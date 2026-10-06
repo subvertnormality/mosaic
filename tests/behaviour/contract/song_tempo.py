@@ -18,7 +18,7 @@ def song_tempo_bounds(c):
         if edit in (-1,1):extreme(edit)
         elif edit==2:extreme(-1);c.enc(3,60);c.key(3)
         # Global Feel (A02) shows the slot's Tempo as its focused selected field.
-        c.ui.expect_selected_field('focused',label='Tempo',value=str(bpm))
+        c.ui.expect_selected_field('vertical_list',label='Tempo',value=str(bpm))
         capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=7)
         controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()

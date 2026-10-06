@@ -22,6 +22,18 @@ class ManualModelTests(unittest.TestCase):
             for step in scene["steps"]:
                 self.assertTrue(step["expect"])
                 self.assertTrue(step["citation"])
+    def test_general_scene_supports_fresh_setup_and_exact_screen_identity(self):
+        data=copy.deepcopy(self.data)
+        data["schema_version"]=2
+        del data["audio"]
+        data["scenes"]=data["scenes"][:1]
+        data["scenes"][0]["setup"]["fixture"]="empty"
+        data["scenes"][0]["steps"]=[dict(id="first-output",caption="Choose an output.",inputs=[],
+            expect=dict(header=dict(page="midi_config",params=dict(channel=1)),device="Emulator test device"),
+            citation="README.md#devices")]
+        model.validate(data)
+        data["scenes"][0]["steps"][0]["expect"]["header"]["page"]="invented"
+        with self.assertRaisesRegex(ValueError,"header|Unknown|enum"):model.validate(data)
     def test_invalid_coordinate_fails_closed(self):
         bad = copy.deepcopy(self.data)
         bad["scenes"][0]["steps"][0]["inputs"] = [{"type":"grid","x":17,"y":4,"state":1}]

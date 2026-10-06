@@ -1,0 +1,14 @@
+test_backend_result_carries_verified_artifact_and_four_distinct_gates (test_omnizart_onnx.OmnizartOnnxTests.test_backend_result_carries_verified_artifact_and_four_distinct_gates) ... ok
+test_endpoints_are_not_peaks_matching_the_source_scipy_decoder (test_omnizart_onnx.OmnizartOnnxTests.test_endpoints_are_not_peaks_matching_the_source_scipy_decoder) ... ok
+test_fake_session_uses_upstream_patch_shape_and_preserves_each_hat_head (test_omnizart_onnx.OmnizartOnnxTests.test_fake_session_uses_upstream_patch_shape_and_preserves_each_hat_head) ... ok
+test_padded_batch_predictions_cannot_contaminate_real_tail_frames (test_omnizart_onnx.OmnizartOnnxTests.test_padded_batch_predictions_cannot_contaminate_real_tail_frames) ... ok
+test_pinned_artifact_sha_mismatch_fails_before_session_construction (test_omnizart_onnx.OmnizartOnnxTests.test_pinned_artifact_sha_mismatch_fails_before_session_construction) ... ok
+test_short_feature_input_discards_padding_activations_before_decode (test_omnizart_onnx.OmnizartOnnxTests.test_short_feature_input_discards_padding_activations_before_decode) ... ok
+test_source_z_score_gates_have_an_explicit_bounded_equivalent (test_omnizart_onnx.OmnizartOnnxTests.test_source_z_score_gates_have_an_explicit_bounded_equivalent) ... ok
+test_strict_source_tensor_shape_rejects_nearby_onnx_output (test_omnizart_onnx.OmnizartOnnxTests.test_strict_source_tensor_shape_rejects_nearby_onnx_output) ... ok
+test_unbounded_onnx_activations_are_normalized_to_bounded_confidence (test_omnizart_onnx.OmnizartOnnxTests.test_unbounded_onnx_activations_are_normalized_to_bounded_confidence) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.028s
+
+OK

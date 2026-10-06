@@ -1,0 +1,13 @@
+..E.....
+======================================================================
+ERROR: test_final_frame_requires_successful_later_oracle_and_preserves_stage (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 45, in test_final_frame_requires_successful_later_oracle_and_preserves_stage
+    frames=module.DeferredFrames();frames.store("cc",{"grid":[1],"binding":{"sha256":"native"}},[{"type":"enc","n":3,"delta":2}])
+AttributeError: module 'manual_case_capture' has no attribute 'DeferredFrames'
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.009s
+
+FAILED (errors=1)

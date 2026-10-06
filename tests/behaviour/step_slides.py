@@ -13,8 +13,13 @@ def step_slide_variants(c):
     for step,value in [(1,24),(3,96),(4,48)]:
         with ui.hold_step(step):
             c.elapse(.05);ui.encoder_event(3,-126);ui.set_value(value+1)
-    def step_k3(step):
-        with ui.hold_step(step):ui.press_key(3)
+            # README.md#trig-param-locks: the held step's slot shows its own value with an L.
+            ui.expect_selected_param(1,value,marker='L')
+    def step_k3(step,value,marker):
+        with ui.hold_step(step):
+            ui.press_key(3)
+            # README.md#param-slides: a slide on the held step shows S; toggled off the lock shows L again.
+            ui.expect_selected_param(1,value,marker=marker)
         c.elapse(.1)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
@@ -25,7 +30,7 @@ def step_slide_variants(c):
         return notes,events
     def between(events,a,b):return [m for m in events if a['index']<m['index']<b['index'] and m['bytes'][:2]==[176,1]]
     # 1) Toggle a step slide on and off: the source jumps straight to its destination.
-    step_k3(1);step_k3(1)
+    step_k3(1,24,'S');step_k3(1,24,'L')
     notes,events=run()
     for cycle in range(2):
         inner=[m['bytes'][2] for m in between(events,notes[4*cycle],notes[4*cycle+2])]
@@ -34,7 +39,7 @@ def step_slide_variants(c):
         assert arrival and arrival[-1]['bytes'][2]==96,('Destination lock missing',arrival)
     c.results.append(dict(kind='step-slide',stage='toggled-off-jumps',passed=True))
     # 2) A step slide on the last lock, wrap off: nothing to slide toward.
-    step_k3(4)
+    step_k3(4,48,'S')
     notes,events=run()
     for cycle in range(1):
         inner=[m['bytes'][2] for m in between(events,notes[4*cycle+3],notes[4*cycle+4])]

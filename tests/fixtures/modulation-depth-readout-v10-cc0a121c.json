@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "capture_scope": "controlled-experimental native",
+  "source_run_id": "9cdedef456b7456a96b96d58f8a5acbb",
+  "session_id": "cecdd07400a84d528aa92de61a148057",
+  "observation_index": 76,
+  "frame_revision": 461,
+  "frame_sha256": "cc0a121cd01af7f04638b5a818c85a526525213b7b5db45809fd7259a5933d49",
+  "width": 128,
+  "height": 64,
+  "format": "BGRA8",
+  "captured_selected_value": "0.10",
+  "failed_expected_selected_value": "0.1",
+  "source_checkout_head": "f36a766fd2e3d425f1f068d4338023d0d9e1e344",
+  "pre_fix_helper_sha256": "f22141029ce2f26e3e1eaefeaaf226fa81e2848bfce3b3a8854f7ae86ffaf7a1",
+  "corrected_helper_sha256": "869286bbffb5996d76968229d8515ddd978410f5f9377fa267b5a6b9084c9f4c",
+  "plan_sha256": "420d695798bcd8bde15d5a9c020b248ee7809d6a1b8d6e7e2fa2f2cd6f35975a",
+  "frame_oracle_sha256": "44c29d29034eb5060501be628394331312a9e23d41bdc45903e48983b5059b1e",
+  "ui_map_sha256": "8fb570618c8076b9f0ef1073f7599e170933ba108ad15fc486730af16116685f"
+}

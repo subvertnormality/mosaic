@@ -1,0 +1,14 @@
+{
+  "status": "authoring-source-freeze-not-native-acceptance",
+  "files": {
+    "tests/behaviour/contract/merge_strategy_routes.py": "f6a5297a3b7b5a3ad53856ceed6d1140781dc351fc2178f68af22400790950f9",
+    "tests/behaviour/contract/foundation_workflow.py": "3e54c677c1fe0a9ac5639e3a8825915026dc68796da9172eb196a969d87b03e7",
+    "tests/behaviour/contract/merge_extensions.py": "732a54d2524c2cfd6fe871b8c20344a41102c60a7e6c79213441da0ac3710fd5",
+    "tests/behaviour/contract/live_ui_feedback.py": "7c507c3e23eafb7df1dae160eb48baff0d0d23683c9c72aed7e96d19feca1489",
+    "tests/behaviour/contract/live_ui_acceptance.py": "4ef870ebe836ab3ff61aa087e1fa23de455cbfeb4a4094293d9a393cb1de502c",
+    "tests/behaviour/harmony_merge_workflow.py": "abb87f0106ffd5aacf1fa04d940899a90a0894486f3cec57a9b41792be97ed62",
+    "tests/behaviour/merge_extension_acceptance.py": "e4e05c12646954e6f84ac175db60661fdf8a160174b76eca7a8f87e88b19fde1",
+    "tools/manual_course_cases.py": "6059806a270c742560bb67df36742077f6fd0d2c0ca7f90621db487c851d18f2"
+  },
+  "scope": "Public route migration to one Strategy selector; unchanged literal musical expectations; no native runs while Doctor source lock is active."
+}

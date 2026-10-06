@@ -1,0 +1,21 @@
+Candidate source SHA256: 0814ca92f3bd38e00e5b91c218e7a3e738706fa5e3ffaf7902180455b7998cea
+Before correction: strict top-level passed=true wrongly rejected reference success, whose publication contract has no passed field. Successful native stage and independently audited complete scene semantics are required instead.
+E...............
+======================================================================
+ERROR: test_audited_reference_success_without_top_level_passed_is_supported (test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 85, in test_audited_reference_success_without_top_level_passed_is_supported
+    self.assertTrue(self.run_bind()['passed'])
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 32, in run_bind
+    return binder.bind(self.build,self.root/'binding',root=self.root,mappings=self.mapping,audit_functions=self.functions)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_feature_bind.py", line 164, in bind
+    rows=stage_reports(build);scenes=catalogue(root)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_feature_bind.py", line 80, in stage_reports
+    if document.get('passed') is not True or document.get('clock_mode')!=mode:raise ValueError('Native report failed or clock mismatch')
+ValueError: Native report failed or clock mismatch
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.113s
+
+FAILED (errors=1)

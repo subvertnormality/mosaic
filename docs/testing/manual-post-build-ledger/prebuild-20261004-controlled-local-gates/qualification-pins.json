@@ -1,0 +1,770 @@
+{
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci",
+  "history": {
+    "previous_qualification_pins": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-merge-focused-gates/qualification-pins.json",
+      "sha256": "4c90c6ee887b83f8980c91525d1b34a44a085b1cadace43fc35071086b140d45"
+    },
+    "prior_15_nonmember_pins": [
+      {
+        "path": "tools/manual_course_cases.py",
+        "sha256": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5"
+      },
+      {
+        "path": "tools/manual_publication_verify.py",
+        "sha256": "10b339ed62fd08b12926abffb67e72f2dce466a84f3b714e0d6b7a05703974a9"
+      },
+      {
+        "path": "tools/manual_audio.py",
+        "sha256": "4583b55b74e3a4fb63dcec6d073bb90b4928ed81f613919af1417f58aa935774"
+      },
+      {
+        "path": "tools/manual_closure_cases.py",
+        "sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be"
+      },
+      {
+        "path": "tools/manual_build.py",
+        "sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8"
+      },
+      {
+        "path": "tests/behaviour/test_manual_build.py",
+        "sha256": "2dc2d988de7f28fd366808fc8ce05adb600277cef7b632ff1562740cecb16ddf"
+      },
+      {
+        "path": "manual/scene-plans-course.yaml",
+        "sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+        "review_chain": [
+          {
+            "kind": "rate",
+            "before_sha256": "a401daf93e4fd19a5b222b89f488394417e653f4ec999df1cb753bfa360c703c",
+            "after_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+            "before_archive": "manual/evidence/course-rate-one-bar-correction/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-rate-one-bar-correction/after/manual/scene-plans-course.yaml"
+          },
+          {
+            "kind": "harmony",
+            "before_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+            "after_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
+            "before_archive": "manual/evidence/course-harmony-baseline-correction/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-harmony-baseline-correction/after/manual/scene-plans-course.yaml"
+          },
+          {
+            "kind": "song-length-prose",
+            "before_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
+            "after_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5",
+            "before_archive": "manual/evidence/course-song-length-correction/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-song-length-correction/after/manual/scene-plans-course.yaml"
+          },
+          {
+            "kind": "song-length-pictured-feedback",
+            "before_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5",
+            "after_sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+            "before_archive": "manual/evidence/course-song-length-pictured-feedback/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-song-length-pictured-feedback/after/manual/scene-plans-course.yaml"
+          }
+        ]
+      },
+      {
+        "path": "manual/VOICES.md",
+        "sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+        "review_chain": [
+          {
+            "kind": "voice",
+            "before_sha256": "bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc",
+            "after_sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+            "before_archive": "manual/evidence/voice-scope-prose-correction/bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc-VOICES.md",
+            "after_archive": "manual/evidence/voice-scope-prose-correction/d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574-VOICES.md"
+          }
+        ]
+      },
+      {
+        "path": "manual/BUILD.md",
+        "sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
+        "review_chain": [
+          {
+            "kind": "engineering-checkpoint-count",
+            "before_sha256": "ddb32c65f05abe4c604791f9b635156921f4df5bb1125e941d5b30fd5c9f375f",
+            "after_sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
+            "before_archive": "manual/evidence/course-song-length-pictured-feedback/objects/ddb32c65f05abe4c604791f9b635156921f4df5bb1125e941d5b30fd5c9f375f",
+            "after_archive": "manual/evidence/course-song-length-pictured-feedback/objects/81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089"
+          }
+        ]
+      },
+      {
+        "path": "manual/scene-plans.yaml",
+        "sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791",
+        "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans.yaml",
+        "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+        "native_case_sources_pinned": false,
+        "test_module": false,
+        "review_chain": [
+          {
+            "original_archive": "manual/evidence/merge-strategy-plan-alignment/before/manual/scene-plans.yaml",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/manual/scene-plans.yaml",
+            "sha256": "106ba6bd35f5df34d58e8258f50d1b94703fb303ba7958fd057c92ea79e11765"
+          },
+          {
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans.yaml",
+            "sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791"
+          }
+        ],
+        "before_sha256": "106ba6bd35f5df34d58e8258f50d1b94703fb303ba7958fd057c92ea79e11765",
+        "after_sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791"
+      },
+      {
+        "path": "manual/scene-plans-extra.yaml",
+        "sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5",
+        "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans-extra.yaml",
+        "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+        "native_case_sources_pinned": false,
+        "test_module": false,
+        "review_chain": [
+          {
+            "original_archive": "docs/testing/merge-strategy-ui/example-unfixed-plan.yaml",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/manual/scene-plans-extra.yaml",
+            "sha256": "d1c6d613d32cdf1760977992ccb552ee059b75ee59ceaf71392cfa229acda592"
+          },
+          {
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans-extra.yaml",
+            "sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5"
+          }
+        ],
+        "before_sha256": "d1c6d613d32cdf1760977992ccb552ee059b75ee59ceaf71392cfa229acda592",
+        "after_sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5"
+      },
+      {
+        "path": "tests/behaviour/contract/live_ui_feedback.py",
+        "sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+        "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/contract/live_ui_feedback.py",
+        "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+        "native_case_sources_pinned": true,
+        "test_module": false,
+        "review_chain": [
+          {
+            "original_archive": "docs/testing/merge-strategy-ui/footer-unfixed-source-20261004/live_ui_feedback.py",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/contract/live_ui_feedback.py",
+            "sha256": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d"
+          },
+          {
+            "original_archive": "docs/testing/merge-strategy-ui/example-unfixed-feedback.py",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/1/tests/behaviour/contract/live_ui_feedback.py",
+            "sha256": "e2c42d52ed5f2f9164c28c1192e28e88480633e29c2bf7d76f7b1898fe0c4048"
+          },
+          {
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/contract/live_ui_feedback.py",
+            "sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f"
+          }
+        ],
+        "before_sha256": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d",
+        "after_sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f"
+      },
+      {
+        "path": "tests/behaviour/merge_strategy_routes.py",
+        "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af",
+        "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/merge_strategy_routes.py",
+        "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+        "native_case_sources_pinned": true,
+        "test_module": false,
+        "review_chain": [
+          {
+            "original_archive": "docs/testing/merge-strategy-ui/footer-unfixed-source-20261004/merge_strategy_routes.py",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/merge_strategy_routes.py",
+            "sha256": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88"
+          },
+          {
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/merge_strategy_routes.py",
+            "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+          }
+        ],
+        "before_sha256": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+        "after_sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+      },
+      {
+        "path": "tests/behaviour/test_manual_case_capture.py",
+        "sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785",
+        "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_manual_case_capture.py",
+        "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+        "native_case_sources_pinned": false,
+        "test_module": true,
+        "review_chain": [
+          {
+            "original_archive": "manual/evidence/merge-strategy-plan-alignment/before/tests/behaviour/test_manual_case_capture.py",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/test_manual_case_capture.py",
+            "sha256": "798dc21ede76f5ba7166d0fd2cf4c032e29dac06cf98bd12339470eb04ae2b3d"
+          },
+          {
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_manual_case_capture.py",
+            "sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785"
+          }
+        ],
+        "before_sha256": "798dc21ede76f5ba7166d0fd2cf4c032e29dac06cf98bd12339470eb04ae2b3d",
+        "after_sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785"
+      },
+      {
+        "path": "tests/behaviour/test_merge_strategy_ui_routes.py",
+        "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc",
+        "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_merge_strategy_ui_routes.py",
+        "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+        "native_case_sources_pinned": false,
+        "test_module": true,
+        "review_chain": [
+          {
+            "original_archive": "docs/testing/merge-strategy-ui/footer-temporal-red-test-source.py",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/test_merge_strategy_ui_routes.py",
+            "sha256": "2d29ea2a9d2e1513e429478a9a636d515586c57a2f61b6d225b14b89dedcec43"
+          },
+          {
+            "original_archive": "docs/testing/merge-strategy-ui/example-red-test-source.py",
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/1/tests/behaviour/test_merge_strategy_ui_routes.py",
+            "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+          },
+          {
+            "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_merge_strategy_ui_routes.py",
+            "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+          }
+        ],
+        "before_sha256": "2d29ea2a9d2e1513e429478a9a636d515586c57a2f61b6d225b14b89dedcec43",
+        "after_sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+      }
+    ],
+    "prior_full_qualification_history_is_preserved_not_current_source_qualification": true
+  },
+  "current_nonmember_pins": [
+    {
+      "path": "docs/ui-reimplementation/tools/reconcile_manual_build.py",
+      "sha256": "d3a9f98930fd52bd0cbbdfe6886a98ffa1a75fbcf2c60dd8a7fbfe784b83da96",
+      "preserved_path": "qualification-source-bytes/docs/ui-reimplementation/tools/reconcile_manual_build.py"
+    },
+    {
+      "path": "docs/ui-reimplementation/tools/test_reconcile_manual_build.py",
+      "sha256": "c7ba63d4470b612342c1dbeb5712a8e250751000761b35b93dc7d7bf837239ac",
+      "preserved_path": "qualification-source-bytes/docs/ui-reimplementation/tools/test_reconcile_manual_build.py"
+    },
+    {
+      "path": "manual/BUILD.md",
+      "sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
+      "preserved_path": "qualification-source-bytes/manual/BUILD.md"
+    },
+    {
+      "path": "manual/VOICES.md",
+      "sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+      "preserved_path": "qualification-source-bytes/manual/VOICES.md"
+    },
+    {
+      "path": "manual/book.schema.json",
+      "sha256": "fef9bf3a4993cfbe24a05f8bcf1215533a93a8b3cb1b5a5f04bddf4d1bb72038",
+      "preserved_path": "qualification-source-bytes/manual/book.schema.json"
+    },
+    {
+      "path": "manual/course.schema.json",
+      "sha256": "0f4120a691476d539522fce1ee3858ce1024f168131e958d58e17a673504d1f7",
+      "preserved_path": "qualification-source-bytes/manual/course.schema.json"
+    },
+    {
+      "path": "manual/scene-plans-course.yaml",
+      "sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+      "preserved_path": "qualification-source-bytes/manual/scene-plans-course.yaml"
+    },
+    {
+      "path": "manual/scene-plans-extra.yaml",
+      "sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5",
+      "preserved_path": "qualification-source-bytes/manual/scene-plans-extra.yaml"
+    },
+    {
+      "path": "manual/scene-plans.yaml",
+      "sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791",
+      "preserved_path": "qualification-source-bytes/manual/scene-plans.yaml"
+    },
+    {
+      "path": "manual/schema.json",
+      "sha256": "5b7dc7115541c43fa1dbdac161cf39355772aa7c88e5d92f9c5f42a898fbc954",
+      "preserved_path": "qualification-source-bytes/manual/schema.json"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_feedback.py",
+      "sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/contract/live_ui_feedback.py"
+    },
+    {
+      "path": "tests/behaviour/manual_audio_contract.py",
+      "sha256": "c716178137201fdc9bae4af26b0cd907c450fc49cee543740c21f59fed3e67fb",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/manual_audio_contract.py"
+    },
+    {
+      "path": "tests/behaviour/manual_authority.py",
+      "sha256": "02a730b973a1ce986cdab643aee388d143a78f2bbde0c8b1330257b7a4c8d88c",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/manual_authority.py"
+    },
+    {
+      "path": "tests/behaviour/merge_strategy_routes.py",
+      "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/merge_strategy_routes.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_authority.py",
+      "sha256": "9c33f4471870f742ec3099b5a0137f06ec764f2fdcdddcaa88865a6710262fb4",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_authority.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_book.py",
+      "sha256": "95aac15dabf023c57634c57434e76ab1c6886c3d9188e76ecd01bf3c13cf025d",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_book.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_build.py",
+      "sha256": "460b17fd6b4885d65b1a7e7515a7319a3b9c98bc7806433cc8446189ec26ae77",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_build.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_capture.py",
+      "sha256": "eea02adb476a6afc940244e4e3d699c524e85e82360eb0cf9a9c4ca4d605444f",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_capture.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_case_capture.py",
+      "sha256": "8ced93458e570c039a8ae0864b0f15fa86a72f061992ec2a5f1faf33385425cc",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_case_capture.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_controlled_generation_integrity.py",
+      "sha256": "a4214ef0190631b16569c9b197ca4114ee6f8925d76c13c637f3e6a178a9e612",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_controlled_generation_integrity.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_course_bind.py",
+      "sha256": "cb82406f5ee6e5b36d515e221cac8daba4a883dbdf9b3f1347bc247efc31c809",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_course_bind.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_feature_bind.py",
+      "sha256": "6d0c81caf12bef0d2230305acd78b7d80186923c8ea962bd9974f1af35d033cb",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_feature_bind.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_publication_verify.py",
+      "sha256": "32d9f2bfb6293bafff4003041dd213d5534b8ede7abdd27fbc1b9664b4b6ec89",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_publication_verify.py"
+    },
+    {
+      "path": "tests/behaviour/test_merge_strategy_ui_routes.py",
+      "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_merge_strategy_ui_routes.py"
+    },
+    {
+      "path": "tools/manual_audio.py",
+      "sha256": "d1fb7cea325312f9b77ee002c7aa71d5f6b829e86f963d7f384ae60af73e17de",
+      "preserved_path": "qualification-source-bytes/tools/manual_audio.py"
+    },
+    {
+      "path": "tools/manual_book.py",
+      "sha256": "9a33afe212b7fbd78806c91ec74392ab7e8867ffa7a02a62fb1ff44e03602611",
+      "preserved_path": "qualification-source-bytes/tools/manual_book.py"
+    },
+    {
+      "path": "tools/manual_build.py",
+      "sha256": "cdf8b1cb1fdca9d6d2384e7e954acc7f992ddf6e4ca0d9e5a3b48d3cc8afd0cc",
+      "preserved_path": "qualification-source-bytes/tools/manual_build.py"
+    },
+    {
+      "path": "tools/manual_capture.py",
+      "sha256": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+      "preserved_path": "qualification-source-bytes/tools/manual_capture.py"
+    },
+    {
+      "path": "tools/manual_case_capture.py",
+      "sha256": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+      "preserved_path": "qualification-source-bytes/tools/manual_case_capture.py"
+    },
+    {
+      "path": "tools/manual_closure_cases.py",
+      "sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+      "preserved_path": "qualification-source-bytes/tools/manual_closure_cases.py"
+    },
+    {
+      "path": "tools/manual_course_bind.py",
+      "sha256": "f19701ed67e4e45ca97e4854f25a7dbdc87a72244c3e6e6e1f7c6a9a5318a1e9",
+      "preserved_path": "qualification-source-bytes/tools/manual_course_bind.py"
+    },
+    {
+      "path": "tools/manual_course_cases.py",
+      "sha256": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5",
+      "preserved_path": "qualification-source-bytes/tools/manual_course_cases.py"
+    },
+    {
+      "path": "tools/manual_feature_bind.py",
+      "sha256": "4fdd27c0a5ccff772f6ff67456e574a6d4349201ca64093ba147137c52e2b3ff",
+      "preserved_path": "qualification-source-bytes/tools/manual_feature_bind.py"
+    },
+    {
+      "path": "tools/manual_publication_verify.py",
+      "sha256": "490e067a6a39ec95f6a89ef14cd5635d3c493fe55af29f8c189e8943c7dadd8a",
+      "preserved_path": "qualification-source-bytes/tools/manual_publication_verify.py"
+    }
+  ],
+  "qualification_receipts": {
+    "operator/source-qualification-receipt.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/source-qualification-receipt.json",
+      "sha256": "1dfd404eba659a018c33025482acad8ea95848bb88abc2fd832f16a8ee195f2a",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/operator/source-qualification-receipt.json"
+    },
+    "operator/root-joint-focused-unit.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/root-joint-focused-unit.json",
+      "sha256": "b9110c1752391c9fbd37a3c4aa9194e3260f4bb1f220e513a3ff7f018fab5042",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/operator/root-joint-focused-unit.json"
+    },
+    "operator/root-joint-focused-unit.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/root-joint-focused-unit.log",
+      "sha256": "897d3b7a667424c2165db7f2c7c7131e5cfd7f3ac6cb282954a04c4abc994e29",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/operator/root-joint-focused-unit.log"
+    },
+    "operator/actual-controlled-local-argv.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/actual-controlled-local-argv.json",
+      "sha256": "c726ef687af5300e95ee9fbd67b3f481fa16665f975c01c524330aa0eacaf299",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/operator/actual-controlled-local-argv.json"
+    },
+    "binder/binder-red-run.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-red-run.log",
+      "sha256": "ac5c20b41589984ab0a688dab3041ccbf358608aaef941b6c02671e3b05ee7c8",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-red-run.log"
+    },
+    "binder/binder-green-run.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-green-run.log",
+      "sha256": "2c6cd787312ed0cfb9ac32ed00b3db7a937cc0c7e8c655794fa5a83aa7c2b7c8",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-green-run.log"
+    },
+    "binder/binder-archive-manifest.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-archive-manifest.json",
+      "sha256": "e016d05b936900aaee31b13c98cd7859476e4faf6923ef107ef08d661894b266",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-archive-manifest.json"
+    },
+    "binder/binder-qualification.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-qualification.json",
+      "sha256": "a32cbbc8843ea20257313ab7bae21e3297ed6f1010ecf734118647eea5219110",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-qualification.json"
+    },
+    "binder/binder-before/tests/behaviour/test_manual_course_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/tests/behaviour/test_manual_course_bind.py",
+      "sha256": "c5045b7e98984e1909091b670c49da26fc78fac3355a6695e05c65fe5c658f5f",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/tests/behaviour/test_manual_course_bind.py"
+    },
+    "binder/binder-before/tests/behaviour/test_manual_feature_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/tests/behaviour/test_manual_feature_bind.py",
+      "sha256": "2033891a4b3c480d04aca3974a6593d3ae02d883651c73233c67013fc4452f71",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/tests/behaviour/test_manual_feature_bind.py"
+    },
+    "binder/binder-before/tests/behaviour/test_manual_book.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/tests/behaviour/test_manual_book.py",
+      "sha256": "9b7d1a5ae4d1227d49c7ca3ed348d338681a748d00c4bc3d661e2d8e4e606a57",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/tests/behaviour/test_manual_book.py"
+    },
+    "binder/binder-before/manual/book.schema.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/manual/book.schema.json",
+      "sha256": "c30b65cd5e5f7f155060342682f7d24562b1661a7f247f4c002f2f7bb4e6daa2",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/manual/book.schema.json"
+    },
+    "binder/binder-before/manual/course.schema.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/manual/course.schema.json",
+      "sha256": "37ceedad42d6a95dadd5aa741ea4426da549cd9eece14a1de08573131312477d",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/manual/course.schema.json"
+    },
+    "binder/binder-before/manual/course.yaml": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/manual/course.yaml",
+      "sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/manual/course.yaml"
+    },
+    "binder/binder-before/tools/manual_feature_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/tools/manual_feature_bind.py",
+      "sha256": "5c1ebc754388649cf14077e373ea3f0ec0712c458e8e21b8d1f7901d2b3020bc",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/tools/manual_feature_bind.py"
+    },
+    "binder/binder-before/tools/manual_course_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/tools/manual_course_bind.py",
+      "sha256": "accc616d62db234edd7d6862c7fbafb52e2daffc702823cc5ef6f33f9a4d7883",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/tools/manual_course_bind.py"
+    },
+    "binder/binder-before/tools/manual_book.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-before/tools/manual_book.py",
+      "sha256": "9b51cc90587d8a01bce4637d850054a5cdd2a2143ec61b03a14c7dd5947c78ec",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-before/tools/manual_book.py"
+    },
+    "binder/binder-after/tests/behaviour/test_manual_course_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/tests/behaviour/test_manual_course_bind.py",
+      "sha256": "cb82406f5ee6e5b36d515e221cac8daba4a883dbdf9b3f1347bc247efc31c809",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/tests/behaviour/test_manual_course_bind.py"
+    },
+    "binder/binder-after/tests/behaviour/test_manual_feature_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/tests/behaviour/test_manual_feature_bind.py",
+      "sha256": "6d0c81caf12bef0d2230305acd78b7d80186923c8ea962bd9974f1af35d033cb",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/tests/behaviour/test_manual_feature_bind.py"
+    },
+    "binder/binder-after/tests/behaviour/test_manual_book.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/tests/behaviour/test_manual_book.py",
+      "sha256": "95aac15dabf023c57634c57434e76ab1c6886c3d9188e76ecd01bf3c13cf025d",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/tests/behaviour/test_manual_book.py"
+    },
+    "binder/binder-after/manual/book.schema.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/manual/book.schema.json",
+      "sha256": "fef9bf3a4993cfbe24a05f8bcf1215533a93a8b3cb1b5a5f04bddf4d1bb72038",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/manual/book.schema.json"
+    },
+    "binder/binder-after/manual/course.schema.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/manual/course.schema.json",
+      "sha256": "0f4120a691476d539522fce1ee3858ce1024f168131e958d58e17a673504d1f7",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/manual/course.schema.json"
+    },
+    "binder/binder-after/manual/course.yaml": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/manual/course.yaml",
+      "sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/manual/course.yaml"
+    },
+    "binder/binder-after/tools/manual_feature_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/tools/manual_feature_bind.py",
+      "sha256": "4fdd27c0a5ccff772f6ff67456e574a6d4349201ca64093ba147137c52e2b3ff",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/tools/manual_feature_bind.py"
+    },
+    "binder/binder-after/tools/manual_course_bind.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/tools/manual_course_bind.py",
+      "sha256": "f19701ed67e4e45ca97e4854f25a7dbdc87a72244c3e6e6e1f7c6a9a5318a1e9",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/tools/manual_course_bind.py"
+    },
+    "binder/binder-after/tools/manual_book.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-after/tools/manual_book.py",
+      "sha256": "9a33afe212b7fbd78806c91ec74392ab7e8867ffa7a02a62fb1ff44e03602611",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-after/tools/manual_book.py"
+    },
+    "binder/binder-diffs/tests/behaviour/test_manual_feature_bind.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/tests/behaviour/test_manual_feature_bind.py.diff",
+      "sha256": "b46f31455b50feb890c6d2d0fa84054831386e77222b8765373086f6946548d5",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/tests/behaviour/test_manual_feature_bind.py.diff"
+    },
+    "binder/binder-diffs/tests/behaviour/test_manual_course_bind.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/tests/behaviour/test_manual_course_bind.py.diff",
+      "sha256": "88ea8e29d249d52510368d0dca1edf883a042a8adc581f73f053c1e22ebcdfdd",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/tests/behaviour/test_manual_course_bind.py.diff"
+    },
+    "binder/binder-diffs/tests/behaviour/test_manual_book.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/tests/behaviour/test_manual_book.py.diff",
+      "sha256": "21fcda0bdb8c45b3edb8f35e8dc60e2f95f30a7f58fc43e5eec2f76dc9628c55",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/tests/behaviour/test_manual_book.py.diff"
+    },
+    "binder/binder-diffs/manual/course.yaml.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/manual/course.yaml.diff",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/manual/course.yaml.diff"
+    },
+    "binder/binder-diffs/manual/book.schema.json.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/manual/book.schema.json.diff",
+      "sha256": "ed074e9260960b6848e96061b881023eec56843b79253dfc985461e3c2f2872d",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/manual/book.schema.json.diff"
+    },
+    "binder/binder-diffs/manual/course.schema.json.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/manual/course.schema.json.diff",
+      "sha256": "7de6e0b522469ca8625ffbeb8c51e4276c51e3718bc42e9f9a9879fd8854b329",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/manual/course.schema.json.diff"
+    },
+    "binder/binder-diffs/tools/manual_book.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/tools/manual_book.py.diff",
+      "sha256": "3283f97a186e4f3b75f41356e23b0b4be419ae0baa33c3b25436777c86c23b94",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/tools/manual_book.py.diff"
+    },
+    "binder/binder-diffs/tools/manual_course_bind.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/tools/manual_course_bind.py.diff",
+      "sha256": "19bdd976a8edce8f8417861a7ae81f4f21977ed27375edcbe2a8dc16c1817c4e",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/tools/manual_course_bind.py.diff"
+    },
+    "binder/binder-diffs/tools/manual_feature_bind.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-qualified-proposal/binder-diffs/tools/manual_feature_bind.py.diff",
+      "sha256": "a86a0c4d7af1b74f3ab16613a1cee3553c0a5acfb7d87c18e1464d7ea549e8f6",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/binder/binder-diffs/tools/manual_feature_bind.py.diff"
+    },
+    "reconciler/green-v2.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/green-v2.log",
+      "sha256": "f81a227971e634e5de9efaaf8face048e2aafe4526db602216dad646944010e4",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/green-v2.log"
+    },
+    "reconciler/course-scope-red.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/course-scope-red.log",
+      "sha256": "8f8cb65056b85fb8ea9678077b668df26c3deaac1bda595b1f4efbfde586873f",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/course-scope-red.log"
+    },
+    "reconciler/before.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/before.json",
+      "sha256": "2b4053d9da72164f3653430b030a8a3415eba48da5b16c1b69e62bfe42cd7669",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/before.json"
+    },
+    "reconciler/after-v2-reconcile_manual_build.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/after-v2-reconcile_manual_build.py",
+      "sha256": "d3a9f98930fd52bd0cbbdfe6886a98ffa1a75fbcf2c60dd8a7fbfe784b83da96",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/after-v2-reconcile_manual_build.py"
+    },
+    "reconciler/test_reconcile_manual_build.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/test_reconcile_manual_build.py",
+      "sha256": "207594b9d7b9f13435d88dbae9a44fa6f92c4389025b0def6de6f58b823ad3a6",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/test_reconcile_manual_build.py"
+    },
+    "reconciler/preparation-receipt-v2.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/preparation-receipt-v2.json",
+      "sha256": "10bf45e627e81b2323cb4bec0cba073c7bbe75b73144e9599b8586cee0e9e1c6",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/preparation-receipt-v2.json"
+    },
+    "reconciler/test_reconcile_manual_build.py.v2.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/test_reconcile_manual_build.py.v2.diff",
+      "sha256": "7ab16eed069f8776682a8863778213359a1d1aa0e72e44a4a94ef5608cd157fd",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/test_reconcile_manual_build.py.v2.diff"
+    },
+    "reconciler/reconcile_manual_build.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/reconcile_manual_build.py",
+      "sha256": "5946e9dc203f84e170b5f4406cc88b8df51c336e7ea633e9c7131f0b20a0ffa3",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/reconcile_manual_build.py"
+    },
+    "reconciler/preparation-receipt.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/preparation-receipt.json",
+      "sha256": "d4f0134074efd9931fc8316e2bac9c56d6ced059c64e4da3de39a3f9e48ac9fb",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/preparation-receipt.json"
+    },
+    "reconciler/after-reconcile_manual_build.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/after-reconcile_manual_build.py",
+      "sha256": "0087a22c84c909d00e4564784170d5bd27e6272ffb4735c930675d18fce56bdc",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/after-reconcile_manual_build.py"
+    },
+    "reconciler/test_reconcile_manual_build.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/test_reconcile_manual_build.py.diff",
+      "sha256": "7ae982e460c9ef0b7d9c24f1deaed5651652b97da3423b42067d1e2c7a2296d4",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/test_reconcile_manual_build.py.diff"
+    },
+    "reconciler/green.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/green.log",
+      "sha256": "1e3a4e1d46d4c9fd72b08b4929299b4dca6240d40dc631aeef7c32756f05b50b",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/green.log"
+    },
+    "reconciler/reconcile_manual_build.py.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/reconcile_manual_build.py.diff",
+      "sha256": "b6a21872afad6e5a8c3d759509dc6348ae9e24af3f422347feb6e2123d1bc871",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/reconcile_manual_build.py.diff"
+    },
+    "reconciler/reconcile_manual_build.py.v2.diff": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/reconcile_manual_build.py.v2.diff",
+      "sha256": "8ec4cbc240433409cc8a623ceba5fdcb43ac032a5b2a30e2e6eac67bd813d9e2",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/reconcile_manual_build.py.v2.diff"
+    },
+    "reconciler/after-v2-test_reconcile_manual_build.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/after-v2-test_reconcile_manual_build.py",
+      "sha256": "c7ba63d4470b612342c1dbeb5712a8e250751000761b35b93dc7d7bf837239ac",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/after-v2-test_reconcile_manual_build.py"
+    },
+    "reconciler/source-red.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/source-red.log",
+      "sha256": "b3a3ac413ced1b40f20aa18017a6c87fa6b2781ba14badc8d8648dd893938981",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/source-red.log"
+    },
+    "reconciler/after-test_reconcile_manual_build.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/after-test_reconcile_manual_build.py",
+      "sha256": "42e47a2b0aba5aabcf7e36a8737169b5342e5c797b101158b8820b99b3b43bbc",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/after-test_reconcile_manual_build.py"
+    },
+    "reconciler/red.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/red.log",
+      "sha256": "0f56edb64c0ec03d40da4ea8f0f6a71f600f0ae5201bd56100658426e5217d85",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/reconciler/red.log"
+    },
+    "authority/after-manual_authority.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/after-manual_authority.py",
+      "sha256": "02a730b973a1ce986cdab643aee388d143a78f2bbde0c8b1330257b7a4c8d88c",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/after-manual_authority.py"
+    },
+    "authority/manual_authority.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/manual_authority.py",
+      "sha256": "4d6a82b694080662e97026526830c663f54d882084f4ef8f7533c4c0bddf6a24",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/manual_authority.py"
+    },
+    "authority/before.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/before.json",
+      "sha256": "0e0d8116d26d2fec822488443d0f77ec00069798a6ab611e9ca85c670f586a08",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/before.json"
+    },
+    "authority/test_manual_authority.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/test_manual_authority.py",
+      "sha256": "61f5c604f7883297333d564b55735e54cf0da8f19d544920cad0e22c5a302b12",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/test_manual_authority.py"
+    },
+    "authority/after-test_manual_authority.py": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/after-test_manual_authority.py",
+      "sha256": "9c33f4471870f742ec3099b5a0137f06ec764f2fdcdddcaa88865a6710262fb4",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/after-test_manual_authority.py"
+    },
+    "authority/preparation-receipt.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/preparation-receipt.json",
+      "sha256": "eef4b249b8f29d6bb6052a9caaaa37a87a3bfb290762d044a8ef9060238ad89f",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/preparation-receipt.json"
+    },
+    "authority/green.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/green.log",
+      "sha256": "c05c9aa2acd587d673334ed75ae1bf930929fee3f93a4c9d98f0e63858dfadce",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/green.log"
+    },
+    "authority/red.log": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-authority-preparation/red.log",
+      "sha256": "3050aab3bb83c0168bb3e249a2a9b68125471548bcecb63debf8340034bfef07",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/authority/red.log"
+    },
+    "publication/archive-manifest.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/controlled-publication-audio-pre-final-20261004/archive-manifest.json",
+      "sha256": "77885d5f08fc3f9f9fb6b7a171b27dcbeb642d7184845c5f0e81b06290aae878",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-receipts/publication/archive-manifest.json"
+    },
+    "operator-before/archive-manifest.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/controlled-local-source-archive-20261004/archive-manifest.json",
+      "sha256": "133552f3af67ff9ff331a9ab6601aab23189b99e09bdb46ab29a37b5f5ad0e9b",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-before/archive-manifest.json"
+    },
+    "operator-before/manual_capture.py.before-controlled-scope-stamp": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/controlled-local-source-archive-20261004/manual_capture.py.before-controlled-scope-stamp",
+      "sha256": "564c1c7258e47deede5f4edec7a5af6533f3d9f65f9c101a46c0b36385f1885e",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-before/manual_capture.py.before-controlled-scope-stamp"
+    },
+    "operator-before/manual_case_capture.py.pre-controlled-local": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/controlled-local-source-archive-20261004/manual_case_capture.py.pre-controlled-local",
+      "sha256": "e01e02cae29c527f9ca52860e1bdf8c502f03db8c910ba216d081c73d121f61d",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-before/manual_case_capture.py.pre-controlled-local"
+    },
+    "operator-before/test_manual_build.py.pre-controlled-local": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/controlled-local-source-archive-20261004/test_manual_build.py.pre-controlled-local",
+      "sha256": "78e9c4758cef56ffe03ccee5fe96610868c89c936eb53a3b9584986f9f362c2e",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-before/test_manual_build.py.pre-controlled-local"
+    },
+    "operator-before/test_manual_case_capture.py.pre-controlled-local": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/controlled-local-source-archive-20261004/test_manual_case_capture.py.pre-controlled-local",
+      "sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-before/test_manual_case_capture.py.pre-controlled-local"
+    },
+    "operator-initial/archive-manifest.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/archive-manifest.json",
+      "sha256": "915f2a8809460c0b2610d10cdab4f3a0c63c3f20e5f151ed284afac1c098cfce",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-initial/archive-manifest.json"
+    },
+    "operator-initial/manual_build.py": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/manual_build.py",
+      "sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-initial/manual_build.py"
+    },
+    "operator-initial/user-directed-controlled-time-transition.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/user-directed-controlled-time-transition.json",
+      "sha256": "9120aeec2d365adb404be30a4591567f14b056f58851194287e4463d80b39855",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-gates/qualification-source-history/operator-initial/user-directed-controlled-time-transition.json"
+    }
+  },
+  "focused_joint_tests": 341,
+  "qualified_tests_by_owner": {
+    "operator": 88,
+    "binder_book": 79,
+    "publication_audio": 99,
+    "reconciler": 53,
+    "authority": 22
+  },
+  "source_review_member_deltas": [],
+  "complete_regression_run": false,
+  "authority_activation": false,
+  "manual_generation_complete": false,
+  "generation_not_launched": true
+}

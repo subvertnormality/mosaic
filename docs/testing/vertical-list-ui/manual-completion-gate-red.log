@@ -1,0 +1,21 @@
+EE................
+======================================================================
+ERROR: test_completion_rejects_an_incomplete_book_even_with_all_plans_and_browser_checks (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 12, in test_completion_rejects_an_incomplete_book_even_with_all_plans_and_browser_checks
+    build.complete_build(True,["scene-plans.yaml"],["scene-plans.yaml"],{"complete_manual":False})
+AttributeError: module 'manual_build' has no attribute 'complete_build'
+
+======================================================================
+ERROR: test_completion_requires_browser_and_entire_required_plan_inventory (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 15, in test_completion_requires_browser_and_entire_required_plan_inventory
+    self.assertFalse(build.complete_build(False,["scene-plans.yaml"],["scene-plans.yaml"],book))
+AttributeError: module 'manual_build' has no attribute 'complete_build'
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.371s
+
+FAILED (errors=2)

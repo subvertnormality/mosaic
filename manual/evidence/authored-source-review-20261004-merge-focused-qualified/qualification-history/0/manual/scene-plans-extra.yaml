@@ -1,0 +1,378 @@
+schema_version: 1
+status: semantic-checkpoint-plan-not-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: Existing native cases are replayed in full. Each selector identifies a result
+  appended after successful player-observable semantic assertions; the native adapter
+  captures the screen and grid at that point. Occurrences are positive and one-based
+  independently per selector. A MIDI semantic checkpoint does not imply that its screen
+  shows every audited event.
+scenes:
+- id: range-reject-and-recover
+  feature_id: channel-length
+  title: Keep a valid range when a gesture is reversed
+  behaviour_case: M-RANGE-REJECT-001
+  citation: README.md#channel-length
+  source: tests/behaviour/contract/range_rejection.py
+  steps:
+  - id: valid-range
+    title: Start at step two
+    caption: Hold start 2, press and release end 4, then release start. The channel
+      repeats D, E and F with its original gates.
+    assertion:
+      kind: range-rejection-playback
+      scale_page: false
+      stage: valid-before-rejection
+      pitches:
+      - 62
+      - 64
+      - 65
+      passed: true
+  - id: reversed-end
+    title: Reject a reversed end
+    caption: Holding step 4 and releasing step 2 reports “End must follow start”.
+      The prior grid range remains unchanged.
+    assertion:
+      kind: range-rejection-feedback
+      scale_page: false
+      sequence: held4-release2
+      passed: true
+  - id: recovery
+    title: Choose a valid range again
+    caption: The next valid gesture selects steps 3–4; MIDI confirms E and F, with
+      the same step timing and gates.
+    assertion:
+      kind: range-rejection-playback
+      scale_page: false
+      stage: valid-recovery
+      pitches:
+      - 64
+      - 65
+      passed: true
+- id: mute-live-resume
+  feature_id: muting-channels
+  title: Mute and bring a running phrase back
+  behaviour_case: M-MUTE-001
+  citation: README.md#muting-channels
+  source: tests/behaviour/scale_memory.py
+  steps:
+  - id: live-unmute
+    title: Bring channel one back
+    caption: After the long channel hold silences the running channel and releases
+      its notes, K1 plus the channel button unmutes it. The bright channel indicator
+      returns; emitted notes continue the unchanged four-note phrase.
+    assertion:
+      kind: unmute-live-phrase
+- id: strum-division-bounds
+  feature_id: chord-strum
+  title: Choose a supported strum division
+  behaviour_case: M-PARAM-001
+  citation: README.md#chord-strum
+  source: tests/behaviour/contract/parameter_divisions.py
+  steps:
+  - id: 'off'
+    title: Start with X
+    caption: Assign Chord Note Strum to a Trig params slot. X leaves strumming off.
+    assertion:
+      kind: parameter-division-label
+      parameter: Chord Note Strum
+      value: X
+      passed: true
+    occurrence: 1
+  - id: smallest
+    title: First supported division
+    caption: One E3 detent from X selects 1/24. This is a fraction of the channel
+      step.
+    assertion:
+      kind: parameter-division-label
+      parameter: Chord Note Strum
+      value: 1/24
+      passed: true
+  - id: maximum
+    title: Upper bound
+    caption: Turning past the supported upper end keeps the visible value at 128.
+    assertion:
+      kind: parameter-division-label
+      parameter: Chord Note Strum
+      value: '128'
+      passed: true
+    occurrence: 2
+  - id: next-lower
+    title: One step down
+    caption: A reverse detent moves from 128 to the next supported value, 120.
+    assertion:
+      kind: parameter-division-label
+      parameter: Chord Note Strum
+      value: '120'
+      passed: true
+- id: parameter-slot-endpoints
+  feature_id: trig-param-locks
+  title: Ten parameter slots keep their own routes
+  behaviour_case: M-PARAM-046
+  citation: README.md#trig-param-locks
+  source: tests/behaviour/parameter_lock_domain.py
+  steps:
+  - id: clamped-slots
+    title: The first and last slots
+    caption: After assigning ten CC slots, E2 clamps at each end. Held step locks
+      still send CC10 on step one and CC1 on step two before their notes; exact gates
+      and releases are checked.
+    assertion:
+      kind: parameter-slot-limit
+      assigned_slots: 10
+      upper_route_cc: 10
+      lower_route_cc: 1
+      upper_and_lower_clamped: true
+      passed: true
+- id: transpose-next-onset
+  feature_id: transposition
+  title: Transpose the next note without cutting the current one
+  behaviour_case: M-TRANS-009
+  citation: README.md#transposition
+  source: tests/behaviour/contract/transpose_global_live_edit.py
+  steps:
+  - id: live-edits
+    title: Live transpose edits
+    caption: Two global transpose edits are made while notes sound. Existing pitches
+      and gates survive; subsequent onsets use the new transpose, remain on the timing
+      lattice and receive matching Note Off messages.
+    assertion:
+      kind: transpose-global-live-edit
+      passed: true
+- id: keyboard-white-key-options
+  feature_id: map-scale-to-white-keys
+  title: Let a keyboard follow the scale
+  behaviour_case: M-OPT-KEYS-001
+  citation: README.md#map-scale-to-white-keys
+  source: tests/behaviour/keyboard_options.py
+  steps:
+  - id: raw-default
+    title: Raw notes by default
+    caption: With white-key mapping off, all 128 input keys emit their original MIDI
+      pitches and matching releases.
+    assertion:
+      kind: keyboard-mapping
+      stage: default-raw
+      passed: true
+  - id: mapped-major
+    title: White keys follow Major
+    caption: 'Enable Map scale to white keys: the C-major scale follows the white
+      keys. The case verifies every input pitch. Black-key handling is characterised
+      by the case rather than promised by this manual.'
+    assertion:
+      kind: keyboard-mapping
+      stage: white-major
+      passed: true
+  - id: mapped-minor
+    title: A new scale changes the mapping
+    caption: Choose natural minor, return to the channel, and play the next keyboard
+      octave. Its exact mapped pitches follow the new scale.
+    assertion:
+      kind: keyboard-mapping
+      stage: white-minor
+      keys:
+      - 60
+      - 61
+      - 62
+      - 63
+      - 64
+      - 65
+      - 66
+      - 67
+      - 68
+      - 69
+      - 70
+      - 71
+      - 72
+      passed: true
+  - id: raw-again
+    title: Turn mapping off
+    caption: Disable mapping to restore the raw MIDI pitches across the tested octave,
+      with no active notes left behind.
+    assertion:
+      kind: keyboard-mapping
+      stage: white-off-raw
+      keys:
+      - 60
+      - 61
+      - 62
+      - 63
+      - 64
+      - 65
+      - 66
+      - 67
+      - 68
+      - 69
+      - 70
+      - 71
+      - 72
+      notes:
+      - 60
+      - 61
+      - 62
+      - 63
+      - 64
+      - 65
+      - 66
+      - 67
+      - 68
+      - 69
+      - 70
+      - 71
+      - 72
+      passed: true
+- id: song-mode-groups-and-selection
+  feature_id: song-mode-operations
+  title: Loop a song group or hold one slot
+  behaviour_case: M-SONG-FLOW-001
+  citation: README.md#song-mode-operations
+  source: tests/behaviour/song_mode_flow.py
+  steps:
+  - id: first-group
+    title: Empty slots close the group
+    caption: With Song mode on, filled slots 1 and 2 repeat as a group because slot
+      3 is empty. Each slot sounds its distinctive two-note octave.
+    assertion:
+      kind: song-mode-flow
+      stage: default-on-group-1
+      slots:
+      - 1
+      - 2
+      - 1
+      - 2
+      notes:
+      - 60
+      - 62
+      - 72
+      - 74
+      - 60
+      - 62
+      - 72
+      - 74
+      passed: true
+  - id: queued-selection
+    title: Select the next slot while playing
+    caption: A live selection of slot 2 waits for slot 4 to finish, then joins the
+      first group. Exact note order verifies the boundary.
+    assertion:
+      kind: song-mode-flow
+      stage: queued-selection
+      slots:
+      - 4
+      - 2
+      - 1
+      - 2
+      notes:
+      - 84
+      - 86
+      - 72
+      - 74
+      - 60
+      - 62
+      - 72
+      - 74
+      passed: true
+  - id: hold-slot
+    title: Song mode off holds the slot
+    caption: With Song mode off, slot 1 keeps repeating rather than advancing automatically.
+    assertion:
+      kind: song-mode-flow
+      stage: off-holds-slot
+      slots:
+      - 1
+      - 1
+      - 1
+      - 1
+      notes:
+      - 60
+      - 62
+      - 60
+      - 62
+      - 60
+      - 62
+      - 60
+      - 62
+      passed: true
+  - id: manual-off
+    title: Manual selection still works
+    caption: 'Song mode off still honours a queued manual selection: finish slot 1,
+      then keep playing slot 2.'
+    assertion:
+      kind: song-mode-flow
+      stage: off-manual-selection
+      slots:
+      - 1
+      - 2
+      - 2
+      - 2
+      notes:
+      - 60
+      - 62
+      - 72
+      - 74
+      - 72
+      - 74
+      - 72
+      - 74
+      passed: true
+- id: merge-shape-owns-trigs
+  feature_id: merge-shape
+  title: Read when Merge Shape is deciding the trigs
+  behaviour_case: M-LIVEUI-SHAPETRIG-001
+  citation: README.md#merge-shape
+  source: tests/behaviour/contract/live_ui_feedback.py
+  steps:
+  - id: shape-only
+    title: Shape is active
+    caption: With Foundation applied, the saved Only mode reads SHAPE (ONLY); the
+      merge-button feedback says Merge Shape is in use.
+    assertion:
+      kind: shape-trig-mode
+      value: ONLY
+      passed: true
+  - id: shape-all
+    title: All remains saved beneath Shape
+    caption: The next button press reads SHAPE (ALL). Foundation still decides the
+      additions, including their velocity-70 accent.
+    assertion:
+      kind: shape-trig-mode
+      value: ALL
+      passed: true
+  - id: legacy-return
+    title: Turn Shape off to restore the saved mode
+    caption: After Mode Off is applied, ordinary All returns and plays the pattern
+      additions at velocity 100. The next merge-button press shows plain Skip feedback
+      and its dim indicator.
+    assertion:
+      kind: live-ui-merge-shape-trig-mode-summary
+      passed: true
+- id: harmony-range-failure-and-fallback
+  feature_id: harmony
+  title: See a failed voicing and choose a fallback
+  behaviour_case: M-HARMONY-FAILURE-001
+  citation: README.md#harmony
+  source: tests/behaviour/contract/harmony_workflows.py
+  steps:
+  - id: range-failure
+    title: No legal register
+    caption: An infeasible Pattern register shows NO VOICING RANGE. The mapped tone
+      is silent and Result exposes the failure details.
+    assertion:
+      kind: no-voicing-visible
+      reason: range
+      passed: true
+  - id: no-event
+    title: An unrecorded step has no event
+    caption: 'Inspect step 5: Status and the channel voice both read NO EVENT. It
+      is not presented as another failed voicing.'
+    assertion:
+      kind: unrecorded-step-inspection
+      step: 5
+      status: NO EVENT
+      passed: true
+  - id: legacy-fallback
+    title: Choose Legacy explicitly
+    caption: Change Failure fallback to LEGACY and apply it. The original C/D/E/F
+      phrase plays again; the Result status reads LEGACY RANGE.
+    assertion:
+      kind: explicit-legacy-fallback
+      passed: true

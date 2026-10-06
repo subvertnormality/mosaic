@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "scope": "All existing run control/oracle AST unchanged after removing only registration initialization/copy/digest assertion, manifest harness path/keyword and report.update(registration).",
+  "before_sha256": "3747c2f578ee641b2b1923eb99679efdf192841e26634d307df603a599b27380",
+  "after_sha256": "e9fa70d80946b06c034a0877da0f84aef1cbe62009608d0d3d66f9dfbfb7b4f1",
+  "complete_regression_run": false
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "tests/behaviour/mini_phase_oracle.py",
+      "before_sha256": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+      "after_sha256": "09e822da182bacde9516a0f318291ed94d5215ca1e9b367f49f8ec05fd73738f"
+    },
+    {
+      "path": "tests/behaviour/contract/mini_phase_oracle.py",
+      "before_sha256": null,
+      "after_sha256": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7"
+    },
+    {
+      "path": "tests/behaviour/test_mini_phase_oracle.py",
+      "before_sha256": "ab9ceda3204db3f0865f230802c71aa8b1ebcc3d3378a66554bda4344d15bf1c",
+      "after_sha256": "61c41d4e5fb724914696f2cd1f37e3ddf21f40e9a35bf7f47257d5ceb7f36ed0"
+    }
+  ],
+  "implementation_byte_identical_to_original": true,
+  "original_and_new_implementation_sha256": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+  "unchanged_guards_and_inventory": {
+    "tests/behaviour/ui_layer_guard.py": "ccc5c2662e091c39a787228f10ec53f4dedb8f4420c674eba5f211144dcef14e",
+    "tests/behaviour/contract_cases.json": "9d678a2a0e147d39850209c18e120bcdd9ab3968869ded8cc0b8cdc0590a7e89",
+    "tests/behaviour/test_ui_layer.py": "882397c160243a3d1657b24c807ca8d479a0938714ce997a766fe1b6ed742cd0"
+  },
+  "new_allowlist_entries": [],
+  "guard_red_failure": "raw UI outside contract module: mini_phase_oracle.py:13",
+  "tests": [
+    "test_mini_phase_oracle",
+    "test_ui_layer.UiLayerGuardTests.test_ui_layer_is_raw_free_outside_contract",
+    "test_ui_layer.UiLayerGuardTests.test_contract_inventory_has_a_fixed_ceiling",
+    "test_ui_layer.UiLayerGuardTests.test_every_case_owner_matches_the_fixed_contract_inventory",
+    "test_ui_layer.UiLayerGuardTests.test_contract_classifier_follows_helpers_and_baseline_failures",
+    "test_driver_wait"
+  ],
+  "affected_returncode": 0,
+  "affected_log_sha256": "ab475514632c6555dc1a1c628b2c3e90325bc98caf38e0372440c4026f6d4d1a",
+  "diff_sha256": "07c1a0a4347b326f70c06083a4b5049c4590ec299a020e9075414e84b7fc5ed9",
+  "native_launched": false,
+  "emulator_changed": false
+}

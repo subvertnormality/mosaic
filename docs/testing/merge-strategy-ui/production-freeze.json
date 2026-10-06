@@ -1,0 +1,21 @@
+{
+  "files": {
+    "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+    "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+    "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+    "lib/ui_live.lua": "66ffd22008369999b6d6b24fe58546b869ed5ee5c1551e81745a6b2398d5c31b",
+    "lib/ui_render.lua": "0bffa33541043ab3a8a95926bf2c316f3b622f2d1c980bd4dac6b151ba6b2a3e",
+    "lib/ui_spec_data.lua": "b2b56372d36ba6c9fbc0548f2420e55150aad24bef60bf1302ed944e6b5075fa",
+    "docs/ui-reimplementation/spec.json": "b4c4bb4d9f493bca35ee18f6767d10f2d97985b849aeeb1c98e110a09b740902",
+    "docs/ui-reimplementation/code/screen.lua": "0bffa33541043ab3a8a95926bf2c316f3b622f2d1c980bd4dac6b151ba6b2a3e"
+  },
+  "native_baseline_reds": [
+    "bd32065f28164ad7ab0ee17f07911f0d",
+    "4238977365094e29a6a9461e6c15dfd2"
+  ],
+  "focused_tests": 10,
+  "production_frozen": true,
+  "source_ledger_finalization_pending": null,
+  "documentary_export_change": "Corrected only two layout_contract prose strings to describe authorized selected overflow marquee. No executable production changes."
+}

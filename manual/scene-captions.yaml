@@ -1,0 +1,180 @@
+schema_version: 1
+overlays:
+- scene_id: doctor-local-auto-capture-and-paint
+  step_id: analyse
+  caption: 'Let the take run until the screen reads ENOUGH / REC OR K3 (about 25 seconds of the loop;
+    this is real time, so wait for the readout), then press K3. Doctor stops recording and analyses it:
+    ANALYSING, Lanes BD SD CYM.'
+  baseline_caption: Press K3 after enough audio has been recorded. Doctor analyses the recording.
+  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+- scene_id: doctor-local-auto-capture-and-paint
+  step_id: paint
+  caption: Press Paint at (16,8) again to commit. The tooltip reads Pattern painted and the flashing steps
+    become solid trigs in pattern 1, on the same steps as the preview. The captured bank stays unchanged.
+  baseline_caption: Tap Paint again. The attacks are stored in pattern 1.
+  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+- scene_id: doctor-local-auto-capture-and-paint
+  step_id: play
+  caption: Press Channel (3,8), then Play at (1,8). Channel 1 sends MIDI note 60 on each painted step, with
+    velocities taken from the recording. In this captured three-second pass, the MIDI strip shows
+    velocities 114, 110 and 107, one hit per beat. The frame shows the Masks screen with the pattern
+    stopped; check the MIDI strip below for the notes sent. Press Play again after about three seconds
+    to stop.
+  baseline_caption: Tap Play. Channel 1 sends the painted attacks to its MIDI output. Tap Play again to
+    stop.
+  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+- scene_id: doctor-local-auto-capture-and-paint
+  step_id: preview
+  caption: 'Select the BD lane (bass drum) at (3,2) and tap Paint at (16,8). The grid flashes the detected
+    bass-drum hits on steps 10, 14, 18 and so on every fourth step to step 62, one per beat. The first
+    hit is on step 10, not step 1, because Auto estimates the phrase start from the recording and the
+    first thump comes some way into it; a Manual-tempo take of the same loop shows it on step 11. This
+    is only a preview: nothing is stored yet. The screen reads PAINT, Policy TOGGLE, Destination 1.'
+  baseline_caption: Select BD and tap Paint to preview its detected attacks.
+  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+- scene_id: doctor-local-auto-capture-and-paint
+  step_id: ready
+  caption: Wait while the norns analyses the recording; a short take takes roughly half a minute, and
+    this wait cannot be shortened. When it finishes, the Window screen shows READY with Window bar 1,
+    Window step 1, Sensitivity 0 and Paint policy TOGGLE. Window bar moves the view by 16 steps and Window
+    step by one, Sensitivity is set for the selected lane, and Paint policy (Toggle, Add or Replace) decides
+    how painted hits meet trigs already in the pattern. The lane buttons BD (bass drum), SD (snare) and
+    CYM (cymbal) light at (3,2) to (5,2).
+  baseline_caption: When analysis finishes, Doctor displays the recording window.
+  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+- scene_id: doctor-local-auto-capture-and-paint
+  step_id: record
+  caption: Leave Tempo on AUTO and tap Record at (1,2). Doctor starts listening to the audio input and
+    will estimate the tempo and phrase start itself. The screen reads CAPTURE, MORE AUDIO NEEDED, LISTENING.
+  baseline_caption: Tap Record. Doctor starts listening to the audio input using Auto tempo.
+  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+- scene_id: doctor-local-auto-capture-and-paint
+  step_id: setup
+  caption: 'Starting point: channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps
+    1-64) and playback is stopped. Play a steady loop into the norns audio input, with a short thump on
+    every beat at 120 BPM; the example uses a 29-second loop, so use one at least that long. Press Pattern
+    (5,8) and choose the Rhythm Doctor algorithm at (16,2). Rhythm Doctor opens on the norns: Record READY,
+    Tempo AUTO, Manual BPM 120, Input STEREO. The bank is EMPTY, so there are no detected hits to paint yet.'
+  baseline_caption: Select Rhythm Doctor while the sequencer is stopped.
+  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+- scene_id: doctor-local-capture-and-paint
+  step_id: analyse
+  caption: 'Let the take run until the screen reads ENOUGH / REC OR K3 (about 25 seconds of the loop;
+    this is real time, so wait for the readout), then press K3. Doctor stops recording and analyses it:
+    ANALYSING, Lanes BD SD CYM.'
+  baseline_caption: Press K3 after enough audio has been recorded. Doctor analyses the recording.
+  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+- scene_id: doctor-local-capture-and-paint
+  step_id: paint
+  caption: Press Paint at (16,8) again to commit. The tooltip reads Pattern painted and the flashing steps
+    become solid trigs in pattern 1, on the same steps as the preview. The captured bank stays unchanged.
+  baseline_caption: Tap Paint again. The attacks are stored in pattern 1.
+  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+- scene_id: doctor-local-capture-and-paint
+  step_id: play
+  caption: Press Channel (3,8), then Play at (1,8). Channel 1 sends MIDI note 60 on each painted step
+    at velocities near 123, taken from the recording, one hit per beat; the painted steps are the bass-drum
+    hits. The frame shows the Masks screen with the pattern stopped; check the MIDI strip below for the
+    notes sent. Press Play again after about three seconds to stop.
+  baseline_caption: Tap Play. Channel 1 sends the painted attacks to its MIDI output. Tap Play again to
+    stop.
+  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+- scene_id: doctor-local-capture-and-paint
+  step_id: preview
+  caption: 'Select the BD lane (bass drum) at (3,2) and tap Paint at (16,8). The grid flashes the detected
+    bass-drum hits on steps 11, 15, 19 and so on every fourth step to step 63, one per beat at 120 BPM.
+    The first hit is on step 11, not step 1, because Manual starts the phrase at the very start of the
+    recording and the first thump comes some way into it. This is only a preview: nothing is stored yet.
+    The screen reads PAINT, Policy TOGGLE, Destination 1.'
+  baseline_caption: Select BD and tap Paint to preview its detected attacks.
+  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+- scene_id: doctor-local-capture-and-paint
+  step_id: ready
+  caption: Wait while the norns analyses the recording; a short take takes roughly half a minute, and
+    this wait cannot be shortened. When it finishes, the Window screen shows READY with Window bar 1,
+    Window step 1, Sensitivity 0 and Paint policy TOGGLE. Window bar moves the view by 16 steps and Window
+    step by one, Sensitivity is set for the selected lane, and Paint policy (Toggle, Add or Replace) decides
+    how painted hits meet trigs already in the pattern. The lane buttons BD (bass drum), SD (snare) and
+    CYM (cymbal) light at (3,2) to (5,2).
+  baseline_caption: When analysis finishes, Doctor displays the recording window.
+  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+- scene_id: doctor-local-capture-and-paint
+  step_id: record
+  caption: 'Turn E2 to Tempo and E3 to MANUAL, then press K3 to confirm: Manual BPM reads 120, so you
+    tell Doctor the tempo instead of letting it estimate. Tap Record at (1,2). Doctor starts listening
+    to the audio input; the screen reads CAPTURE, MORE AUDIO NEEDED, RECORDING.'
+  baseline_caption: Select Manual tempo, press K3 to apply, then tap Record. Doctor starts listening to
+    the audio input.
+  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+- scene_id: doctor-local-capture-and-paint
+  step_id: setup
+  caption: 'Starting point: channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps
+    1-64) and playback is stopped. Play a steady loop into the norns audio input, with a short thump on
+    every beat at 120 BPM; the example uses a 29-second loop, so use one at least that long. Press Pattern
+    (5,8) and choose the Rhythm Doctor algorithm at (16,2). Rhythm Doctor opens on the norns: Record READY,
+    Tempo AUTO, Manual BPM 120, Input STEREO. The bank is EMPTY, so no lane buttons are lit yet.'
+  baseline_caption: Select Rhythm Doctor while the sequencer is stopped.
+  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+- scene_id: first-sound-equal-note-loop
+  step_id: assignment
+  caption: 'Tap Channel (3,8), then tap pattern slot (1,2) to feed pattern 1 to channel 1. Next limit
+    the channel to four steps: hold step 1 at (1,4), tap step 4 at (4,4), then release step 1. Hold the
+    first step of the range, tap the last, then let go. The channel now loops steps 1 to 4, and those
+    four steps are brighter than the rest of row 4.'
+  baseline_caption: Tap Channel and assign pattern 1. Hold step 1, tap step 4, then release step 1 to
+    set a four-step range.
+  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+- scene_id: first-sound-equal-note-loop
+  step_id: device
+  caption: 'Starting point: a new, empty project, stopped, with Record off. No channel has an output,
+    no pattern has trigs and no masks are set. Tap Channel (3,8): the header reads CH01. Turn E1 to open
+    Channel tasks, choose Device with E2 and press K3. Turn E3 one detent to the first output in the list
+    and press K3 to apply it. Whichever name the row shows is fine for this walk-through; in your own
+    project pick the note-capable output you set up in Connect a sound. The Device page for CH01 stays
+    on screen.'
+  baseline_caption: Tap Channel. Open Channel tasks, select Device, choose the first MIDI output and press
+    K3.
+  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+- scene_id: first-sound-equal-note-loop
+  step_id: length-and-playback
+  caption: Turn E2 one detent to select Len, then turn E3 until the screen reads 1/2, so each note lasts
+    half a step. Tap Play (1,8) to hear four equal C notes (MIDI 60, velocity 80) repeating as the playhead
+    runs along steps 1 to 4; the frame shows the Masks screen, so listen to your output or check the MIDI
+    strip below. Tap Play again to stop.
+  baseline_caption: Select Len and set 1/2. Press Play to hear four equal MIDI 60 attacks. The replay
+    checks two complete cycles and stops playback.
+  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+- scene_id: first-sound-equal-note-loop
+  step_id: note
+  caption: Turn E1 to open Channel tasks, scroll up to Masks with E2 and press K3. Select Note with E2,
+    then turn E3 right until the screen reads C3, which is MIDI 60. The Note row shows the name, so stop
+    on the readout instead of counting. With no step held this sets the channel note for all steps.
+  baseline_caption: Open Masks, select Note and set MIDI 60. The Masks screen displays C3.
+  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+- scene_id: first-sound-equal-note-loop
+  step_id: pattern
+  caption: Tap Pattern (5,8) for the Trig view of pattern 1, then tap steps (1,4), (2,4), (3,4) and (4,4).
+    Four steps light on row 4. Each lit step is a trig, a moment where a note will sound.
+  baseline_caption: Tap Pattern and activate steps 1–4. The Pattern Trig page remains selected.
+  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+- scene_id: first-sound-equal-note-loop
+  step_id: velocity
+  caption: Turn E2 one detent to select Vel, then turn E3 right until the screen reads 80. Every step
+    now plays at velocity 80, a medium-loud level.
+  baseline_caption: Select Vel and set 80. All steps use this channel velocity default.
+  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+- scene_id: software-player-doubledecker
+  step_id: select-player
+  caption: On channel 3's Device page, turn E3 until the Device row reads Doubledecker. The screen asks you to press K3 to confirm, so the selection is still a draft. Press K3 to apply it. The README describes Doubledecker as a two-layer synth; use it for a layered part after applying the selection.
+  baseline_caption: On channel 3's Device page, turn E3 until the Device row reads Doubledecker. The row shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
+  contract_sha256: 32eb1db06a30d8a6280248d6431c13006f2a15b53cdfcc85bbd49d1eded01eda
+- scene_id: software-player-oilcan
+  step_id: select-player
+  caption: On channel 1's Device page, turn E3 until the Device row reads Oilcan 1. The screen asks you to press K3 to confirm, so the selection is still a draft. Press K3 to apply it. The README describes Oilcan as percussion sync; use it for a percussion part after applying the selection.
+  baseline_caption: On channel 1's Device page, turn E3 until the Device row reads Oilcan 1. The row shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
+  contract_sha256: a1f1ad158a32b49a54a71ecd3a061b51e6562e557a948c9d9c0113dfa1432bff
+- scene_id: software-player-polyperc
+  step_id: select-player
+  caption: On channel 2's Device page, turn E3 until the Device row reads Polyperc 1. The screen asks you to press K3 to confirm, so the selection is still a draft. Press K3 to apply it. The README describes Polyperc as poly perc; use it for a percussive part after applying the selection.
+  baseline_caption: On channel 2's Device page, turn E3 until the Device row reads Polyperc 1. The row shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
+  contract_sha256: 50e7ee5e1d3e202080d3c4d506d9aee7eb1d0d020ac032452a6b458af880b811

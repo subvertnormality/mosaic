@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "scope": "Four focused complete native captures for corrected observer/plan examples; no whole72build/course recapture/editorial/hardware claim",
+  "roles": [
+    {
+      "role": "foundation-all-skip",
+      "lane": "controlled",
+      "report": {
+        "path": "/home/andy/mosaic-manual-runs/9a7cd8a122f24c7491cfa8be2d7d562f/reference-scenes.json",
+        "sha256": "520d1bb886e20e86314d2ccc1a19f2048eed0920f4323baec2f4f4ccf86466dd"
+      },
+      "audit": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/strategy-foundation-all-skip-controlled-focused-audit.json",
+        "sha256": "7c5e51e6f799c1768ec826695d22985644a75b550895a2efc067d6abf5c76a60"
+      },
+      "native_identity": {
+        "path": "/home/andy/mosaic-manual-runs/9a7cd8a122f24c7491cfa8be2d7d562f/M-LIVEUI-SHAPETRIG-001-base-midi/native/identity.json",
+        "sha256": "f239479d55e72ff9276ee428941f84a978b0feb71f575440f38a74e8933bba1a"
+      },
+      "case_sources_pinned": {
+        "tests/behaviour/contract/live_ui_feedback.py": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+        "tests/behaviour/merge_strategy_routes.py": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+      },
+      "runtime_status": "experimental-unadmitted",
+      "complete_regression_run": false,
+      "hardware_timing_equivalent": false
+    },
+    {
+      "role": "foundation-all-skip",
+      "lane": "real",
+      "report": {
+        "path": "/home/andy/mosaic-manual-runs/916152fc32ae415682123f69597cc97d/reference-scenes.json",
+        "sha256": "b807b19e3292cdb3e446e9e6187fd2a984527d5484ff93d2db5b0fc55afad60b"
+      },
+      "audit": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/strategy-foundation-all-skip-real-focused-audit.json",
+        "sha256": "fa5a96e506e6b81faa379e5abce2f931c52e9eff69d0a46c24221ae698e0f57b"
+      },
+      "native_identity": {
+        "path": "/home/andy/mosaic-manual-runs/916152fc32ae415682123f69597cc97d/M-LIVEUI-SHAPETRIG-001-base-midi/native/identity.json",
+        "sha256": "032cd4a1842b6d45f054f4818f46efa3340511e140bef9820acf91ab6efca9f2"
+      },
+      "case_sources_pinned": {
+        "tests/behaviour/contract/live_ui_feedback.py": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+        "tests/behaviour/merge_strategy_routes.py": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+      },
+      "runtime_status": "experimental-unadmitted",
+      "complete_regression_run": false,
+      "hardware_timing_equivalent": false
+    },
+    {
+      "role": "overlap-union",
+      "lane": "controlled",
+      "report": {
+        "path": "/home/andy/mosaic-manual-runs/ddf9bc720591468e86cfdcbc52c24d2d/reference-scenes.json",
+        "sha256": "3ae3ab078c1fbd0b82bd6a0a51b3aa372a8d892aaa0e21d5acfa8099f41679ee"
+      },
+      "audit": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/strategy-overlap-union-controlled-focused-audit.json",
+        "sha256": "a0df35cf1d35510f080d6bbfe70fa83c7962ad806e9d54fc6e8424956a7ca90c"
+      },
+      "native_identity": {
+        "path": "/home/andy/mosaic-manual-runs/ddf9bc720591468e86cfdcbc52c24d2d/M-LIVEUI-MERGEMODES-001-base-midi/native/identity.json",
+        "sha256": "bdd6b92bc91684b335401ade920d982631e4b1896f6f635493e90a2f6996a9c3"
+      },
+      "case_sources_pinned": {
+        "tests/behaviour/contract/live_ui_feedback.py": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+        "tests/behaviour/merge_strategy_routes.py": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+      },
+      "runtime_status": "experimental-unadmitted",
+      "complete_regression_run": false,
+      "hardware_timing_equivalent": false
+    },
+    {
+      "role": "overlap-union",
+      "lane": "real",
+      "report": {
+        "path": "/home/andy/mosaic-manual-runs/58fb8d5fb0c7421d97de79027d2c38a8/reference-scenes.json",
+        "sha256": "d565a191f2860faf60f2f8cc6dcfd88fec695c883889811a34224398b28bad47"
+      },
+      "audit": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/strategy-overlap-union-real-focused-audit.json",
+        "sha256": "437ded21777277cc8f18775aa5721b324ed9170f3f365db958572ff21dd4c29a"
+      },
+      "native_identity": {
+        "path": "/home/andy/mosaic-manual-runs/58fb8d5fb0c7421d97de79027d2c38a8/M-LIVEUI-MERGEMODES-001-base-midi/native/identity.json",
+        "sha256": "67d92870a74a649fb330e603f702be3db3739aca481042f4d547dd123c03cb56"
+      },
+      "case_sources_pinned": {
+        "tests/behaviour/contract/live_ui_feedback.py": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+        "tests/behaviour/merge_strategy_routes.py": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+      },
+      "runtime_status": "experimental-unadmitted",
+      "complete_regression_run": false,
+      "hardware_timing_equivalent": false
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "manual/scene-plans.yaml",
+      "sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans.yaml",
+      "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+      "native_case_sources_pinned": false,
+      "test_module": false,
+      "review_chain": [
+        {
+          "original_archive": "manual/evidence/merge-strategy-plan-alignment/before/manual/scene-plans.yaml",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/manual/scene-plans.yaml",
+          "sha256": "106ba6bd35f5df34d58e8258f50d1b94703fb303ba7958fd057c92ea79e11765"
+        },
+        {
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans.yaml",
+          "sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791"
+        }
+      ],
+      "before_sha256": "106ba6bd35f5df34d58e8258f50d1b94703fb303ba7958fd057c92ea79e11765",
+      "after_sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791"
+    },
+    {
+      "path": "manual/scene-plans-extra.yaml",
+      "sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans-extra.yaml",
+      "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+      "native_case_sources_pinned": false,
+      "test_module": false,
+      "review_chain": [
+        {
+          "original_archive": "docs/testing/merge-strategy-ui/example-unfixed-plan.yaml",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/manual/scene-plans-extra.yaml",
+          "sha256": "d1c6d613d32cdf1760977992ccb552ee059b75ee59ceaf71392cfa229acda592"
+        },
+        {
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/manual/scene-plans-extra.yaml",
+          "sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5"
+        }
+      ],
+      "before_sha256": "d1c6d613d32cdf1760977992ccb552ee059b75ee59ceaf71392cfa229acda592",
+      "after_sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_feedback.py",
+      "sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/contract/live_ui_feedback.py",
+      "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+      "native_case_sources_pinned": true,
+      "test_module": false,
+      "review_chain": [
+        {
+          "original_archive": "docs/testing/merge-strategy-ui/footer-unfixed-source-20261004/live_ui_feedback.py",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/contract/live_ui_feedback.py",
+          "sha256": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d"
+        },
+        {
+          "original_archive": "docs/testing/merge-strategy-ui/example-unfixed-feedback.py",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/1/tests/behaviour/contract/live_ui_feedback.py",
+          "sha256": "e2c42d52ed5f2f9164c28c1192e28e88480633e29c2bf7d76f7b1898fe0c4048"
+        },
+        {
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/contract/live_ui_feedback.py",
+          "sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f"
+        }
+      ],
+      "before_sha256": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d",
+      "after_sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f"
+    },
+    {
+      "path": "tests/behaviour/merge_strategy_routes.py",
+      "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/merge_strategy_routes.py",
+      "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+      "native_case_sources_pinned": true,
+      "test_module": false,
+      "review_chain": [
+        {
+          "original_archive": "docs/testing/merge-strategy-ui/footer-unfixed-source-20261004/merge_strategy_routes.py",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/merge_strategy_routes.py",
+          "sha256": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88"
+        },
+        {
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/merge_strategy_routes.py",
+          "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+        }
+      ],
+      "before_sha256": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+      "after_sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+    },
+    {
+      "path": "tests/behaviour/test_manual_case_capture.py",
+      "sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_manual_case_capture.py",
+      "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+      "native_case_sources_pinned": false,
+      "test_module": true,
+      "review_chain": [
+        {
+          "original_archive": "manual/evidence/merge-strategy-plan-alignment/before/tests/behaviour/test_manual_case_capture.py",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/test_manual_case_capture.py",
+          "sha256": "798dc21ede76f5ba7166d0fd2cf4c032e29dac06cf98bd12339470eb04ae2b3d"
+        },
+        {
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_manual_case_capture.py",
+          "sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785"
+        }
+      ],
+      "before_sha256": "798dc21ede76f5ba7166d0fd2cf4c032e29dac06cf98bd12339470eb04ae2b3d",
+      "after_sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785"
+    },
+    {
+      "path": "tests/behaviour/test_merge_strategy_ui_routes.py",
+      "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_merge_strategy_ui_routes.py",
+      "membership": "separate qualification dependency; not one of78 reviewed ledger members",
+      "native_case_sources_pinned": false,
+      "test_module": true,
+      "review_chain": [
+        {
+          "original_archive": "docs/testing/merge-strategy-ui/footer-temporal-red-test-source.py",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/0/tests/behaviour/test_merge_strategy_ui_routes.py",
+          "sha256": "2d29ea2a9d2e1513e429478a9a636d515586c57a2f61b6d225b14b89dedcec43"
+        },
+        {
+          "original_archive": "docs/testing/merge-strategy-ui/example-red-test-source.py",
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-history/1/tests/behaviour/test_merge_strategy_ui_routes.py",
+          "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+        },
+        {
+          "preserved_archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/qualification-source/tests/behaviour/test_merge_strategy_ui_routes.py",
+          "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+        }
+      ],
+      "before_sha256": "2d29ea2a9d2e1513e429478a9a636d515586c57a2f61b6d225b14b89dedcec43",
+      "after_sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+    }
+  ],
+  "red_green_receipts": [
+    {
+      "path": "docs/testing/merge-strategy-ui/footer-observer-fixture-rgr.json",
+      "sha256": "fb0af877fbaf54a3b6b52a1be05aaab9016cb8f24ece88fa9eb78f0ff35cea71"
+    },
+    {
+      "path": "docs/testing/merge-strategy-ui/example-checkpoints-fixture-rgr.json",
+      "sha256": "3119e506344320271cc65d2102249ef26378e6296f9e8ead88f687023c1f5465"
+    },
+    {
+      "path": "manual/evidence/merge-strategy-plan-alignment/source-alignment-receipt.json",
+      "sha256": "dfc241f954ab25154c726be800991f678e59bddb577b5975619902339c6a20ea"
+    },
+    {
+      "path": "manual/evidence/merge-shared-strategy-prose-20261004/manifest.json",
+      "sha256": "a894176fea5108fdd2ec6af449b5c851f367067cc58141e98479447e56575ec8"
+    },
+    {
+      "path": "docs/testing/manual-publication-new-kinds/build5-stage11-strategy-footer-failure-audit.json",
+      "sha256": "b2ead45a67ca57e3862c48cc3c621ced14aa3629edfcd725a6e4c7bde568dc12"
+    },
+    {
+      "path": "docs/testing/manual-publication-new-kinds/strategy-footer-unfixed-controlled-046-audit.json",
+      "sha256": "24f77ae9ecd345745ba6cc45dbdf0663b546049d3eac94e4cf103beed0488301"
+    },
+    {
+      "path": "docs/testing/manual-publication-new-kinds/strategy-footer-candidate-controlled-e14-partial-audit.json",
+      "sha256": "2a259af46fc0fa26fdd3aa3b9a9f652cf8f18d5c69419873bce3dd10ac04e541"
+    },
+    {
+      "path": "docs/testing/manual-publication-new-kinds/strategy-controlled-native-wire-supplement.json",
+      "sha256": "9c4a729262b5d01a1b542a1eb251325b614674dbc5933f91e18e76f6c93f57a4"
+    }
+  ],
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "source_review_live_applied": false,
+  "previous_qualification": {
+    "path": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/paired-native-qualification.json",
+    "sha256": "2701f628637dd6c46e5fb643395d2d12121035a3d12911246982b87bf7c171c7"
+  }
+}

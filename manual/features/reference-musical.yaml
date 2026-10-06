@@ -1,0 +1,3504 @@
+features:
+- id: lfos-and-modulation
+  title: LFOs and Modulation
+  audience: all
+  summary: Matrix routes toolkit modulation sources to device parameters.
+  prose: 'Mosaic supports Matrix mod and toolkit. Matrix routes modulation sources to device parameters;
+    toolkit supplies LFOs and other rhythmic modulators.
+
+
+    Install and configure the mods using their documentation:
+
+    - [Matrix](https://github.com/sixolet/matrix)
+
+    - [Toolkit](https://github.com/sixolet/toolkit)'
+  musical_use: Route a macro or LFO to a device parameter. Clear the routing depth to restore the authored
+    parameter value.
+  related:
+  - save-and-load
+  sources:
+    readme: manual/legacy/README-1.4.0.md#lfos-and-modulation
+    behaviour_cases:
+    - M-MOD-001
+    - M-MOD-002
+    - M-MOD-003
+    - M-MOD-004
+    - M-MANUAL-MODULATION-001
+    code:
+    - lib/step.lua
+    - lib/devices/param_manager.lua
+  controls:
+  - gesture: Open Matrix routing in the native norns parameter menu.
+    result: A modulation source, target and depth can be selected.
+  - gesture: Open the selected toolkit source’s parameters.
+    result: The macro or LFO settings can be changed. Routed modulation affects playback.
+  details:
+  - title: Installed mods
+    text: Matrix provides routing. Toolkit provides modulation sources. Their installed versions determine
+      the native menu sequence. This feature has no additional Mosaic grid shortcut.
+  - title: Step-lock precedence
+    text: Modulation can add or subtract from an outgoing MIDI CC value. Clearing the modulation restores
+      the value supplied by its default or step lock.
+  recipes: []
+  scene_refs:
+  - matrix-macro-route-clear
+  - toolkit-clocked-lfo-menu
+  - matrix-macro-modest-cc
+  review:
+    status: verified
+    cases:
+    - M-MOD-001
+    - M-MOD-002
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: matrix-macro-route-clear
+      data: reference-modulation-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/01ef2e2ab78c452aa35cba2ead3154c3
+      data_sha256: 18a2d481c60335d5fa0c6c24617372dc23e3b75c5dc048e31f05f8331971357e
+      case: M-MOD-001
+      assertions:
+      - kind: selected-menu-label
+        text: Fixed Note
+      - kind: selected-menu-label
+        text: macro 1
+      - kind: selected-menu-value
+        text: '1.00'
+      - kind: selected-menu-label
+        text: value
+      - kind: midi
+        complete_cycles: 3
+      - kind: selected-menu-value
+        text: '-'
+      - kind: midi
+        complete_cycles: 3
+      scope: Native Matrix macro source/target/depth menu plus affected/restored MIDI; clocked toolkit
+        LFO configuration menu and full-case clocked MIDI acceptance.
+    - scene: toolkit-clocked-lfo-menu
+      data: reference-modulation-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/01ef2e2ab78c452aa35cba2ead3154c3
+      data_sha256: 18a2d481c60335d5fa0c6c24617372dc23e3b75c5dc048e31f05f8331971357e
+      case: M-MOD-002
+      assertions:
+      - kind: selected-menu-label
+        text: lfo 1
+      - kind: selected-menu-value
+        text: '1.00'
+      - kind: selected-menu-label
+        text: clocked
+      - kind: selected-menu-label
+        text: beats
+      - kind: selected-menu-label
+        text: shape
+      scope: Native Matrix macro source/target/depth menu plus affected/restored MIDI; clocked toolkit
+        LFO configuration menu and full-case clocked MIDI acceptance.
+    applicability: native-ui
+    native_gap: Actual installed Matrix/toolkit menu and MIDI modulation are covered; physical norns scheduling
+      equivalence and every routed parameter are outside these examples.
+    rationale: Native Matrix macro source/target/depth menu plus affected/restored MIDI; clocked toolkit
+      LFO configuration menu and full-case clocked MIDI acceptance.
+    controlled_baselines: []
+  category: musical
+  parent: save-and-load
+  level: 3
+  teaching_bindings:
+  - id: matrix-macro-route-clear-target
+    binding:
+      status: verified
+      scene: matrix-macro-route-clear
+      step: target
+    teaching_binding:
+      transition_scope: adjacent
+      from_step_id: start
+      actions:
+      - id: choose-menu
+        kind: choose-menu
+        label: Choose Fixed Note
+        trigger:
+          type: key
+          n: 3
+          gesture: tap
+        menu_text: Fixed Note
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: target
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_menu_text: Fixed Note
+      human_outcome: At this result, the menu highlights Fixed Note.
+      practice_prompt: Route a macro or LFO to a device parameter. Clear the routing depth to restore
+        the authored parameter value.
+  - id: toolkit-clocked-lfo-menu-clock
+    binding:
+      status: verified
+      scene: toolkit-clocked-lfo-menu
+      step: clock
+    teaching_binding:
+      transition_scope: adjacent
+      from_step_id: depth
+      actions:
+      - id: choose-menu
+        kind: choose-menu
+        label: Choose clocked
+        trigger:
+          type: key
+          n: 3
+          gesture: tap
+        menu_text: clocked
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: clock
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_menu_text: clocked
+      human_outcome: At this result, the menu highlights clocked.
+      practice_prompt: Route a macro or LFO to a device parameter. Clear the routing depth to restore
+        the authored parameter value.
+- id: musical-merge-and-voice-leading
+  title: Musical Merge and Voice Leading
+  audience: all
+  summary: Foundation and Fragments reshape merged output without rewriting patterns. Harmony places output
+    voices; its default is Off.
+  prose: 'Merge Shape changes a channel’s merged rhythm. Harmony places output notes in specified registers.
+    Neither feature rewrites source patterns. Older projects restore their saved Skip, Only or All Strategy
+    and retain its original MIDI, timing and random behavior. Foundation and Fragments are other exclusive
+    choices of the same Strategy selector.
+
+
+    Merge modes, Merge Shape and Harmony are consecutive Channel tasks. Merge Shape and Voice leading
+    use vertical lists. Editable rows display their current value. Submenus display OPEN >. The selected
+    row is marked >.
+
+
+    1. Open Merge Shape or Harmony from Channel tasks.
+
+    2. Turn E2 to select a row.
+
+    3. Turn E3 to change a staged value.
+
+    4. Press K3 on OPEN > to open that settings list. The bottom line names the action, for example K3
+    OPEN RHYTHM.
+
+    5. Press K3 on an ordinary value row to validate and apply the complete draft.
+
+
+    Action rows, including Create group, Four-part smooth, Delete group and Reset map, display a plain
+    >. Delete group and Reset map require confirmation.
+
+
+    Press K2 to discard a dirty draft, or to return from an opened list to its parent. Turn E1 to return
+    to the feature’s first screen and discard an unapplied draft. From the first screen, E1 returns to
+    Channel tasks.
+
+
+    A stopped edit applies immediately. During playback, Merge Shape displays NEXT CYCLE and applies before
+    the next channel-cycle onset. Harmony displays NEXT PATTERN and applies at the next global pattern
+    boundary. Stop activates the latest applied request for the next start.
+
+
+    Merge Shape shows a read-only Strategy summary. Its Strategy selector action discards an unapplied
+    parameter draft and opens the shared selector on Merge modes. Grid (14,8) selects the same Skip, Only,
+    All, Foundation and Fragments choices. A strategy request is immediate; parameter drafts still need
+    K3 Apply. Active is sounding output, while Pending is an accepted request awaiting its displayed boundary.'
+  musical_use: Use Merge Shape to add or remove channel trigs without editing the assigned patterns. Use
+    Harmony to set output registers.
+  related: []
+  sources:
+    readme: manual/legacy/README-1.4.0.md#musical-merge-and-voice-leading
+    behaviour_cases:
+    - M-MERGE-FOUNDATION-001
+    - M-MERGE-PHRASE-001
+    - M-HARMONY-REVOICE-001
+    code:
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/optional_config_transaction.lua
+    - lib/musical_merge/state.lua
+    - lib/harmony/config_state.lua
+  controls:
+  - gesture: In Channel tasks, turn E2 to Merge Shape or Harmony. Press K3.
+    result: The selected feature opens.
+  - gesture: Turn E2.
+    result: The selected row changes.
+  - gesture: Turn E3 on a value row.
+    result: The draft value changes.
+  - gesture: Press K3 on a row marked OPEN >.
+    result: The selected settings list opens.
+  - gesture: Press K3 on a value row.
+    result: Mosaic validates and applies the draft.
+  - gesture: Press K2.
+    result: A dirty draft is discarded. In an opened settings list, the parent list returns.
+  - gesture: Turn E1.
+    result: An unapplied draft is discarded and the feature’s first screen returns. From that screen,
+      Channel tasks returns.
+  details:
+  - title: Applying changes
+    text: Stopped edits apply immediately. During playback, Merge Shape normally displays NEXT CYCLE and
+      applies at the next channel-cycle onset. Harmony displays NEXT PATTERN and applies at the next global
+      pattern boundary. A shared group-reference change can also queue Merge Shape for NEXT PATTERN. Stop
+      settles the latest applied request.
+  - title: Source patterns
+    text: E3 edits a draft until K3 applies it. Grid editing can cancel a dirty draft. Merge Shape and
+      Harmony change channel output; they do not rewrite source patterns.
+  recipes: []
+  scene_refs:
+  - foundation-protected-and-added
+  - harmony-revoice-two-voices
+  - shared-merge-strategy-workflow
+  review:
+    status: controlled-verified
+    cases:
+    - M-HARMONY-REVOICE-001
+    - M-MERGE-FOUNDATION-001
+    - M-MERGE-STRATEGY-001
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are
+      retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware
+      acceptance remain separate.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: shared-merge-strategy-workflow
+      data: reference-merge-strategy-scenes.json
+      data_sha256: fad3d96ea5cbd06385d724b89330d50dcb9c7b81f1ba93c5a216031c6c734f03
+      clock_mode: controlled-experimental
+      case: M-MERGE-STRATEGY-001
+      assertions:
+      - &id004
+        kind: merge-strategy-ui
+        checkpoint: foundation-active
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Anchor
+          value: '1'
+          observation_index: 29
+          frame_sha256: 1ae60d8c900eda2391cded27b882e951ddd70d81074c1587e155977ba7d192ff
+        - layout: detail
+          label: Strategy
+          value: FOUNDATION
+          observation_index: 31
+          frame_sha256: a2ccf83fbfc0182fa3747be51fdf7824360d352507bf9250378594720ebdf6ef
+        - layout: detail
+          label: Active
+          value: FOUNDATION
+          observation_index: 32
+          frame_sha256: 4ff6da6fb437da3fdcaa5639e879596b922852aab3fae0f67440bf264d726cb3
+        witness:
+          observation_index: 33
+          frame_sha256: 4ff6da6fb437da3fdcaa5639e879596b922852aab3fae0f67440bf264d726cb3
+          grid_sha256: ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb
+          midi_count: 10
+          midi_outstanding: []
+          monotonic_ns: 502309743619896
+          logical_ns: 16330000000
+          recipe_index: 466
+        strategy: FOUNDATION
+        active: FOUNDATION
+      - &id005
+        kind: effective-foundation-musical-result
+        loops: 2
+        loop_steps: 8
+        expected:
+        - - 0
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 0
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 0
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 0
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 0
+          - 5
+          - 1
+          - 60
+          - 70
+        - - 0
+          - 7
+          - 1
+          - 60
+          - 70
+        - - 1
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 1
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 1
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 1
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 1
+          - 5
+          - 1
+          - 60
+          - 70
+        - - 1
+          - 7
+          - 1
+          - 60
+          - 70
+        - - 2
+          - 1
+          - 1
+          - 60
+          - 127
+        tolerance_seconds: 2.0e-09
+        passed: true
+      - &id006
+        kind: merge-strategy-ui
+        checkpoint: fragments-inactive
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Note mode
+          value: AVERAGE
+          observation_index: 43
+          frame_sha256: 539daed165c6ea35b06a0fb9557b33887c85f2ec0ac1b395aa8292aee58dcbbc
+        - layout: detail
+          label: Note mode
+          value: UP
+          observation_index: 44
+          frame_sha256: 049e93996915729f4e9d65b966a7ea1e981e5c01be2cea043b2f9278809e94b8
+        - layout: detail
+          label: Note mode
+          value: AVERAGE
+          observation_index: 45
+          frame_sha256: 05326f113ac5eadaaabdd1a62d149d1a07b6ba22d2e938539a20eacb5cf1ea50
+        - layout: detail
+          label: Velocity mode
+          value: AVERAGE
+          observation_index: 46
+          frame_sha256: f3cf7f6f0b0c5ab0e48256ec078ec52006e636d8c4494a5a650e85dbb26c3b44
+        - layout: detail
+          label: Velocity mode
+          value: UP
+          observation_index: 47
+          frame_sha256: 720b2a8bf1ee927b11bc8b3a1291bbd7c9992cb25ddc92407772fe8190fcffd7
+        - layout: detail
+          label: Velocity mode
+          value: AVERAGE
+          observation_index: 48
+          frame_sha256: f3cf7f6f0b0c5ab0e48256ec078ec52006e636d8c4494a5a650e85dbb26c3b44
+        - layout: detail
+          label: Length mode
+          value: AVERAGE
+          observation_index: 49
+          frame_sha256: 1e1303a4c53ccdd034750237d7a99c776e40626c7e62e250c9ebab842f3c2f30
+        - layout: detail
+          label: Length mode
+          value: UP
+          observation_index: 50
+          frame_sha256: d93e5aadf4ca584b76b28d134399d89bbb41dcfb649a9083f9c5023fad6c908f
+        - layout: detail
+          label: Length mode
+          value: AVERAGE
+          observation_index: 51
+          frame_sha256: 3f2e68bb60750bb8b8a2b4fad8892fccbf2974af02c6da2e8073622ff528f885
+        - layout: detail
+          label: Strategy
+          value: FRAGMENTS
+          observation_index: 52
+          frame_sha256: 6ed7ed56f24704f699a97183dee82f27ffe43f7527bb35133d8dda57a58d1492
+        - layout: detail
+          label: Active
+          value: FRAGMENTS
+          observation_index: 53
+          frame_sha256: 4688704c47b8e33990b1d26beccf3c7a131812f532778bce22507aa703bab7d9
+        - layout: detail
+          label: Note mode inactive
+          value: AVERAGE SAVED
+          observation_index: 55
+          frame_sha256: d96c7f8a90f8928c767bfc00a024cac2152c4b8a34d952d117028489e2e125b1
+        - layout: detail
+          label: Note mode inactive
+          value: AVERAGE SAVED
+          observation_index: 56
+          frame_sha256: 48d70e8e0e58b5ce5e880a63344925b3926bcc3733cd0503e06e19ea3c79f190
+        - layout: detail
+          label: Velocity mode inactive
+          value: AVERAGE SAVED
+          observation_index: 57
+          frame_sha256: 055789a89165fb5dd77fac72cbf5c126969c128c1775b2dfed01cb7a7f827836
+        - layout: detail
+          label: Velocity mode inactive
+          value: AVERAGE SAVED
+          observation_index: 58
+          frame_sha256: 055789a89165fb5dd77fac72cbf5c126969c128c1775b2dfed01cb7a7f827836
+        - layout: detail
+          label: Length mode inactive
+          value: AVERAGE SAVED
+          observation_index: 59
+          frame_sha256: c581edf6e07f7cdc3fff4bfff0b2e87bdc1207ce6332745f253779c9632e1caa
+        - layout: detail
+          label: Length mode inactive
+          value: AVERAGE SAVED
+          observation_index: 60
+          frame_sha256: 7f3bef7e3aea00508dadf797b9ca061ea94dbe2db83ce85dfe14b414ced821f9
+        witness:
+          observation_index: 61
+          frame_sha256: 7f3bef7e3aea00508dadf797b9ca061ea94dbe2db83ce85dfe14b414ced821f9
+          grid_sha256: 9259759536631099d82d4005bff5c393767618f536c2bc63752f74e579b3ce0d
+          midi_count: 110
+          midi_outstanding: []
+          monotonic_ns: 502312890522794
+          logical_ns: 33020000000
+          recipe_index: 1177
+        strategy: FRAGMENTS
+        active: FRAGMENTS
+        saved_modes:
+        - AVERAGE
+        - AVERAGE
+        - AVERAGE
+      - &id007
+        kind: effective-fragments-musical-result
+        loops: 2
+        loop_steps: 8
+        expected:
+        - - 0
+          - 5
+          - 1
+          - 60
+          - 100
+        - - 0
+          - 7
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 5
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 7
+          - 1
+          - 60
+          - 100
+        - - 2
+          - 5
+          - 1
+          - 60
+          - 100
+        tolerance_seconds: 2.0e-09
+        passed: true
+        size: 8
+        seed: 0
+      - &id008
+        kind: merge-strategy-ui
+        checkpoint: legacy-restored
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Strategy
+          value: SKIP
+          observation_index: 71
+          frame_sha256: fb440ed888270eb6e51ff2bcee980cd8e470f03762180660ba2e52646e8d5831
+        - layout: detail
+          label: Active
+          value: SKIP
+          observation_index: 72
+          frame_sha256: 06900539e1945d3f619b966a69761281be4d6cd676ead5fc825ff37bfc2a26ce
+        - layout: detail
+          label: Note mode
+          value: AVERAGE
+          observation_index: 74
+          frame_sha256: 6d338a4531bb1c78fd2890815e8f9405acd9a9bf24765e780deba819ed904361
+        - layout: detail
+          label: Velocity mode
+          value: AVERAGE
+          observation_index: 75
+          frame_sha256: f3cf7f6f0b0c5ab0e48256ec078ec52006e636d8c4494a5a650e85dbb26c3b44
+        - layout: detail
+          label: Length mode
+          value: AVERAGE
+          observation_index: 76
+          frame_sha256: 0bd512134ff90638562db402e1749179a6aee5b894971b82f68912880f4a6126
+        - layout: detail
+          label: Strategy
+          value: SKIP
+          observation_index: 77
+          frame_sha256: ae4d7e15c91acebc19ed6963f11c92b91dcd1cc447916c1084096a4c96bde92e
+        - layout: detail
+          label: Strategy
+          value: SKIP
+          observation_index: 78
+          frame_sha256: 0281bc6d68f1e7f56f1b3c2617af1b49532908d5467b1684387bf18e1b77425c
+        witness:
+          observation_index: 79
+          frame_sha256: 0281bc6d68f1e7f56f1b3c2617af1b49532908d5467b1684387bf18e1b77425c
+          grid_sha256: 1fd9a41482d6a8bf5413112f621a25bb496287cb8a9276bf62760d710eeaa3c8
+          midi_count: 210
+          midi_outstanding: []
+          monotonic_ns: 502316176107951
+          logical_ns: 46080000000
+          recipe_index: 1818
+        strategy: SKIP
+        saved_modes:
+        - AVERAGE
+        - AVERAGE
+        - AVERAGE
+      - &id009
+        kind: effective-only-silence
+        loops: 2
+        loop_steps: 8
+        elapsed_required_seconds: 2.6666666666666665
+        witness:
+          start:
+            observation_index: 84
+            frame_sha256: f5570dcd6b14c42f3dfa495534b23608ae61f6343999cb05a1345225a55a626e
+            grid_sha256: a09b634252fa4a4074b3f4c7b1d290f8a3a9e5e78bd5b4b60648dc5ad1318e3f
+            midi_count: 210
+            midi_outstanding: []
+            monotonic_ns: 502316215396086
+            logical_ns: 46140000000
+            recipe_index: 1821
+          end:
+            observation_index: 87
+            frame_sha256: adcb6aca131cd8f0c4d3e22e3568b977f64f779af199ec33bda84da1ca6ec8fc
+            grid_sha256: a09b634252fa4a4074b3f4c7b1d290f8a3a9e5e78bd5b4b60648dc5ad1318e3f
+            midi_count: 284
+            midi_outstanding: []
+            monotonic_ns: 502316320287695
+            logical_ns: 48926666667
+            recipe_index: 1828
+        midi_start_exclusive: 210
+        midi_end_inclusive: 284
+        expected: []
+        actual: []
+        passed: true
+      - &id010
+        kind: restored-legacy-musical-result
+        loops: 2
+        loop_steps: 8
+        expected:
+        - - 0
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 0
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 0
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 0
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 0
+          - 5
+          - 1
+          - 60
+          - 100
+        - - 0
+          - 7
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 1
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 1
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 1
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 1
+          - 5
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 7
+          - 1
+          - 60
+          - 100
+        - - 2
+          - 1
+          - 1
+          - 60
+          - 127
+        tolerance_seconds: 2.0e-09
+        passed: true
+      - &id011
+        kind: merge-strategy-ui
+        checkpoint: unset-anchor-refusal
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Strategy
+          value: ONLY
+          observation_index: 81
+          frame_sha256: f5570dcd6b14c42f3dfa495534b23608ae61f6343999cb05a1345225a55a626e
+        - layout: detail
+          label: Strategy
+          value: ALL
+          observation_index: 89
+          frame_sha256: 8f81dcbbbd762e0e316061c8869cf4e62b908d9b18ae9b7a9e81de6ad8de517f
+        - layout: detail
+          label: Anchor
+          value: NONE
+          observation_index: 100
+          frame_sha256: 98ca55d56ff80fa849834d83a4c27deb37ba06d49fdedfde13498a16a321cef0
+        - layout: detail
+          label: Strategy
+          value: ALL
+          observation_index: 102
+          frame_sha256: ef74ce7d82dc51deab01c3c0b22b41dc4af161b12900a660ae476a721ac21e44
+        - layout: detail
+          label: Strategy
+          value: FOUNDATION
+          observation_index: 103
+          frame_sha256: 0e807b77fbf6076054fec66ec59812ccaaa11bd38c3d423e0e72859b21f2457f
+        - layout: detail
+          label: Active
+          value: ALL
+          observation_index: 104
+          frame_sha256: 20631d3210df1d9df877658d18b59e94fc72a57d81594d799da095097b9b3706
+        - layout: detail
+          label: Pending
+          value: NONE
+          observation_index: 105
+          frame_sha256: 64f539a9163dd6730237720379e03d55ed748ad0dc965038dd23fa24c59ae9ee
+        - layout: detail
+          label: Request
+          value: NEEDS ANCHOR
+          observation_index: 106
+          frame_sha256: e863b29bf469ad2935316fa1afc6ec304ece3a9d5e75cd236b4099436f048bc4
+        - layout: detail
+          label: Strategy
+          value: FOUNDATION
+          observation_index: 107
+          frame_sha256: ba0008fab67105962a9879ff8e7f3c3b96ca129d39037d4cee4765c726b9326d
+        witness:
+          observation_index: 108
+          frame_sha256: ba0008fab67105962a9879ff8e7f3c3b96ca129d39037d4cee4765c726b9326d
+          grid_sha256: 3259899636c49f833b2f0765f2aa5917a4946ca8b698f7736820f25bdef1835c
+          midi_count: 384
+          midi_outstanding: []
+          monotonic_ns: 502319848211179
+          logical_ns: 64836666667
+          recipe_index: 2512
+        selected: FOUNDATION
+        active: ALL
+        pending: NONE
+        request: NEEDS ANCHOR
+      - &id012
+        kind: merge-strategy-ui
+        checkpoint: unassigned-anchor-refusal
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Strategy
+          value: FRAGMENTS
+          observation_index: 110
+          frame_sha256: 3b6be8b14df684f11b501a98202442470978fbe8c0dcef53686f8f9101850f4f
+        - layout: detail
+          label: Active
+          value: FRAGMENTS
+          observation_index: 111
+          frame_sha256: 8ba2cb3ba57bfdd5f0a00d64973bf456f736e88300f4f14037510b43d3aa5150
+        - layout: detail
+          label: Strategy
+          value: ALL
+          observation_index: 112
+          frame_sha256: ef74ce7d82dc51deab01c3c0b22b41dc4af161b12900a660ae476a721ac21e44
+        - layout: detail
+          label: Anchor
+          value: '1'
+          observation_index: 114
+          frame_sha256: 10a978b0b2f0099b59700e1800986486d6bb5aab84f468c0df9ffe05fa38a46e
+        - layout: detail
+          label: Strategy
+          value: FOUNDATION
+          observation_index: 115
+          frame_sha256: 8e85414bfccc58a3aecb4abc8413bc0da711b9972a66b97475a2671776e38f2c
+        - layout: detail
+          label: Active
+          value: ALL
+          observation_index: 116
+          frame_sha256: f93befac005a3324e76ef9a754b3a8d3cf5b89fdb18d890a9c1195a444dee0a1
+        - layout: detail
+          label: Pending
+          value: NONE
+          observation_index: 117
+          frame_sha256: 0b4a78e22a94d7bbf43beced67e9fd454d01152e6b64037e998f2fcc7d401414
+        - layout: detail
+          label: Request
+          value: NEEDS ANCHOR
+          observation_index: 118
+          frame_sha256: ba3668cc2c1cc5b1287a9d04a43305e4bf1baad9a6d4e3ac3cc38a211d475b4e
+        - layout: detail
+          label: Strategy
+          value: FOUNDATION
+          observation_index: 119
+          frame_sha256: 7cb36042cc81e07d98068272a513e125f2f62ec04a00b980eba6ec102351f5e0
+        witness:
+          observation_index: 120
+          frame_sha256: 7cb36042cc81e07d98068272a513e125f2f62ec04a00b980eba6ec102351f5e0
+          grid_sha256: b1d6e23980eca6639e77130774dd747658c0b5fba5962036dc4d977a84c0365b
+          midi_count: 384
+          midi_outstanding: []
+          monotonic_ns: 502321920496081
+          logical_ns: 81346666667
+          recipe_index: 3044
+        selected: FOUNDATION
+        active: ALL
+        pending: NONE
+        request: NEEDS ANCHOR
+      - &id013
+        kind: merge-strategy-ui
+        checkpoint: pending-cycle
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Strategy
+          value: FRAGMENTS
+          observation_index: 122
+          frame_sha256: 192923bd599a00d1ae6b241dc5996750096e1f6b1b1cbc0298e200e6b44edca3
+        - layout: detail
+          label: Active
+          value: FRAGMENTS
+          observation_index: 123
+          frame_sha256: 4688704c47b8e33990b1d26beccf3c7a131812f532778bce22507aa703bab7d9
+        - layout: detail
+          label: Strategy
+          value: ALL
+          observation_index: 124
+          frame_sha256: 8f81dcbbbd762e0e316061c8869cf4e62b908d9b18ae9b7a9e81de6ad8de517f
+        - layout: detail
+          label: Strategy
+          value: ALL
+          observation_index: 125
+          frame_sha256: 8f81dcbbbd762e0e316061c8869cf4e62b908d9b18ae9b7a9e81de6ad8de517f
+        - layout: detail
+          label: Pending
+          value: FOUNDATION
+          observation_index: 128
+          frame_sha256: 37b966bc0203985438cd54250a58bbf559492f5a42a2a233f54a89c5fd13f418
+        - layout: detail
+          label: Boundary
+          value: NEXT CYCLE
+          observation_index: 129
+          frame_sha256: bac969c0622d7a5cc5aafa3814d06505e42ac11c6f1fdcab5e488f73434b7765
+        witness:
+          observation_index: 130
+          frame_sha256: bac969c0622d7a5cc5aafa3814d06505e42ac11c6f1fdcab5e488f73434b7765
+          grid_sha256: 95dae6a52abbe47d30370b91a5ff36f61c0a6f13388593b1635bc82aea029541
+          midi_count: 410
+          midi_outstanding:
+          - port: 1
+            channel: 1
+            note: 65
+            count: 1
+          monotonic_ns: 502322996648889
+          logical_ns: 89626666667
+          recipe_index: 3268
+        active: ALL
+        pending: FOUNDATION
+        boundary: NEXT CYCLE
+      - &id014
+        kind: merge-strategy-next-cycle
+        witness:
+          start:
+            observation_index: 126
+            frame_sha256: 8f81dcbbbd762e0e316061c8869cf4e62b908d9b18ae9b7a9e81de6ad8de517f
+            grid_sha256: 091db1bb39d14105b678c4adb9fe4ecf1449eb509c4530bffeafb6f9229a0d51
+            midi_count: 384
+            midi_outstanding: []
+            monotonic_ns: 502322890540634
+            logical_ns: 88966666667
+            recipe_index: 3250
+          end:
+            observation_index: 137
+            frame_sha256: 72714b8529bb739edc0a2d56e57c8b4ad5b0dcfec62d40b9f19990f4eedaa520
+            grid_sha256: ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb
+            midi_count: 484
+            midi_outstanding: []
+            monotonic_ns: 502324975123610
+            logical_ns: 94946666667
+            recipe_index: 3582
+        midi_start_exclusive: 384
+        midi_end_inclusive: 484
+        expected:
+        - - 0
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 0
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 0
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 0
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 0
+          - 5
+          - 1
+          - 60
+          - 100
+        - - 0
+          - 7
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 1
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 1
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 1
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 1
+          - 5
+          - 1
+          - 60
+          - 70
+        - - 1
+          - 7
+          - 1
+          - 60
+          - 70
+        - - 2
+          - 1
+          - 1
+          - 60
+          - 127
+        actual:
+        - - 0
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 0
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 0
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 0
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 0
+          - 5
+          - 1
+          - 60
+          - 100
+        - - 0
+          - 7
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 1
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 1
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 1
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 1
+          - 5
+          - 1
+          - 60
+          - 70
+        - - 1
+          - 7
+          - 1
+          - 60
+          - 70
+        - - 2
+          - 1
+          - 1
+          - 60
+          - 127
+        tolerance_seconds: 2.0e-09
+        passed: true
+      - &id015
+        kind: merge-strategy-ui
+        checkpoint: m02-readonly
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Active
+          value: FOUNDATION
+          observation_index: 135
+          frame_sha256: 94edf69c3caee69b41a61d3ed4a0813aa1380e41665025139ab72ba8dcb00432
+        - layout: detail
+          label: Pending
+          value: NONE
+          observation_index: 136
+          frame_sha256: 72714b8529bb739edc0a2d56e57c8b4ad5b0dcfec62d40b9f19990f4eedaa520
+        - layout: detail
+          label: Strategy
+          value: FOUNDATION
+          observation_index: 140
+          frame_sha256: d2b51bb61314fbf44e9fe2d0eb7e711bcbdd3d5ee951b7df156ab1710ac23b56
+        - layout: detail
+          label: Strategy
+          value: FOUNDATION
+          observation_index: 141
+          frame_sha256: 89ea8ebd2bfd09be368a598fd1b94ef8adfa092680bef4155b58a9dc82a7ef09
+        witness:
+          observation_index: 142
+          frame_sha256: 89ea8ebd2bfd09be368a598fd1b94ef8adfa092680bef4155b58a9dc82a7ef09
+          grid_sha256: ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb
+          midi_count: 484
+          midi_outstanding: []
+          monotonic_ns: 502325323816958
+          logical_ns: 97856666667
+          recipe_index: 3674
+        strategy: FOUNDATION
+      - &id016
+        kind: merge-strategy-ui
+        checkpoint: draft-discarded
+        passed: true
+        characterization: shared effective selector
+        fields:
+        - layout: detail
+          label: Add amount
+          value: '99'
+          observation_index: 144
+          frame_sha256: 12d2b46bf898ad25b1f3de6ad38222eb1763324beb6f73d12c8c5b06408b4b08
+        - layout: detail
+          label: Add amount
+          value: '100'
+          observation_index: 146
+          frame_sha256: 3295f06b77b5a7574970ae097d9028e55ec05427e554ba4deb2c9404ed076b7e
+        witness:
+          observation_index: 147
+          frame_sha256: 3295f06b77b5a7574970ae097d9028e55ec05427e554ba4deb2c9404ed076b7e
+          grid_sha256: ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb
+          midi_count: 484
+          midi_outstanding: []
+          monotonic_ns: 502326172788229
+          logical_ns: 104956666667
+          recipe_index: 3911
+        label: Add amount
+        value: '100'
+      scope: Shared Strategy ownership, parameter-draft discard, Foundation controls and exact musical
+        output, plus Harmony revoicing through current public UI.
+      build_lane_proofs: &id017
+      - &id001
+        stage: reference-controlled-scene-plans-merge-strategy-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-merge-strategy-base-midi.json
+        stage_sha256: b2e38dd754a9330230612890c54ebfcbe7c414e32835e7266bab5d47fe6c41bb
+        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-merge-strategy-base-midi.log
+        log_sha256: 85739e32a6da852a2458ca421e3e382f50af6fc3e6479d6382a9cb1bd5e5c5fc
+        report: /home/andy/mosaic-manual-runs/389dac315d5040e0a90858e5aa27be73/reference-scenes.json
+        report_sha256: fad3d96ea5cbd06385d724b89330d50dcb9c7b81f1ba93c5a216031c6c734f03
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 6b359fd6da14c03f279de920d3ea9b664c450be15a7c3a0ba3c21d03682a55e5
+          application_digest: 9d3b11358ad0b669d2e8f672614300a473ea590ceac630e791bacabf7b3acbf8
+    - scene: foundation-protected-and-added
+      data: reference-musical-scenes.json
+      data_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+      clock_mode: controlled-experimental
+      case: M-MERGE-FOUNDATION-001
+      assertions:
+      - &id018
+        kind: documentation-frame
+        name: images/merge-shape-foundation.png
+        sha256: bfef1e487a4d957d65587e682bdeeaf60f793603c5d7f56cbf2edb472e6baca4
+        passed: true
+        validation: pinned-v2-mini-pose
+        page: M03
+        baseline_sha256: 49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463
+        atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+        matching_poses:
+        - 0
+      - &id019
+        kind: foundation-physical-workflow
+        passed: true
+      scope: Shared Strategy ownership, parameter-draft discard, Foundation controls and exact musical
+        output, plus Harmony revoicing through current public UI.
+      build_lane_proofs: &id020
+      - &id002
+        stage: reference-controlled-scene-plans-musical-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.json
+        stage_sha256: 4fc394938704ba70b1ef2a294152c0c23589ce6be619650dd0193ca3caa5cf15
+        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.log
+        log_sha256: 92fe6cf5e56216a48286563e7ba7add39aba43a2fb63902e26e9795a7ffe72d0
+        report: /home/andy/mosaic-manual-runs/02f488b1d7534c3391e7e7a67414e9cd/reference-scenes.json
+        report_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 5edd07fc97ae76205b8e9fd04a0f9d00467daeb7ffd7c2e5011b18d6a5e1188c
+          application_digest: 9d3b11358ad0b669d2e8f672614300a473ea590ceac630e791bacabf7b3acbf8
+    - scene: harmony-revoice-two-voices
+      data: reference-musical-scenes.json
+      data_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+      clock_mode: controlled-experimental
+      case: M-HARMONY-REVOICE-001
+      assertions:
+      - kind: revoice-physical-workflow
+        passed: true
+      scope: Shared Strategy ownership, parameter-draft discard, Foundation controls and exact musical
+        output, plus Harmony revoicing through current public UI.
+      build_lane_proofs:
+      - &id003
+        stage: reference-controlled-scene-plans-musical-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.json
+        stage_sha256: 4fc394938704ba70b1ef2a294152c0c23589ce6be619650dd0193ca3caa5cf15
+        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.log
+        log_sha256: 92fe6cf5e56216a48286563e7ba7add39aba43a2fb63902e26e9795a7ffe72d0
+        report: /home/andy/mosaic-manual-runs/02f488b1d7534c3391e7e7a67414e9cd/reference-scenes.json
+        report_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 864a5d204a18d5ac3fc5254b6d5aaf520ab6efc19ce464cc0bb086fac9c988e7
+          application_digest: 9d3b11358ad0b669d2e8f672614300a473ea590ceac630e791bacabf7b3acbf8
+    applicability: native-ui
+    native_gap: null
+    rationale: Shared Strategy ownership, parameter-draft discard, Foundation controls and exact musical
+      output, plus Harmony revoicing through current public UI.
+    controlled_baselines:
+    - *id001
+    - *id002
+    - *id003
+    historical_native_evidence:
+    - review:
+        status: pending
+        cases:
+        - M-HARMONY-REVOICE-001
+        - M-MERGE-FOUNDATION-001
+        note: Shared Strategy instructions updated to the candidate control contract. Earlier native evidence
+          remains historical; new shared-selector captures and musical acceptance are pending.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: foundation-protected-and-added
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-MERGE-FOUNDATION-001
+          assertions:
+          - kind: documentation-frame
+            name: images/merge-shape-foundation.png
+            sha256: 49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463
+            passed: true
+          - kind: foundation-physical-workflow
+            passed: true
+          scope: Overview of Foundation output and two-voice Harmony Revoice; child references retain
+            specific feature boundaries.
+        - scene: harmony-revoice-two-voices
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-HARMONY-REVOICE-001
+          assertions:
+          - kind: revoice-physical-workflow
+            passed: true
+          scope: Overview of Foundation output and two-voice Harmony Revoice; child references retain
+            specific feature boundaries.
+        applicability: native-ui
+        native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled
+          examples.
+        rationale: Overview of Foundation output and two-voice Harmony Revoice; child references retain
+          specific feature boundaries.
+        controlled_baselines:
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: foundation-protected-and-added
+          clock_mode: controlled-experimental
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: harmony-revoice-two-voices
+          clock_mode: controlled-experimental
+      scene_refs:
+      - foundation-protected-and-added
+      - harmony-revoice-two-voices
+    scope: Shared Strategy ownership, parameter-draft discard, Foundation controls and exact musical output,
+      plus Harmony revoicing through current public UI.
+    binding_receipt: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/feature-bind/manifest.json
+    complete_regression_run: false
+    validation_scope: controlled-manual-generation
+    realtime_qualification: pending-ci
+  category: musical
+  parent: null
+  level: 2
+  teaching_bindings:
+  - id: play-foundation-protected-and-added-accented-phrase
+    binding:
+      status: verified
+      scene: foundation-protected-and-added
+      step: accented-phrase
+    teaching_binding:
+      from_step_id: accent-setting
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 60, 62, 64, 65.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: accented-phrase
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 97
+      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
+        MIDI 64 at velocity 107, MIDI 65 at velocity 97.
+  - id: play-harmony-revoice-two-voices-two-voice-placement
+    binding:
+      status: verified
+      scene: harmony-revoice-two-voices
+      step: two-voice-placement
+    teaching_binding:
+      from_step_id: harmony-open
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 48, 50, 50, 52.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: two-voice-placement
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 1
+          bytes:
+          - 144
+          - 48
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 50
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 50
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 52
+          - 117
+      human_outcome: The captured MIDI notes include MIDI 48 at velocity 127, MIDI 50 at velocity 127,
+        MIDI 50 at velocity 117, MIDI 52 at velocity 117.
+  - id: play-shared-merge-strategy-workflow-foundation-phrase
+    binding:
+      status: verified
+      scene: shared-merge-strategy-workflow
+      step: foundation-phrase
+    teaching_binding:
+      from_step_id: foundation-active
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 60, 62, 64, 65.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: foundation-phrase
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 97
+      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
+        MIDI 64 at velocity 107, MIDI 65 at velocity 97.
+- id: merge-shape
+  title: Merge Shape
+  audience: all
+  summary: Foundation keeps one anchor pattern’s trigs and adds a repeatable selection of trigs from the
+    other assigned patterns; Phrase changes how many additions play from loop to loop.
+  prose: 'Merge Shape turns several assigned patterns into one channel part. The Anchor pattern’s trigs
+    always play. Trigs from the other assigned patterns are additions: Merge Shape decides how many of
+    them play, how loud, and how close to an anchor. The source patterns are never changed.
+
+
+    Terms used on this page: Anchor is the pattern whose trigs are protected. An addition is a trig from
+    another assigned pattern that Foundation admits. A draft is a set of edits shown on screen but not
+    yet applied; K3 applies it and K2 discards it. Active is the strategy that is sounding, and Pending
+    is a request waiting for its boundary.
+
+
+    [Captured two-cycle Build workflow](#merge-shape/foundation-two-cycle-build)
+
+
+    [Captured Foundation settings and output](#merge-shape/foundation-protected-and-added)
+
+
+    Choose Foundation with the shared Strategy selector on grid (14,8) or Merge modes. Merge Shape shows
+    Strategy as a read-only summary; its Strategy selector action opens Merge modes and discards an unapplied
+    parameter draft. K2 returns with the accepted configuration loaded. Foundation controls trigs only;
+    note, velocity and length merge settings remain active. Choose Skip, Only or All to restore legacy
+    trig merging with retained values. Foundation selects
+
+    one assigned pattern as the protected Anchor. Other assigned trig patterns offer
+
+    candidate additions at non-anchor steps; overlaps remain one anchor. Amount
+
+    admits a deterministic, seed-ranked subset, Accent scales addition velocity, and
+
+    Gap suppresses additions within 0–8 circular channel steps of an anchor. Anchor
+
+    velocity remains authored. Explicit channel/step masks still win, probability
+
+    can still reject an onset, and source patterns are never flattened or changed.
+
+
+    Phrase Cycles can be 1, 2, 4 or 8. Flat, Build, Answer and Fill are stored as
+
+    visible per-cycle percentages; changing a percentage makes a Custom curve.
+
+    Fixed repeats the same ranked additions. Per phrase changes ranking only after a
+
+    complete phrase. Each channel loop advances its own CYCLE counter—even with
+
+    polymetric ranges, swing or mute—and Stop restarts at cycle 1.
+
+
+    Keep anchor pitch uses the anchor pattern''s relative note on anchor steps before
+
+    normal scale conversion. Addition Target can be Legacy, the full effective
+
+    scale, selected effective degree indices, or the immutable material of an enabled
+
+    Harmony Ensemble group. Targets affect admitted additions only. Note masks,
+
+    random shifts and fixed-note operations keep their existing precedence and show
+
+    a bypass rather than being quantised twice. Nearest-note ties choose the lower
+
+    pitch. A missing/empty target visibly falls back to the legacy pitch.
+
+
+    Foundation ranking is repeatable for the saved seed and grows as a nested set:
+
+    raising Amount cannot remove an already selected addition while source, gap,
+
+    seed and phrase are unchanged.
+
+
+    Fragments is another shared Strategy choice. Foundation''s Interlock and Structure settings remain
+    staged parameter edits: K3 applies the draft, K2 discards it. During playback the shown boundary is
+    NEXT CYCLE, or NEXT PATTERN when applicable. Strategy choices themselves request immediately and do
+    not need K3 Apply.'
+  musical_use: Use Foundation to keep one pattern as the spine of a part and vary how many extra notes,
+    and how loud, other patterns add. Use Phrase to build the part up over two to eight loops.
+  related:
+  - musical-merge-and-voice-leading
+  sources:
+    readme: manual/legacy/README-1.4.0.md#merge-shape
+    behaviour_cases:
+    - M-MERGE-FOUNDATION-001
+    - M-MERGE-PHRASE-001
+    - M-LIVEUI-SHAPETRIG-001
+    code:
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/optional_config_transaction.lua
+    - lib/musical_merge/config.lua
+    - lib/musical_merge/foundation.lua
+    - lib/musical_merge/pitch_target.lua
+    - lib/musical_merge/state.lua
+    - lib/pattern.lua
+  controls:
+  - gesture: On Merge modes, select Strategy with E2 and turn E3 to FOUNDATION, or press grid (14,8) until
+      it selects Foundation.
+    result: 'A valid assigned anchor allows the request: Active reads FOUNDATION and grid (14,8) brightens.
+      NEEDS ANCHOR leaves the request unapplied and the previous strategy keeps sounding.'
+  - gesture: On Merge Shape, select Strategy selector and press K3.
+    result: An unapplied parameter draft is discarded and the shared selector opens on Merge modes. Strategy
+      itself is read-only on Merge Shape.
+  - gesture: Select Rhythm. Press K3.
+    result: 'The Rhythm list opens: Anchor, Add amount, Amount detail, Add accent, Anchor gap, Seed and
+      Interlock.'
+  - gesture: Select Phrase. Press K3.
+    result: 'The Phrase list opens: Cycles, Shape, one Cycle row per cycle, and Variation.'
+  - gesture: On Phrase, select Cycles and turn E3. Then select Shape and turn E3.
+    result: Cycles steps through 1, 2, 4 and 8. Shape steps through Flat, Build, Answer, Fill and Custom,
+      and the Cycle rows show the stored percentage for each cycle (Build with 2 cycles reads 50 then
+      100).
+  - gesture: In Foundation, select Pitch. Press K3.
+    result: Keep anchor, Add target, Target setup and Structure open.
+  - gesture: Press K3 on a value row.
+    result: The whole draft applies and the footer reads APPLIED. While playing, the footer reads NEXT
+      CYCLE and the edit starts at the next channel loop.
+  - gesture: Press K2.
+    result: A dirty draft is discarded, or an opened list returns to its parent.
+  details:
+  - title: Anchor and precedence
+    text: Foundation retains anchor velocity. Note, velocity and length merge settings still apply. Explicit
+      masks take precedence. Probability can reject an onset. Source patterns are unchanged.
+  - title: Saved trig merge while Foundation is active
+    text: While Foundation is Active, Merge modes shows Active FOUNDATION and Foundation decides the channel's
+      trigs. Your saved Skip, Only or All trig merge setting is kept and is not edited. Choose Skip, Only
+      or All on the Strategy selector to restore it. Note, velocity and length merge rows stay editable.
+  - title: Undo
+    text: Applying a Merge Shape draft, including the Interlock and Structure edits made in the same draft,
+      is one step in the channel's Memory. Open History in Channel tasks and turn E3 back one step to
+      restore the previous configuration.
+  - title: Amount and variation
+    text: For unchanged source, Gap, Seed and phrase, increasing Amount retains previously admitted additions.
+      Fixed repeats the ranking. Per phrase changes the ranking after a complete phrase.
+  - title: Amount, Accent and Phrase do different jobs
+    text: Add amount and the Phrase curve decide how many additions play. Add accent decides how loud
+      they are. Lowering Add accent therefore makes additions quieter without removing any; it does not
+      change the Phrase curve.
+  recipes:
+  - title: Set a two-cycle Build phrase
+    text: 'Musical purpose: build a part over two loops. Loop 1 plays the anchor line with one extra note.
+      Loop 2 plays the same line with both extra notes.
+
+
+      Starting point: channel 1 has an 8-step loop at 90 BPM with the default Rate /1, so each step is
+      one sixteenth note (one sixth of a second). Pattern 1 holds C D E F on steps 1 to 4 (velocities
+      127, 117, 107, 97). Pattern 2 holds a C on steps 5 and 7, and both patterns are assigned to the
+      channel. Strategy is SKIP.
+
+
+      1. Press E1 to open Channel tasks, select Merge Shape with E2 and press K3. The Merge Shape list
+      opens: Strategy, Rhythm, Phrase, Pitch, Result.
+
+      2. Select Rhythm with E2 and press K3. The Rhythm list opens with Anchor on the first row.
+
+      3. Turn E3 once so Anchor reads 01, then press K3. The footer reads APPLIED. Pattern 1 is now the
+      anchor, so its four trigs always play.
+
+      4. Press E1 for Channel tasks, select Merge modes, select Strategy with E2 and turn E3 until it
+      reads FOUNDATION (or press grid (14,8) until it does). Active reads FOUNDATION. The channel grid
+      lights steps 1 to 5 and 7: four anchors and two possible additions.
+
+      5. Return to Merge Shape. Select Phrase with E2 and press K3. The Phrase list opens: Cycles, Shape,
+      Variation.
+
+      6. Select Cycles and turn E3 once right. Cycles reads 2 and two Cycle rows appear.
+
+      7. Select Shape and turn E3 once right, from FLAT to BUILD. Cycle 1 reads 50 and Cycle 2 reads 100,
+      so the first loop admits half of the additions and the second loop admits all of them.
+
+      8. Press K3 on a value row. The footer reads APPLIED.
+
+      9. Press Play (grid (1,8)) and listen to four loops, then press Stop. Loop 1 plays C D E F and one
+      extra C on step 7; loop 2 plays C D E F and extra Cs on steps 5 and 7; then the two loops repeat.
+      The extra notes play at velocity 70, quieter than the anchors.
+
+
+      What each loop plays (an added C is shown as +C):
+
+
+      Loop 1: steps 1 to 4 C D E F, step 5 rest, step 7 +C.
+
+
+      Loop 2: steps 1 to 4 C D E F, step 5 +C, step 7 +C.
+
+
+      Listen for the loop-to-loop change: the extra C on step 5 is present in every second loop only.
+
+
+      To make the additions quieter or louder without changing how many play, change Add accent in Rhythm.
+
+
+      The captured version of this recipe is [Captured two-cycle Build workflow](#merge-shape/foundation-two-cycle-build).'
+  scene_refs:
+  - merge-shape-owns-trigs
+  - merge-shape-skip-shared-step
+  - foundation-protected-and-added
+  - foundation-two-cycle-build
+  - shared-merge-strategy-workflow
+  review:
+    status: controlled-verified
+    cases:
+    - M-LIVEUI-SHAPETRIG-001
+    - M-LIVEUI-SHAPETRIG-002
+    - M-MERGE-FOUNDATION-001
+    - M-MERGE-PHRASE-001
+    - M-MERGE-STRATEGY-001
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are
+      retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware
+      acceptance remain separate.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: shared-merge-strategy-workflow
+      data: reference-merge-strategy-scenes.json
+      data_sha256: fad3d96ea5cbd06385d724b89330d50dcb9c7b81f1ba93c5a216031c6c734f03
+      clock_mode: controlled-experimental
+      case: M-MERGE-STRATEGY-001
+      assertions:
+      - *id004
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      - *id009
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - *id014
+      - *id015
+      - *id016
+      scope: Shared Strategy ownership/refusal/cycle handoff, read-only Merge Shape summary and parameter-draft
+        discard, Foundation accent and two-cycle Build output.
+      build_lane_proofs: *id017
+    - scene: foundation-protected-and-added
+      data: reference-musical-scenes.json
+      data_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+      clock_mode: controlled-experimental
+      case: M-MERGE-FOUNDATION-001
+      assertions:
+      - *id018
+      - *id019
+      scope: Shared Strategy ownership/refusal/cycle handoff, read-only Merge Shape summary and parameter-draft
+        discard, Foundation accent and two-cycle Build output.
+      build_lane_proofs: *id020
+    - scene: foundation-two-cycle-build
+      data: reference-musical-scenes.json
+      data_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+      clock_mode: controlled-experimental
+      case: M-MERGE-PHRASE-001
+      assertions:
+      - kind: foundation-build-phrase
+        positions:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 7
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 7
+        - 1
+        - 2
+        - 3
+        - 4
+        - 7
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 7
+        - 1
+        exact_timing: true
+        passed: true
+      scope: Shared Strategy ownership/refusal/cycle handoff, read-only Merge Shape summary and parameter-draft
+        discard, Foundation accent and two-cycle Build output.
+      build_lane_proofs:
+      - &id021
+        stage: reference-controlled-scene-plans-musical-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.json
+        stage_sha256: 4fc394938704ba70b1ef2a294152c0c23589ce6be619650dd0193ca3caa5cf15
+        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.log
+        log_sha256: 92fe6cf5e56216a48286563e7ba7add39aba43a2fb63902e26e9795a7ffe72d0
+        report: /home/andy/mosaic-manual-runs/02f488b1d7534c3391e7e7a67414e9cd/reference-scenes.json
+        report_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 8f06f1fffd129f6b9a653c184edf0397daf6a27bf24f89292a61738ab327fe32
+          application_digest: 9d3b11358ad0b669d2e8f672614300a473ea590ceac630e791bacabf7b3acbf8
+    applicability: native-ui
+    native_gap: null
+    rationale: Shared Strategy ownership/refusal/cycle handoff, read-only Merge Shape summary and parameter-draft
+      discard, Foundation accent and two-cycle Build output.
+    controlled_baselines:
+    - *id001
+    - *id002
+    - *id021
+    historical_native_evidence:
+    - review:
+        status: pending
+        cases:
+        - M-LIVEUI-SHAPETRIG-001
+        - M-MERGE-FOUNDATION-001
+        - M-MERGE-PHRASE-001
+        note: Shared Strategy instructions updated to the candidate control contract. Earlier native evidence
+          remains historical; new shared-selector captures and musical acceptance are pending.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: merge-shape-owns-trigs
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-LIVEUI-SHAPETRIG-001
+          assertions:
+          - kind: shape-trig-mode
+            value: ONLY
+            passed: true
+          - kind: shape-trig-mode
+            value: ALL
+            passed: true
+          - kind: live-ui-merge-shape-trig-mode-summary
+            passed: true
+          scope: The cited public workflow and stated native semantic outcomes.
+        - scene: foundation-protected-and-added
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-MERGE-FOUNDATION-001
+          assertions:
+          - kind: documentation-frame
+            name: images/merge-shape-foundation.png
+            sha256: 49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463
+            passed: true
+          - kind: foundation-physical-workflow
+            passed: true
+          scope: The cited public workflow and stated native semantic outcomes.
+        - scene: foundation-two-cycle-build
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-MERGE-PHRASE-001
+          assertions:
+          - kind: foundation-build-phrase
+            positions:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 7
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 7
+            - 1
+            - 2
+            - 3
+            - 4
+            - 7
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 7
+            - 1
+            exact_timing: true
+            passed: true
+          scope: The cited public workflow and stated native semantic outcomes.
+        applicability: native-ui
+        native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled
+          examples.
+        rationale: Reference source audit and the cited public native workflow are complete for publication.
+        controlled_baselines:
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: merge-shape-owns-trigs
+          clock_mode: controlled-experimental
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: foundation-protected-and-added
+          clock_mode: controlled-experimental
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: foundation-two-cycle-build
+          clock_mode: controlled-experimental
+      scene_refs:
+      - merge-shape-owns-trigs
+      - foundation-protected-and-added
+      - foundation-two-cycle-build
+    scope: Shared Strategy ownership/refusal/cycle handoff, read-only Merge Shape summary and parameter-draft
+      discard, Foundation accent and two-cycle Build output.
+    binding_receipt: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/feature-bind/manifest.json
+    complete_regression_run: false
+    validation_scope: controlled-manual-generation
+    realtime_qualification: pending-ci
+  category: musical
+  parent: musical-merge-and-voice-leading
+  level: 3
+  teaching_bindings:
+  - id: field-merge-shape-owns-trigs-merge-modes-open
+    binding:
+      status: verified
+      scene: merge-shape-owns-trigs
+      step: merge-modes-open
+    teaching_binding:
+      from_step_id: start
+      transition_scope: adjacent
+      actions:
+      - id: value
+        kind: select-value
+        control: E2
+        field_label: Strategy
+        value: FOUNDATION
+        label: Set Strategy to FOUNDATION with E2 clockwise.
+        direction: clockwise
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: merge-modes-open
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_field.label: Strategy
+          selected_field.value: FOUNDATION
+      human_outcome: The selected Strategy field reads FOUNDATION at the captured checkpoint.
+  - id: play-merge-shape-skip-shared-step-skip-phrase
+    binding:
+      status: verified
+      scene: merge-shape-skip-shared-step
+      step: skip-phrase
+    teaching_binding:
+      from_step_id: strategy-skip
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 60, 62, 65, 60.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: skip-phrase
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 97
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 100
+      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
+        MIDI 65 at velocity 97, MIDI 60 at velocity 100.
+  - id: play-foundation-protected-and-added-accented-phrase
+    binding:
+      status: verified
+      scene: foundation-protected-and-added
+      step: accented-phrase
+    teaching_binding:
+      from_step_id: accent-setting
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 60, 62, 64, 65.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: accented-phrase
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 97
+      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
+        MIDI 64 at velocity 107, MIDI 65 at velocity 97.
+  - id: field-foundation-two-cycle-build-cycles-two
+    binding:
+      status: verified
+      scene: foundation-two-cycle-build
+      step: cycles-two
+    teaching_binding:
+      from_step_id: start
+      transition_scope: adjacent
+      actions:
+      - id: value
+        kind: select-value
+        control: E3
+        field_label: Cycles
+        value: '2'
+        label: Set Cycles to 2 with E3 clockwise.
+        direction: clockwise
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: cycles-two
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_field.label: Cycles
+          selected_field.value: '2'
+      human_outcome: The selected Cycles field reads 2 at the captured checkpoint.
+  - id: play-shared-merge-strategy-workflow-foundation-phrase
+    binding:
+      status: verified
+      scene: shared-merge-strategy-workflow
+      step: foundation-phrase
+    teaching_binding:
+      from_step_id: foundation-active
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 60, 62, 64, 65.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: foundation-phrase
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 97
+      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
+        MIDI 64 at velocity 107, MIDI 65 at velocity 97.
+- id: fragments
+  title: Fragments
+  audience: all
+  summary: Fragments cuts the channel loop into 4-, 8- or 16-step sections and plays each section from
+    one assigned pattern, chosen by a repeatable seed.
+  prose: '[Captured Fragments seed and playback workflow](#fragments/fragments-seed-source-choice)
+
+
+    Fragments is a separate mode for building a phrase from pieces of the assigned
+
+    patterns. Choose Fragments with the shared Strategy selector, then open Rhythm from Merge Shape for
+    Size (4,
+
+    8 or 16 steps), Keep anchor, Anchor (shown only with Keep anchor) and Seed. The
+
+    channel loop is cut into fragments of Size steps counted from the channel''s own
+
+    start step; the last fragment is shorter when the loop does not divide evenly,
+
+    and a loop shorter than Size is one fragment. Fragments never cross the loop end.
+
+
+    Each fragment plays one assigned pattern, chosen repeatably by the Seed: the
+
+    same seed always gives the same choice. The fragment keeps that pattern''s own
+
+    trigs, notes, velocities and lengths exactly, so the legacy trig, note,
+
+    velocity and length merge modes and merged-pentatonic do not apply while
+
+    Fragments is active. Merge modes marks its retained note, velocity and length rows inactive, with
+    values such as `AVERAGE SAVED`. These rows and their grid buttons do not edit saved values. Choose
+    Skip, Only or All to restore the retained settings. A note longer than the gap to
+
+    the next onset on the loop is shortened to that gap. Keep anchor also plays the
+
+    Anchor pattern''s trigs where the fragment''s own pattern has none; where both have
+
+    a trig, the fragment''s pattern wins. With no assigned pattern the mode falls back
+
+    to legacy merging and Result says `ASSIGN PATTERN`.
+
+
+    Phrase shows only Cycles and Variation in this mode. Fixed repeats the same
+
+    fragment sources every phrase; Per phrase draws new ones for each phrase.
+
+    Shape percentages, Amount, Accent and Gap do not apply. Fragments hides Pitch; choose the adjacent
+    Harmony task directly for voice leading. Explicit masks still win and probability can still reject
+    an
+
+    onset. The channel grid shows exactly the trigs the fragments play.'
+  musical_use: Use Fragments to build one phrase from sections of several patterns, for example the first
+    half of a sparse pattern and the second half of a busier one, while every section keeps its authored
+    notes, velocities and lengths.
+  related:
+  - merge-shape
+  sources:
+    readme: manual/legacy/README-1.4.0.md#fragments
+    behaviour_cases:
+    - M-MERGE-FRAGMENTS-001
+    - M-MERGE-FRAGMENTS-002
+    - M-MERGE-FRAGMENTS-003
+    code:
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/optional_config_transaction.lua
+    - lib/musical_merge/fragments.lua
+    - lib/musical_merge/config.lua
+    - lib/musical_merge/state.lua
+    - lib/pattern.lua
+  controls:
+  - gesture: On Merge modes, select Strategy with E2 and turn E3 to FRAGMENTS, or press grid (14,8) until
+      it selects Fragments.
+    result: Active reads FRAGMENTS. Fragments owns all four merge attributes, and the note, velocity and
+      length rows on Merge modes show values such as AVERAGE SAVED and are inactive.
+  - gesture: On Merge Shape, select Rhythm. Press K3.
+    result: 'The Fragments list opens: Size, Keep anchor, Seed, and Anchor when Keep anchor is ON.'
+  - gesture: Select Size. Turn E3.
+    result: Fragment size changes between 4, 8 and 16 channel steps. A draft is shown until K3 applies
+      it.
+  - gesture: Select Seed. Turn E3.
+    result: Seed changes from 0 to 65535. The same seed always chooses the same source pattern for each
+      fragment.
+  - gesture: Select Keep anchor. Turn E3.
+    result: When ON, the Anchor row appears and the anchor pattern’s trigs fill positions where the fragment’s
+      source has no trig.
+  - gesture: Press K3 on a value row.
+    result: The draft applies and the footer reads APPLIED. The channel grid then shows exactly the trigs
+      the fragments play.
+  - gesture: Select Phrase. Press K3.
+    result: Cycles and Variation open. Fixed repeats the same fragment sources every phrase; Per phrase
+      draws new ones.
+  details:
+  - title: Loop boundaries
+    text: Fragments start at the channel loop’s start step. The last fragment is shorter when the loop
+      does not divide evenly. A loop shorter than Size is one fragment. Fragments do not cross the loop
+      end.
+  - title: Overrides and fallback
+    text: Legacy trig, note, velocity and length merges and merged-pentatonic do not apply in Fragments.
+      Explicit masks and probability still apply. With no assigned pattern, Result displays ASSIGN PATTERN
+      and uses legacy merging.
+  recipes:
+  - title: Set four-step fragments
+    text: 'Musical purpose: build one phrase from two patterns, taking the first half of the loop from
+      one pattern and the second half from the other. Each half keeps its source notes and velocities.
+
+
+      Starting point: channel 1 has an 8-step loop at 90 BPM and Rate /1. Pattern 1 holds C D E F on steps
+      1 to 4 (velocities 127, 117, 107, 97). Pattern 2 holds a C at velocity 100 on steps 3 and 6, and
+      both are assigned to the channel. Strategy is SKIP.
+
+
+      1. Press E1 to open Channel tasks, select Merge modes and press K3. Select Strategy with E2 and
+      turn E3 until it reads FRAGMENTS. Active reads FRAGMENTS. A strategy choice applies at once and
+      needs no K3.
+
+      2. Press E1 for Channel tasks, select Merge Shape and press K3. Select Rhythm with E2 and press
+      K3. The Fragments list opens: Size 8, Keep anchor OFF, Seed 0; edits on this list are drafts until
+      you press K3.
+
+      3. Select Size and turn E3 once left. Size reads 4, so the loop is cut into two fragments: steps
+      1 to 4 and steps 5 to 8.
+
+      4. Press K3. The footer reads APPLIED and the channel grid lights only step 3, because Seed 0 gives
+      the first fragment to Pattern 2 and the second to Pattern 1, and Pattern 1 has no trigs in the second
+      half.
+
+      5. Press Play (grid (1,8)), listen to two loops and press Stop. Each loop plays a single C (MIDI
+      60) at velocity 100, and Pattern 1’s E on step 3 is not mixed in.
+
+      6. Select Seed with E2 and turn E3 once right. Seed reads 1, and a seed always makes the same choice,
+      so Seed 1 gives the first fragment to Pattern 1 and the second to Pattern 2.
+
+      7. Press K3. The footer reads APPLIED and the grid lights steps 1, 2, 3, 4 and 6.
+
+      8. Press Play. Each loop plays C D E F (MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97) and
+      then Pattern 2’s C on step 6 at velocity 100, then press Stop.
+
+
+      Edits stay drafts until K3, so change Size and Seed first and apply once if you prefer. Turn Keep
+      anchor ON to let the anchor pattern fill empty positions. Open Phrase and set Variation to Per phrase
+      if you want new sources each phrase.
+
+
+      The seed is a repeatable dice roll: seed 0 and seed 1 above give opposite choices for the two halves,
+      and every other seed gives its own choice that always repeats. Try a few more seeds and keep the
+      one you like.
+
+
+      The captured version of this recipe is [Captured Fragments seed and playback workflow](#fragments/fragments-seed-source-choice).'
+  scene_refs:
+  - fragments-seed-source-choice
+  - shared-merge-strategy-workflow
+  review:
+    status: controlled-verified
+    cases:
+    - M-MERGE-FRAGMENTS-001
+    - M-MERGE-STRATEGY-001
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are
+      retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware
+      acceptance remain separate.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: shared-merge-strategy-workflow
+      data: reference-merge-strategy-scenes.json
+      data_sha256: fad3d96ea5cbd06385d724b89330d50dcb9c7b81f1ba93c5a216031c6c734f03
+      clock_mode: controlled-experimental
+      case: M-MERGE-STRATEGY-001
+      assertions:
+      - *id004
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      - *id009
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - *id014
+      - *id015
+      - *id016
+      scope: Shared Fragments selection, inactive retained merge settings/restoration, seed-specific fragment
+        source output and native current editor workflow.
+      build_lane_proofs: *id017
+    - scene: fragments-seed-source-choice
+      data: reference-musical-scenes.json
+      data_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+      clock_mode: controlled-experimental
+      case: M-MERGE-FRAGMENTS-001
+      assertions:
+      - kind: fragments-seed-0
+        loops: 2
+        loop_steps: 8
+        expected:
+        - - 0
+          - 3
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 3
+          - 1
+          - 60
+          - 100
+        - - 2
+          - 3
+          - 1
+          - 60
+          - 100
+        tolerance_seconds: 2.0e-09
+        passed: true
+        seed: 0
+      - kind: documentation-frame
+        name: images/merge-shape-fragments.png
+        sha256: e70202706e3e90e3b4d3c2a45fe4f0d046a726c86e902d820480b7d6f47d2e78
+        passed: true
+        validation: pinned-v2-mini-pose
+        page: M15
+        baseline_sha256: 760b9f276791a959a98a73441d88f534d9f77730fad051d93dd890841581689b
+        atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+        matching_poses:
+        - 7
+      - kind: fragments-seed-1
+        loops: 2
+        loop_steps: 8
+        expected:
+        - - 0
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 0
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 0
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 0
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 0
+          - 6
+          - 1
+          - 60
+          - 100
+        - - 1
+          - 1
+          - 1
+          - 60
+          - 127
+        - - 1
+          - 2
+          - 1
+          - 62
+          - 117
+        - - 1
+          - 3
+          - 1
+          - 64
+          - 107
+        - - 1
+          - 4
+          - 1
+          - 65
+          - 97
+        - - 1
+          - 6
+          - 1
+          - 60
+          - 100
+        - - 2
+          - 1
+          - 1
+          - 60
+          - 127
+        tolerance_seconds: 2.0e-09
+        passed: true
+        seed: 1
+      scope: Shared Fragments selection, inactive retained merge settings/restoration, seed-specific fragment
+        source output and native current editor workflow.
+      build_lane_proofs:
+      - &id022
+        stage: reference-controlled-scene-plans-musical-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.json
+        stage_sha256: 4fc394938704ba70b1ef2a294152c0c23589ce6be619650dd0193ca3caa5cf15
+        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-musical-base-midi.log
+        log_sha256: 92fe6cf5e56216a48286563e7ba7add39aba43a2fb63902e26e9795a7ffe72d0
+        report: /home/andy/mosaic-manual-runs/02f488b1d7534c3391e7e7a67414e9cd/reference-scenes.json
+        report_sha256: fe3788cc65c247f1ce92b49cd13893ea81b17a908596d06cfa539e8de38d0f9e
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 6de899cd937d8a5981bf47cd061c78751767c45b8ebc1bef34cb99906290e71d
+          application_digest: 9d3b11358ad0b669d2e8f672614300a473ea590ceac630e791bacabf7b3acbf8
+    applicability: native-ui
+    native_gap: null
+    rationale: Shared Fragments selection, inactive retained merge settings/restoration, seed-specific
+      fragment source output and native current editor workflow.
+    controlled_baselines:
+    - *id001
+    - *id022
+    historical_native_evidence:
+    - review:
+        status: pending
+        cases:
+        - M-MERGE-FRAGMENTS-001
+        note: Shared Strategy instructions updated to the candidate control contract. Earlier native evidence
+          remains historical; new shared-selector captures and musical acceptance are pending.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: fragments-seed-source-choice
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-MERGE-FRAGMENTS-001
+          assertions:
+          - kind: fragments-seed-0
+            seed: 0
+            loops: 2
+            loop_steps: 8
+            passed: true
+          - kind: documentation-frame
+            name: images/merge-shape-fragments.png
+            sha256: 760b9f276791a959a98a73441d88f534d9f77730fad051d93dd890841581689b
+            passed: true
+          - kind: fragments-seed-1
+            seed: 1
+            loops: 2
+            loop_steps: 8
+            passed: true
+          scope: The cited public workflow and stated native semantic outcomes.
+        applicability: native-ui
+        native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled
+          examples.
+        rationale: Reference source audit and the cited public native workflow are complete for publication.
+        controlled_baselines:
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: fragments-seed-source-choice
+          clock_mode: controlled-experimental
+      scene_refs:
+      - fragments-seed-source-choice
+    scope: Shared Fragments selection, inactive retained merge settings/restoration, seed-specific fragment
+      source output and native current editor workflow.
+    binding_receipt: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/feature-bind/manifest.json
+    complete_regression_run: false
+    validation_scope: controlled-manual-generation
+    realtime_qualification: pending-ci
+  category: musical
+  parent: merge-shape
+  level: 4
+  teaching_bindings:
+  - id: choose-fragments-strategy
+    binding:
+      status: verified
+      scene: shared-merge-strategy-workflow
+      step: fragments-selected
+    teaching_binding:
+      from_step_id: numeric-modes
+      transition_scope: adjacent
+      actions:
+      - id: select
+        kind: tap-grid
+        x: 14
+        y: 8
+        label: Choose FRAGMENTS for the shared merge strategy
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: fragments-selected
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_field.label: Strategy
+          selected_field.value: FRAGMENTS
+      human_outcome: The Strategy field reads FRAGMENTS.
+  - id: field-fragments-seed-source-choice-fragments-active
+    binding:
+      status: verified
+      scene: fragments-seed-source-choice
+      step: fragments-active
+    teaching_binding:
+      from_step_id: start
+      transition_scope: adjacent
+      actions:
+      - id: value
+        kind: select-value
+        control: E2
+        field_label: Active
+        value: FRAGMENTS
+        label: Set Active to FRAGMENTS with E2 clockwise.
+        direction: clockwise
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: fragments-active
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_field.label: Active
+          selected_field.value: FRAGMENTS
+      human_outcome: The selected Active field reads FRAGMENTS at the captured checkpoint.
+- id: interlock
+  title: Interlock
+  audience: all
+  summary: Interlock removes a follower channel’s Foundation additions that fall within 0 to 4 steps of
+    a leader channel’s anchors.
+  prose: '[Captured Interlock Leader and Window workflow](#interlock/interlock-leader-window)
+
+
+    Interlock makes one channel''s Foundation additions leave room for another
+
+    channel''s anchors. On the follower''s Rhythm screen, Interlock opens Leader (Off
+
+    or any other channel) and Window (0–4 of the follower''s steps). An addition is
+
+    removed when a leader anchor falls within Window steps of it; Window 0 removes
+
+    only additions that start exactly with a leader anchor. Anchors of either channel
+
+    are never removed, so an addition removed here simply does not play.
+
+
+    Leader anchors are the anchor pattern''s trigs in the leader''s loop, planned from
+
+    the song, not what the leader happened to sound: probability, mute and swing do
+
+    not change them, and swing or shuffle never change which additions are removed.
+
+    Channels at different clock divisions or loop lengths are compared in musical
+
+    time from Start. The leader must itself use Foundation for its anchors to count;
+
+    otherwise Status says `LEADER OFF` or `LEADER MISSING` and nothing is removed.
+
+
+    A channel can follow one leader, and a channel that has a leader cannot be one:
+
+    Apply refuses a chain with `LEADER HAS LEADER` or `CHANNEL IS A LEADER` and
+
+    keeps your draft. Where Mosaic cannot plan the leader exactly—after a clock
+
+    division, loop range or song change while playing (`RESYNC`, until the next
+
+    Start or song realign) or beyond its planning budget (`PLAN LIMIT`)—the
+
+    follower plays all of its admitted additions for that loop and shows why.
+
+    Status on the Interlock screen and the Interlock row on Result show `ON` or the
+
+    bypass.
+
+
+    Interlock plans additions when a follower wraps its loop. Many followers wrapping together increase
+    the work on that step. If you use many followers, stagger their loop lengths or wrap points.'
+  musical_use: Use Interlock to keep one channel’s extra notes out of another channel’s way, for example
+    hi-hat additions that never land on the kick’s anchors, bass additions that leave room for a lead,
+    or two parts that should not double each other.
+  related:
+  - merge-shape
+  sources:
+    readme: manual/legacy/README-1.4.0.md#interlock
+    behaviour_cases:
+    - M-MERGE-INTERLOCK-001
+    - M-MERGE-INTERLOCK-002
+    - M-MERGE-INTERLOCK-003
+    - M-MERGE-INTERLOCK-004
+    - M-MERGE-INTERLOCK-005
+    - M-MERGE-INTERLOCK-006
+    - M-MERGE-INTERLOCK-007
+    - M-MERGE-INTERLOCK-008
+    - M-MERGE-INTERLOCK-009
+    code:
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/optional_config_transaction.lua
+    - lib/musical_merge/interlock.lua
+    - lib/musical_merge/leader_query.lua
+    - lib/musical_merge/dependency.lua
+    - lib/musical_merge/common_time.lua
+  controls:
+  - gesture: Select the follower channel on the grid. In Channel tasks, open Merge Shape, select Rhythm
+      and press K3, then select Interlock and press K3.
+    result: 'The Interlock list opens: Leader, Window and Status.'
+  - gesture: Select Leader. Turn E3.
+    result: Leader changes between OFF and the other channels. Another Foundation channel becomes the
+      draft leader.
+  - gesture: Select Window. Turn E3.
+    result: Window changes between 0 and 4 follower steps.
+  - gesture: Press K3 on a value row.
+    result: The draft applies and the footer reads APPLIED (NEXT CYCLE while playing). Status reads ON
+      when the filter is working. An invalid chain shows a reason and keeps the draft.
+  - gesture: Press K2.
+    result: The draft is discarded and Rhythm returns.
+  details:
+  - title: Leader anchors
+    text: Mute, probability and swing do not change the nominal leader-anchor decision. Window 0 removes
+      only additions that start exactly with a leader anchor. Interlock compares where leader anchors
+      start, not how long the leader’s note lasts, so it does not keep space free for a sustained leader
+      note.
+  - title: Bypass status
+    text: LEADER OFF, LEADER MISSING, RESYNC and PLAN LIMIT identify inactive filtering. During a planning
+      bypass, admitted additions play. Gap and Amount still apply.
+  recipes:
+  - title: Set Window 0
+    text: 'Musical purpose: stop one channel’s extra notes landing on another channel’s anchor, for example
+      hi-hat additions that never double the kick. Interlock changes only the follower’s additions. Anchors
+      on both channels always play.
+
+
+      Starting point: Foundation is on for two channels, both with 8-step loops. Channel 1 (the follower,
+      MIDI channel 1) has anchor Pattern 1 (C D E F on steps 1 to 4) and Pattern 2 (a C on steps 5 and
+      7) as additions. Channel 2 (the leader, MIDI channel 2) has anchor Pattern 3, a single trig on step
+      5; channel 1 has no leader, and its grid lights steps 1 to 5 and 7.
+
+
+      1. Select channel 1 on the grid (button (1,1)). Press E1 for Channel tasks, select Merge Shape with
+      E2 and press K3.
+
+      2. Select Rhythm and press K3, then select Interlock (the last row) and press K3. The Interlock
+      list opens: Leader OFF, Window 0, Status.
+
+      3. Select Leader and turn E3 once right. Leader reads CH02. A channel cannot follow itself, so CH01
+      is not offered.
+
+      4. Press K3. The footer reads APPLIED, Window stays 0 and Status reads ON. Step 5 goes dark on the
+      channel 1 grid: Pattern 2’s addition starts exactly on the leader’s anchor and is removed. Steps
+      1 to 4 and step 7 stay lit.
+
+      5. Press Play (grid (1,8)) and listen to two loops, then press Stop. Channel 1 plays steps 1 to
+      4 and step 7, and channel 2 plays its anchor on step 5; nothing from channel 1 sounds on step 5.
+
+      6. Select Window and turn E3 twice right. Window reads 2.
+
+      7. Press K3. The footer reads APPLIED. Step 7 also goes dark, because it is two steps from the leader’s
+      anchor on step 5, and only steps 1 to 4 remain on channel 1; if you apply while playing, the footer
+      reads NEXT CYCLE and the change starts at the next loop.
+
+
+      Window 0 removes only additions that start with a leader anchor. Each step of Window widens the
+      gap by one follower step, up to 4.
+
+
+      The captured version of this recipe is [Captured Interlock Leader and Window workflow](#interlock/interlock-leader-window).'
+  scene_refs:
+  - interlock-leader-window
+  review:
+    status: verified
+    cases:
+    - M-MERGE-INTERLOCK-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: interlock-leader-window
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-MERGE-INTERLOCK-001
+      assertions:
+      - kind: detail-row
+        row: 2
+        label: Status
+        value: 'ON'
+        passed: true
+      - kind: interlock-window-0
+        window: 0
+        loops: 2
+        loop_steps: 8
+        passed: true
+      - kind: interlock-queued-window
+        passed: true
+      - kind: interlock-after-refusal
+        window: 2
+        loops: 2
+        loop_steps: 8
+        passed: true
+      scope: The cited public workflow and stated native semantic outcomes.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Reference source audit and the cited public native workflow are complete for publication.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: interlock-leader-window
+      clock_mode: controlled-experimental
+  category: musical
+  parent: merge-shape
+  level: 4
+  teaching_bindings:
+  - id: field-interlock-leader-window-leader-chosen
+    binding:
+      status: verified
+      scene: interlock-leader-window
+      step: leader-chosen
+    teaching_binding:
+      from_step_id: interlock-open
+      transition_scope: adjacent
+      actions:
+      - id: value
+        kind: select-value
+        control: E3
+        field_label: Leader
+        value: CH02
+        label: Set Leader to CH02 with E3 clockwise.
+        direction: clockwise
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: leader-chosen
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_field.label: Leader
+          selected_field.value: CH02
+      human_outcome: The selected Leader field reads CH02 at the captured checkpoint.
+- id: structure
+  title: Structure
+  audience: all
+  summary: Structure moves selected Foundation notes to the nearest pitch class of an enabled Harmony
+    group’s chord.
+  prose: '[Captured Structure group and marker workflow](#structure/structure-anchor-chord-and-delete)
+
+
+    Structure snaps chosen moments of a Foundation line to a chord while the notes
+
+    in between keep their own pitch. Pitch opens Structure: Markers (Off, Anchors,
+
+    Every 4 or Every 8) and Chord group, an enabled Harmony Ensemble group. Anchors
+
+    marks every anchor onset; Every 4 and Every 8 mark steps 1, 5, 9… or 1, 9… of the
+
+    channel loop counted from its start step. A note at a marker is converted to the
+
+    scale as usual and then moved to the nearest pitch class of the group''s chord,
+
+    taking the lower one on a tie. Notes between markers keep their Addition Target
+
+    (additions) or their own pitch (anchors); Mosaic makes no claim that they
+
+    resolve. Note masks, random shifts and fixed notes still win at a marker.
+
+
+    Apply needs an enabled group while Markers is on. If the group becomes
+
+    unavailable during playback the markers play their ordinary pitch and Result
+
+    says `CHORD MISSING`. Deleting or disabling the group turns Markers Off for every
+
+    channel that uses it in the same change; Delete group lists those channels first.
+
+    During playback that change waits for the next pattern boundary, and a Merge
+
+    Shape edit applied to one of those channels before then waits with it and shows
+
+    `NEXT PATTERN` instead of `NEXT CYCLE`.
+
+    A snapped marker keeps its chord tone when Harmony Revoice or Ensemble would move
+
+    it: Harmony''s Result says `MARKER PRIORITY`. With Harmony Pattern, a mapped note
+
+    value that snaps to a different pitch class at a marker than it plays between
+
+    markers has no single mapped pitch, so it is silent at both, whichever fallback
+
+    is chosen; unmapped values keep their own pitch.'
+  musical_use: Use Structure to land chosen notes of a Foundation line on the tones of a chord while the
+    notes between them keep their own pitch, for example a bass line that touches C, E or G on the strong
+    beats.
+  related:
+  - merge-shape
+  sources:
+    readme: manual/legacy/README-1.4.0.md#structure
+    behaviour_cases:
+    - M-MERGE-STRUCTURE-001
+    - M-MERGE-STRUCTURE-002
+    - M-MERGE-STRUCTURE-003
+    - M-MERGE-STRUCTURE-004
+    - M-MERGE-STRUCTURE-005
+    - M-MERGE-STRUCTURE-006
+    - M-MERGE-STRUCTURE-007
+    code:
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/musical_merge/structure.lua
+    - lib/harmony/pattern.lua
+    - lib/optional_config_transaction.lua
+  controls:
+  - gesture: Choose Foundation on Merge modes or with grid (14,8). On Merge Shape, select Pitch and press
+      K3, then select Structure and press K3.
+    result: The Structure list opens with Markers.
+  - gesture: Select Markers. Turn E3.
+    result: Markers changes between OFF, ANCHORS, EVERY 4 and EVERY 8. When Markers is on, a Chord group
+      row appears.
+  - gesture: Select Chord group. Turn E3.
+    result: An enabled Harmony group becomes the draft chord source.
+  - gesture: Press K3 on a value row.
+    result: The draft applies. A group that is missing or disabled prevents activation.
+  details:
+  - title: Markers and pitch precedence
+    text: Markers count from the channel loop’s start step. The nearest chord pitch class is selected;
+      ties select the lower pitch. Note masks, random shifts and fixed notes retain their precedence.
+  - title: Group deletion and disable
+    text: Deleting or disabling a referenced group turns affected Markers Off in the same transaction.
+      During playback, that change waits for NEXT PATTERN. Pending linked Merge Shape edits wait for the
+      same boundary.
+  recipes:
+  - title: Snap anchors to a chord, then try Every 4
+    text: 'Musical purpose: land the strong notes of a line on the tones of a chord while the notes between
+      them stay as written. Anchors snaps every anchor note. Every 4 snaps only steps 1 and 5 of an 8-step
+      loop and leaves the rest of the line alone.
+
+
+      Terms: a Harmony group is a stored chord. Its Template count is how many tones the chord has, each
+      Tone row sets that tone''s offset from the root, and Group enabled lets other features use it. Structure
+      moves a marked note to the nearest tone of an enabled group''s chord.
+
+
+      Starting point: channel 1 has an 8-step loop with Foundation on. Pattern 1 is the anchor (C D E
+      F on steps 1 to 4, MIDI 60, 62, 64, 65). Pattern 2 supplies additions (a C on steps 5 and 7). If
+      Foundation is not on yet, follow steps 1 to 4 of Set a two-cycle Build phrase first. Steps 1 to
+      3 build a group that holds the chord C E G; if you already have an enabled group with that chord,
+      start at step 4.
+
+
+      1. Create the group: press E1 for Channel tasks, select Harmony and press K3. Select Groups with
+      E2 and press K3. Select Create group and press K3. Group 1 appears.
+
+
+      2. Set the chord: select Source and press K3. Select Template count and turn E3 twice right, so
+      the chord has 3 tones. Select Tone 2 and turn E3 twice right. Select Tone 3 and turn E3 four times
+      right. With the root, the offsets 2 and 4 are C E G in C major. Press K3 on a value row. The footer
+      reads APPLIED.
+
+
+      3. Enable the group: press K2 to return to Groups. Select Members and press K3, select Group enabled,
+      turn E3 once right to ON and press K3. The footer reads APPLIED. Group 1 is enabled.
+
+
+      4. Open Structure: press E1 for Channel tasks, select Merge Shape and press K3. Select Pitch and
+      press K3, then select Structure and press K3. The Structure list opens with Markers OFF.
+
+
+      5. Select Markers and turn E3 once right. Markers reads ANCHORS and a Chord group row appears showing
+      1, then press K3. The footer reads APPLIED.
+
+
+      6. Press Play (grid (1,8)) and listen to two loops. The anchors C D E F sound as C C E E (MIDI 60,
+      60, 64, 64): D is equally near C and E and takes the lower one, and F is nearer E than G. The additions
+      on steps 5 and 7 stay C. Press Stop.
+
+
+      7. Now the contrast. Select Markers and turn E3 once right. Markers reads EVERY 4, so only steps
+      1 and 5 are markers. Press K3.
+
+
+      8. Press Play. Step 1 and step 5 are C, which is already a chord tone, so nothing moves. D on step
+      2 and F on step 4 are not markers any more and return to their own pitches. The line plays MIDI
+      60, 62, 64, 65, 60 and 60 in each loop. Then press Stop.
+
+
+      Choosing Anchors snaps every anchor, and Every 4 snaps only the beats you choose. Deleting or disabling
+      the group turns Markers OFF.
+
+
+      The captured version, [Captured Structure group and marker workflow](#structure/structure-anchor-chord-and-delete),
+      covers steps 1 to 6 with Anchors and then deletes the group. Steps 7 and 8 are captured in [Mark
+      every fourth step](#structure/structure-every-4-markers), which starts from the enabled C E G group
+      with Foundation on and shows Markers set to Every 4 and the line playing 60, 62, 64, 65, 60, 60
+      in each loop.'
+  scene_refs:
+  - structure-anchor-chord-and-delete
+  - structure-every-4-markers
+  review:
+    status: verified
+    cases:
+    - M-MERGE-STRUCTURE-001
+    - M-MERGE-STRUCTURE-004
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: structure-anchor-chord-and-delete
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-MERGE-STRUCTURE-001
+      assertions:
+      - kind: detail-row
+        row: 1
+        label: Chord group
+        value: '1'
+        passed: true
+      - kind: structure-anchor-markers
+        markers: anchors
+        loops: 2
+        loop_steps: 8
+        passed: true
+      - kind: detail-row
+        row: 1
+        label: Affected
+        value: '1'
+        passed: true
+      - kind: structure-group-deleted
+        markers: 'off'
+        loops: 2
+        loop_steps: 8
+        passed: true
+      scope: The cited public workflow and stated native semantic outcomes.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Reference source audit and the cited public native workflow are complete for publication.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: structure-anchor-chord-and-delete
+      clock_mode: controlled-experimental
+  category: musical
+  parent: merge-shape
+  level: 4
+- id: result-and-reason
+  title: Result and Reason
+  audience: all
+  summary: Result shows what a step is and why. Reason lists, in order, the decisions that excluded an
+    addition.
+  prose: 'Use Result and Reason when an expected addition is silent. They tell you whether the step is
+    an anchor, an admitted addition or empty, and which rule removed it, so you can fix the setting instead
+    of editing a pattern or adding a mask.
+
+
+    The examples below use a follower channel with Foundation (anchor Pattern 1 on steps 1 to 4, additions
+    from Pattern 2 on steps 5 and 7) that follows channel 2 through Interlock, where channel 2 has an
+    anchor on step 5. See Interlock to set that up.
+
+
+    1. Press E1 for Channel tasks, select Merge Shape with E2 and press K3. Select Result and press K3.
+
+    2. Select Step with E2. Turn E3 to the step to inspect. Role and Decision show that step.
+
+    3. Select Reason with E2 and press K3. The Merge Reason dashboard opens with six rows. K2 returns
+    to Result.
+
+
+    The six rows of Reason:
+
+
+    - Step: the step you are inspecting.
+
+    - Role: what the step is, followed by its source patterns. ANCHOR is a trig from the anchor pattern,
+    ADDITION P2 is an addition taken from Pattern 2, and EMPTY means nothing plays.
+
+    - Decision: OK when the step plays, otherwise every rule that excluded it, in order. GAP comes first,
+    then INTERLOCK CH02. When both apply, both are listed, as in GAP, INTERLOCK.
+
+    - Interlock: ON while the leader’s anchors are being avoided, OFF when there is no leader, RESYNC
+    or PLAN LIMIT when Interlock cannot plan the leader and is bypassed.
+
+    - Velocity: the velocity the step plays, or NONE when it does not play.
+
+    - Pitch target: LEGACY unless an Addition Target or Structure marker applies.
+
+
+    A suppressed addition shows Role EMPTY with its source patterns, for example EMPTY P2, and Velocity
+    NONE. EMPTY P2 does not mean Pattern 2 has no trig on that step. Read Decision to see why the candidate
+    was removed.
+
+
+    During a planning bypass, Gap and Amount still decide the step as if Interlock were Off.
+
+
+    A fragment step names its fragment and source, for example FRAGMENT 1 P03 or KEPT ANCHOR. A Structure
+    marker shows MARKER CHORD G01 when its pitch is snapped, CHORD MISSING when the group is unavailable,
+    or a reason such as BYPASS NOTE MASK, BYPASS RANDOM, BYPASS FIXED or BYPASS QUANTISED FIXED.
+
+
+    When a leader is set, Result also shows the Interlock status. A queued edit refused at the loop boundary
+    is shown as Rejected. Silence-aware Interlock, which would keep space free while another channel’s
+    notes sustain, is not available in this release.'
+  musical_use: Open Result and Reason before changing a pattern or adding a mask to bring back an addition
+    that does not play.
+  related:
+  - merge-shape
+  sources:
+    readme: manual/legacy/README-1.4.0.md#result-and-reason
+    behaviour_cases:
+    - M-MERGE-FRAGMENTS-001
+    - M-MERGE-FRAGMENTS-002
+    - M-MERGE-FRAGMENTS-003
+    - M-MERGE-INTERLOCK-001
+    - M-MERGE-INTERLOCK-002
+    - M-MERGE-INTERLOCK-003
+    - M-MERGE-INTERLOCK-004
+    - M-MERGE-INTERLOCK-005
+    - M-MERGE-INTERLOCK-006
+    - M-MERGE-INTERLOCK-007
+    - M-MERGE-INTERLOCK-008
+    - M-MERGE-INTERLOCK-009
+    - M-MERGE-STRUCTURE-001
+    - M-MERGE-STRUCTURE-002
+    - M-MERGE-STRUCTURE-003
+    - M-MERGE-STRUCTURE-004
+    - M-MERGE-STRUCTURE-005
+    - M-MERGE-STRUCTURE-006
+    - M-MERGE-STRUCTURE-007
+    code:
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/musical_merge/display.lua
+    - lib/musical_merge/foundation.lua
+    - lib/musical_merge/fragments.lua
+    - lib/musical_merge/interlock.lua
+    - lib/musical_merge/structure.lua
+  controls:
+  - gesture: Open Result in Merge Shape.
+    result: The selected step’s Role and Decision are displayed.
+  - gesture: In Result, select Step with E2 and turn E3.
+    result: The inspected step changes. In the Interlock example, steps 5 and 7 are the interesting ones.
+  - gesture: In Result, select Reason with E2. Press K3.
+    result: The Merge Reason dashboard opens for the step selected in Result. Its Step row is read-only.
+      K2 returns to Result.
+  details:
+  - title: Combined reasons
+    text: Reason can display GAP and INTERLOCK together, with GAP first. The Interlock row is separate
+      and shows ON, OFF, RESYNC or PLAN LIMIT. A planning bypass does not remove Gap or Amount decisions.
+  - title: Pitch status
+    text: MARKER CHORD G01 identifies a snapped marker. BYPASS NOTE MASK, BYPASS RANDOM and fixed-note
+      bypasses identify retained pitches. CHORD MISSING identifies the ordinary-pitch fallback.
+  - title: Suppressed addition readout
+    text: A suppressed Foundation addition shows Role EMPTY with its source patterns, and Velocity NONE.
+      Decision tells you whether a candidate was excluded or the source step was empty.
+  recipes: []
+  scene_refs:
+  - reason-ordered-rejections
+  review:
+    status: controlled-verified
+    cases:
+    - M-MERGE-INTERLOCK-001
+    - M-MERGE-STRUCTURE-001
+    - M-MANUAL-REASON-001
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are
+      retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware
+      acceptance remain separate.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: reason-ordered-rejections
+      data: reference-reason-swing-scenes.json
+      data_sha256: 420375cbe8048af3a1eaaabd23301a71f177c5ff61431b920c785757be2db4bf
+      clock_mode: controlled-experimental
+      case: M-MANUAL-REASON-001
+      assertions:
+      - kind: manual-reason-dashboard
+        checkpoint: admitted-addition
+        rows:
+        - - Step
+          - '7'
+        - - Role
+          - ADDITION P2
+        - - Decision
+          - OK
+        - - Interlock
+          - 'ON'
+        - - Velocity
+          - '70'
+        - - Pitch target
+          - LEGACY
+        citation: README.md#result-and-reason
+        characterisation: 'characterisation outside legacy README: suppressed Role is EMPTY P2 and Velocity
+          is NONE'
+        passed: true
+      - kind: manual-reason-dashboard
+        checkpoint: interlock-rejection
+        rows:
+        - - Step
+          - '5'
+        - - Role
+          - EMPTY P2
+        - - Decision
+          - INTERLOCK CH02
+        - - Interlock
+          - 'ON'
+        - - Velocity
+          - NONE
+        - - Pitch target
+          - LEGACY
+        citation: README.md#result-and-reason
+        characterisation: 'characterisation outside legacy README: suppressed Role is EMPTY P2 and Velocity
+          is NONE'
+        passed: true
+      - kind: manual-reason-dashboard
+        checkpoint: ordered-gap-interlock
+        rows:
+        - - Step
+          - '5'
+        - - Role
+          - EMPTY P2
+        - - Decision
+          - GAP, INTERLOCK
+        - - Interlock
+          - 'ON'
+        - - Velocity
+          - NONE
+        - - Pitch target
+          - LEGACY
+        citation: README.md#result-and-reason
+        characterisation: 'characterisation outside legacy README: suppressed Role is EMPTY P2 and Velocity
+          is NONE'
+        passed: true
+      - kind: manual-reason-midi
+        expected:
+        - - 0
+          - 60
+          - 127
+        - - 24
+          - 62
+          - 117
+        - - 48
+          - 64
+          - 107
+        - - 72
+          - 65
+          - 97
+        - - 144
+          - 60
+          - 70
+        - - 192
+          - 60
+          - 127
+        absent_pulse: 96
+        channel: 1
+        midi_start_index: 10
+        tolerance_seconds: 2.0e-09
+        citation: README.md#interlock
+        passed: true
+      scope: Exact ordered Reason readouts and associated emitted/suppressed MIDI outcomes.
+      build_lane_proofs:
+      - &id023
+        stage: reference-controlled-scene-plans-reason-swing-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-reason-swing-base-midi.json
+        stage_sha256: 6a023882cfb592b47d7f3b45c6578d781342adf72e6d24b5eb50deaa9ab7fa5e
+        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/reference-controlled-scene-plans-reason-swing-base-midi.log
+        log_sha256: 5371e479c6406f43448cef698c115d281432730715677dafd909e0803dac78c4
+        report: /home/andy/mosaic-manual-runs/c293aecf584746069d125fa902dd9d56/reference-scenes.json
+        report_sha256: 420375cbe8048af3a1eaaabd23301a71f177c5ff61431b920c785757be2db4bf
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: e7ad4555a9f91b724da74bb7c615249b5882fcd0c1a82848d8791ea69cec57e6
+          application_digest: 9d3b11358ad0b669d2e8f672614300a473ea590ceac630e791bacabf7b3acbf8
+    applicability: native-ui
+    native_gap: null
+    rationale: Exact ordered Reason readouts and associated emitted/suppressed MIDI outcomes.
+    controlled_baselines:
+    - *id023
+    historical_native_evidence:
+    - review:
+        status: pending
+        cases:
+        - M-MERGE-INTERLOCK-001
+        - M-MERGE-STRUCTURE-001
+        note: Source and case definitions reviewed. Published native assertions and their scope are listed
+          separately; pending gaps are not acceptance evidence.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: interlock-leader-window
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-MERGE-INTERLOCK-001
+          assertions:
+          - kind: detail-row
+            row: 2
+            label: Status
+            value: 'ON'
+            passed: true
+          - kind: interlock-window-0
+            window: 0
+            loops: 2
+            loop_steps: 8
+            passed: true
+          - kind: interlock-queued-window
+            passed: true
+          - kind: interlock-after-refusal
+            window: 2
+            loops: 2
+            loop_steps: 8
+            passed: true
+          scope: Interlock ON/window/refusal and Structure selected-group/deletion outcomes. Full Reason
+            rows and ordered combined reasons are not asserted by these scenes.
+        - scene: structure-anchor-chord-and-delete
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-MERGE-STRUCTURE-001
+          assertions:
+          - kind: detail-row
+            row: 1
+            label: Chord group
+            value: '1'
+            passed: true
+          - kind: structure-anchor-markers
+            markers: anchors
+            loops: 2
+            loop_steps: 8
+            passed: true
+          - kind: detail-row
+            row: 1
+            label: Affected
+            value: '1'
+            passed: true
+          - kind: structure-group-deleted
+            markers: 'off'
+            loops: 2
+            loop_steps: 8
+            passed: true
+          scope: Interlock ON/window/refusal and Structure selected-group/deletion outcomes. Full Reason
+            rows and ordered combined reasons are not asserted by these scenes.
+        applicability: native-ui
+        native_gap: Full six-row Reason and combined ordered reasons are awaiting the dedicated public
+          fixture; existing scenes only assert related status/group outcomes.
+        rationale: Interlock ON/window/refusal and Structure selected-group/deletion outcomes. Full Reason
+          rows and ordered combined reasons are not asserted by these scenes.
+        controlled_baselines:
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: interlock-leader-window
+          clock_mode: controlled-experimental
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: structure-anchor-chord-and-delete
+          clock_mode: controlled-experimental
+      scene_refs:
+      - interlock-leader-window
+      - structure-anchor-chord-and-delete
+    scope: Exact ordered Reason readouts and associated emitted/suppressed MIDI outcomes.
+    binding_receipt: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/feature-bind/manifest.json
+    complete_regression_run: false
+    validation_scope: controlled-manual-generation
+    realtime_qualification: pending-ci
+  category: musical
+  parent: merge-shape
+  level: 4
+- id: harmony
+  title: Harmony
+  audience: all
+  summary: Harmony provides Off, Revoice, Pattern and Ensemble modes for channel output pitch placement.
+  prose: "Harmony changes the pitch a channel sends, not its rhythm. Open it from Channel tasks (Voice\
+    \ leading list: Mode, Group, Preset, Tone Map in Pattern mode, Register, Bass, Groups, Rules, Entry,\
+    \ Result). Tone Map is the page that maps written notes to voices. Register sets each voice’s range.\
+    \ Entry holds the Failure fallback. Result shows what was planned and sent.\n\n[Captured Harmony range\
+    \ failure and fallback](#harmony/harmony-range-failure-and-fallback)\n\n[Captured Harmony Revoice\
+    \ workflow](#harmony/harmony-revoice-two-voices)\n\nHarmony offers four mutually exclusive channel\
+    \ modes:\n\n- Off follows the ordinary Mosaic pitch path exactly.\n- Revoice takes the actual root\
+    \ and enabled chord-mask voices after Mosaic's\n  pitch-class decisions, preserving their pitch classes\
+    \ and sounding count while\n  choosing legal octaves and assignments.\n- Pattern maps explicit effective\
+    \ relative values in the current merge binding\n  to Bass, Inner1–3 or Top. Repeated mapped values\
+    \ reuse one pitch for the entire\n  harmonic frame; unmapped values remain Raw. Random, fixed, absolute-mask\
+    \ and\n  chord-mask events visibly bypass Pattern. Conflicting aliases fail closed.\n- Ensemble assigns\
+    \ Bass/Inner/Top roles to one to five explicit monophonic\n  channels. Each member retains its own\
+    \ rhythm, velocity, gate, clock and route,\n  but its pitch is replaced by the shared frame. A conflicting\
+    \ local scale lock\n  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`); a channel or\n\
+    \  step octave override does the same (`LOCAL OCTAVE BYPASS`).\n\nRegister rows set inclusive MIDI\
+    \ Low/High, Centre and Preferred leap for every\nrole. Smooth prioritises literal common tones and\
+    \ economical movement; Compact\nprioritises register centre/spacing; Independent prioritises movement\
+    \ without a\ncommon-tone score. Hard options cover crossing, exact unison, strict leap and\nstrict\
+    \ bass direction. Bass can be Root, an explicit Inversion tone, Smooth or\nan exact Pedal. Revoice\
+    \ pedals must already be in its input material; only an\nEnsemble group can explicitly allow a non-chord\
+    \ pedal.\n\nThe deterministic solver searches every legal pitch-class placement inside the\nconfigured\
+    \ ranges (up to five voices) and never clamps an illegal result. A frame\nwith no solution silences\
+    \ affected mapped voices by default; Legacy fallback is\nexplicit. A bounded search reports `BUDGET\
+    \ EXCEEDED` rather than emitting a\npartial answer. Preparing a frame does not change voice history:\
+    \ the first real\nscheduled onset consumes it, while redraws, rests, failed probability, mute and\n\
+    missing output do not. Delayed strums and arpeggios keep the pitch snapshot made\nat their onset,\
+    \ and Note Off always releases the pitch and route actually sent.\n\n[Captured NO VOICING and Legacy\
+    \ fallback](#harmony/harmony-range-failure-and-fallback)\n\nThe Channel grid remains the chronological\
+    \ trig/mask surface. Foundation anchors\nand additions therefore appear as active steps there. After\
+    \ a step plays, the\nPattern Note grid moves that step's bright note LED to the final effective pitch\n\
+    that the native 21-position note range can represent. Switch its upper, centred\nor lower seven-note\
+    \ bank as usual to inspect octave placement. Raw and bypassed\nevents use the ordinary pre-Harmony\
+    \ position; turning Harmony Off restores the\nordinary merged/scale positions immediately. An exact\
+    \ pitch outside that native\nrange has no false in-range LED and remains available in Result/Note\
+    \ Dashboard.\n\nThis display is read-only: touching the projected Note fader still edits its\nselected\
+    \ source-pattern value. Until the changed step plays again, the edited\nsource is displayed rather\
+    \ than a stale output. Final Harmony pitches are also\nshown on Output (its Pitch and Sent rows) and\
+    \ on Harmony's Result screen, one row\nper voice as the planned and sent note (`C3 > C3`). Result\
+    \ uses its Step row to\nselect one coherent event chain; on Note\nDashboard, holding a grid step temporarily\
+    \ inspects that step instead of combining\nit with a later delayed event. A step with no recorded\
+    \ event says `NO EVENT` and\nshows no planned or emitted pitch; it never borrows the latest event\
+    \ from another\nstep. This readout occupies the bottom two lines of the Note Dashboard, which is\n\
+    the row tooltips use, so while a harmony event is being shown there the page\nclears that row and\
+    \ tooltips are not visible on it. Result status names local scale/octave bypasses, explicit Legacy\
+    \ fallback\nand the specific no-voicing reason. For an Ensemble group, any member bypass or failure\
+    \ is\nsurfaced even when another member has a valid voicing. The projection never writes\nback into\
+    \ a shared pattern. Copy/save stores\nversioned configuration, not running solver or phrase history.\
+    \ Missing optional\nconfiguration loads as Off; unknown schema versions reject the project before\
+    \ it\nreplaces the active project."
+  musical_use: Use Revoice for root and chord-mask voices, Pattern for repeated relative values, or Ensemble
+    for a chord distributed across monophonic channels.
+  related:
+  - musical-merge-and-voice-leading
+  sources:
+    readme: manual/legacy/README-1.4.0.md#harmony
+    behaviour_cases:
+    - M-HARMONY-REVOICE-001
+    - M-HARMONY-PATTERN-001
+    - M-HARMONY-PATTERN-CLOCKS-001
+    - M-HARMONY-PATTERN-BYPASS-001
+    - M-HARMONY-ENSEMBLE-001
+    - M-HARMONY-PERSIST-001
+    - M-HARMONY-FAILURE-001
+    - M-HARMONY-HELD-001
+    - M-UIACC-A19-001
+    code:
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/harmony/config.lua
+    - lib/harmony/config_state.lua
+    - lib/harmony/context.lua
+    - lib/harmony/voicing.lua
+    - lib/harmony/pattern.lua
+    - lib/harmony/state.lua
+    - lib/harmony/inspection.lua
+    - lib/harmony/grid_projection.lua
+    - lib/step.lua
+  controls:
+  - gesture: In Channel tasks, select Harmony. Press K3.
+    result: Voice leading settings open.
+  - gesture: Turn E2 to Mode. Turn E3.
+    result: The draft mode changes between Off, Revoice, Pattern and Ensemble.
+  - gesture: Select Register or another settings row marked OPEN >. Press K3.
+    result: The selected settings list opens.
+  - gesture: Turn E2 to select a value. Turn E3 to change it. Press K3 on a value row.
+    result: Mosaic validates and applies the draft. During playback, NEXT PATTERN indicates a queued change.
+  - gesture: Press K2.
+    result: A dirty draft is cancelled. An opened settings list returns to its parent.
+  - gesture: In Result, select Step.
+    result: The selected event’s planned and sent pitches are displayed.
+  - gesture: On Note Dashboard, hold a grid step.
+    result: That step’s event is inspected. A step without a recorded event displays NO EVENT.
+  - gesture: In Pattern mode, select Tone Map. Press K3. Select a Tone row and turn E3.
+    result: The row changes between RAW, BASS, INNER1, INNER2, INNER3 and TOP. K3 on a value row applies
+      the map.
+  - gesture: Select Register. Press K3. Select a role with the Role row, then select Low, High or Centre
+      and turn E3.
+    result: The role’s inclusive MIDI range changes. A Low, High and Centre that leave no legal placement
+      for a mapped note give NO VOICING RANGE and silence it.
+  - gesture: Select Entry. Press K3. Select Failure fallback and turn E3.
+    result: Failure fallback changes between SILENCE and LEGACY. Silence is the default; Legacy plays
+      the ordinary pitch and Result reads LEGACY RANGE.
+  details:
+  - title: Mode selection
+    text: Revoice places the actual root and enabled chord-mask voices in legal octaves. Pattern maps
+      repeated effective relative values to roles. Ensemble assigns a shared harmonic frame to specified
+      monophonic channels; each member retains its rhythm and route.
+  - title: No voicing and fallback
+    text: Infeasible registers display NO VOICING RANGE on Result. Silence is the default failure fallback.
+      To change it, open Entry and set Failure fallback to LEGACY. A step with no event reads NO EVENT,
+      which is different from a failed voicing. A solver budget failure does not emit a partial answer.
+  - title: Note grid editing
+    text: After a played event, the Note grid displays the final pitch if it is within the native range.
+      Editing a Note fader still edits the selected source pattern. Projected pitches are not written
+      to that pattern.
+  - title: Saving and loading
+    text: Saving stores the Harmony settings, not the solver position or phrase history. A project saved
+      with no Harmony settings loads with Harmony Off. A project saved by a newer, unknown Harmony version
+      is refused with a message that names the slot and says voicing schema version, and the project that
+      is running is kept.
+  recipes:
+  - title: Map three relative values
+    text: 'Musical purpose: pin chosen written notes to fixed voices of a chord frame, each limited to
+      its own register, so a note that repeats in the phrase always lands on the same pitch. Choose Pattern
+      when you want to decide which written note goes to which voice; choose Revoice when the chord notes
+      are already written and you want Mosaic to arrange their octaves. In this phrase the notes are all
+      different, so the repeat rule is explained at the end rather than heard.
+
+
+      Terms used below: a written value is the relative note of a step (0 to 3 here); a voice is Bass,
+      Inner 1 to 3 or Top; a register is the range of MIDI notes a voice may use; RAW means the value
+      is not mapped and keeps its own pitch.
+
+
+      Starting point: channel 1 plays one pattern, C D E F on steps 1 to 4 (written values 0, 1, 2, 3;
+      MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97), at 90 BPM. Harmony is Off.
+
+
+      1. Press E1 for Channel tasks, select Harmony with E2 and press K3. The Voice leading list opens
+      with Mode OFF.
+
+
+      2. Select Mode with E2 and turn E3 twice right (Off, Revoice, Pattern). Mode reads PATTERN and a
+      Tone Map row appears. The change is a draft until K3.
+
+
+      3. Select Tone Map with E2 and press K3. The Tone Map lists one row for each written value, Tone
+      0 to Tone 3, all RAW, followed by Reset map.
+
+
+      4. Select Tone 0 and turn E3 once right. It reads BASS. Press K3. The footer reads APPLIED. Press
+      Play and then Stop: C still plays as MIDI 60, because 60 already lies inside the default Bass register
+      (24 to 60), so nothing sounds different yet.
+
+
+      5. Select Tone 2 and turn E3 twice right so it reads INNER1. Press K3. Tone 1 (D) stays RAW.
+
+
+      6. Select Tone 3 and turn E3 five times right so it reads TOP. Press K3.
+
+
+      7. Press E1 to return to the Voice leading list. Select Register with E2 and press K3. The Register
+      list opens: Role (the first role is Bass), Low, High, Centre, Preferred leap, Strict leap.
+
+
+      8. Select High with E2 and turn E3 five times left. High reads 55. Press K3.
+
+
+      9. Press Play and listen to two loops, then press Stop. The Bass register now ends at 55, so 60
+      no longer fits and C plays as MIDI 48 (C2), the nearest C inside it. D stays at MIDI 62 because
+      it is RAW. E and F are placed in their Inner 1 and Top registers. Open Result straight away (next
+      step) to see each pitch.
+
+
+      10. Press E1 to return to the Voice leading list, select Result and press K3. Select Step and turn
+      E3 to step 1, step 3 and step 4: each shows its planned and sent pitch.
+
+
+      A repeated mapped value uses one pitch for the whole harmonic frame: if the phrase were C D C F,
+      both Cs would sound as MIDI 48. If a role''s range leaves no legal placement for a mapped note,
+      Result shows NO VOICING RANGE and that note is silent. See [Captured Harmony range failure and fallback](#harmony/harmony-range-failure-and-fallback).'
+  scene_refs:
+  - harmony-range-failure-and-fallback
+  - harmony-revoice-two-voices
+  - harmony-ensemble-and-local-bypass
+  review:
+    status: verified
+    cases:
+    - M-HARMONY-ENSEMBLE-001
+    - M-HARMONY-FAILURE-001
+    - M-HARMONY-REVOICE-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: harmony-range-failure-and-fallback
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-HARMONY-FAILURE-001
+      assertions:
+      - kind: no-voicing-visible
+        reason: range
+        passed: true
+      - kind: unrecorded-step-inspection
+        step: 5
+        status: NO EVENT
+        passed: true
+      - kind: explicit-legacy-fallback
+        passed: true
+      scope: The cited public workflow and stated native semantic outcomes.
+    - scene: harmony-revoice-two-voices
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-HARMONY-REVOICE-001
+      assertions:
+      - kind: revoice-physical-workflow
+        passed: true
+      scope: The cited public workflow and stated native semantic outcomes.
+    - scene: harmony-ensemble-and-local-bypass
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-HARMONY-ENSEMBLE-001
+      assertions:
+      - kind: ensemble-polyrhythm
+        role_pitches:
+          '1': 48
+          '2': 55
+          '3': 64
+          '4': 67
+        passed: true
+      - kind: local-scale-bypass
+        channel: 2
+        pitches:
+        - 64
+        - 64
+        - 64
+        - 64
+        - 64
+        status: LOCAL SCALE BYPASS
+        passed: true
+      - kind: local-octave-bypass
+        channel: 3
+        inspected_step: 2
+        pitches:
+        - 72
+        - 72
+        - 72
+        - 72
+        - 72
+        - 72
+        status: LOCAL OCTAVE BYPASS
+        passed: true
+      scope: The cited public workflow and stated native semantic outcomes.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Reference source audit and the cited public native workflow are complete for publication.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: harmony-range-failure-and-fallback
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: harmony-revoice-two-voices
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: harmony-ensemble-and-local-bypass
+      clock_mode: controlled-experimental
+  category: musical
+  parent: musical-merge-and-voice-leading
+  level: 3
+  teaching_bindings:
+  - id: field-harmony-range-failure-and-fallback-register-low
+    binding:
+      status: verified
+      scene: harmony-range-failure-and-fallback
+      step: register-low
+    teaching_binding:
+      from_step_id: register-open
+      transition_scope: adjacent
+      actions:
+      - id: value
+        kind: select-value
+        control: E3
+        field_label: Low
+        value: '50'
+        label: Set Low to 50 with E3 clockwise.
+        direction: clockwise
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: register-low
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_field.label: Low
+          selected_field.value: '50'
+      human_outcome: The selected Low field reads 50 at the captured checkpoint.
+  - id: play-harmony-revoice-two-voices-two-voice-placement
+    binding:
+      status: verified
+      scene: harmony-revoice-two-voices
+      step: two-voice-placement
+    teaching_binding:
+      from_step_id: harmony-open
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 48, 50, 50, 52.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: two-voice-placement
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 1
+          bytes:
+          - 144
+          - 48
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 50
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 50
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 52
+          - 117
+      human_outcome: The captured MIDI notes include MIDI 48 at velocity 127, MIDI 50 at velocity 127,
+        MIDI 50 at velocity 117, MIDI 52 at velocity 117.
+  - id: field-harmony-ensemble-and-local-bypass-group-enabled
+    binding:
+      status: verified
+      scene: harmony-ensemble-and-local-bypass
+      step: group-enabled
+    teaching_binding:
+      from_step_id: opted-in
+      transition_scope: adjacent
+      actions:
+      - id: value
+        kind: select-value
+        control: E3
+        field_label: Group enabled
+        value: 'ON'
+        label: Set Group enabled to ON with E3 clockwise.
+        direction: clockwise
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: group-enabled
+        label: Preview the captured result
+      semantic_requires:
+        public_readout_equals:
+          selected_field.label: Group enabled
+          selected_field.value: 'ON'
+      human_outcome: The selected Group enabled field reads ON at the captured checkpoint.
+- id: performance-management
+  title: Performance Management
+  audience: all
+  summary: Channel count, clock rates, parameter slides, trigless locks and n.b. devices affect sequencer
+    workload.
+  prose: 'Channel count, clock rate, trig locks, parameter slides and n.b. devices affect Mosaic’s workload.
+    Heavy workload can delay sequencing and make external clock synchronization unreliable.
+
+
+    - Use greater care with high clock rates, trig locks, parameter slides and n.b. devices as channel
+    count increases.
+
+    - High clock rates and multipliers increase sequencer workload.
+
+    - Use global parameter slides sparingly. Use step parameter slides when global sliding is unnecessary,
+    and limit the total number of slides.
+
+    - Disable trigless locks when the additional modulation granularity is not needed.
+
+    - Limit the number of n.b. devices.
+
+
+    A test on version 1.1.1 found unreliable external synchronization with one Doubledecker n.b. device
+    at 110 BPM, trigless parameters, locks on most steps for all 10 trig parameters across four channels,
+    and 40 parameters using global parameter sliding. Other combinations can produce different results.
+    This earlier example does not specify a universal limit for the current version.'
+  musical_use: Reduce global slides, fast multipliers or trigless-lock density when an arrangement’s timing
+    becomes unreliable.
+  related: []
+  sources:
+    readme: manual/legacy/README-1.4.0.md#performance-management
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-SLIDE-CAPACITY-001
+    code:
+    - lib/clock/m_clock.lua
+    - lib/step.lua
+    - lib/devices/param_manager.lua
+  controls: []
+  details:
+  - title: Earlier timing test
+    text: The 110 BPM Doubledecker example comes from testing on version 1.1.1. It is not a universal
+      current limit. Host and emulator timing do not establish physical norns scheduling accuracy.
+  - title: Reducing workload
+    text: Use step slides where a global slide is unnecessary. Disable trigless locks when their additional
+      modulation detail is not needed. Compare changes using the same arrangement and clock source.
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: external-hardware
+    rationale: Workload guidance includes historical physical-device timing and host/hardware distinctions.
+    native_gap: No physical-norns scheduling equivalence or universal workload threshold is established.
+  category: musical
+  parent: null
+  level: 2

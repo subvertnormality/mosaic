@@ -1,0 +1,177 @@
+FE.EEEEEEEF.....EE.......F.
+======================================================================
+ERROR: test_complete_audited_course_binds_exactly_and_records_evidence (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 41, in test_complete_audited_course_binds_exactly_and_records_evidence
+    result=self.bind();course=yaml.safe_load((self.root/"manual/course.yaml").read_text())
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_durable_publication_reaudits_both_native_reports (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 111, in test_durable_publication_reaudits_both_native_reports
+    self.bind()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_durable_publication_rejects_changed_course_or_receipt (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 102, in test_durable_publication_rejects_changed_course_or_receipt
+    self.bind();p=self.root/"manual/course.yaml";p.write_bytes(p.read_bytes()+b"\n")
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_durable_publication_rejects_changed_report (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 98, in test_durable_publication_rejects_changed_report
+    self.bind();self.documents[1].write_bytes(self.documents[1].read_bytes()+b"\n")
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_durable_publication_rejects_forged_mapping (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 106, in test_durable_publication_rejects_forged_mapping
+    self.bind();p=self.root/"manual/generated/course-binding.json";d=json.loads(p.read_text());d["mappings"][0]["scene"]="unrelated";p.write_text(json.dumps(d))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_durable_publication_requires_full_independent_checkpoint_count (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 116, in test_durable_publication_requires_full_independent_checkpoint_count
+    self.bind()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_durable_publication_verifies_without_artifact_writes (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 90, in test_durable_publication_verifies_without_artifact_writes
+    self.bind();publication=self.root/"manual/generated/course-binding.json"
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_existing_evidence_directory_not_overwritten (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 86, in test_existing_evidence_directory_not_overwritten
+    with self.assertRaises(FileExistsError):self.bind()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_verify_only_does_not_replace_durable_receipt (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 120, in test_verify_only_does_not_replace_durable_receipt
+    self.bind();p=self.root/"manual/generated/course-binding.json";before=p.read_bytes()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+ERROR: test_verify_only_requires_and_preserves_verified_course (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 71, in test_verify_only_requires_and_preserves_verified_course
+    self.bind();before=(self.root/"manual/course.yaml").read_bytes()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=50):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 69, in bind
+    lane=check_lane(document,clock,plan)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 38, in check_lane
+    if total!=48:raise ValueError("Course checkpoint total must be 48")
+ValueError: Course checkpoint total must be 48
+
+======================================================================
+FAIL: test_changed_inputs_during_audit_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course checkpoint total must be 48
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 81, in test_changed_inputs_during_audit_rejected
+    with self.assertRaisesRegex(ValueError,"inputs changed"):binder.bind(*self.documents,self.root/"proof",root=self.root)
+AssertionError: "inputs changed" does not match "Course checkpoint total must be 48"
+
+======================================================================
+FAIL: test_failed_independent_audit_keeps_pending (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course checkpoint total must be 48
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 38, in test_failed_independent_audit_keeps_pending
+    with self.assertRaisesRegex(ValueError,"native mismatch"):binder.bind(*self.documents,self.root/"proof",root=self.root)
+AssertionError: "native mismatch" does not match "Course checkpoint total must be 48"
+
+======================================================================
+FAIL: test_public_song_length_recipe_sets_one_bar_through_actual_fader (test_manual_course_bind.CourseSongLengthRecipe)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 248, in test_public_song_length_recipe_sets_one_bar_through_actual_fader
+    self.assertEqual(int(actual.stdout.strip()),16,'physical column2 sets one step; a section needs16')
+AssertionError: 1 != 16 : physical column2 sets one step; a section needs16
+
+----------------------------------------------------------------------
+Ran 27 tests in 4.142s
+
+FAILED (failures=3, errors=10)

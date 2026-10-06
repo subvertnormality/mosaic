@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "required_plans": [
+    "scene-plans-closure.yaml",
+    "scene-plans-course.yaml",
+    "scene-plans-devices.yaml",
+    "scene-plans-extra.yaml",
+    "scene-plans-lead-panic.yaml",
+    "scene-plans-locks.yaml",
+    "scene-plans-merge-strategy.yaml",
+    "scene-plans-musical.yaml",
+    "scene-plans-nested.yaml",
+    "scene-plans-options.yaml",
+    "scene-plans-parameters.yaml",
+    "scene-plans-polymeter.yaml",
+    "scene-plans-readability.yaml",
+    "scene-plans-reason-swing.yaml",
+    "scene-plans-remaining.yaml",
+    "scene-plans-vertical-list.yaml",
+    "scene-plans-workflow.yaml",
+    "scene-plans.yaml"
+  ],
+  "stage_count": 72,
+  "old_and_new_plan_exactly_equal": true,
+  "opt_in_does_not_change_plan": true,
+  "root_quick_output": "cheat_sheet.html",
+  "plan_sha256": "a6394050053badacc0d67255877e6f282e370c4b02784e88146b72c48e63273b",
+  "builder_sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8",
+  "test_sha256": "2dc2d988de7f28fd366808fc8ce05adb600277cef7b632ff1562740cecb16ddf",
+  "native_launched": false
+}

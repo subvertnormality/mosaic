@@ -1,0 +1,174 @@
+FAIL program fingerprint screen
+FAIL manual section drift MAN.016
+FAIL manual section drift MAN.017
+FAIL manual section drift MAN.032
+FAIL manual section drift MAN.033
+FAIL manual section drift MAN.034
+FAIL manual section drift MAN.035
+FAIL manual section drift MAN.044
+FAIL manual section drift MAN.052
+FAIL manual section drift MAN.053
+FAIL manual section drift MAN.054
+FAIL manual section drift MAN.057
+FAIL manual section drift MAN.072
+FAIL manual section drift MAN.079
+FAIL manual section drift MAN.081
+FAIL manual section drift MAN.083
+FAIL manual section drift MAN.111
+FAIL manual section drift MAN.112
+FAIL manual section drift MAN.113
+FAIL manual section drift MAN.114
+FAIL manual section drift MAN.115
+FAIL manual section drift MAN.116
+FAIL manual section drift MAN.117
+FAIL manual section drift MAN.118
+FAIL manual section drift MAN.119
+FAIL missing manual section
+FAIL manual heading inventory
+FAIL grid registration inventory mismatch
+FAIL branch lines outside callback channel_edit_page.01.leave_feature_editor
+FAIL branch lines outside callback channel_edit_page.01.k1_toggle_trig_mask
+FAIL branch lines outside callback channel_edit_page.01.plain_tap_no_feature
+FAIL branch lines outside callback channel_edit_page.02.k1_long_clear_trig_mask
+FAIL branch lines outside callback channel_edit_page.02.plain_long_step
+FAIL branch lines outside callback channel_edit_page.03.step_release_records_locks
+FAIL branch lines outside callback channel_edit_page.04.k1_unmute
+FAIL branch lines outside callback channel_edit_page.04.k1_mute
+FAIL branch lines outside callback channel_edit_page.04.select_channel
+FAIL branch lines outside callback channel_edit_page.05.long_unmute
+FAIL branch lines outside callback channel_edit_page.05.long_mute
+FAIL branch lines outside callback channel_edit_page.06.range_set
+FAIL branch lines outside callback channel_edit_page.06.range_rejected
+FAIL branch lines outside callback channel_edit_page.06.octave_lock_set
+FAIL branch lines outside callback channel_edit_page.06.octave_lock_clear
+FAIL branch lines outside callback channel_edit_page.06.scale_lock_set
+FAIL branch lines outside callback channel_edit_page.06.scale_lock_clear
+FAIL branch lines outside callback channel_edit_page.06.k1_dual_mute_toggle
+FAIL branch lines outside callback channel_edit_page.06.two_channels_no_k1
+FAIL branch lines outside callback channel_edit_page.07.pattern_added
+FAIL branch lines outside callback channel_edit_page.07.pattern_removed
+FAIL branch lines outside callback channel_edit_page.08.trig_merge_skip
+FAIL branch lines outside callback channel_edit_page.08.trig_merge_only
+FAIL branch lines outside callback channel_edit_page.08.trig_merge_all
+FAIL branch lines outside callback channel_edit_page.09.note_merge_average
+FAIL branch lines outside callback channel_edit_page.09.note_merge_up
+FAIL branch lines outside callback channel_edit_page.09.note_merge_down
+FAIL branch lines outside callback channel_edit_page.09.note_merge_pattern_wraps_to_average
+FAIL branch lines outside callback channel_edit_page.10.velocity_merge_average
+FAIL branch lines outside callback channel_edit_page.10.velocity_merge_up
+FAIL branch lines outside callback channel_edit_page.10.velocity_merge_down
+FAIL branch lines outside callback channel_edit_page.10.velocity_merge_pattern_wraps_to_average
+FAIL branch lines outside callback channel_edit_page.11.length_merge_average
+FAIL branch lines outside callback channel_edit_page.11.length_merge_up
+FAIL branch lines outside callback channel_edit_page.11.length_merge_down
+FAIL branch lines outside callback channel_edit_page.11.length_merge_pattern_wraps_to_average
+FAIL branch lines outside callback channel_edit_page.12.trig_merge_release_hides_gesture
+FAIL branch lines outside callback channel_edit_page.12.note_merge_release_hides_gesture
+FAIL branch lines outside callback channel_edit_page.12.velocity_length_merge_release_hides_gesture
+FAIL branch lines outside callback channel_edit_page.12.release_after_pattern_priority
+FAIL branch lines outside callback channel_edit_page.13.channel_octave
+FAIL branch lines outside callback channel_edit_page.14.note_pattern_priority
+FAIL branch lines outside callback channel_edit_page.14.velocity_pattern_priority
+FAIL branch lines outside callback channel_edit_page.14.length_pattern_priority
+FAIL branch lines outside callback channel_edit_page.14.trig_merge_plus_pattern_inert
+FAIL branch lines outside callback channel_edit_page.15.step_hold_shows_locks
+FAIL branch lines outside callback note_edit_page.01.k1_row1_select_pattern
+FAIL branch lines outside callback note_edit_page.01.set_note
+FAIL branch lines outside callback note_edit_page.01.k1_set_note_all_banks
+FAIL branch lines outside callback note_edit_page.02.long_row1_select_pattern
+FAIL branch lines outside callback note_edit_page.03.bank_1
+FAIL branch lines outside callback note_edit_page.04.bank_2
+FAIL branch lines outside callback note_edit_page.05.bank_3
+FAIL branch lines outside callback note_edit_page.06.bank_4
+FAIL branch lines outside callback note_edit_page.07.note_view_down
+FAIL branch lines outside callback note_edit_page.07.note_view_down_at_limit
+FAIL branch lines outside callback note_edit_page.08.note_view_centre
+FAIL branch lines outside callback note_edit_page.09.note_view_up
+FAIL branch lines outside callback note_edit_page.09.note_view_up_at_limit
+FAIL branch lines outside callback note_edit_page.10.long_row1_select_pattern
+FAIL branch lines outside callback note_edit_page.10.long_view_top
+FAIL branch lines outside callback note_edit_page.10.long_view_root
+FAIL branch lines outside callback note_edit_page.10.long_view_bottom
+FAIL branch lines outside callback trigger_edit_page.01.select_pattern
+FAIL branch lines outside callback trigger_edit_page.01.select_pattern_discards_stale_doctor_preview
+FAIL branch lines outside callback trigger_edit_page.02.toggle_trig
+FAIL branch lines outside callback trigger_edit_page.04.pattern2_length_euclid
+FAIL branch lines outside callback trigger_edit_page.04.pattern2
+FAIL branch lines outside callback trigger_edit_page.04.pattern2_inert_doctor
+FAIL branch lines outside callback trigger_edit_page.05.select_algorithm
+FAIL branch lines outside callback trigger_edit_page.05.enter_doctor
+FAIL branch lines outside callback trigger_edit_page.05.leave_doctor
+FAIL branch lines outside callback trigger_edit_page.06.select_bank_mask
+FAIL branch lines outside callback trigger_edit_page.06.bank_mask_inert
+FAIL branch lines outside callback trigger_edit_page.07.record_start_capture
+FAIL branch lines outside callback trigger_edit_page.07.record_finish
+FAIL branch lines outside callback trigger_edit_page.07.record_cancel_prompt
+FAIL branch lines outside callback trigger_edit_page.07.record_blocked_playing
+FAIL branch lines outside callback trigger_edit_page.07.record_blocked_setup
+FAIL branch lines outside callback trigger_edit_page.08.record_release_consumed
+FAIL branch lines outside callback trigger_edit_page.09.select_lane
+FAIL branch lines outside callback trigger_edit_page.09.select_lane_repreviews_paint
+FAIL branch lines outside callback trigger_edit_page.09.non_lane_cell_inert
+FAIL branch lines outside callback trigger_edit_page.10.arm_paint
+FAIL branch lines outside callback trigger_edit_page.10.commit_paint
+FAIL branch lines outside callback trigger_edit_page.10.doctor_arm_paint
+FAIL branch lines outside callback trigger_edit_page.10.doctor_arm_paint_unavailable
+FAIL branch lines outside callback trigger_edit_page.10.doctor_commit_paint
+FAIL branch lines outside callback trigger_edit_page.10.doctor_commit_failed
+FAIL branch lines outside callback trigger_edit_page.11.cancel_paint
+FAIL branch lines outside callback trigger_edit_page.11.doctor_cancel_paint
+FAIL branch lines outside callback trigger_edit_page.11.cancel_idle
+FAIL branch lines outside callback trigger_edit_page.12.doctor_step_left
+FAIL branch lines outside callback trigger_edit_page.12.shift_left
+FAIL branch lines outside callback trigger_edit_page.12.left_idle
+FAIL branch lines outside callback trigger_edit_page.13.doctor_phrase_start
+FAIL branch lines outside callback trigger_edit_page.13.shift_reset
+FAIL branch lines outside callback trigger_edit_page.13.centre_idle
+FAIL branch lines outside callback trigger_edit_page.14.doctor_step_right
+FAIL branch lines outside callback trigger_edit_page.14.shift_right
+FAIL branch lines outside callback trigger_edit_page.14.right_idle
+FAIL branch lines outside callback trigger_edit_page.15.length_forward
+FAIL branch lines outside callback trigger_edit_page.15.length_wraps
+FAIL branch lines outside callback trigger_edit_page.15.held_step_without_trig
+FAIL branch lines outside callback trigger_edit_page.16.doctor_previous_phrase
+FAIL branch lines outside callback trigger_edit_page.16.doctor_next_phrase
+FAIL branch lines outside callback trigger_edit_page.16.long_shift_button_non_doctor
+FAIL branch lines outside callback trigger_edit_page.17.reset_length
+FAIL branch lines outside callback trigger_edit_page.17.reset_length_no_trig
+FAIL branch lines outside callback velocity_edit_page.01.k1_row1_select_pattern
+FAIL branch lines outside callback velocity_edit_page.01.set_velocity
+FAIL branch lines outside callback velocity_edit_page.01.k1_set_velocity_all_banks
+FAIL branch lines outside callback velocity_edit_page.02.long_row1_select_pattern
+FAIL branch lines outside callback velocity_edit_page.03.bank_1
+FAIL branch lines outside callback velocity_edit_page.04.bank_2
+FAIL branch lines outside callback velocity_edit_page.05.bank_3
+FAIL branch lines outside callback velocity_edit_page.06.bank_4
+FAIL branch lines outside callback velocity_edit_page.07.velocity_view_down
+FAIL branch lines outside callback velocity_edit_page.07.velocity_view_down_at_limit
+FAIL branch lines outside callback velocity_edit_page.08.long_view_high
+FAIL branch lines outside callback velocity_edit_page.08.long_view_low
+FAIL branch lines outside callback velocity_edit_page.09.velocity_view_up
+FAIL branch lines outside callback velocity_edit_page.09.velocity_view_up_at_limit
+FAIL source drift lib/m_grid.lua
+FAIL source drift lib/pages/channel_edit_page/channel_edit_clock_controls.lua
+FAIL source drift lib/pages/channel_edit_page/channel_edit_history.lua
+FAIL source drift lib/pages/channel_edit_page/channel_edit_masks.lua
+FAIL source drift lib/pages/channel_edit_page/channel_edit_page.lua
+FAIL source drift lib/pages/channel_edit_page/channel_edit_page_ui.lua
+FAIL source drift lib/pages/channel_edit_page/channel_edit_parameters.lua
+FAIL source drift lib/pages/channel_edit_page/channel_feature_editor.lua
+FAIL source drift lib/pages/note_edit_page/note_edit_page.lua
+FAIL source drift lib/pages/note_edit_page/note_edit_page_ui.lua
+FAIL source drift lib/pages/scale_edit_page/scale_edit_page_ui.lua
+FAIL source drift lib/pages/song_edit_page/song_edit_page_ui.lua
+FAIL source drift lib/pages/trigger_edit_page/trigger_edit_page.lua
+FAIL source drift lib/pages/trigger_edit_page/trigger_edit_page_ui.lua
+FAIL source drift lib/pages/velocity_edit_page/velocity_edit_page.lua
+FAIL source drift lib/pages/velocity_edit_page/velocity_edit_page_ui.lua
+FAIL source drift lib/ui.lua
+FAIL source drift lib/rhythm_doctor/ui_adapter.lua
+FAIL source drift lib/application_parameters.lua
+FAIL source drift mosaic.lua
+FAIL source drift README.md
+FAIL source drift cheat_sheet.html
+FAIL contract validation

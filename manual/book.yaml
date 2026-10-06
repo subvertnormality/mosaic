@@ -1,0 +1,103 @@
+schema_version: 2
+edition: 1.4.0
+title: Mosaic manual
+legacy_source: legacy/README-1.4.0.md
+legacy_source_sha256: 532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c
+sources:
+- features/reference-learn.yaml
+- features/reference-workflow.yaml
+- features/reference-pattern.yaml
+- features/reference-channel.yaml
+- features/reference-scale.yaml
+- features/reference-song.yaml
+- features/reference-locks.yaml
+- features/reference-options.yaml
+- features/reference-musical.yaml
+- features/reference-developer.yaml
+- features/masks.yaml
+- features/tutorials.yaml
+- features/cookbook.yaml
+aliases:
+  norns-sound-sources-with-nb: norns-sound-sources-with-n-b
+  midi-input: midi-keyboard-input
+  midi-devices: midi-device-configuration
+  clock-mods: clocks-swing-and-shuffle
+navigation:
+- id: learn
+  title: Start here
+  description: Install, choose a sound and make four notes.
+- id: workflow
+  title: Workflows
+  description: From a rhythm to a finished arrangement.
+- id: reference
+  title: Reference
+  description: Every control, with a stable destination.
+- id: quick
+  title: Quick reference
+  description: Controls and their results.
+- id: cookbook
+  title: Musical cookbook
+  description: Numbered procedures for rhythm, melody and arrangement.
+scene_sources:
+- features/scenes-reference-parameter-recording-scenes.yaml
+- scene-plans-closure.yaml
+- scene-plans-course.yaml
+- scene-plans-devices.yaml
+- scene-plans-extra.yaml
+- scene-plans-lead-panic.yaml
+- scene-plans-locks.yaml
+- scene-plans-merge-strategy.yaml
+- scene-plans-musical.yaml
+- scene-plans-nested.yaml
+- scene-plans-options.yaml
+- scene-plans-parameters.yaml
+- scene-plans-polymeter.yaml
+- scene-plans-player-apply.yaml
+- scene-plans-readability.yaml
+- scene-plans-reason-swing.yaml
+- scene-plans-remaining.yaml
+- scene-plans-vertical-list.yaml
+- scene-plans-workflow.yaml
+- scene-plans.yaml
+- features/scenes-doctor-scenes.yaml
+- features/scenes-player-routes.yaml
+- features/scenes-reference-closure-scenes.yaml
+- features/scenes-reference-course-scenes.yaml
+- features/scenes-reference-devices-scenes.yaml
+- features/scenes-reference-extra-scenes.yaml
+- features/scenes-reference-lead-panic-scenes.yaml
+- features/scenes-reference-locks-scenes.yaml
+- features/scenes-reference-merge-strategy-scenes.yaml
+- features/scenes-reference-musical-scenes.yaml
+- features/scenes-reference-nested-scenes.yaml
+- features/scenes-reference-options-midi-modulation-scenes.yaml
+- features/scenes-reference-options-scenes.yaml
+- features/scenes-reference-parameters-scenes.yaml
+- features/scenes-reference-polymeter-scenes.yaml
+- features/scenes-reference-readability-scenes.yaml
+- features/scenes-reference-reason-swing-scenes.yaml
+- features/scenes-reference-remaining-scenes.yaml
+- features/scenes-reference-scenes.yaml
+- features/scenes-reference-vertical-list-scenes.yaml
+- features/scenes-reference-workflow-scenes.yaml
+- features/first-sound-capture.yaml
+- scene-captions.yaml
+- doctor-scene.yaml
+- player-routes.yaml
+- doctor-auto-probe.yaml
+- scene-starting-states.yaml
+- scene-plans-modulation-macro.yaml
+- scene-plans-native-public-gaps.yaml
+audio_sources:
+- audio-scenes.yaml
+schema_sources:
+- teaching-binding.schema.json
+- screen-output.schema.json
+- book.schema.json
+- caption-overlays.schema.json
+- case-scenes.schema.json
+- schema.json
+- doctor-scene.schema.json
+- course.schema.json
+- doctor-bindings.schema.json
+course_source: course.yaml

@@ -1,0 +1,22 @@
+--- before/manual/book.schema.json
++++ after/manual/book.schema.json
+@@ -100,11 +100,18 @@
+                 "enum": [
+                   "pending",
+                   "pilot-reviewed",
+-                  "verified"
++                  "verified",
++                  "controlled-verified"
+                 ]
+               },
+               "cases": {
+                 "type": "array"
++              },
++              "validation_scope": {
++                "const": "controlled-manual-generation"
++              },
++              "realtime_qualification": {
++                "const": "pending-ci"
+               }
+             }
+           },

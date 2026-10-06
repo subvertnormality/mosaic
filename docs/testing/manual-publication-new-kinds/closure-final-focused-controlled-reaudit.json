@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "error": "Controlled native input timestamp differs",
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 6, in <module>\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 167, in audit_reference\n    verify_teaching_checkpoint(step,observations,path,document['clock_mode'],results)\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 574, in verify_teaching_checkpoint\n    check_song_queue_blink(row,observations,recipe,events,actions,clock_mode)\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 543, in check_song_queue_blink\n    check_applied_native_input(actual[0],native,events,clock_mode)\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 507, in check_applied_native_input\n    if event['monotonic_ns']!=native['monotonic_ns']:raise ValueError('Controlled native input timestamp differs')\nValueError: Controlled native input timestamp differs\n",
+  "report": "/home/andy/mosaic-manual-runs/4e136b11b7204a8db9930dd78b6c34ed/reference-scenes.json",
+  "report_sha256": "94f53046e05895e4b9457dac88d708a5aba7056f198dbf10791a2d85ff69c31f",
+  "seconds": 0.5010148989968002,
+  "clock_mode": "controlled-experimental",
+  "scope": "Two closure cases, three scenes; not complete regression or hardware timing",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

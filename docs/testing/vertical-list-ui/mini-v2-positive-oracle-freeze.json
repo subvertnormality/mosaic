@@ -1,0 +1,18 @@
+{
+  "immutable_oracle_root": "/home/andy/mosaic-mini-header-v2-positive-oracle-20261003",
+  "scope": "independently copied exact v2 animation/phase/native-header acceptance before production wiring; v1 native resting-icon red preserved separately",
+  "files": {
+    "mini_header_ui.py": "adce2c90322bfbca04992c4ec7af4738c972ece22d874fe859e8889c8c36adb2",
+    "mini_header_animation_ui.py": "36e2591f11cb9ef2ed660abd82db89b1c4b3abd9ec86af40b7adfbdcce358fc4",
+    "mini_header_atlas.json": "ed4d8972b1012b7570d402b6ba997c6c78c6c0926e577f974e03758782ed3c54",
+    "mini_header_atlas_v2.json": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46"
+  },
+  "v2_atlas_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+  "v1_native_baseline_receipt": "docs/testing/vertical-list-ui/mini-header-rest-baseline-red.json",
+  "rest_and_footprints_unchanged_all93": true,
+  "pose_count": 744,
+  "phase": "floor((quarterBeat % loopQuarterBeats) * poseCount / loopQuarterBeats); Off/unavailable/invalid clock -> pose0",
+  "oracle_self_checks": 11,
+  "application_green_claimed": false,
+  "complete_regression_run": false
+}

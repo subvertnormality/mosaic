@@ -1,0 +1,140 @@
+schema_version: 1
+status: focused-source-plans
+scenes:
+- id: lock-lead-time-menu-and-output
+  feature_id: lock-lead-time
+  title: Set MIDI lock lead time
+  behaviour_case: M-SYNC-LEAD-001
+  citation: README.md#lock-lead-time
+  source: tests/behaviour/contract/lock_lead_time.py
+  scope: Four child sessions, ordinals 1–4. The unchanged full case checks pulse rounding, first-note
+    exception, clocks, release gates and cross-run gate consistency. The menu frames are live; the final
+    comparison is not used as a closed-session frame.
+  steps:
+  - id: lead-0
+    title: Set 0 ms lead
+    caption: Open the norns MOSAIC parameter group. Set Lock lead time (ms) to 0. The menu displays this
+      value.
+    session_ordinal: 1
+    assertion:
+      kind: global-lock-lead-setting
+      value_ms: 0
+      default_checked: 25
+  - id: play-0
+    title: Compare lock and note timing
+    caption: Play the phrase. CC 1 values alternate 24 and 48. The values precede later notes according
+      to the selected lead; note timing and gate lengths remain unchanged. Stop playback.
+    session_ordinal: 1
+    assertion:
+      kind: lock-lead-time
+      lead_time_ms: 0
+      notes: 8
+      passed: true
+  - id: lead-5
+    title: Set 5 ms lead
+    caption: Open the norns MOSAIC parameter group. Set Lock lead time (ms) to 5. The menu displays this
+      value.
+    session_ordinal: 2
+    assertion:
+      kind: global-lock-lead-setting
+      value_ms: 5
+      default_checked: 25
+  - id: play-5
+    title: Compare lock and note timing
+    caption: Play the phrase. CC 1 values alternate 24 and 48. The values precede later notes according
+      to the selected lead; note timing and gate lengths remain unchanged. Stop playback.
+    session_ordinal: 2
+    assertion:
+      kind: lock-lead-time
+      lead_time_ms: 5
+      notes: 8
+      passed: true
+  - id: lead-10
+    title: Set 10 ms lead
+    caption: Open the norns MOSAIC parameter group. Set Lock lead time (ms) to 10. The menu displays this
+      value.
+    session_ordinal: 3
+    assertion:
+      kind: global-lock-lead-setting
+      value_ms: 10
+      default_checked: 25
+  - id: play-10
+    title: Compare lock and note timing
+    caption: Play the phrase. CC 1 values alternate 24 and 48. The values precede later notes according
+      to the selected lead; note timing and gate lengths remain unchanged. Stop playback.
+    session_ordinal: 3
+    assertion:
+      kind: lock-lead-time
+      lead_time_ms: 10
+      notes: 8
+      passed: true
+  - id: lead-25
+    title: Set 25 ms lead
+    caption: Open the norns MOSAIC parameter group. Set Lock lead time (ms) to 25. The menu displays this
+      value.
+    session_ordinal: 4
+    assertion:
+      kind: global-lock-lead-setting
+      value_ms: 25
+      default_checked: 25
+  - id: play-25
+    title: Compare lock and note timing
+    caption: Play the phrase. CC 1 values alternate 24 and 48. The values precede later notes according
+      to the selected lead; note timing and gate lengths remain unchanged. Stop playback.
+    session_ordinal: 4
+    assertion:
+      kind: lock-lead-time
+      lead_time_ms: 25
+      notes: 8
+      passed: true
+- id: panic-hold-without-navigation
+  feature_id: midi-panic
+  title: Release MIDI notes without changing pages
+  behaviour_case: M-PANIC-001
+  citation: README.md#midi-panic
+  source: tests/behaviour/contract/panic_navigation.py
+  required_adapter_extension: deferred-final-assertion-v1
+  scope: Freeze the live second matching grid checkpoint, after the Channel hold is released while Song
+    remains selected. Publish only after unchanged full exported panic trace passes. Never obtain a new
+    snapshot after Driver.finish.
+  steps:
+  - id: release
+    title: Hold a non-selected page key
+    caption: From Song, hold the Channel key and release it after the panic sweep. Song remains selected.
+      The sweep sends Note Off for all 128 notes on all 16 channels to each of the three connected MIDI
+      ports.
+    assertion:
+      kind: grid
+      cells:
+      - - 3
+        - 8
+      - - 4
+        - 8
+      - - 5
+        - 8
+      - - 6
+        - 8
+      expected:
+      - 2
+      - 2
+      - 2
+      - 15
+      actual:
+      - 2
+      - 2
+      - 2
+      - 15
+    occurrence: 2
+    final_assertion:
+      kind: panic-navigation
+      held_button: 3
+      selected_page: song
+      repeat: 0
+      expected_panic: true
+      passed: true
+    final_accounting:
+      kind: panic-full-stream-accounting
+      note_events: 6144
+      windows: 1
+      unaccounted: 0
+      passed: true

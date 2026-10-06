@@ -1,0 +1,13 @@
+.F..
+======================================================================
+FAIL: test_public_identifiers_are_registered_for_both_new_cases (test_merge_strategy_ui_routes.HelperIdentifierPreflightTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 88, in test_public_identifiers_are_registered_for_both_new_cases
+    elif name=="expect_native_menu_label":self.assertIn(key,NATIVE_MENU_PARAMETERS)
+AssertionError: 'clock_tempo' not found in {'configured_control_1': {'label': 'Control 1', 'failure': 'Configured Control 1 unavailable in Matrix target group'}}
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.044s
+
+FAILED (failures=1)

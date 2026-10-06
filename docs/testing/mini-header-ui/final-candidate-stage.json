@@ -1,0 +1,15 @@
+{
+  "staged_root": "/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic",
+  "identity_path": "/home/andy/mosaic-mini-header-final-candidate-20261003/identity.json",
+  "identity_sha256": "ea063341ea64238c8d99b87912ff4f80fb9be3ff21968b86be896fef2e137009",
+  "files": 1530,
+  "pre_post_copied_equal": true,
+  "read_only": true,
+  "helper_hashes": {
+    "tests/behaviour/contract/merge_strategy_ui.py": "546813318a80c472a940f2b5c2c298c1e8d9961cfc615face22c8b906118d476",
+    "tests/behaviour/contract/mini_header_animation_ui.py": "ad0aa93eac767772709b281e6cc2131dd611e88870cc19b701d3e88cac40186c",
+    "tests/behaviour/contract/ui_readability.py": "38e8a37daaf16f544c9203ec04aaf70c0463a1a7f990bd561d6524a84077f758",
+    "tests/behaviour/test_mini_header_animation_ui.py": "a3ffae1f640af1c9a85d6bb0dfd8e804b64c800cb5c12a12b869decbfccb89f0"
+  },
+  "native_launch_pending": true
+}

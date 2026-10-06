@@ -1,0 +1,11 @@
+{
+  "baseline_helper": "/home/andy/mosaic-ui-question-footer-immediate-regression-20261003/runner.py",
+  "baseline_sha256": "ad74243b00e581a95a00c3bd6a43550bbcb2127e1f4a82e24b0e19acdeefd405",
+  "candidate_helper": "/home/andy/mosaic-ui-question-footer-immediate-fixed-regression-20261003/runner.py",
+  "candidate_sha256": "cfb8d3818fd2153fe9661995c97e9872da13b0f7b303c8a144e782b036595fd6",
+  "only_change": {
+    "STAGE_before": "/home/andy/mosaic-ui-question-footer-unfixed-20261003/mosaic",
+    "STAGE_after": "/home/andy/mosaic-ui-question-footer-fixed-20261003/mosaic"
+  },
+  "assertion_body_unchanged": true
+}

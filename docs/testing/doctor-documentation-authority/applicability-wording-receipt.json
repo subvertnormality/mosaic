@@ -1,0 +1,15 @@
+{
+  "scope": "Metadata-only timing applicability wording correction; no controls/oracles or applicability boolean changed.",
+  "source_before": {
+    "path": "docs/testing/doctor-documentation-authority/runner-before-applicability-wording-e9fa70d80946b06c034a0877da0f84aef1cbe62009608d0d3d66f9dfbfb7b4f1.py",
+    "sha256": "e9fa70d80946b06c034a0877da0f84aef1cbe62009608d0d3d66f9dfbfb7b4f1"
+  },
+  "source_after": {
+    "path": "tools/doctor_options_capture.py",
+    "sha256": "ad8e4efb823004d36d6af2bb186a218ca56904844d73bd89d29c8f869935422d"
+  },
+  "ast_equal_except_controlled_time_reason": true,
+  "registration_tests": 5,
+  "native_launched": false,
+  "complete_regression_run": false
+}

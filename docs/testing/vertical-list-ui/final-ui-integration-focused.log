@@ -1,0 +1,65 @@
+............F......F.......................F.........................
+======================================================================
+FAIL: test_contract_inventory_has_a_fixed_ceiling (tests.behaviour.test_ui_layer.UiLayerGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui_layer.py", line 786, in test_contract_inventory_has_a_fixed_ceiling
+    self.assertEqual(value["cases"], sorted(classified))
+AssertionError: Lists differ: ['M-A[6447 chars]ERGE-STRUCTURE-001', 'M-NAV-001', 'M-OPT-STOP-[1906 chars]OTS'] != ['M-A[6447 chars]ERGE-INTERLOCK-002', 'M-MERGE-INTERLOCK-003', [2326 chars]OTS']
+
+First differing element 322:
+'M-MERGE-STRUCTURE-001'
+'M-MERGE-INTERLOCK-002'
+
+Second list contains 17 additional elements.
+First extra element 430:
+'M-UI-READABILITY-001'
+
+Diff is 10170 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_every_case_owner_matches_the_fixed_contract_inventory (tests.behaviour.test_ui_layer.UiLayerGuardTests) (case_id='M-UI-READABILITY-001')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui_layer.py", line 800, in test_every_case_owner_matches_the_fixed_contract_inventory
+    self.assertEqual(source.parent == contract_root, case_id in expected)
+AssertionError: True != False
+
+======================================================================
+FAIL: test_every_case_owner_matches_the_fixed_contract_inventory (tests.behaviour.test_ui_layer.UiLayerGuardTests) (case_id='M-MERGE-STRATEGY-001')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui_layer.py", line 800, in test_every_case_owner_matches_the_fixed_contract_inventory
+    self.assertEqual(source.parent == contract_root, case_id in expected)
+AssertionError: True != False
+
+======================================================================
+FAIL: test_harmony_page_navigation_preserves_header_observations (tests.behaviour.test_ui_layer.UiLayerGuardTests)
+README MERGE-FOUNDATION/HARMONY-REVOICE: show the selected page.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui_layer.py", line 483, in test_harmony_page_navigation_preserves_header_observations
+    self.assertEqual(len(navigation), 1, run.__name__)
+AssertionError: 0 != 1 : setup_foundation
+
+======================================================================
+FAIL: test_reachable_raw_ui_in_a_helper_is_detected (tests.behaviour.test_ui_layer.UiLayerGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui_layer.py", line 551, in test_reachable_raw_ui_in_a_helper_is_detected
+    self.assertEqual(
+AssertionError: Lists differ: [('tests.behaviour.test_ui_layer._raw_helper_for_reachability', 13, 'tap')] != [('test_ui_layer._raw_helper_for_reachability', 13, 'tap')]
+
+First differing element 0:
+('tests.behaviour.test_ui_layer._raw_helper_for_reachability', 13, 'tap')
+('test_ui_layer._raw_helper_for_reachability', 13, 'tap')
+
+- [('tests.behaviour.test_ui_layer._raw_helper_for_reachability', 13, 'tap')]
+?    ----------------
+
++ [('test_ui_layer._raw_helper_for_reachability', 13, 'tap')]
+
+----------------------------------------------------------------------
+Ran 70 tests in 36.463s
+
+FAILED (failures=5)

@@ -1,3 +1,4 @@
+from contract.vertical_list_ui import clock_list as vertical_list_clock_workflow
 from lock_lead_time import lock_lead_time
 from duration_witness import assert_duration_witness_observed, controlled_duration_witness_pair
 from scale_memory import (adjacent_channel_ranges, all_pattern_slots,
@@ -10,6 +11,7 @@ from shuffle_matrix import shuffle_matrix
 from shuffle_first_bar_record import shuffle_first_bar_record
 from random_note_domains import random_note_domains
 from contract.grid_hot_disconnect import grid_disconnect_two_key_range
+from contract.rhythm_doctor_options import setup_options as _doctor_setup_options
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from keyboard_repeated_note_on import keyboard_repeated_note_on
@@ -28,13 +30,15 @@ from contract.live_ui_acceptance import (ui_accept_a01, ui_accept_a02, ui_accept
 from contract.live_ui_sweep import live_ui_sweep
 from contract.live_ui_feedback import (live_ui_algorithm, live_ui_paint, live_ui_dashboards, live_ui_view_channel,
                                         live_ui_grid_focus, live_ui_merge_modes, live_ui_channel_select,
-                                        live_ui_note_page_step, live_ui_merge_shape_trig_mode)
+                                        live_ui_note_page_step, live_ui_merge_shape_trig_mode,
+                                        live_ui_merge_shape_skip_shared_step)
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from contract.device_configs import malformed_device_configs, missing_id_device_configs
 from contract.grid_viewer import pattern_grid_viewer
 from contract.inactive_note_positions import inactive_note_positions
 from contract.transpose_global_live_edit import transpose_global_live_edit
+from song_slot_transpose import transpose_song_slot_copy
 from contract.clock_divisions import integral_clock_divisions, integral_clock_divisions_slow
 from contract.strum_reset_continuity import strum_reset_continuity
 from contract.navigation_matrix import navigation_matrix
@@ -104,6 +108,8 @@ from contract.dashboard_chord_slots import dashboard_chord_slots
 from harmony_merge_workflow import phrase_build_workflow,pattern_harmony_workflow,pattern_harmony_independent_clocks_workflow,pattern_harmony_delayed_bypass_workflow
 from contract.harmony_workflows import revoice_workflow,pattern_harmony_persistence_workflow,ensemble_polyrhythm_workflow,no_voicing_fallback_workflow,held_step_precedence_workflow
 from contract.foundation_workflow import foundation_workflow
+from contract.merge_strategy_ui import selector_workflow
+from contract.ui_readability import readability_workflow
 from contract.merge_extensions import fragments_workflow,fragments_short_loop_workflow,fragments_offset_mask_workflow,interlock_workflow,structure_workflow
 from merge_extension_acceptance import (interlock_unequal_workflow,structure_harmony_workflow,structure_history_workflow,structure_ensemble_priority_workflow,interlock_freshness_workflow,interlock_retiming_workflow,interlock_plan_limit_workflow,interlock_range_resync_workflow,interlock_swing_invariance_workflow,interlock_shuffle_invariance_workflow,interlock_song_resync_workflow,
     structure_pitch_workflow,structure_lifecycle_workflow,structure_arp_root_workflow)
@@ -126,7 +132,8 @@ from contract.range_rejection import queued_global_length_transitions
 from contract.range_rejection import range_reject_001,range_reject_002,range_reject_003,range_reject_004
 from range_rejection import offset_scale_range_clipping
 from contract.range_rejection import global_range_clipping
-from range_rejection import rejected_range_channel_isolation
+from range_rejection import rejected_range_channel_isolation, rejected_range_offset_step4
+from channel_length_lcm import channel_length_sixteen_and_five
 from contract.range_rejection import rejected_range_while_playing
 from contract.range_rejection import rejected_range
 from range_workflows import accepted_live_range_transitions
@@ -145,6 +152,7 @@ from mask_clearing import mask_clear_recorded_chord
 from mask_clearing import mask_clear_last_steps
 from mask_clearing import mask_clear_combined_chords
 from mask_clearing import mask_clear_attributes
+from mask_note_default_x import mask_note_default_unset
 from numeric_merging import fractional_length_mask_merge
 from numeric_merging import numeric_length_merge
 from numeric_merging import velocity_zero_boundary
@@ -570,8 +578,19 @@ def editor_step_groups(c):
     c.ui.configure();c.ui.pattern_editor(view='trigger')
     for y in range(5,8):
         for x in range(1,5):c.ui.tap_control('step',(y-4)*16+x)
+    # README Adding Notes: each step page (16 steps) holds its own trigs; pages 2-4 now have four.
+    c.ui.expect_steps({s:'selected' for s in [*range(17,21),*range(33,37),*range(49,53)]})
+    c.results.append(dict(kind='workflow-check',name='trigs-on-pages-2-to-4',passed=True))
     c.ui.pattern_editor(view='note',from_view='trigger')
-    for x in range(1,5):editor_shift_tap(c,'pattern_note_degree',(x,x-1))
+    for x in range(1,5):
+        editor_shift_tap(c,'pattern_note_degree',(x,x-1))
+        if x==1:
+            # Holding K1 for the first entry lights the note on the page being edited.
+            c.ui.expect_leds({('pattern_note_degree',(1,0)):'active'})
+            c.results.append(dict(kind='workflow-check',name='first-note-set',passed=True))
+    # The other three notes lit too (a different cell set from the four-note check below).
+    c.ui.expect_leds({('pattern_note_degree',(x,x-1)):'active' for x in range(2,5)})
+    c.results.append(dict(kind='workflow-check',name='four-notes-set',passed=True))
     for group in range(4):
         c.ui.tap_control('pattern_group',group+1);c.ui.expect_leds({('pattern_note_degree',(x,x-1)):'active' for x in range(1,5)})
     c.results.append(dict(kind='workflow-check',name='shift-copies-notes-to-four-groups',passed=True))
@@ -944,6 +963,36 @@ def transpose_lock_domain(c):
                        cycles=2, timeout=3, settle_seconds=4/3-.1)
     assert_durations(c, notes, [1]*8)
     c.results.append(dict(kind='transpose-lock-clear', global_transpose=4,
+                          explicit_zero_step=2, restored_pitches=list(restored), passed=True))
+
+
+def transpose_lock_direct(c):
+    """Lock step 1 through the fader's direct taps, one tap per lock (README.md#transposition-locks).
+
+    The fader's inner left, centre and inner right presses select -12, 0 and +12 at once, so each lock
+    is one press while step 1 is held; K2 then restores the global +4 on step 1."""
+    c.configure(); c.ui.scale_editor()
+    c.ui.tap_control("global_transpose_plus_four")  # Global +4 distinguishes an absent lock from explicit zero.
+    c.ui.hold_control_tap("step", "step_transpose_zero", 2)  # Explicit zero lock bounds step 1's persistence.
+    field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
+    tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
+    for value, target in ((-12, "step_transpose_minimum"), (0, "step_transpose_zero"), (12, "step_transpose_plus_twelve")):
+        c.ui.hold_control_tap("step", target, 1)
+        expected = [(1,[144,60+value,127]), (1,[144,62,117]), (1,[144,64,107]), (1,[144,65,97])]
+        notes = c.playback(expected, cycles=2, timeout=3, settle_seconds=4/3-.1)
+        assert_durations(c, notes, [1]*8)
+        errors = [(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
+        assert errors and max(abs(error) for error in errors) <= tolerance, (value, errors)
+        c.results.append(dict(kind='transpose-lock-value', value=value, direct=True,
+                              expected_first_pitch=60+value,
+                              maximum_spacing_error_seconds=max(abs(error) for error in errors),
+                              passed=True))
+    with c.ui.hold_step(1): c.ui.press_key(2)
+    restored = (64,62,64,65)
+    notes = c.playback([(1,[144,p,v]) for p,v in zip(restored,(127,117,107,97))],
+                       cycles=2, timeout=3, settle_seconds=4/3-.1)
+    assert_durations(c, notes, [1]*8)
+    c.results.append(dict(kind='transpose-lock-clear', direct=True, global_transpose=4,
                           explicit_zero_step=2, restored_pitches=list(restored), passed=True))
 
 
@@ -1461,6 +1510,125 @@ def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
     c.results.append(dict(kind='spread-acceleration-contract',arp=arp,acceleration=acceleration,default_off=acceleration==0 and not explicit_off,explicit_off=explicit_off,onsets=len(expected),release_checks=len(rows),decision='01a07f50-06ce-76f2-86f5-76414bd23074',compatibility_claim='New-contract conformance; historical behavior is preserved only where independently shown',passed=True))
 
 
+# --- Strum gate and per-song-slot Strum (README Chord Spread, Trig Parameters).
+# Both drive only public input and observe emitted MIDI and the rendered screen;
+# expectations are literal ticks derived from the README. Real-time lane pending CI.
+
+# One channel step is 216 ticks; a tick is 1/144 s (README.md#chord-strum cases).
+STRUM_SLOT_PITCHES = (60, 64, 67, 69, 72)
+STRUM_SLOT_VELOCITY = 127
+
+
+def strum_slot_chord_channel(c, length_detents, strum, spread=None, mask_turns=(2, 4, 5, 7)):
+    """One trig on step 1 of channel 1 with selected chord-mask turns."""
+    c.configure()
+    c.ui.hold_control_tap("step", "step", 1, 64)
+    c.ui.tap_control("pattern_editor")
+    for x in (2, 3, 4):
+        c.ui.tap_step(x)
+    c.ui.tap_control("channel_editor")
+    c.ui.turn(1, -4)
+    c.ui.turn(2, 2)
+    c.ui.set_value(length_detents)
+    for turns in mask_turns:
+        c.ui.turn(2, 1)
+        c.ui.set_value(turns)
+    c.ui.turn(1, 3)
+    c.ui.set_value(-11)
+    c.ui.press_key(3)
+    c.ui.turn(1, -2)
+    c.ui.assign_trig_parameter_key("chord_note_strum")
+    if strum:
+        c.ui.set_value(strum)
+    if spread:
+        c.ui.turn(2, 1)
+        c.ui.assign_trig_parameter_key("chord_spread")
+        c.ui.set_value(spread)
+
+
+def strum_slot_play_and_check(c, seconds, expected, durations, kind):
+    """Play the selected song slot for ``seconds``, Stop, and check every onset
+    and release of the captured window against ``expected`` (tick, pitch, velocity)."""
+    import time
+    from midi_window import MidiWindow
+    from note_schedule import assert_schedule
+    capture = MidiWindow(c.snapshot()["midi_count"])
+    c.ui.play()
+    c.elapse(seconds)
+    capture.extend(c.snapshot())
+    controlled = c.clock_mode == "controlled-experimental"
+    lower = c.logical_ns if controlled else time.monotonic_ns()
+    c.ui.control_edge("play_stop", True)
+    c.ui.control_edge("play_stop", False)
+    upper = c.logical_ns if controlled else time.monotonic_ns()
+    c.elapse(2)
+    capture.extend(c.snapshot())
+    c.wait(lambda state: not state["midi_capture"]["outstanding"])
+    field = "logical_ns" if controlled else "monotonic_ns"
+    notes = capture.note_ons()
+    assert notes, "no notes were played"
+    rows = assert_schedule(capture.events, expected, durations, field=field, origin=notes[0][field],
+                           stop_bounds=(lower, upper), tolerance=2e-9 if controlled else .01)
+    c.results.append(dict(kind=kind, onsets=len(expected), release_checks=len(rows),
+                          truncated_by_stop=sum(1 for row in rows if row["truncated"]), passed=True))
+    return rows
+
+
+def strum_fractional_release(c):
+    """README.md#chord-spread: spacing modifiers "do not change the selected note
+    length". Length 2 steps (432 ticks) with Strum 1/2 and Spread 1/4 puts the five
+    voices at 0, 162, 324, 486 and 648 ticks (0, 3/4, 3/2, 9/4 and 3 steps); each
+    sounds a full 432 ticks from its own onset, so the releases fall at 432, 594,
+    756, 918 and 1080 ticks, none cut short by the Stop that follows."""
+    strum_slot_chord_channel(c, 18, strum=8, spread=5)
+    onsets = [162 * i for i in range(5)]
+    expected = [(tick, STRUM_SLOT_PITCHES[i], STRUM_SLOT_VELOCITY) for i, tick in enumerate(onsets)]
+    rows = strum_slot_play_and_check(c, 8, expected, [432] * 5, "strum-fractional-release")
+    assert not any(row["truncated"] for row in rows), "a strummed voice was released by Stop, not its gate"
+
+
+def trig_param_per_song_slot(c):
+    """README.md#trig-parameters: trig params are unique to a song pattern. Strum is
+    assigned on channel 1 and left Off in song slot 1, which is then copied to slot 2.
+    In slot 2, with no step held, Strum is turned to 1/2. Slot 1 still shows Strum X
+    and plays its chord as a block (five voices at tick 0); slot 2 shows 1/2 and
+    strums (0, 108, 216, 324, 432 ticks); both keep that after changing slots again."""
+    strum_slot_chord_channel(c, 89, strum=0)
+    label = c.ui.trig_parameter_label("chord_note_strum")
+
+    def trig_page():
+        c.ui.channel_page("trig_locks", channel=1, confirm=False)
+        c.ui.select_field("param_slot", saturate=-12, then=0)
+
+    def song_slot(slot):
+        c.ui.song_editor()
+        c.ui.tap_control("song_pattern_slot", slot)
+        c.ui.channel_editor()
+
+    c.ui.song_editor()
+    c.ui.copy_slot(1, 2, control="song_pattern_slot")
+    c.ui.tap_control("song_pattern_slot", 2)
+    c.ui.channel_editor()
+    trig_page()
+    c.ui.set_value(8)
+    c.ui.expect_selected_field("overview_params", label, "1/2")
+    block = [(0, pitch, STRUM_SLOT_VELOCITY) for pitch in STRUM_SLOT_PITCHES]
+    strum = [(108 * i, STRUM_SLOT_PITCHES[i], STRUM_SLOT_VELOCITY) for i in range(5)]
+    # Gates are 128 steps long, so every release is the Stop that follows.
+    song_slot(1)
+    strum_slot_play_and_check(c, 3.5, block, [27648] * 5, "trig-param-slot-1-block")
+    trig_page()
+    c.ui.expect_selected_field("overview_params", label, "X")
+    song_slot(2)
+    strum_slot_play_and_check(c, 3.5, strum, [27648] * 5, "trig-param-slot-2-strum")
+    trig_page()
+    c.ui.expect_selected_field("overview_params", label, "1/2")
+    song_slot(1)
+    strum_slot_play_and_check(c, 3.5, block, [27648] * 5, "trig-param-slot-1-block-again")
+    trig_page()
+    c.ui.expect_selected_field("overview_params", label, "X")
+
+
 def arp_empty_masks(c,muted=False):
     from note_accounting import note_pairs
     c.configure();c.ui.turn(1,-3);c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
@@ -1643,7 +1811,9 @@ def toolkit_parameter_group(c,name):
 def macro_route_clear(c):
     route_fixed_note(c,'macro_1')
     toolkit_parameter_group(c,'macro_1');c.ui.expect_native_menu_label('mod_active')
-    c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_value');c.ui.turn(3,100);c.ui.press_key(1)
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_value');c.ui.turn(3,100)
+    menu_value(c,'1.0') # README.md#lfos-and-modulation: the macro Value at full strength.
+    c.ui.press_key(1)
     c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
     # Return to the retained Matrix source selection, then zero its depth.
     c.ui.press_key(1);c.ui.turn(1,-4);c.ui.press_key(3);c.ui.press_key(3);c.ui.press_key(3)
@@ -1702,7 +1872,9 @@ def pulse_lfo(c):
     route_fixed_note(c,'lfo_1')
     toolkit_parameter_group(c,'lfo_1');c.ui.expect_native_menu_label('mod_clocked');c.ui.press_key(3)
     c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_beats');c.ui.turn(3,9)
-    c.ui.turn(2,2);c.ui.expect_native_menu_label('mod_shape');c.ui.turn(3,2);c.ui.press_key(1)
+    c.ui.turn(2,2);c.ui.expect_native_menu_label('mod_shape');c.ui.turn(3,2)
+    menu_value(c,'pulse') # README.md#lfos-and-modulation: the chosen LFO shape.
+    c.ui.press_key(1)
     import math
     notes=[(60,127),(62,117),(64,107),(65,97)]
     if c.clock_mode=='real-time':emitted=pulse_lfo_real_time(c,notes)
@@ -2017,6 +2189,11 @@ def reexpress_case_results(context,case):
     (context.out/'observations.json').write_text(json.dumps(context.observations,indent=2)+'\n')
 
 
+def select_live_record_replay_tempo_baseline(c,ui):
+    ui.encoder_event(3,-126)
+    ui.encoder_event(3,-126)
+    menu_value(c,'1')
+
 def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False,case_id=None):
     import time
     ui=c.ui
@@ -2122,7 +2299,15 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     # Replay in normal internal clock after disarming; preview MIDI cannot
     # satisfy this oracle because playback takes a fresh capture marker.
     ui.press_key(1);ui.press_key(3);menu_label(c,'source');ui.set_value(-1);menu_value(c,'internal')
-    ui.turn(2,1);menu_label(c,'tempo');ui.set_value(-10);menu_value(c,'90');ui.press_key(1)
+    ui.turn(2,1);menu_label(c,'tempo')
+    # README "Arm live record": replay at the fixture's stated 90 BPM.
+    # norns adopts a rounded external-clock estimate once per second; even
+    # the exact 100 BPM stimulus need not leave this menu at precisely 100.
+    # Establish the starting value through public input before the original
+    # -10 detents. Keep the required 90 BPM and every placement/timing oracle.
+    select_live_record_replay_tempo_baseline(c,ui)
+    ui.set_value(99);menu_value(c,'100')
+    ui.set_value(-10);menu_value(c,'90');ui.press_key(1)
     # Independent step positions define playback order, including wrap input.
     phrase=sorted(zip(placement_steps,[(1,[144,72,90]),(1,[144,79,80])]))
     if boundary_witness:
@@ -2627,8 +2812,22 @@ from contract.continue_spp import continue_spp_unsupported
 from external_clock_faults import external_clock_fault,external_clock_explicit_recovery
 from external_clock_long import long_external_phase
 from external_clock_backlog import external_clock_runtime_backlog
+from trig_param_strum_persistence import trig_param_strum_persistence
+
+def run_doctor_setup_options(c):
+    c.doctor_options_case_id='M-DOCTOR-SETUP-001'
+    _doctor_setup_options(c)
+
+
+def live_parameter_recording_with_visual_checkpoints(c):
+    """Use the public parameter-recording case with its manual checkpoints enabled."""
+    return live_parameter_recording(c,visual_checkpoints=True)
+
 
 CASES={
+ 'M-DOCTOR-SETUP-001':dict(run=run_doctor_setup_options,requirements=[],case_id='M-DOCTOR-SETUP-001',citation='manual:rhythm-doctor',description='Rhythm Doctor setup UI: AUTO/MANUAL draft, Manual BPM 40/240 clamps and endpoint repeats, STEREO/L/R cycling, discard/reopen, apply/reopen, and playing-state refusal of setup edits and Record (README.md#rhythm-doctor; no backend BPM/input claim)'),
+ 'M-UI-READABILITY-001':dict(run=readability_workflow,requirements=['CH-ASSIGN'],description='Public Trig Param assignment and long C07 selected-label readability with motion On/Off; fitting converted Clock/Scale text stability, unchanged Masks/Trig Params and exact four-note MIDI. Marquee timing and display bounds are characterized; positive overflowing vertical-list text is component-only because current public converted fields fit.'),
+ 'M-MERGE-STRATEGY-001':dict(run=selector_workflow,requirements=['MERGE-FOUNDATION','MERGE-FRAGMENTS'],description='Shared grid/norns Strategy selector: Skip, Only, All, Foundation and Fragments; actual and pending strategies, inactive saved modes, anchor refusal and recovery, draft discard, exact musical output and cycle-boundary handoff (shared selector characterized until final README merge entry is frozen)'),
  'M-MERGE-FOUNDATION-001':dict(run=foundation_workflow,requirements=['MERGE-FOUNDATION'],description='Physical Channel-page workflow enables Foundation with P01 anchors, projects protected/addition trigs and emits literal accented additions over two loops'),
  'M-MERGE-FRAGMENTS-001':dict(run=fragments_workflow,requirements=['MERGE-FRAGMENTS'],description='Physical Merge Shape workflow selects Fragments (Size 4) on an 8-step loop of two patterns: each fragment plays its own source pattern\'s trigs, notes and velocities (no legacy averaging), the saved seed chooses the sources (seed 0 then seed 1), and the channel grid shows exactly the trigs MIDI plays over two exact loops (README Merge Shape Fragments)'),
  'M-MERGE-FRAGMENTS-002':dict(run=fragments_short_loop_workflow,requirements=['MERGE-FRAGMENTS'],description='A six-step loop shorter than Size 8 uses one source fragment; Keep anchor fills empty positions without replacing overlapping source trigs, with exact MIDI and grid output (README Merge Shape Fragments)'),
@@ -2719,6 +2918,7 @@ CASES={
  'M-LIVEUI-FOLLOW-001':dict(run=live_ui_follow,requirements=['NAV-SCREEN-FOLLOW'],description='The screen follows grid page buttons (Pattern cycle included), channel selection and held steps: a held step scopes the edit family (ST05) and release restores the screen it came from (README Norns Menu Navigation)'),
  'M-LIVEUI-TASKS-001':dict(run=live_ui_tasks,requirements=['NAV-TASKS'],description='E1 opens Channel tasks from Masks and Trig params on the row it came from; E1 and E2 scroll the rows, clamped; Channel tasks opens every Channel screen (README Norns Menu Navigation)'),
  'M-LIVEUI-SPLASH-001':dict(run=live_ui_splash,requirements=['NAV-SPLASH'],description='At start the tiles lay down, lift away and hand over to the first screen; any input skips the animation (README Norns Menu Navigation)'),
+ 'M-UI-VERTICAL-001':dict(run=vertical_list_clock_workflow,requirements=['CH-TEMPO'],description='Vertical Clock co-visible rows, native return, X inheritance, read-only Feel source skipped by E2, clamp boundaries, unchanged Masks and single-field Trig Options (README Norns Menu Navigation)'),
  'M-UIACC-A01-001':dict(run=ui_accept_a01,requirements=['UI-ACCEPT-A01'],description='Acceptance A01: E1 (one detent or one large event, either way) at Masks or Trig params opens Channel tasks on the row it came from; in the list E1 moves one row per event (large events too), clamped at Masks and History, and K3 opens the row; each family keeps its selected field when reopened; a held step makes E1 switch Masks <-> Trig params (clamped); no MIDI, mask or LED change and the phrase replays exactly (README Norns Menu Navigation, Grid Menu Navigation)'),
  'M-UIACC-A02-001':dict(run=ui_accept_a02,requirements=['UI-ACCEPT-A02'],description='Acceptance A02: with steps 1 and 64 held, K1+K2 clears only the held steps on Masks and on Trig params; channel defaults and unheld locks stay (screen and MIDI), both release orders restore the family at channel scope (README Removing Masks, Mask Locks, Trig Param Locks)'),
  'M-UIACC-A03-001':dict(run=ui_accept_a03,requirements=['UI-ACCEPT-A03'],description='Acceptance A03: the parameter picker opened from slot 2 keeps its target slot; K2 discards an unapplied browse; K3 applies and repeats idempotently; Off sends no CC; held step + K3 slides CC1 from its lock to the next lock, sent in order (README Trig Param Locks, Param Slides)'),
@@ -2735,6 +2935,7 @@ CASES={
  'M-LIVEUI-CHSELECT-001':dict(run=live_ui_channel_select,requirements=['UI-FEEDBACK-CHANNEL-SELECT'],description='A grid channel select keeps the norns screen for the new channel: Device (CC Device / None) and Clock (/1 / /2) stay with the selected channel\'s scope and values; from a Harmony or Merge Shape child the editor root (Voice leading, Merge Shape) opens for the new channel (README Norns Menu Navigation)'),
  'M-LIVEUI-NOTESTEP-001':dict(run=live_ui_note_page_step,requirements=['UI-FEEDBACK-NOTE-PAGE-STEP'],description='On Pattern Note and Velocity page 49-64 a held fader key in column 6 is step 54: header ST54 and cell 54 outlined (not ST22); a tap sets step 54\'s note (tooltip) and the grid stays on page 49-64 (README Adding Notes, Adding Velocity)'),
  'M-LIVEUI-SHAPETRIG-001':dict(run=live_ui_merge_shape_trig_mode,requirements=['UI-FEEDBACK-MERGE-SHAPE-TRIG'],description='With Merge Shape Foundation applied, Merge modes reads SHAPE (SKIP/ONLY/ALL) and the trig merge button tooltip says Merge Shape is in use while the Foundation additions (velocity 70) still play; after Mode Off the saved All reads plainly and plays pattern 2 at 100, and the button tooltip is the plain one (README Merge Shape)'),
+ 'M-LIVEUI-SHAPETRIG-002':dict(run=live_ui_merge_shape_skip_shared_step,requirements=['UI-FEEDBACK-MERGE-SHAPE-TRIG'],description='With pattern 2 trigging steps 3 and 7, Skip silences the step both patterns trig (step 3) and plays pattern 2 alone at step 7 at velocity 100, then All plays the shared step merged as D at velocity 104 (README Trig, Note and Velocity Merge Modes)'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
  'M-SCALE-MEMORY-DISPLAY-001':dict(run=memory_scale_lock_display,requirements=["CH-ACTIVE-SCALE-DISPLAY"],issues=[85],description='User-created channel scale lock on step 3 stays represented on the Memory page; its unlocked neighbour and the Trig Locks page are raw-grid controls (issue #85 characterisation)'),
@@ -2896,7 +3097,7 @@ CASES={
  'M-REC-PARAM-028':dict(run=lambda c:live_parameter_recording(c,empty_step=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-off recording skips a rest without overwriting its old96 lock; re-enable only for disarmed replay to expose exact24/64/96/64 storage'),
  'M-REC-PARAM-003':dict(run=lambda c:live_parameter_recording(c,empty_step=True),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-on live recording crosses an empty step; exact MIDI automation survives disarmed replay independently of changed patch default, with absent note and four-second deadlines'),
  'M-REC-PARAM-002':dict(run=lambda c:live_parameter_recording(c,switch_return=True),requirements=['REC-PARAM-AUTOMATION','CH-SELECT','PARAM-SLOTS'],description='Switch away during live parameter recording, hear old locks, return before step4; live value must match its stored disarmed replay while paused steps remain unchanged'),
- 'M-REC-PARAM-001':dict(run=live_parameter_recording,requirements=['REC-PARAM-AUTOMATION','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Live encoder recording holds the edited CC value against old locks, records future steps, and replays exact locks before notes after disarming'),
+ 'M-REC-PARAM-001':dict(run=live_parameter_recording_with_visual_checkpoints,requirements=['REC-PARAM-AUTOMATION','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Live encoder recording holds the edited CC value against old locks, records future steps, and replays exact locks before notes after disarming'),
  'M-PARAM-022':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
  'M-PARAM-023':dict(run=lambda c:probability_midi_locks(c,trigless=False,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=False, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
  'M-PARAM-024':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=True),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=True; exact lock bytes/timing and step100 lock-before-note'),
@@ -3018,6 +3219,7 @@ CASES={
  'M-DASHBOARD-004':dict(run=chord_shape_case(False,4,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape4; exact MIDI remains asserted'),
  'M-CHORDSHAPE-259':dict(run=chord_shape_case(False,2,False,15,extra='early-stop'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
  'M-CHORDSHAPE-258':dict(run=chord_shape_case(False,2,False,9,extra='disabled'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
+ 'M-CHORDSHAPE-260':dict(run=chord_shape_case(False,2,False,9,extra='accelerating-up'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-SPREAD', 'CHORD-ACCEL'],description="Positive Chord Accel Mod stretches each strum gap: slot times 0, 3/4, 7/4, 3 and 9/2 steps"),
  'M-CHORDSHAPE-257':dict(run=chord_shape_case(False,2,False,9,extra='accelerating'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-SPREAD', 'CHORD-ACCEL'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
  'M-CHORDVEL-005':dict(run=chord_shape_case(False,1,False,15,velocity=127,modifier=40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 127 with +40: every strummed voice clamps at 127, exact order and releases'),
  'M-CHORDVEL-006':dict(run=chord_shape_case(False,1,False,15,velocity=1,modifier=-40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 1 with -40: root at 1 and every voice clamps to explicit velocity-zero messages'),
@@ -3285,7 +3487,7 @@ CASES={
  'M-CHORDSHAPE-004':dict(run=chord_shape_case(False,2,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
  'M-CHORDSHAPE-003':dict(run=chord_shape_case(False,2,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
  'M-CHORDSHAPE-002':dict(run=chord_shape_case(False,1,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-001':dict(run=chord_shape_case(False,1,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-001':dict(run=chord_shape_case(False,1,False,15,strum_readout_checkpoint=True),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
  'M-ARP-014':dict(run=arp_empty_muted_replacement,requirements=['CHORD-ARP', 'CHORD-MUTE-ROOT'],description='Empty-muted trigger cancels old arp onsets while preserving tails and replacement ownership through Stop'),
  'M-ARP-013':dict(controlled_only='Absolute live-edit schedule requires controlled time until D20 mapping is admitted',run=lambda c:arp_rest_live_scale(c,True),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
  'M-ARP-012':dict(controlled_only='Absolute live-edit schedule requires controlled time until D20 mapping is admitted',run=lambda c:arp_rest_live_scale(c,False),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
@@ -3331,6 +3533,9 @@ CASES={
  'M-ARP-002':dict(run=lambda c:arp_basic_timing(c,replacement=True),requirements=['CHORD-ARP','PARAM-SLOTS','CH-TEMPO'],description='Replacing two-step arpeggios each step must not let old termination release the new generation'),
  'M-ARP-003':dict(run=lambda c:arp_basic_timing(c,fractional_gate=True),requirements=['CHORD-ARP','MASK-ATTRIBUTES'],description='Half-step arp ends at a1.25-step gate, clips its final note and emits no extra final onset'),
  'M-ARP-001':dict(run=arp_basic_timing,requirements=['CHORD-ARP','PARAM-SLOTS','CH-TEMPO'],description='Half-step arpeggio loops root and third within a two-step gate; exact onset/release table and silence after Stop'),
+ 'M-STRUM-GATE-001':dict(run=strum_fractional_release,requirements=['CHORD-STRUM','CHORD-SPREAD','PARAM-SLOTS'],description='Strummed voices at fractional onsets (Strum 1/2, Spread 1/4, Length 2 steps) each sound their full selected length from their own onset: releases 432, 594, 756, 918 and 1080 ticks (README Chord Spread)'),
+ 'M-TRIGPARAM-SLOT-001':dict(run=trig_param_per_song_slot,requirements=['PARAM-SLOTS','CHORD-STRUM','SONG-SLOTS'],description='A Strum trig param set with no step held in song slot 2 neither shows nor plays in slot 1, which stays a block chord, and survives changing slots (README Trig Parameters)'),
+ 'M-TRIGPARAM-STRUM-PERSIST-001':dict(run=trig_param_strum_persistence,requirements=['PARAM-SLOTS','CHORD-STRUM','CHORD-SPREAD','SONG-SLOTS','SAVE-NAMED'],description='Named-save cold-load keeps distinct Strum/Spread values per song slot; Off slot 1 plays three voices together and Strum 1/2 + Spread 1/4 slot 2 starts voices at 0, 162, 324 ticks with full two-step gates releasing at 432, 594, 756 ticks'),
  'M-TIME-012':dict(run=strum_reset_continuity,requirements=['CHORD-STRUM','PARAM-SLOTS','OPT-REPEAT-RESET','CH-TEMPO'],description='Assign a strum through native parameter UI, verify root/chord offsets and existing gate across resets, and reject deferred notes after Stop'),
  'M-TIME-010':dict(run=pending_mask_lengths,requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Half-step and two-step note releases across repeat resets, including expected same-pitch overlaps and explicit stop accounting'),
  'M-TIME-011':dict(run=lambda c:pending_mask_lengths(c,True),requirements=['MASK-ATTRIBUTES','CH-TEMPO','OPT-REPEAT-RESET'],description='Maximum128-step notes span eighteen resets; complete initial releases precede coincident retriggers, and Stop drains remaining voices'),
@@ -3353,6 +3558,8 @@ CASES={
  'M-RANGE-LIVE-001':dict(run=accepted_live_range_transitions,requirements=['CH-RANGE'],description='Accepted range edits while playhead is inside/below/above new bounds: exact next note, three loops, unchanged phase, full releases and stopped range LEDs'),
  'M-RANGE-GLOBAL-001':dict(run=global_range_clipping,requirements=['SONG-LENGTH','CH-RANGE'],description='Global lengths1/2/3/4/64 cap channel1..4,2..4,63..64 by length, preserve endpoint LEDs, restore full range, exact notes/gates/phase'),
  'M-RANGE-REJECT-005':dict(run=rejected_range_channel_isolation,requirements=['CH-RANGE'],description='Reject range edit while two independent routed channels play four/three-step phrases with distinct notes, velocity and fractional lengths; preserve both schedules'),
+ 'M-RANGE-REJECT-006':dict(run=rejected_range_offset_step4,requirements=['CH-RANGE'],description='Four-against-three polymeter with a step-4 checkpoint (channel 1 plays 65 as channel 2 wraps to 79), then the same refused range edit and exact schedules as M-RANGE-REJECT-005'),
+ 'M-RANGE-LCM-001':dict(run=channel_length_sixteen_and_five,requirements=['CH-RANGE'],description='Channels with 16-step and 5-step ranges start together, loop independently on their own ports and meet again after 80 steps (lcm), exact onset steps and phase'),
  'M-RANGE-REJECT-004':dict(run=range_reject_004,requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageTrue: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
  'M-RANGE-REJECT-003':dict(run=range_reject_003,requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageFalse: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
  'M-RANGE-REJECT-002':dict(run=range_reject_002,requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageTrue: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
@@ -3381,6 +3588,7 @@ CASES={
  'M-MASK-012':dict(run=lambda c:mask_clear_attributes(c,'trig',True,True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='Clearing forced-on step overrides restores a silent trig default while another routed channel proves transport continues'),
  'M-MASK-011':dict(run=lambda c:mask_clear_attributes(c,'note',True,True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='Clearing selected-channel overrides preserves another routed channel with nonempty defaults and conflicting note/velocity/length step masks'),
  'M-MASK-007':dict(run=lambda c:mask_clear_attributes(c,'note',True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='Clearing conflicting step overrides preserves nonempty channel defaults and restores their exact MIDI behavior'),
+ 'M-MASK-NOTE-X-001':dict(run=mask_note_default_unset,requirements=['MASK-ATTRIBUTES','MASK-PRECEDENCE'],description='Turning the channel Note default back to X restores the four-step pattern exact notes and velocities'),
  'M-MASK-008':dict(run=lambda c:mask_clear_attributes(c,'velocity',True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='Clearing conflicting step overrides preserves nonempty channel defaults and restores their exact MIDI behavior'),
  'M-MASK-009':dict(run=lambda c:mask_clear_attributes(c,'length',True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='Clearing conflicting step overrides preserves nonempty channel defaults and restores their exact MIDI behavior'),
  'M-MASK-010':dict(run=lambda c:mask_clear_attributes(c,'chord',True),requirements=['MASK-ATTRIBUTES','MASK-CLEAR-STEP','MASK-CLEAR-CHANNEL','MASK-STEP-ENTRY','MASK-PRECEDENCE','MASK-CHORD'],description='Clearing conflicting step overrides preserves nonempty channel defaults and restores their exact MIDI behavior'),
@@ -3400,6 +3608,8 @@ CASES={
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
  'M-TIME-002':dict(run=integral_clock_divisions_slow,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
+ 'M-TRANS-011':dict(run=transpose_lock_direct,requirements=['LOCK-TRANSPOSE'],description='Direct fader taps lock held step 1 to -12, 0 and +12 one tap each over an explicit-zero step and global +4, with exact MIDI and phase, then K2 restores the global transposition'),
+ 'M-TRANS-010':dict(run=transpose_song_slot_copy,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS'],description='A song slot copied and then transposed +2 plays its own pitches while slot 1 keeps the original phrase, with the Scale overview Transpose row and slot LEDs shown'),
  'M-TRANS-009':dict(run=transpose_global_live_edit,requirements=['TRANSPOSE-GLOBAL','NAV-TRANSPORT'],description='Two global transpose edits during sounding notes preserve current pitch/gate and change the next onset, exact harmonic-sync programs, releases and phase'),
  'M-TRANS-008':dict(run=transpose_song_persistence,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SAVE-AUTO','PERSIST-AUTO-001'],description='Independent +5/-7 copied song transposes survive the real autosave deadline and a fresh native process with exact restored MIDI and slot LEDs'),
  'M-TRANS-007':dict(run=transpose_song_copy_isolation,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SONG-ADVANCE','OPT-SONG-MODE'],description='Copy +5 song transpose, edit copy to -7, then cross live 16-step song boundaries with exact MIDI, slot LEDs, ownership and phase'),

@@ -1,0 +1,93 @@
+{
+  "scope": "Unfixed both-lane observable footer regression; exact original controlled baseline, no candidate or wholebuild acceptance",
+  "passed": false,
+  "baseline_failure_confirmed": true,
+  "run": "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1",
+  "clock_mode": "controlled-experimental",
+  "native_skip_fields": [
+    {
+      "label": "Strategy",
+      "observation_index": 55,
+      "passed": true
+    },
+    {
+      "label": "Active",
+      "observation_index": 56,
+      "passed": true
+    }
+  ],
+  "footer_observations": [
+    {
+      "observation_index": 55,
+      "matched": true,
+      "frame_sha256": "2e2bcf332c37c6532bb1c20825dfc823dbeef5b70f203863321768e5bf1d497e"
+    },
+    {
+      "observation_index": 56,
+      "matched": true,
+      "frame_sha256": "5feff2fec56409243c4669fbafda939d26c30cc6ab953e7e172647f147158d50"
+    },
+    {
+      "observation_index": 57,
+      "matched": false,
+      "frame_sha256": "df44c32abaa69b738853523b5009ef6581b50d566d2800702afe2ee9f247d934"
+    },
+    {
+      "observation_index": 58,
+      "matched": false,
+      "frame_sha256": "23dcec70b467576e63b292f0c65cdd89f7ef2939583ffddfe0e07d01740f9497"
+    },
+    {
+      "observation_index": 59,
+      "matched": false,
+      "frame_sha256": "bea1752a387232ad580b347cd57e80c902c7ac401ca7cc2e4a2e02fe67a7fb3b"
+    }
+  ],
+  "held_inputs": [],
+  "active_notes": 0,
+  "native_kind11_onsets": 26,
+  "native_kind11_releases": 26,
+  "cleanup": [
+    {
+      "service": "matron",
+      "pid": 11728,
+      "returncode": 0,
+      "seconds": 0.11389632802456617
+    },
+    {
+      "service": "sclang",
+      "pid": 11620,
+      "returncode": -15,
+      "seconds": 0.11453065002569929
+    },
+    {
+      "service": "crone",
+      "pid": 11612,
+      "returncode": 0,
+      "seconds": 6.279099034145474e-05
+    },
+    {
+      "service": "jack",
+      "pid": 11602,
+      "returncode": 0,
+      "seconds": 0.03159964899532497
+    }
+  ],
+  "pins": {
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/failure.json": "8bc95968ef80c415e4146b01a9b07f3c4a56358cd879526cbf6d29081bef538c",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/start-source-identity.json": "6ebb1d94dccb562ec98b6424ba8f2ca5e6f73bcbe6de3da333e0869f928c2270",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/M-LIVEUI-SHAPETRIG-001-base-midi/results.json": "fb49378f1229244c219b9b66b74f9f277fa66ef83d0485199ac4319b023833b1",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/M-LIVEUI-SHAPETRIG-001-base-midi/observations.json": "40e14fe5f51ed79f1efa476d6cb3af2835ead1057ef4adda21b215f006506b02",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/M-LIVEUI-SHAPETRIG-001-base-midi/recipe.json": "64c2a2bf57c41052a3100ed5785b50d68995c7854d630cd368341ee608a9a455",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/M-LIVEUI-SHAPETRIG-001-base-midi/native/native-events.jsonl": "8417104502be65edb23b93dbb5c6d3dde7b583ff2c2ff312cfd2dafed1144202",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/M-LIVEUI-SHAPETRIG-001-base-midi/native/cleanup.json": "5de8d424a90d994ab4927dc0d8a28b1b21b94419dd8437323924f6c63ad08cf3",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/case-source/tests/behaviour/contract/live_ui_feedback.py": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d",
+    "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1/case-source/tests/behaviour/merge_strategy_routes.py": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88"
+  },
+  "real_baseline_audit": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/build5-stage11-strategy-footer-failure-audit.json",
+    "sha256": "b2ead45a67ca57e3862c48cc3c621ced14aa3629edfcd725a6e4c7bde568dc12"
+  },
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

@@ -1,0 +1,4340 @@
+{
+  "schema_version": 1,
+  "fixture_kind": "verbatim-saved-midi-packets",
+  "provenance": {
+    "failed_run": "a2266acb2b39422bac13f270e0649de8",
+    "failed_report_sha256": "4080732c460283bb0d225df9bb21ee0718fe60a150cd5cc63fd2eb796ba8973e",
+    "case": "M-MASK-010",
+    "failed_observations_sha256": "45ee418bc8e766d804e1c385f6a08115dfdc4d85d7fcc8911579b049921a20ca",
+    "successful_control_case": "M-MASK-007",
+    "successful_control_observations_sha256": "36cfd922910b42231a672b9d4f98b6b3e55472723149b082129f78161902d324",
+    "session_id": "9a3d7fcd04514d5c9b38d0549992a576",
+    "clock_mode": "controlled-experimental",
+    "source_revision": "f36a766fd2e3d425f1f068d4338023d0d9e1e344",
+    "case_source_sha256": "e6810645c6377ff9bc1c170cc23ce8bb12165688cc38a96348e9855069604081",
+    "driver_source_sha256": "924cf69c0c32ce6e06657587585ed893ba72ce5af5ee288a5a3b4fbf81e47007"
+  },
+  "baseline_failure": {
+    "reason": "Driver.playback counted packets as notes and compared each packet bytes array to one three-byte expected message",
+    "reported_expected_messages": 25,
+    "reported_actual_packets": 25,
+    "actual_packet_note_message_count": 2
+  },
+  "coalesced_chord_packets": [
+    {
+      "case": "M-MASK-010",
+      "observation_index": 30,
+      "event": {
+        "index": 18,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106196472666803,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 11280000000
+      }
+    },
+    {
+      "case": "M-MASK-010",
+      "observation_index": 30,
+      "event": {
+        "index": 19,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106197039464077,
+        "bytes": [
+          128,
+          60,
+          127,
+          128,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      }
+    },
+    {
+      "case": "M-MASK-010",
+      "observation_index": 30,
+      "event": {
+        "index": 24,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106197039932179,
+        "bytes": [
+          144,
+          62,
+          117,
+          144,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      }
+    },
+    {
+      "case": "M-MASK-010",
+      "observation_index": 30,
+      "event": {
+        "index": 25,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106197881953645,
+        "bytes": [
+          128,
+          62,
+          117,
+          128,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 11613333333
+      }
+    }
+  ],
+  "single_message_packets": [
+    {
+      "case": "M-MASK-007",
+      "observation_index": 30,
+      "event": {
+        "index": 18,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106041542318176,
+        "bytes": [
+          144,
+          72,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              72,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 14780000000
+      }
+    },
+    {
+      "case": "M-MASK-007",
+      "observation_index": 30,
+      "event": {
+        "index": 19,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106042391930992,
+        "bytes": [
+          128,
+          72,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              72,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      }
+    },
+    {
+      "case": "M-MASK-007",
+      "observation_index": 30,
+      "event": {
+        "index": 24,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106042392588527,
+        "bytes": [
+          144,
+          74,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              74,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      }
+    },
+    {
+      "case": "M-MASK-007",
+      "observation_index": 30,
+      "event": {
+        "index": 25,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106043385826796,
+        "bytes": [
+          128,
+          74,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              74,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 15113333333
+      }
+    }
+  ],
+  "full_history_snapshot": {
+    "observation_index": 30,
+    "observation_sha256": "45ee418bc8e766d804e1c385f6a08115dfdc4d85d7fcc8911579b049921a20ca",
+    "midi_count": 162,
+    "midi_capture": {
+      "count": 162,
+      "tail_start": 1,
+      "tail_limit": 4096,
+      "complete_log": "native-events.jsonl",
+      "event_limit": 1000000,
+      "dropped": 0,
+      "outstanding": [
+        {
+          "port": 1,
+          "channel": 1,
+          "note": 60,
+          "count": 1
+        },
+        {
+          "port": 1,
+          "channel": 1,
+          "note": 67,
+          "count": 1
+        }
+      ]
+    },
+    "midi": [
+      {
+        "index": 1,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660304959,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 2,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660342049,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 3,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660350830,
+        "bytes": [
+          194,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 4,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660357040,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 5,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660361860,
+        "bytes": [
+          196,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 5,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 6,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660366700,
+        "bytes": [
+          197,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 6,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 7,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660371970,
+        "bytes": [
+          198,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 7,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 8,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660376850,
+        "bytes": [
+          199,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 8,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 9,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660387461,
+        "bytes": [
+          200,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 9,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 10,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106179660392721,
+        "bytes": [
+          201,
+          11
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 10,
+            "data": [
+              11
+            ]
+          }
+        ],
+        "logical_ns": 0
+      },
+      {
+        "index": 11,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106196471793512,
+        "bytes": [
+          250
+        ],
+        "decoded": [
+          {
+            "type": "start"
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 12,
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 106196471828913,
+        "bytes": [
+          250
+        ],
+        "decoded": [
+          {
+            "type": "start"
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 13,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106196471835653,
+        "bytes": [
+          250
+        ],
+        "decoded": [
+          {
+            "type": "start"
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 14,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106196471964026,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 15,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106196471974186,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 16,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106196471980226,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 17,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106196471986596,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 18,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106196472666803,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 11280000000
+      },
+      {
+        "index": 19,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106197039464077,
+        "bytes": [
+          128,
+          60,
+          127,
+          128,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      },
+      {
+        "index": 20,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197039550970,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      },
+      {
+        "index": 21,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197039560690,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      },
+      {
+        "index": 22,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197039564850,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      },
+      {
+        "index": 23,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197039569410,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      },
+      {
+        "index": 24,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106197039932179,
+        "bytes": [
+          144,
+          62,
+          117,
+          144,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 11446666666
+      },
+      {
+        "index": 25,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106197881953645,
+        "bytes": [
+          128,
+          62,
+          117,
+          128,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 11613333333
+      },
+      {
+        "index": 26,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197882043787,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11613333333
+      },
+      {
+        "index": 27,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197882054007,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11613333333
+      },
+      {
+        "index": 28,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197882058357,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 11613333333
+      },
+      {
+        "index": 29,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106197882063038,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 11613333333
+      },
+      {
+        "index": 30,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106197882401176,
+        "bytes": [
+          144,
+          64,
+          107,
+          144,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 11613333333
+      },
+      {
+        "index": 31,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106198696630053,
+        "bytes": [
+          128,
+          64,
+          107,
+          128,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 11780000001
+      },
+      {
+        "index": 32,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106198696738836,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11780000001
+      },
+      {
+        "index": 33,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106198696750946,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11780000001
+      },
+      {
+        "index": 34,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106198696756236,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 11780000001
+      },
+      {
+        "index": 35,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106198696762557,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 11780000001
+      },
+      {
+        "index": 36,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106198697152716,
+        "bytes": [
+          144,
+          65,
+          97,
+          144,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 11780000001
+      },
+      {
+        "index": 37,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106199461558641,
+        "bytes": [
+          128,
+          65,
+          97,
+          128,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 11946666666
+      },
+      {
+        "index": 38,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106199461664813,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11946666666
+      },
+      {
+        "index": 39,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106199461675214,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 11946666666
+      },
+      {
+        "index": 40,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106199461679474,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 11946666666
+      },
+      {
+        "index": 41,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106199461684374,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 11946666666
+      },
+      {
+        "index": 42,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106199462057073,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 11946666666
+      },
+      {
+        "index": 43,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106200286632492,
+        "bytes": [
+          128,
+          60,
+          127,
+          128,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 12113333333
+      },
+      {
+        "index": 44,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106200286729084,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12113333333
+      },
+      {
+        "index": 45,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106200286739474,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12113333333
+      },
+      {
+        "index": 46,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106200286743685,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 12113333333
+      },
+      {
+        "index": 47,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106200286748685,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 12113333333
+      },
+      {
+        "index": 48,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106200287101023,
+        "bytes": [
+          144,
+          62,
+          117,
+          144,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 12113333333
+      },
+      {
+        "index": 49,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106201105923444,
+        "bytes": [
+          128,
+          62,
+          117,
+          128,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 12280000001
+      },
+      {
+        "index": 50,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201106016216,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12280000001
+      },
+      {
+        "index": 51,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201106026187,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12280000001
+      },
+      {
+        "index": 52,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201106036267,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 12280000001
+      },
+      {
+        "index": 53,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201106041267,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 12280000001
+      },
+      {
+        "index": 54,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106201106371345,
+        "bytes": [
+          144,
+          64,
+          107,
+          144,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 12280000001
+      },
+      {
+        "index": 55,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106201875283599,
+        "bytes": [
+          128,
+          64,
+          107,
+          128,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 12446666666
+      },
+      {
+        "index": 56,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201875384141,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12446666666
+      },
+      {
+        "index": 57,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201875402172,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12446666666
+      },
+      {
+        "index": 58,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201875407352,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 12446666666
+      },
+      {
+        "index": 59,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106201875412872,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 12446666666
+      },
+      {
+        "index": 60,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106201875780111,
+        "bytes": [
+          144,
+          65,
+          97,
+          144,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 12446666666
+      },
+      {
+        "index": 61,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106202705791793,
+        "bytes": [
+          128,
+          65,
+          97,
+          128,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 12613333333
+      },
+      {
+        "index": 62,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106202705882865,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12613333333
+      },
+      {
+        "index": 63,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106202705892895,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12613333333
+      },
+      {
+        "index": 64,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106202705897335,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 12613333333
+      },
+      {
+        "index": 65,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106202705902075,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 12613333333
+      },
+      {
+        "index": 66,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106202706250264,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 12613333333
+      },
+      {
+        "index": 67,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106203510519792,
+        "bytes": [
+          128,
+          60,
+          127,
+          128,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 12780000001
+      },
+      {
+        "index": 68,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106203511045255,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12780000001
+      },
+      {
+        "index": 69,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106203511056175,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12780000001
+      },
+      {
+        "index": 70,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106203511060455,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 12780000001
+      },
+      {
+        "index": 71,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106203511065186,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 12780000001
+      },
+      {
+        "index": 72,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106203511370403,
+        "bytes": [
+          144,
+          62,
+          117,
+          144,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 12780000001
+      },
+      {
+        "index": 73,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106204261100889,
+        "bytes": [
+          128,
+          62,
+          117,
+          128,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 12946666666
+      },
+      {
+        "index": 74,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106204261198351,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12946666666
+      },
+      {
+        "index": 75,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106204261208762,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 12946666666
+      },
+      {
+        "index": 76,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106204261212982,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 12946666666
+      },
+      {
+        "index": 77,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106204261218772,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 12946666666
+      },
+      {
+        "index": 78,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106204261580161,
+        "bytes": [
+          144,
+          64,
+          107,
+          144,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 12946666666
+      },
+      {
+        "index": 79,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106205114988257,
+        "bytes": [
+          128,
+          64,
+          107,
+          128,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 13113333333
+      },
+      {
+        "index": 80,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106205115091219,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13113333333
+      },
+      {
+        "index": 81,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106205115102510,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13113333333
+      },
+      {
+        "index": 82,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106205115106660,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 13113333333
+      },
+      {
+        "index": 83,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106205115111960,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 13113333333
+      },
+      {
+        "index": 84,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106205115459738,
+        "bytes": [
+          144,
+          65,
+          97,
+          144,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 13113333333
+      },
+      {
+        "index": 85,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106206027379990,
+        "bytes": [
+          128,
+          65,
+          97,
+          128,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 13280000001
+      },
+      {
+        "index": 86,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206027472062,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13280000001
+      },
+      {
+        "index": 87,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206027482303,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13280000001
+      },
+      {
+        "index": 88,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206027486543,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 13280000001
+      },
+      {
+        "index": 89,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206027491203,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 13280000001
+      },
+      {
+        "index": 90,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106206027829001,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 13280000001
+      },
+      {
+        "index": 91,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106206859812523,
+        "bytes": [
+          128,
+          60,
+          127,
+          128,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 13446666666
+      },
+      {
+        "index": 92,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206859914265,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13446666666
+      },
+      {
+        "index": 93,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206859924895,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13446666666
+      },
+      {
+        "index": 94,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206859928946,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 13446666666
+      },
+      {
+        "index": 95,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106206859933796,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 13446666666
+      },
+      {
+        "index": 96,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106206860319345,
+        "bytes": [
+          144,
+          62,
+          117,
+          144,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 13446666666
+      },
+      {
+        "index": 97,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106207679931185,
+        "bytes": [
+          128,
+          62,
+          117,
+          128,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 13613333333
+      },
+      {
+        "index": 98,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106207680043548,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13613333333
+      },
+      {
+        "index": 99,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106207680054528,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13613333333
+      },
+      {
+        "index": 100,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106207680058868,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 13613333333
+      },
+      {
+        "index": 101,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106207680063378,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 13613333333
+      },
+      {
+        "index": 102,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106207680381616,
+        "bytes": [
+          144,
+          64,
+          107,
+          144,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 13613333333
+      },
+      {
+        "index": 103,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106208488453976,
+        "bytes": [
+          128,
+          64,
+          107,
+          128,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 13780000001
+      },
+      {
+        "index": 104,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106208488545428,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13780000001
+      },
+      {
+        "index": 105,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106208488555688,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13780000001
+      },
+      {
+        "index": 106,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106208488559798,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 13780000001
+      },
+      {
+        "index": 107,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106208488564518,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 13780000001
+      },
+      {
+        "index": 108,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106208488885496,
+        "bytes": [
+          144,
+          65,
+          97,
+          144,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 13780000001
+      },
+      {
+        "index": 109,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106209340939958,
+        "bytes": [
+          128,
+          65,
+          97,
+          128,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 13946666666
+      },
+      {
+        "index": 110,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106209341032970,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13946666666
+      },
+      {
+        "index": 111,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106209341043370,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 13946666666
+      },
+      {
+        "index": 112,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106209341047470,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 13946666666
+      },
+      {
+        "index": 113,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106209341052040,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 13946666666
+      },
+      {
+        "index": 114,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106209341398789,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 13946666666
+      },
+      {
+        "index": 115,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106210152155033,
+        "bytes": [
+          128,
+          60,
+          127,
+          128,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 14113333333
+      },
+      {
+        "index": 116,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210152244865,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14113333333
+      },
+      {
+        "index": 117,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210152254785,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14113333333
+      },
+      {
+        "index": 118,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210152258836,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 14113333333
+      },
+      {
+        "index": 119,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210152263606,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 14113333333
+      },
+      {
+        "index": 120,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106210152581613,
+        "bytes": [
+          144,
+          62,
+          117,
+          144,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 14113333333
+      },
+      {
+        "index": 121,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106210939388499,
+        "bytes": [
+          128,
+          62,
+          117,
+          128,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 14280000001
+      },
+      {
+        "index": 122,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210939477221,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14280000001
+      },
+      {
+        "index": 123,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210939487841,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14280000001
+      },
+      {
+        "index": 124,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210939492381,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 14280000001
+      },
+      {
+        "index": 125,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106210939497011,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 14280000001
+      },
+      {
+        "index": 126,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106210939816289,
+        "bytes": [
+          144,
+          64,
+          107,
+          144,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 14280000001
+      },
+      {
+        "index": 127,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106211740454936,
+        "bytes": [
+          128,
+          64,
+          107,
+          128,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 14446666666
+      },
+      {
+        "index": 128,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106211740559749,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14446666666
+      },
+      {
+        "index": 129,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106211740570189,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14446666666
+      },
+      {
+        "index": 130,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106211740574329,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 14446666666
+      },
+      {
+        "index": 131,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106211740578909,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 14446666666
+      },
+      {
+        "index": 132,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106211740895787,
+        "bytes": [
+          144,
+          65,
+          97,
+          144,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 14446666666
+      },
+      {
+        "index": 133,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106212569370970,
+        "bytes": [
+          128,
+          65,
+          97,
+          128,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 14613333333
+      },
+      {
+        "index": 134,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106212569465122,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14613333333
+      },
+      {
+        "index": 135,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106212569475343,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14613333333
+      },
+      {
+        "index": 136,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106212569479563,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 14613333333
+      },
+      {
+        "index": 137,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106212569484223,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 14613333333
+      },
+      {
+        "index": 138,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106212569827561,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 14613333333
+      },
+      {
+        "index": 139,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106213390386433,
+        "bytes": [
+          128,
+          60,
+          127,
+          128,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 14780000001
+      },
+      {
+        "index": 140,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106213390494086,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14780000001
+      },
+      {
+        "index": 141,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106213390505626,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14780000001
+      },
+      {
+        "index": 142,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106213390509776,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 14780000001
+      },
+      {
+        "index": 143,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106213390515106,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 14780000001
+      },
+      {
+        "index": 144,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106213390892435,
+        "bytes": [
+          144,
+          62,
+          117,
+          144,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 14780000001
+      },
+      {
+        "index": 145,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106214193428696,
+        "bytes": [
+          128,
+          62,
+          117,
+          128,
+          71,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              71,
+              117
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      },
+      {
+        "index": 146,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106214193520818,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      },
+      {
+        "index": 147,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106214193530759,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      },
+      {
+        "index": 148,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106214193535069,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      },
+      {
+        "index": 149,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106214193549039,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      },
+      {
+        "index": 150,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106214193885477,
+        "bytes": [
+          144,
+          64,
+          107,
+          144,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 14946666666
+      },
+      {
+        "index": 151,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106215029524177,
+        "bytes": [
+          128,
+          64,
+          107,
+          128,
+          67,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              67,
+              107
+            ]
+          }
+        ],
+        "logical_ns": 15113333333
+      },
+      {
+        "index": 152,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215029633409,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 15113333333
+      },
+      {
+        "index": 153,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215029645670,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 15113333333
+      },
+      {
+        "index": 154,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215029651790,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 15113333333
+      },
+      {
+        "index": 155,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215029657850,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 15113333333
+      },
+      {
+        "index": 156,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106215030042539,
+        "bytes": [
+          144,
+          65,
+          97,
+          144,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 15113333333
+      },
+      {
+        "index": 157,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106215926946272,
+        "bytes": [
+          128,
+          65,
+          97,
+          128,
+          69,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          },
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              69,
+              97
+            ]
+          }
+        ],
+        "logical_ns": 15280000001
+      },
+      {
+        "index": 158,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215927037824,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 15280000001
+      },
+      {
+        "index": 159,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215927049125,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ],
+        "logical_ns": 15280000001
+      },
+      {
+        "index": 160,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215927054105,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ],
+        "logical_ns": 15280000001
+      },
+      {
+        "index": 161,
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 106215927059765,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ],
+        "logical_ns": 15280000001
+      },
+      {
+        "index": 162,
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 106215927408263,
+        "bytes": [
+          144,
+          60,
+          127,
+          144,
+          67,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          },
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              67,
+              127
+            ]
+          }
+        ],
+        "logical_ns": 15280000001
+      }
+    ]
+  }
+}

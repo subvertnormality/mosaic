@@ -1,0 +1,524 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Explicit semantic case-scene plan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "scenes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "feature_id",
+          "title",
+          "behaviour_case",
+          "citation",
+          "steps"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "feature_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "behaviour_case": {
+            "type": "string",
+            "pattern": "^M-[A-Z0-9-]+$"
+          },
+          "citation": {
+            "type": "string",
+            "pattern": "^(?:README\\.md#[a-z0-9-]+|manual:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S]))$"
+          },
+          "screen_format": {
+            "const": "gray8-rle"
+          },
+          "profile": {
+            "enum": [
+              "base-midi",
+              "midi-modulation",
+              "manual-player-ui"
+            ]
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "title",
+                "caption",
+                "assertion"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "caption": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "assertion": {
+                  "type": "object",
+                  "required": [
+                    "kind"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "native_readout": {
+                  "type": "object",
+                  "required": [
+                    "layout",
+                    "slot",
+                    "label",
+                    "value",
+                    "marker"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "layout": {
+                      "const": "overview_params"
+                    },
+                    "slot": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 64
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "marker": {
+                      "enum": [
+                        null,
+                        "L",
+                        "S"
+                      ]
+                    }
+                  }
+                },
+                "native_replay": {
+                  "type": "object",
+                  "required": [
+                    "port",
+                    "channel",
+                    "controller",
+                    "cc_values",
+                    "notes",
+                    "window",
+                    "timing"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "port": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "channel": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 16
+                    },
+                    "controller": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 127
+                    },
+                    "cc_values": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 127
+                      }
+                    },
+                    "notes": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": [
+                          {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 127
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 127
+                          }
+                        ],
+                        "additionalItems": false
+                      }
+                    },
+                    "window": {
+                      "type": "object",
+                      "required": [
+                        "start_recipe_index",
+                        "start_action",
+                        "stop_recipe_index",
+                        "stop_action",
+                        "prefix_messages",
+                        "suffix_messages"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "start_recipe_index": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "stop_recipe_index": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "start_action": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "x",
+                            "y",
+                            "state"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "type": {
+                              "const": "grid"
+                            },
+                            "x": {
+                              "const": 1
+                            },
+                            "y": {
+                              "const": 8
+                            },
+                            "state": {
+                              "const": 1
+                            }
+                          }
+                        },
+                        "stop_action": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "x",
+                            "y",
+                            "state"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "type": {
+                              "const": "grid"
+                            },
+                            "x": {
+                              "const": 15
+                            },
+                            "y": {
+                              "const": 8
+                            },
+                            "state": {
+                              "const": 1
+                            }
+                          }
+                        },
+                        "prefix_messages": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/midiBytes"
+                          }
+                        },
+                        "suffix_messages": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/midiBytes"
+                          }
+                        }
+                      }
+                    },
+                    "timing": {
+                      "type": "object",
+                      "required": [
+                        "step_ns",
+                        "natural_gate_ns",
+                        "tolerance_ns"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "step_ns": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "natural_gate_ns": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "tolerance_ns": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      }
+                    }
+                  }
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "capture_stage": {
+                  "enum": [
+                    "after-assertion",
+                    "before-finish"
+                  ]
+                },
+                "pre_finish_expect": {
+                  "type": "object",
+                  "anyOf": [
+                    {
+                      "required": [
+                        "header"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "field"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "menu"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "menu_label",
+                        "menu_value"
+                      ]
+                    }
+                  ],
+                  "properties": {
+                    "header": {
+                      "type": "object",
+                      "required": [
+                        "page"
+                      ],
+                      "properties": {
+                        "page": {
+                          "type": "string"
+                        },
+                        "params": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "field": {
+                      "type": "object",
+                      "required": [
+                        "layout",
+                        "label",
+                        "value"
+                      ],
+                      "properties": {
+                        "layout": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "art": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "menu": {
+                      "type": "object",
+                      "required": [
+                        "label",
+                        "value"
+                      ],
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        },
+                        "top": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      }
+                    },
+                    "menu_label": {
+                      "type": "object",
+                      "required": [
+                        "label"
+                      ],
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "x": {
+                          "type": "integer"
+                        },
+                        "width": {
+                          "type": "integer"
+                        },
+                        "top": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "menu_value": {
+                      "type": "object",
+                      "required": [
+                        "value"
+                      ],
+                      "properties": {
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "session_ordinal": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "assertion_alternatives": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "kind"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "assertion": {
+                        "properties": {
+                          "kind": {
+                            "const": "parameter-recording-selected-value"
+                          }
+                        },
+                        "required": [
+                          "kind"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "assertion"
+                    ]
+                  },
+                  "then": {
+                    "required": [
+                      "native_readout",
+                      "native_replay"
+                    ]
+                  },
+                  "else": {
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "native_readout"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "native_replay"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "capture_stage": {
+                        "const": "before-finish"
+                      }
+                    },
+                    "required": [
+                      "capture_stage"
+                    ]
+                  },
+                  "then": {
+                    "required": [
+                      "pre_finish_expect"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "session_ordinal": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "midiBytes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      }
+    }
+  }
+}

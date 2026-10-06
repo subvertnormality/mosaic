@@ -1,0 +1,14 @@
+STAGE JOB 1
+{"manifest": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-controlled-experimental/2e0c711bc2054a02be855af7cddb79fe/manifest.json", "case": "H17-CANCEL-IMMEDIATE-CHARACTERIZATION", "clock_mode": "controlled-experimental", "passed": true, "complete_regression_run": false, "controlled_time_admitted": false, "failure": null, "stage": "/home/andy/mosaic-ui-question-footer-fixed-20261003/mosaic", "stage_identity_sha256": "1e796800131f08616d7acb075e0695305af00efc24d5cafb2a8d6644c7b7ed2b", "helper_sha256": "cfb8d3818fd2153fe9661995c97e9872da13b0f7b303c8a144e782b036595fd6", "elapsed": 27.35445133096073}
+STAGE JOB 2
+{"manifest": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-real-time/4a84c36720f046fdb708c59dd947afe1/manifest.json", "case": "H17-CANCEL-IMMEDIATE-CHARACTERIZATION", "clock_mode": "real-time", "passed": true, "complete_regression_run": false, "controlled_time_admitted": false, "failure": null, "stage": "/home/andy/mosaic-ui-question-footer-fixed-20261003/mosaic", "stage_identity_sha256": "1e796800131f08616d7acb075e0695305af00efc24d5cafb2a8d6644c7b7ed2b", "helper_sha256": "cfb8d3818fd2153fe9661995c97e9872da13b0f7b303c8a144e782b036595fd6", "elapsed": 87.64840974099934}
+STAGE JOB 3
+{"case": "M-UIACC-A01-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/e59bdc24374a447fbc6288e2aff9e793/manifest.json"}
+{"case": "M-UIACC-A02-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/8601f3f518f64894a2470392ea80fcd6/manifest.json"}
+{"case": "M-UIACC-A03-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/c6b0fed35c4e47b8ac60ff4a98d23c64/manifest.json"}
+{"case": "M-UIACC-A18-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/01fb3350e58a40c393aea5f5a6ffd633/manifest.json"}
+STAGE JOB 4
+{"case": "M-UIACC-A01-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/25b3c4ba3992410f942cdd58bdddc0c8/manifest.json"}
+{"case": "M-UIACC-A02-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/c5a8a58c9d8441778a3264d8abb8dfb5/manifest.json"}
+{"case": "M-UIACC-A03-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/23c048a510814106b71c66ed67aaaaa2/manifest.json"}
+{"case": "M-UIACC-A18-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/38e4b70259734bf0bd4b831d64b52302/manifest.json"}

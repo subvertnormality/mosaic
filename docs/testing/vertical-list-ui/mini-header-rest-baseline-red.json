@@ -1,0 +1,111 @@
+{
+  "scope": "v1 literal resting Clock icon absent on original pre-mini application; richer v2 animation not claimed here",
+  "atlas_sha256": "ed4d8972b1012b7570d402b6ba997c6c78c6c0926e577f974e03758782ed3c54",
+  "stage": "/home/andy/mosaic-pre-mini-header-20261003/mosaic",
+  "stage_identity_sha256": "fccfe004003cfba93460f643ff06346233f5c91b71ba911a3855b26699bb08ae",
+  "frozen_acceptance_root": "/home/andy/mosaic-mini-header-native-regression-20261003-v2",
+  "invalid_fixture_run": "/home/andy/mosaic-behaviour-runs/mini-header-baseline-controlled-experimental/f1dafbf517164490aa6857a84850318d",
+  "invalid_fixture_not_credited": true,
+  "lanes": {
+    "controlled-experimental": {
+      "manifest": "/home/andy/mosaic-behaviour-runs/mini-header-baseline-controlled-experimental/09ee2f0338724baabaed535d3050fd6a/manifest.json",
+      "manifest_sha256": "844eb9ef9f271fa16d60538b307ae21897e6f120d1367b9a802bc768c8900733",
+      "native_expected_red": true,
+      "failure": {
+        "type": "AssertionError",
+        "message": "{'page': 'C04', 'enabled': False, 'expected': 'literal resting mini-header pose0', 'actual_matching_poses': []}",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/andy/mosaic-mini-header-native-regression-20261003-v2/runner.py\", line 17, in <module>\n    try:c=Driver(out,**kw);helper.missing_icon_regression(c)\n  File \"/home/andy/mosaic-mini-header-native-regression-20261003-v2/mini_header_ui.py\", line 69, in missing_icon_regression\n    s=c.snapshot();matches=require_icon(s,\"C04\",False)\n  File \"/home/andy/mosaic-mini-header-native-regression-20261003-v2/mini_header_ui.py\", line 42, in require_icon\n    assert matches and (enabled or 0 in matches),dict(page=page,enabled=enabled,expected=\"literal authored mini-header frame\" if enabled else \"literal resting mini-header pose0\",actual_matching_poses=matches)\nAssertionError: {'page': 'C04', 'enabled': False, 'expected': 'literal resting mini-header pose0', 'actual_matching_poses': []}\n"
+      },
+      "last_frame_sha256": "58010389c4aa9f7fdb0a8c4e2c1878c32ca6ae697e485653d33ee78d40ee8217",
+      "source_files_verified_unchanged": 1478,
+      "source_mismatches": [],
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 4491,
+          "returncode": 0,
+          "seconds": 0.16408643499016762
+        },
+        {
+          "service": "sclang",
+          "pid": 4388,
+          "returncode": -15,
+          "seconds": 0.11447828804375604
+        },
+        {
+          "service": "crone",
+          "pid": 4377,
+          "returncode": 0,
+          "seconds": 6.902101449668407e-05
+        },
+        {
+          "service": "jack",
+          "pid": 4370,
+          "returncode": 0,
+          "seconds": 0.015715634042862803
+        }
+      ],
+      "stopped": {
+        "session_id": "4e6ea8fc439949138fef2b603812651c",
+        "monotonic_ns": 437799259161778
+      },
+      "held_notes": [],
+      "native_coroutine_errors": [],
+      "accepted_navigation": [
+        "UI motion Off",
+        "Clock Rate /1"
+      ]
+    },
+    "real-time": {
+      "manifest": "/home/andy/mosaic-behaviour-runs/mini-header-baseline-real-time/78461cf653cd40d99dc349e74d9c0c52/manifest.json",
+      "manifest_sha256": "de78415fea049eadc1514235142529006fb199377f3ba1294de03fa87534c98b",
+      "native_expected_red": true,
+      "failure": {
+        "type": "AssertionError",
+        "message": "{'page': 'C04', 'enabled': False, 'expected': 'literal resting mini-header pose0', 'actual_matching_poses': []}",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/andy/mosaic-mini-header-native-regression-20261003-v2/runner.py\", line 17, in <module>\n    try:c=Driver(out,**kw);helper.missing_icon_regression(c)\n  File \"/home/andy/mosaic-mini-header-native-regression-20261003-v2/mini_header_ui.py\", line 69, in missing_icon_regression\n    s=c.snapshot();matches=require_icon(s,\"C04\",False)\n  File \"/home/andy/mosaic-mini-header-native-regression-20261003-v2/mini_header_ui.py\", line 42, in require_icon\n    assert matches and (enabled or 0 in matches),dict(page=page,enabled=enabled,expected=\"literal authored mini-header frame\" if enabled else \"literal resting mini-header pose0\",actual_matching_poses=matches)\nAssertionError: {'page': 'C04', 'enabled': False, 'expected': 'literal resting mini-header pose0', 'actual_matching_poses': []}\n"
+      },
+      "last_frame_sha256": "58010389c4aa9f7fdb0a8c4e2c1878c32ca6ae697e485653d33ee78d40ee8217",
+      "source_files_verified_unchanged": 1478,
+      "source_mismatches": [],
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 6601,
+          "returncode": 0,
+          "seconds": 0.11406646500108764
+        },
+        {
+          "service": "sclang",
+          "pid": 6498,
+          "returncode": -15,
+          "seconds": 0.1147265019826591
+        },
+        {
+          "service": "crone",
+          "pid": 6490,
+          "returncode": 0,
+          "seconds": 6.798101821914315e-05
+        },
+        {
+          "service": "jack",
+          "pid": 6483,
+          "returncode": 0,
+          "seconds": 0.031628969009034336
+        }
+      ],
+      "stopped": {
+        "session_id": "583ad7e7477745c7bf21ffc8eada39f1",
+        "monotonic_ns": 437868495859937
+      },
+      "held_notes": [],
+      "native_coroutine_errors": [],
+      "accepted_navigation": [
+        "UI motion Off",
+        "Clock Rate /1"
+      ]
+    }
+  },
+  "complete_regression_run": false,
+  "controlled_time_admitted": false
+}

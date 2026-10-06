@@ -1,0 +1,1133 @@
+schema_version: 1
+fixture_kind: doctor-native-audio
+dataset: generated/doctor-scenes.json
+source_paths:
+- doctor-scene.yaml
+- doctor-auto-probe.yaml
+scenes:
+- id: doctor-local-capture-and-paint
+  title: Record audio and paint detected attacks
+  behaviour_case: MA-DOCTOR-AUDIO-001
+  steps:
+  - id: setup
+    caption: Select Rhythm Doctor while the sequencer is stopped.
+    expect:
+      route: R01
+      empty_grid: true
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 3
+      delta: -100
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: enc
+      n: 2
+      delta: -120
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: enc
+      n: 1
+      delta: -2
+    - type: enc
+      n: 1
+      delta: -2
+    - type: enc
+      n: 1
+      delta: -2
+    - type: enc
+      n: 1
+      delta: -2
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: enc
+      n: 3
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 16
+      y: 7
+      state: 1
+    - type: grid
+      x: 16
+      y: 7
+      state: 0
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: grid
+      x: 16
+      y: 2
+      state: 1
+    - type: grid
+      x: 16
+      y: 2
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: tap_control
+      args:
+      - channel_editor
+    - type: ui
+      method: open_channel_task
+      args:
+      - device
+    - type: ui
+      method: set_value
+      args:
+      - 1
+    - type: ui
+      method: press_key
+      args:
+      - 3
+    - type: ui
+      method: tap_control
+      args:
+      - pattern_slot
+      - 1
+    - type: ui
+      method: set_range
+      args:
+      - 1
+      - 64
+    - type: ui
+      method: tap_control
+      args:
+      - pattern_editor
+    - type: ui
+      method: select_rhythm_doctor_algorithm
+      args:
+      - rhythm_doctor
+  - id: record
+    caption: Select Manual tempo, press K3 to apply, then tap Record. Doctor starts
+      listening to the audio input.
+    expect:
+      route: R02
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: enc
+      n: 2
+      delta: -6
+    - type: enc
+      n: 3
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: rhythm_doctor_setup_field
+      args:
+      - -6
+    - type: wait
+      seconds: 0.1
+    - type: ui
+      method: adjust_rhythm_doctor_setup_value
+      args:
+      - 2
+    - type: ui
+      method: expect_rhythm_doctor_setup_field
+      args:
+      - TEMPO
+      - MANUAL
+    - type: ui
+      method: rhythm_doctor_key_edge
+      args:
+      - apply_correction
+      - true
+    - type: wait
+      seconds: 0.04
+    - type: ui
+      method: rhythm_doctor_key_edge
+      args:
+      - apply_correction
+      - false
+    - type: wait
+      seconds: 0.12
+    - type: ui
+      method: rhythm_doctor_capture_edge
+      args:
+      - true
+    - type: wait
+      seconds: 0.08
+    - type: ui
+      method: rhythm_doctor_capture_edge
+      args:
+      - false
+    - type: wait
+      seconds: 0.08
+    - type: audio-input-start
+  - id: analyse
+    caption: Press K3 after enough audio has been recorded. Doctor analyses the recording.
+    expect:
+      route: R04
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    authoring_operations:
+    - type: wait
+      fixture: capture_finish_seconds
+    - type: ui
+      method: rhythm_doctor_key_edge
+      args:
+      - apply_correction
+      - true
+    - type: wait
+      seconds: 0.04
+    - type: ui
+      method: rhythm_doctor_key_edge
+      args:
+      - apply_correction
+      - false
+    - type: wait
+      seconds: 0.12
+  - id: ready
+    caption: When analysis finishes, Doctor displays the recording window.
+    expect:
+      route: R05
+      timeout: 180
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs: []
+    authoring_operations: []
+  - id: preview
+    caption: Select BD and tap Paint to preview its detected attacks.
+    expect:
+      route: R08
+      grid: preview
+      levels:
+      - 12
+      - 15
+      minimum_trigs: 2
+      grid_steps:
+      - 10
+      - 14
+      - 18
+      - 22
+      - 26
+      - 30
+      - 34
+      - 38
+      - 42
+      - 46
+      - 50
+      - 54
+      - 58
+      - 62
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: grid
+      x: 3
+      y: 2
+      state: 1
+    - type: grid
+      x: 3
+      y: 2
+      state: 0
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: select_rhythm_doctor_lane
+      args:
+      - BD
+    - type: ui
+      method: tap_control
+      args:
+      - paint
+  - id: paint
+    caption: Tap Paint again. The attacks are stored in pattern 1.
+    expect:
+      tooltip: Pattern painted
+      grid: commit
+      level: 15
+      matches: preview
+      grid_steps:
+      - 10
+      - 14
+      - 18
+      - 22
+      - 26
+      - 30
+      - 34
+      - 38
+      - 42
+      - 46
+      - 50
+      - 54
+      - 58
+      - 62
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: tap_control
+      args:
+      - paint
+  - id: play
+    caption: Tap Play. Channel 1 sends the painted attacks to its MIDI output. Tap
+      Play again to stop.
+    expect:
+      midi_minimum_attacks: 2
+      port: 1
+      outstanding_notes: []
+      midi_start_index: 10
+      midi_end_index: 98
+      notes:
+      - index: 54
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 425216620648208
+        bytes:
+        - 144
+        - 60
+        - 124
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 124
+      - index: 72
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 425217287055992
+        bytes:
+        - 144
+        - 60
+        - 120
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 120
+      - index: 90
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 425217953735278
+        bytes:
+        - 144
+        - 60
+        - 116
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 116
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: tap_control
+      args:
+      - channel_editor
+    - type: midi-baseline
+    - type: ui
+      method: play
+      args: []
+    - type: wait
+      seconds: 3
+    - type: ui
+      method: stop
+      args: []
+  feature_id: rhythm-doctor
+  profile: audio-real-time
+- id: doctor-local-auto-capture-and-paint
+  title: Record audio in Auto mode and paint detected attacks
+  behaviour_case: MA-DOCTOR-AUDIO-001
+  steps:
+  - id: setup
+    caption: Select Rhythm Doctor while the sequencer is stopped.
+    expect:
+      route: R01
+      empty_grid: true
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 3
+      delta: -100
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: enc
+      n: 2
+      delta: -120
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: enc
+      n: 1
+      delta: -2
+    - type: enc
+      n: 1
+      delta: -2
+    - type: enc
+      n: 1
+      delta: -2
+    - type: enc
+      n: 1
+      delta: -2
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 1
+      delta: 2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: -2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: enc
+      n: 2
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: enc
+      n: 3
+      delta: 2
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 16
+      y: 7
+      state: 1
+    - type: grid
+      x: 16
+      y: 7
+      state: 0
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: grid
+      x: 16
+      y: 2
+      state: 1
+    - type: grid
+      x: 16
+      y: 2
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: tap_control
+      args:
+      - channel_editor
+    - type: ui
+      method: open_channel_task
+      args:
+      - device
+    - type: ui
+      method: set_value
+      args:
+      - 1
+    - type: ui
+      method: press_key
+      args:
+      - 3
+    - type: ui
+      method: tap_control
+      args:
+      - pattern_slot
+      - 1
+    - type: ui
+      method: set_range
+      args:
+      - 1
+      - 64
+    - type: ui
+      method: tap_control
+      args:
+      - pattern_editor
+    - type: ui
+      method: select_rhythm_doctor_algorithm
+      args:
+      - rhythm_doctor
+  - id: record
+    caption: Tap Record. Doctor starts listening to the audio input using Auto tempo.
+    expect:
+      route: R02
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: rhythm_doctor_capture_edge
+      args:
+      - true
+    - type: wait
+      seconds: 0.08
+    - type: ui
+      method: rhythm_doctor_capture_edge
+      args:
+      - false
+    - type: wait
+      seconds: 0.08
+    - type: audio-input-start
+  - id: analyse
+    caption: Press K3 after enough audio has been recorded. Doctor analyses the recording.
+    expect:
+      route: R04
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    authoring_operations:
+    - type: wait
+      fixture: capture_finish_seconds
+    - type: ui
+      method: rhythm_doctor_key_edge
+      args:
+      - apply_correction
+      - true
+    - type: wait
+      seconds: 0.04
+    - type: ui
+      method: rhythm_doctor_key_edge
+      args:
+      - apply_correction
+      - false
+    - type: wait
+      seconds: 0.12
+  - id: ready
+    caption: When analysis finishes, Doctor displays the recording window.
+    expect:
+      route: R05
+      timeout: 180
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs: []
+    authoring_operations: []
+  - id: preview
+    caption: Select BD and tap Paint to preview its detected attacks.
+    expect:
+      route: R08
+      grid: preview
+      levels:
+      - 12
+      - 15
+      minimum_trigs: 2
+      grid_steps:
+      - 10
+      - 14
+      - 18
+      - 22
+      - 26
+      - 30
+      - 34
+      - 38
+      - 42
+      - 46
+      - 50
+      - 54
+      - 58
+      - 62
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: grid
+      x: 3
+      y: 2
+      state: 1
+    - type: grid
+      x: 3
+      y: 2
+      state: 0
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: select_rhythm_doctor_lane
+      args:
+      - BD
+    - type: ui
+      method: tap_control
+      args:
+      - paint
+  - id: paint
+    caption: Tap Paint again. The attacks are stored in pattern 1.
+    expect:
+      tooltip: Pattern painted
+      grid: commit
+      level: 15
+      matches: preview
+      grid_steps:
+      - 10
+      - 14
+      - 18
+      - 22
+      - 26
+      - 30
+      - 34
+      - 38
+      - 42
+      - 46
+      - 50
+      - 54
+      - 58
+      - 62
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: tap_control
+      args:
+      - paint
+  - id: play
+    caption: Tap Play. Channel 1 sends the painted attacks to its MIDI output. Tap
+      Play again to stop.
+    expect:
+      midi_minimum_attacks: 2
+      port: 1
+      outstanding_notes: []
+      midi_start_index: 10
+      midi_end_index: 98
+      notes:
+      - index: 54
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 425624033730020
+        bytes:
+        - 144
+        - 60
+        - 116
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 116
+      - index: 72
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 425624700992720
+        bytes:
+        - 144
+        - 60
+        - 117
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 117
+      - index: 90
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 425625367679683
+        bytes:
+        - 144
+        - 60
+        - 112
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 112
+    citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    authoring_operations:
+    - type: ui
+      method: tap_control
+      args:
+      - channel_editor
+    - type: midi-baseline
+    - type: ui
+      method: play
+      args: []
+    - type: wait
+      seconds: 3
+    - type: ui
+      method: stop
+      args: []
+  feature_id: rhythm-doctor
+  profile: audio-real-time

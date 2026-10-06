@@ -1,0 +1,41 @@
+{
+  "scope": "Only rejected-range-channel-isolation expect.assertion.phrases source-defined integer channel key restoration after complete actual-selector canonical equality; no musical value replacement or broad numeric-key inference",
+  "files": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": {
+      "before_sha256": "a65bd218e651932b05a1b94c955edf8053aa17ed2fad50bd5837e343e16ec3cc",
+      "after_sha256": "387f549f69147003be47d17ddef9cc2085c3665a91ebc61daa840dea9f140b95"
+    },
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": {
+      "before_sha256": "0fe2c9f94ba3c3b6d056308ca68160509c6b63e70501f061b1de53567063eb57",
+      "after_sha256": "3c4b7069967eb64bc0f3b001212658391ee240e0da9143a9e66d861f965dbe65"
+    }
+  },
+  "red": {
+    "path": "/home/andy/mosaic-manual-build-operators/reconciler-polymeter-phrases-e0fc753c68bf435da68e03937cd2f6b7/red.log",
+    "sha256": "bd12c310cc8f6a0df2667679f748095d18c73387ce2ad90eb90552bab213c016",
+    "tests": 2,
+    "expected_failures": 1,
+    "changed_value_rejection_passed": true
+  },
+  "green": {
+    "path": "/home/andy/mosaic-manual-build-operators/reconciler-polymeter-phrases-e0fc753c68bf435da68e03937cd2f6b7/green.log",
+    "sha256": "92b7e5507ca829b306da1b56bc19259b64381faba8ed2698ad1c09f8b02c5032",
+    "tests": 59
+  },
+  "actual_historical_reproductions": [
+    {
+      "kind": "polymeter",
+      "report": "/home/andy/mosaic-manual-runs/b312f68014634a39a4e3276412e07e17/reference-scenes.json",
+      "report_sha256": "fafd8d95a64c55dcc03e618c9a42869cb46d4ba5edf384942c9ca32417c192d4",
+      "exact_generated_sha256": "edf572eb89be95baf6ddb4403ef1492895217aa110ac8e656b89b806faed926e"
+    },
+    {
+      "kind": "reason-swing",
+      "report": "/home/andy/mosaic-manual-runs/50beafcd961a4581981b7973a57c5e7b/reference-scenes.json",
+      "report_sha256": "7e7067437362fec0dde388df1ccc5a2e3b81fc9cdcd9db01ed7ac8f62666adf8",
+      "exact_generated_sha256": "9c206523acbf747168bec38015827bbe2b8fdc92266fae47eb8485c4a2db5249"
+    }
+  ],
+  "native_launched": false,
+  "complete_regression_run": false
+}

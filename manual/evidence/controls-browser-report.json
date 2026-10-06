@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "checks": [
+    "Wrong encoder cannot skip held step; keyboard hold, turn, release select exact native results",
+    "Grouped hold/turn/release does not reveal result before all constituents",
+    "Held grid (keyboard) plus clicked norns key plus release advances to the exact clear result",
+    "Grouped norns key hold and release are required; no fabricated intermediate frames",
+    "First-loop authored encoder sequence selects exact velocity result",
+    "Large reference bundles use explicit checkpoint fallback, not arbitrary-control advancement"
+  ],
+  "book_sha256": "a19163b7866d4f7119447768152abd3f0c6f072ae852fc08bac9b7b5ace54bfa",
+  "player_sha256": "f0585fa388af6d9765031b8b1476b5fced7ff7dcd270ac76fce5101af5073c01"
+}

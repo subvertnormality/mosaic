@@ -1,0 +1,60 @@
+{
+  "status": "design_prototype_only_not_actual_feature_capture",
+  "atlas_sha256": "ed4d8972b1012b7570d402b6ba997c6c78c6c0926e577f974e03758782ed3c54",
+  "pages": 93,
+  "native_settings_excluded": 9,
+  "preview_sha256": "3b87b3eaa7f77a9a74ab23ee2c619bddab6a6ee72bfe8bb33329703dbbde7bed",
+  "backgrounds": [
+    {
+      "id": "R01",
+      "label": "Doctor",
+      "path": "images/ui-preview/doctor-list-top.png",
+      "sha256": "b610318cdcf5516a0c78bc4a8d1dac43e73799d2e1e2d21ebc607163ec988088",
+      "historical_background": true
+    },
+    {
+      "id": "C04",
+      "label": "Clock",
+      "path": "images/ui-preview/mosaic-clock-vertical.png",
+      "sha256": "3a44d9b462440f4381db1fdaeac4c40857581d066fcdbeee9abaf1fb3db875a9",
+      "historical_background": true
+    },
+    {
+      "id": "S01",
+      "label": "Scale",
+      "path": "images/ui-preview/mosaic-scale-vertical.png",
+      "sha256": "34e1ea4a36924558b64847b0f7a545adf49b1faa7f8f11460924733b6c9d19ae",
+      "historical_background": true
+    },
+    {
+      "id": "M02",
+      "label": "Plants",
+      "path": "images/merge-shape-foundation.png",
+      "sha256": "1dac205f0379af973f62703cc49507cddacea68d019fcac9a172d46ec7ea9850",
+      "historical_background": true
+    },
+    {
+      "id": "H02",
+      "label": "Choir",
+      "path": "images/harmony-register.png",
+      "sha256": "73482ae4abfb0bb1964c08aa65ee04215cef7a778a31761f6f661517d82104b1",
+      "historical_background": true
+    },
+    {
+      "id": "C01",
+      "label": "Masks \u00b7 compact7\u00d78",
+      "path": "images/ui-preview/mosaic-masks-overview.png",
+      "sha256": "f6baf0b2fe88af3e2f2892eac36fc7d597568546588d20e43f8289965f2a679f",
+      "historical_background": true
+    },
+    {
+      "id": "C02",
+      "label": "Trig Params \u00b7 compact7\u00d78",
+      "path": "images/norns/trig-params.png",
+      "sha256": "2e867683ec1516bb48ed3609d081c630a63994404824e1a00f027281ab59e8c9",
+      "historical_background": true
+    }
+  ],
+  "component_baseline": "two missing-miniature failures; production still unfixed",
+  "preview_runtime_correction": "Clamp negative first RAF timestamp delta; explicit DOM bindings. Exact atlas unchanged."
+}

@@ -1,0 +1,279 @@
+{
+  "captured_utc": "2026-10-04T12:39:07.170171+00:00",
+  "root_internal_release": true,
+  "operation": "single controlled no-publish output-dashboard-readout capture",
+  "launch_argv_file": "/home/andy/mosaic-manual-build-operators/focused-dashboard-launch-1f25a146c7784a52af2e93073a5b622b/focused-dashboard-argv.json",
+  "launch_argv_sha256_raw": "ab05ba2451b657bf01dc3190bd0fb952cef56b8f883e2441738a901f65655723",
+  "launch_argv_sha256_canonical": "e78d4dfc83c444e4c5596cfba03a3f0a029db5917640c5181d171685272aadb6",
+  "exec_session_id": 30046,
+  "capture_process": {
+    "pid": 28679,
+    "start_ticks": 50016590,
+    "exe": "/usr/bin/python3.8",
+    "terminal_exit_code": 0,
+    "terminal_output": [
+      "Verified M-LIVEUI-DASH-001 / output-dashboard-readout",
+      "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa"
+    ]
+  },
+  "run_directory": "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa",
+  "report_path": "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa/reference-scenes.json",
+  "report_sha256": "47a04ed38573b10595fb1248936a3afbae0dfb5f3c3e28099b42ff250da02ffa",
+  "captured_scenes": [
+    "output-dashboard-readout"
+  ],
+  "clock_mode": "controlled-experimental",
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci",
+  "complete_regression_run": false,
+  "report_start_source_identity_path": "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa/start-source-identity.json",
+  "report_start_source_identity_sha256": "ac1c6737ee184cb7372057a4395fdf55eeb627db62b68b0193f5d0e56a537252",
+  "final_editorial_freeze_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/vertical-list-ui/p02-truthful-footer/final-editorial-freeze.json",
+  "final_editorial_freeze_sha256": "909dedf4399775b38b11573552615c4f75e3f8de52d93308960e572bfd418607",
+  "final_editorial_freeze_matches": {
+    "lib/ui_live.lua": true,
+    "lib/tests/lib/ui_live_tests.lua": true,
+    "tests/behaviour/contract/live_ui_feedback.py": true,
+    "tests/behaviour/contract/live_ui_sweep.py": true,
+    "tests/behaviour/test_ui.py": true,
+    "manual/features/reference-pattern.yaml": true,
+    "docs/ui-reimplementation/current-source-review.json": true,
+    "docs/ui-reimplementation/source-inventory.json": true,
+    "docs/ui-reimplementation/generated/source-review-receipt.json": true
+  },
+  "capture_source_match_summary": {
+    "case_sources": {
+      "count": 236,
+      "all_match": true,
+      "mismatches": []
+    },
+    "fixture_sources": {
+      "count": 1,
+      "all_match": true,
+      "mismatches": []
+    },
+    "capture_sources": {
+      "count": 3,
+      "all_match": true,
+      "mismatches": []
+    }
+  },
+  "plan_match": {
+    "manual/scene-plans-remaining.yaml": true
+  },
+  "assertion_summary": {
+    "M-LIVEUI-DASH-001": {
+      "frame_sha256": "91b2dc819cb9540c65c9405a51f2371b8ba542a2de8da6a76edaf8e2eab62fad",
+      "grid_sha256": "07328c5e487b0069d3415d2626135977a289f0e8c7f5a17c869bb3399abe3eac",
+      "stable_rows": 55,
+      "semantic_assertions": 8,
+      "header": "OUTPUT",
+      "dashboard": "CH01; rows all NO EVENT",
+      "footer_results": [
+        {
+          "kind": "footer",
+          "text": "E3 SET",
+          "passed": true
+        },
+        {
+          "kind": "footer",
+          "text": "E3 SET",
+          "passed": true
+        },
+        {
+          "kind": "footer",
+          "text": "E3 SET",
+          "passed": true
+        },
+        {
+          "kind": "footer",
+          "text": "E3 SET",
+          "passed": true
+        }
+      ],
+      "immediate_setting_and_k3_noop": {
+        "kind": "trig-options-immediate-setting-no-k3-apply",
+        "amount_before": "x24",
+        "amount_after": "x32",
+        "pattern_grid_before": [
+          15,
+          15,
+          15,
+          15,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "pattern_grid_after": [
+          15,
+          15,
+          15,
+          15,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "passed": true,
+        "citation": "manual/features/reference-pattern.yaml#adding-trigs"
+      },
+      "summary": {
+        "kind": "live-ui-dashboards-summary",
+        "passed": true
+      }
+    }
+  },
+  "cleanup": {
+    "cleanup_verified": true,
+    "finished": true,
+    "held_inputs": [],
+    "session_id": "98640694507a4ce4b635def734973d69",
+    "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+    "cleanup_json_sha256": "7aed1683a5c7ee71501662717cf96795e0b684fdbf565ef45da01304e6bcfa1f",
+    "cleanup_rows": [
+      {
+        "service": "matron",
+        "pid": 29199,
+        "returncode": 0,
+        "seconds": 0.11413895298028365
+      },
+      {
+        "service": "sclang",
+        "pid": 29057,
+        "returncode": -15,
+        "seconds": 0.06429213599767536
+      },
+      {
+        "service": "crone",
+        "pid": 29049,
+        "returncode": 0,
+        "seconds": 0.015479752037208527
+      },
+      {
+        "service": "jack",
+        "pid": 29044,
+        "returncode": 0,
+        "seconds": 0.0315985789638944
+      }
+    ],
+    "stopped_json_sha256": "eda6258ddf34e54696431313d9573b534538c8df0b1c92de907614feb9e47e15",
+    "post_capture_live_process_scan": []
+  },
+  "prior_failed_run_preserved": {
+    "manifest_sha256": "51904c9db687e16dce2dc588b87b2b403128ac2c6badf4d2e0a5ebe732325ef0",
+    "failure_json_sha256": "b04249707f4662af3bd9ec38b9af45fc889a68637dc6af2f745ed4fc83ec9170"
+  }
+}

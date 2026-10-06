@@ -1,0 +1,144 @@
+--- 
++++ 
+@@ -23,27 +23,37 @@
+  out=copy.deepcopy(document)
+  for f in out.get('features',[]):f.pop('review',None);f.pop('scene_refs',None)
+  return out
+-def course_claims(document):
++def course_claims(document,controlled_local=False):
+  out=copy.deepcopy(document);out['project'].pop('capture_status',None)
++ if controlled_local:
++  out['project'].pop('validation_scope',None);out['project'].pop('realtime_qualification',None)
+  for ch in out['learning_path']:
+   for stage in ch['stages']:stage.pop('binding',None)
+  return out
+-def canonical_stage_names(root,plans):
++def controlled_generation(manifest):
++ return manifest.get('validation_scope')=='controlled-manual-generation'
++
++def canonical_stage_names(root,plans,controlled_local=False):
+  import manual_build
+- opts=SimpleNamespace(mod_code_root='identity',audio_emulator='identity',audio_install='identity',ffmpeg='identity',emulator='identity',controlled_install='identity',real_install='identity',modulation_code_root='identity',readability_real_install='identity',browser_tests=True,quick_output='cheat_sheet.html')
++ opts=SimpleNamespace(mod_code_root='identity',audio_emulator='identity',audio_install='identity',ffmpeg='identity',emulator='identity',controlled_install='identity',real_install='identity',modulation_code_root='identity',readability_real_install='identity',browser_tests=True,quick_output='cheat_sheet.html',controlled_local=controlled_local)
+  previous=manual_build.ROOT
+  try:
+   manual_build.ROOT=root
+-  return [row['name'] for row in manual_build.plan(opts,plans)]
++  return [row['name'] for row in (manual_build.plan(opts,plans,controlled_local=True) if controlled_local else manual_build.plan(opts,plans))]
+  finally:manual_build.ROOT=previous
+ 
+ def verify_manifest(root,build,pin):
+  path=build/'manifest.json';require(sha(path.read_bytes())==pin,'Build manifest pin mismatch');m=read(path)
+- require(m.get('passed') is True and m.get('build_complete') is True and m.get('renderer_validated') is True and m.get('complete_regression_run') is False,'Incomplete build receipt')
++ local=controlled_generation(m)
++ require(m.get('passed') is True and m.get('renderer_validated') is True and m.get('complete_regression_run') is False,'Incomplete build receipt')
++ if local:
++  require(m.get('build_complete') is False and m.get('realtime_qualification')=='pending-ci','Generation cannot claim full or real-time qualification')
++  require(m.get('manual_generation_complete') is True,'Incomplete manual generation receipt')
++ else:require(m.get('build_complete') is True,'Incomplete build receipt')
+  require(m.get('tool_sha256')==sha((root/'tools/manual_build.py').read_bytes()),'Build tool identity changed')
+  required=sorted(p.name for p in (root/'manual').glob('scene-plans*.yaml'))
+  require(sorted(m.get('required_plans',[]))==required and sorted(m.get('selected_plans',[]))==required,'Build plan inventory changed')
+- require([row['name'] for row in m['stages']]==canonical_stage_names(root,m['selected_plans']),'Build stage sequence differs from full canonical plan')
++ require([row['name'] for row in m['stages']]==(canonical_stage_names(root,m['selected_plans'],True) if local else canonical_stage_names(root,m['selected_plans'])),'Build stage sequence differs from selected canonical plan')
+  names=set()
+  for row in m['stages']:
+   name=row['name'];require(name not in names,'Duplicate stage');names.add(name)
+@@ -55,24 +65,27 @@
+  required_stages={'refresh-scene-index','raw-publication-audit','feature-bind','course-bind','compile-book','quick-reference','publication-audit'}
+  require(required_stages<=names,'Missing mandatory build stage')
+  from manual_build import verify_doctor_completion
+- verify_doctor_completion(m['stages'])
++ if not local:verify_doctor_completion(m['stages'])
+  actual={str(p.relative_to(root)):sha(p.read_bytes()) for p in sorted((root/'manual').rglob('*.yaml'))}
+  require(m['source_files_after']==actual,'Build after source inventory mismatch')
+  for name,h in m['source_files_before'].items():require(sha(safe(build/'authoring-before',name).read_bytes())==h,'Changed prebuild authoring')
+  return m
+ 
+-def check_metadata(name,before,after,build):
++def check_metadata(name,before,after,build,controlled_local=False):
+  old,new=yaml.safe_load(before),yaml.safe_load(after)
+  if before==after:return 'unchanged authored bytes'
+  if name=='manual/course.yaml':
+   receipt=read(build/'course-bind/binding-receipt.json')
++  if controlled_local:require(receipt.get('validation_scope')=='controlled-manual-generation' and receipt.get('realtime_qualification')=='pending-ci' and receipt.get('complete_regression_run') is False,'Missing controlled generation binding scope')
+   require(receipt.get('passed') is True and receipt.get('course_written') is True,'Missing course binding proof')
+   require(receipt['course_before_sha256']==sha(before) and receipt['course_after_sha256']==sha(after),'Course binding identity mismatch')
+   require((build/'course-bind/course-before.yaml').read_bytes()==before and (build/'course-bind/course-after.yaml').read_bytes()==after,'Course snapshots differ')
+-  require(course_claims(old)==course_claims(new),'Learning text or source claims changed')
+-  return 'two-lane receipted course binding only'
++  if controlled_local:require(new['project'].get('validation_scope')=='controlled-manual-generation' and new['project'].get('realtime_qualification')=='pending-ci','Controlled course metadata scope mismatch')
++  require(course_claims(old,controlled_local)==course_claims(new,controlled_local),'Learning text or source claims changed')
++  return 'controlled-generation receipted course binding; real-time qualification pending CI' if controlled_local else 'two-lane receipted course binding only'
+  if name.startswith('manual/features/') and 'features' in old:
+   receipt=read(build/'feature-bind/manifest.json')
++  if controlled_local:require(receipt.get('validation_scope')=='controlled-manual-generation' and receipt.get('realtime_qualification')=='pending-ci' and receipt.get('complete_regression_run') is False,'Missing controlled generation binding scope')
+   require(receipt.get('passed') is True and receipt.get('complete_regression_run') is False,'Missing feature binding proof')
+   files=[v for v in receipt['files'] if v['path']==name]
+   require(len(files)==1 and files[0]['before_sha256']==sha(before) and files[0]['after_sha256']==sha(after),'Feature binding identity mismatch')
+@@ -89,17 +102,19 @@
+    require(row.get('scene_ids',[]) and set(row['scene_ids'])<=set(b.get('scene_refs',[])) and b.get('review',{}).get('binding_receipt')==str(build/'feature-bind/manifest.json'),'Feature scene receipt membership changed')
+    canonical=lambda v:sha(json.dumps(v,sort_keys=True,separators=(',',':')).encode())
+    require(row['claims_sha256']==canonical({k:v for k,v in b.items() if k not in ('review','scene_refs')}) and row['prior_review_sha256']==canonical(a.get('review',{})) and row['current_review_sha256']==canonical(b.get('review',{})),'Feature receipt claims mismatch')
+-  return 'independently audited receipted feature review and scene references only'
++  return 'independently audited controlled-generation receipted feature review; real-time qualification pending CI' if controlled_local else 'independently audited receipted feature review and scene references only'
+  raise ValueError('Unapproved authored source mutation: '+name)
+ 
+ def reproduced_scenes(root,build,m):
+  from manual_doctor_publish import authored_bindings,collect_reports
+  result={}
+  for row in m['stages']:
+-  if not row['name'].startswith('reference-real-'):continue
++  prefix='reference-controlled-' if controlled_generation(m) else 'reference-real-'
++  if not row['name'].startswith(prefix):continue
+   args=row['executed_command'];require('--publish' in args and '--output' in args,'Reference publication command missing')
+   output=args[args.index('--output')+1];require(Path(output).name==output and output.endswith('.json'),'Unsafe generated output')
+   doc=read(row['native_report']['path']);require(read(root/'manual/generated'/output)==doc,'Published reference differs from native report')
++  if controlled_generation(m):require(doc.get('validation_scope')=='controlled-manual-generation' and doc.get('realtime_qualification')=='pending-ci' and doc.get('clock_mode')=='controlled-experimental' and doc.get('complete_regression_run') is False,'Controlled generation report scope mismatch')
+   authored=dict(schema_version=1,fixture_kind='behaviour-case',trace_contract='The original pinned case replays public inputs and verifies every authored semantic selector; per-scene deltas include native encoder units and waits.',scenes=copy.deepcopy(doc['scenes']))
+   for scene in authored['scenes']:
+    scene.pop('evidence',None)
+@@ -122,10 +137,14 @@
+   before=safe(snapshot,name).read_bytes();require(sha(before)==item['sha256']==snap['files'][name],'Prebuild ledger snapshot mismatch')
+   if name.endswith('.yaml') and name.startswith('manual/'):
+    require(m['source_files_before'].get(name)==sha(before),'Initial ledger differs from build authoring-before')
+- from manual_publication_verify import audit_publication
+- require(audit_publication().get('passed') is True,'Independent publication audit failed')
+- from manual_course_bind import verify_publication
+- verify_publication(root)
++ if controlled_generation(m):
++  from manual_publication_verify import audit_controlled_manual_generation
++  require(audit_controlled_manual_generation(build).get('passed') is True,'Independent controlled generation audit failed')
++ else:
++  from manual_publication_verify import audit_publication
++  require(audit_publication().get('passed') is True,'Independent publication audit failed')
++  from manual_course_bind import verify_publication
++  verify_publication(root)
+  generated=reproduced_scenes(root,build,m)
+  index=next(s for s in m['stages'] if s['name']=='refresh-scene-index')['action']
+  from manual_build import scene_sources
+@@ -152,7 +171,7 @@
+   if name in generated:require(after==generated[name],'Generated scene YAML does not reproduce');meaning='Exact scene authoring reproduced from audited successful native publication.'
+   elif name=='manual/book.yaml':meaning='Only completed-build reproduced scene source index changed.'
+   elif name=='cheat_sheet.html':meaning='Exact root quick reference regenerated from qualified unchanged authored controls.'
+-  elif name.startswith('manual/') and name.endswith('.yaml'):meaning=check_metadata(name,before,after,build)
++  elif name.startswith('manual/') and name.endswith('.yaml'):meaning=check_metadata(name,before,after,build,controlled_generation(m))
+   else:raise ValueError('Runtime or non-generated source drift: '+name)
+   item['sha256']=sha(after);item['meaning']+=' Post-build review: '+meaning;changes.append({'path':name,'kind':'changed','before_sha256':sha(before),'after_sha256':sha(after),'meaning':meaning})
+  for name,raw in generated.items():
+@@ -161,6 +180,7 @@
+    newreview['files'][name]={'sha256':sha(raw),'meaning':'Exact new scene authoring reproduced from audited successful native build report.'};changes.append({'path':name,'kind':'added','sha256':sha(raw)})
+  newreview['retired_generated_files']=dict(newreview.get('retired_generated_files',{}),**retired)
+  newreview['post_build_review']={'manifest':str(build/'manifest.json'),'sha256':pin,'prebuild_snapshot':str(snapshot/'snapshot.json'),'sha256_before':sha((snapshot/'snapshot.json').read_bytes()),'changes':changes,'complete_regression_run':False}
++ if controlled_generation(m):newreview['post_build_review'].update(validation_scope='controlled-manual-generation',manual_generation_complete=True,realtime_qualification='pending-ci')
+  return newreview
+ 
+ def reconcile(build,pin,snapshot,evidence):
+@@ -194,6 +214,7 @@
+   for temporary in temporaries.values():
+    if temporary.exists():temporary.unlink()
+  report={'passed':True,'complete_regression_run':False,'build_manifest_sha256':pin,'files_before':len(previous['files']),'files_after':len(out['files']),'manual_sections':len(out['manual_sections']),'callbacks':len(out['grid_registrations']),'branches':len(receipt['branches']),'changes':review['post_build_review']['changes'],'after':{str(p.relative_to(root)):sha(p.read_bytes()) for p in targets}}
++ if review['post_build_review'].get('validation_scope'):report.update(validation_scope='controlled-manual-generation',manual_generation_complete=True,realtime_qualification='pending-ci')
+  (evidence/'receipt.json').write_text(json.dumps(report,indent=2)+'\n');return report
+ 
+ def main():

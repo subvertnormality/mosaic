@@ -15,6 +15,89 @@
         "Recorded screen/grid timeline"
       ],
       "scope": "Two independent channels, four bars. Not part of the exhaustive behaviour campaign; not hardware timing evidence."
+    },
+    "MA-AUDIO-oilcan-pocket": {
+      "type": "native manual audio acceptance",
+      "implementation": "tools/manual_audio.py:capture",
+      "citations": [
+        "README.md#masks",
+        "characterisation: digital audio integrity"
+      ],
+      "oracles": [
+        "Exact public input and voice assignment",
+        "Audible solo PCM for every contribution",
+        "Four-bar mix PCM headroom and settled tail",
+        "Native screen/grid timeline and recording hashes"
+      ],
+      "scope": "Real-time DSP audio; controlled-time lane inapplicable. Not an exhaustive campaign or physical-norns timing claim."
+    },
+    "MA-AUDIO-bass-and-intervals": {
+      "type": "native manual audio acceptance",
+      "implementation": "tools/manual_audio.py:capture",
+      "citations": [
+        "README.md#masks",
+        "characterisation: digital audio integrity"
+      ],
+      "oracles": [
+        "Exact public input and voice assignment",
+        "Audible solo PCM for every contribution",
+        "Four-bar mix PCM headroom and settled tail",
+        "Native screen/grid timeline and recording hashes"
+      ],
+      "scope": "Real-time DSP audio; controlled-time lane inapplicable. Not an exhaustive campaign or physical-norns timing claim."
+    },
+    "MA-AUDIO-three-voice-conversation": {
+      "type": "native manual audio acceptance",
+      "implementation": "tools/manual_audio.py:capture",
+      "citations": [
+        "README.md#masks",
+        "characterisation: digital audio integrity"
+      ],
+      "oracles": [
+        "Exact public input and voice assignment",
+        "Audible solo PCM for every contribution",
+        "Four-bar mix PCM headroom and settled tail",
+        "Native screen/grid timeline and recording hashes"
+      ],
+      "scope": "Real-time DSP audio; controlled-time lane inapplicable. Not an exhaustive campaign or physical-norns timing claim."
+    },
+    "M-MANUAL-REASON-001": {
+      "type": "native manual acceptance",
+      "implementation": "tools/manual_reason_swing_cases.py:reason_workflow",
+      "citations": [
+        "README.md#result-and-reason",
+        "characterisation outside legacy README: suppressed Role is EMPTY P2 and Velocity is NONE"
+      ],
+      "oracles": [
+        "Six exact visible Result/Reason rows for admitted, rejected and combined reasons",
+        "Exact suppressed-step grid and MIDI absence"
+      ],
+      "scope": "Selected manual acceptance in real-time and controlled-time lanes; not an exhaustive campaign or hardware timing evidence."
+    },
+    "M-MANUAL-SWING-001": {
+      "type": "native manual acceptance",
+      "implementation": "tools/manual_reason_swing_cases.py:swing_workflow",
+      "citations": [
+        "README.md#clocks-swing-and-shuffle"
+      ],
+      "oracles": [
+        "Exact live Swing 25 control screen",
+        "Original native musical pulse timings and tolerances"
+      ],
+      "scope": "Selected manual acceptance in real-time and controlled-time lanes; not an exhaustive campaign or hardware timing evidence."
+    },
+    "MA-DOCTOR-AUDIO-001": {
+      "type": "native manual audio-input acceptance",
+      "implementation": "tools/manual_doctor_capture.py:run",
+      "citations": [
+        "manual/legacy/README-1.4.0.md#rhythm-doctor"
+      ],
+      "oracles": [
+        "Actual public audio input recorded through production softcut",
+        "Listening, analysis and ready-bank screen feedback",
+        "Committed trig grid and emitted MIDI attacks"
+      ],
+      "scope": "Real-time audio-input workflow; controlled audio lane inapplicable. Not exhaustive campaign or physical hardware evidence."
     }
   }
 }

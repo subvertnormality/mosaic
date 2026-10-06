@@ -1,0 +1,13 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+.................F
+Failed tests:
+-------------
+1) test_hardening_channel_step_releases_commit_individually_and_coalesce_only_refresh
+.///lib/channel_edit_page_ui_delta_killers_tests.lua:775: .///lib/channel_edit_page_ui_delta_killers_tests.lua:701: LuaUnit test FAILURE: expected: "mosaic/lib/quantiser"
+actual: "mosaic/lib/musical_merge/strategy"
+expected: true, actual: false
+stack traceback:
+	.///lib/channel_edit_page_ui_delta_killers_tests.lua:775: in upvalue 'test_hardening_channel_step_releases_commit_individually_and_coalesce_only_refresh'
+
+Ran 18 tests in 0.728 seconds, 17 successes, 1 failure

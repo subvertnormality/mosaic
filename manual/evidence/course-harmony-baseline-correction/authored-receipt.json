@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "purpose": "Approved baseline-first C-major listening comparison before preparing and applying D major",
+  "files": [
+    {
+      "path": "manual/course.yaml",
+      "before_sha256": "7085ca8abc08f6b84f7ec9c1376982cc3e102ce9ed2488fe474dcbd9555ff5de",
+      "after_sha256": "5793ae5cfb895958bd0f0e9f3e62fcecabf0206ab9ee4c73389586f8b2279f10"
+    },
+    {
+      "path": "manual/features/reference-workflow.yaml",
+      "before_sha256": "b409a67cb9d1f1b2cb3f16b0e54c66b45f3118e674bcbed9ad25d51db04e8255",
+      "after_sha256": "5421750bec25107d491c6da07c9cf5f6eb5f1915960486648a93608fba2b6670"
+    },
+    {
+      "path": "manual/scene-plans-course.yaml",
+      "before_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+      "after_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8"
+    },
+    {
+      "path": "manual/features/reference-scale.yaml",
+      "before_sha256": "4a585aa65ba6dc76ab3b9c646b195dbc82f8039303285bd41c26ce9f9bcef665",
+      "after_sha256": "68f5389591462169e8b448e900c7f9e07317fbf4e7d6de6fc66077229bfa98d3"
+    }
+  ],
+  "features": 133,
+  "chapters": 10,
+  "teaching_stages": 38,
+  "checkpoints": 48,
+  "checkpoint_assertions_unchanged": true,
+  "apply_stage_unchanged": true,
+  "native_acceptance_claimed": false,
+  "diff_sha256": "4b95da6f9009e4bd2542a349c3d64a372b41d414622d45b65671bde53ea5c174"
+}

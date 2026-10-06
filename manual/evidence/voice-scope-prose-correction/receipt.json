@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "publication_kind": "voice-scope-prose-correction",
+  "created_utc": "2026-10-04T02:00:24.806840+00:00",
+  "scope": "Two authorized prose corrections only; no captures, source audio recipes, voice profiles, manifests or course prose changed.",
+  "changes": [
+    {
+      "path": "manual/features/reference-learn.yaml",
+      "before_sha256": "8967eba1b00feb59774941df5576473aea208187500483eda444247369d29c89",
+      "after_sha256": "ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d",
+      "before_evidence": "manual/evidence/voice-scope-prose-correction/8967eba1b00feb59774941df5576473aea208187500483eda444247369d29c89-reference-learn.yaml",
+      "after_evidence": "manual/evidence/voice-scope-prose-correction/ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d-reference-learn.yaml",
+      "diff": "manual/evidence/voice-scope-prose-correction/reference-learn.yaml.diff"
+    },
+    {
+      "path": "manual/VOICES.md",
+      "before_sha256": "bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc",
+      "after_sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+      "before_evidence": "manual/evidence/voice-scope-prose-correction/bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc-VOICES.md",
+      "after_evidence": "manual/evidence/voice-scope-prose-correction/d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574-VOICES.md",
+      "diff": "manual/evidence/voice-scope-prose-correction/VOICES.md.diff"
+    }
+  ]
+}

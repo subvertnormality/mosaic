@@ -1,0 +1,124 @@
+features:
+- id: development
+  title: Development
+  audience: developer
+  summary: Run the repository tests on a development machine before opening a pull request.
+  prose: 'Run the repository tests before opening a pull request:
+
+
+    ```
+
+    ./test.sh
+
+    ```
+
+
+    Run the harness on a development machine. Do not run it on norns: the harness downloads a norns repository
+    copy, which can conflict with the device installation. If it was run on the device, delete /code/mosaic/lib/tests/test_artefacts
+    to remove that copy.'
+  musical_use: ''
+  related: []
+  sources:
+    readme: manual/legacy/README-1.4.0.md#development
+    behaviour_cases: []
+    code:
+    - test.sh
+    - lib/tests/run_tests.lua
+    - tests/behaviour/run.py
+    - tests/behaviour/suite.py
+  controls:
+  - gesture: Run ./test.sh on the development machine.
+    result: The Lua test suite runs. Do not run the harness on the norns device.
+  details:
+  - title: Behavior changes
+    text: '1. Add the smallest regression for the change.
+
+      2. Confirm that it fails for the expected reason.
+
+      3. Make the production change and rerun the regression.
+
+      4. Run affected unit, integration and emulator behavior tests, then the full Lua suite.
+
+      Follow AGENTS.md. Documentation does not replace observable acceptance.'
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: documentation-only
+    rationale: Development-machine test commands are developer guidance, not a player-input feature.
+    native_gap: No native playback capture is required for the prose; test-suite results remain separate
+      evidence.
+  category: developer
+  parent: null
+  level: 2
+- id: roadmap
+  title: Roadmap
+  audience: developer
+  summary: Microtiming is listed as future work.
+  prose: Microtiming is listed as future work.
+  musical_use: ''
+  related:
+  - development
+  sources:
+    readme: manual/legacy/README-1.4.0.md#roadmap
+    behaviour_cases: []
+    code: []
+  controls: []
+  details:
+  - title: Availability
+    text: The roadmap does not add a control to this release or specify a delivery date.
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: documentation-only
+    rationale: Microtiming is a roadmap entry with no available control in this release.
+    native_gap: No native microtiming acceptance is claimed.
+  category: developer
+  parent: development
+  level: 3
+- id: interesting-components-for-norns-script-developers
+  title: Interesting Components for Norns Script Developers
+  audience: developer
+  summary: The Lua harness and mocks run norns script tests away from hardware.
+  prose: 'Mosaic’s Lua test harness runs scripts away from norns hardware. It downloads a norns repository
+    copy and uses local mocks and shims for luaunit tests. See /lib/tests for the harness and example
+    tests.
+
+
+    This program is released under the GNU license. Copyright Andrew Hillel 2024.'
+  musical_use: ''
+  related:
+  - development
+  sources:
+    readme: manual/legacy/README-1.4.0.md#interesting-components-for-norns-script-developers
+    behaviour_cases: []
+    code:
+    - lib/tests/run_tests.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: documentation-only
+    rationale: Lua harness architecture and license are developer reference content.
+    native_gap: Native scenes do not verify licensing or harness architecture.
+  category: developer
+  parent: development
+  level: 3

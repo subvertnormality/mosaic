@@ -1,0 +1,54 @@
+--- 
++++ 
+@@ -105,6 +105,39 @@
+   return 'independently audited controlled-generation receipted feature review; real-time qualification pending CI' if controlled_local else 'independently audited receipted feature review and scene references only'
+  raise ValueError('Unapproved authored source mutation: '+name)
+ 
++def reference_authoring(doc):
++ """Recover only source-proven Python types/sharing erased by JSON serialization."""
++ run=Path(doc['evidence']);plans={}
++ canonical=lambda value:json.dumps(json.loads(json.dumps(value)),sort_keys=True,separators=(',',':'))
++ for name,expected in doc['source']['plan_files'].items():
++  path=safe(run/'plan-source',name);require(sha(path.read_bytes())==expected,'Changed frozen selector source')
++  for plan in yaml.safe_load(path.read_bytes())['scenes']:
++   require(plan['id'] not in plans,'Duplicate frozen scene selector');plans[plan['id']]=plan
++ scenes=copy.deepcopy(doc['scenes']);requirements={};traces={}
++ for scene in scenes:
++  case=scene['behaviour_case'];shared=requirements.setdefault(case,scene['requirements'])
++  require(shared==scene['requirements'],'Inconsistent source-shared case requirements');scene['requirements']=shared
++  trace_path=Path(scene['evidence']['path'])/'capture-trace.json'
++  require(sha(trace_path.read_bytes())==scene['evidence']['capture_trace_sha256'],'Changed immutable capture trace')
++  trace=traces.setdefault(str(trace_path.resolve()),read(trace_path));cursor=0
++  plan=plans.get(scene['id']);require(plan is not None,'Missing frozen scene selector')
++  for step in scene['steps']:
++   matches=[item for item in plan['steps'] if item['id']==step['id']]
++   require(len(matches)==1,'Missing or duplicate frozen step selector');item=matches[0]
++   accepted=[item['assertion']]+item.get('assertion_alternatives',[]);actual=step['expect']['assertion']
++   matched=[value for value in accepted if canonical(value)==canonical(actual)]
++   require(matched,'Actual assertion differs from frozen selector')
++   if actual.get('kind')=='ensemble-polyrhythm' and 'role_pitches' in actual:
++    typed=matched[0].get('role_pitches')
++    require(isinstance(typed,dict) and all(type(key)is int for key in typed),'Ensemble selector lacks integer channel keys')
++    require(canonical(typed)==canonical(actual['role_pitches']),'Actual role pitches differ from source selector')
++    actual['role_pitches']=copy.deepcopy(typed)
++   end=cursor+len(step['inputs'])
++   require(trace[cursor:end]==step['inputs'],'Actual inputs differ from immutable capture trace')
++   step['inputs']=trace[cursor:end];cursor=end;step.pop('output')
++  scene.pop('evidence')
++ return dict(schema_version=1,fixture_kind='behaviour-case',trace_contract='The original pinned case replays public inputs and verifies every authored semantic selector; per-scene deltas include native encoder units and waits.',scenes=scenes)
++
+ def reproduced_scenes(root,build,m):
+  from manual_doctor_publish import authored_bindings,collect_reports
+  result={}
+@@ -115,10 +148,7 @@
+   output=args[args.index('--output')+1];require(Path(output).name==output and output.endswith('.json'),'Unsafe generated output')
+   doc=read(row['native_report']['path']);require(read(root/'manual/generated'/output)==doc,'Published reference differs from native report')
+   if controlled_generation(m):require(doc.get('validation_scope')=='controlled-manual-generation' and doc.get('realtime_qualification')=='pending-ci' and doc.get('clock_mode')=='controlled-experimental' and doc.get('complete_regression_run') is False,'Controlled generation report scope mismatch')
+-  authored=dict(schema_version=1,fixture_kind='behaviour-case',trace_contract='The original pinned case replays public inputs and verifies every authored semantic selector; per-scene deltas include native encoder units and waits.',scenes=copy.deepcopy(doc['scenes']))
+-  for scene in authored['scenes']:
+-   scene.pop('evidence',None)
+-   for step in scene['steps']:step.pop('output')
++  authored=reference_authoring(doc)
+   result['manual/features/scenes-'+Path(output).stem+'.yaml']=yaml.safe_dump(authored,sort_keys=False).encode()
+  doctor=read(root/'manual/generated/doctor-scenes.json')
+  byname={row['name']:row for row in m['stages']}

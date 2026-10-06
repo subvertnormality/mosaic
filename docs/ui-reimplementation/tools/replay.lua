@@ -3,7 +3,8 @@ local root=arg[1] or 'docs/ui-reimplementation'
 local modules={}
 function include(name)
  if not modules[name] then
-  local path = name == 'mosaic/lib/ui_characters' and 'lib/ui_characters.lua' or (root..'/code/'..name..'.lua')
+  local live={['mosaic/lib/ui_characters']='lib/ui_characters.lua',['mosaic/lib/ui_mini']='lib/ui_mini.lua',['mosaic/lib/ui_mini_atlas']='lib/ui_mini_atlas.lua'}
+  local path=live[name] or (root..'/code/'..name..'.lua')
   modules[name]=assert(loadfile(path))()
  end
  return modules[name]

@@ -1,0 +1,1501 @@
+{
+  "status": "authored_animation_design_v2_not_runtime_configuration",
+  "palette": {
+    ".": "transparent",
+    "a": 7,
+    "b": 11,
+    "c": 15
+  },
+  "source_v1_sha256": "ec263577bf52419578f8d31b23ff7d01e9071d3600c618ec7f259c2d7fe2aac6",
+  "frame_phase": "Eight poses over two quarter beats; frame zero remains the accepted rest drawing exactly.",
+  "assets": [
+    {
+      "id": "R01",
+      "width": 20,
+      "height": 8,
+      "concept": "Doctor greeting",
+      "frames": [
+        [
+          "....cac.......ccc...",
+          "...bbbbb.....ca.ac..",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb......ccc...",
+          "....bbb........b....",
+          "...ccacc.......b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          "....bab.......ccc...",
+          "...bbbbb.....ca.ac..",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb......ccc...",
+          "....bbb........b....",
+          "...bcacb.......b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          ".....cac......bcb...",
+          "....bbbbb....ca.ac..",
+          "...cb.b.bc...ca.ac..",
+          "....bbbbb.....bcb...",
+          ".....bbb.......b....",
+          "...bcacb.......b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          ".....cbc......bcb...",
+          "....bbbbb....ca.ac..",
+          "...cb.b.bc...ca.ac..",
+          "....bbbbb.....bcb...",
+          ".....bbb.......b....",
+          "...ccacc.b.....b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          "....cac.............",
+          "...bbbbb......ccc...",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb.....ca.ac..",
+          "....bbb.......ccc...",
+          "...ccacc.c.....b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          ".....cac............",
+          "....bbbbb.....ccc...",
+          "...cb.b.bc...ca.ac..",
+          "....bbbbb....ca.ac..",
+          ".....bbb......ccc...",
+          "...ccacc.b.....b....",
+          "..cccacccb....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          "....bab.......bcb...",
+          "...bbbbb.....ca.ac..",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb......bcb...",
+          "....bbb........b....",
+          "...ccacc.......b....",
+          "..bccaccb.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          "....bac.......ccc...",
+          "...bbbbb.....ca.ac..",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb......ccc...",
+          "....bbb........b....",
+          "...ccacc.......b....",
+          "..cccaccb.....aaa...",
+          "...aa.aa............"
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Original Doctor dude gives a small nod beside his mirror; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R02",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor listening",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb......bbb.........",
+          "..cb.b.bc....b..cb........",
+          "...bbbbb....b..cacb.......",
+          "....bbb.....b..cacb.......",
+          "...ccacc.....b..cb........",
+          "..cccaccc.....bbb.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb......bbb.........",
+          "..cb.b.bc....b..cb........",
+          "...bbbbb....b..cacb.......",
+          "....bbb.....b..cacb.......",
+          "...bcacb.....b..cb........",
+          "..cccaccc.....bbb.........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb.....ccc.........",
+          "...cb.b.bc...b..cb........",
+          "....bbbbb...b..cacb.......",
+          ".....bbb....b..cacb.......",
+          "...bcacb.....b..cb........",
+          "..cccaccc.....bcb.........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cbc..................",
+          "....bbbbb.....ccc.........",
+          "...cb.b.bc...b..cb........",
+          "....bbbbb...b..cacb.......",
+          ".....bbb....b..cacb.......",
+          "...ccacc.b...b..cb........",
+          "..cccaccc.....bcb.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb.......bbb........",
+          "..cb.b.bc.....b..cb.......",
+          "...bbbbb.....b..cacb......",
+          "....bbb......b..cacb......",
+          "...ccacc.c....b..cb.......",
+          "..cccaccc......bbb........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb......bbb........",
+          "...cb.b.bc....b..cb.......",
+          "....bbbbb....b..cacb......",
+          ".....bbb.....b..cacb......",
+          "...ccacc.b....b..cb.......",
+          "..cccacccb.....bbb........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb......ccc.........",
+          "..cb.b.bc....b..cb........",
+          "...bbbbb....b..cacb.......",
+          "....bbb.....b..cacb.......",
+          "...ccacc.....b..cb........",
+          "..bccaccb.....bcb.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bac...................",
+          "...bbbbb......bbb.........",
+          "..cb.b.bc....b..cb........",
+          "...bbbbb....b..cacb.......",
+          "....bbb.....b..cacb.......",
+          "...ccacc.....b..cb........",
+          "..cccaccb.....bbb.........",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor leans toward a small recording shell; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R03",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor take card",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb.....cccccccc.....",
+          "..cb.b.bc....c......c.....",
+          "...bbbbb.....c.bbb..c.....",
+          "....bbb......c.b....c.....",
+          "...ccacc.....cccccccc.....",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb.....cccccccc.....",
+          "..cb.b.bc....c......c.....",
+          "...bbbbb.....c.bbb..c.....",
+          "....bbb......c.b....c.....",
+          "...bcacb.....cccccccc.....",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb....bbbbcccc.....",
+          "...cb.b.bc...c......c.....",
+          "....bbbbb....c.bbb..c.....",
+          ".....bbb.....c.b....c.....",
+          "...bcacb.....cccccccc.....",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cbc..................",
+          "....bbbbb....bbbbcccc.....",
+          "...cb.b.bc...c......c.....",
+          "....bbbbb....c.bbb..c.....",
+          ".....bbb.....c.b....c.....",
+          "...ccacc.b...cccccccc.....",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac......cccccccc.....",
+          "...bbbbb.....c......c.....",
+          "..cb.b.bc....c.bbb..c.....",
+          "...bbbbb.....c.b....c.....",
+          "....bbb......cccccccc.....",
+          "...ccacc.c................",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac.....cccccccc.....",
+          "....bbbbb....c......c.....",
+          "...cb.b.bc...c.bbb..c.....",
+          "....bbbbb....c.b....c.....",
+          ".....bbb.....cccccccc.....",
+          "...ccacc.b................",
+          "..cccacccb................",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb.....bbbbcccc.....",
+          "..cb.b.bc....c......c.....",
+          "...bbbbb.....c.bbb..c.....",
+          "....bbb......c.b....c.....",
+          "...ccacc.....cccccccc.....",
+          "..bccaccb.................",
+          "...aa.aa.................."
+        ],
+        [
+          "....bac...................",
+          "...bbbbb.....cccccccc.....",
+          "..cb.b.bc....c......c.....",
+          "...bbbbb.....c.bbb..c.....",
+          "....bbb......c.b....c.....",
+          "...ccacc.....cccccccc.....",
+          "..cccaccb.................",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor holds a take card that gently tilts; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R04",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor notes",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....bb..cc..bb....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...ccacc.....a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....bb..cc..bb....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...bcacb.....a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc....aa..aa..aa....",
+          "....bbbbb.....bb..cc..bb....",
+          ".....bbb....................",
+          "...bcacb.....a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cbc....................",
+          "....bbbbb...................",
+          "...cb.b.bc....aa..aa..aa....",
+          "....bbbbb.....bb..cc..bb....",
+          ".....bbb....................",
+          "...ccacc.b...a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....cc..cc..cc....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...ccacc.c...a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc....cc..cc..cc....",
+          "....bbbbb.....bb..cc..bb....",
+          ".....bbb....................",
+          "...ccacc.b...a....a....a....",
+          "..cccacccb..aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....aa..aa..aa....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...ccacc.....a....a....a....",
+          "..bccaccb...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....bb..cc..bb....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...ccacc.....a....a....a....",
+          "..cccaccb...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor follows three small analysis dots with a subtle head nod; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R05",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor window",
+      "frames": [
+        [
+          "cccccaccccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "c..ccacc..c.................",
+          "c.cccaccc.c.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccbabcccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "c..bcacb..c.................",
+          "c.cccaccc.c.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccccacccc.................",
+          "c...bbbbb.c.....cc..........",
+          "c..cb.b.bcc....c............",
+          "c...bbbbb.c....c............",
+          "c....bbb..c.....cc..........",
+          "a..bcacb..a.................",
+          "a.cccaccc.a.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccbcbcccc.................",
+          "c...bbbbb.c.....cc..........",
+          "c..cb.b.bcc....c............",
+          "c...bbbbb.c....c............",
+          "c....bbb..c.....cc..........",
+          "a..ccacc.ba.................",
+          "a.cccaccc.a.................",
+          "ccccccccccc................."
+        ],
+        [
+          "cccccaccccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "b..ccacc.cb.................",
+          "b.cccaccc.b.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccccacccc.................",
+          "c...bbbbb.c.....cc..........",
+          "c..cb.b.bcc....c............",
+          "c...bbbbb.c....c............",
+          "c....bbb..c.....cc..........",
+          "b..ccacc.bb.................",
+          "b.cccacccbb.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccbabcccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "a..ccacc..a.................",
+          "a.bccaccb.a.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccbaccccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "c..ccacc..c.................",
+          "c.cccaccb.c.................",
+          "ccccccccccc................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor leans into a little window frame and returns; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R06",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor alignment",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.............c.......",
+          "...ccacc....cccccccccccc....",
+          "..cccaccc...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.............c.......",
+          "...bcacb....cccccccccccc....",
+          "..cccaccc...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb.......b...........",
+          "...cb.b.bc......b...c.......",
+          "....bbbbb.......b...c.......",
+          ".....bbb............c.......",
+          "...bcacb....bbbbcccccccc....",
+          "..cccaccc...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          ".....cbc....................",
+          "....bbbbb.......b...........",
+          "...cb.b.bc......b...c.......",
+          "....bbbbb.......b...c.......",
+          ".....bbb............c.......",
+          "...ccacc.b..bbbbcccccccc....",
+          "..cccaccc...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.....cccccccccccc....",
+          "...ccacc.c..c.a.a.a.a.ac....",
+          "..cccaccc...cccccccccccc....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb.......b...........",
+          "...cb.b.bc......b...c.......",
+          "....bbbbb.......b...c.......",
+          ".....bbb....cccccccccccc....",
+          "...ccacc.b..c.a.a.a.a.ac....",
+          "..cccacccb..cccccccccccc....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.............c.......",
+          "...ccacc....bbbbcccccccc....",
+          "..bccaccb...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          "....bac.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.............c.......",
+          "...ccacc....cccccccccccc....",
+          "..cccaccb...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor moves a small ruler beside two staggered marks; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R07",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor aligned markers",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb......ccc...ccc.....",
+          "..cb.b.bc.....c.....c.......",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...ccacc......c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb......ccc...ccc.....",
+          "..cb.b.bc.....c.....c.......",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...bcacb......c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb.....cbb...cbb.....",
+          "...cb.b.bc....c.....c.......",
+          "....bbbbb.....c.....c.......",
+          ".....bbb......c.....c.......",
+          "...bcacb......c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cbc....................",
+          "....bbbbb.....cbb...cbb.....",
+          "...cb.b.bc....c.....c.......",
+          "....bbbbb.....c.....c.......",
+          ".....bbb......c.....c.......",
+          "...ccacc.b....c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb......c.....c.......",
+          "..cb.b.bc.....ccc...ccc.....",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...ccacc.c....c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb.....c.....c.......",
+          "...cb.b.bc....ccc...ccc.....",
+          "....bbbbb.....c.....c.......",
+          ".....bbb......c.....c.......",
+          "...ccacc.b....c.....c.......",
+          "..cccacccb...aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb......cbb...cbb.....",
+          "..cb.b.bc.....c.....c.......",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...ccacc......c.....c.......",
+          "..bccaccb....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bac.....................",
+          "...bbbbb......ccc...ccc.....",
+          "..cb.b.bc.....c.....c.......",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...ccacc......c.....c.......",
+          "..cccaccb....aaa...aaa......",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor nods beside two matched marker flags; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R08",
+      "width": 24,
+      "height": 8,
+      "concept": "Doctor brush",
+      "frames": [
+        [
+          "....cac..........ccc....",
+          "...bbbbb........bcc.....",
+          "..cb.b.bc......ab.......",
+          "...bbbbb......ab........",
+          "....bbb......ab.........",
+          "...ccacc....ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ],
+        [
+          "....bab..........ccc....",
+          "...bbbbb........bcc.....",
+          "..cb.b.bc......ab.......",
+          "...bbbbb......ab........",
+          "....bbb......ab.........",
+          "...bcacb....ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ],
+        [
+          ".....cac.........bbb....",
+          "....bbbbb.......bbc.....",
+          "...cb.b.bc.....ab.......",
+          "....bbbbb.....ab........",
+          ".....bbb.....ab.........",
+          "...bcacb....ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ],
+        [
+          ".....cbc.........bbb....",
+          "....bbbbb.......bbc.....",
+          "...cb.b.bc.....ab.......",
+          "....bbbbb.....ab........",
+          ".....bbb.....ab.........",
+          "...ccacc.b..ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ],
+        [
+          "....cac...........ccc...",
+          "...bbbbb.........bcc....",
+          "..cb.b.bc......ab.......",
+          "...bbbbb......ab........",
+          "....bbb......ab.........",
+          "...ccacc.c..ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ],
+        [
+          ".....cac..........ccc...",
+          "....bbbbb........bcc....",
+          "...cb.b.bc.....ab.......",
+          "....bbbbb.....ab........",
+          ".....bbb.....ab.........",
+          "...ccacc.b..ab..........",
+          "..cccacccb..............",
+          "...aa.aa................"
+        ],
+        [
+          "....bab..........bbb....",
+          "...bbbbb........bbc.....",
+          "..cb.b.bc......ab.......",
+          "...bbbbb......ab........",
+          "....bbb......ab.........",
+          "...ccacc....ab..........",
+          "..bccaccb...............",
+          "...aa.aa................"
+        ],
+        [
+          "....bac..........ccc....",
+          "...bbbbb........bcc.....",
+          "..cb.b.bc......ab.......",
+          "...bbbbb......ab........",
+          "....bbb......ab.........",
+          "...ccacc....ab..........",
+          "..cccaccb...............",
+          "...aa.aa................"
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor gently raises a small paint brush; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R09",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor painted bed",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....c...c...c.....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...ccacc.....a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....c...c...c.....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...bcacb.....a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc....b...b...b.....",
+          "....bbbbb.....b...b...b.....",
+          ".....bbb.....aaaaaaaaaaa....",
+          "...bcacb.....a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cbc....................",
+          "....bbbbb...................",
+          "...cb.b.bc....b...b...b.....",
+          "....bbbbb.....b...b...b.....",
+          ".....bbb.....aaaaaaaaaaa....",
+          "...ccacc.b...a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc......c...c...c....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...ccacc.c...a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc.....c...c...c....",
+          "....bbbbb.....b...b...b.....",
+          ".....bbb.....aaaaaaaaaaa....",
+          "...ccacc.b...a.........a....",
+          "..cccacccb...aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....b...b...b.....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...ccacc.....a.........a....",
+          "..bccaccb....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....c...c...c.....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...ccacc.....a.........a....",
+          "..cccaccb....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor tends a small dotted paint bed with a hand nod; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R10",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor bank box",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb.......cccc.......",
+          "..cb.b.bc......c..c.......",
+          "...bbbbb.....cccccccc.....",
+          "....bbb......c.aaaa.c.....",
+          "...ccacc.....c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb.......cccc.......",
+          "..cb.b.bc......c..c.......",
+          "...bbbbb.....cccccccc.....",
+          "....bbb......c.aaaa.c.....",
+          "...bcacb.....c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb......bbbb.......",
+          "...cb.b.bc.....c..c.......",
+          "....bbbbb....cccccccc.....",
+          ".....bbb.....c.aaaa.c.....",
+          "...bcacb.....c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cbc..................",
+          "....bbbbb......bbbb.......",
+          "...cb.b.bc.....c..c.......",
+          "....bbbbb....cccccccc.....",
+          ".....bbb.....c.aaaa.c.....",
+          "...ccacc.b...c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac........cccc.......",
+          "...bbbbb.......c..c.......",
+          "..cb.b.bc.................",
+          "...bbbbb.....cccccccc.....",
+          "....bbb......c.aaaa.c.....",
+          "...ccacc.c...c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac.......cccc.......",
+          "....bbbbb......c..c.......",
+          "...cb.b.bc................",
+          "....bbbbb....cccccccc.....",
+          ".....bbb.....c.aaaa.c.....",
+          "...ccacc.b...c......c.....",
+          "..cccacccb...cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb.......bbbb.......",
+          "..cb.b.bc......c..c.......",
+          "...bbbbb.....cccccccc.....",
+          "....bbb......c.aaaa.c.....",
+          "...ccacc.....c......c.....",
+          "..bccaccb....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          "....bac...................",
+          "...bbbbb.......cccc.......",
+          "..cb.b.bc......c..c.......",
+          "...bbbbb.....cccccccc.....",
+          "....bbb......c.aaaa.c.....",
+          "...ccacc.....c......c.....",
+          "..cccaccb....cccccccc.....",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor holds a closed bank box whose handle tilts; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R11",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor rest stool",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...cccccc...ccc.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...bcccbc...ccc.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc..................",
+          "....bbbbb............ccc....",
+          ".....bbb............ccacc...",
+          "...bcccbc...aaa.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          ".....cbc....................",
+          "....bbbbb...................",
+          "...cb.b.bc..................",
+          "....bbbbb............ccc....",
+          ".....bbb............ccacc...",
+          "...ccccccb..aaa.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...ccccccc..bbb.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc..................",
+          "....bbbbb............ccc....",
+          ".....bbb............ccacc...",
+          "...ccccccb..bbb.....ccacc...",
+          "...a..a..b...a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...cccccc...aaa.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          "....bac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...cccccc...ccc.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor sits beside a stationary stop pebble and breathes; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R12",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor empty tray",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb..................",
+          "....bbb......b......b.....",
+          "...ccacc.....b......b.....",
+          "..cccaccc.....bbbbbb......",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb..................",
+          "....bbb......b......b.....",
+          "...bcacb.....b......b.....",
+          "..cccaccc.....bbbbbb......",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb.................",
+          "...cb.b.bc................",
+          "....bbbbb.................",
+          ".....bbb.....b......b.....",
+          "...bcacb.....b......b.....",
+          "..cccaccc.....aaaabb......",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cbc..................",
+          "....bbbbb.................",
+          "...cb.b.bc................",
+          "....bbbbb.................",
+          ".....bbb.....b......b.....",
+          "...ccacc.b...b......b.....",
+          "..cccaccc.....aaaabb......",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb.....b......b.....",
+          "....bbb......b......b.....",
+          "...ccacc.c....bbbbbb......",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb.................",
+          "...cb.b.bc................",
+          "....bbbbb....b......b.....",
+          ".....bbb.....b......b.....",
+          "...ccacc.b....bbbbbb......",
+          "..cccacccb................",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb..................",
+          "....bbb......b......b.....",
+          "...ccacc.....b......b.....",
+          "..bccaccb.....aaaabb......",
+          "...aa.aa.................."
+        ],
+        [
+          "....bac...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb..................",
+          "....bbb......b......b.....",
+          "...ccacc.....b......b.....",
+          "..cccaccb.....bbbbbb......",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor looks into a small empty tray and returns upright; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R13",
+      "width": 30,
+      "height": 8,
+      "concept": "Doctor lane ribbons",
+      "frames": [
+        [
+          "....cac.......................",
+          "...bbbbb......bbbbbbbbbbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...ccacc......aaaaaaaaaaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          "....bab.......................",
+          "...bbbbb......bbbbbbbbbbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...bcacb......aaaaaaaaaaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          ".....cac......................",
+          "....bbbbb.....bcccbbbbbbb.....",
+          "...cb.b.bc...b...........b....",
+          "....bbbbb.....ccccccccccc.....",
+          ".....bbb.....c...........c....",
+          "...bcacb......acccaaaaaaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          ".....cbc......................",
+          "....bbbbb.....bcccbbbbbbb.....",
+          "...cb.b.bc...b...........b....",
+          "....bbbbb.....ccccccccccc.....",
+          ".....bbb.....c...........c....",
+          "...ccacc.b....acccaaaaaaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          "....cac.......................",
+          "...bbbbb......bbbbbbcccbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...ccacc.c....aaaaaacccaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          ".....cac......................",
+          "....bbbbb.....bbbbbbcccbb.....",
+          "...cb.b.bc...b...........b....",
+          "....bbbbb.....ccccccccccc.....",
+          ".....bbb.....c...........c....",
+          "...ccacc.b....aaaaaacccaa.....",
+          "..cccacccb...a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          "....bab.......................",
+          "...bbbbb......bcccbbbbbbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...ccacc......acccaaaaaaa.....",
+          "..bccaccb....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          "....bac.......................",
+          "...bbbbb......bbbbbbbbbbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...ccacc......aaaaaaaaaaa.....",
+          "..cccaccb....a...........a....",
+          "...aa.aa......................"
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor follows three parallel ribbons with a gentle nod; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R14",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor limit fence",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc....c...c...c......",
+          "...bbbbb.....ccccccccc......",
+          "....bbb......c...c...c......",
+          "...ccacc.....ccccccccc......",
+          "..cccaccc....c...c...c......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc....c...c...c......",
+          "...bbbbb.....ccccccccc......",
+          "....bbb......c...c...c......",
+          "...bcacb.....ccccccccc......",
+          "..cccaccc....c...c...c......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc...c...c...b......",
+          "....bbbbb....ccccccccb......",
+          ".....bbb.....c...c...b......",
+          "...bcacb.....ccccccccb......",
+          "..cccaccc....c...c...b......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cbc....................",
+          "....bbbbb...................",
+          "...cb.b.bc...c...c...b......",
+          "....bbbbb....ccccccccb......",
+          ".....bbb.....c...c...b......",
+          "...ccacc.b...ccccccccb......",
+          "..cccaccc....c...c...b......",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc....c...c....c.....",
+          "...bbbbb.....cccccccc.c.....",
+          "....bbb......c...c....c.....",
+          "...ccacc.c...cccccccc.c.....",
+          "..cccaccc....c...c....c.....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc...c...c....c.....",
+          "....bbbbb....cccccccc.c.....",
+          ".....bbb.....c...c....c.....",
+          "...ccacc.b...cccccccc.c.....",
+          "..cccacccb...c...c....c.....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc....c...c...b......",
+          "...bbbbb.....ccccccccb......",
+          "....bbb......c...c...b......",
+          "...ccacc.....ccccccccb......",
+          "..bccaccb....c...c...b......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc....c...c...c......",
+          "...bbbbb.....ccccccccc......",
+          "....bbb......c...c...c......",
+          "...ccacc.....ccccccccc......",
+          "..cccaccb....c...c...c......",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor adjusts a short measuring fence by one pixel; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R15",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor browsing leaf",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb........ccc.......",
+          "..cb.b.bc......cb.ac......",
+          "...bbbbb......cb..ac......",
+          "....bbb......cb...ac......",
+          "...ccacc......cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb........ccc.......",
+          "..cb.b.bc......cb.ac......",
+          "...bbbbb......cb..ac......",
+          "....bbb......cb...ac......",
+          "...bcacb......cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb.......bbb.......",
+          "...cb.b.bc.....cb.ac......",
+          "....bbbbb.....cb..ac......",
+          ".....bbb.....cb...ac......",
+          "...bcacb......cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cbc..................",
+          "....bbbbb.......bbb.......",
+          "...cb.b.bc.....cb.ac......",
+          "....bbbbb.....cb..ac......",
+          ".....bbb.....cb...ac......",
+          "...ccacc.b....cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb.........ccc......",
+          "..cb.b.bc......c.b.a......",
+          "...bbbbb......cb..ac......",
+          "....bbb......cb...ac......",
+          "...ccacc.c....cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb........ccc......",
+          "...cb.b.bc.....c.b.a......",
+          "....bbbbb.....cb..ac......",
+          ".....bbb.....cb...ac......",
+          "...ccacc.b....cccccc......",
+          "..cccacccb......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb........bbb.......",
+          "..cb.b.bc......cb.ac......",
+          "...bbbbb......cb..ac......",
+          "....bbb......cb...ac......",
+          "...ccacc......cccccc......",
+          "..bccaccb.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bac...................",
+          "...bbbbb........ccc.......",
+          "..cb.b.bc......cb.ac......",
+          "...bbbbb......cb..ac......",
+          "....bbb......cb...ac......",
+          "...ccacc......cccccc......",
+          "..cccaccb.......a.........",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor turns one small leaf-shaped page; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    },
+    {
+      "id": "R16",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor correction leaf",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb.......bbb..........",
+          "..cb.b.bc.....b...bbb.......",
+          "...bbbbb.....b..c....b......",
+          "....bbb......b..cc....b.....",
+          "...ccacc......b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb.......bbb..........",
+          "..cb.b.bc.....b...bbb.......",
+          "...bbbbb.....b..c....b......",
+          "....bbb......b..cc....b.....",
+          "...bcacb......b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb......aaa..........",
+          "...cb.b.bc....b...bbb.......",
+          "....bbbbb....b..c....b......",
+          ".....bbb.....b..cc....b.....",
+          "...bcacb......b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cbc....................",
+          "....bbbbb......aaa..........",
+          "...cb.b.bc....b...bbb.......",
+          "....bbbbb....b..c....b......",
+          ".....bbb.....b..cc....b.....",
+          "...ccacc.b....b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb........bbb.........",
+          "..cb.b.bc.....b...bbb.......",
+          "...bbbbb.....b..c....b......",
+          "....bbb......b..cc....b.....",
+          "...ccacc.c....b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb.......bbb.........",
+          "...cb.b.bc....b...bbb.......",
+          "....bbbbb....b..c....b......",
+          ".....bbb.....b..cc....b.....",
+          "...ccacc.b....b..c...b......",
+          "..cccacccb.....bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb.......aaa..........",
+          "..cb.b.bc.....b...bbb.......",
+          "...bbbbb.....b..c....b......",
+          "....bbb......b..cc....b.....",
+          "...ccacc......b..c...b......",
+          "..bccaccb......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bac.....................",
+          "...bbbbb.......bbb..........",
+          "..cb.b.bc.....b...bbb.......",
+          "...bbbbb.....b..c....b......",
+          "....bbb......b..cc....b.....",
+          "...ccacc......b..c...b......",
+          "..cccaccb......bbbbbb.......",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Eight authored poses: breath and mirror anticipation, head lean, tool/hand lift, page-specific prop response, followthrough, settling and release. Doctor holds a softly bent correction leaf that straightens; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data.",
+      "frame_count": 8
+    }
+  ]
+}

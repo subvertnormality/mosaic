@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-10-04T12:34:52.104991+00:00",
+  "owner_freeze_receipt": "/home/andy/mosaic-manual-1.4.0/docs/testing/vertical-list-ui/p02-truthful-footer/final-editorial-freeze.json",
+  "owner_freeze_sha256": "909dedf4399775b38b11573552615c4f75e3f8de52d93308960e572bfd418607",
+  "owner_frozen_files_match": {
+    "lib/ui_live.lua": true,
+    "lib/tests/lib/ui_live_tests.lua": true,
+    "tests/behaviour/contract/live_ui_feedback.py": true,
+    "tests/behaviour/contract/live_ui_sweep.py": true,
+    "tests/behaviour/test_ui.py": true,
+    "manual/features/reference-pattern.yaml": true,
+    "docs/ui-reimplementation/current-source-review.json": true,
+    "docs/ui-reimplementation/source-inventory.json": true,
+    "docs/ui-reimplementation/generated/source-review-receipt.json": true
+  },
+  "owner_frozen_file_hashes": {
+    "lib/ui_live.lua": "bbdee8cf4cef9eedac03bf435095b0324fee31d6fcb81714bc6d7a06e54242ab",
+    "lib/tests/lib/ui_live_tests.lua": "58024da1288998c7b5311a70438afdbb1ec0108fbb39ddcb98c7c91c874ad0ee",
+    "tests/behaviour/contract/live_ui_feedback.py": "47682bb0536f3506386f558759cc898ed9c2a01606e2b6d25092bb8a7c78ffdd",
+    "tests/behaviour/contract/live_ui_sweep.py": "ff2bd9cb2304e2cf99d7c03bc3a5c6206679c400e02af6fb93d5c2d04c523a1a",
+    "tests/behaviour/test_ui.py": "2f3a899d3a7b14f08c44eb15c51f7f8c4547ee13cb30046398c6f311eea6fc75",
+    "manual/features/reference-pattern.yaml": "f417b2010a2e7deac15168610ee874d41dae7825689f96bf63ee7350ce5146f9",
+    "docs/ui-reimplementation/current-source-review.json": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975",
+    "docs/ui-reimplementation/source-inventory.json": "126ac9d0b9adc7f6321de8938ce30dfec9fb3b163e0c7a0a6465be402bd64c1e",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "6bce24656ba00973c806d02bdbdb6db7fdfc843a6e5d91aca790404bd9ee5025"
+  },
+  "capture_source_hashes": {
+    "manual/scene-plans-remaining.yaml": "46af36a5c136f0be1b984cebaeccd8864ae32a6c228e70aeb0f0ac09381d0a33",
+    "tools/manual_case_capture.py": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+    "tools/manual_capture.py": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+    "tools/manual_model.py": "22be5eaf517c5d00080c98a56638945d940eaba95a2dd6f4153364262d728f89",
+    "tests/behaviour/cases.py": "440fd85e793f6985411069a95573f89fd4e87a27ad19310b88b0e97d4c1820bf",
+    "tests/behaviour/contract/live_ui_feedback.py": "47682bb0536f3506386f558759cc898ed9c2a01606e2b6d25092bb8a7c78ffdd",
+    "tests/behaviour/contract/live_ui_sweep.py": "ff2bd9cb2304e2cf99d7c03bc3a5c6206679c400e02af6fb93d5c2d04c523a1a",
+    "tests/behaviour/driver.py": "924cf69c0c32ce6e06657587585ed893ba72ce5af5ee288a5a3b4fbf81e47007",
+    "manual/case-scenes.schema.json": "39efba797de43c416d59e7931783fa96e6c2f2a64e8cda10f2d77530040e125e"
+  },
+  "installation_path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+  "emulator_current_json_sha256": "8b33811d483f11b8375cd631fc753df379c3c4765b7bd6d56c79b1aa1e849c05",
+  "prior_failed_manifest_sha256": "51904c9db687e16dce2dc588b87b2b403128ac2c6badf4d2e0a5ebe732325ef0",
+  "prior_failure_json_sha256": "b04249707f4662af3bd9ec38b9af45fc889a68637dc6af2f745ed4fc83ec9170"
+}

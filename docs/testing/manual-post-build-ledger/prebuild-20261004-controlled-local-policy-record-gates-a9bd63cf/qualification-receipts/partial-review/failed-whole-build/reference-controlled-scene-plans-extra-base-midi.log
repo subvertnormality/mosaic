@@ -1,0 +1,10 @@
+Verified M-RANGE-REJECT-001 / range-reject-and-recover
+Verified M-MUTE-001 / mute-live-resume
+Verified M-PARAM-001 / strum-division-bounds
+Verified M-PARAM-046 / parameter-slot-endpoints
+Verified M-TRANS-009 / transpose-next-onset
+Verified M-OPT-KEYS-001 / keyboard-white-key-options
+Verified M-SONG-FLOW-001 / song-mode-groups-and-selection
+Verified M-LIVEUI-SHAPETRIG-001 / merge-shape-owns-trigs
+Verified M-HARMONY-FAILURE-001 / harmony-range-failure-and-fallback
+/home/andy/mosaic-manual-runs/6f1769c53dbd45278e595d96883a1554

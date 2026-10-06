@@ -1,0 +1,12 @@
+{
+  "files": {
+    "lib/ui_live.lua": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+    "lib/tests/lib/ui_live_tests.lua": "0a7e0a3797863c104ee8ae93dd8968546e8d3df63a7088e317bde996a2831843",
+    "tests/behaviour/contract/live_ui_feedback.py": "cd1b04e2a4bbbbc2404aa668853c574d4031da008a4f41b35e4c3f3e189e1372",
+    "tests/behaviour/contract/live_ui_sweep.py": "aaaa8d94691e7ed7c62168d52700a29fe617a7a51e4852ccc18787c818eb5eb3",
+    "tests/behaviour/test_ui.py": "80a1d18b352714923a7af0c84818568b3b132e0a3d0025e72b6685b48b524fe3",
+    "manual/features/reference-pattern.yaml": "03d48e5fb111831c11818bfd52c77c8db1b5242871af3aad363e245b1c9a3c14"
+  },
+  "production_unfixed": true,
+  "spacing_fix_evidence_unchanged": true
+}

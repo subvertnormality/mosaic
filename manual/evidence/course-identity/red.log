@@ -1,0 +1,21 @@
+FF
+======================================================================
+FAIL: test_course_source_is_pinned_and_edit_invalidates_identity (test_manual_authority.ManualAuthorityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority.py", line 116, in test_course_source_is_pinned_and_edit_invalidates_identity
+    self.assertIn("manual/course.yaml",before["files"])
+AssertionError: 'manual/course.yaml' not found in {'manual/book.yaml': 'f95536c527f0e492eccebbcca89ae63f965959f8cbdb864f279ec8eaea928bf4', 'manual/features/a.yaml': '72bbaa010d70d47b6eea41ad83aefb433f016ea5dbe47d273e5d3abb43a2de10'}
+
+======================================================================
+FAIL: test_course_source_escape_is_rejected (test_manual_authority.ManualAuthorityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority.py", line 123, in test_course_source_escape_is_rejected
+    authoring_identity(self.root)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.008s
+
+FAILED (failures=2)

@@ -18,7 +18,7 @@ def endurance_mixed(c,duration=DURATION):
     # Global tempo 90 -> 120 on the song page's second screen.
     c.tap(6,8);c.ui.turn(1, 1);c.enc(3,BPM-90);c.key(3)
     # Global Feel (A02) shows the applied Tempo as its focused selected field.
-    c.ui.expect_selected_field('focused',label='Tempo',value=str(BPM))
+    c.ui.expect_selected_field('vertical_list',label='Tempo',value=str(BPM))
     c.ui.turn(1, -1);c.tap(3,8)
     marker=c.snapshot()['midi_count'] # build-phase keyboard monitoring precedes Play
     c.tap(1,8)

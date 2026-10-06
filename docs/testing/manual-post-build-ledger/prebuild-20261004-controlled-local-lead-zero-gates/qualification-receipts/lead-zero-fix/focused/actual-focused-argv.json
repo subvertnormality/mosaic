@@ -1,0 +1,15 @@
+[
+  "/usr/bin/python3",
+  "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+  "--plans",
+  "manual/scene-plans-lead-panic.yaml",
+  "--scene",
+  "lock-lead-menu-values",
+  "--clock-mode",
+  "controlled-experimental",
+  "--experimental-install",
+  "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "--profile",
+  "base-midi",
+  "--controlled-local"
+]

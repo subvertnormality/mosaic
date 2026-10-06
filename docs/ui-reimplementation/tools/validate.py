@@ -15,6 +15,20 @@ def manual_slices(manual):
  heads=list(re.finditer(r'^(#{1,6}) (.+)$',manual,re.M))
  return heads,[manual[h.end():(heads[n+1].start()if n+1<len(heads)else len(manual))].strip()for n,h in enumerate(heads)]
 
+def manual_source_text(repo,descriptor=None,reviewed_files=None):
+ """Read an explicitly reviewed full manual snapshot after overview migration."""
+ if descriptor is None:return (repo/'README.md').read_text(encoding='utf8').replace('\r\n','\n')
+ assert isinstance(descriptor,dict) and descriptor.get('meaning'), 'missing manual source semantic review'
+ name=descriptor.get('file');assert isinstance(name,str) and name, 'missing manual source path'
+ relative=Path(name);assert not relative.is_absolute() and '..' not in relative.parts, 'manual source outside repository'
+ path=(repo/relative).resolve()
+ try:path.relative_to(repo.resolve())
+ except ValueError:raise AssertionError('manual source outside repository')
+ assert reviewed_files is not None and reviewed_files.get(name)==descriptor.get('sha256'), 'unreviewed manual source identity'
+ raw=path.read_bytes().replace(b'\r\n',b'\n')
+ assert hashlib.sha256(raw).hexdigest()==descriptor.get('sha256'), 'manual source fingerprint drift'
+ return raw.decode('utf8')
+
 def doctor_overlay_errors(s,check_sources=False):
  """grid.doctor_override must partition its declared region of the Trig grid with the adapter lane layout."""
  ov=s['grid'].get('doctor_override');errors=[]
@@ -180,9 +194,11 @@ def validate(s=None,inventory=None,check_sources=True):
   require(hashlib.sha256(section['text'].encode()).hexdigest()==section['sha256'],'manual section digest '+section['id'])
   for sid in section['screens']:require(sid in s['screens'],'manual target '+section['id'])
  if check_sources:
-  manual=(REPO/'README.md').read_text(encoding='utf8').replace('\r\n','\n')
+  try:manual=manual_source_text(REPO,i.get('manual_source'),i['files'])
+  except (AssertionError,OSError) as error:
+   require(False,str(error));manual=''
   heads,texts=manual_slices(manual)
-  # Each manual section is checked against the README slice itself, not the inventory's stored copy.
+  # Each historical MAN section is checked against its explicitly pinned source, never fabricated from overview headings.
   for section,text in zip(i['manual_sections'],texts):require(hashlib.sha256(text.encode()).hexdigest()==section['sha256'],'manual section drift '+section['id'])
   require(len(heads)==len(i['manual_sections']),'missing manual section')
   require([h[2]for h in heads]==[x['heading']for x in i['manual_sections']],'manual heading inventory')

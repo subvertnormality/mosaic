@@ -1,0 +1,21 @@
+.EE.........
+======================================================================
+ERROR: test_earlier_image_cannot_be_accepted_as_after_assertion_capture (test_manual_publication_verify.DeferredCaptureIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 96, in test_earlier_image_cannot_be_accepted_as_after_assertion_capture
+    with self.assertRaisesRegex(ValueError,'precedes'):audit.check_capture_stage(step,results,plan)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_capture_stage'
+
+======================================================================
+ERROR: test_explicit_before_finish_flag_requires_pinned_authorization_and_ui_evidence (test_manual_publication_verify.DeferredCaptureIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 98, in test_explicit_before_finish_flag_requires_pinned_authorization_and_ui_evidence
+    step,results,plan=self.fixture();audit.check_capture_stage(step,results,plan)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_capture_stage'
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.012s
+
+FAILED (errors=2)

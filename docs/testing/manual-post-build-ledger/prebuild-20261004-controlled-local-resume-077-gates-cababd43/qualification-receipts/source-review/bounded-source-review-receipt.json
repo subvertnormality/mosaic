@@ -1,0 +1,170 @@
+{
+  "root_authorization": "Root installed reviewed four finalqualified tools and explicitly authorized requisite ledger/candidate updates in this task; no generation completion.",
+  "draft": {
+    "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/review-delta.json",
+    "sha256": "41793a8bdc55ba2173802d65b9f970a488fdd3366d8e8f799c322353d0001648"
+  },
+  "member_deltas": [
+    {
+      "path": "manual/features/cookbook.yaml",
+      "before_sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+      "current_sha256": "af43f4a5bda3c90e712e9ab9278f424d4ae9e9cacf92b4f63bafe20376f8df67",
+      "kind": "authored-prerequisite-correction",
+      "preserved_before": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/manual/features/cookbook.yaml",
+        "sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a"
+      }
+    },
+    {
+      "path": "manual/features/scenes-doctor-scenes.yaml",
+      "before_sha256": "09bab660df9b7b98bafaa03f7a432dc85602d1c16f7ea0e3ab0b85ced1117359",
+      "current_sha256": "e937d5567481348aa7800657b24b97bd0bf66859ed02fc21d686cfdc9e0d74ee",
+      "kind": "historical-partial-generated-publication",
+      "preserved_before": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/manual/features/scenes-doctor-scenes.yaml",
+        "sha256": "09bab660df9b7b98bafaa03f7a432dc85602d1c16f7ea0e3ab0b85ced1117359"
+      },
+      "serialization_reproduction": {
+        "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-doctor-scenes.yaml",
+        "sha256": "e937d5567481348aa7800657b24b97bd0bf66859ed02fc21d686cfdc9e0d74ee"
+      },
+      "qualification": "Exact pinned generator reproduction from passed same-parent stages; full failed generation is not complete."
+    },
+    {
+      "path": "manual/features/scenes-reference-remaining-scenes.yaml",
+      "before_sha256": "8c7ecaa953f52f9c5a79a0fdf4e1eef0234f222af2514320c077225aacef4a94",
+      "current_sha256": "119dfbdaf993f1d78462d407d4e374306625a402755b659ba2f6f5f57033af1c",
+      "kind": "historical-partial-generated-publication",
+      "preserved_before": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/manual/features/scenes-reference-remaining-scenes.yaml",
+        "sha256": "8c7ecaa953f52f9c5a79a0fdf4e1eef0234f222af2514320c077225aacef4a94"
+      },
+      "serialization_reproduction": {
+        "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-remaining-scenes.yaml",
+        "sha256": "119dfbdaf993f1d78462d407d4e374306625a402755b659ba2f6f5f57033af1c"
+      },
+      "qualification": "Exact pinned generator reproduction from passed same-parent stages; full failed generation is not complete."
+    },
+    {
+      "path": "manual/features/scenes-reference-scenes.yaml",
+      "before_sha256": "039b06d5a7ee9b3cea172782781257da6be7bd0f9d7f9592d99c617378e9f1fc",
+      "current_sha256": "c664c494e7121360fa110a953f7eb49a14731e77f851482ce0ae13fdd2aa33d8",
+      "kind": "historical-partial-generated-publication",
+      "preserved_before": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/manual/features/scenes-reference-scenes.yaml",
+        "sha256": "039b06d5a7ee9b3cea172782781257da6be7bd0f9d7f9592d99c617378e9f1fc"
+      },
+      "serialization_reproduction": {
+        "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-scenes.yaml",
+        "sha256": "c664c494e7121360fa110a953f7eb49a14731e77f851482ce0ae13fdd2aa33d8"
+      },
+      "qualification": "Exact pinned generator reproduction from passed same-parent stages; full failed generation is not complete."
+    },
+    {
+      "path": "manual/features/scenes-reference-vertical-list-scenes.yaml",
+      "before_sha256": "49d96e0793e08b323b9f314bc559b4b3d5734654d61ad83b1485a82b39f69c85",
+      "current_sha256": "77b88ac21ba47bc1d38811b9986bac6a97872b738a88753fdde81c0a1131a0fc",
+      "kind": "historical-partial-generated-publication",
+      "preserved_before": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/manual/features/scenes-reference-vertical-list-scenes.yaml",
+        "sha256": "49d96e0793e08b323b9f314bc559b4b3d5734654d61ad83b1485a82b39f69c85"
+      },
+      "serialization_reproduction": {
+        "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-vertical-list-scenes.yaml",
+        "sha256": "77b88ac21ba47bc1d38811b9986bac6a97872b738a88753fdde81c0a1131a0fc"
+      },
+      "qualification": "Exact pinned generator reproduction from passed same-parent stages; full failed generation is not complete."
+    },
+    {
+      "path": "manual/features/scenes-reference-workflow-scenes.yaml",
+      "before_sha256": "a2f58bc29bd6eb9624b33ac7b1bb73ba07c4f6042bc6c1a2a7867e09ede20b30",
+      "current_sha256": "a6d493556c663cc294db9f7ae6035dd8113d3052825d07b9505c9fe6e4fafa1a",
+      "kind": "historical-partial-generated-publication",
+      "preserved_before": {
+        "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/manual/features/scenes-reference-workflow-scenes.yaml",
+        "sha256": "a2f58bc29bd6eb9624b33ac7b1bb73ba07c4f6042bc6c1a2a7867e09ede20b30"
+      },
+      "serialization_reproduction": {
+        "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-workflow-scenes.yaml",
+        "sha256": "a6d493556c663cc294db9f7ae6035dd8113d3052825d07b9505c9fe6e4fafa1a"
+      },
+      "qualification": "Exact pinned generator reproduction from passed same-parent stages; full failed generation is not complete."
+    }
+  ],
+  "original_failed_parent": {
+    "manifest": {
+      "path": "/home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/manifest.json",
+      "sha256": "7a074c5e5de8eafd3d1191bfed1ded1911baca384f4378632761f3d79ed94f87"
+    },
+    "passed": false,
+    "build_complete": false,
+    "individual_passed_stages": 24,
+    "failed_stage": "CalledProcessError(1, ['/usr/bin/python3', '/home/andy/mosaic-manual-1.4.0/tools/manual_audio.py', '--mod-code-root', '/home/andy/mosaic-manual-voices', '--audio-install', '/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json', '--ffmpeg', '/home/andy/mosaic-manual-tools/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2', '--midi-emulator', '/home/andy/projects/monome-emulator-ci-combined', '--midi-controlled-install', '/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json', '--controlled-local'])",
+    "generation_context": {
+      "path": "/home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/generation-context.json",
+      "sha256": "f60ed54a66a8a9f4b656ff0fee195b191421d25f9da39a5fda90f98bcb217e12"
+    },
+    "authoring_before_cookbook": {
+      "path": "/home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/authoring-before/manual/features/cookbook.yaml",
+      "sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a"
+    },
+    "qualification": "Original generation start remains immutable; partial stage successes do not establish full generation."
+  },
+  "ghost_prerequisite_qualification": [
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/ghost-manifest.json",
+      "sha256": "26475dd7efc00abb0ceb4df8d3b08db2dff55eaf0dfc1c106fd789c35561a4de"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/ghost-root-installation.json",
+      "sha256": "5b557e7e4314a53d35fea756b30b2d0de2b666eeb5173a66bc1b6afd25b65726"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/ghost-root-native-green.json",
+      "sha256": "d481ab5957a53b7e71a5d690c353cec63bf4f0b7b77f6a7a0e50c8b2472bc1bf"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/masks-saved-result-validation.json",
+      "sha256": "fd327f045c00826dfc0da5123a555df8dd7369f4d769afb01b928844ce63b9df"
+    }
+  ],
+  "masks_bounded_bootstrap": {
+    "live": {
+      "path": "/home/andy/mosaic-manual-1.4.0/manual/generated/pilot.json",
+      "sha256": "3a9a9150fb9775d652d3231beb3e9b95db04fed8704f7144c32da0952e890e46"
+    },
+    "capture_original": {
+      "path": "/home/andy/mosaic-manual-runs/afe2243e49ce4d0587f651b5e28dae68/pilot.json",
+      "sha256": "00218cf3e08628ba2da426a68110250399f6aee0b6d4a79c925434e000b5f9a2"
+    },
+    "parsed_json_exact_equal": true,
+    "bytes_exact_equal": false,
+    "difference": "JSON serialization only; identical parsed data.",
+    "pilot_complete": false,
+    "scene_build_complete": true,
+    "behaviour_cases": [],
+    "saved_result_validation": {
+      "path": "/home/andy/mosaic-manual-build-operators/masks-audio-refresh-077b/scope-correction/root-saved-result-validation.json",
+      "sha256": "fd327f045c00826dfc0da5123a555df8dd7369f4d769afb01b928844ce63b9df"
+    },
+    "scope": "Saved-result validation/compression receipt update only; full fresh Masks visuals remain required builder stage1."
+  },
+  "before_ledger": {
+    "docs/ui-reimplementation/current-source-review.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/current-source-review.json",
+      "sha256": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975"
+    },
+    "docs/ui-reimplementation/source-inventory.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/source-inventory.json",
+      "sha256": "126ac9d0b9adc7f6321de8938ce30dfec9fb3b163e0c7a0a6465be402bd64c1e"
+    },
+    "docs/ui-reimplementation/generated/source-review-receipt.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/generated/source-review-receipt.json",
+      "sha256": "6bce24656ba00973c806d02bdbdb6db7fdfc843a6e5d91aca790404bd9ee5025"
+    }
+  },
+  "reviewed_members": 78,
+  "manual_generation_complete": false,
+  "complete_regression_run": false,
+  "realtime_qualification": "pending-ci"
+}

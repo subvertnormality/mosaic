@@ -1,0 +1,20 @@
+......F
+======================================================================
+FAIL: test_scale_sample_returns_through_grid_channel_editor_before_channel_task (test_merge_strategy_ui_routes.ScaleContextExitGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 130, in test_scale_sample_returns_through_grid_channel_editor_before_channel_task
+    ui_readability.readability_workflow(c)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/ui_readability.py", line 124, in readability_workflow
+    c.ui.channel_page("masks",channel=1);c.ui.select_row("note",1)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 119, in channel_page
+    self_test.assertEqual(self.context,"channel","Channel Tasks cannot be entered from Scale context")
+AssertionError: 'scale' != 'channel'
+- scale
++ channel
+ : Channel Tasks cannot be entered from Scale context
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.046s
+
+FAILED (failures=1)

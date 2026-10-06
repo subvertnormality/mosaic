@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "live_review_sha256": "655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741",
+  "proposed_review_sha256": "b722c92b67b6599429c4a71481fbf9e50e73ba388e5add086ff6a7218a7813da",
+  "member_paths_changed": [
+    "manual/features/reference-workflow.yaml",
+    "manual/features/reference-musical.yaml"
+  ],
+  "membership_unchanged": true,
+  "membership_count": 78,
+  "qualification_sha256": "2701f628637dd6c46e5fb643395d2d12121035a3d12911246982b87bf7c171c7",
+  "strict_refresh": {
+    "passed": true,
+    "manual_sections": 125,
+    "callbacks": 64,
+    "branches": 164,
+    "members": 78
+  },
+  "live_applied": false
+}

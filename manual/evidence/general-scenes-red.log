@@ -1,0 +1,329 @@
+.E....
+======================================================================
+ERROR: test_general_scene_supports_fresh_setup_and_exact_screen_identity (test_manual_model.ManualModelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_model.py", line 18, in validate
+    jsonschema.Draft7Validator(schema).validate(data)
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 353, in validate
+    raise error
+jsonschema.exceptions.ValidationError: 'audio' is a required property
+
+Failed validating 'required' in schema:
+    {'$schema': 'http://json-schema.org/draft-07/schema#',
+     'additionalProperties': False,
+     'properties': {'audio': {'properties': {'bars': {'maximum': 16,
+                                                      'minimum': 4,
+                                                      'type': 'integer'},
+                                             'bpm': {'maximum': 240,
+                                                     'minimum': 30,
+                                                     'type': 'number'},
+                                             'description': {'type': 'string'},
+                                             'files': {'items': {'type': 'string'},
+                                                       'minItems': 2,
+                                                       'type': 'array'},
+                                             'profile': {'const': 'manual-duo'},
+                                             'title': {'type': 'string'},
+                                             'tracks': {'minItems': 2,
+                                                        'type': 'array'}},
+                              'required': ['title',
+                                           'profile',
+                                           'bars',
+                                           'bpm',
+                                           'files',
+                                           'tracks',
+                                           'description'],
+                              'type': 'object'},
+                    'feature': {'properties': {'audience': {'enum': ['beginner',
+                                                                     'intermediate',
+                                                                     'expert',
+                                                                     'all']},
+                                               'controls': {'type': 'array'},
+                                               'details': {'type': 'array'},
+                                               'id': {'pattern': '^[a-z][a-z0-9-]*$',
+                                                      'type': 'string'},
+                                               'musical_use': {'type': 'string'},
+                                               'prose': {'type': 'string'},
+                                               'recipes': {'type': 'array'},
+                                               'related': {'items': {'type': 'string'},
+                                                           'type': 'array'},
+                                               'sources': {'type': 'object'},
+                                               'summary': {'type': 'string'},
+                                               'title': {'minLength': 1,
+                                                         'type': 'string'}},
+                                'required': ['id',
+                                             'title',
+                                             'audience',
+                                             'summary',
+                                             'prose',
+                                             'musical_use',
+                                             'related',
+                                             'sources',
+                                             'controls',
+                                             'details',
+                                             'recipes'],
+                                'type': 'object'},
+                    'scenes': {'items': {'additionalProperties': False,
+                                         'properties': {'behaviour_case': {'pattern': '^M-[A-Z0-9-]+$',
+                                                                           'type': 'string'},
+                                                        'id': {'pattern': '^[a-z][a-z0-9-]*$',
+                                                               'type': 'string'},
+                                                        'setup': {'additionalProperties': False,
+                                                                  'properties': {'fixture': {'enum': ['four-note-pattern',
+                                                                                                      'four-note-eight-step']},
+                                                                                 'seed': {'const': 42},
+                                                                                 'voices': {'type': 'object'}},
+                                                                  'required': ['fixture',
+                                                                               'seed',
+                                                                               'voices'],
+                                                                  'type': 'object'},
+                                                        'steps': {'items': {'additionalProperties': False,
+                                                                            'properties': {'caption': {'minLength': 1,
+                                                                                                       'type': 'string'},
+                                                                                           'citation': {'pattern': '^(README.md#|characterisation:)',
+                                                                                                        'type': 'string'},
+                                                                                           'expect': {'additionalProperties': False,
+                                                                                                      'minProperties': 1,
+                                                                                                      'properties': {'cycle_steps': {'maximum': 64,
+                                                                                                                                     'minimum': 1,
+                                                                                                                                     'type': 'integer'},
+                                                                                                                     'durations': {'type': 'array'},
+                                                                                                                     'midi_phrase': {'minItems': 1,
+                                                                                                                                     'type': 'array'},
+                                                                                                                     'positions': {'type': 'array'},
+                                                                                                                     'screen': {'items': {'maxItems': 2,
+                                                                                                                                          'minItems': 2,
+                                                                                                                                          'type': 'array'},
+                                                                                                                                'minItems': 1,
+                                                                                                                                'type': 'array'}},
+                                                                                                      'type': 'object'},
+                                                                                           'id': {'type': 'string'},
+                                                                                           'inputs': {'items': {'additionalProperties': False,
+                                                                                                                'allOf': [{'if': {'properties': {'type': {'const': 'grid'}}},
+                                                                                                                           'then': {'required': ['x',
+                                                                                                                                                 'y',
+                                                                                                                                                 'state']}},
+                                                                                                                          {'if': {'properties': {'type': {'const': 'key'}}},
+                                                                                                                           'then': {'required': ['n']}},
+                                                                                                                          {'if': {'properties': {'type': {'const': 'enc'}}},
+                                                                                                                           'then': {'required': ['n',
+                                                                                                                                                 'delta']}},
+                                                                                                                          {'if': {'properties': {'type': {'const': 'wait'}}},
+                                                                                                                           'then': {'required': ['seconds']}}],
+                                                                                                                'properties': {'delta': {'maximum': 128,
+                                                                                                                                         'minimum': -128,
+                                                                                                                                         'type': 'integer'},
+                                                                                                                               'n': {'maximum': 3,
+                                                                                                                                     'minimum': 1,
+                                                                                                                                     'type': 'integer'},
+                                                                                                                               'seconds': {'maximum': 5,
+                                                                                                                                           'minimum': 0,
+                                                                                                                                           'type': 'number'},
+                                                                                                                               'state': {'enum': [0,
+                                                                                                                                                  1],
+                                                                                                                                         'type': 'integer'},
+                                                                                                                               'type': {'enum': ['grid',
+                                                                                                                                                 'key',
+                                                                                                                                                 'enc',
+                                                                                                                                                 'wait',
+                                                                                                                                                 'play',
+                                                                                                                                                 'stop']},
+                                                                                                                               'x': {'maximum': 16,
+                                                                                                                                     'minimum': 1,
+                                                                                                                                     'type': 'integer'},
+                                                                                                                               'y': {'maximum': 8,
+                                                                                                                                     'minimum': 1,
+                                                                                                                                     'type': 'integer'}},
+                                                                                                                'required': ['type'],
+                                                                                                                'type': 'object'},
+                                                                                                      'type': 'array'}},
+                                                                            'required': ['id',
+                                                                                         'caption',
+                                                                                         'inputs',
+                                                                                         'expect',
+                                                                                         'citation'],
+                                                                            'type': 'object'},
+                                                                  'minItems': 1,
+                                                                  'type': 'array'},
+                                                        'title': {'type': 'string'}},
+                                         'required': ['id',
+                                                      'title',
+                                                      'behaviour_case',
+                                                      'setup',
+                                                      'steps'],
+                                         'type': 'object'},
+                               'minItems': 1,
+                               'type': 'array'},
+                    'schema_version': {'const': 1}},
+     'required': ['schema_version', 'feature', 'scenes', 'audio'],
+     'title': 'Mosaic review pilot authoring data',
+     'type': 'object'}
+
+On instance:
+    {'feature': {'audience': 'all',
+                 'controls': [{'gesture': 'Grid (3,8) → E1 tasks → E2 '
+                                          'Masks → K3',
+                               'result': 'Open the eight mask values.'},
+                              {'gesture': 'E2',
+                               'result': 'Choose Trig, Note, Vel, Len, '
+                                         'Chd1–Chd4.'},
+                              {'gesture': 'E3, no step held',
+                               'result': 'Edit the channel default.'},
+                              {'gesture': 'Hold step + E3',
+                               'result': "Edit that step's exception."},
+                              {'gesture': 'Hold K1 + tap step',
+                               'result': 'Add or remove a trig mask.'},
+                              {'gesture': 'Hold step + K2',
+                               'result': 'Clear all mask attributes for '
+                                         'the held step.'},
+                              {'gesture': 'K1 + K2, no grid keys held',
+                               'result': 'Clear channel step overrides; '
+                                         'preserve defaults.'}],
+                 'details': [{'text': 'X is an unset attribute, not zero. '
+                                      "A step's explicit attribute wins "
+                                      'over the channel default; an unset '
+                                      'step uses the default; an unset '
+                                      'default falls back to merged '
+                                      'pattern data. Clearing step '
+                                      'overrides does not erase the '
+                                      'defaults.',
+                              'title': 'Read X as inherit'},
+                             {'text': 'Chd1–Chd4 are four additional '
+                                      'scale-relative voices above or '
+                                      'below the root. 3rd and 5th are '
+                                      'intervals, not MIDI note numbers. '
+                                      'Start with one added voice; use '
+                                      'strum and chord velocity for '
+                                      'separation.',
+                              'title': 'Chords need a polyphonic output'},
+                             {'text': 'By default, note masks snap to the '
+                                      'chosen scale. They do not follow '
+                                      'degree or rotation unless full '
+                                      'quantisation is enabled. Snap Note '
+                                      'Masks to Scale, Quantise Note Masks '
+                                      'and the Fully Quantise Mask trig '
+                                      'parameter interact; the existing '
+                                      'M-MASK-019–021 cases cover this '
+                                      'precedence.',
+                              'title': 'Scale, degree and rotation'},
+                             {'text': 'Hold a step and play a MIDI '
+                                      'keyboard to enter notes and chords. '
+                                      'Live recording is another route. A '
+                                      'held step takes precedence over '
+                                      'channel-wide clearing even with K1 '
+                                      'down. Other channels are '
+                                      'unaffected. The existing suite '
+                                      'checks steps 63/64, multiple chord '
+                                      'slots and recorded-chord clearing.',
+                              'title': 'MIDI and clearing'},
+                             {'text': "Check the selected channel's "
+                                      'output, active range and mute '
+                                      'state. A trig alone needs an '
+                                      'audible note, velocity and length. '
+                                      'A mono voice cannot sound all chord '
+                                      'voices together. To undo an '
+                                      'exception, hold that step and press '
+                                      'K2.',
+                              'title': 'If a new note is silent'},
+                             {'text': 'Mosaic uses the norns musicutil '
+                                      'octave convention: floor(MIDI note '
+                                      '/ 12 − 2). MIDI 60 is therefore '
+                                      'displayed as C3. Many other '
+                                      'instruments call that same pitch '
+                                      'C4; the numeric MIDI note is '
+                                      'unchanged. Recipes here use the '
+                                      'names shown on norns.',
+                              'title': 'Why the screen calls MIDI 60 C3'}],
+                 'id': 'masks',
+                 'musical_use': 'Start with a two-note motif. Repeat its '
+                                'contour, then change the last note on '
+                                'every second phrase. Use velocity for '
+                                'emphasis before adding more notes.',
+                 'prose': 'Patterns supply the material; a channel merges '
+                          'it; masks give you the last word on individual '
+                          'attributes. Change a note without disturbing '
+                          'its rhythm, tuck in a quiet accent, or add a '
+                          'chord above a bass line.',
+                 'recipes': [{'text': 'Use C major. Write C5–D5–G5–E5 on '
+                                      'steps 1, 4, 7 and 11 of a 16-step '
+                                      'lead channel. On the next phrase, '
+                                      'replace E5 with D5, then resolve to '
+                                      'C5. Keep the first three attacks '
+                                      'unchanged so the listener '
+                                      'recognises the motif.',
+                              'title': 'A melody that answers itself'},
+                             {'text': 'Keep the main accent at velocity '
+                                      '90. Add a half-step note just '
+                                      'before it at velocity 35. Once the '
+                                      'contrast works, use Trig '
+                                      'Probability on the quiet note for '
+                                      'occasional surprises. Lower '
+                                      'velocity makes a ghost note; '
+                                      'probability decides whether it '
+                                      'happens.',
+                              'title': 'Ghost notes and syncopation'},
+                             {'text': 'Put long C3 notes on a bass channel '
+                                      'and C4 roots with 3rd and 5th chord '
+                                      'masks on a polyphonic channel. Move '
+                                      'one chord voice by the smallest '
+                                      'available scale interval for voice '
+                                      'leading. A B4 lead note adds '
+                                      'tension; resolve it to C5. Keep '
+                                      'drum kit note mapping separate from '
+                                      'pitched harmony.',
+                              'title': 'A harmony with room to breathe'},
+                             {'text': 'Keep drums at 16 steps and try a '
+                                      'five-step masked melody. Their '
+                                      'starts meet again after 80 steps. '
+                                      'Add swing on the channel Clock page '
+                                      'for a lilt; compare before '
+                                      'combining swing with shuffle. These '
+                                      'are adjacent-feature recipes, not '
+                                      'new mask controls.',
+                              'title': 'Let the loop lengths disagree'}],
+                 'related': ['merge-modes',
+                             'channel-length',
+                             'chord-strum',
+                             'fully-quantise-mask',
+                             'arm-live-record'],
+                 'sources': {'behaviour_cases': ['M-MASK-007',
+                                                 'M-MASK-008',
+                                                 'M-MASK-010',
+                                                 'M-MASK-005',
+                                                 'M-MASK-017',
+                                                 'M-MASK-021'],
+                             'code': ['lib/pages/channel_edit_page/channel_edit_masks.lua',
+                                      'lib/pages/channel_edit_page/channel_edit_navigation.lua',
+                                      'lib/ui_adapters/masks.lua'],
+                             'readme': 'README.md#masks'},
+                 'summary': 'Keep the pattern. Give the melody a mind of '
+                            'its own.',
+                 'title': 'Masks'},
+     'scenes': [{'behaviour_case': 'M-MASK-007',
+                 'id': 'mask-precedence',
+                 'setup': {'fixture': 'empty',
+                           'seed': 42,
+                           'voices': {'1': 'Emulator test device'}},
+                 'steps': [{'caption': 'Choose an output.',
+                            'citation': 'README.md#devices',
+                            'expect': {'device': 'Emulator test device',
+                                       'header': {'page': 'midi_config',
+                                                  'params': {'channel': 1}}},
+                            'id': 'first-output',
+                            'inputs': []}],
+                 'title': 'Give one step its own melody'}],
+     'schema_version': 2}
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_model.py", line 34, in test_general_scene_supports_fresh_setup_and_exact_screen_identity
+    model.validate(data)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_model.py", line 20, in validate
+    raise ValueError(error.message) from error
+ValueError: 'audio' is a required property
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.354s
+
+FAILED (errors=1)

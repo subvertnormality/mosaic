@@ -1,0 +1,228 @@
+--- before/tools/manual_build.py
++++ after/tools/manual_build.py
+@@ -3,7 +3,7 @@
+ Every run receives a fresh immutable evidence directory. A completed manual
+ build is separate from the exhaustive behaviour campaign.
+ """
+-import argparse,contextlib,datetime,hashlib,http.server,json,os,shutil,subprocess,sys,threading,uuid
++import argparse,contextlib,datetime,hashlib,http.server,json,os,shutil,subprocess,sys,threading,time,uuid
+ from pathlib import Path
+ import yaml
+ ROOT=Path(__file__).resolve().parents[1]
+@@ -275,6 +275,56 @@
+     if action.get("doctor_ready"):command+=doctor_ready_arguments(evidence)
+     return command
+ 
++def prepare_stage_gate(options,evidence):
++    value=getattr(options,"stage_gate_dir",None)
++    if value is None:return
++    directory=Path(value).resolve()
++    directory.mkdir(parents=True,exist_ok=False)
++    (directory/"owner.json").write_text(json.dumps(gate_owner(evidence),sort_keys=True)+"\n")
++def gate_owner(evidence):
++    # Field 22 follows the process name (which may itself contain spaces).
++    fields=Path("/proc/self/stat").read_text().rsplit(")",1)[1].split()
++    return dict(pid=os.getpid(),proc_starttime=fields[19],evidence_dir=str(evidence.resolve()),
++        builder_sha256=digest(Path(__file__)),
++        builder_argv_sha256=hashlib.sha256(Path("/proc/self/cmdline").read_bytes()).hexdigest())
++def gate_blob(value):return (json.dumps(value,sort_keys=True,separators=(",",":"))+"\n").encode()
++def await_stage_gate(stage,index,evidence,options,completed):
++    value=getattr(options,"stage_gate_dir",None)
++    if value is None:return
++    if len(completed)!=index-1 or any(row.get("passed") is not True for row in completed):
++        raise ValueError("Stage gate requires every preceding stage to pass")
++    directory=Path(value).resolve();owner=gate_owner(evidence)
++    if gate_blob(json.loads((directory/"owner.json").read_text()))!=gate_blob(owner):
++        raise ValueError("Stage gate owner changed")
++    previous=None
++    if completed:
++        last=completed[-1];receipt=evidence/(last["name"]+".json")
++        if gate_blob(json.loads(receipt.read_text()))!=gate_blob(last):raise ValueError("Prior stage receipt changed")
++        previous=dict(path=str(receipt.resolve()),sha256=digest(receipt))
++    command=stage_command(stage,evidence)
++    request=dict(schema_version=1,**owner,stage_index=index,stage_name=stage["name"],
++        stage_sha256=hashlib.sha256(gate_blob(stage)).hexdigest(),
++        argv_sha256=hashlib.sha256(gate_blob(command)).hexdigest(),
++        previous_receipt=previous,nonce=uuid.uuid4().hex)
++    blob=gate_blob(request);sha=hashlib.sha256(blob).hexdigest()
++    stem=f"{index:03d}-{sha}";request_path=directory/(stem+".request.json")
++    with request_path.open("xb") as handle:handle.write(blob)
++    expected=dict(request_sha256=sha,**owner,stage_index=index,stage_name=stage["name"],
++        argv_sha256=request["argv_sha256"],nonce=request["nonce"])
++    release=directory/(stem+".resume.json")
++    print("Stage gate ready:",request_path,flush=True)
++    while not release.exists():time.sleep(0.1)
++    accepted=json.loads(release.read_text())
++    if gate_blob(accepted)!=gate_blob(expected):raise ValueError("Stage gate resume identity mismatch")
++    if request_path.read_bytes()!=blob or gate_owner(evidence)!=owner:
++        raise ValueError("Stage gate request or owner changed")
++    if previous and (digest(receipt)!=previous["sha256"] or
++            gate_blob(json.loads(receipt.read_text()))!=gate_blob(last)):
++        raise ValueError("Prior stage receipt changed while awaiting resume")
++    archive=evidence/"stage-gates";archive.mkdir(exist_ok=True)
++    with (archive/(stem+".json")).open("x") as handle:
++        json.dump(dict(request=request,request_sha256=sha,resume=accepted),handle,indent=2);handle.write("\n")
++
+ def run_stage(stage,evidence,options,browser_url):
+     record=dict(stage,passed=False)
+     log=evidence/(stage["name"]+".log")
+@@ -346,6 +396,7 @@
+     parser.add_argument("--skip-browser-tests",dest="browser_tests",action="store_false",default=True)
+     parser.add_argument("--quick-output",default="manual/generated/quick-reference.html")
+     parser.add_argument("--artifacts",type=Path,default=ROOT.parent/"mosaic-manual-build-runs")
++    parser.add_argument("--stage-gate-dir",type=Path,help="Fresh opt-in between-stage coordination directory; exact resume required")
+     parser.add_argument("--plan-only",action="store_true")
+     options=parser.parse_args()
+     all_plans=[p.name for p in sorted((ROOT/"manual").glob("scene-plans*.yaml"))]
+@@ -353,6 +404,7 @@
+     stages=plan(options,plans)
+     if options.plan_only:print(json.dumps(stages,indent=2));return 0
+     evidence=options.artifacts.resolve()/uuid.uuid4().hex;evidence.mkdir(parents=True,exist_ok=False)
++    prepare_stage_gate(options,evidence)
+     sources={str(p.relative_to(ROOT)):digest(p) for p in sorted((ROOT/"manual").rglob("*.yaml"))}
+     for name in sources:
+         target=evidence/"authoring-before"/name;target.parent.mkdir(parents=True,exist_ok=True)
+@@ -363,7 +415,8 @@
+         selected_plans=plans,required_plans=all_plans,renderer_validated=False,stages=[])
+     try:
+         with preview(options.browser_tests) as browser_url:
+-            for stage in stages:
++            for index,stage in enumerate(stages,1):
++                await_stage_gate(stage,index,evidence,options,manifest["stages"])
+                 print("Stage:",stage["name"],flush=True)
+                 try:manifest["stages"].append(run_stage(stage,evidence,options,browser_url))
+                 except BaseException:
+--- before/tests/behaviour/test_manual_build.py
++++ after/tests/behaviour/test_manual_build.py
+@@ -1,5 +1,5 @@
+ """Build orchestration contracts; characterisation outside the manual."""
+-import importlib.util,unittest,tempfile,sys,json,subprocess
++import importlib.util,unittest,tempfile,sys,json,subprocess,ast,hashlib,os
+ from unittest import mock
+ from pathlib import Path
+ from types import SimpleNamespace
+@@ -320,4 +320,124 @@
+   plan=__import__("yaml").safe_load((ROOT/"manual/scene-plans-readability.yaml").read_text())
+   self.assertEqual(plan["scenes"][0]["behaviour_case"],"M-UI-READABILITY-001")
+   self.assertEqual(len(plan["scenes"][0]["steps"]),17)
++
++# Between-stage coordination; characterisation outside the instrument manual.
++MODULE=ROOT/"tools/manual_build.py"
++class StageGates(unittest.TestCase):
++ def setUp(self):
++  self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
++  self.root=Path(self.tmp.name);self.evidence=self.root/"evidence";self.evidence.mkdir()
++  self.options=SimpleNamespace(stage_gate_dir=self.root/"gates")
++  self.stage=dict(name="capture-real",command=["python","capture.py"],emulator="native",exclusive_lock=False,action=None)
++ def setup_gate(self):build.prepare_stage_gate(self.options,self.evidence)
++ def answer(self,mutation=None):
++  requests=list(self.options.stage_gate_dir.glob("*.request.json"));self.assertEqual(len(requests),1)
++  request=requests[0];value=json.loads(request.read_text());blob=request.read_bytes()
++  expected=dict(request_sha256=hashlib.sha256(blob).hexdigest(),**build.gate_owner(self.evidence),stage_index=value["stage_index"],stage_name=value["stage_name"],argv_sha256=value["argv_sha256"],nonce=value["nonce"])
++  if mutation:mutation(expected)
++  request.with_name(request.name.replace(".request.json",".resume.json")).write_text(json.dumps(expected))
++ def wait(self,answer=None,index=1,completed=None):
++  with mock.patch.object(build.time,"sleep",side_effect=lambda _: self.answer(answer)):
++   build.await_stage_gate(self.stage,index,self.evidence,self.options,completed or [])
++ def test_cli_exposes_opt_in_without_launching_native(self):
++  result=subprocess.run([sys.executable,str(MODULE),"--help"],capture_output=True,text=True)
++  self.assertEqual(result.returncode,0);self.assertIn("--stage-gate-dir",result.stdout)
++ def test_default_off_creates_no_files_and_resolves_no_commands(self):
++  options=SimpleNamespace()
++  with mock.patch.object(build,"stage_command",side_effect=AssertionError("default resolved command")):
++   build.prepare_stage_gate(options,self.evidence);build.await_stage_gate(self.stage,1,self.evidence,options,[])
++  self.assertEqual(list(self.evidence.iterdir()),[])
++ def test_unique_directory_rejects_reusing_previous_build(self):
++  self.setup_gate()
++  with self.assertRaises(FileExistsError):self.setup_gate()
++ def test_matching_resume_archives_exact_request_and_release(self):
++  self.setup_gate();self.wait()
++  proof=json.loads(next((self.evidence/"stage-gates").glob("*.json")).read_text())
++  self.assertEqual(proof["request"]["stage_index"],1)
++  self.assertEqual(proof["request"]["stage_name"],"capture-real")
++  self.assertEqual(proof["request"]["argv_sha256"],hashlib.sha256(build.gate_blob(self.stage["command"])).hexdigest())
++  self.assertEqual(proof["request"]["pid"],os.getpid())
++ def test_wrong_resume_fields_never_release(self):
++  for field in ["pid","proc_starttime","evidence_dir","stage_index","stage_name","argv_sha256","nonce","request_sha256"]:
++   with self.subTest(field=field),tempfile.TemporaryDirectory() as directory:
++    self.options.stage_gate_dir=Path(directory)/"gates";self.setup_gate()
++    with self.assertRaisesRegex(ValueError,"identity mismatch"):self.wait(lambda value:value.__setitem__(field,"wrong"))
++ def test_stale_release_does_not_match_fresh_random_request(self):
++  self.setup_gate();(self.options.stage_gate_dir/"001-stale.resume.json").write_text('{}')
++  self.wait();self.assertEqual(len(list(self.options.stage_gate_dir.glob("*.request.json"))),1)
++ def test_failed_prior_stage_never_requests_next(self):
++  self.setup_gate()
++  with self.assertRaisesRegex(ValueError,"preceding stage"):
++   self.wait(index=2,completed=[dict(name="prior",passed=False)])
++  self.assertEqual(list(self.options.stage_gate_dir.glob("*.request.json")),[])
++ def test_missing_prior_stage_never_allows_skip(self):
++  self.setup_gate()
++  with self.assertRaisesRegex(ValueError,"preceding stage"):self.wait(index=2)
++  self.assertEqual(list(self.options.stage_gate_dir.glob("*.request.json")),[])
++ def test_prior_terminal_receipt_must_match_before_request(self):
++  self.setup_gate();previous=dict(name="prior",passed=True,returncode=0)
++  path=self.evidence/"prior.json";path.write_text(json.dumps(dict(previous,passed=False)))
++  with self.assertRaisesRegex(ValueError,"receipt changed"):self.wait(index=2,completed=[previous])
++  path.write_text(json.dumps(previous));self.wait(index=2,completed=[previous])
++  request=json.loads(next(self.options.stage_gate_dir.glob("*.request.json")).read_text())
++  self.assertEqual(request["previous_receipt"]["sha256"],build.digest(path))
++ def test_owner_change_rejected_before_request(self):
++  self.setup_gate();(self.options.stage_gate_dir/"owner.json").write_text('{}')
++  with self.assertRaisesRegex(ValueError,"owner changed"):self.wait()
++  self.assertEqual(list(self.options.stage_gate_dir.glob("*.request.json")),[])
++ def test_gate_is_outside_native_stdout_drain_and_before_stage_launch(self):
++  source=MODULE.read_text();tree=ast.parse(source)
++  stage=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="run_stage")
++  self.assertNotIn("await_stage_gate",ast.get_source_segment(source,stage))
++  main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="main")
++  calls=[n for n in ast.walk(main) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name)]
++  gate=next(n for n in calls if n.func.id=="await_stage_gate");launch=next(n for n in calls if n.func.id=="run_stage")
++  self.assertLess(gate.lineno,launch.lineno)
++ def test_planning_and_native_pipe_drain_are_unchanged(self):
++  # Frozen original AST identities avoid importing a second fixture module.
++  expected={'plan': '1544f9b3616862f91d1e84a302e5a8ca2f6ed3f325e7b7985ff4a42b9023371a', 'stage_command': 'a43530ce869eacc49c6e8727e766bd47fcec5267cc13b036b7883bf58a289cef', 'run_stage': '984ab8f8ceaa1409ea4fa0e4dd2e01145891ac2187a9c8ec674bccbbb803239b'}
++  candidate=ast.parse(MODULE.read_text())
++  for name,value in expected.items():
++   function=next(n for n in candidate.body if isinstance(n,ast.FunctionDef) and n.name==name)
++   self.assertEqual(hashlib.sha256(ast.dump(function,include_attributes=False).encode()).hexdigest(),value)
++ def test_failed_child_in_main_never_requests_following_stage(self):
++  root=self.root/"app";(root/"manual/generated").mkdir(parents=True)
++  options=SimpleNamespace(stage_gate_dir=None,artifacts=self.root/"runs",plans=["scene-plans.yaml"],plan_only=False,browser_tests=False)
++  second=dict(self.stage,name="next-capture")
++  def fail(stage,evidence,*args):
++   (evidence/(stage["name"]+".json")).write_text(json.dumps(dict(stage,passed=False,returncode=1)))
++   raise RuntimeError("native failed")
++  import contextlib
++  with mock.patch.object(build,"ROOT",root),mock.patch.object(build.argparse.ArgumentParser,"parse_args",return_value=options),mock.patch.object(build,"plan",return_value=[self.stage,second]),mock.patch.object(build,"preview",return_value=contextlib.nullcontext(None)),mock.patch.object(build.subprocess,"check_output",return_value="revision"),mock.patch.object(build,"await_stage_gate") as gate,mock.patch.object(build,"run_stage",side_effect=fail):
++   with self.assertRaisesRegex(RuntimeError,"native failed"):build.main()
++  self.assertEqual(gate.call_count,1);self.assertEqual(gate.call_args.args[1],1)
++  manifest=json.loads(next(options.artifacts.glob("*/manifest.json")).read_text())
++  self.assertFalse(manifest["passed"]);self.assertEqual([x["name"] for x in manifest["stages"]],[self.stage["name"]])
++ def test_default_off_main_runs_every_stage_in_order(self):
++  root=self.root/"app";(root/"manual/generated").mkdir(parents=True)
++  (root/"manual/generated/book.json").write_text('{}')
++  options=SimpleNamespace(stage_gate_dir=None,artifacts=self.root/"runs",plans=["scene-plans.yaml"],plan_only=False,browser_tests=False)
++  stages=[dict(self.stage,name=f"capture-{index}") for index in range(72)]
++  seen=[]
++  def finish(stage,evidence,*args):
++   seen.append(stage["name"]);record=dict(stage,passed=True,returncode=0)
++   (evidence/(stage["name"]+".json")).write_text(json.dumps(record));return record
++  import contextlib
++  with mock.patch.object(build,"ROOT",root),mock.patch.object(build.argparse.ArgumentParser,"parse_args",return_value=options),mock.patch.object(build,"plan",return_value=stages),mock.patch.object(build,"preview",return_value=contextlib.nullcontext(None)),mock.patch.object(build.subprocess,"check_output",return_value="revision"),mock.patch.object(build,"run_stage",side_effect=finish),mock.patch.object(build,"complete_build",return_value=True):
++   self.assertEqual(build.main(),0)
++  self.assertEqual(seen,[stage["name"] for stage in stages]);self.assertFalse((self.root/"gates").exists())
++ def test_prior_receipt_mutated_during_wait_rejects_resume(self):
++  self.setup_gate();previous=dict(name="prior",passed=True,returncode=0)
++  path=self.evidence/"prior.json";path.write_text(json.dumps(previous))
++  def mutate(value):path.write_text(json.dumps(dict(previous,returncode=1)))
++  with self.assertRaisesRegex(ValueError,"Prior stage receipt changed"):
++   self.wait(mutate,index=2,completed=[previous])
++  self.assertFalse((self.evidence/"stage-gates").exists())
++ def test_equivalent_numeric_resume_types_are_rejected(self):
++  for field,value in [("stage_index",True),("stage_index",1.0),("pid",float(os.getpid()))]:
++   with self.subTest(field=field,value=value),tempfile.TemporaryDirectory() as directory:
++    self.options.stage_gate_dir=Path(directory)/"gates";self.setup_gate()
++    with self.assertRaisesRegex(ValueError,"identity mismatch"):
++     self.wait(lambda resume:resume.__setitem__(field,value))
++
+ if __name__=="__main__":unittest.main()

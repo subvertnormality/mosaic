@@ -1,0 +1,9 @@
+{
+  "qualification": false,
+  "reason": "Application/test source changed during lane; also incorrect Doctor rest footer expected by fixture",
+  "files": {
+    "controlled-experimental-affected-start.json": "eabed1c2b13204316da0fced66e7073ca5455fe4e9ae602b92e98f8b68173b5e",
+    "controlled-experimental-affected.log": "a91e3aa2e71322844366620963030f747834714213bf0045913d47ca3f321534",
+    "controlled-experimental-affected-finish.json": "1884277cef0354ada913f0f3ed9dc8d2be4331677f5c96eb56c6485f143179b8"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "format": "mosaic-doctor-quick-reference-facts-v1",
+  "status": "Meaningful control/result authoring correction; no native status promotion",
+  "previous_sources": {
+    "manual/features/reference-pattern.yaml": {
+      "sha256": "1c6518072108e73116c2dcc2d54113623859a8f2f4fb797b4f3aa51ccd12c529",
+      "archive": "docs/testing/doctor-quick-reference/documentary-history/1c6518072108e73116c2dcc2d54113623859a8f2f4fb797b4f3aa51ccd12c529-reference-pattern.yaml"
+    },
+    "cheat_sheet.html": {
+      "sha256": "ddf7ccbb3a0e00c604826f2fb5a328451238e181c36c2b495a6aaaddff247ffa",
+      "archive": "docs/testing/doctor-quick-reference/documentary-history/ddf7ccbb3a0e00c604826f2fb5a328451238e181c36c2b495a6aaaddff247ffa-cheat_sheet.html"
+    }
+  },
+  "candidate_feature_source_sha256": "56acd949c1573d9ad066591f32b94d65f65798cd5df61b4c547446a0bb434534",
+  "claims": [
+    "Stopped recording/setup/Alignment; readybank browse/paint canplay",
+    "LocalBD/SD/CYM explicitgridpositions",
+    "Stereo records both inputs separately;L/Rduplicates choseninput",
+    "Manual uses entered BPM;Auto estimates;explicitAlignment retained",
+    "Localcompilefailure ANALYSIS_BACKEND_UNAVAILABLE noREADYbank;checkcompilerbeforeanothercapture"
+  ],
+  "historical_evidence": "Untouched; compiler generated output is a reference projection, not native acceptance",
+  "candidate_files": {
+    "manual/features/reference-pattern.yaml": "56acd949c1573d9ad066591f32b94d65f65798cd5df61b4c547446a0bb434534",
+    "cheat_sheet.html": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+    "manual/generated/quick-reference.html": "bcdb21c11168d79d3668ec458730c663b4d32ca5126851c61af9ca8c8eb8ea3b",
+    "manual/cheat-sheet.proposed.html": "d7b80b7012dc3691deb98504e24c00e03e07ab49c631cba2e998d55c88fe37d7",
+    "manual/generated/book.json": "ab987bbe8bc8d1aab5088aff164433c7eed059570db25b22174733829ea1c44b"
+  },
+  "compiled_book": {
+    "features": 133,
+    "scenes": 96,
+    "complete_manual": false
+  }
+}

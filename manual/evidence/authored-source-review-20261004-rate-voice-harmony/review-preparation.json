@@ -1,0 +1,152 @@
+{
+  "scope": "Prepared-only combined explicit authored source review; no live ledger or snapshot writes",
+  "receipts": [
+    {
+      "kind": "rate",
+      "receipt": "manual/evidence/course-rate-one-bar-correction/authored-receipt.json",
+      "sha256": "52486ae820f34c6c4b76557e5b5323a9c3ff601312e206e025a51826849d80e5",
+      "files": [
+        "manual/course.yaml",
+        "manual/features/tutorials.yaml",
+        "manual/features/reference-workflow.yaml",
+        "manual/scene-plans-course.yaml"
+      ]
+    },
+    {
+      "kind": "voice",
+      "receipt": "manual/evidence/voice-scope-prose-correction/receipt.json",
+      "sha256": "a69ee42057e8fe4f1087c85c1cdd38700db1910d66a3f49bbb41a7b4b802a37d",
+      "files": [
+        "manual/features/reference-learn.yaml",
+        "manual/VOICES.md"
+      ]
+    },
+    {
+      "kind": "harmony",
+      "receipt": "manual/evidence/course-harmony-baseline-correction/authored-receipt.json",
+      "sha256": "be8d6c82b678b854acafabf58a21778474b5e866d8d8a1070181d11d0204d311",
+      "files": [
+        "manual/course.yaml",
+        "manual/features/reference-workflow.yaml",
+        "manual/scene-plans-course.yaml",
+        "manual/features/reference-scale.yaml"
+      ]
+    }
+  ],
+  "chains": {
+    "manual/course.yaml": [
+      {
+        "kind": "rate",
+        "before_sha256": "ef5735efbdd2382cf270c3227697bc816a62a7fa924d037fa427c8f4e63bbe55",
+        "after_sha256": "7085ca8abc08f6b84f7ec9c1376982cc3e102ce9ed2488fe474dcbd9555ff5de",
+        "before_archive": "manual/evidence/course-rate-one-bar-correction/before/manual/course.yaml",
+        "after_archive": "manual/evidence/course-rate-one-bar-correction/after/manual/course.yaml"
+      },
+      {
+        "kind": "harmony",
+        "before_sha256": "7085ca8abc08f6b84f7ec9c1376982cc3e102ce9ed2488fe474dcbd9555ff5de",
+        "after_sha256": "5793ae5cfb895958bd0f0e9f3e62fcecabf0206ab9ee4c73389586f8b2279f10",
+        "before_archive": "manual/evidence/course-harmony-baseline-correction/before/manual/course.yaml",
+        "after_archive": "manual/evidence/course-harmony-baseline-correction/after/manual/course.yaml"
+      }
+    ],
+    "manual/features/tutorials.yaml": [
+      {
+        "kind": "rate",
+        "before_sha256": "2f08e38428e3a9163417af2bec3400f4af8ba40b9742c137f725f40b916e19e3",
+        "after_sha256": "4a900da83f50145373889b69174ff352fc8652d703b77e5f7cf9bb7bb79ab343",
+        "before_archive": "manual/evidence/course-rate-one-bar-correction/before/manual/features/tutorials.yaml",
+        "after_archive": "manual/evidence/course-rate-one-bar-correction/after/manual/features/tutorials.yaml"
+      }
+    ],
+    "manual/features/reference-workflow.yaml": [
+      {
+        "kind": "rate",
+        "before_sha256": "9430e3db0d5314fa7a8b992e4f1d891de1c86b55ab0a1e4ee514aae8435ffd26",
+        "after_sha256": "b409a67cb9d1f1b2cb3f16b0e54c66b45f3118e674bcbed9ad25d51db04e8255",
+        "before_archive": "manual/evidence/course-rate-one-bar-correction/before/manual/features/reference-workflow.yaml",
+        "after_archive": "manual/evidence/course-rate-one-bar-correction/after/manual/features/reference-workflow.yaml"
+      },
+      {
+        "kind": "harmony",
+        "before_sha256": "b409a67cb9d1f1b2cb3f16b0e54c66b45f3118e674bcbed9ad25d51db04e8255",
+        "after_sha256": "5421750bec25107d491c6da07c9cf5f6eb5f1915960486648a93608fba2b6670",
+        "before_archive": "manual/evidence/course-harmony-baseline-correction/before/manual/features/reference-workflow.yaml",
+        "after_archive": "manual/evidence/course-harmony-baseline-correction/after/manual/features/reference-workflow.yaml"
+      }
+    ],
+    "manual/scene-plans-course.yaml": [
+      {
+        "kind": "rate",
+        "before_sha256": "a401daf93e4fd19a5b222b89f488394417e653f4ec999df1cb753bfa360c703c",
+        "after_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+        "before_archive": "manual/evidence/course-rate-one-bar-correction/before/manual/scene-plans-course.yaml",
+        "after_archive": "manual/evidence/course-rate-one-bar-correction/after/manual/scene-plans-course.yaml"
+      },
+      {
+        "kind": "harmony",
+        "before_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+        "after_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
+        "before_archive": "manual/evidence/course-harmony-baseline-correction/before/manual/scene-plans-course.yaml",
+        "after_archive": "manual/evidence/course-harmony-baseline-correction/after/manual/scene-plans-course.yaml"
+      }
+    ],
+    "manual/features/reference-learn.yaml": [
+      {
+        "kind": "voice",
+        "before_sha256": "8967eba1b00feb59774941df5576473aea208187500483eda444247369d29c89",
+        "after_sha256": "ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d",
+        "before_archive": "manual/evidence/voice-scope-prose-correction/8967eba1b00feb59774941df5576473aea208187500483eda444247369d29c89-reference-learn.yaml",
+        "after_archive": "manual/evidence/voice-scope-prose-correction/ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d-reference-learn.yaml"
+      }
+    ],
+    "manual/VOICES.md": [
+      {
+        "kind": "voice",
+        "before_sha256": "bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc",
+        "after_sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+        "before_archive": "manual/evidence/voice-scope-prose-correction/bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc-VOICES.md",
+        "after_archive": "manual/evidence/voice-scope-prose-correction/d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574-VOICES.md"
+      }
+    ],
+    "manual/features/reference-scale.yaml": [
+      {
+        "kind": "harmony",
+        "before_sha256": "4a585aa65ba6dc76ab3b9c646b195dbc82f8039303285bd41c26ce9f9bcef665",
+        "after_sha256": "68f5389591462169e8b448e900c7f9e07317fbf4e7d6de6fc66077229bfa98d3",
+        "before_archive": "manual/evidence/course-harmony-baseline-correction/before/manual/features/reference-scale.yaml",
+        "after_archive": "manual/evidence/course-harmony-baseline-correction/after/manual/features/reference-scale.yaml"
+      }
+    ]
+  },
+  "ledger_paths_before": 78,
+  "ledger_paths_proposed": 78,
+  "changed_ledger_members": [
+    "manual/course.yaml",
+    "manual/features/tutorials.yaml",
+    "manual/features/reference-workflow.yaml",
+    "manual/features/reference-learn.yaml",
+    "manual/features/reference-scale.yaml"
+  ],
+  "separate_nonmembers": [
+    "manual/scene-plans-course.yaml",
+    "manual/VOICES.md"
+  ],
+  "historical_manual_sections": 125,
+  "callbacks": 64,
+  "branches": 164,
+  "historical_sections_callbacks_controllers_exactly_equal": true,
+  "dry_strict_source_validation": true,
+  "checkpoint_assertions_exactly_equal": 48,
+  "teaching_stage_ids_exactly_equal": 38,
+  "harmony_apply_stage_exactly_equal": true,
+  "quick_reference_current": true,
+  "quick_reference_sha256": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+  "current_review_before_sha256": "d924a17d8e88f13e09c10178b25ab08a5b7e67d5e2b87303cfa32c71fd23ee2a",
+  "current_inventory_before_sha256": "82e05ac517fed12071e1474ecfb427c78d782582336f18eb274f55c1c41b2205",
+  "proposal_sha256": "b8f5b50d852ff7ecca0b520f5004427b6a452c1a1f0f544c957bf9584ea441c5",
+  "ready_to_apply": false,
+  "native_qualification_pending": true,
+  "complete_regression_run": false,
+  "authority_activation": false
+}

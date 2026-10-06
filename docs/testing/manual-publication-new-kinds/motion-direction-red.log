@@ -1,0 +1,15 @@
+................................E....................................
+======================================================================
+ERROR: test_response_bound_comes_from_native_observations_not_declared_timeout (test_manual_publication_verify.MotionResponseAndMusicIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 315, in test_response_bound_comes_from_native_observations_not_declared_timeout
+    audit.check_motion_feedback(row,observations,recipe,events,actions)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 621, in check_motion_feedback
+    if recipe[start:end]!=expected:raise ValueError('Motion feedback differs from exact public encoder/key edges')
+ValueError: Motion feedback differs from exact public encoder/key edges
+
+----------------------------------------------------------------------
+Ran 69 tests in 2.221s
+
+FAILED (errors=1)

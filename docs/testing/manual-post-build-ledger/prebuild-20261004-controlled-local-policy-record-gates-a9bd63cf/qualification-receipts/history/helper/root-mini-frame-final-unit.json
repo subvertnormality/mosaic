@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "tests": 11,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "duration_seconds": 1.9239832040038891,
+  "source_pins": {
+    "tests/behaviour/contract/harmony_merge_visual.py": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296",
+    "tests/behaviour/test_mini_header_animation_ui.py": "3664f8b3043c6fc41db5917ab1e4152fdfb873869d0f6c584878ba056cbea755",
+    "tests/behaviour/fixtures/harmony-no-voicing-native-obs44.json": "41cd1bc5dc68d5e7387e8e1cb67dd0772530da4564c93b0217606cf6dbdc1be7"
+  },
+  "fixture_matches_original_observation": true,
+  "log_sha256": "51170282d5170e98abb0110ae07e2c489ae50c8a237b22e4c1314f215a8be641",
+  "native_processes": [],
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci"
+}

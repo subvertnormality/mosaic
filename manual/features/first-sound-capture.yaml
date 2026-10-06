@@ -1,0 +1,274 @@
+schema_version: 2
+feature:
+  id: first-sound
+  title: Creating a First Loop
+  audience: beginner
+  summary: Configure an output and play a four-step channel loop.
+  prose: |-
+    Start with a new project. This walkthrough makes a four-step loop on channel 1, beginning with its output. Leave Record disarmed.
+
+    1. Tap Channel `(3,8)`. Check `CH01` in the header. Turn E1 to open Channel tasks, choose Device with E2, and press K3. Select a working output with E3. Press K3 to apply. For internal sound, choose an enabled supported player such as Polyperc 1. For MIDI, choose the basic MIDI device (CC Device) or your map, then check the destination port and MIDI channel against the instrument.
+    2. Tap Pattern `(5,8)` to reach Trig view. The header should name pattern 1. Tap the first four steps: `(1,4)` through `(4,4)`. They light as active attacks, the trigs where notes will sound. If you are editing another pattern, select pattern 1 using the top-row pattern selector.
+    3. Tap Channel `(3,8)` and assign pattern 1 with its slot at `(1,2)`. Hold step 1 `(1,4)`, tap step 4 `(4,4)`, then release step 1: hold the first step of a range, tap its last step, then let go. This gives channel 1 a four-step range.
+    4. Open Channel tasks → Masks. Select Note with E2 and set a channel-wide note of MIDI 60 with E3, without holding a step. In Masks the display calls this C3. Set Vel to 80 and Len to ½. These defaults define the note, velocity and length of all four attacks.
+    5. Tap Play `(1,8)`. You should hear four equal attacks repeating, with a moving grid playhead. At 90 BPM and the default Rate /1 each step lasts one sixth of a second. Tap Play again to stop. If Shift press stop is enabled, hold K1 with that tap.
+    6. Open the norns PARAMS menu with a short K1 tap. Under MOSAIC, choose Save project and give the loop a name. Return to Mosaic before continuing.
+
+    After all four attacks are audible, continue with [Build a phrase](#build-a-phrase).
+  musical_use: ''
+  related:
+  - no-sound
+  - devices
+  - adding-trigs
+  - masks
+  - save-and-load
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-MASK-007
+    - M-MASK-008
+    - M-SAVE-NAMED-001
+    code:
+    - tests/behaviour/composition_workflow.py
+    - tests/behaviour/ui.py
+    - tests/behaviour/ui_map.py
+  controls: []
+  details:
+  - title: Coordinates and pitches
+    text: 'The first channel steps run across row 4. Coordinates count from the grid’s top-left corner.
+      Octave labels vary between screens: this tutorial uses the Masks field, where MIDI 60 is C3. Numeric
+      MIDI is the reliable reference when moving between instruments or controls.'
+  recipes: []
+scenes:
+- id: first-sound-equal-note-loop
+  title: Create a four-step loop from an empty project
+  behaviour_case: M-PAT-001
+  setup:
+    fixture: empty
+    seed: 42
+    voices:
+      '1': MIDI test output
+  steps:
+  - id: device
+    caption: Tap Channel. Open Channel tasks, select Device, choose the first MIDI output and press K3.
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: enc
+      n: 1
+      delta: 3
+    - type: enc
+      n: 2
+      delta: -9
+    - type: enc
+      n: 2
+      delta: 7
+    - type: key
+      n: 3
+    - type: enc
+      n: 3
+      delta: 1
+    - type: key
+      n: 3
+    expect:
+      header:
+        page: midi_config
+        params:
+          channel: 1
+    citation: README.md#devices
+  - id: pattern
+    caption: Tap Pattern and activate steps 1–4. The Pattern Trig page remains selected.
+    inputs:
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    expect:
+      header:
+        page: trigger_editor
+        params:
+          pattern: 1
+    citation: README.md#adding-trigs
+  - id: assignment
+    caption: Tap Channel and assign pattern 1. Hold step 1, tap step 4, then release step 1 to set a four-step
+      range.
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    expect:
+      header:
+        page: merge_detail
+        params:
+          channel: 1
+    citation: README.md#adding-patterns-to-channels
+  - id: note
+    caption: Open Masks, select Note and set MIDI 60. The Masks screen displays C3.
+    inputs:
+    - type: enc
+      n: 1
+      delta: 3
+    - type: enc
+      n: 2
+      delta: -9
+    - type: key
+      n: 3
+    - type: enc
+      n: 2
+      delta: -10
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 3
+      delta: 61
+    expect:
+      header:
+        page: masks
+        params:
+          channel: 1
+      screen:
+      - - note
+        - C3
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: velocity
+    caption: Select Vel and set 80. All steps use this channel velocity default.
+    inputs:
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 3
+      delta: 81
+    expect:
+      header:
+        page: masks
+        params:
+          channel: 1
+      screen:
+      - - velocity
+        - '80'
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: length-and-playback
+    caption: Select Len and set 1/2. Press Play to hear four equal MIDI 60 attacks. The replay checks
+      two complete cycles and stops playback.
+    inputs:
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 3
+      delta: 8
+    expect:
+      header:
+        page: masks
+        params:
+          channel: 1
+      screen:
+      - - length
+        - 1/2
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      durations:
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      positions:
+      - 0
+      - 1
+      - 2
+      - 3
+      cycle_steps: 4
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums

@@ -1,0 +1,14 @@
+--- frozen846b
++++ candidate
+@@ -199,10 +199,10 @@
+     for step,degree in ((1,0),(5,0),(9,0),(13,1)):ui.tap_control('pattern_note_degree',(step,degree))
+     ui.channel_editor();musical(c,'harmony-design-relative')
+     ui.scale_editor();ui.tap_control('scale_slot',2)
++    musical(c,'harmony-design-draft')
+     c.enc(2,-12);c.enc(3,2)
+     checkpoint(c,'harmony-design-draft-scale','scale',{'slot':2},selected=dict(layout='vertical_list',label='Root',value='D'))
+     ui.select_row('scale',1);ui.expect_selected_field('vertical_list','Scale','Major')
+-    musical(c,'harmony-design-draft')
+     ui.press_key(3);musical(c,'harmony-design-apply-d')
+     ui.tap_control('scale_slot',1);ui.press_key(3);musical(c,'harmony-design-apply-restored')
+     ui.pattern_editor()

@@ -1,0 +1,17 @@
+{
+  "exit_code": 2,
+  "command": [
+    "lua",
+    "run_tests.lua",
+    "-p",
+    "test_ui_adapters_merge_root_strategy",
+    "-p",
+    "test_ui_adapters_read_only_c09_fragments_overridden"
+  ],
+  "files": {
+    "lib/ui_adapters/read_only.lua": "b6188bc95ec9275821ce2a9abe75c383fd6cd54f84ef8f1feedb5b178be78f9e",
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": "9fe94cb266076b4a6315b6c653ba53636dac0b7ce1f05577a77af7a5a4caeeda",
+    "lib/tests/lib/ui_adapters_read_only_tests.lua": "77409d22e4917a0a00fe0053496cf15a7654014e037b9651a1e4edf2e2761e43",
+    "lib/tests/lib/ui_adapters_merge_tests.lua": "16cc2896031068d1b1ebdfc585b6f6029879be81c9faffd737ea319ca390a631"
+  }
+}

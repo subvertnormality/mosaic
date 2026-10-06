@@ -1,0 +1,17 @@
+F...........................
+======================================================================
+FAIL: test_changed_inputs_during_audit_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Independent course audit did not verify all 50 checkpoints
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 81, in test_changed_inputs_during_audit_rejected
+    with self.assertRaisesRegex(ValueError,"inputs changed"):binder.bind(*self.documents,self.root/"proof",root=self.root)
+AssertionError: "inputs changed" does not match "Independent course audit did not verify all 50 checkpoints"
+
+----------------------------------------------------------------------
+Ran 28 tests in 3.959s
+
+FAILED (failures=1)

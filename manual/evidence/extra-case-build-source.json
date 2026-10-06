@@ -1,0 +1,6 @@
+{
+  "before_sha256": "3ac7077d545fa3aae39b7f2074fb38cea8da712665ded78190a5a1397faf5e1e",
+  "after_sha256": "8dc33e1419c062f905e5d43b34d61ec6c167084acf077ac586b94495aadfbda6",
+  "regression": "test_reason_and_swing_pin_the_additive_case_source_in_both_lanes",
+  "complete_regression_run": false
+}

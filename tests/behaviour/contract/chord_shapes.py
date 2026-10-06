@@ -47,7 +47,8 @@ def chord_dashboard_display(c, root_velocity, voices):
 
 
 def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
-                         modifier=10, extra=None, dashboard=False):
+                         modifier=10, extra=None, dashboard=False,
+                         strum_readout_checkpoint=False):
     c.configure()
     c.hold_tap((1, 4), (16, 7))
     c.tap(5, 8)
@@ -70,6 +71,10 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
     c.ui.turn(1, -2)
     _assign_trig_parameter(c, "Chord Note Arpeggio" if arp else "Chord Note Strum")
     c.enc(3, 0 if extra == "disabled" else 8)
+    if strum_readout_checkpoint:
+        # M-CHORDSHAPE-001: keep the selected half-step value as a native UI
+        # checkpoint before E2 leaves slot 1 for Chord Pattern.
+        c.ui.expect_selected_param(1, "1/2", marker=None, label="Chord Note Strum")
     c.enc(2, 1)
     _assign_trig_parameter(c, "Chord Pattern")
     c.enc(3, shape)
@@ -79,20 +84,23 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
     c.enc(2, 1)
     _assign_trig_parameter(c, "Chord Velocity Mod")
     c.enc(3, modifier)
-    if extra == "accelerating":
+    if extra in ("accelerating", "accelerating-up"):
         c.enc(2, 1)
         _assign_trig_parameter(c, "Chord Spread")
         c.enc(3, 5)
         c.enc(2, 1)
         _assign_trig_parameter(c, "Chord Accel Mod")
-        c.enc(3, -1)
+        c.enc(3, -1 if extra == "accelerating" else 1)
     if dashboard:
         c.ui.turn(1, 4)
     capture = MidiWindow(c.snapshot()["midi_count"])
     trigger = c.logical_ns
     c.action(type="grid", x=1, y=8, state=1)
     c.action(type="grid", x=1, y=8, state=0)
-    c.elapse(2.625 if extra == "early-stop" else 3.25)
+    # README.md#chord-acceleration: Accel +1 stretches the gaps, so the last
+    # slot (4 1/2 steps, 972 ticks) needs about 7 s before Stop.
+    c.elapse(2.625 if extra == "early-stop" else
+             7.5 if extra == "accelerating-up" else 3.25)
     capture.extend(c.snapshot())
     controlled = c.clock_mode == "controlled-experimental"
     lower = c.logical_ns if controlled else time.monotonic_ns()
@@ -116,6 +124,11 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
         ticks = {0: 0, 108: 162, 216: 270, 324: 324}
         expected = [(ticks[tick], pitch, vel) for tick, pitch, vel in expected
                     if tick in ticks]
+    elif extra == "accelerating-up":
+        # README.md#chord-acceleration table row +1: gaps 3/4, 1, 5/4, 3/2
+        # steps, so slot times 0, 3/4, 7/4, 3, 9/2 steps (216 ticks a step).
+        ticks = {0: 0, 108: 162, 216: 378, 324: 648, 432: 972}
+        expected = [(ticks[tick], pitch, vel) for tick, pitch, vel in expected]
     elif extra == "early-stop":
         expected = [row for row in expected if row[0] < 378]
     if arp and mask_bits == 0:
@@ -159,7 +172,8 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
             tolerance=2e-9 if controlled else .01)
     c.results.append(dict(kind="chord-shape-slots", arp=arp, shape=shape,
                           muted=muted, mask_bits=mask_bits,
-                          onsets=len(expected), release_checks=len(rows), passed=True))
+                          onsets=len(expected), release_checks=len(rows), passed=True,
+                          **(dict(acceleration=1) if extra == "accelerating-up" else {})))
     if dashboard:
         # Chord slots 1..4 send pitches[1..4] when their mask bit is set.
         voices = [pitches[slot] if mask_bits & (1 << (slot - 1)) else None for slot in range(1, 5)]

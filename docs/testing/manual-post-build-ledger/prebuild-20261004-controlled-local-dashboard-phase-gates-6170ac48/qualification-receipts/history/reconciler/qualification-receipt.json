@@ -1,0 +1,42 @@
+{
+  "scope": "Exact frozen-selector role_pitches typing and source-defined per-case requirements/per-participant trace sharing only; no oracle/value normalization",
+  "files": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": {
+      "before_sha256": "d3a9f98930fd52bd0cbbdfe6886a98ffa1a75fbcf2c60dd8a7fbfe784b83da96",
+      "after_sha256": "a65bd218e651932b05a1b94c955edf8053aa17ed2fad50bd5837e343e16ec3cc"
+    },
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": {
+      "before_sha256": "c7ba63d4470b612342c1dbeb5712a8e250751000761b35b93dc7d7bf837239ac",
+      "after_sha256": "0fe2c9f94ba3c3b6d056308ca68160509c6b63e70501f061b1de53567063eb57"
+    }
+  },
+  "red": {
+    "path": "/home/andy/mosaic-manual-build-operators/reconciler-reference-object-reconstruction-d77533035ea04dc890ceb5d2c354eefa/red.log",
+    "sha256": "831a2ebe2d436bc7f685cf3df71491baf4c16dbb2cd40bcde95c885621397404",
+    "failed_tests": 4
+  },
+  "green": {
+    "path": "/home/andy/mosaic-manual-build-operators/reconciler-reference-object-reconstruction-d77533035ea04dc890ceb5d2c354eefa/green-final.log",
+    "sha256": "69d64f140f9c8e019d28bf879e44aa80d7f9c1806bc732f5920e7c0f357dfd5f",
+    "tests": 57
+  },
+  "prior_fixture_adjustment": "Existing synthetic reproduction fixture now supplies required frozen plan and trace evidence; original LED/output-stripping assertions retained",
+  "actual_historical_reproductions": [
+    {
+      "kind": "musical",
+      "report": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/reference-scenes.json",
+      "report_sha256": "037ff6cb48af37b06d725b57c1d0f98ac811d93ed4acb94402a5d85bfe1d645a",
+      "generated_sha256": "04bbf4782e05d26f1cb89a5d414471a57cd091aaaacd83102dffbbe910d4ef00",
+      "exact_live_yaml": true
+    },
+    {
+      "kind": "nested",
+      "report": "/home/andy/mosaic-manual-runs/90a5df27f9bd479caf4bec904b54b741/reference-scenes.json",
+      "report_sha256": "945dbb96257f057634dfb581dfda500dff6a4c47de902653e2a7daaafafb411b",
+      "generated_sha256": "2fe0f2b128916c24effc28890c21a50e3b30b560b9504e707a7dad3e2d9c895d",
+      "exact_live_yaml": true
+    }
+  ],
+  "native_launched": false,
+  "complete_regression_run": false
+}

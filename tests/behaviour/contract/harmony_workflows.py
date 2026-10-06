@@ -46,6 +46,8 @@ def revoice_workflow(c):
     c.configure()
     # Device Config -> Masks; add one scale-degree chord voice.
     c.ui.turn(1, -20); c.ui.turn(2, 3); c.ui.set_value(1)
+    # README.md#adding-chords: Chord 1 holds the voice a scale-degree step above the root (2nd).
+    c.ui.expect_selected_mask("chord_1", "2nd")
     # Masks -> Harmony; Revoice is the first opt-in mode.
     c.ui.channel_page("harmony", "masks", channel=1)
     c.ui.expect_header("harmony", channel=1)
@@ -227,8 +229,11 @@ def setup_no_voicing(c):
     c.ui.set_value(2)                # Pattern
     c.ui.turn(2, 4); c.ui.press_key(3)      # Register
     c.ui.expect_header("harmony_register", channel=1)
+    # README.md#harmony: Register rows set inclusive MIDI Low/High, Centre and Preferred leap.
     c.ui.turn(2, 1); c.ui.set_value(26)  # Bass Low 50
+    c.ui.expect_selected_field("detail", "Low", "50")
     c.ui.turn(2, 1); c.ui.set_value(-10) # Bass High 50
+    c.ui.expect_selected_field("detail", "High", "50")
     c.ui.turn(2, 1); c.ui.set_value(2)   # Bass Centre 50; valid but excludes pitch class C
     c.ui.expect_selected_field("detail", "Centre", "50")
     c.ui.press_key(3)

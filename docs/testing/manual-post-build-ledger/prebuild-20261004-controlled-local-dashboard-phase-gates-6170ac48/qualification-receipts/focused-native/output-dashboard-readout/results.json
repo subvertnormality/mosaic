@@ -1,0 +1,555 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "MERGE MODES CH01",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "DEVICE CH01",
+    "matched": true
+  },
+  {
+    "kind": "dashboard",
+    "title": "OUTPUT",
+    "scope": "CH01",
+    "rows": [
+      [
+        "Note",
+        "NO EVENT"
+      ],
+      [
+        "Vel / Len",
+        "NO EVENT"
+      ],
+      [
+        "Step",
+        "NO EVENT"
+      ],
+      [
+        "Degree",
+        "NO EVENT"
+      ],
+      [
+        "Pitch",
+        "NO EVENT"
+      ],
+      [
+        "Sent",
+        "NO EVENT"
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "documentation-frame",
+    "name": "manual/M-LIVEUI-DASH-001/output-dashboard-readout/fresh",
+    "sha256": "91b2dc819cb9540c65c9405a51f2371b8ba542a2de8da6a76edaf8e2eab62fad",
+    "stable_rows": 55,
+    "stable_sha256": "9144c9b38ca36e45dfae428245ec560669758a86b47d630733e398561e509237",
+    "grid_sha256": "07328c5e487b0069d3415d2626135977a289f0e8c7f5a17c869bb3399abe3eac",
+    "semantic_assertions": 8,
+    "passed": true,
+    "assertion_index": 7,
+    "assertion": {
+      "kind": "dashboard",
+      "title": "OUTPUT",
+      "scope": "CH01",
+      "rows": [
+        [
+          "Note",
+          "NO EVENT"
+        ],
+        [
+          "Vel / Len",
+          "NO EVENT"
+        ],
+        [
+          "Step",
+          "NO EVENT"
+        ],
+        [
+          "Degree",
+          "NO EVENT"
+        ],
+        [
+          "Pitch",
+          "NO EVENT"
+        ],
+        [
+          "Sent",
+          "NO EVENT"
+        ]
+      ],
+      "passed": true
+    },
+    "assertion_sha256": "8f503829814e137883f55e7975f00e74ced2b148d225030c67b0ff35477595d3",
+    "trace_sha256": "2a674991b07428db5f044807e1b344c011397800b077e5ce006ff68d549fe0a4",
+    "session_ordinal": 0
+  },
+  {
+    "kind": "screen-header",
+    "expected": "SCALE SLOT 01",
+    "matched": true
+  },
+  {
+    "kind": "dashboard",
+    "title": "SCALE OVERVIEW",
+    "scope": "SLOT 01",
+    "rows": [
+      [
+        "Playing scale",
+        "01"
+      ],
+      [
+        "Edit scale",
+        "01"
+      ],
+      [
+        "Step / range",
+        "01 / 01..64"
+      ],
+      [
+        "Transpose",
+        "0"
+      ],
+      [
+        "Step lock",
+        "NONE"
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "dashboard",
+    "title": "SCALE OVERVIEW",
+    "scope": "SLOT 01",
+    "rows": [
+      [
+        "Playing scale",
+        "01"
+      ],
+      [
+        "Edit scale",
+        "01"
+      ],
+      [
+        "Step / range",
+        "01 / 01..64"
+      ],
+      [
+        "Transpose",
+        "0"
+      ],
+      [
+        "Step lock",
+        "NONE"
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "dashboard",
+    "title": "SCALE OVERVIEW",
+    "scope": "SLOT 01",
+    "rows": [
+      [
+        "Playing scale",
+        "01"
+      ],
+      [
+        "Edit scale",
+        "01"
+      ],
+      [
+        "Step / range",
+        "01 / 01..64"
+      ],
+      [
+        "Transpose",
+        "0"
+      ],
+      [
+        "Step lock",
+        "NONE"
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "dashboard",
+    "title": "SCALE OVERVIEW",
+    "scope": "SLOT 01",
+    "rows": [
+      [
+        "Playing scale",
+        "01"
+      ],
+      [
+        "Edit scale",
+        "01"
+      ],
+      [
+        "Step / range",
+        "01 / 01..64"
+      ],
+      [
+        "Transpose",
+        "0"
+      ],
+      [
+        "Step lock",
+        "NONE"
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "dashboard",
+    "title": "SCALE OVERVIEW",
+    "scope": "SLOT 01",
+    "rows": [
+      [
+        "Playing scale",
+        "01"
+      ],
+      [
+        "Edit scale",
+        "01"
+      ],
+      [
+        "Step / range",
+        "01 / 01..64"
+      ],
+      [
+        "Transpose",
+        "0"
+      ],
+      [
+        "Step lock",
+        "NONE"
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "SCALE TASKS SLOT 01",
+    "matched": true
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Overview",
+    "value": "OPEN >",
+    "matched": true,
+    "observation_index": 36,
+    "frame_sha256": "ce2cc09717a01665c1a1fc0974b54572210bf248bac3ebf9e7647f2175edff45"
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Overview",
+    "value": "OPEN >",
+    "matched": true,
+    "observation_index": 37,
+    "frame_sha256": "1aad06eeef5ca4e8198650c67f75ee041a865674cfaf40763aca44f5d288267b"
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Scale clock",
+    "value": "OPEN >",
+    "matched": true,
+    "observation_index": 38,
+    "frame_sha256": "02aa4a2190939053fef96965a83494a57d8d291c646822f19fe7a904172fe773"
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Scale",
+    "value": "OPEN >",
+    "matched": true,
+    "observation_index": 39,
+    "frame_sha256": "d816350a44e86fdd04d7a699cf8ee40bcce9820ab7ec48a66614a90c67aea81b"
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Scale",
+    "value": "OPEN >",
+    "matched": true,
+    "observation_index": 40,
+    "frame_sha256": "a98a0d2d16ff8fe618e8bcf8d9aa6d35c5f701fe16f43bf3752903b2d661efe9"
+  },
+  {
+    "kind": "scale-tasks-rows",
+    "rows": [
+      "Scale",
+      "Scale clock",
+      "Overview"
+    ],
+    "passed": true
+  },
+  {
+    "kind": "dashboard",
+    "title": "SONG PLAYBACK",
+    "scope": "SONG 01",
+    "rows": [
+      [
+        "Playing",
+        "SONG 01"
+      ],
+      [
+        "Next",
+        "SONG 01"
+      ],
+      [
+        "Pass",
+        "1 / 1"
+      ],
+      [
+        "Global length",
+        "64"
+      ],
+      [
+        "Song mode",
+        "AUTO"
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "selected-field",
+    "layout": "vertical_list",
+    "label": "Tresillo amount",
+    "value": "x24",
+    "matched": true,
+    "observation_index": 43,
+    "frame_sha256": "c66c58cdbd79b5c1fb305fd7a10977eec85e9795495010ee13aa0333dec61f25"
+  },
+  {
+    "kind": "footer",
+    "text": "E3 SET",
+    "passed": true
+  },
+  {
+    "kind": "selected-field",
+    "layout": "vertical_list",
+    "label": "Tresillo amount",
+    "value": "x24",
+    "matched": true,
+    "observation_index": 46,
+    "frame_sha256": "48f2c4104d7e9c1517c017e8e1d0019cc805b721a9f1a21af3bbdecac41443e7"
+  },
+  {
+    "kind": "footer",
+    "text": "E3 SET",
+    "passed": true
+  },
+  {
+    "kind": "selected-field",
+    "layout": "vertical_list",
+    "label": "Tresillo amount",
+    "value": "x32",
+    "matched": true,
+    "observation_index": 49,
+    "frame_sha256": "4a4d28280beb63d28b3fb83b4fc59de7ecb437031bd4b097186484ad396c666a"
+  },
+  {
+    "kind": "footer",
+    "text": "E3 SET",
+    "passed": true
+  },
+  {
+    "kind": "selected-field",
+    "layout": "vertical_list",
+    "label": "Tresillo amount",
+    "value": "x32",
+    "matched": true,
+    "observation_index": 51,
+    "frame_sha256": "4a4d28280beb63d28b3fb83b4fc59de7ecb437031bd4b097186484ad396c666a"
+  },
+  {
+    "kind": "footer",
+    "text": "E3 SET",
+    "passed": true
+  },
+  {
+    "kind": "trig-options-immediate-setting-no-k3-apply",
+    "amount_before": "x24",
+    "amount_after": "x32",
+    "pattern_grid_before": [
+      15,
+      15,
+      15,
+      15,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "pattern_grid_after": [
+      15,
+      15,
+      15,
+      15,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "passed": true,
+    "citation": "manual/features/reference-pattern.yaml#adding-trigs"
+  },
+  {
+    "kind": "live-ui-dashboards-summary",
+    "passed": true
+  }
+]

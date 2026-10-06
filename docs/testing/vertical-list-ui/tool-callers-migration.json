@@ -1,0 +1,21 @@
+{
+  "changes": [
+    {
+      "path": "tools/manual_closure_cases.py",
+      "before_sha256": "6a00cab809bd4ca6e75b11b98adcbbe278bea8c4964dbb56fceaba5e4aa8dd65",
+      "after_sha256": "df1676be5d1dd4d27eb46a021303927297deb3844f380b922508b9accf783a5d"
+    },
+    {
+      "path": "tools/docs_capture.py",
+      "before_sha256": "27f60699c93f7de5a98ace821cc0d1b1c337ad06e9f546885bf51c18a605e407",
+      "after_sha256": "1d59aaa6c89e4c42dec50dd08bf8e08ec66d00473234a343cae3cab650d158ca"
+    },
+    {
+      "path": "tools/manual_course_cases.py",
+      "before_sha256": "57eaf07dce495df445ecb6eeb1dcf74e285931b12b09dc20cc8529ed4652e51f",
+      "after_sha256": "7a398d26ff68f1b62bd507f0a2726a33942b54825cb9db7a9d1fc36d76216d87"
+    }
+  ],
+  "transparent_layout_alias": false,
+  "historical_native_files_modified": false
+}

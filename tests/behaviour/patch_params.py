@@ -85,6 +85,8 @@ def patch_lock_precedence(c,lock_value=99):
             c.ui.turn(3, 1);c.ui.turn(3, -1)
         else:
             for _ in range(abs(lock_value-63)):c.ui.turn(3, 1 if lock_value>63 else -1)
+        # README.md#trig-param-locks: while held, slot 1 shows the lock with an L; the stored 63 is untouched.
+        if lock_value not in (63,-1):c.ui.expect_selected_param(1,lock_value,marker='L')
     finally:c.ui.gesture([], [('step', 1)])
     before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
@@ -196,18 +198,25 @@ def patch_slide_timing(c,wrap=False,target=96,fractional=False,swing=None,shuffl
         c.ui.seek_current_patch_parameter('cc_default', confirm=False, failure='Default-Off CC control unreachable')
     turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
     c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('cc_default' if default_off else 'stored_patch_cc1')
+    # The assigned slot shows the stored value (63) until a step lock replaces it on a held step.
+    if not default_off:c.ui.expect_selected_param(1,63)
     locks=[(1,24),(lock_step,target)]+([(2,-1)] if off_middle else [])+([(4,48)] if step_local else [])
     for step,value in locks:
         c.ui.gesture([('step', step)], [])
         try:
             c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+            if value>=0 and not default_off:c.ui.expect_selected_param(1,value,marker='L')
         finally:c.ui.gesture([], [('step', step)])
     if step_local:
         # Documented held-step K3: only source step1 slides; global remains off.
         c.ui.gesture([('step', 1)], [])
-        try:c.ui.press_key(3)
+        try:
+            c.ui.press_key(3)
+            if not default_off:c.ui.expect_selected_param(1,24,marker='S')
         finally:c.ui.gesture([], [('step', 1)])
-    else:c.ui.press_key(3) # Documented global slide toggle for the selected parameter.
+    else:
+        c.ui.press_key(3) # Documented global slide toggle for the selected parameter.
+        if not default_off:c.ui.expect_selected_param(1,63,marker='S')
     if fractional:
         # Parameter page 2 -> clocks page 4; /1 (index13) -> x5.3 (index5).
         c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.wait_for_header('clock_mods', channel=1)

@@ -86,10 +86,14 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertFalse(hasattr(ordinary, 'foundation_workflow'))
         node = ast.parse(inspect.getsource(owner.foundation_workflow)).body[0]
         # Interpreter-stable digest of the same AST (CI runs Python 3.8), as
-        # migrated to the live UI's vertical Rhythm screen.
+        # migrated to the live UI's vertical Rhythm screen. Reviewed re-freeze,
+        # followup-cases: foundation_workflow adds one acceptance, Add accent turned to
+        # 40 and K3 applied, then a second two-loop playback with the additions at
+        # velocity 40 and the anchors unchanged (README Merge Shape); the earlier
+        # steps, image hash and 70% playback are untouched.
         self.assertEqual(
             ast_digest(node),
-            '503e13eaccadda1fac6ee16a674d9a74d3143690760279db2b339f9c1723eb47',
+            'fd6364f6a8fe10265de36e5f2a5afeff4890162c70da080e5a9f327c04844bf9',
         )
 
     def test_fast_external_acquisition_has_exact_contract_owner(self):
@@ -458,31 +462,57 @@ class UiLayerGuardTests(unittest.TestCase):
             self.assertEqual(callable_raw_dependencies(run), [], run.__name__)
 
     def test_harmony_page_navigation_preserves_header_observations(self):
-        """README MERGE-FOUNDATION/HARMONY-REVOICE: show the selected page."""
+        """README MERGE-FOUNDATION/HARMONY-REVOICE: show every selected page."""
         import ast
         import inspect
         import textwrap
+        from unittest.mock import Mock, call, patch
 
         from harmony_merge_workflow import setup_foundation
         from contract.harmony_workflows import revoice_workflow
+        from merge_strategy_routes import foundation_rhythm
 
-        for run, page in ((setup_foundation, "merge_shape"),
-                          (revoice_workflow, "harmony")):
-            calls = [node for node in ast.walk(ast.parse(
-                textwrap.dedent(inspect.getsource(run))))
-                if isinstance(node, ast.Call)
-                and isinstance(node.func, ast.Attribute)
-                and isinstance(node.func.value, ast.Attribute)
-                and node.func.value.attr == "ui"
-                and node.args and isinstance(node.args[0], ast.Constant)
-                and node.args[0].value == page]
-            navigation = [node.lineno for node in calls
-                          if node.func.attr == "channel_page"]
-            observations = [node.lineno for node in calls
-                            if node.func.attr == "expect_header"]
-            self.assertEqual(len(navigation), 1, run.__name__)
-            self.assertTrue(any(line > navigation[0] for line in observations),
-                            "%s lost its screen-header result" % run.__name__)
+        # Foundation now has one shared effective selector. Its factory must
+        # delegate once, and both Merge Shape visits must retain a visible
+        # header before the Rhythm edit: save Anchor, then reopen after selection.
+        driver = Mock()
+        with patch('merge_strategy_routes.foundation_rhythm',
+                   wraps=foundation_rhythm) as shared_route:
+            setup_foundation(driver)
+        shared_route.assert_called_once_with(driver, 1)
+        entries = driver.ui.method_calls
+        starts = [i for i, entry in enumerate(entries)
+                  if entry == call.channel_page('merge_shape', channel=1)]
+        self.assertEqual(len(starts), 2)
+        for start in starts:
+            self.assertEqual(entries[start + 1],
+                             call.expect_header('merge_shape', channel=1))
+            self.assertEqual(entries[start + 2], call.select_row('rhythm', 1))
+            self.assertEqual(entries[start + 3], call.press_key(3))
+            self.assertEqual(entries[start + 4],
+                             call.expect_header('merge_rhythm', channel=1))
+        self.assertEqual(entries.count(call.expect_header('merge_detail', channel=1)), 1)
+        self.assertEqual(entries.count(call.expect_selected_field(
+            'detail', 'Strategy', 'FOUNDATION')), 1)
+        self.assertEqual(entries.count(call.expect_selected_field(
+            'detail', 'Active', 'FOUNDATION')), 1)
+
+        # Harmony still navigates directly and keeps its exact single header pair.
+        calls = [node for node in ast.walk(ast.parse(
+            textwrap.dedent(inspect.getsource(revoice_workflow))))
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and isinstance(node.func.value, ast.Attribute)
+            and node.func.value.attr == 'ui'
+            and node.args and isinstance(node.args[0], ast.Constant)
+            and node.args[0].value == 'harmony']
+        navigation = [node.lineno for node in calls
+                      if node.func.attr == 'channel_page']
+        observations = [node.lineno for node in calls
+                        if node.func.attr == 'expect_header']
+        self.assertEqual(len(navigation), 1)
+        self.assertTrue(any(line > navigation[0] for line in observations),
+                        'revoice_workflow lost its screen-header result')
 
     def test_harmony_replay_retains_page_observations_and_navigation(self):
         """README Harmony workflows retain their visible page checkpoints."""
@@ -649,7 +679,7 @@ class UiLayerGuardTests(unittest.TestCase):
             if case_id.startswith(("M-CHORDSHAPE-", "M-CHORDVEL-"))
             or case_id in dashboard
         }
-        self.assertEqual(len(chord), 278)
+        self.assertEqual(len(chord), 279)
         self.assertEqual(
             {CASES[case_id]["run"].__module__ for case_id in chord},
             {"contract.chord_shapes"},
@@ -784,7 +814,10 @@ class UiLayerGuardTests(unittest.TestCase):
         from ui_layer_guard import classify_contract_cases
         classified = classify_contract_cases(CASES)
         self.assertEqual(value["cases"], sorted(classified))
-        self.assertEqual(value["ceiling"], 472)
+        # Reviewed ceiling raise 476 -> 478 (followup-cases): M-CHORDSHAPE-260 and
+        # M-LIVEUI-SHAPETRIG-002 are contract-owned (the chord family test requires its
+        # cases in contract.chord_shapes), and the ceiling keeps its 10% headroom.
+        self.assertEqual(value["ceiling"], 478)
         self.assertGreaterEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
 
     def test_every_case_owner_matches_the_fixed_contract_inventory(self):

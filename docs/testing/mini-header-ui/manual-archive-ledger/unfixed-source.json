@@ -1,0 +1,6 @@
+{
+  "tool_sha256": "c2cc106163afcf52cbcd80ecee18df99786398201e8433baef69e4912e1828ae",
+  "validator_sha256": "2b8a2ed5b871fa82e77cfe8d29cf326d622c1349f51bc42cdc71be59dd65c114",
+  "test_sha256": "bd106db0af5a1527926f8f2b1dee3f6081400365437bc7139151220845f51e97",
+  "expected_defect": "MAN slicing incorrectly reads replacement overview instead of explicitly pinned full manual archive"
+}

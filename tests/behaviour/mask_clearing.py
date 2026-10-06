@@ -1,5 +1,120 @@
 """Manual mask-clear gestures, neighbouring-step isolation and MIDI oracles."""
 
+def _strict_midi_messages(packet):
+    """Parse concatenated MIDI messages; reject truncated, running-status or bad packets."""
+    data=packet.get('bytes')
+    if not isinstance(data,(list,tuple)) or not data:
+        raise AssertionError(('Empty or missing MIDI packet',packet))
+    if any(type(byte) is not int or not 0<=byte<=255 for byte in data):
+        raise AssertionError(('Invalid MIDI byte',packet))
+    messages=[];cursor=0
+    while cursor<len(data):
+        status=data[cursor]
+        if status<0x80:
+            raise AssertionError(('Running status/data byte without status',packet,cursor))
+        if 0xF8<=status<=0xFF:
+            if status in (0xF9,0xFD):raise AssertionError(('Undefined realtime status',packet,status))
+            length=1
+        elif 0x80<=status<=0xEF:
+            length=2 if status&0xF0 in (0xC0,0xD0) else 3
+        elif status==0xF1 or status==0xF3:length=2
+        elif status==0xF2:length=3
+        elif status==0xF6:length=1
+        else:raise AssertionError(('Unsupported or stray system status',packet,status))
+        if cursor+length>len(data):raise AssertionError(('Truncated MIDI message',packet,cursor,length))
+        message=list(data[cursor:cursor+length])
+        if any(byte>0x7F for byte in message[1:]):
+            raise AssertionError(('Status byte in MIDI data',packet,cursor,message))
+        messages.append(message);cursor+=length
+        if len(messages)>63:raise AssertionError(('Oversized MIDI packet',packet))
+    note_messages=[message for message in messages if message[0]&0xF0 in (0x80,0x90)]
+    if note_messages:
+        decoded=packet.get('decoded')
+        if not isinstance(decoded,list):raise AssertionError(('Note packet lacks public decoded messages',packet))
+        expected=[]
+        for message in note_messages:
+            status,pitch,velocity=message
+            kind=status&0xF0
+            if kind==0x90 and velocity==0:
+                raise AssertionError(('Zero-velocity note-on unsupported by strict mask parser',packet))
+            expected.append(dict(type='note_on' if kind==0x90 else 'note_off',
+                                 channel=(status&0x0F)+1,data=[pitch,velocity]))
+        actual=[row for row in decoded if row.get('type') in ('note_on','note_off')]
+        if actual!=expected:raise AssertionError(('Decoded MIDI does not match raw packet',packet,expected,actual))
+    return messages
+
+def _expanded_mask_note_events(packets,after_index):
+    from copy import deepcopy
+    expanded=[];previous=after_index
+    for packet in packets:
+        packet_index=packet.get('index')
+        if type(packet_index) is not int or packet_index<=previous:
+            raise AssertionError(('MIDI packet order/index changed',previous,packet))
+        previous=packet_index
+        messages=_strict_midi_messages(packet)
+        for ordinal,message in enumerate(messages):
+            if message[0]&0xF0 not in (0x80,0x90):continue
+            event=deepcopy(packet);event['packet_index']=packet_index
+            event['message_ordinal']=ordinal;event['index']=packet_index*64+ordinal
+            event['bytes']=message;expanded.append(event)
+    return expanded
+
+def _expanded_mask_state(state,after_index):
+    """Validate retained public capture history, then expand only the new tail."""
+    packets=state.get('midi');capture=state.get('midi_capture')
+    count=state.get('midi_count')
+    if not isinstance(packets,list) or not isinstance(capture,dict):
+        raise AssertionError(('MIDI capture state is incomplete',state))
+    tail_start=capture.get('tail_start');tail_limit=capture.get('tail_limit')
+    captured_count=capture.get('count');dropped=capture.get('dropped')
+    if (type(after_index)is not int or after_index<0 or type(count)is not int
+            or type(tail_start)is not int or type(tail_limit)is not int
+            or type(captured_count)is not int or type(dropped)is not int):
+        raise AssertionError(('MIDI capture counters are invalid',state))
+    if dropped!=0 or captured_count!=count:
+        raise AssertionError(('MIDI capture dropped or count mismatch',state))
+    expected_tail_start=max(1,count-tail_limit+1)
+    if tail_start!=expected_tail_start or len(packets)>tail_limit:
+        raise AssertionError(('MIDI capture tail metadata is inconsistent',expected_tail_start,tail_start,tail_limit,len(packets)))
+    if tail_start>after_index+1:
+        raise AssertionError(('MIDI capture tail starts after playback marker',after_index,tail_start,state))
+    expected_indexes=list(range(tail_start,count+1))
+    indexes=[packet.get('index') for packet in packets]
+    if indexes!=expected_indexes:
+        raise AssertionError(('MIDI retained history is incomplete or unordered',expected_indexes[:8],expected_indexes[-8:],indexes[:8],indexes[-8:]))
+    return _expanded_mask_note_events((packet for packet in packets if packet['index']>after_index),after_index)
+
+def _mask_packet_playback(c,expected,cycles,closing_group_size,timeout=5):
+    """Capture note messages without mistaking a coalesced packet for one note."""
+    from note_accounting import note_pairs
+    assert expected and cycles>=2 and closing_group_size>=1
+    before=c.snapshot()['midi_count'];target=len(expected)*cycles+closing_group_size
+    c.tap(1,8)
+    def expanded(state):
+        return _expanded_mask_state(state,before)
+    def enough(state):
+        return sum(144<=event['bytes'][0]<=159 and event['bytes'][2]>0 for event in expanded(state))>=target
+    state=c.wait(enough,timeout)
+    first=expanded(state);onsets=[event for event in first if 144<=event['bytes'][0]<=159 and event['bytes'][2]>0]
+    wanted=[expected[index%len(expected)] for index in range(target)]
+    actual=[(event['port'],event['bytes']) for event in onsets]
+    assert len(onsets)==target,dict(expected_count=target,actual_count=len(onsets),actual=actual)
+    assert actual==wanted,dict(expected=wanted,actual=actual)
+    c.tap(1,8);final=c.wait(lambda row:row['midi_capture']['outstanding']==[])
+    events=expanded(final)
+    onsets=[event for event in events if 144<=event['bytes'][0]<=159 and event['bytes'][2]>0]
+    actual=[(event['port'],event['bytes']) for event in onsets]
+    assert len(onsets)==target,dict(expected_count=target,actual_count=len(onsets),actual=actual)
+    assert actual==wanted,dict(expected=wanted,actual=actual)
+    pairs=note_pairs(events)
+    assert len(pairs)==target,dict(expected_pairs=target,actual_pairs=len(pairs))
+    packets=[packet for packet in final['midi'] if packet['index']>before]
+    c.results.append(dict(kind='midi',expected=wanted,actual=actual,complete_cycles=cycles,
+                          packet_count=len(packets),coalesced_note_packets=sum(
+                              sum(message[0]&0xF0 in (0x80,0x90) for message in _strict_midi_messages(packet))>1
+                              for packet in packets)))
+    return onsets,events
+
 def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_slot=1):
     from cases import assert_durations
     ui = c.ui
@@ -32,7 +147,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     def verify(active,stage):
-        phrase=[];lengths=[];positions=[]
+        phrase=[];lengths=[];positions=[];duration_events=None
         for step,(note,velocity) in enumerate(zip([60,62,64,65],[127,117,107,97]),1):
             overridden=step in active
             if attribute=='trig' and (not overridden if defaults else overridden):continue
@@ -66,8 +181,10 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
             for i,note in enumerate(sentinel):assert abs((note[field]-sentinel[0][field])/1e9-i/6)<=tolerance
             c.results.append(dict(kind='mask-clear-other-channel-isolation',stage=stage,expected_notes=expected_other,observed_onsets=len(sentinel),passed=True))
         else:
-            notes=c.playback(phrase,cycles=3 if defaults else 2,timeout=5)
-        if lengths:assert_durations(c,notes,lengths*2)
+            closing_group_size=sum(position==positions[0] for position in positions)
+            notes,duration_events=_mask_packet_playback(c,phrase,cycles=3 if defaults else 2,
+                                                            closing_group_size=closing_group_size,timeout=5)
+        if lengths:assert_durations(c,notes,lengths*2,events=duration_events)
         for i,note in enumerate(notes):
             elapsed=((i//len(phrase))*4+positions[i%len(phrase)]-positions[0])/6
             assert abs((note[field]-notes[0][field])/1e9-elapsed)<=tolerance

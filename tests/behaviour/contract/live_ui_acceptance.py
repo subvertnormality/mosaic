@@ -110,7 +110,7 @@ def _expect_params(c, cells, selected, label, value, stage):
 
 def _expect_focused(c, label, value, stage):
     from frame_oracle import selected_field_matches
-    _wait_frame(c, lambda s: selected_field_matches(s, 'focused', label, value),
+    _wait_frame(c, lambda s: selected_field_matches(s, 'vertical_list', label, value),
                 'focused-field', stage=stage, label=label, value=value)
 
 
@@ -575,20 +575,20 @@ def ui_accept_a10(c):
     c.enc(2, -6)
     _expect_detail(c, 'Patterns', '01 02', 'merge-patterns')
     c.enc(2, 1)
-    _expect_detail(c, 'Trig mode', 'SKIP', 'merge-trig-mode-default')
+    _expect_detail(c, 'Strategy', 'SKIP', 'merge-trig-mode-default')
     # Skip: trigs only where exactly one pattern has one (steps 3 and 4).
     c.playback(_melody([(64, 107), (65, 97)]), cycles=2)
     c.key(2)  # K2 returns to the remembered Channel family (Masks)
     ui.expect_header('masks', channel=1)
     # Trig merge (14,8) cycles Skip -> Only -> All; each shows Merge detail on Trig mode.
     ui.tap_control('trig_merge_mode')
-    _merge_follow(c, 'Trig mode', 'ONLY', 'Only trig merge mode', 'trig-only')
+    _merge_follow(c, 'Strategy', 'ONLY', 'ONLY APPLIED', 'trig-only')
     # Only: steps where both patterns trig; velocity average rounds half up:
     # (127+100)/2 = 113.5 -> 114, (117+100)/2 = 108.5 -> 109; note average (0+0)/2 = 0 -> C4,
     # (1+0)/2 = 0.5 -> 1 -> D4 (README Note/Velocity Merge Modes: Average).
     c.playback(_melody([(60, 114), (62, 109)]), cycles=2)
     ui.tap_control('trig_merge_mode')
-    _merge_follow(c, 'Trig mode', 'ALL', 'All trig merge mode', 'trig-all')
+    _merge_follow(c, 'Strategy', 'ALL', 'ALL APPLIED', 'trig-all')
     all_average = [(60, 114), (62, 109), (64, 107), (65, 97)]
     c.playback(_melody(all_average), cycles=2)
     # Held note merge + an unassigned pattern (3): Merge detail follows, the pattern is a
@@ -600,10 +600,10 @@ def ui_accept_a10(c):
         _expect_footer(c, 'Note merge mode pattern 3', 'note-merge-3')  # characterisation
     # Merge detail keeps its own row (Trig mode); the assignment is still patterns 1 and 2,
     # and the note merge source reads as the manual names it.
-    _expect_detail(c, 'Trig mode', 'ALL', 'follow-keeps-merge-row')
-    c.enc(2, 1)
+    _expect_detail(c, 'Strategy', 'ALL', 'follow-keeps-merge-row')
+    ui.select_row('note_mode',4)
     _expect_detail(c, 'Note mode', 'PAT 3', 'note-merge-source-row')
-    c.enc(2, -3)
+    ui.select_row('patterns',0)
     _expect_detail(c, 'Patterns', '01 02', 'source-not-assigned')
     c.led_values(PATTERN_ROW, [15, 15] + [2] * 14)
     c.key(2)

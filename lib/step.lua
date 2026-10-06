@@ -62,6 +62,14 @@ local resolve_pitch = pitch_resolution.new(
   end
 )
 local build_arp_sequence = arp_descriptor.new(chord_order.index)
+-- The part of a step a strummed voice sounds after the whole steps its delayed
+-- action waits; nil on a whole step, so those gates are queued exactly as before.
+local function strum_onset_fraction(delay)
+  local fraction = delay - math.floor(delay)
+  if fraction <= 1e-9 or fraction >= 1 - 1e-9 then return nil end
+  return fraction
+end
+
 local play_strum_root_now, resolve_strum_chord, resolve_strum_root_later =
   strum_descriptor.new(chord_order.index, chord_timing.delay)
 
@@ -1222,7 +1230,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
           if processed_chord_note then
             local accepted = play_note(processed_chord_note, note_container, velocity, note_container.length,
-              note_on_for_source("chord"..chord_number))
+              note_on_for_source("chord"..chord_number), strum_onset_fraction(delay))
             if accepted and consume_harmony then consume_harmony() end
 
             if note_dashboard_values and not note_dashboard_values.chords then
@@ -1273,7 +1281,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         if processed_note then
           local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * 4))
           local accepted = play_note(processed_note, note_container, velocity, note_container.length,
-            note_on_for_source("root"))
+            note_on_for_source("root"), strum_onset_fraction(delayed_root_delay))
           if accepted and consume_harmony then consume_harmony() end
 
           if c == program.get().selected_channel then

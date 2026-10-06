@@ -20,7 +20,7 @@ def slide_capacity(c):
         c.ui.turn(1, 2); c.ui.wait_for_header('clock_mods', channel=channel)
         c.enc(3, detents); c.key(3)
         # The live Clock screen (C04) shows its selected Rate field whole.
-        c.ui.expect_selected_field('focused', 'Rate', label)
+        c.ui.expect_selected_field('vertical_list', 'Rate', label)
         c.ui.turn(1, -2)
 
     def lock(step, value):

@@ -163,6 +163,20 @@ local function model_env(body)
     env.channel_page = {set_merge_mode = function(kind, mode)
       env.merge_sets[#env.merge_sets + 1] = kind .. "=" .. mode
       program.get_selected_channel()[kind .. "_merge_mode"] = mode
+    end, set_merge_strategy = function(mode)
+      local channel = program.get_selected_channel()
+      channel.musical_merge = channel.musical_merge or include("mosaic/lib/musical_merge/config").new()
+      if mode == "foundation" or mode == "fragments" then
+        channel.musical_merge.mode = mode
+        env.merge_sets[#env.merge_sets + 1] = "strategy=" .. mode
+      else
+        channel.musical_merge.mode = "off"
+        if channel.trig_merge_mode ~= mode then
+          channel.trig_merge_mode = mode
+          env.merge_sets[#env.merge_sets + 1] = "trig=" .. mode
+        end
+      end
+      return true, "APPLIED"
     end}
     env.pages = {
       note = include("mosaic/lib/pages/note_edit_page/note_edit_page_ui"),
@@ -327,14 +341,14 @@ function test_ui_adapters_read_only_c09_e3_steps_merge_modes_through_the_channel
     program.get_selected_channel().trig_merge_mode = "skip"
     luaunit.assert_true(env.adapter:edit("trig_mode", 1, t).ok)
     luaunit.assert_true(env.adapter:edit("trig_mode", 1, t).ok)
-    luaunit.assert_true(env.adapter:edit("trig_mode", 1, t).ok) -- clamped at ALL
-    luaunit.assert_equals(env.merge_sets, {"trig=only", "trig=all"})
-    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", t)).trig_mode, "ALL")
+    luaunit.assert_true(env.adapter:edit("trig_mode", 1, t).ok) -- next strategy is Foundation
+    luaunit.assert_equals(env.merge_sets, {"trig=only", "trig=all", "strategy=foundation"})
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", t)).trig_mode, "FOUNDATION")
     program.get_selected_channel().note_merge_mode = "down"
     luaunit.assert_true(env.adapter:edit("note_mode", 1, t).ok)
     luaunit.assert_equals(values(env.adapter:describe("C09", "C09", t)).note_mode, "PAT 1")
     luaunit.assert_true(env.adapter:edit("velocity_mode", -1, t).ok) -- already the first
-    luaunit.assert_equals(env.merge_sets, {"trig=only", "trig=all", "note=pattern_number_1"})
+    luaunit.assert_equals(env.merge_sets, {"trig=only", "trig=all", "strategy=foundation", "note=pattern_number_1"})
     luaunit.assert_false(env.adapter:edit("patterns", 1, t).ok)
   end)
 end
@@ -347,7 +361,7 @@ function test_ui_adapters_read_only_c09_trig_mode_names_merge_shape_when_it_deci
     channel.trig_merge_mode = "only"
     luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "ONLY")
     channel.musical_merge = {schema_version = 1, mode = "foundation"}
-    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "SHAPE (ONLY)")
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "FOUNDATION")
     channel.musical_merge = {schema_version = 1, mode = "off"}
     luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "ONLY")
   end)
@@ -443,5 +457,40 @@ function test_ui_adapters_read_only_snapshot_is_immutable_and_flags_a_moved_even
     luaunit.assert_equals(env.adapter:snapshot(target("C06")).snapshot.planned.output, 60)
     env.inspection.plan(song, 1, {step = 4, output = 62})
     luaunit.assert_true(env.adapter:snapshot(target("C06"), 1).stale)
+  end)
+end
+
+-- Characterisation requested 3 October 2026: the strategy selector names the
+-- effective merge strategy, independently of the saved legacy trig setting.
+function test_ui_adapters_read_only_c09_strategy_names_effective_foundation_and_fragments()
+  model_env(function(env)
+    local channel = program.get_selected_channel()
+    channel.trig_merge_mode = "only"
+    channel.musical_merge = {schema_version = 1, mode = "foundation"}
+    local fields = env.adapter:describe("C09", "C09", target("C09")).descriptors
+    local strategy
+    for _, field in ipairs(fields) do if field.id == "trig_mode" then strategy = field end end
+    luaunit.assert_equals(strategy.label, "Strategy")
+    luaunit.assert_equals(strategy.value, "FOUNDATION")
+    channel.musical_merge = {schema_version = 2, mode = "fragments"}
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "FRAGMENTS")
+    luaunit.assert_equals(channel.trig_merge_mode, "only")
+  end)
+end
+
+-- Characterisation requested 3 October 2026: Fragments owns all four merge
+-- streams; saved legacy parameter settings remain visible, inactive and intact.
+function test_ui_adapters_read_only_c09_fragments_overridden_legacy_fields_cannot_edit()
+  model_env(function(env)
+    local channel = program.get_selected_channel()
+    channel.musical_merge = {schema_version = 2, mode = "fragments"}
+    local outcome = env.adapter:describe("C09", "C09", target("C09"))
+    local by_id = {}
+    for _, field in ipairs(outcome.descriptors) do by_id[field.id] = field end
+    for _, id in ipairs({"note_mode", "velocity_mode", "length_mode"}) do
+      luaunit.assert_equals(by_id[id].kind, "readonly")
+      luaunit.assert_false(env.adapter:edit(id, 1, target("C09")).ok)
+    end
+    luaunit.assert_equals(env.merge_sets, {})
   end)
 end

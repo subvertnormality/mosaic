@@ -17,7 +17,8 @@ def validate(data):
     try:
         jsonschema.Draft7Validator(schema).validate(data)
     except jsonschema.ValidationError as error:
-        raise ValueError(error.message) from error
+        path=".".join(str(v) for v in error.absolute_path)
+        raise ValueError(path+": "+error.message) from error
     case_source = (ROOT / "tests/behaviour/cases.py").read_text()
     ids = set()
     for scene in data["scenes"]:
@@ -38,7 +39,7 @@ def validate(data):
                         raise ValueError("Release without press")
                     else: held.remove(key)
         if held: raise ValueError("Scene leaves controls held")
-    for filename in data["audio"]["files"]:
+    for filename in data.get("audio",{}).get("files",[]):
         if not re.fullmatch(r"audio/[a-z0-9-]+\.(ogg|mp3)", filename):
             raise ValueError("Unsafe audio path")
     return data

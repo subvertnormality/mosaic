@@ -1,0 +1,48 @@
+test_both_signs_and_boundary_requests_preserve_public_input (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... FAIL
+test_invalid_types_fail_before_any_public_event (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... FAIL
+test_large_negative_request_preserves_total_inside_public_delta_bound (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... FAIL
+test_zero_sends_no_public_event_or_wait (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... FAIL
+
+======================================================================
+FAIL: test_both_signs_and_boundary_requests_preserve_public_input (test_doctor_ready_encoder.DoctorEncoderBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_encoder.py", line 53, in test_both_signs_and_boundary_requests_preserve_public_input
+    self.assertTrue(all(-127 <= event[2] <= 127 for event in events))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_invalid_types_fail_before_any_public_event (test_doctor_ready_encoder.DoctorEncoderBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_encoder.py", line 65, in test_invalid_types_fail_before_any_public_event
+    _turn(c, 2, steps)
+AssertionError: (<class 'TypeError'>, <class 'ValueError'>) not raised
+
+======================================================================
+FAIL: test_large_negative_request_preserves_total_inside_public_delta_bound (test_doctor_ready_encoder.DoctorEncoderBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_encoder.py", line 35, in test_large_negative_request_preserves_total_inside_public_delta_bound
+    self.assertTrue(all(type(event[2]) is int and -127 <= event[2] <= 127
+AssertionError: False is not true : public action delta must be integer[-127,127]
+
+======================================================================
+FAIL: test_zero_sends_no_public_event_or_wait (test_doctor_ready_encoder.DoctorEncoderBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_encoder.py", line 59, in test_zero_sends_no_public_event_or_wait
+    self.assertEqual(c.calls, [])
+AssertionError: Lists differ: [('enc', 2, 0), ('elapse', 0.1)] != []
+
+First list contains 2 additional elements.
+First extra element 0:
+('enc', 2, 0)
+
+- [('enc', 2, 0), ('elapse', 0.1)]
++ []
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+FAILED (failures=4)

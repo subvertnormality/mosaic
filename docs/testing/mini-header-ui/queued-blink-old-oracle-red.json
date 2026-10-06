@@ -1,0 +1,14 @@
+{
+  "old_helper_sha256": "6e88f77522addd8336e91d5c35bfc5e63c221ad30ab24bb57127176a385546c6",
+  "expected": "Reject native visual dwell300ms below source-derived340ms",
+  "actual": [
+    1,
+    7,
+    1,
+    7,
+    1,
+    7,
+    1
+  ],
+  "regression_red": true
+}

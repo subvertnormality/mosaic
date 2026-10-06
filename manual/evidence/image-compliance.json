@@ -1,0 +1,140 @@
+{
+  "inspection": "All nine are screen screenshots, not installation photos or explanatory diagrams. Historical source assets may remain; interactive guide must render native data instead.",
+  "images": [
+    {
+      "file": "images/lock-lead-time.png",
+      "sha256": "1f1f81951677d6af31e64a5bf59829ab8ccaf290a9eadd4f4fe4203ce5c2b115",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "lock-lead-time",
+      "replacement_scene_candidates": [],
+      "recommendation": "Remove rendered prose image; retain procedural text until verified capture exists",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/merge-shape-phrase.png",
+      "sha256": "1035cc59a67748a7500a9e36ce43411a4edd73dc77f470e15f9e7f4b2fa3410c",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "merge-shape",
+      "replacement_scene_candidates": [
+        "merge-shape-owns-trigs"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/merge-shape-foundation.png",
+      "sha256": "1dac205f0379af973f62703cc49507cddacea68d019fcac9a172d46ec7ea9850",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "merge-shape",
+      "replacement_scene_candidates": [
+        "foundation-protected-and-added",
+        "foundation-two-cycle-build"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/merge-shape-fragments.png",
+      "sha256": "7984c43100cc0c290f1f9639d32ed0aae7102f10c0d7efa03e8c3f3afa6f014a",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "fragments",
+      "replacement_scene_candidates": [
+        "fragments-seed-source-choice"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/merge-shape-interlock.png",
+      "sha256": "533d8bbbb5553040db390a0dd79c89873fd58a37b1f8d8a1a218c62bbbb5f4e2",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "interlock",
+      "replacement_scene_candidates": [
+        "interlock-leader-window"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/merge-shape-structure.png",
+      "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "structure",
+      "replacement_scene_candidates": [
+        "structure-anchor-chord-and-delete"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/harmony-register.png",
+      "sha256": "73482ae4abfb0bb1964c08aa65ee04215cef7a778a31761f6f661517d82104b1",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "harmony",
+      "replacement_scene_candidates": [
+        "harmony-range-failure-and-fallback"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/harmony-tone-map.png",
+      "sha256": "9ada7d5dfae6b9d849e19f4228b1475459595d3f9eefe57af08ef87904e6f823",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "harmony",
+      "replacement_scene_candidates": [
+        "harmony-revoice-two-voices",
+        "harmony-ensemble-and-local-bypass"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    },
+    {
+      "file": "images/harmony-no-voicing.png",
+      "sha256": "f55f4b3fb68a92d1721a928b3e587ba0716dc174ab05a9cf1e4bb6d094eac7ea",
+      "classification": "Baked norns framebuffer screenshot; visually inspected",
+      "feature": "harmony",
+      "replacement_scene_candidates": [
+        "harmony-range-failure-and-fallback"
+      ],
+      "recommendation": "Replace rendered prose image with verified scene deep link",
+      "owner_notified": "reference_audit"
+    }
+  ],
+  "authoring_remaining_rendered_images": [],
+  "replacement_links": [
+    [
+      "merge-shape",
+      "#merge-shape/foundation-two-cycle-build"
+    ],
+    [
+      "merge-shape",
+      "#merge-shape/foundation-protected-and-added"
+    ],
+    [
+      "fragments",
+      "#fragments/fragments-seed-source-choice"
+    ],
+    [
+      "interlock",
+      "#interlock/interlock-leader-window"
+    ],
+    [
+      "structure",
+      "#structure/structure-anchor-chord-and-delete"
+    ],
+    [
+      "harmony",
+      "#harmony/harmony-range-failure-and-fallback"
+    ],
+    [
+      "harmony",
+      "#harmony/harmony-revoice-two-voices"
+    ],
+    [
+      "harmony",
+      "#harmony/harmony-range-failure-and-fallback"
+    ]
+  ],
+  "passed": true
+}

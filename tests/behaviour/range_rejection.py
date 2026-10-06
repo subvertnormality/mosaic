@@ -1,7 +1,7 @@
 """Ordinary range isolation and scale clipping behaviour."""
 
-def rejected_range_channel_isolation(c):
-    from cases import assert_durations
+def four_against_three_setup(c):
+    """Channel 1 plays 60,62,64,65 over steps 1-4 on port 1; channel 2 plays 79,81,79 over steps 1-3 on port 2."""
     c.ui.configure()
     c.ui.select_channel_on_page(2,'midi_config');c.ui.turn(3,1);c.ui.turn(2,1);c.ui.turn(3,1);c.ui.turn(2,1);c.ui.turn(3,1);c.ui.press_key(3)
     c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,3);c.ui.channel_page('masks','midi_config',confirm=False)
@@ -11,12 +11,42 @@ def rejected_range_channel_isolation(c):
         with c.ui.hold_step(2):c.ui.turn(3,local_turns)
         c.elapse(.06)
     c.ui.select_channel(1)
+
+def rejected_range_channel_isolation(c,offset_step4=False):
+    from cases import assert_durations
+    four_against_three_setup(c)
     marker=c.snapshot()['midi_count'];c.ui.tap_control('play_stop')
     def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
-    c.wait(lambda state:len(emitted(state))>=10)
+    if offset_step4:
+        # README.md#channel-length: the 4-step and 3-step loops started together on step 1; on
+        # step 4 channel 1 plays its fourth note, 65, while the 3-step loop has wrapped and
+        # channel 2 begins again with 79 (derived arithmetic, label: characterisation of the LCM claim).
+        field4='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance4=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        state=c.wait(lambda state:sum(m['port']==1 for m in emitted(state))>=4 and sum(m['port']==2 for m in emitted(state))>=4)
+        fourth=[[m for m in emitted(state) if m['port']==port][3] for port in (1,2)]
+        assert [m['bytes'] for m in fourth]==[[144,65,97],[145,79,40]],'step 4: channel 1 has not wrapped, channel 2 has'
+        assert abs(fourth[0][field4]-fourth[1][field4])/1e9<=tolerance4,'both fourth-step notes start together'
+        c.results.append(dict(kind='loops-offset-step-4',port1_note=65,port2_note=79,passed=True))
+    state=c.wait(lambda state:len(emitted(state))>=10)
+    assert {m['port'] for m in emitted(state)}=={1,2},'both channels must be sounding before the range gesture'
+    c.results.append(dict(kind='polymeter-playing',ports=[1,2],passed=True))
     c.ui.set_range(4,2)
     state=c.wait(lambda state:sum(m['port']==1 for m in emitted(state))>=17 and sum(m['port']==2 for m in emitted(state))>=17,5)
     all_notes=emitted(state);assert all((m['port'],m['bytes'][0]) in [(1,144),(2,145)] for m in all_notes)
+    # README Channel Length: a 4-step and a 3-step loop start together on step 1 and again after
+    # 12 steps, the first count both divide into. Step 13 is the 13th note of each port, 2 s later
+    # at 6 steps per second; the refused reversed range left both loops running.
+    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+    ports={port:[m for m in all_notes if m['port']==port] for port in (1,2)}
+    meeting=[ports[port][12] for port in (1,2)]
+    assert [m['bytes'] for m in meeting]==[[144,60,127],[145,79,40]],'step 13 is the first step of both phrases'
+    delta=abs(meeting[0][field]-meeting[1][field])/1e9
+    assert delta<=tolerance,delta
+    for port in (1,2):
+        assert abs((ports[port][12][field]-ports[port][0][field])/1e9-12/6)<=tolerance
+    c.results.append(dict(kind='loops-meet-at-step-13',port1_note=60,port2_note=79,onset_delta_s=delta,passed=True))
     c.ui.tap_control('play_stop');c.wait(lambda state:not state['midi_capture']['outstanding'])
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
@@ -33,6 +63,10 @@ def rejected_range_channel_isolation(c):
     first=[next(m[field] for m in all_notes if m['port']==port) for port in [1,2]]
     assert abs(first[0]-first[1])/1e9<=tolerance
     c.results.append(dict(kind='rejected-range-channel-isolation',ranges=[[1,4],[1,3]],phrases=phrases,passed=True))
+
+def rejected_range_offset_step4(c):
+    """M-RANGE-REJECT-006: the four-against-three polymeter with a step-4 offset checkpoint."""
+    return rejected_range_channel_isolation(c,offset_step4=True)
 
 def offset_scale_range_clipping(c):
     from cases import assert_durations

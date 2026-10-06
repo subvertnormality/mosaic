@@ -28,6 +28,22 @@ def startup_lock(timeout=300):
 def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
+MANUAL_PLAYER_UI_PROFILE = {
+    "controlled_ui_only": True,
+    "mods": {
+        "doubledecker": {"url": "https://github.com/sixolet/doubledecker.git", "commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89"},
+        "nb_polyperc": {"url": "https://github.com/dstroud/nb_polyperc.git", "commit": "714bd0c5b811f7cb21b7a7b8340891ffee4b5670"},
+        "oilcan": {"url": "https://github.com/zjb-s/oilcan.git", "commit": "257915f433c7d2c32b2b09c4fe5eed5434a16de5"},
+    },
+}
+
+def validate_profile_clock(profile, clock_mode, output_profiles):
+    if profile == "manual-player-ui":
+        if clock_mode != "controlled-experimental":
+            raise ValueError("manual-player-ui is controlled UI-only")
+    elif profile in output_profiles and clock_mode != "real-time":
+        raise ValueError("Audio/Crow profiles require real time; DSP and Crow are not controlled-time sources")
+
 class Driver:
     def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False,cost_profile=None,app_root=None,lua_profile_instructions=None,midi_lead_time_ms=0):
         if Session is None:raise RuntimeError('MONOME_EMULATOR is required for the local emulator Driver')
@@ -40,25 +56,26 @@ class Driver:
         self.app_root=Path(app_root).resolve() if app_root else REPO
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(self.app_root,target_is_directory=True)
         output_profiles=json.loads((REPO/'tests/behaviour/output-profiles.json').read_text())['profiles']
-        if profile not in ('base-midi','midi-modulation') and profile not in output_profiles:raise ValueError('Unknown profile')
-        if profile in output_profiles and clock_mode!='real-time':raise ValueError('Audio/Crow profiles require real time; DSP and Crow are not controlled-time sources')
+        if profile not in ('base-midi','midi-modulation','manual-player-ui') and profile not in output_profiles:raise ValueError('Unknown profile')
+        validate_profile_clock(profile,clock_mode,output_profiles)
+        manual_player_ui = profile == 'manual-player-ui'
         self.profile=profile;self.mod_revisions={};self.applied_mod_patches={}
         if mod_patches and profile!="midi-modulation":raise ValueError("Mod patches require modulation profile")
         patches=json.loads((REPO/"tests/behaviour/mod-patches/manifest.json").read_text()) if mod_patches else {}
         if profile!='base-midi':
             if not mod_code_root:raise ValueError('Mod profile requires an explicit mod code root')
-            mods=(output_profiles[profile]['mods'] if profile in output_profiles else json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'])
+            mods=(MANUAL_PLAYER_UI_PROFILE['mods'] if manual_player_ui else output_profiles[profile]['mods'] if profile in output_profiles else json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'])
             for name,entry in mods.items():
                 source=Path(mod_code_root).resolve()/name
                 if not source.is_dir():raise ValueError('Missing mod source: '+name)
-                if profile in output_profiles:
+                if profile in output_profiles or manual_player_ui:
                     origin=subprocess.check_output(['git','remote','get-url','origin'],cwd=source,text=True).strip()
                     if origin!=entry['url']:raise ValueError('Unexpected mod origin: '+name)
                 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
                 if revision!=entry['commit']:raise ValueError('Unexpected mod revision: '+name)
                 dirty=subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=source,text=True)
                 if dirty:raise ValueError('Mod source has uncommitted changes: '+name)
-                if profile in output_profiles:
+                if profile in output_profiles or manual_player_ui:
                     ignored=subprocess.check_output(['git','ls-files','--others','--ignored','--exclude-standard','--','*.lua','*.sc','*.so','*.scx'],cwd=source,text=True)
                     if ignored:raise ValueError('Ignored runtime source outside mod pin: '+name)
                 if name in patches:
@@ -117,9 +134,16 @@ class Driver:
         # watchdog only prevents a stalled emulator from hanging indefinitely.
         start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else max(180,timeout*12))
         logical_end=self.logical_ns+round(timeout*1e9)
+        retained_limit=getattr(self,"wait_observation_limit",None)
+        if retained_limit is not None and (type(retained_limit)is not int or not 1<=retained_limit<=2048):
+            raise ValueError("Wait observation retention must be bounded to1..2048")
         while time.monotonic()<end:
             state=self.snapshot()
-            if len(self.observations)>start+2:del self.observations[start+1:-1]
+            if retained_limit is None:
+                if len(self.observations)>start+2:del self.observations[start+1:-1]
+            elif len(self.observations)>start+retained_limit:
+                del self.observations[start+retained_limit:]
+                raise AssertionError("Wait observation retention limit exceeded")
             if predicate(state):return state
             if self.clock_mode!="real-time" and self.logical_ns>=logical_end:break
             self.elapse(.03 if self.clock_mode=="real-time" else min(.01,(logical_end-self.logical_ns)/1e9))

@@ -17,10 +17,12 @@
   ],
   "checks": [
     "All scene captions, forward/back frames and 128 LED values",
-    "Clickable and keyboard encoder advances",
-    "Encoder drag, norns keys, grid pads, grid focus and autoplay",
+    "Single encoder turn participates; following compound gesture rejects encoder without hold",
+    "Pictured controls preserve current frame; explicit Next, grid focus and autoplay",
     "Search, dense reference and theme switching",
-    "Both Opus and MP3 decode to the exact four-bar phrase plus tail",
+    "Selected Opus and MP3 match authored four-bar tempo and independent three-second native capture tail",
+    "Historical pilot duration oracle preserved separately",
     "Real web audio decoding, seek/pause and captured playhead sync"
-  ]
+  ],
+  "audio_contract_source_sha256": "f166e83375f500dc797de3449be74debc17218b3803c7f2c27f3fa43862b8a56"
 }

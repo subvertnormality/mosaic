@@ -1,0 +1,31 @@
+EE
+======================================================================
+ERROR: test_dry_run_preserves_exact_immutable_scenes_without_writing (test_manual_doctor_publish.DoctorPublicationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_doctor_publish.py", line 18, in test_dry_run_preserves_exact_immutable_scenes_without_writing
+    doctor=importlib.import_module('manual_doctor_publish')
+  File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 973, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'manual_doctor_publish'
+
+======================================================================
+ERROR: test_independent_refusal_cannot_replace_publication (test_manual_doctor_publish.DoctorPublicationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_doctor_publish.py", line 27, in test_independent_refusal_cannot_replace_publication
+    doctor=importlib.import_module('manual_doctor_publish')
+  File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 973, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'manual_doctor_publish'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (errors=2)

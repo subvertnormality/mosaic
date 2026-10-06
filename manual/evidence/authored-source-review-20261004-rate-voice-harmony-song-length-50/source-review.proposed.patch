@@ -1,0 +1,194 @@
+--- current historical source-review
++++ proposed authored source-review, pending full50 qualification
+@@ -181,8 +181,8 @@
+       "meaning": "Current user-authoritative authored YAML manual index/routes and discoverability. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+     },
+     "manual/course.yaml": {
+-      "sha256": "ef5735efbdd2382cf270c3227697bc816a62a7fa924d037fa427c8f4e63bbe55",
+-      "meaning": "Current user-authoritative authored YAML course structure and explicit teaching handoffs. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
++      "sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
++      "meaning": "Current user-authoritative authored YAML course structure and explicit teaching handoffs. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: Rate /1 realizes the unchanged intended one-bar 16-step phrase, and the C-major comparison is listened to before preparing Root D; Apply procedure and38 stage IDs remain intact. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. Native qualification remains pending until the full continuous course passes both lanes. Explicit authored Song-length correction: use the public grid Global length gesture to persist Length16 for each section before listening to the unchanged two one-bar sections. This is a corrected teaching procedure, not a post-build metadata exception."
+     },
+     "manual/player-routes.yaml": {
+       "sha256": "5e60341faa3c1c354a330d4996d0cfe0b6dc943965038adc1bc1d5e150286b3e",
+@@ -209,8 +209,8 @@
+       "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+     },
+     "manual/features/reference-learn.yaml": {
+-      "sha256": "8967eba1b00feb59774941df5576473aea208187500483eda444247369d29c89",
+-      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
++      "sha256": "ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d",
++      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: distinguish four researched/pinned voices from three recorded voices; Emplaitress has no recording because MiPlaits is unavailable. No substituted audio claim. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. Native qualification remains pending until the full continuous course passes both lanes."
+     },
+     "manual/features/reference-locks.yaml": {
+       "sha256": "89283a2cd968ebb3b99a15c001d708f8d83181b6b47bc869a09971faf430b8c5",
+@@ -229,16 +229,16 @@
+       "meaning": "Reviewed semantic delta: stopped capture/setup/Alignment versus playing READY browse/paint; exact BD/SD/CYM public lane inputs; Stereo versus duplicated L/R ADC; retained recording K3 reanalysis, explicit BPM/origin precedence and regular confirmed-tempo Manual Start beat grid. Intended contract separate from preserved historical native bindings; no new case identity. Reviewed metadata-only extension: rhythm-doctor appends canonical tools/doctor-qualification-inventory.json source and pending MA-DOCTOR-MANUAL-START-BEAT-001 specialized qualification; all prose, controls, historical review/source evidence and global behaviour-case IDs exactly retained. Registration does not promote native acceptance."
+     },
+     "manual/features/reference-scale.yaml": {
+-      "sha256": "4a585aa65ba6dc76ab3b9c646b195dbc82f8039303285bd41c26ce9f9bcef665",
+-      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
++      "sha256": "68f5389591462169e8b448e900c7f9e07317fbf4e7d6de6fc66077229bfa98d3",
++      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: pressing grid transport cancels the unapplied Scale draft, matching ordinary production press/save behavior. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. Native qualification remains pending until the full continuous course passes both lanes."
+     },
+     "manual/features/reference-song.yaml": {
+       "sha256": "93b05f827f6a732a22bd22fefe0fafc68d43c7070f80640d1954bf7cb76397eb",
+       "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+     },
+     "manual/features/reference-workflow.yaml": {
+-      "sha256": "9430e3db0d5314fa7a8b992e4f1d891de1c86b55ab0a1e4ee514aae8435ffd26",
+-      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
++      "sha256": "305fe19ee02d961f73d64ed359a29957b8aff31d7e220d194e1d11bcce58406a",
++      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: one-bar Rate /1 and baseline-first C listening before the D-major pending draft; final Apply and exact intended MIDI comparisons remain intact. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. Native qualification remains pending until the full continuous course passes both lanes. Explicit authored Song-length correction: use the public grid Global length gesture to persist Length16 for each section before listening to the unchanged two one-bar sections. This is a corrected teaching procedure, not a post-build metadata exception."
+     },
+     "manual/features/scenes-doctor-scenes.yaml": {
+       "sha256": "09bab660df9b7b98bafaa03f7a432dc85602d1c16f7ea0e3ab0b85ced1117359",
+@@ -313,8 +313,8 @@
+       "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+     },
+     "manual/features/tutorials.yaml": {
+-      "sha256": "2f08e38428e3a9163417af2bec3400f4af8ba40b9742c137f725f40b916e19e3",
+-      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
++      "sha256": "4a900da83f50145373889b69174ff352fc8652d703b77e5f7cf9bb7bb79ab343",
++      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: set Clock Rate /1 for the already-intended one-bar16step lesson; no musical period or stage identity change. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. Native qualification remains pending until the full continuous course passes both lanes."
+     }
+   },
+   "new_manual_sections": {
+@@ -440,5 +440,137 @@
+     "file": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+     "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+     "meaning": "Keep125 historical MAN IDs bound to exactly frozen full UI README8e93de46 after user-approved thin-overview migration. Current intendedmanualauthority isbook/course/features YAML; no historicalheading is fabricated fromoverview."
++  },
++  "explicit_authored_review": {
++    "scope": "Root-approved exact authored rate/voice/harmony corrections; not a metadata-only mutation waiver",
++    "read_on": "2026-10-04",
++    "receipts": [
++      {
++        "kind": "rate",
++        "receipt": "manual/evidence/course-rate-one-bar-correction/authored-receipt.json",
++        "sha256": "52486ae820f34c6c4b76557e5b5323a9c3ff601312e206e025a51826849d80e5",
++        "files": [
++          "manual/course.yaml",
++          "manual/features/tutorials.yaml",
++          "manual/features/reference-workflow.yaml",
++          "manual/scene-plans-course.yaml"
++        ]
++      },
++      {
++        "kind": "voice",
++        "receipt": "manual/evidence/voice-scope-prose-correction/receipt.json",
++        "sha256": "a69ee42057e8fe4f1087c85c1cdd38700db1910d66a3f49bbb41a7b4b802a37d",
++        "files": [
++          "manual/features/reference-learn.yaml",
++          "manual/VOICES.md"
++        ]
++      },
++      {
++        "kind": "harmony",
++        "receipt": "manual/evidence/course-harmony-baseline-correction/authored-receipt.json",
++        "sha256": "be8d6c82b678b854acafabf58a21778474b5e866d8d8a1070181d11d0204d311",
++        "files": [
++          "manual/course.yaml",
++          "manual/features/reference-workflow.yaml",
++          "manual/scene-plans-course.yaml",
++          "manual/features/reference-scale.yaml"
++        ]
++      },
++      {
++        "kind": "song-length-prose",
++        "receipt": "manual/evidence/course-song-length-correction/authored-receipt.json",
++        "sha256": "50847953575b8daa721d9a9721cf91df38d67c49d78a53c1c53627dec96aed82",
++        "files": [
++          "manual/course.yaml",
++          "manual/features/reference-workflow.yaml",
++          "manual/scene-plans-course.yaml"
++        ]
++      },
++      {
++        "kind": "song-length-pictured-feedback",
++        "receipt": "manual/evidence/course-song-length-pictured-feedback/authored-receipt.json",
++        "sha256": "e1bbefd6f0faf766b3181f9565bf1c9aa73811176d62471490e882cc0f571057",
++        "files": [
++          "manual/scene-plans-course.yaml"
++        ]
++      },
++      {
++        "kind": "engineering-checkpoint-count",
++        "receipt": "manual/evidence/course-song-length-pictured-feedback/build-count-receipt.json",
++        "sha256": "cf58a3137490a7c7574766e0e78184675d133a2b50276d6fc32f16004a71f75e",
++        "files": [
++          "manual/BUILD.md"
++        ]
++      }
++    ],
++    "separate_nonledger_files": {
++      "manual/scene-plans-course.yaml": {
++        "sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
++        "review_chain": [
++          {
++            "kind": "rate",
++            "before_sha256": "a401daf93e4fd19a5b222b89f488394417e653f4ec999df1cb753bfa360c703c",
++            "after_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
++            "before_archive": "manual/evidence/course-rate-one-bar-correction/before/manual/scene-plans-course.yaml",
++            "after_archive": "manual/evidence/course-rate-one-bar-correction/after/manual/scene-plans-course.yaml"
++          },
++          {
++            "kind": "harmony",
++            "before_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
++            "after_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
++            "before_archive": "manual/evidence/course-harmony-baseline-correction/before/manual/scene-plans-course.yaml",
++            "after_archive": "manual/evidence/course-harmony-baseline-correction/after/manual/scene-plans-course.yaml"
++          },
++          {
++            "kind": "song-length-prose",
++            "before_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
++            "after_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5",
++            "before_archive": "manual/evidence/course-song-length-correction/before/manual/scene-plans-course.yaml",
++            "after_archive": "manual/evidence/course-song-length-correction/after/manual/scene-plans-course.yaml"
++          },
++          {
++            "kind": "song-length-pictured-feedback",
++            "before_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5",
++            "after_sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
++            "before_archive": "manual/evidence/course-song-length-pictured-feedback/before/manual/scene-plans-course.yaml",
++            "after_archive": "manual/evidence/course-song-length-pictured-feedback/after/manual/scene-plans-course.yaml"
++          }
++        ]
++      },
++      "manual/VOICES.md": {
++        "sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
++        "review_chain": [
++          {
++            "kind": "voice",
++            "before_sha256": "bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc",
++            "after_sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
++            "before_archive": "manual/evidence/voice-scope-prose-correction/bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc-VOICES.md",
++            "after_archive": "manual/evidence/voice-scope-prose-correction/d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574-VOICES.md"
++          }
++        ]
++      },
++      "manual/BUILD.md": {
++        "sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
++        "review_chain": [
++          {
++            "kind": "engineering-checkpoint-count",
++            "before_sha256": "ddb32c65f05abe4c604791f9b635156921f4df5bb1125e941d5b30fd5c9f375f",
++            "after_sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
++            "before_archive": "manual/evidence/course-song-length-pictured-feedback/objects/ddb32c65f05abe4c604791f9b635156921f4df5bb1125e941d5b30fd5c9f375f",
++            "after_archive": "manual/evidence/course-song-length-pictured-feedback/objects/81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089"
++          }
++        ]
++      }
++    },
++    "qualification_closure": {
++      "status": "pending",
++      "required": "settled helper/auditor regression and both complete continuous-course native lanes: ten scenes,50 checkpoints including both persistent Global length16 pictures; independent raw audit and final root review"
++    },
++    "authority_activation": false,
++    "complete_regression_run": false,
++    "previous_proposal": {
++      "path": "manual/evidence/authored-source-review-20261004-rate-voice-harmony/current-source-review.proposed.json",
++      "sha256": "b8f5b50d852ff7ecca0b520f5004427b6a452c1a1f0f544c957bf9584ea441c5"
++    }
+   }
+ }

@@ -1,0 +1,13 @@
+{
+  "examples_deferred": 13,
+  "examples_reused": 8,
+  "files_sha256": {
+    "campaign-cleanup-verification-v2.json": "a76f0285f6acca24c16d3e4d36b45b24539d46730f18640486e1e2e4f0f0fbe7",
+    "runtime-identity-reuse-check.json": "5525f92b88de545d0d96d9db5d00264ac5a1b1970e60495a553eeb810337cefc"
+  },
+  "inventory_complete": false,
+  "kind": "pinned-partial-audio-origin-receipts",
+  "origin_report_sha256": "f36318c05f2ec7ed0abc8293a683f0867f8a2eb0f394e0092501d770325ee9d0",
+  "raw_wavs_deferred": 32,
+  "raw_wavs_reused": 22
+}

@@ -18,7 +18,7 @@ for fid,f in fixtures.items():
  cases.append({'id':'bound.'+fid,'program':'screen','model':v})
  # Boundary fixture uses empty providers; must not crash or mutate.
 for sid,x in s['screens'].items():
- v={'screen':sid,'title':x['title'],'scope':'NO TARGET','fields':[],'selected':1,'layout':'focused','footer':'EMPTY','status':''}
+ v={'screen':sid,'title':x['title'],'scope':'NO TARGET','fields':[],'selected':1,'layout':x['live_render']['layout'],'footer':'EMPTY','status':''}
  cases.append({'id':'empty.'+sid,'program':'screen','model':v})
 # Maximum numeric domains on every screen at its declared layout/art, each field selected in turn.
 # 16383: NRPN/14-bit (lib/devices/nrpn_codec.lua); 65535: merge seed (lib/musical_merge/config.lua);
@@ -31,7 +31,7 @@ for sid,x in s['screens'].items():
   if lay=='pattern64':v['cells']=[{'level':2,'selected':k==0,'playing':False}for k in range(64)]
   cases.append({'id':'max.'+sid+'.'+str(sel),'program':'screen','model':v,'check_values':lay!='pattern64'})
 # A numeric value wider than 126px must fail visibly (flag + LAYOUT OVERFLOW), never clip or raise.
-for lay in ['focused','detail','overview_masks','overview_params']:
+for lay in ['focused','vertical_list','detail','overview_masks','overview_params']:
  v={'screen':'overflow','title':'OVERFLOW','scope':'X','fields':[{'id':'wide','label':'WIDE','short_label':'W','value':'9'*40,'compact_value':'9'*40,'kind':'value'}],'selected':1,'layout':lay,'footer':'','status':''}
  cases.append({'id':'overflow.'+lay,'program':'screen','model':v,'expect_overflow':True})
 (R/'generated/replay-input.lua').write_text('return '+lua(cases)+'\n',encoding='utf8')

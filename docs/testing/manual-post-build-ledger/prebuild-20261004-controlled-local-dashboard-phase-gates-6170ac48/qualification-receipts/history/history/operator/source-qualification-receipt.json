@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "operator_id": "controlled-local-3962d1d646e64124aabf3182d748a390",
+  "created_for": "root review only; does not execute the builder",
+  "argv_path": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/actual-controlled-local-argv.json",
+  "argv_sha256": "c726ef687af5300e95ee9fbd67b3f481fa16665f975c01c524330aa0eacaf299",
+  "artifacts_root": "/home/andy/mosaic-manual-build-runs/controlled-local-3962d1d646e64124aabf3182d748a390",
+  "controlled_local": true,
+  "stage_gate_dir": "omitted",
+  "plan_only": false,
+  "default_plan": {
+    "count": 72,
+    "byte_identical_to_archived": true,
+    "sha256": "ada92f688ed2918829151232458f7b343387f656d558be6887a4b68e5b2a0dfd"
+  },
+  "controlled_plan": {
+    "count": 43,
+    "controlled_reference_groups": 19,
+    "reference_real_groups": 0,
+    "doctor_options_qualification_groups": 0,
+    "doctor_asset_recordings": [
+      "doctor-manual-real",
+      "doctor-auto-real"
+    ]
+  },
+  "focused_tests": {
+    "test_manual_build.py": {
+      "passed": 62
+    },
+    "test_manual_case_capture.py": {
+      "passed": 25
+    },
+    "test_manual_capture.py": {
+      "passed": 1
+    },
+    "total_passed": 88,
+    "all_green": true
+  },
+  "red_before": {
+    "observed": true,
+    "detail": "Before controlled_local support, a focused call failed with TypeError: plan() got an unexpected keyword argument controlled_local. The original builder bytes are preserved in the source archive; the raw test-run transcript was not separately retained."
+  },
+  "source_hashes": {
+    "tools/manual_build.py": "cdf8b1cb1fdca9d6d2384e7e954acc7f992ddf6e4ca0d9e5a3b48d3cc8afd0cc",
+    "tools/manual_capture.py": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+    "tools/manual_case_capture.py": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+    "tests/behaviour/test_manual_build.py": "460b17fd6b4885d65b1a7e7515a7319a3b9c98bc7806433cc8446189ec26ae77",
+    "tests/behaviour/test_manual_case_capture.py": "8ced93458e570c039a8ae0864b0f15fa86a72f061992ec2a5f1faf33385425cc",
+    "tests/behaviour/test_manual_capture.py": "eea02adb476a6afc940244e4e3d699c524e85e82360eb0cf9a9c4ca4d605444f"
+  },
+  "archive_dir": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/controlled-local-source-archive-20261004",
+  "archive_hashes": {
+    "archive-manifest.json": "133552f3af67ff9ff331a9ab6601aab23189b99e09bdb46ab29a37b5f5ad0e9b",
+    "manual_capture.py.before-controlled-scope-stamp": "564c1c7258e47deede5f4edec7a5af6533f3d9f65f9c101a46c0b36385f1885e",
+    "manual_case_capture.py.pre-controlled-local": "e01e02cae29c527f9ca52860e1bdf8c502f03db8c910ba216d081c73d121f61d",
+    "test_manual_build.py.pre-controlled-local": "78e9c4758cef56ffe03ccee5fe96610868c89c936eb53a3b9584986f9f362c2e",
+    "test_manual_case_capture.py.pre-controlled-local": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785"
+  },
+  "owned_allowlist": [
+    "tools/manual_build.py",
+    "tools/manual_capture.py",
+    "tools/manual_case_capture.py",
+    "tests/behaviour/test_manual_build.py",
+    "tests/behaviour/test_manual_case_capture.py",
+    "tests/behaviour/test_manual_capture.py"
+  ],
+  "boundary": "No native captures or behavioral test stages were launched for this qualification."
+}

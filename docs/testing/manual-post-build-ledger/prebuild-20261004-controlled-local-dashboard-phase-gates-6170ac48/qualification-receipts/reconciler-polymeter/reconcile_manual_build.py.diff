@@ -1,0 +1,14 @@
+--- 
++++ 
+@@ -132,6 +132,11 @@
+     require(isinstance(typed,dict) and all(type(key)is int for key in typed),'Ensemble selector lacks integer channel keys')
+     require(canonical(typed)==canonical(actual['role_pitches']),'Actual role pitches differ from source selector')
+     actual['role_pitches']=copy.deepcopy(typed)
++   if actual.get('kind')=='rejected-range-channel-isolation' and 'phrases' in actual:
++    typed=matched[0].get('phrases')
++    require(isinstance(typed,dict) and all(type(key)is int for key in typed),'Polymeter selector lacks integer channel keys')
++    require(canonical(typed)==canonical(actual['phrases']),'Actual polymeter phrases differ from source selector')
++    actual['phrases']=copy.deepcopy(typed)
+    end=cursor+len(step['inputs'])
+    require(trace[cursor:end]==step['inputs'],'Actual inputs differ from immutable capture trace')
+    step['inputs']=trace[cursor:end];cursor=end;step.pop('output')

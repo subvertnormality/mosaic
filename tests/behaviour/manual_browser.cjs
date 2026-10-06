@@ -4,22 +4,32 @@
  */
 const {chromium}=require("playwright");
 const assert=require("node:assert/strict");
+const {decodeScreenPixels}=require("./manual_screen_oracle.cjs");
 const fs=require("node:fs");
 const path=require("node:path");
+const crypto=require("node:crypto"),{execFileSync}=require("node:child_process");
 const root=path.resolve(__dirname,"../..");
 (async()=>{
  const data=JSON.parse(fs.readFileSync(path.join(root,"manual/generated/pilot.json")));
+ const audioManifest=JSON.parse(fs.readFileSync(path.join(root,"manual/generated/audio-scenes.json")));
+ const pilotAudio=data.audio;
+ const selectedAudio=audioManifest.examples.find(example=>example.feature_ids.includes("masks"));
+ const authoredAudio=JSON.parse(execFileSync("python3",["-c","import json,yaml,sys; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))",path.join(root,"manual/audio-scenes.yaml")],{encoding:"utf8"}));
+ const authoredExample=selectedAudio&&authoredAudio.examples.find(example=>example.id===selectedAudio.id);
+ const captureSource=fs.readFileSync(path.join(root,"tools/manual_audio.py"),"utf8");
+ assert(captureSource.includes("job=c.runtime.capture_start(seconds+3)"),"Musical capture tail contract changed: independently review expected duration");
+ if(selectedAudio){assert(authoredExample,"Selected audio must have an authored recipe");assert.equal(selectedAudio.bars,authoredExample.bars);assert.equal(selectedAudio.bpm,authoredExample.bpm);data.audio=selectedAudio;}
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
- const report={schema_version:1,passed:false,viewports:[],checks:[]}, errors=[];
+ const report={schema_version:1,passed:false,viewports:[],checks:[],audio_contract_source_sha256:crypto.createHash("sha256").update(captureSource).digest("hex")}, errors=[];
  try{
   const page=await browser.newPage({viewport:{width:1440,height:1100}});
   page.on("pageerror",e=>errors.push(e.message));
   await page.goto((process.env.MOSAIC_MANUAL_URL||"http://localhost:8765/manual/")+"#masks");
-  await page.waitForFunction(()=>document.getElementById("scene").options.length>0);
-  assert.equal(await page.locator("h1").textContent(),"Masks.");
+  await page.waitForFunction(()=>!document.body.classList.contains("book-loading")&&document.getElementById("scene").options.length>0);
+  assert.equal(await page.locator("h1").textContent(),"Masks");
   async function frameCheck(output){
     const actual=await page.evaluate(()=>({pixels:Array.from(document.getElementById("screen").getContext("2d").getImageData(0,0,128,64).data).filter((_,i)=>i%4===0),grid:Array.from(document.querySelectorAll("#grid button")).map(b=>Number(b.dataset.level))}));
-    const expected=output.screen_rle.flatMap(([value,count])=>Array(count).fill(value*17));
+    const expected=decodeScreenPixels(output);
     assert.deepEqual(actual.pixels,expected,"Canvas must match every captured framebuffer pixel");
     assert.deepEqual(actual.grid,output.grid,"All 128 brightness values must match");
   }
@@ -35,13 +45,12 @@ const root=path.resolve(__dirname,"../..");
   report.checks.push("All scene captions, forward/back frames and 128 LED values");
   await page.selectOption("#scene","0");
   await page.locator(".encoder[data-n='3']").click();
-  assert.equal(await page.locator("#counter").textContent(),"02 / "+String(data.scenes[0].steps.length).padStart(2,"0"));
-  await page.click("#previous");
+  assert.equal(await page.locator("#counter").textContent(),"02 / "+String(data.scenes[0].steps.length).padStart(2,"0"),"A single captured turn advances; an encoder alone cannot complete the following hold and turn");
   await page.locator(".encoder[data-n='3']").focus();
   await page.keyboard.press("ArrowRight");
-  assert.equal(await page.locator("#counter").textContent(),"02 / "+String(data.scenes[0].steps.length).padStart(2,"0"));
-  report.checks.push("Clickable and keyboard encoder advances");
-  await page.click("#previous");
+  assert.equal(await page.locator("#counter").textContent(),"02 / "+String(data.scenes[0].steps.length).padStart(2,"0"),"A single captured turn advances; an encoder alone cannot complete the following hold and turn");
+  report.checks.push("Single encoder turn participates; following compound gesture rejects encoder without hold");
+  await page.selectOption("#scene","0");
   const knob=await page.locator(".encoder[data-n='3']").boundingBox();
   await page.mouse.move(knob.x+knob.width/2,knob.y+knob.height/2);
   await page.mouse.down();await page.mouse.move(knob.x+knob.width/2+25,knob.y+knob.height/2);await page.mouse.up();
@@ -55,18 +64,19 @@ const root=path.resolve(__dirname,"../..");
     const input=data.scenes[si].steps[target].inputs.find(a=>a.type===kind);
     if(kind==="key")await page.locator("[data-key='"+input.n+"']").click();
     else await page.locator("#grid button").nth((input.y-1)*16+input.x-1).click();
-    await frameCheck(data.scenes[si].steps[target].output);
+    await frameCheck(data.scenes[si].steps[target-1].output);
+    await page.click("#next");await frameCheck(data.scenes[si].steps[target].output);
   }
   await page.locator("#grid button").first().focus();await page.keyboard.press("ArrowRight");
   assert.equal(await page.locator("#grid button").nth(1).evaluate(n=>document.activeElement===n),true);
   await page.selectOption("#scene","0");await page.click("#autoplay");
   await page.waitForFunction(()=>document.getElementById("counter").textContent.startsWith("02"));
   await page.click("#autoplay");await frameCheck(data.scenes[0].steps[1].output);
-  report.checks.push("Encoder drag, norns keys, grid pads, grid focus and autoplay");
+  report.checks.push("Pictured controls preserve current frame; explicit Next, grid focus and autoplay");
 
   await page.fill("#search","clear");
   await page.waitForFunction(()=>document.querySelectorAll("#search-results a").length>0);
-  assert.match(await page.locator("#search-results").textContent(),/Controls|inherit|Masks/i);
+  assert.match(await page.locator("#search-results").textContent(),/Controls|inherit|Masks|Clear/i);
   await page.click("#dense");assert.equal(await page.locator("body").evaluate(n=>n.classList.contains("dense")),true);
   await page.click("#dense");
   const before=await page.locator("html").getAttribute("data-theme");await page.click("#theme");
@@ -87,9 +97,12 @@ const root=path.resolve(__dirname,"../..");
       try{for(const file of files){const bytes=await fetch(file).then(r=>r.arrayBuffer());const decoded=await ctx.decodeAudioData(bytes);result.push(decoded.duration);}}finally{await ctx.close();}
       return result;
     },data.audio.files);
-    const expectedDuration=data.audio.bars*4*60/data.audio.bpm+2;
+    // Independent authored bars/tempo and native capture_start(seconds+3), not generated metrics.
+    const expectedDuration=selectedAudio?authoredExample.bars*4*60/authoredExample.bpm+3:pilotAudio.bars*4*60/pilotAudio.bpm+2;
     for(const duration of durations)assert(Math.abs(duration-expectedDuration)<.06,"Every encoded format must decode the full captured clip");
-    report.checks.push("Both Opus and MP3 decode to the exact four-bar phrase plus tail");
+    report.checks.push("Selected Opus and MP3 match authored four-bar tempo and independent three-second native capture tail");
+    // Preserve the original pilot's separate two-second-tail oracle.
+    if(pilotAudio){const pilotDurations=await page.evaluate(async files=>{const ctx=new AudioContext();try{return await Promise.all(files.map(file=>fetch(file).then(r=>r.arrayBuffer()).then(bytes=>ctx.decodeAudioData(bytes)).then(audio=>audio.duration)));}finally{await ctx.close();}},pilotAudio.files);const pilotExpected=pilotAudio.bars*4*60/pilotAudio.bpm+2;for(const duration of pilotDurations)assert(Math.abs(duration-pilotExpected)<.06,"Historical pilot retains its exact independent two-second tail");report.checks.push("Historical pilot duration oracle preserved separately");}
     await page.locator("#audio").evaluate(async a=>{await a.play();a.currentTime=2;});
     await page.waitForFunction(()=>document.getElementById("counter").textContent.startsWith("LISTEN"));
     await page.locator("#audio").evaluate(a=>a.pause());

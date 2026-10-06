@@ -5,6 +5,7 @@
 -- draw(v) returns ok,report. It never raises inside redraw: a value that cannot be shown
 -- whole sets ok=false and paints LAYOUT OVERFLOW; the acceptance harness treats that as a fail.
 local art=include('mosaic/lib/ui_characters')
+local mini=include('mosaic/lib/ui_mini')
 local M={}
 local MORE='...' -- value withheld from a cell; the full value is on the same screen's full-width line
 local function text(value,x,y,size,level)
@@ -145,6 +146,46 @@ function M.draw(v)
    if room>0 then text(fit(f.label,room),1,y,8,7)end
    if val~=''then right(val,127,y,15)end
   end
+ elseif L=='vertical_list' then
+  -- Lists retain the existing overflow marquee on the selected field only.
+  -- Fitting text, neighbors, title, scope and footer stay still.
+  local selected_phase=phase
+  phase=nil
+  text(fit(v.title,118),1,7,8,15);status_y=17
+  local split=selected and width(tostring(selected.value))+width(tostring(selected.label))+4>119
+  local rows=split and 3 or 4
+  local first=math.max(1,math.min(v.selected-1,#v.fields-rows+1))
+  local last=math.min(#v.fields,first+rows-1)
+  local position=#v.fields>rows and (v.selected..'/'..#v.fields) or nil
+  local scope=v.scope
+  if v.status and v.status~=''then scope=scope..'  '..v.status end
+  text(fit(scope,position and 92 or 118),1,17,8,7)
+  if position then right(position,118,17,9)end
+  local y=27
+  for k=first,last do
+   local f=v.fields[k];local on=k==v.selected;local val=tostring(f.value)
+   if on then text('>',0,y,8,15)end
+   if on and split then
+    -- Long exact values receive a separate full-width line. The selected
+    -- label and neighboring fields stay visible; the action footer stays put.
+    phase=selected_phase
+    text(fit(f.label,119),7,y,8,15);y=y+9
+    if width(val)>119 then
+     if exact(f)and not phase then fail('value '..tostring(f.id));val=''else val=fit(val,119)end
+    end
+    if val~=''then right(val,126,y,15)end
+    phase=nil
+   else
+    if width(val)>119 then
+     if exact(f)then val=MORE;r.marked[#r.marked+1]=f.id else val=fit(val,119)end
+    end
+    local room=math.max(0,119-width(val)-4)
+    if room>0 then text(fit(f.label,room),7,y,8,on and 15 or 7)end
+    if val~=''then right(val,126,y,on and 15 or 10)end
+   end
+   y=y+9
+  end
+  if #v.fields==0 then text('EMPTY',7,27,8,10)end
  elseif L=='detail' then
   text(fit(v.title,126),1,7,8,15);text(fit(v.scope,126),1,17,8,7);status_y=17
   local first=math.max(1,math.min(v.selected-1,#v.fields-3))
@@ -212,6 +253,13 @@ function M.draw(v)
   text(fit(v.footer.left or'',61),1,63,8,7)
   right(fit(v.footer.right or'',61),127,63,10)
  else text(fit(v.footer or'',126),1,63,8,9)end
+ -- Essential header text owns its existing room. Decoration yields rather
+ -- than shortening a title; right-scope layouts retain their original7px slot.
+ local compact=L=='overview_masks' or L=='overview_params' or L=='dashboard'
+ local title_room=compact and 78 or (L=='vertical_list' and 118 or 126)
+ local title_width=width8(fit(v.title,title_room))
+ r.header_mini,r.header_region=mini.draw(v.screen,title_width,L,v.header_beat)
+ r.mark_safe=compact or 1+title_width+2<=121
  -- Whether any text is cut, and in how many marquee ticks one next moves.
  r.cut,r.next_move=cut,next_move
  return r.ok,r

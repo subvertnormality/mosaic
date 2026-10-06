@@ -27,7 +27,7 @@ def song_tempo_divisions(c):
         c.ui.channel_page('clock_mods', confirm=False)
         c.ui.expect_header('clock_mods', channel=1, song_slot=slot, octave=OCTAVE[slot])
         c.enc(3, detents); c.key(3)
-        c.ui.expect_selected_field('focused', label='Rate', value=label)
+        c.ui.expect_selected_field('vertical_list', label='Rate', value=label)
         c.results.append(dict(kind='slot-clock-division', slot=slot, label=label, passed=True))
     c.tap(6, 8); c.tap(1, 1); c.tap(3, 8)                        # play from slot 1
     plan = []                                                     # (global-step time, pitch, velocity)

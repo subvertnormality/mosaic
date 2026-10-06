@@ -2,13 +2,16 @@
   "format": "mosaic-ui-contract",
   "version": 1,
   "authority": {
-    "musical_intent": "README.md",
+    "musical_intent": "manual/book.yaml, manual/course.yaml and manual/features/*.yaml (user-authoritative interactive manual)",
     "interaction": "spec.json",
     "screen_code": "code/",
     "examples": "fixtures.json",
     "html": "generated acceptance only",
     "gesture_changes": "permitted with explicit functional replacement",
-    "test_refactor": "assumed complete"
+    "test_refactor": "assumed complete",
+    "historical_MAN_reference": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+    "overview": "README.md",
+    "quick_reference": "cheat_sheet.html generated from authored YAML; frozen full reference retains historic row identities"
   },
   "screen_model": {
     "required": [
@@ -862,7 +865,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "metronome"
       },
@@ -1338,12 +1341,40 @@
         },
         {
           "id": "trig_mode",
-          "label": "Trig mode",
+          "label": "Strategy",
           "example": "SKIP",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
             "field": "trig_mode"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "active_strategy",
+          "label": "Active",
+          "example": "ALL",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "active_strategy"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "pending_strategy",
+          "label": "Pending",
+          "example": "NONE",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "pending_strategy"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -1391,6 +1422,34 @@
           "missing": "NONE",
           "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "pending_boundary",
+          "label": "Boundary",
+          "example": "NONE",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "pending_boundary"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "strategy_status",
+          "label": "Request",
+          "example": "READY",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "strategy_status"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -1399,8 +1458,8 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Merge modes for the selected channel. E2 chooses a row; E3 steps a mode through the modes its grid merge button (and held button + pattern) can set, applied at once as that button does. Patterns are assigned on the grid pattern row and are shown only. K2 returns; E1 opens Channel tasks (owner decision 25 September 2026).",
-      "state_explanation": "List all 16 selected pattern slots with wrapping/paging. Show exact engine mode labels and effective step values, not a claim that merged scale material is a conventional chord. No selection: NONE. Random merge output is last observed/unknown until evaluated without advancing RNG. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "controls_explanation": "E2 chooses a row; E3 steps Strategy through Skip, Only, All, Foundation, Fragments using the same validated request as grid key (14,8). Legacy parameter rows edit only when the active strategy does not own them. K2 returns. Readonly Active/Pending/Boundary/Request rows remain selectable for inspection.",
+      "state_explanation": "Strategy is the request cursor; The adjacent Active row always name actual musical state. Pending and Boundary name only an accepted queued request. A refused Foundation cursor shows NEEDS ANCHOR and can advance to Fragments without autoassigning an anchor. Saved legacy values overridden by active Fragments are readonly and labelled inactive.",
       "parent": "N01",
       "entry_flow_ids": [
         "G07",
@@ -1554,7 +1613,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": null
       },
@@ -2202,7 +2261,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": null
       },
@@ -2622,7 +2681,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": null
       },
@@ -2714,7 +2773,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "metronome"
       },
@@ -3857,7 +3916,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "metronome"
       },
@@ -4627,7 +4686,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": null
       },
@@ -5473,7 +5532,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Channel E1 opens Channel tasks from any Channel screen, as every page's E1 opens its task list (owner decision 25 September 2026, replacing Masks → Trig params → Tasks). Held steps restrict E1 to switching between the two editors. In Tasks, E1 or E2 moves through the rows and K3 opens one. This replaces the old eight-page strip.",
+      "controls_explanation": "Channel E1 opens Channel tasks from any Channel screen, as every page's E1 opens its task list (owner decision 25 September 2026, replacing Masks \u2192 Trig params \u2192 Tasks). Held steps restrict E1 to switching between the two editors. In Tasks, E1 or E2 moves through the rows and K3 opens one. This replaces the old eight-page strip.",
       "state_explanation": "Remaining entries Merge detail, Device, History scroll. This is a task chooser, not a sequence of editing pages. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -6722,7 +6781,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": null
       },
@@ -7159,7 +7218,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Song grid → E1 task chooser → E2 selection → K3 open. K2 returns.",
+      "controls_explanation": "Song grid \u2192 E1 task chooser \u2192 E2 selection \u2192 K3 open. K2 returns.",
       "state_explanation": "Playback is read-only. Slot setup edits repeats and Song mode. Grid selects/copies slots and sets length. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -7328,7 +7387,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E1 task chooser → Mask detail. E2 changes selected mask; E3 edits using C01 handlers; same held-scope and clear rules. E1 → Masks returns to the overview.",
+      "controls_explanation": "E1 task chooser \u2192 Mask detail. E2 changes selected mask; E3 edits using C01 handlers; same held-scope and clear rules. E1 \u2192 Masks returns to the overview.",
       "state_explanation": "Native presentation fixture; proposed layout, not application implementation. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -7338,7 +7397,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": null
       },
@@ -7396,7 +7455,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E1 task chooser → Trig detail. Same selected slot, value edit, assignment and slide bindings as overview. K3 remains slide. E1 → Trig params returns.",
+      "controls_explanation": "E1 task chooser \u2192 Trig detail. Same selected slot, value edit, assignment and slide bindings as overview. K3 remains slide. E1 \u2192 Trig params returns.",
       "state_explanation": "Shows the single currently selected slot; its field id is slot_<n> of that slot (fixture context SLOT09 -> slot_9) per field_contracts.parameters.identity, never the assigned parameter name. Native presentation fixture; proposed layout, not application implementation. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -7406,7 +7465,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": null
       },
@@ -7504,7 +7563,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "doctor_routes rows empty and setup (EMPTY, or any stopped state holding a setup draft). Grid (1,2) Record: the press starts a capture in the Tempo mode (Auto -> LISTENING, Manual -> RECORDING) and its release is consumed; it is refused with STOP_SEQUENCER while playing and SETUP_ACTIVE while a setup draft is open. E2 selects Tempo / Manual BPM / Input (wrapping) and opens the setup draft; E3 edits the draft: Tempo toggles Auto/Manual, Manual BPM +-1 within 40..240, Input cycles Stereo/L/R. K2 discards the draft, K3 keeps it. Setup is available only while stopped in EMPTY or FAILED (field_contracts.doctor.setup, transport_gate). Lane cells select a lane in any state (G41).",
-      "state_explanation": "Manual BPM and Input are editable LOCAL ONLY values: the adapter keeps and shows them but the runtime receives only the Auto/Manual capture mode (ui_adapter.lua:228-230; README \"Before recording\"). They are never shown as unavailable and never presented as audio routing (R14 explains). Status reads NOT READY until the capture worker reports ready, otherwise EMPTY. Before any bank exists the lane set is the on-device default BD/SD/CYM (Adapter.LANES). Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "Manual BPM and Input are editable LOCAL ONLY values: the adapter keeps and shows them but the runtime receives only the Auto/Manual capture mode (ui_adapter.lua:228-230; README \"Before recording\"). They are never shown as unavailable and never presented as audio routing (R14 explains). Status reads NOT READY until the capture worker reports ready, otherwise EMPTY. Before any bank exists the lane set is the on-device default BD/SD/CYM (Adapter.LANES). Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values and scope are stationary in a vertical list; the footer names contextual actions. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
         "G40"
@@ -7642,7 +7701,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "doctor"
       },
@@ -7744,7 +7803,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "doctor_routes row capture (stopped, LISTENING or RECORDING, no modal or draft). Once Finish is eligible (Adapter:finish_eligible from runtime capture_progress: captured seconds >= Bank.minimum_capture_seconds(40 BPM)) grid Record or K3 finishes the take (runtime:finish -> ANALYSING, R04). Before that K3 returns MORE_AUDIO_NEEDED and Record opens the cancel_capture question (R03).",
-      "state_explanation": "Status is ENOUGH / REC OR K3 or MORE AUDIO NEEDED, read from the adapter, never inferred from the animation. LISTENING (Auto tempo) and RECORDING (Manual) share this screen. Starting the sequencer cancels the capture and returns to EMPTY (G43 -> R11). Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "Status is ENOUGH / REC OR K3 or MORE AUDIO NEEDED, read from the adapter, never inferred from the animation. LISTENING (Auto tempo) and RECORDING (Manual) share this screen. Starting the sequencer cancels the capture and returns to EMPTY (G43 -> R11). Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values and scope are stationary in a vertical list; the footer names contextual actions. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
         "G40",
@@ -7883,7 +7942,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "doctor"
       },
@@ -8224,7 +8283,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "doctor_routes row analysis (stopped, ANALYSING or REANALYSING). ANALYSING: grid Record asks cancel_capture (R03). REANALYSING (a confirmed alignment is being re-analysed): Record asks cancel_correction (R16) and the previous READY bank is kept until the result. E2/E3/K2/K3 do nothing.",
-      "state_explanation": "The lane set is whatever the analysis returns: three lanes on the device, up to ten from the analysis server (field_contracts.doctor.lanes); nothing is promised before the bank arrives. Late results after a cancel or project change are stale. A failed correction restores the previous READY bank (runtime message CORRECTION_FAILED); a failed first analysis goes to FAILED (R12). Transport start cancels the job: ANALYSING -> EMPTY, REANALYSING -> previous READY bank. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "The lane set is whatever the analysis returns: three lanes on the device, up to ten from the analysis server (field_contracts.doctor.lanes); nothing is promised before the bank arrives. Late results after a cancel or project change are stale. A failed correction restores the previous READY bank (runtime message CORRECTION_FAILED); a failed first analysis goes to FAILED (R12). Transport start cancels the job: ANALYSING -> EMPTY, REANALYSING -> previous READY bank. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values and scope are stationary in a vertical list; the footer names contextual actions. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
         "G40",
@@ -8363,7 +8422,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "doctor"
       },
@@ -8479,7 +8538,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "doctor_routes rows ready and ready_playing (READY, no armed preview, no modal or draft when stopped). E2 selects Window bar / Window step / Sensitivity / Paint policy / Alignment (wrapping); E3 edits: Window bar +-16 cells and Window step +-1 cell per detent through runtime:set_window_start (bounded by Bank.with_window_start to whole 64-cell windows), Sensitivity +-0.05 for the current lane (0..1), Paint policy cycles Toggle/Add/Replace, Alignment opens the alignment draft (R06) - stopped only, STOP_SEQUENCER while playing. Grid (10/12,8) browse and (11,8) phrase start (G46, R15); lane cells (G41, R13); Paint (16,8) arms a preview (G42, R08); Record asks to clear the bank (R10, stopped only). K2/K3 do nothing here.",
-      "state_explanation": "Everything on this screen except Alignment works while the sequencer plays (field_contracts.doctor.transport_gate). Lane switching keeps the window; sensitivity belongs to the selected lane. Each window, sensitivity or policy change bumps the adapter window revision, so an already armed preview then fails to commit with STALE_PREVIEW until it is retaken. This fixture assumes a bank long enough for steps 17-80. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "Everything on this screen except Alignment works while the sequencer plays (field_contracts.doctor.transport_gate). Lane switching keeps the window; sensitivity belongs to the selected lane. Each window, sensitivity or policy change bumps the adapter window revision, so an already armed preview then fails to commit with STALE_PREVIEW until it is retaken. This fixture assumes a bank long enough for steps 17-80. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values and scope are stationary in a vertical list; the footer names contextual actions. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
         "G40",
@@ -8619,7 +8678,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "window"
       },
@@ -8736,7 +8795,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "doctor_routes row alignment (stopped, alignment draft without a refusal). E2 selects Half tempo / Double tempo / Exact BPM / Start beat / Fine start (wrapping; clears a shown refusal). E3 edits: Exact BPM +-1 within 40..240; Start beat steps through the detected beat grid (1..#beat_positions); Fine start +-1 ms clamped to the captured span. K3 applies: with Half or Double tempo selected the draft BPM is halved or doubled first, then runtime:apply_alignment starts the re-analysis (REANALYSING, R04). K2 discards the draft. Stopped-only; starting the sequencer discards the draft.",
-      "state_explanation": "The draft opens on the beat nearest the detected phrase start (phrase_beat_index), so confirming without editing keeps the detector's answer (README \"Finding the phrase\"). A refused apply keeps the draft and shows the refusal (R07). A successful correction yields a new bank revision, which invalidates old paint previews. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "The draft opens on the beat nearest the detected phrase start (phrase_beat_index), so confirming without editing keeps the detector's answer (README \"Finding the phrase\"). A refused apply keeps the draft and shows the refusal (R07). A successful correction yields a new bank revision, which invalidates old paint previews. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values and scope are stationary in a vertical list; the footer names contextual actions. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
         "SCREEN.R06"
@@ -8874,7 +8933,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "doctor"
       },
@@ -9214,7 +9273,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "doctor_routes rows ready_preview and ready_preview_playing (READY with Paint armed), playing or stopped. Grid (16,8) commits the armed preview to the destination it was built for (Replace is confirmed by that press); a refusal keeps it armed and shows the code. (14,8) cancels. (10/12,8) tap +-1 cell, hold +-64 cells, (11,8) phrase start: the preview is retaken at the new window (G46). Selecting a lane retakes it (G41). K3 is not Paint.",
-      "state_explanation": "Works while the sequencer plays and survives transport start. Changing pattern or song slot discards the preview (discard_stale_rhythm_doctor_paint). E3 edits to window, sensitivity or policy retire the adapter preview, so the next commit reports STALE_PREVIEW until it is retaken. Painting never rewrites the capture bank. Default policy is Toggle; Replace here is explicit. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "Works while the sequencer plays and survives transport start. Changing pattern or song slot discards the preview (discard_stale_rhythm_doctor_paint). E3 edits to window, sensitivity or policy retire the adapter preview, so the next commit reports STALE_PREVIEW until it is retaken. Painting never rewrites the capture bank. Default policy is Toggle; Replace here is explicit. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values and scope are stationary in a vertical list; the footer names contextual actions. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
         "G42"
@@ -9352,7 +9411,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "doctor"
       },
@@ -9454,7 +9513,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "G42 outcome paint_committed on a READY row, playing or stopped. Continue selecting lanes and windows; Paint (16,8) arms a new preview. The adapter keeps paint_undo/paint_redo but no current UI route calls them, and none is invented.",
-      "state_explanation": "Commit writes once through the paint transaction (pattern revision checked, journal recorded). NO_PAINT_CHANGE, PATTERN_CHANGED and STALE_PREVIEW leave the preview armed on R08. Cancel instead says Painting cancelled and returns to R05 with the pattern unchanged. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "Commit writes once through the paint transaction (pattern revision checked, journal recorded). NO_PAINT_CHANGE, PATTERN_CHANGED and STALE_PREVIEW leave the preview armed on R08. Cancel instead says Painting cancelled and returns to R05 with the pattern unchanged. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values and scope are stationary in a vertical list; the footer names contextual actions. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
         "G42",
@@ -9593,7 +9652,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "vertical_list",
         "model": "ViewModel",
         "art": "doctor"
       },
@@ -11333,7 +11392,7 @@
       "fields": [
         {
           "id": "mode",
-          "label": "Mode",
+          "label": "Strategy",
           "example": "FOUNDATION",
           "binding": {
             "provider": "merge",
@@ -11414,6 +11473,20 @@
           "missing": "NONE",
           "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "strategy_selector",
+          "label": "Strategy selector",
+          "example": ">",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "strategy_selector"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -11422,8 +11495,8 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E2 selects the visible field; E3 edits. K2 cancels the whole draft; K3 on a value applies the whole draft. K3 on an action opens it. E1 cancels/returns to root, then Tasks. Shown as a list (detail layout: every row, the selected one marked >; owner decision 27 September 2026) because most rows open child screens (OPEN >).",
-      "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Mode Fragments (plan docs/musical-merge-extensions-plan.md §2/§5) replaces the Rhythm route with the Fragments screen (field `fragments`, label Rhythm) and hides Pitch; Phrase shows Cycles and Variation only.",
+      "controls_explanation": "Strategy is readonly effective state. Strategy selector opens the shared C09 selector and cancels any unapplied parameter draft. Rhythm, Phrase, Pitch and Result retain their vertical parameter menus; E3 edits these drafts, K3 applies and K2 cancels/returns.",
+      "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Mode Fragments (plan docs/musical-merge-extensions-plan.md \u00a72/\u00a75) replaces the Rhythm route with the Fragments screen (field `fragments`, label Rhythm) and hides Pitch; Phrase shows Cycles and Variation only.",
       "parent": "N01",
       "entry_flow_ids": [
         "NAV.Channel.M02"
@@ -15442,7 +15515,7 @@
         "mutation": "none during draw"
       },
       "hold_policy": "follow_family",
-      "state_explanation": "Information only: a dashboard of six rows. Role names the step's role and its source patterns (ADDITION P1,2). Decision lists every rejection reason of the candidate in pipeline order (gap, then Interlock; plan §3), and a Fragments step names its fragment from 1 and its source (FRAGMENT 1 P03) or KEPT ANCHOR. Interlock shows the admission separately from those reasons: ON while it filters, else its visible bypass (RESYNC, PLAN LIMIT, LEADER OFF, LEADER MISSING), OFF without a leader and NOT USED in Fragments mode (plan §1.2, §3). Pitch target shows a Structure marker's chord decision (MARKER CHORD G01, CHORD MISSING, or the explicit bypass that kept its pitch such as BYPASS NOTE MASK) or NOT USED in Fragments mode."
+      "state_explanation": "Information only: a dashboard of six rows. Role names the step's role and its source patterns (ADDITION P1,2). Decision lists every rejection reason of the candidate in pipeline order (gap, then Interlock; plan \u00a73), and a Fragments step names its fragment from 1 and its source (FRAGMENT 1 P03) or KEPT ANCHOR. Interlock shows the admission separately from those reasons: ON while it filters, else its visible bypass (RESYNC, PLAN LIMIT, LEADER OFF, LEADER MISSING), OFF without a leader and NOT USED in Fragments mode (plan \u00a71.2, \u00a73). Pitch target shows a Structure marker's chord decision (MARKER CHORD G01, CHORD MISSING, or the explicit bypass that kept its pitch such as BYPASS NOTE MASK) or NOT USED in Fragments mode."
     },
     "H19": {
       "id": "H19",
@@ -15855,7 +15928,7 @@
       },
       "hold_policy": "follow_family",
       "controls_explanation": "E2 selects a row; E3 edits it. K3 applies the whole Merge Shape draft; K2 cancels a draft or returns. E1 cancels/returns to root, then Tasks.",
-      "state_explanation": "Plan §2: fragment Size 4/8/16 from the channel's own start step, Keep anchor Off/On, Anchor (assigned patterns, shown only with Keep anchor) and Seed. Each fragment plays one assigned pattern's own trigs, notes, velocities and lengths; the legacy note/velocity/length merge modes do not apply."
+      "state_explanation": "Plan \u00a72: fragment Size 4/8/16 from the channel's own start step, Keep anchor Off/On, Anchor (assigned patterns, shown only with Keep anchor) and Seed. Each fragment plays one assigned pattern's own trigs, notes, velocities and lengths; the legacy note/velocity/length merge modes do not apply."
     },
     "M16": {
       "id": "M16",
@@ -15943,7 +16016,7 @@
       },
       "hold_policy": "follow_family",
       "controls_explanation": "E2 selects a row; E3 edits it. K3 applies the whole Merge Shape draft; K2 cancels a draft or returns. E1 cancels/returns to root, then Tasks.",
-      "state_explanation": "Plan §3/§1.5: Leader OFF or another channel, Window 0..4 follower steps. Additions within the window of a leader anchor are removed (INTERLOCK CHnn). Every other channel is listed; Apply rejects a chain with LEADER HAS LEADER or CHANNEL IS A LEADER. Status shows ON or the visible bypass of the active build."
+      "state_explanation": "Plan \u00a73/\u00a71.5: Leader OFF or another channel, Window 0..4 follower steps. Additions within the window of a leader anchor are removed (INTERLOCK CHnn). Every other channel is listed; Apply rejects a chain with LEADER HAS LEADER or CHANNEL IS A LEADER. Status shows ON or the visible bypass of the active build."
     },
     "M18": {
       "id": "M18",
@@ -16017,7 +16090,7 @@
       },
       "hold_policy": "follow_family",
       "controls_explanation": "E2 selects a row; E3 edits it. K3 applies the whole Merge Shape draft; K2 cancels a draft or returns. E1 cancels/returns to root, then Tasks.",
-      "state_explanation": "Plan §4: explicit Markers Off/Anchors/Every 4/Every 8 snap marker onsets to an enabled Harmony Ensemble group's chord (Chord group, shown while markers are on). Apply requires an enabled group; deleting or disabling it turns the markers Off in the same transaction."
+      "state_explanation": "Plan \u00a74: explicit Markers Off/Anchors/Every 4/Every 8 snap marker onsets to an enabled Harmony Ensemble group's chord (Chord group, shown while markers are on). Apply requires an enabled group; deleting or disabling it turns the markers Off in the same transaction."
     }
   },
   "providers": {
@@ -16594,7 +16667,7 @@
     "G03": {
       "id": "G03",
       "kind": "grid_outcome",
-      "intent": "Pattern button (5,8), existing Trig→Note→Velocity cycle",
+      "intent": "Pattern button (5,8), existing Trig\u2192Note\u2192Velocity cycle",
       "old": {
         "source": "pages/pages.lua; global grid dispatch; Pattern Editor",
         "gesture": "original public grid handler including modifiers and releases"
@@ -18036,7 +18109,7 @@
         "context": "Song"
       },
       "action": "retain_original_callback_once",
-      "follow": "A01 edit-slot repeats on deliberate edit selection; A03 queue/current on queue-only action; explicit copy source→destination on copy",
+      "follow": "A01 edit-slot repeats on deliberate edit selection; A03 queue/current on queue-only action; explicit copy source\u2192destination on copy",
       "replacement": "presentation_follow",
       "preserves": [
         "musical_result",
@@ -23689,7 +23762,17 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "42b867fea1375344f3fe44bdaa66e724851bd5265c0f2bc2c1a86374c07c754e"
+      "sha256": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7"
+    },
+    "mini": {
+      "file": "code/mini.lua",
+      "kind": "native_screen_proto_code",
+      "sha256": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c"
+    },
+    "mini_atlas": {
+      "file": "code/mini_atlas.lua",
+      "kind": "native_screen_proto_code",
+      "sha256": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871"
     }
   },
   "guardrails": [
@@ -31220,11 +31303,12 @@
     "merge": {
       "route_fields": {
         "M02": [
-          "mode:off|foundation|fragments",
+          "mode:readonly effective Strategy",
           "Rhythm->M03 (Foundation/Off) or Rhythm->M15 (Fragments, field fragments)",
           "Phrase->M06",
           "Pitch->M07",
-          "Result->M05"
+          "Result->M05",
+          "Strategy selector->C09 shared effective selector"
         ],
         "M03": [
           "anchor:assigned_patterns",
@@ -31261,7 +31345,7 @@
           "Reason->M14",
           "interlock:readonly_active (when a leader is configured)",
           "pitch:readonly_active (at a Structure marker)",
-          "rejected:readonly (boundary rejection, plan §1.5)"
+          "rejected:readonly (boundary rejection, plan \u00a71.5)"
         ],
         "M09": [
           "merge_gesture",
@@ -31300,7 +31384,7 @@
           "structure.group_id:enabled Harmony group (while markers on)"
         ]
       },
-      "transaction": "all fields one owner draft; assigned-anchor/effective-target/stale snapshot validated on Apply; one-way leader dependencies (LEADER HAS LEADER / CHANNEL IS A LEADER) and an enabled Structure group validated on Apply (plan §1.5, §4)",
+      "transaction": "all fields one owner draft; assigned-anchor/effective-target/stale snapshot validated on Apply; one-way leader dependencies (LEADER HAS LEADER / CHANNEL IS A LEADER) and an enabled Structure group validated on Apply (plan \u00a71.5, \u00a74)",
       "repeat_key": {
         "template": "degree_<n>",
         "pattern": "^degree_[1-9][0-9]*$",
@@ -31676,13 +31760,56 @@
         "overflow_status": 7,
         "neighbours_y": 63,
         "rule": "Information-only screens show every field at once (owner decision 25 September 2026). No selection cursor."
+      },
+      "vertical_list": {
+        "title": [
+          1,
+          7
+        ],
+        "scope": [
+          1,
+          17
+        ],
+        "row_baselines": [
+          27,
+          36,
+          45,
+          54
+        ],
+        "label_x": 7,
+        "value_right_x": 126,
+        "selected_level": 15,
+        "unselected_label_level": 7,
+        "unselected_value_level": 10,
+        "selection_arrow": [
+          0,
+          "selected row baseline"
+        ],
+        "position_right": [
+          118,
+          17
+        ],
+        "footer_baseline": 63,
+        "overflow_status": 17,
+        "priority": "Values remain exact. Selected label/value use separate rows if they cannot share one, retaining neighboring fields. Fitting labels/values stay static; selected oversized text retains the existing Motion-controlled marquee so its full content can be read. Neighboring fields, title, scope and footer stay static. Motion Off preserves explicit overflow feedback. Position count appears when fields exceed viewport; footer names contextual actions."
       }
     },
     "text": "full labels in detail; exact (numeric) values are never cropped or abbreviated: every layout with fields gives the selected value a whole full-width route on the same screen (focused value_region, detail selected row, overview full_value_line); cells use the '...' more-marker; overflow paints LAYOUT OVERFLOW and fails acceptance; absent event is NO EVENT; Off/Inherit/None/Mixed/zero distinct",
-    "motion": "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame. Text too wide for its room scrolls right to left so it can be read in full (owner request 26 September 2026): on a 10 Hz tick shared by every cut text it rests 8 ticks, drops one character per tick until its end shows, rests 8 ticks and starts again; the phase restarts with the screen or selection, a frame is drawn only when a text moves, and with motion off text is cut statically with ~.",
+    "motion": "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame. Text too wide for its room scrolls right to left so it can be read in full (owner request 26 September 2026): on a 10 Hz tick shared by every cut text it rests 8 ticks, drops one character per tick until its end shows, rests 8 ticks and starts again; the phase restarts with the screen or selection, a frame is drawn only when a text moves, and with motion off text is cut statically with ~. Authorized correction 3 October 2026: fitting vertical_list text stays static; selected oversized labels or exact values retain the existing Motion-controlled marquee on their separate selected rows. Neighboring fields, title, scope and footer stay static. Focused horizontal layouts are replaced; startup/title-mark and non-list musical/status animation remain.",
     "performance": "dirty-driven existing refresh cadence; no rendering allocations proportional to project size or musical recomputation",
     "specimen_rule": "screen.lua is the data-bound layout reference; atlas/characters/visuals retain accepted illustrative recipes. Fixture constants never supply application values. Decorative art only. Data diagrams require explicit snapshot bindings, described in diagram_contracts.",
-    "brand_mark": "Four 2px tiles at x121..126, y1..6 on every live screen: Mosaic's mark. Rest levels 3/6/3/6; lit in sequence by decorative motion. Scope text ends at x118 so the mark never overlaps text."
+    "brand_mark": "Four 2px tiles at x121..126, y1..6 on every live screen: Mosaic's mark. Rest levels 3/6/3/6; lit in sequence by decorative motion. Scope text ends at x118 so the mark never overlaps text.",
+    "header_miniatures": {
+      "atlas": "mini_atlas",
+      "registered_mosaic_scenes": 93,
+      "native_owned_exceptions": 9,
+      "priority": "Original full title, scope, rows and footer retain priority; decoration yields when its whole footprint does not fit.",
+      "ordinary_region": "Right aligned, x96..127 maximum;8px high at y0.",
+      "scope_on_right_region": "x121..127,y0..7 only; Masks and Trig Params visible controls remain unchanged.",
+      "timing": "Playing follows(lattice.transport-1)/ppqn; stopped previews selected norns clock.get_beats with valid tempo. Motion Off or invalid source shows accepted rest pose. No wall-time fallback or musical state writes.",
+      "animation": "Eight authored poses per scene over its2/4quarter-note loop, capped at12Hz redraw requests.",
+      "replaces": "Registered miniature replaces four-tile corner mark; unknown/oversized decoration may keep bounded rest mark only when header geometry is safe."
+    }
   },
   "subroutes": {},
   "view_model": {
@@ -31799,7 +31926,8 @@
       "M09": "M09",
       "FRAGMENTS": "M15",
       "INTERLOCK": "M16",
-      "STRUCTURE": "M18"
+      "STRUCTURE": "M18",
+      "STRATEGY_SELECTOR": "C09"
     },
     "harmony": {
       "H01": "H01",
@@ -33262,6 +33390,28 @@
       "line": 202,
       "binding_rule": "Assign a stable id beside this exact action declaration; label is source evidence, never runtime dispatch key.",
       "field_id": "structure",
+      "kind": "route"
+    },
+    {
+      "from": "M02",
+      "field_label_reference": "Strategy selector",
+      "old_owner_route": "M01",
+      "old_action_route": "STRATEGY_SELECTOR",
+      "to": "C09",
+      "event": "K3.down",
+      "guard": {
+        "field_kind": "action",
+        "descriptor_enabled": true
+      },
+      "effects": [
+        "owner.before_if_present",
+        "return.push",
+        "owner.open_translated_route"
+      ],
+      "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
+      "line": 170,
+      "binding_rule": "Assign a stable id beside this exact action declaration; label is source evidence, never runtime dispatch key.",
+      "field_id": "strategy_selector",
       "kind": "route"
     }
   ],

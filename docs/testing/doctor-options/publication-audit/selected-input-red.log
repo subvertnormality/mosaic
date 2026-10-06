@@ -1,0 +1,13 @@
+....E..................
+======================================================================
+ERROR: test_selected_input_frame_is_required_for_each_actual_adc_role (test_doctor_options_audit.DoctorInputDocumentationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 158, in test_selected_input_frame_is_required_for_each_actual_adc_role
+    contract=audit.adc_checkpoint_contract(case);self.assertEqual(len(contract),count);self.assertEqual(contract[1],('setup-input-source',dict(route='R01',label='Input',value=value)))
+AttributeError: module 'doctor_options_audit' has no attribute 'adc_checkpoint_contract'
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.064s
+
+FAILED (errors=1)

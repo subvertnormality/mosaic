@@ -1,0 +1,524 @@
+features:
+- id: first-sound
+  title: Creating a First Loop
+  audience: beginner
+  summary: Hear a repeating four-note loop.
+  prose: 'Before starting: Start a new project with Record off. No output, patterns or masks have been
+    entered yet. The walkthrough below begins by choosing an output for channel 1, so you can follow it
+    from an empty project. [Configuring an Output](#setup) explains the choices.
+
+
+    ### Choose the output
+
+
+    1. Tap Channel (3,8). The header reads CH01.
+
+    2. Turn E1 to open Channel tasks, select Device with E2 and press K3.
+
+    3. Select a working output with E3: the basic MIDI device (CC Device), your own configuration, or
+    Polyperc 1 for internal sound. Press K3 to apply.
+
+
+    Device shows the output you chose. A selection that has not been applied with K3 is only a draft.
+
+
+    ### Enter four attacks
+
+
+    1. Tap Pattern (5,8) to Trig. The header names pattern 1.
+
+    2. Tap (1,4), (2,4), (3,4), (4,4).
+
+
+    Four active attacks light on row 4. Each lit step is a trig, a point where a note can sound. If you
+    are editing another pattern, select pattern 1 on the top row first.
+
+
+    ### Assign and shorten
+
+
+    1. Tap Channel (3,8).
+
+    2. Tap pattern slot (1,2).
+
+    3. Hold step (1,4), tap (4,4), release (1,4). To set a range, hold its first step, tap its last step,
+    then release the first.
+
+
+    Pattern 1 feeds channel 1 across a four-step range, so the channel loops steps 1 to 4.
+
+
+    ### Give the attacks a pitch and level
+
+
+    1. Open Channel tasks → Masks.
+
+    2. With no step held, select Note with E2 and set MIDI 60 with E3 (C3). The Masks screen labels MIDI
+    60 as C3.
+
+    3. Select Vel and set 80.
+
+    4. Select Len and set 1/2.
+
+
+    These are channel masks: all four attacks share one pitch, velocity and length. A step could override
+    them later.
+
+
+    ### Play and stop
+
+
+    1. Tap Play (1,8).
+
+    2. Listen for four equal C notes repeating, with a playhead moving along the grid. At 90 BPM and the
+    default Rate /1 each step lasts one sixth of a second, so the loop repeats about every two thirds
+    of a second.
+
+    3. Tap Play again to stop; hold K1 too if Shift press stop is enabled.
+
+
+    Four equal C notes repeat. Playback stops with notes released.
+
+
+    Resulting project: Pattern 1 attacks 1–4; CH01 assigned P1; range 1–4; Note 60/Vel 80/Len1/2; no step
+    exceptions; stopped.'
+  musical_use: ''
+  related:
+  - no-sound
+  - devices
+  - adding-trigs
+  - masks
+  - save-and-load
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-MASK-007
+    - M-MASK-008
+    - M-SAVE-NAMED-001
+    - M-PAT-001
+    code:
+    - tests/behaviour/composition_workflow.py
+    - tests/behaviour/ui.py
+    - tests/behaviour/ui_map.py
+  controls: []
+  details:
+  - title: Coordinates and pitches
+    text: 'The first channel steps run across row 4. Coordinates count from the grid’s top-left corner.
+      Octave labels vary between screens: this tutorial uses the Masks field, where MIDI 60 is C3. Numeric
+      MIDI is the reliable reference when moving between instruments or controls.'
+  - title: Walkthrough Result
+    text: The walkthrough above shows each setting on screen and plays two cycles of four equal MIDI notes
+      (MIDI 60, velocity 80), then stops playback. It does not include a live audio recording of the first
+      loop.
+  - title: Recovery
+    text: If silent, follow No Sound in transport → assignment → range → masks → output order.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  recipes: []
+  scene_refs:
+  - first-sound-equal-note-loop
+  review:
+    status: verified
+    cases:
+    - M-PAT-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The exact empty-project route, equal-note loop and stopping are captured in both lanes.
+      Named Save/Load is demonstrated by its separate real-time project-roundtrip scene. Physical sound
+      output is separate.
+    native_evidence:
+      real-time:
+        run_id: 9bc49fb0f9df44b1a3eb726ed4f0727e
+        report: /home/andy/mosaic-manual-runs/9bc49fb0f9df44b1a3eb726ed4f0727e/report.json
+        report_sha256: c196cbb1e42b401991834a37ed9b7a6a657f7ba7902979400c4747d659e8272c
+        scene: first-sound-equal-note-loop
+        complete_regression_run: false
+      controlled-experimental:
+        run_id: 503550d3fa12488489f34e739d07b0ee
+        report: /home/andy/mosaic-manual-runs/503550d3fa12488489f34e739d07b0ee/report.json
+        report_sha256: 5e8f64a19ae3c17d6b072d706be759cf887da5ee0c7ae7fa6d54df5ac10a2fe6
+        scene: first-sound-equal-note-loop
+        complete_regression_run: false
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+  category: learn
+  parent: getting-started
+  level: 3
+- id: no-sound
+  title: Troubleshooting No Sound
+  audience: beginner
+  summary: Check transport, channel data and output settings in order.
+  prose: 'Use the loop in [Creating a First Loop](#first-sound). Check the following in order.
+
+
+    1. Check that the grid playhead moves. If it does not, press Play. For an external clock source, check
+    that the source is running and sending clock. Use the internal clock for a standalone check.
+
+    2. Select the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An
+    unassigned source pattern does not play through the channel.
+
+    3. Check that active attacks are inside the channel range. If several patterns are assigned, check whether
+    Skip removes their overlaps. Compare one assigned pattern or All trig merge.
+
+    4. Open Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value
+    overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.
+
+    5. Open Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match
+    output port and receive channel. For n.b., check that the player is installed, enabled and supported.
+    Check norns audio level and the listening path.
+
+
+    For hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic
+    sends Note Off messages but does not stop playback. A running sequence can sound new notes after the
+    sweep.
+
+
+    The examples on this page each show one of these checks. Keep each channel independent shows that Device
+    belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when
+    a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before
+    its start is refused, the previous valid range stays, and only the attacks inside that range sound.
+    Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length
+    masks shows that velocity 0 is silent and that X lets the pattern''s own velocity through (check 4).
+    Create a four-step loop from an empty project is the working loop to compare against.'
+  musical_use: ''
+  related:
+  - first-sound
+  - sequencer-start-and-stop
+  - midi-panic
+  - merge-modes
+  - devices
+  - masks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#midi-device-configuration
+    behaviour_cases:
+    - M-PANIC-001
+    - M-MASK-008
+    - M-WORKFLOW-001
+    - M-LIVEUI-CHSELECT-001
+    - M-LIVEUI-MERGEMODES-001
+    - M-PAT-001
+    - M-MUTE-001
+    - M-RANGE-REJECT-001
+    code:
+    - tests/behaviour/composition_workflow.py
+    - tests/behaviour/ui.py
+    - tests/behaviour/ui_map.py
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - first-sound-equal-note-loop
+  - mute-live-resume
+  - range-reject-and-recover
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-LIVEUI-MERGEMODES-001
+    - M-MASK-008
+    - M-PAT-001
+    - M-MUTE-001
+    - M-RANGE-REJECT-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native scoped scenes cover basic playback, device scope, mutes, ranges, mask silence and
+      merge choices. Physical cabling/audio setup is external. Panic is documented in its separate guide
+      and awaits its own scene.
+  category: learn
+  parent: getting-started
+  level: 3
+- id: build-a-phrase
+  title: Creating a Phrase and Arrangement
+  audience: beginner
+  summary: Turn four fast attacks into four evenly spaced beats.
+  prose: 'Before starting: Use channel 1 with pattern 1 assigned, active attacks at steps 1–4 and range
+    1–4. Set channel Masks Note to MIDI 60, Vel to 80 and Len to 1/2; clear existing step exceptions. Stop
+    playback. [Creating a First Loop](#first-sound) gives the complete preparation route.
+
+
+    ### Extend the range
+
+
+    1. Tap Channel (3,8).
+
+    2. Hold (1,4), tap (16,4), release.
+
+    3. Turn E1 to Channel tasks; select Clock with E2 and press K3.
+
+    4. Select Rate with E2; set /1 with E3 (sixteenth notes, the default).
+
+    5. Press K3 to apply while stopped.
+
+
+    The channel traverses16 steps before repeating.
+
+
+    ### Move the attacks
+
+
+    1. Open Pattern Trig, pattern 1.
+
+    2. Remove steps 2,3,4.
+
+    3. Add steps 5,9,13; keep step 1.
+
+
+    Four attacks now sit on the four beats. The old attacks have been removed explicitly.
+
+
+    ### Hear the longer phrase
+
+
+    1. Play two bars.
+
+    2. Stop.
+
+
+    C–C–C–C remains the pitch sequence; the space between attacks has increased.
+
+
+    Resulting project: P1 attacks 1/5/9/13; CH01 range 1–16; sixteenth-note rate; Note 60/Vel 80/Len1/2
+    unchanged.
+
+
+    The examples below extend this phrase. Set channel and step note masks shows how a step''s own note
+    beats the channel default. Save D major, then apply it shows how a scale slot can be edited and saved
+    without changing what plays until you apply it. The last three examples walk through the whole workflow
+    in order: Add a second pattern in D major merges two patterns on channel 1, Add a second channel with
+    its own output gives channel 2 its own MIDI port, and Chain song slots an octave apart plays two song
+    slots.'
+  musical_use: ''
+  related:
+  - rhythm-section-design
+  - harmony-design
+  - melody-composition
+  - modulation-movement-and-interest
+  - song-composition
+  - small-hours
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-SAVE-NAMED-001
+    - M-SCALE-001
+    - M-MASK-007
+    - M-PAT-001
+    - M-MERGE-PHRASE-001
+    code:
+    - tests/behaviour/composition_workflow.py
+    - tests/behaviour/ui.py
+    - tests/behaviour/ui_map.py
+  controls: []
+  details:
+  - title: Restore Pattern Note Inheritance
+    text: >-
+      The first loop leaves CH01 Note C3 (MIDI 60), Vel 80 and Len 1/2 channel masks. These still override
+      matching pattern values. Before editing relative pattern notes, stop playback. Tap Channel (3,8),
+      turn E1 to Channel tasks, select Masks with E2 and press K3. With no step held, select Note with E2
+      and turn E3 until the field reads X. X is unset, not zero; on steps without a step-specific note mask,
+      the merged pattern note now plays. Keep Vel and Len at 80 and 1/2, or set them to X if pattern values
+      should control them too.
+
+      K1+K2 with no step held clears channel step overrides but preserves defaults; it does not clear Note
+      C3. To clear all masks on one step, hold that step and press K2. See Masks: Unset values and precedence.
+  - title: Recovery
+    text: Remove an accidental attack by tapping it again in Pattern Trig.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  recipes: []
+  scene_refs:
+  - scale-save-d-and-apply
+  - mask-precedence
+  - workflow-patterns-and-scale
+  - workflow-second-channel
+  - workflow-song-chain
+  - first-sound-equal-note-loop
+  review:
+    status: verified
+    cases:
+    - M-SCALE-001
+    - M-MASK-007
+    - M-WORKFLOW-001
+    - M-PAT-001
+    - M-MERGE-PHRASE-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The full native composition case checks two channels, harmony, merge modes, MIDI melody,
+      slot arrangement, autosave and isolated restart. It starts from its own configured phrase. The explicit
+      first-loop handoff (clear channel Note/Vel/Len defaults and remove attacks 2–4) is source-reviewed
+      but awaits a continuous native lesson capture. Suggested variants and physical sound sources are
+      separate.
+    audio_refs:
+    - three-voice-conversation
+    audio_cases:
+    - MA-AUDIO-three-voice-conversation
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+  category: learn
+  parent: getting-started
+  level: 3
+- id: keep-your-work
+  title: Saving and Loading a Project
+  audience: beginner
+  summary: Restore the arrangement from a named project.
+  prose: 'Before starting: Use any stopped project containing a named arrangement. The worked reload check
+    uses slot 1 with channel 1 muted and another channel audible. For another project, make a reversible
+    visible change before loading and confirm the saved state returns.
+
+
+    ### Save the arrangement
+
+
+    1. Tap K1 briefly to enter the norns system menu.
+
+    2. Open PARAMS → MOSAIC → Save project.
+
+    3. Enter Four notes and confirm.
+
+
+    The named project stores the two-section arrangement.
+
+
+    ### Prove the saved version
+
+
+    1. Return to Mosaic, select Song slot 1, then open Channel.
+
+    2. Hold K1, tap channel 1 at (1,1), release K1 to unmute it temporarily.
+
+    3. With playback stopped, open PARAMS → MOSAIC → Load project.
+
+    4. Select Four notes and confirm.
+
+
+    Slot 1 returns to bass alone; the temporary change is removed.
+
+
+    ### Replay the restored sections
+
+
+    1. Select slot 1.
+
+    2. Play four section passes and stop.
+
+
+    The saved bass-only/full-phrase alternation is restored. Continue with merge, recording or modulation
+    task guides without replacing this saved version.
+
+
+    Resulting project: Named project Four notes contains both sections and restores their exact playback.
+    Transport stopped with no held notes.'
+  musical_use: ''
+  related:
+  - save-and-load
+  - song-composition
+  - first-sound
+  sources:
+    readme: manual/legacy/README-1.4.0.md#save-and-load
+    behaviour_cases:
+    - M-SAVE-NAMED-001
+    - M-SAVE-002
+    - M-SAVE-FAIL-001
+    code:
+    - tests/behaviour/composition_workflow.py
+    - tests/behaviour/ui.py
+    - tests/behaviour/ui_map.py
+  controls:
+  - gesture: Short K1 → PARAMS → MOSAIC → Save project
+    result: Enter and confirm a project name.
+  - gesture: PARAMS → MOSAIC → Load project
+    result: Choose a saved project; K2 cancels the dialog.
+  details:
+  - title: Recovery
+    text: K2 cancels Load without replacing the current project. Keep the saved name before trying optional
+      variations.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases:
+    - M-SAVE-NAMED-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native default and typed project naming, overwrite, idle autosave, cancelled Load and
+      both named reloads with exact persistence and playback checks. Rejected-file and failure recovery
+      are separately scoped source cases.
+    rationale: Native default and typed project naming, overwrite, idle autosave, cancelled Load and both
+      named reloads with exact persistence and playback checks. Rejected-file and failure recovery are
+      separately scoped source cases.
+    controlled_baselines: []
+    native_evidence:
+    - scene: named-project-roundtrip
+      data: reference-option-scenes.json
+      clock_mode: real-time
+      publication_run: /home/andy/mosaic-manual-runs/07ff0a9fe4324961b9cca1b05e62dd89
+      data_sha256: 6cc688de9c23de5900a9799d3fbed72b2debcbe845fd8f950dae641c86423203
+      case: M-SAVE-NAMED-001
+      native_case_evidence:
+        path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-SAVE-NAMED-001-base-midi
+        session_context:
+          session_ordinal: 0
+          clock_mode: real-time
+          profile: base-midi
+          app_root: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/application
+          experimental_install: null
+          installation_sha256: null
+          session_id: 40abdab68a724b11b915a8a9afeb2b03
+          runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+          application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+          finished: true
+          held_inputs: []
+          cleanup_verified: true
+        results_sha256: 2a905aa0c28ce871a827387e3f9bee50ed13a77187a38279d7d4582c2455e2e2
+        identity_sha256: 8514b2ab6714132c3ae14347e9e649fe13c21e3b61e85ea87d9ac63536f01c8e
+        recipe_sha256: 954ae9cdf0a058328f87e54679693cecf09dbd19dad7802c8ed9875eb66c8032
+        native_events_sha256: 7e299d1854c1a4b2dc1e9ec5d002b7fc4c35160a76e4ab8a2cf8b738d0f4240b
+        capture_trace_sha256: 6ab76d82192a310f591ff8897cb30e839725088d2d35723aa6342438ff957eb2
+        session_context_sha256: 38ffc6a792299c694e7bb8b6abfb369f0fca95c54e4c32731b10e94332066a67
+        native_config_sha256: 46629b44d14dda8c456a235a7609d57fb0b4798997b6ea1487c1dc780ad99989
+        cleanup_sha256: a34b06860200faa8e587fd819cf1af9b8a91a766f6529df73cfd2708b80eba37
+        case_participants:
+        - path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-SAVE-NAMED-001-base-midi
+          session_context:
+            session_ordinal: 0
+            clock_mode: real-time
+            profile: base-midi
+            app_root: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/application
+            experimental_install: null
+            installation_sha256: null
+            session_id: 40abdab68a724b11b915a8a9afeb2b03
+            runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+            application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+            finished: true
+            held_inputs: []
+            cleanup_verified: true
+          results_sha256: 2a905aa0c28ce871a827387e3f9bee50ed13a77187a38279d7d4582c2455e2e2
+          identity_sha256: 8514b2ab6714132c3ae14347e9e649fe13c21e3b61e85ea87d9ac63536f01c8e
+          recipe_sha256: 954ae9cdf0a058328f87e54679693cecf09dbd19dad7802c8ed9875eb66c8032
+          native_events_sha256: 7e299d1854c1a4b2dc1e9ec5d002b7fc4c35160a76e4ab8a2cf8b738d0f4240b
+          capture_trace_sha256: 6ab76d82192a310f591ff8897cb30e839725088d2d35723aa6342438ff957eb2
+          session_context_sha256: 38ffc6a792299c694e7bb8b6abfb369f0fca95c54e4c32731b10e94332066a67
+          native_config_sha256: 46629b44d14dda8c456a235a7609d57fb0b4798997b6ea1487c1dc780ad99989
+          cleanup_sha256: a34b06860200faa8e587fd819cf1af9b8a91a766f6529df73cfd2708b80eba37
+        case_participants_path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-SAVE-NAMED-001-base-midi/case-participants.json
+        case_participants_sha256: 6605cb81b9d719534143512e0df31b0f0978deb7efd12d79300e066f430b46e1
+      independent_audit: manual/evidence/options-complete-start-recovery-real-independent-audit.json
+      independent_audit_sha256: 15ec2a6d85de9c24d12b8c7709c6fb737c2e3665c0642938ec8f31ebf8b4c320
+      scope: Native default and typed project naming, overwrite, idle autosave, cancelled Load and both
+        named reloads with exact persistence and playback checks. Rejected-file and failure recovery are
+        separately scoped source cases.
+      complete_regression_run: false
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+  category: learn
+  parent: getting-started
+  level: 3

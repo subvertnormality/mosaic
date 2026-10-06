@@ -1,0 +1,27 @@
+test_a_48k_capture_is_analysed_rather_than_refused (test_server.CaptureRateTests.test_a_48k_capture_is_analysed_rather_than_refused) ... ok
+test_positions_come_back_in_the_captures_own_coordinates (test_server.CaptureRateTests.test_positions_come_back_in_the_captures_own_coordinates)
+The bank addresses samples of the file the player recorded, not of ... ok
+test_resampling_preserves_length_within_a_sample (test_server.CaptureRateTests.test_resampling_preserves_length_within_a_sample) ... ok
+test_the_tempo_is_not_scaled_by_the_rate_ratio (test_server.CaptureRateTests.test_the_tempo_is_not_scaled_by_the_rate_ratio)
+The stub tracker places beats on a real grid, so a mishandled rate ... ok
+test_a_capture_comes_back_in_the_shape_the_worker_accepts (test_server.ServerTests.test_a_capture_comes_back_in_the_shape_the_worker_accepts) ... ok
+test_a_player_correction_is_honoured (test_server.ServerTests.test_a_player_correction_is_honoured) ... ok
+test_an_over_long_capture_is_refused (test_server.ServerTests.test_an_over_long_capture_is_refused) ... ok
+test_an_unknown_path_is_not_served (test_server.ServerTests.test_an_unknown_path_is_not_served) ... ok
+test_health_advertises_the_lane_set_before_any_capture (test_server.ServerTests.test_health_advertises_the_lane_set_before_any_capture)
+Mosaic needs the lane list to lay out the grid, and needs it without ... ok
+test_it_reads_a_stereo_capture (test_server.ServerTests.test_it_reads_a_stereo_capture) ... ok
+test_it_reads_the_24_bit_wav_softcut_actually_writes (test_server.ServerTests.test_it_reads_the_24_bit_wav_softcut_actually_writes)
+The device records through softcut, which writes 24-bit PCM. Python's ... ok
+test_no_candidate_carries_a_note (test_server.ServerTests.test_no_candidate_carries_a_note)
+Velocity yes, pitch no: the bank has nowhere to put a note number, ... ok
+test_rubbish_is_refused_rather_than_analysed (test_server.ServerTests.test_rubbish_is_refused_rather_than_analysed) ... ok
+test_silence_is_a_valid_empty_result (test_server.ServerTests.test_silence_is_a_valid_empty_result) ... ok
+test_the_capture_digest_is_returned_so_the_client_can_match_it (test_server.ServerTests.test_the_capture_digest_is_returned_so_the_client_can_match_it) ... ok
+test_the_phrase_start_is_reported_and_is_a_tracked_downbeat (test_server.ServerTests.test_the_phrase_start_is_reported_and_is_a_tracked_downbeat) ... ok
+test_health_reports_the_fault_and_analysis_is_refused (test_server.UnreadyServerTests.test_health_reports_the_fault_and_analysis_is_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 8.217s
+
+OK

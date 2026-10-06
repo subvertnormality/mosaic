@@ -1,0 +1,21 @@
+.................EE..............
+======================================================================
+ERROR: test_nb_parent_native_ui_cannot_be_verified_without_picker_replay (test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 196, in test_nb_parent_native_ui_cannot_be_verified_without_picker_replay
+    with self.assertRaisesRegex(ValueError,'player route'):binder.verify_nb_route_bindings(self.root,audit_projection=Mock())
+AttributeError: module 'manual_feature_bind' has no attribute 'verify_nb_route_bindings'
+
+======================================================================
+ERROR: test_nb_parent_reuses_exact_canonical_projection_without_copying_scene (test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 206, in test_nb_parent_reuses_exact_canonical_projection_without_copying_scene
+    result=binder.verify_nb_route_bindings(self.root,audit_projection=audit)
+AttributeError: module 'manual_feature_bind' has no attribute 'verify_nb_route_bindings'
+
+----------------------------------------------------------------------
+Ran 33 tests in 0.359s
+
+FAILED (errors=2)

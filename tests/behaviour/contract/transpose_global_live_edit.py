@@ -13,14 +13,18 @@ def transpose_global_live_edit(c):
     def now():
         return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
     edit1_lower=now();c.ui.control_edge("global_transpose_increment", True);c.ui.control_edge("global_transpose_increment", False);edit1_upper=now()
+    # README.md#transposition / screen rules: a grid transposition edit shows Scale overview with its Transpose row.
+    c.ui.expect_dashboard_row('Transpose','+1')
     c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=5)
     c.elapse(.04)
     before_second=len(capture.note_ons());assert 5<=before_second<=6
     edit2_lower=now();c.ui.control_edge("global_transpose_minimum", True);c.ui.control_edge("global_transpose_minimum", False);edit2_upper=now()
+    c.ui.expect_dashboard_row('Transpose','-12')
     c.elapse(1);capture.extend(c.snapshot())
     c.ui.control_edge("play_stop", True)
     stop_lower=now();c.ui.control_edge("play_stop", False);stop_upper=now()
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+    c.ui.expect_dashboard_row('Transpose','-12') # Stopped: the edit is kept.
     notes=capture.note_ons();assert len(notes)>=10
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     edits=((edit1_lower,edit1_upper,1),(edit2_lower,edit2_upper,-12))

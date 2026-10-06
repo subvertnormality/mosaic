@@ -1,0 +1,32 @@
+--- manual/features/reference-workflow.yaml before
++++ manual/features/reference-workflow.yaml after
+@@ -420,15 +420,20 @@
+ 
+     2. Open Channel tasks → Merge modes.
+ 
+-    3. Select the trig merge field with E2.
+-
+-    4. Change the mode with E3 and compare playback.
+-
+-    5. Repeat for note, velocity and length merge fields.
+-
+-
+-    The default Skip trig mode removes overlapping attacks. All retains attacks from either pattern. If
+-    an attack disappears after assigning another pattern, check the trig merge mode.'
++    3. Select Strategy with E2.
++
++    4. Choose Skip, Only or All with E3 and compare playback. The choice requests immediately; no K3
++    Apply is required. Active shows the sounding strategy; Pending names an accepted change waiting
++    for its boundary.
++
++    5. Select the note, velocity or length merge row with E2 and edit its value with E3.
++
++
++    Skip removes overlapping attacks. All retains attacks from either pattern. Only retains shared
++    attacks. Foundation and Fragments are alternative choices of this same Strategy selector, not
++    additional modes layered over Skip, Only or All. Foundation controls trigs while note, velocity and
++    length merge settings remain active. Fragments controls all four attributes; retained note, velocity
++    and length settings are inactive until a strategy that uses them becomes active.'
+   musical_use: Combine a steady pulse and a syncopated pattern. Compare Skip with All while keeping the
+     output sound unchanged.
+   related:

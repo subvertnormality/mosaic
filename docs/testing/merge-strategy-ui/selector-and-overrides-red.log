@@ -1,0 +1,17 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+FF
+Failed tests:
+-------------
+1) test_ui_adapters_merge_root_strategy_is_readonly_and_selector_is_explicit
+.///lib/ui_adapters_merge_tests.lua:385: expected: "Strategy"
+actual: "Mode"
+stack traceback:
+	.///lib/ui_adapters_merge_tests.lua:385: in upvalue 'test_ui_adapters_merge_root_strategy_is_readonly_and_selector_is_explicit'
+
+2) test_ui_adapters_read_only_c09_fragments_overridden_legacy_fields_cannot_edit
+.///lib/ui_adapters_read_only_tests.lua:477: expected: "readonly"
+actual: "value"
+stack traceback:
+
+Ran 2 tests in 0.006 seconds, 0 successes, 2 failures, 2411 non-selected
+find: ‘/home/we/norns/lua/core’: No such file or directory

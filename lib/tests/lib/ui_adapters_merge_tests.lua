@@ -72,7 +72,7 @@ end
 
 function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   local adapter, editor = fresh({1, 2})
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "rhythm", "phrase", "pitch", "result"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "rhythm", "phrase", "pitch", "result", "strategy_selector"})
   open_id(adapter, editor, "rhythm")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"anchor", "add_amount", "amount_detail", "add_accent", "anchor_gap", "seed",
     "interlock"})
@@ -102,10 +102,11 @@ function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   -- Plan §5: Mode Fragments replaces Rhythm with the Fragments screen, Phrase
   -- keeps Cycles and Variation, and Pitch is omitted.
   editor:encoder_one()
-  adapter:edit("mode", 1, target(editor), editor.generation)
-  adapter:edit("mode", 1, target(editor), editor.generation)
+  -- Unit draft seam: Strategy is now readonly here; actual mode selection is
+  -- validated by the shared C09/grid selector in merge_strategy_ui_tests.
+  editor.draft.mode, editor.dirty = "fragments", true
   luaunit.assert_equals(editor.draft.mode, "fragments")
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "result"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "result", "strategy_selector"})
   open_id(adapter, editor, "fragments")
   luaunit.assert_equals(editor.screen, "FRAGMENTS")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"fragment_size", "fragment_keep_anchor", "seed"})
@@ -118,7 +119,7 @@ function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   open_id(adapter, editor, "phrase")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"cycles", "variation"})
   editor:key(2)
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "result"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "result", "strategy_selector"})
 end
 
 function test_ui_adapters_merge_conditional_modes_and_cardinality()
@@ -157,15 +158,16 @@ end
 function test_ui_adapters_merge_edit_matches_the_old_encoder_path()
   local function drive(use_adapter)
     local adapter, editor, _, channel = fresh({1, 3})
+    -- Both editing paths start from the same Foundation draft. The removed
+    -- independent Mode knob is not part of this child-editor parity oracle.
+    editor.draft.mode, editor.dirty = "foundation", true
     if use_adapter then
-      luaunit.assert_true(adapter:edit("mode", 1, target(editor), editor.generation).ok)
       open_id(adapter, editor, "rhythm")
       luaunit.assert_true(adapter:edit("anchor", 1, target(editor), editor.generation).ok)
       luaunit.assert_true(adapter:edit("add_amount", -5, target(editor), editor.generation).ok)
       luaunit.assert_true(adapter:edit("seed", 3, target(editor), editor.generation).ok)
       luaunit.assert_true(adapter:apply(adapter.owner_token(), target(editor), editor.generation).ok)
     else
-      editor:enc(3, 1)
       open_label(editor, "Rhythm")
       select_label(editor, "Anchor"); editor:enc(3, 1)
       select_label(editor, "Add amount"); editor:enc(3, -5)
@@ -217,16 +219,20 @@ end
 
 function test_ui_adapters_merge_stale_generation_and_target_are_refused_without_mutation()
   local adapter, editor = fresh({1})
+  open_id(adapter, editor, "rhythm")
   local captured, generation = target(editor), editor.generation
-  adapter:edit("mode", 1, captured, generation)
+  luaunit.assert_true(adapter:edit("seed", 1, captured, generation).ok)
   luaunit.assert_true(editor.dirty)
   editor:key(2) -- owner K2 cancel reloads: generation moves on
   luaunit.assert_equals(editor.draft.mode, "off")
-  luaunit.assert_equals(adapter:edit("mode", 1, captured, generation).code, "stale_generation")
+  -- Cancellation also returns to the root: isolate the stale generation from
+  -- that separately tested route-target mismatch.
+  captured = target(editor)
+  luaunit.assert_equals(adapter:edit("seed", 1, captured, generation).code, "stale_generation")
   luaunit.assert_equals(editor.draft.mode, "off")
   luaunit.assert_false(editor.dirty)
   local other = target(editor); other.channel_number = 2
-  luaunit.assert_equals(adapter:edit("mode", 1, other, editor.generation).code, "stale_target")
+  luaunit.assert_equals(adapter:edit("seed", 1, other, editor.generation).code, "stale_target")
   luaunit.assert_equals(adapter:apply({generation = generation}).code, "stale_generation")
   luaunit.assert_equals(adapter:cancel({generation = generation}).code, "stale_generation")
   luaunit.assert_equals(editor.draft.mode, "off")
@@ -235,14 +241,14 @@ end
 function test_ui_adapters_merge_apply_and_cancel_wrap_owner_commit()
   local adapter, editor, _, channel = fresh({1})
   editor.draft.anchor = 1
-  adapter:edit("mode", 1, target(editor), editor.generation)
+  editor.draft.mode, editor.dirty = "foundation", true
   local cancelled = adapter:cancel(adapter.owner_token())
   luaunit.assert_true(cancelled.ok)
   luaunit.assert_true(cancelled.result.cancelled)
   luaunit.assert_equals(editor.status, "DRAFT CANCELLED")
   luaunit.assert_nil(channel.musical_merge)
   -- Invalid draft: exact owner error, stays on the draft.
-  adapter:edit("mode", 1, target(editor), editor.generation)
+  editor.draft.mode, editor.dirty = "foundation", true
   local invalid = adapter:apply(adapter.owner_token(), target(editor))
   luaunit.assert_false(invalid.ok)
   luaunit.assert_equals(invalid.code, "invalid")
@@ -363,7 +369,7 @@ end
 function test_ui_adapters_merge_child_rows_name_the_screen_they_open()
   local adapter, editor = fresh({1, 2})
   luaunit.assert_equals(opens(assert_parity(adapter, editor)),
-    {mode = false, rhythm = "M03", phrase = "M06", pitch = "M07", result = "M05"})
+    {mode = false, rhythm = "M03", phrase = "M06", pitch = "M07", result = "M05", strategy_selector = "C09"})
   open_id(adapter, editor, "rhythm")
   luaunit.assert_equals(opens(assert_parity(adapter, editor)),
     {anchor = false, add_amount = false, amount_detail = "M12", add_accent = false, anchor_gap = false, seed = false, interlock = "M16"})
@@ -372,4 +378,18 @@ function test_ui_adapters_merge_child_rows_name_the_screen_they_open()
     {keep_anchor = false, add_target = false, target_setup = "M13", structure = "M18"})
   editor:encoder_one(); open_id(adapter, editor, "result")
   luaunit.assert_equals(opens(assert_parity(adapter, editor)).reason, "M14")
+end
+
+-- Characterisation requested 3 October 2026: effective Strategy has one shared
+-- selector, rather than a second independent Shape Mode draft control.
+function test_ui_adapters_merge_root_strategy_is_readonly_and_selector_is_explicit()
+  local adapter, owner = fresh({1, 2})
+  local outcome = describe(adapter, owner)
+  luaunit.assert_true(outcome.ok)
+  local by_id = {}
+  for _, field in ipairs(outcome.descriptors) do by_id[field.id] = field end
+  luaunit.assert_equals(by_id.mode.label, "Strategy")
+  luaunit.assert_equals(by_id.mode.kind, "readonly")
+  luaunit.assert_equals(by_id.strategy_selector.kind, "action")
+  luaunit.assert_equals(by_id.strategy_selector.opens, "C09")
 end

@@ -42,23 +42,39 @@ def verify(d,stage,slots,cycles=2):
         for m,row in zip(actual,wanted):assert abs((m[field]-origin)/1e9-row[4]/6)<=tolerance,(stage,port,row)
     d.results.append(dict(kind='composition-workflow',stage=stage,expected=expected,cycles=cycles,passed=True))
 
-def build_composition(c,check=None):
-    """The workflow project; check(stage, slots) runs after each workflow stage when given."""
+def build_composition(c,check=None,observe=False):
+    """The workflow project; check(stage, slots) runs after each workflow stage when given.
+
+    ``observe`` additionally checks what the player sees after each group of inputs (grid LEDs,
+    screen header, dashboard) and records a ``composition-step`` row for it, so a manual page can
+    show a checkpoint after every few inputs; it only reads the screen and grid."""
     check=check or (lambda stage,slots:None)
     ui=c.ui
+    def seen(stage,*expectations):
+        if not observe:return
+        for expectation in expectations:expectation()
+        c.results.append(dict(kind='composition-step',stage=stage,passed=True))
     def edit_root(semitones):ui.turn(2,-1);ui.set_value(semitones);ui.press_key(3);ui.turn(2,1)
     ui.configure()
     ui.pattern_editor();ui.tap_control('pattern_select',2);ui.tap_step(1);ui.tap_step(3)
+    seen('pattern-2-trigs',lambda:ui.expect_steps({1:'selected',3:'selected'}))
     ui.pattern_editor(view='note',from_view='trigger')
-    ui.tap_control('pattern_note_degree',(1,4));ui.tap_control('pattern_note_degree',(3,6));ui.menu('channel_editor')
-    ui.scale_editor();ui.tap_control('scale_slot',2);edit_root(2);ui.menu('channel_editor')
-    ui.tap_control('pattern_slot',2);check('default-skip',[(CH1_SKIP,{},0)])
+    ui.tap_control('pattern_note_degree',(1,4));ui.tap_control('pattern_note_degree',(3,6))
+    seen('pattern-2-notes',lambda:ui.expect_leds({('pattern_note_degree',(1,4)):'active',('pattern_note_degree',(3,6)):'active'}))
+    ui.menu('channel_editor')
+    ui.scale_editor();ui.tap_control('scale_slot',2);edit_root(2)
+    seen('scale-slot-2-d-major',lambda:ui.expect_header('scale',slot=2))
+    ui.menu('channel_editor')
+    ui.tap_control('pattern_slot',2)
+    seen('pattern-2-assigned',lambda:ui.expect_leds({('pattern_slot',1):'selected',('pattern_slot',2):'selected'}))
+    check('default-skip',[(CH1_SKIP,{},0)])
     ui.tap_control('trig_merge_mode');ui.tap_control('trig_merge_mode')
     ui.expect_leds({('trig_merge_mode',None):'medium'})
     ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
     check('merge-all-average',[(CH1_ALL,{},0)])
     ui.select_channel_on_page(2,'midi_config');ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('pattern_slot',2);ui.set_range(1,4)
+    seen('channel-2-routed',lambda:ui.expect_header('merge_detail',channel=2),lambda:ui.expect_leds({('pattern_slot',2):'selected'}))
     ui.channel_page('masks','midi_config',channel=2,confirm=False)
     ui.expect_header('masks',channel=2)
     with ui.hold_step(3):
@@ -67,13 +83,16 @@ def build_composition(c,check=None):
     check('two-channels-with-melody',[(CH1_ALL,CH2,0)])
     ui.song_editor();ui.tap_control('global_pattern_length',2)
     for _ in range(3):ui.tap_control('global_pattern_length',8)
+    seen('song-length-4',lambda:ui.expect_dashboard('song',[('Playing','SONG 01'),('Next','SONG 01'),('Pass','1 / 1'),('Global length','4'),('Song mode','AUTO')]))
     ui.copy_slot(1,2,control='song_pattern_slot');ui.tap_control('song_pattern_slot',2)
+    seen('slot-2-copied',lambda:ui.expect_leds({('song_pattern_slot',2):'selected'}))
     ui.menu('channel_editor');ui.select_channel(1);ui.tap_control('channel_octave',1)
+    seen('channel-1-octave-plus-1',lambda:ui.expect_channel_octave(1))
     ui.song_editor();ui.tap_control('song_pattern_slot',1);ui.menu('channel_editor')
     return [(CH1_ALL,CH2,0),(CH1_ALL,CH2,1)]
 
 def composition_workflow(c):
-    song=build_composition(c,lambda stage,slots:verify(c,stage,slots))
+    song=build_composition(c,lambda stage,slots:verify(c,stage,slots),observe=True)
     verify(c,'chained-song',song)
     # Keep it: idle autosave, then a fresh process plays the same song.
     for _ in range(3):c.elapse(21)

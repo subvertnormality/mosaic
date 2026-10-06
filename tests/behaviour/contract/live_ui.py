@@ -11,6 +11,8 @@ import base64
 import re
 from pathlib import Path
 
+from ui_map import CHANNEL_TASKS
+
 # The splash draws the logo's blocks (lib/ui_splash_logo.lua, generated from
 # images/logo.svg): dots and pills on a 15 x 9 grid of 8 x 7 px cells from x 4.
 _LOGO = (Path(__file__).resolve().parents[3] / "lib" / "ui_splash_logo.lua").read_text()
@@ -45,7 +47,14 @@ def live_ui_follow(c):
     with ui.hold_step(5):
         ui.expect_header("masks", channel=3, held=(5,))
         c.results.append(dict(kind="held-scope", step=5, passed=True))
+        # README.md#norns-menu-navigation: while a step is held, edits apply to the
+        # held step only. The first Note detent is C-2; the channel keeps X.
+        ui.select_row("note", 1)
+        ui.expect_selected_mask("note", "X")
+        c.enc(3, 1)
+        ui.expect_selected_mask("note", "C-2")
     ui.expect_header("masks", channel=3)
+    ui.expect_selected_mask("note", "X")
     # From another Channel screen, a hold shows the remembered family (Masks: E1 opens
     # Channel tasks straight from it, so Trig params was never shown), then returns.
     ui.channel_page("clock_mods", channel=3)
@@ -77,7 +86,19 @@ def live_ui_tasks(c):
     c.key(3); ui.expect_header("trig_locks", channel=1)
     for page in ("memory", "clock_mods", "midi_config", "note_dashboard", "merge_shape", "harmony",
                  "masks", "trig_locks"):
-        ui.channel_page(page)
+        if page in ("memory", "midi_config"):
+            # The three public inputs of Ui.channel_page written out, so the
+            # task row the player lands on (README.md#norns-menu-navigation:
+            # Device and History are the last two Channel tasks) is read.
+            task, label = ("history", "History") if page == "memory" else ("device", "Device")
+            c.enc(1, 3)
+            c.enc(2, -len(CHANNEL_TASKS))
+            c.enc(2, CHANNEL_TASKS.index(task))
+            ui.expect_task_row(label)
+            ui.press_key(3)
+            ui.confirm_header(page, channel=1)
+        else:
+            ui.channel_page(page)
         c.results.append(dict(kind="channel-task", page=page, passed=True))
 
 

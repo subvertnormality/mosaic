@@ -1,0 +1,6 @@
+test_cli_exit_has_same_registrations_as_import (test_suite.CommandLineRegistrationTests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.012s
+
+OK

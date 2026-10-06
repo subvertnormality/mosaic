@@ -1,0 +1,16 @@
+...............F.................missing root recipe/results evidence
+.usage: python3 -m unittest [-h] [--lane {controlled,real-time}] path
+python3 -m unittest: error: --lane must match the lane directory name 'controlled'
+...................................................................................................................................................................
+======================================================================
+FAIL: test_live_header_puts_a_dashboard_scope_on_the_title_row (tests.behaviour.test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3136, in test_live_header_puts_a_dashboard_scope_on_the_title_row
+    self.assertTrue(live_header_matches(state, "PAINT PREVIEW", "CH01", "dashboard"))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 197 tests in 1.325s
+
+FAILED (failures=1)

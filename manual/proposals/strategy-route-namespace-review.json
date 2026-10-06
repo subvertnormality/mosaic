@@ -1,0 +1,28 @@
+{
+  "status": "source-namespace-review-no-native-reclassification-claim",
+  "diagnosis": "15 preexisting musical cases reached a new contract.* helper that contains semantic Ui verbs only. They were absent from baseline/gate failure lists; classifier correctly follows contract namespace. Public route belongs in ordinary helper namespace.",
+  "before": "tests/behaviour/contract/merge_strategy_routes.py",
+  "after": "tests/behaviour/merge_strategy_routes.py",
+  "body_sha256_before": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+  "body_sha256_after": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+  "changed_imports": [
+    "tests/behaviour/test_ui_layer.py",
+    "tests/behaviour/harmony_merge_workflow.py",
+    "tests/behaviour/merge_extension_acceptance.py",
+    "tests/behaviour/contract/merge_extensions.py",
+    "tests/behaviour/contract/foundation_workflow.py",
+    "tests/behaviour/contract/live_ui_feedback.py"
+  ],
+  "guard_proof": {
+    "raw_sites": [],
+    "counterfactual_classified_count": 432,
+    "added_cases": [
+      "M-MERGE-STRATEGY-001",
+      "M-UI-READABILITY-001"
+    ],
+    "removed_cases": [],
+    "ceiling_formula": "ceil(count*1.1) = (count*11+9)//10",
+    "proposed_explicit_ceiling": 476
+  },
+  "native_runs": false
+}

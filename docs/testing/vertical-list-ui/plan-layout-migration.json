@@ -1,0 +1,12 @@
+{
+  "changes": [
+    {
+      "path": "manual/scene-plans-reason-swing.yaml",
+      "before_sha256": "babc27b9b3f90f86d9ffca63b9b11aae86063b9f67e29214bd7ad62f2fdf092c",
+      "after_sha256": "5dbe53ec61f1c0d7d42e1ad013b4a06d76218dd40dd95e23b73e8d8fdce1c440",
+      "replacements": 1
+    }
+  ],
+  "historical_captures_modified": false,
+  "semantic_assertions_preserved": true
+}

@@ -94,7 +94,7 @@ def _foundation(driver):
     setup_foundation(driver)
     driver.ui.select_field("add_amount", offset=1)
     driver.ui.select_field("add_accent", offset=2)
-    driver.ui.expect_selected_field("focused", "Add accent", "70", art=True)
+    driver.ui.expect_selected_field("vertical_list", "Add accent", "70", art=True)
 
 
 def _tone_map(driver):

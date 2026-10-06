@@ -1,0 +1,15 @@
+..........................................................E.........
+======================================================================
+ERROR: test_real_blink_uses_actual_complete_waveform_and_exact_grid_revision (test_manual_publication_verify.SongQueuedNativeIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 455, in test_real_blink_uses_actual_complete_waveform_and_exact_grid_revision
+    args=self.real_blink();receipt=audit.check_song_queue_blink(*args,'real-time');self.assertEqual(receipt['sample_span_ns'],3330000000)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 482, in check_song_queue_blink
+    if len(samples)!=7 or any(type(index)is not int or not 0<=index<len(observations) for index in indices) or indices!=sorted(set(indices)):raise ValueError('Song queue requires seven distinct native samples')
+ValueError: Song queue requires seven distinct native samples
+
+----------------------------------------------------------------------
+Ran 68 tests in 2.587s
+
+FAILED (errors=1)

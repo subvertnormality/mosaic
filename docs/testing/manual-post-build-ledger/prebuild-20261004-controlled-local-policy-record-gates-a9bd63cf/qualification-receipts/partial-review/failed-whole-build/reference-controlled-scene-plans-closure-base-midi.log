@@ -1,0 +1,8 @@
+Verified M-PARAM-039 / random-pentatonic-on
+Verified M-PARAM-037 / random-pentatonic-off
+Verified M-MERGE-011 / merged-pentatonic-on
+Verified M-MERGE-010 / merged-pentatonic-off
+Verified M-SONG-SETTINGS-002 / song-tempo-across-slots
+Verified M-MANUAL-CLOSURE-SONG-001 / song-slot-light-states song-slot-repeat-values
+Verified M-MANUAL-CLOSURE-MOTION-001 / screen-motion-on-and-off
+/home/andy/mosaic-manual-runs/9cb1f3c69bc74a4788ab39dc67b02ff4

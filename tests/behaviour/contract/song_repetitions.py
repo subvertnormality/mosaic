@@ -8,11 +8,11 @@ def song_repetition_domain(c):
     c.ui.set_mosaic_options([('Song mode',True),('Reset on song seq change',True),('Reset on pattern repeat',True)])
     # The Song button lands on Song Playback (A03); Repeats is on Slot Setup (A01),
     # which stays showing while the grid selects slot 1.
-    c.ui.open_task('Song','slot_setup');c.ui.expect_selected_field('focused',label='Repeats')
+    c.ui.open_task('Song','slot_setup');c.ui.expect_selected_field('vertical_list',label='Repeats')
     previous=1
     for repeats in range(1,17):
         c.tap(1,1);c.enc(3,repeats-previous);c.key(3);previous=repeats
-        c.ui.expect_selected_field('focused',label='Repeats',value=str(repeats))
+        c.ui.expect_selected_field('vertical_list',label='Repeats',value=str(repeats))
         capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
         target=2*repeats+3
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=target,timeout=10)

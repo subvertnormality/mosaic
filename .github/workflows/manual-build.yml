@@ -1,0 +1,147 @@
+name: Build manual site
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main, codex/1.4.0, codex/rhythm-doctor-phrase]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+  EMULATOR_REVISION: 68ab70903d22500237ce68edc7e31c3b867cf179
+
+jobs:
+  record-audio:
+    name: Record manual audio assets
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 360
+    env:
+      EMULATOR_ROOT: ${{ runner.temp }}/monome-emulator
+      PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+      PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
+      MANUAL_CI_MODE: audio
+    steps:
+      - name: Check out exact PR source or dispatch ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          submodules: recursive
+      - name: Install native build and font dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential ca-certificates cmake ffmpeg fonts-dejavu-core \
+            fonts-liberation fonts-noto-core fonts-noto-mono git jackd2 lua5.3 \
+            pkg-config python3 python3-jsonschema python3-pytest python3-yaml libasound2-dev \
+            libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev \
+            libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev \
+            libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+          fc-cache -f
+      - name: Set up Node for manual browser checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+      - name: Restore the pinned emulator runtime
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/monome-emulator/.runtime
+          key: monome-emulator-ubuntu20-68ab709-qualified-v9
+      - name: Lint, unit-test and record every audio example
+        shell: bash
+        run: .github/scripts/manual-build.sh
+      - name: Upload the audio report, clips and native evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-audio-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 1
+      - name: Upload audio provisioning evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-audio-evidence-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/manual-build-evidence
+          if-no-files-found: ignore
+          retention-days: 90
+          compression-level: 9
+
+  build-controlled-manual:
+    name: Full controlled manual build
+    needs: record-audio
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 360
+    env:
+      EMULATOR_ROOT: ${{ runner.temp }}/monome-emulator
+      PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+      PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
+      NODE_PATH: ${{ runner.temp }}/mosaic-manual-ci/playwright-node/node_modules
+      MANUAL_CI_MODE: build
+    steps:
+      - name: Check out exact PR source or dispatch ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          submodules: recursive
+      - name: Install native build and font dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential ca-certificates cmake ffmpeg fonts-dejavu-core \
+            fonts-liberation fonts-noto-core fonts-noto-mono git jackd2 lua5.3 \
+            pkg-config python3 python3-jsonschema python3-pytest python3-yaml libasound2-dev \
+            libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev \
+            libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev \
+            libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+          fc-cache -f
+      - name: Set up Node for manual browser checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+      - name: Restore the pinned emulator runtime
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/monome-emulator/.runtime
+          key: monome-emulator-ubuntu20-68ab709-qualified-v9
+      - name: Download the recorded audio bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: manual-audio-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
+      - name: Build, strictly audit, and package the complete manual
+        id: manual
+        shell: bash
+        run: .github/scripts/manual-build.sh
+      - name: Upload static preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.manual.outputs.artifact_name }}
+          path: ${{ steps.manual.outputs.artifact_root }}
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 6
+      - name: Upload immutable generation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-build-evidence-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/manual-build-evidence
+          if-no-files-found: ignore
+          retention-days: 90
+          compression-level: 9

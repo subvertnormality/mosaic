@@ -1,0 +1,29 @@
+EE.......
+======================================================================
+ERROR: test_current_source_native_publication_needs_no_git_commit_or_overlay (test_manual_publication_verify.FreshPilotPublication)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 62, in test_current_source_native_publication_needs_no_git_commit_or_overlay
+    with patch.object(audit,'MANUAL',manual),patch.object(audit,'audit_fresh_pilot',return_value=dict(frames=1)) as verify,patch.object(audit,'refresh_compression_receipt',return_value={}) as receipt,patch.object(audit.subprocess,'check_output',side_effect=AssertionError('Fresh publication must not require Git')):
+  File "/usr/lib/python3.8/unittest/mock.py", line 1393, in __enter__
+    original, local = self.get_original()
+  File "/usr/lib/python3.8/unittest/mock.py", line 1366, in get_original
+    raise AttributeError(
+AttributeError: <module 'manual_publication_verify' from '/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py'> does not have the attribute 'audit_fresh_pilot'
+
+======================================================================
+ERROR: test_native_verification_failure_prevents_receipt_refresh (test_manual_publication_verify.FreshPilotPublication)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 73, in test_native_verification_failure_prevents_receipt_refresh
+    with patch.object(audit,'MANUAL',manual),patch.object(audit,'audit_fresh_pilot',side_effect=ValueError('Native assertion failed')),patch.object(audit,'refresh_compression_receipt') as receipt:
+  File "/usr/lib/python3.8/unittest/mock.py", line 1393, in __enter__
+    original, local = self.get_original()
+  File "/usr/lib/python3.8/unittest/mock.py", line 1366, in get_original
+    raise AttributeError(
+AttributeError: <module 'manual_publication_verify' from '/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py'> does not have the attribute 'audit_fresh_pilot'
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.047s
+
+FAILED (errors=2)

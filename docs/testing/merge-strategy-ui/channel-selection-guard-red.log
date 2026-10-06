@@ -1,0 +1,18 @@
+test_fresh_channel_and_return_are_explicit_public_selections (test_merge_strategy_ui_routes.ChannelSelectionGuardTests) ... FAIL
+
+======================================================================
+FAIL: test_fresh_channel_and_return_are_explicit_public_selections (test_merge_strategy_ui_routes.ChannelSelectionGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 26, in test_fresh_channel_and_return_are_explicit_public_selections
+    with patch.multiple(merge,**patches):merge.selector_workflow(c)
+  File "/home/andy/mosaic-mini-header-engineering-v2-20261003/mosaic/tests/behaviour/contract/merge_strategy_ui.py", line 169, in selector_workflow
+    c.ui.channel_page("merge_shape",channel=2)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 18, in channel_page
+    if self.selected!=channel:raise AssertionError("scope argument does not select the channel")
+AssertionError: scope argument does not select the channel
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)

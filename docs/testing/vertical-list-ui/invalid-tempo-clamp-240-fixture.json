@@ -1,0 +1,13 @@
+{
+  "kind": "invalid-bounded-tempo-clamp-fixture",
+  "run": "35a62c22213d4e26a2efa36c6363b51e",
+  "stage_identity": "c4c8741500a11fc9f3af700f300e21231ec06a97865edf0108498dd5c8247136",
+  "actual_tempo": 51,
+  "actual_frame_sha256": "c82f5d8afda27e1b3ed25fbebe4005179a2e9c40e470dbda818105fea1cb0ef9",
+  "reason": "Three legal raw-126 events equal189detents, insufficient to clamp authoredmaximum240 to1",
+  "correction": "Four legal raw-126 events cover252detents; exact assert1 then explicittarget unchanged",
+  "partial_evidence": "All10stopped mini rows complete in failed parentcase; fullplaying summary not reached, not acceptance",
+  "old_helper_sha256": "b2bc8204c1ed07bdd295f2b14f349a61437679a4ff8d78eac4455d9f6f50ffb4",
+  "new_helper_sha256": "a2e2dbfe0623566a5bb35b842d3e3781f7ad6807ec4c8f3af5cbc65d0ab34d45",
+  "cleanup": "Four services closed; realnotlaunched"
+}

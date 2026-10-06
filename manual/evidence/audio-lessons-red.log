@@ -1,0 +1,76 @@
+Baseline: immutable 8f01f0f4ae0d42148bfcdeda7a1a8939/capture-tool.py
+Expected failure: unfixed tool has no literal musical output acceptance and rejects higher velocity/relative authored tracks.
+Return code: 1
+Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+  File "/usr/lib/python3.8/runpy.py", line 265, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/usr/lib/python3.8/runpy.py", line 97, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/usr/lib/python3.8/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_contract.py", line 6, in <module>
+    from manual_audio import validate, expand, metrics, verify_midi_packets, mapped_score
+ImportError: cannot import name 'verify_midi_packets' from 'manual_audio' (/home/andy/mosaic-manual-audio-runs/8f01f0f4ae0d42148bfcdeda7a1a8939/capture-tool.py)
+
+Independent authoring regression against the same immutable baseline (new output functions intentionally excluded so model regressions execute):
+test_authored_step_bounds (baseline_contract.AudioAuthoring) ... ok
+test_bar_phrases_retain_first_two_bars (baseline_contract.AudioAuthoring) ... FAIL
+test_duplicate_channel_rejected (baseline_contract.AudioAuthoring) ... ok
+test_final_bar_replaces_not_overlays (baseline_contract.AudioAuthoring) ... ok
+test_invalid_step_velocity_rejected (baseline_contract.AudioAuthoring) ... FAIL
+test_player_cannot_be_assigned_twice (baseline_contract.AudioAuthoring) ... ok
+test_relative_pattern_keeps_note_mask_unset (baseline_contract.AudioAuthoring) ... ERROR
+test_velocity_90_and_35_are_authored (baseline_contract.AudioAuthoring) ... ERROR
+
+======================================================================
+ERROR: test_relative_pattern_keeps_note_mask_unset (baseline_contract.AudioAuthoring)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_contract.py", line 42, in test_relative_pattern_keeps_note_mask_unset
+    self.assertNotIn("note",validate(self.data)["examples"][0]["tracks"][0])
+  File "/home/andy/mosaic-manual-audio-runs/8f01f0f4ae0d42148bfcdeda7a1a8939/capture-tool.py", line 28, in validate
+    if not 1<=track["channel"]<=16 or not 0<=track["note"]<=127 or not 1<=track["velocity"]<=80:raise ValueError("track range")
+KeyError: 'note'
+
+======================================================================
+ERROR: test_velocity_90_and_35_are_authored (baseline_contract.AudioAuthoring)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_contract.py", line 27, in test_velocity_90_and_35_are_authored
+    self.assertEqual(validate(self.data)["examples"][0]["tracks"][0]["velocity"],90)
+  File "/home/andy/mosaic-manual-audio-runs/8f01f0f4ae0d42148bfcdeda7a1a8939/capture-tool.py", line 28, in validate
+    if not 1<=track["channel"]<=16 or not 0<=track["note"]<=127 or not 1<=track["velocity"]<=80:raise ValueError("track range")
+ValueError: track range
+
+======================================================================
+FAIL: test_bar_phrases_retain_first_two_bars (baseline_contract.AudioAuthoring)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_contract.py", line 31, in test_bar_phrases_retain_first_two_bars
+    self.assertEqual(expand(track,4),[[1,48],[17,48],[33,48],[44,55],[49,48],[60,55]])
+AssertionError: Lists differ: [[1, 48], [9, 55], [17, 48], [25, 55], [33, 48], [41, 55], [49, 60]] != [[1, 48], [17, 48], [33, 48], [44, 55], [49, 48], [60, 55]]
+
+First differing element 1:
+[9, 55]
+[17, 48]
+
+First list contains 1 additional elements.
+First extra element 6:
+[49, 60]
+
+- [[1, 48], [9, 55], [17, 48], [25, 55], [33, 48], [41, 55], [49, 60]]
++ [[1, 48], [17, 48], [33, 48], [44, 55], [49, 48], [60, 55]]
+
+======================================================================
+FAIL: test_invalid_step_velocity_rejected (baseline_contract.AudioAuthoring)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_contract.py", line 35, in test_invalid_step_velocity_rejected
+    validate(self.data)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+FAILED (failures=2, errors=2)

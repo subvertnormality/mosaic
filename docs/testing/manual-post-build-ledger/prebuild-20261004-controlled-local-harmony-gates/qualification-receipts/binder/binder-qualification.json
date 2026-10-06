@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "focused_tests": 79,
+  "source": {
+    "tools/manual_course_bind.py": {
+      "before_sha256": "accc616d62db234edd7d6862c7fbafb52e2daffc702823cc5ef6f33f9a4d7883",
+      "after_sha256": "f19701ed67e4e45ca97e4854f25a7dbdc87a72244c3e6e6e1f7c6a9a5318a1e9"
+    },
+    "tools/manual_feature_bind.py": {
+      "before_sha256": "5c1ebc754388649cf14077e373ea3f0ec0712c458e8e21b8d1f7901d2b3020bc",
+      "after_sha256": "4fdd27c0a5ccff772f6ff67456e574a6d4349201ca64093ba147137c52e2b3ff"
+    },
+    "tools/manual_book.py": {
+      "before_sha256": "9b51cc90587d8a01bce4637d850054a5cdd2a2143ec61b03a14c7dd5947c78ec",
+      "after_sha256": "9a33afe212b7fbd78806c91ec74392ab7e8867ffa7a02a62fb1ff44e03602611"
+    },
+    "manual/book.schema.json": {
+      "before_sha256": "c30b65cd5e5f7f155060342682f7d24562b1661a7f247f4c002f2f7bb4e6daa2",
+      "after_sha256": "fef9bf3a4993cfbe24a05f8bcf1215533a93a8b3cb1b5a5f04bddf4d1bb72038"
+    },
+    "manual/course.schema.json": {
+      "before_sha256": "37ceedad42d6a95dadd5aa741ea4426da549cd9eece14a1de08573131312477d",
+      "after_sha256": "0f4120a691476d539522fce1ee3858ce1024f168131e958d58e17a673504d1f7"
+    },
+    "manual/course.yaml": {
+      "before_sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
+      "after_sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420"
+    },
+    "tests/behaviour/test_manual_course_bind.py": {
+      "before_sha256": "c5045b7e98984e1909091b670c49da26fc78fac3355a6695e05c65fe5c658f5f",
+      "after_sha256": "cb82406f5ee6e5b36d515e221cac8daba4a883dbdf9b3f1347bc247efc31c809"
+    },
+    "tests/behaviour/test_manual_feature_bind.py": {
+      "before_sha256": "2033891a4b3c480d04aca3974a6593d3ae02d883651c73233c67013fc4452f71",
+      "after_sha256": "6d0c81caf12bef0d2230305acd78b7d80186923c8ea962bd9974f1af35d033cb"
+    },
+    "tests/behaviour/test_manual_book.py": {
+      "before_sha256": "9b7d1a5ae4d1227d49c7ca3ed348d338681a748d00c4bc3d661e2d8e4e606a57",
+      "after_sha256": "95aac15dabf023c57634c57434e76ab1c6886c3d9188e76ecd01bf3c13cf025d"
+    }
+  },
+  "lesson_course_bytes_unchanged": true,
+  "complete_regression_run": false,
+  "authority_activation": false,
+  "green_log_sha256": "2c6cd787312ed0cfb9ac32ed00b3db7a937cc0c7e8c655794fa5a83aa7c2b7c8"
+}

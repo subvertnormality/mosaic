@@ -1,0 +1,18 @@
+{
+  "status": "animation_v2_design_only",
+  "scenes": 93,
+  "poses": 744,
+  "rest_pixels_exact_v1": true,
+  "dimensions_exact_v1": true,
+  "v1_atlas_sha256": "ed4d8972b1012b7570d402b6ba997c6c78c6c0926e577f974e03758782ed3c54",
+  "v2_atlas_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+  "preview_sha256": "2fb956b76b06f509facb0ff2b9673100fff414736bc6e68e7ee5ae91e3cb34de",
+  "phase": "floor((quarterBeat % loopQuarterBeats) * poseCount / loopQuarterBeats)",
+  "native_missing_rest_reds": [
+    "09ee2f0338724baabaed535d3050fd6a",
+    "78461cf653cd40d99dc349e74d9c0c52"
+  ],
+  "production_wiring": "held_pending_richer_preview_review",
+  "comparison": "Original and revised at1:1; enlarged view version selector; shared beat/tempo",
+  "root_review": "all93 rest/footprints identical; CUA seven contexts/original-revised/Off-On/no errors; richer design accepted"
+}

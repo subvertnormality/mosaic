@@ -1,0 +1,16 @@
+{
+  "report_sha256": "10da6ee72769c96a0689af88df20be291c8856175270b0ff014dd97b457d3fb8",
+  "independent_reference_audit": 16,
+  "selected_scene_ids": [
+    "foundation-protected-and-added",
+    "fragments-seed-source-choice",
+    "harmony-range-failure-and-fallback",
+    "interlock-leader-window",
+    "structure-anchor-chord-and-delete"
+  ],
+  "native_processes": [],
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci",
+  "clock_mode": "controlled-experimental",
+  "complete_regression_run": false
+}

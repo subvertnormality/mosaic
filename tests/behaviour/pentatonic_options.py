@@ -7,6 +7,9 @@ SCALES=[('major',[0,2,4,5,7,9,11],[1,2,3,5,6]),('harmonic-major',[0,2,4,5,7,8,11
         ('melodic-minor',[0,2,3,5,7,9,11],[1,3,4,5,7]),('dorian',[0,2,3,5,7,9,10],[1,2,4,5,7]),
         ('phrygian',[0,1,3,5,7,8,10],[1,3,4,6,7]),('lydian',[0,2,4,6,7,9,11],[2,3,5,6,7]),
         ('mixolydian',[0,2,4,5,7,9,10],[1,2,4,5,6]),('locrian',[0,1,3,5,6,8,10],[2,3,4,6,7])]
+# The Scale screen's Scale row text for each entry above (lib/quantiser.lua names).
+SCALE_ROWS=['Major','Harmonic Major','Minor','Harmonic Minor','Melodic Minor','Dorian',
+            'Phrygian','Lydian','Mixolydian','Locrian']
 DEGREES=list(range(7))
 VELOCITY=[127,117,107,97,127,117,107]
 
@@ -41,8 +44,16 @@ def lock_all_to_pentatonic(c):
     ui.tap_control("pattern_editor")
     for x,degree in ((5,6),(6,5),(7,4)):
         ui.tap_control("pattern_note_degree", (x, degree))
+    # The velocity page after the second pass: steps 5-7 carry the velocity bars
+    # (5,1), (6,2) and (7,3), the 127, 117 and 107 the playback below checks.
+    ui.expect_leds({("pattern_note_degree", (5, 6)): "active",
+                    ("pattern_note_degree", (6, 5)): "active",
+                    ("pattern_note_degree", (7, 4)): "active"})
     ui.tap_control("channel_editor")
     ui.set_range(1, 7)
+    # README.md#channel-length: hold the start step and tap the end step; steps 1-7
+    # light and step 8 is outside the range.
+    ui.expect_steps({1: "selected", 7: "selected", 8: "dark"})
     def verify(label,pitches):
         notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,VELOCITY)],cycles=2,timeout=6)
         assert_durations(c,notes,[1]*14)
@@ -57,6 +68,8 @@ def lock_all_to_pentatonic(c):
             ui.tap_control("scale_editor")
             ui.set_value(1)
             ui.press_key(3)
+            # README.md#scale-editor: K3 applies the picked Scale; the row names it.
+            ui.expect_selected_field("vertical_list","Scale",SCALE_ROWS[number])
             ui.tap_control("channel_editor")
         verify('on-'+name,snapped(intervals,selection))
     ui.set_mosaic_options([('Lock all to pentatonic',False)])

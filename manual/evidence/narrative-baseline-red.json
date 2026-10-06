@@ -1,0 +1,11 @@
+{
+  "passed": false,
+  "checks": [],
+  "expected_failure": "Start here must expose the first-loop chapter",
+  "source_files": {
+    "book.js": "954bbf094184ca55fcb038e07148ac78d873c4105e59229479eecd73594b1aa2",
+    "manual.js": "f80348fbaccfb8a03db8c2bc4c8117c5786a115f2e556f5b8a02b55221097a4d",
+    "manual.css": "12ea8127391d7ec74422da49f7083e8fa416f2d889d4ab03c1c66f90e7f215f3",
+    "index.html": "1a1687852f9152884b2f9cd35b007eb84c75f99af597b03ddf76d1232ddad6fb"
+  }
+}

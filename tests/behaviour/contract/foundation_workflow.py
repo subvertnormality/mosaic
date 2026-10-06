@@ -10,12 +10,9 @@ def setup_foundation(c):
     c.ui.tap_control("pattern_editor"); c.ui.select_channel(2)
     c.ui.tap_step(5); c.ui.tap_step(7)
     c.ui.tap_control("channel_editor"); c.ui.tap_control("pattern_slot", 2)
-    # Device Config -> Merge Shape. Enable Foundation and explicitly select P01.
-    c.ui.channel_page("merge_shape", "midi_config", channel=1)
-    c.ui.expect_header("merge_shape", channel=1)
-    c.ui.turn(3, 1)       # Mode: Foundation (staged).
-    c.ui.turn(2, 1); c.ui.press_key(3)  # Rhythm -> M02.
-    c.ui.turn(3, 1); c.ui.press_key(3)  # Anchor: P01; apply the whole transaction.
+    # Select the one effective Strategy after saving the explicit P01 anchor.
+    from merge_strategy_routes import foundation_rhythm
+    foundation_rhythm(c,1)
     c.ui.expect_steps({step: "selected" for step in (1, 2, 3, 4, 5, 7)})
 
 
@@ -35,3 +32,15 @@ def foundation_workflow(c):
                 ((60, 127), (62, 117), (64, 107), (65, 97), (60, 70), (60, 70))]
     c.playback(expected, cycles=2, timeout=7)
     c.results.append(dict(kind='foundation-physical-workflow', passed=True))
+    # README.md#merge-shape: Add accent scales the velocity of the additions (pattern
+    # 2's trigs sit at the default velocity 100); anchors are untouched. Stopped
+    # transport applies the edit immediately on K3. Characterisation: the exact
+    # 100 x 40% = 40 mapping matches the 70% -> 70 already pinned above.
+    c.ui.turn(3, -30)
+    c.ui.expect_selected_field("detail", "Add accent", "40")
+    c.ui.press_key(3)
+    quieter = [(1, [144, note, velocity]) for note, velocity in
+               ((60, 127), (62, 117), (64, 107), (65, 97), (60, 40), (60, 40))]
+    c.playback(quieter, cycles=2, timeout=7)
+    c.results.append(dict(kind='foundation-accent-edit', accent=40, addition_velocity=40,
+                          anchors_unchanged=True, passed=True))

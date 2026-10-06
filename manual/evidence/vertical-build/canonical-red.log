@@ -1,0 +1,22 @@
+FF
+======================================================================
+FAIL: test_vertical_list_capture_uses_the_canonical_native_registry (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 97, in test_vertical_list_capture_uses_the_canonical_native_registry
+    self.assertNotIn("--extra-cases",command)
+AssertionError: '--extra-cases' unexpectedly found in ['/usr/bin/python3', '/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py', '--plans', '/home/andy/mosaic-manual-1.4.0/manual/scene-plans-vertical-list.yaml', '--profile', 'base-midi', '--output', 'reference-vertical-list-scenes.json', '--extra-cases', '/home/andy/mosaic-manual-1.4.0/tools/manual_vertical_list_cases.py', '--clock-mode', 'real-time', '--publish']
+
+======================================================================
+FAIL: test_multiple_additive_helpers_are_retained_for_mixed_plans (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 105, in test_multiple_additive_helpers_are_retained_for_mixed_plans
+    self.assertEqual(set(helpers),{str(root/"tools/manual_course_cases.py")})
+AssertionError: Items in the first set but not the second:
+'/tmp/tmp9v2fj6oj/tools/manual_vertical_list_cases.py'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.019s
+
+FAILED (failures=2)

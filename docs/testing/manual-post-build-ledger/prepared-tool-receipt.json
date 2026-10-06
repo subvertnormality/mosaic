@@ -1,0 +1,36 @@
+{
+  "purpose": "Prepared and independently reviewed strict post-build reconciliation; NOT executed on current incomplete publications",
+  "passed": true,
+  "complete_regression_run": false,
+  "source_files": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": "e009111a59552ac7f44927d7cbf5b29ebd3c2d69f3eb16032b7b519b75eac4a0",
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": "8047ac261158376c4c75335f77a797058ff2211a4c0d59db377801557565ddb2",
+    "docs/ui-reimplementation/tools/refresh_source_inventory.py": "d5915d41fd4df567cea7f6e403d153d294aec6f8d2453334cb572a918dd5fa3f"
+  },
+  "tests": {
+    "total": 39,
+    "new": 23,
+    "existing_retained_source_review_tests": 16,
+    "green_log": "reconciliation-green.log",
+    "retirement_red_log": "retirement-red.log",
+    "design_review_red_receipt": "design-review-red-receipt.json"
+  },
+  "independent_review": "manual_course_compiler checked actual schemas/API, all three specific strict gaps closed, no remaining actual API/provenance blocker",
+  "prebuild_snapshot": "prebuild-20261003/snapshot.json",
+  "snapshot_sha256": "cbb6082763d75e3b3e6b9e6359598fbf6563606bd1028f29f0e519d5ca5da1ed",
+  "before_root_cheat_sha256": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+  "preserved_counts": {
+    "manual_sections": 125,
+    "callbacks": 64,
+    "branches": 164,
+    "source_files_before": 78
+  },
+  "expected_generated_delta": {
+    "removed": 8,
+    "added": 11,
+    "net": 3,
+    "source_files_after_expected": 81
+  },
+  "authority_activation": false,
+  "actual_post_build_reconciliation": false
+}

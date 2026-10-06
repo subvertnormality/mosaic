@@ -1,0 +1,11 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+F
+Failed tests:
+-------------
+1) test_ui_adapters_read_only_c09_strategy_names_effective_foundation_and_fragments
+.///lib/ui_adapters_read_only_tests.lua:459: expected: "Strategy"
+actual: "Trig mode"
+stack traceback:
+
+Ran 1 tests in 0.005 seconds, 0 successes, 1 failure, 2410 non-selected
+find: ‘/home/we/norns/lua/core’: No such file or directory

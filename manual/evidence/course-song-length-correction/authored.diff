@@ -1,0 +1,34 @@
+--- before/manual/course.yaml
++++ after/manual/course.yaml
+@@ -533,7 +533,7 @@
+     goal: Set the section boundary
+     action: '1. Open Song (6,8); select slot 1 at (1,1).
+ 
+-      2. Tap (2,7) to set Global length to 16 steps.
++      2. With transport stopped, tap (3,7), then tap (8,7) three times. Check Global length reads 16.
+ 
+       3. Open Song tasks → Slot setup. Select Repeats with E2, set 1 with E3 and press K3 to apply.
+ 
+--- before/manual/features/reference-workflow.yaml
++++ after/manual/features/reference-workflow.yaml
+@@ -664,7 +664,7 @@
+ 
+     1. Open Song (6,8); select slot 1 at (1,1).
+ 
+-    2. Tap (2,7) to set Global length to 16 steps.
++    2. With transport stopped, tap (3,7), then tap (8,7) three times. Check Global length reads 16.
+ 
+     3. Open Song tasks → Slot setup. Select Repeats with E2, set 1 with E3 and press K3 to apply.
+ 
+--- before/manual/scene-plans-course.yaml
++++ after/manual/scene-plans-course.yaml
+@@ -340,7 +340,8 @@
+       passed: true
+   - id: song-composition-length
+     title: Set the section boundary
+-    caption: The contiguous group contains slots1 and2, one16-step pass each.
++    caption: 'Both slots show Global length 16 and Repeats 1. Song mode is On: each section lasts one
++      16-step bar.'
+     assertion:
+       kind: manual-course-ui
+       stage: song-composition-length-mode

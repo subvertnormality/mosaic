@@ -27,10 +27,10 @@
   "h15": "Owned by R01 and the performance ledger. Retain m_clock_performance_tests.lua as an existing fast regression, but performance recipes, measurements and real-time failures are outside this card."
  },
  "base_revision": "7141f50",
- "manual": "README.md",
- "manual_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c",
+ "manual": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+ "manual_sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "28dcf55ddbc327d74d0303557ccd3a31cfdffba085991f825d98166fbc48c3d7",
+ "inventory_sha256": "1d96ac8ef6aa7f5fb69b37263ad9d809afd0eede0c706bca82ebdc331c59d595",
  "counts": {
   "requirements": 177,
   "production_lua_modules": 171,
@@ -181,7 +181,8 @@
     "M-MERGE-STRUCTURE-003",
     "M-MERGE-INTERLOCK-004",
     "M-MERGE-STRUCTURE-004",
-    "M-MERGE-STRUCTURE-005"
+    "M-MERGE-STRUCTURE-005",
+    "M-MERGE-STRATEGY-001"
    ],
    "status": "implemented"
   },
@@ -338,7 +339,8 @@
     "M-REC-PARAM-023",
     "M-SONG-LENGTH-001",
     "M-SONG-LENGTH-002",
-    "M-VIEW-001"
+    "M-VIEW-001",
+    "M-UI-READABILITY-001"
    ],
    "status": "hardening-complete-generated"
   },
@@ -752,7 +754,10 @@
     "M-XA-003-JF-OWNERSHIP",
     "M-XA-004-JF-OVERLAP",
     "M-XA-005-NB-LOCK",
-    "M-XA-006-NB-CHORD-ACCEL"
+    "M-XA-006-NB-CHORD-ACCEL",
+    "M-STRUM-GATE-001",
+    "M-TRIGPARAM-SLOT-001",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "hardening-complete-with-profile-gap"
   },
@@ -1602,7 +1607,10 @@
     "M-SPREAD-026",
     "M-SPREAD-027",
     "M-TIME-012",
-    "M-XA-006-NB-CHORD-ACCEL"
+    "M-XA-006-NB-CHORD-ACCEL",
+    "M-STRUM-GATE-001",
+    "M-TRIGPARAM-SLOT-001",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "hardening-complete-partitioned"
   },
@@ -1771,7 +1779,8 @@
     "M-TIME-015",
     "M-TRIPLE-004",
     "M-UI-001",
-    "M-UI-002"
+    "M-UI-002",
+    "M-UI-VERTICAL-001"
    ],
    "status": "hardening-complete-partitioned"
   },
@@ -2222,7 +2231,9 @@
     "M-TRIPLE-002",
     "M-TRIPLE-003",
     "M-TRIPLE-005",
-    "M-WORKFLOW-001"
+    "M-WORKFLOW-001",
+    "M-TRIGPARAM-SLOT-001",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "hardening-complete-partitioned"
   },
@@ -2618,5 +2629,96 @@
    "linked_behaviour_cases": [],
    "status": "hardening-complete-generated"
   }
- ]
+ ],
+ "case_registration_extensions": [
+  {
+   "case": "M-UI-VERTICAL-001",
+   "requirements": [
+    "CH-TEMPO"
+   ],
+   "domains": [
+    "H08"
+   ],
+   "scope": "Additive canonical traceability only; historical linked cases, domain status and gaps remain unchanged.",
+   "complete_regression_run": false
+  },
+  {
+   "case": "M-MERGE-STRATEGY-001",
+   "requirements": [
+    "MERGE-FOUNDATION",
+    "MERGE-FRAGMENTS"
+   ],
+   "domains": [
+    "H16"
+   ],
+   "scope": "Additive canonical traceability only; historical linked cases, domain status and gaps remain unchanged.",
+   "complete_regression_run": false
+  },
+  {
+   "case": "M-UI-READABILITY-001",
+   "requirements": [
+    "CH-ASSIGN"
+   ],
+   "domains": [
+    "H01"
+   ],
+   "scope": "Additive canonical traceability only; historical linked cases, domain status and gaps remain unchanged.",
+   "complete_regression_run": false
+  },
+  {
+   "case": "M-STRUM-GATE-001",
+   "requirements": [
+    "CHORD-STRUM",
+    "CHORD-SPREAD",
+    "PARAM-SLOTS"
+   ],
+   "domains": [
+    "H03",
+    "H07"
+   ],
+   "scope": "Additive canonical traceability only; historical linked cases, domain status and gaps remain unchanged.",
+   "complete_regression_run": false
+  },
+  {
+   "case": "M-TRIGPARAM-SLOT-001",
+   "requirements": [
+    "PARAM-SLOTS",
+    "CHORD-STRUM",
+    "SONG-SLOTS"
+   ],
+   "domains": [
+    "H03",
+    "H07",
+    "H12"
+   ],
+   "scope": "Additive canonical traceability only; historical linked cases, domain status and gaps remain unchanged.",
+   "complete_regression_run": false
+  },
+  {
+   "case": "M-TRIGPARAM-STRUM-PERSIST-001",
+   "requirements": [
+    "PARAM-SLOTS",
+    "CHORD-STRUM",
+    "CHORD-SPREAD",
+    "SONG-SLOTS",
+    "SAVE-NAMED"
+   ],
+   "domains": [
+    "H03",
+    "H07",
+    "H12"
+   ],
+   "scope": "Additive canonical traceability only; historical linked cases, domain status and gaps remain unchanged.",
+   "complete_regression_run": false
+  }
+ ],
+ "current_inventory_counts": {
+  "manual_requirements": 178,
+  "domain_requirements": 177,
+  "case_ids": 888,
+  "outside_domain_requirement_ids": [
+   "SETUP-CONFIG-CREATOR"
+  ],
+  "scope": "Current source inventory, not a completed campaign."
+ }
 }

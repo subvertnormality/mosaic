@@ -1,0 +1,54 @@
+schema_version: 1
+starting_states:
+- scene_id: algorithm-choose-and-preview
+  text: A new empty project, stopped, with Record off. No pattern has trigs, and no trig algorithm
+    has been chosen yet. The first step opens the Pattern editor and picks the algorithm.
+- scene_id: channel-task-navigation
+  text: 'A new empty project that has just started: stopped, Record off, no pattern or output
+    set up. Channel 1 is the selected channel and nothing is held.'
+- scene_id: course-getting-started
+  text: 'A new, empty project with the transport stopped: no output, pattern or tempo has
+    been set up yet. Channel 1 is selected.'
+- scene_id: doctor-local-auto-capture-and-paint
+  text: Channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps 1-64), and
+    playback is stopped. The audio input will receive a synthetic test recording, 29 seconds
+    of a short thump on every beat at 120 BPM, once Record starts. Tempo stays on Auto.
+- scene_id: doctor-local-capture-and-paint
+  text: Channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps 1-64), and
+    playback is stopped. The audio input will receive a synthetic test recording, 29 seconds
+    of a short thump on every beat at 120 BPM, once Record starts. Tempo will be set to Manual
+    at 120 BPM.
+- scene_id: first-sound-equal-note-loop
+  text: A new empty project, stopped, with Record off. No channel has an output, no pattern
+    has trigs and no masks are set. One MIDI output is available to choose on channel 1.
+- scene_id: mask-chords
+  text: 'Channel 1 sends to the emulator test device and plays pattern 1: four trigs on steps
+    1-4 (C, D, E, F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in the default C
+    major scale. No masks are set.'
+- scene_id: mask-expression
+  text: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with
+    the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. No masks
+    are set (every mask reads X), the sequencer is stopped and the Channel screen is showing.'
+- scene_id: mask-precedence
+  text: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with
+    the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. No masks
+    are set, so every step uses the pattern''s own note. The sequencer is stopped and the
+    Channel screen is showing.'
+- scene_id: mask-trigs
+  text: 'Channel 1 plays pattern 1: four trigs on steps 1-4 followed by four empty steps,
+    in an eight-step loop. No masks are set.'
+- scene_id: paint-shift-and-cancel
+  text: A new empty project, stopped, with Record off. The Pattern editor has not been opened
+    and pattern 1 has no trigs.
+- scene_id: software-player-doubledecker
+  text: The Doubledecker n.b. mod is installed and enabled in norns MODS. Channel 3's Device
+    page is open and its player list is ready to browse. This channel carries the chords in
+    the audio example Rhythm, bass and a changing chord.
+- scene_id: software-player-oilcan
+  text: The Oilcan n.b. mod is installed and enabled in norns MODS. Channel 1's Device page
+    is open and its player list is ready to browse. This channel carries the percussion in
+    the audio example Rhythm, bass and a changing chord.
+- scene_id: software-player-polyperc
+  text: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page
+    is open and its player list is ready to browse. This channel carries the bass in the audio
+    example Rhythm, bass and a changing chord.

@@ -1,0 +1,50 @@
+{
+  "failed_run": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7",
+  "source_files": [
+    {
+      "path": "tests/behaviour/merge_strategy_routes.py",
+      "sha256": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+      "archive": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/footer-unfixed-source-20261004/merge_strategy_routes.py"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_feedback.py",
+      "sha256": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d",
+      "archive": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/footer-unfixed-source-20261004/live_ui_feedback.py"
+    }
+  ],
+  "raw_files": [
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-LIVEUI-SHAPETRIG-001-base-midi/observations.json",
+      "sha256": "9be96ce7a882ed0e4aa2c67f91f5806c53bc253198501e32f1ea666512555f8d"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-LIVEUI-SHAPETRIG-001-base-midi/recipe.json",
+      "sha256": "4f75c923ac712b3b50129b28d2f47986d15d698d11329426330f3aef41d0127f"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-LIVEUI-SHAPETRIG-001-base-midi/results.json",
+      "sha256": "544c62307fb0ea76a045947bcf2e453250ceff601d6dcc215e81e8e0c4ce2f39"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-LIVEUI-SHAPETRIG-001-base-midi/native/native-events.jsonl",
+      "sha256": "a0ec82b7bb90f9405f6d8042f0ae5580bfedc227db3be835ded55be43e1b457a"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-LIVEUI-SHAPETRIG-001-base-midi/native/cleanup.json",
+      "sha256": "b7441e231361af4f2cfdd647c89ddb8a273377a97873a7ecd67fe5be5170b906"
+    }
+  ],
+  "exact_footer": "SKIP APPLIED",
+  "footer_matching_observations": [
+    54,
+    55
+  ],
+  "footer_matching_times_ns": [
+    472571621485120,
+    472573331905265
+  ],
+  "diagnosis": "Exact tooltip displayed with Strategy and Active SKIP; subsequent clamped E2 navigation returns to Strategy after the3second tooltip lifetime before caller asserts footer.",
+  "semantic_strategy_and_active_and_music_preserved": true,
+  "controlled_baseline_pending": true,
+  "production_unchanged": true
+}

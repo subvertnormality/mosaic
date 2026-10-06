@@ -1,0 +1,25 @@
+{
+  "changes": [
+    {
+      "file": "cheat_sheet.html",
+      "before": "ddf7ccbb3a0e00c604826f2fb5a328451238e181c36c2b495a6aaaddff247ffa",
+      "after": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+      "review": "Regenerated quick reference from current authoritative YAML. Reviewed delta adds accurate Doctor stopped transport, ADC Stereo/L/R routing, lane selection, retained recording Alignment/regular confirmed-tempo Manual Start beat controls; n.b. parent replay source context retained. Generated reference does not qualify pending native evidence."
+    },
+    {
+      "file": "manual/features/reference-channel.yaml",
+      "before": "a71c928413f807376ee6b06e60a2c8942463e7401053b355267ebc850b7e86e4",
+      "after": "bef96579573279e6244596a40e721bebdcfff7b81ac3b800f6a84d002188aafd",
+      "review": "Reviewed semantic delta: n.b. parent voice-picker replay links three existing scenes/catalogue and explicit subsequent K3/real audio acceptance; no mod-installation, post-apply persistence or hardware routing claim. YAML reformatting elsewhere preserves semantic content."
+    },
+    {
+      "file": "manual/features/reference-pattern.yaml",
+      "before": "e7be922bebe64deec0a0bfeb37b79ac8437988ef4e4c38a7f78fd3b8a048a6d7",
+      "after": "56acd949c1573d9ad066591f32b94d65f65798cd5df61b4c547446a0bb434534",
+      "review": "Reviewed semantic delta: stopped capture/setup/Alignment versus playing READY browse/paint; exact BD/SD/CYM public lane inputs; Stereo versus duplicated L/R ADC; retained recording K3 reanalysis, explicit BPM/origin precedence and regular confirmed-tempo Manual Start beat grid. Intended contract separate from preserved historical native bindings; no new case identity."
+    }
+  ],
+  "lua_changes": false,
+  "spec_executable_model_changes": false,
+  "global_final_qualification": false
+}

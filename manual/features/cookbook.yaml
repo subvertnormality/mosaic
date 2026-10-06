@@ -1,0 +1,923 @@
+features:
+- id: small-hours
+  title: Four-Bar Percussion, Bass and Chord Example
+  audience: intermediate
+  summary: Build a four-bar loop of drums, bass and a moving chord on three channels at 90 BPM in C major.
+  prose: 'Build a four-bar loop on three channels: Oilcan 1 plays drums on channel 1, Polyperc 1 plays
+    a bass line on channel 2 and Doubledecker plays chords on channel 3. The drum and bass phrases repeat
+    unchanged in every bar. Only the chord roots change, in bar 4, so you hear the harmony move while
+    the groove stays put. Play "Rhythm, bass and a changing chord" under Listen to hear the finished result
+    first.
+
+
+    Before you start:
+
+
+    1. Set 90 BPM in Song tasks → Tempo & feel (E3, then K3). Keep the default Rate /1 on every channel:
+    one step is a sixteenth note, 16 steps are one bar and 64 steps are four bars.
+
+
+    2. Set the range of channels 1–3 to steps 1–64.
+
+
+    3. Open PARAMS > MOSAIC and set Snap note masks to scale to Off, so that MIDI 37 (C#1) in the drum
+    channel is not snapped to C major.
+
+
+    How notes are entered in these recipes: open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). E2
+    chooses the value (Trig, Note, Vel, Len, Chd1–Chd4). With no step held, E3 sets the channel default,
+    which every step uses unless it has its own value. Hold K1 and tap a step to add or remove a trig
+    on it. Hold a step and turn E3 to give that step its own value. Hold a step and press K2 to remove
+    its own values. The grid shows sixteen steps at a time: bar 1 is steps 1–16, bar 2 is steps 17–32,
+    bar 3 is steps 33–48 and bar 4 is steps 49–64, so move to the right sixteen-step page before you tap
+    steps in a later bar. In bars after the first, add 16 to each step number of bar 1.
+
+
+    Build the channels in order: Percussion Channel, Bass Channel, Chord Channel. Press Play after each
+    one to hear the loop grow before you add the next channel.
+
+
+    Finish with a contrasting section: open the Song Editor, copy the song slot and mute one channel in
+    the copy (see Song Composition). Numeric MIDI notes are used throughout, because Masks shows MIDI
+    36, 48 and 60 as C1, C2 and C3 while other controls label octaves differently. Each n.b. player is
+    unique: Polyperc 1 cannot be assigned to another channel once it is assigned to the bass.'
+  musical_use: Build the rhythm, bass and chords as separate channels and play the loop after each one.
+    Then change only the chord roots in bar 4 and listen to the harmony move over an unchanged groove.
+  related:
+  - masks
+  - channel-length
+  - song-composition
+  - norns-sound-sources-with-n-b
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-MASK-007
+    - M-MASK-010
+    - M-MASK-008
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+    - lib/devices/device_map.lua
+    - lib/clock/divisions.lua
+  controls: []
+  details:
+  - title: Example Scope
+    text: 'The recipes give the exact settings of the recorded example, so you can reproduce it. The recording
+      is the authored version only: other values you try are not part of it. Listen to the recording first
+      if you want a target for each channel.'
+  - title: 'Recorded Example: Rhythm, bass and a changing chord'
+    text: 'Four bars at 90 BPM.
+
+
+      Channel 1, Oilcan 1, velocity 38: in every bar MIDI 36 on steps 1 and 9, MIDI 38 on steps 4 and
+      12 and MIDI 37 on steps 5 and 13.
+
+
+      Channel 2, Polyperc 1, velocity 42: in every bar MIDI 48 on steps 1, 5 and 13 and MIDI 55 on step
+      9.
+
+
+      Channel 3, Doubledecker, velocity 26, three steps long, Chd1 3rd and Chd2 5th: in bars 1 to 3 the
+      chord roots are MIDI 60 on step 1 and MIDI 62 on step 9 of the bar. In bar 4 they are MIDI 67 on
+      step 49 and MIDI 60 on step 57.
+
+
+      Play the loop and listen for the chord at the start of bar 4: the drums and bass are unchanged,
+      while the chords move from C and D to G and C.'
+  recipes:
+  - title: Percussion Channel
+    text: 'Starting point: the three settings under Before you start are done (90 BPM, steps 1-64, Snap
+      note masks to scale Off) and channel 1 is empty. The steps below build a six-hit drum bar and repeat
+      it in all four bars.
+
+
+      1. Select channel 1 (1,1). Press E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Oilcan
+      1 and press K3 to assign it.
+
+
+      2. Open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). With no step held, turn E2 to Note and
+      turn E3 to MIDI 36 (C1). Turn E2 to Vel and set 38. Turn E2 to Len and set ½ step. Every trig you
+      add now plays MIDI 36 at velocity 38 for half a step. In the default Oilcan kit MIDI 36, 37 and
+      38 trigger three different drum timbres.
+
+
+      3. In bar 1 (steps 1-16), hold K1 and tap steps 1, 4, 5, 9, 12 and 13. Six trigs light on the grid.
+
+
+      4. Turn E2 back to Note. Hold step 4 and turn E3 to MIDI 38 (D1), then release. Do the same for
+      step 12. Hold step 5 and turn E3 to MIDI 37 (C#1), then release, and do the same for step 13. Steps
+      1 and 9 keep the default MIDI 36.
+
+
+      5. Listen: press Play and hear bar 1 loop. MIDI 36 falls on beats 1 and 3, MIDI 37 on beats 2 and
+      4, and each MIDI 38 hit sounds one step before a MIDI 37 hit. Press Stop.
+
+
+      6. Repeat steps 3 and 4 in each of the other three bars, moving the grid to that bar''s sixteen-step
+      page first. Each pair below is a step number and its MIDI note:
+
+      Bar 2: 17/36, 20/38, 21/37, 25/36, 28/38, 29/37.
+
+      Bar 3: 33/36, 36/38, 37/37, 41/36, 44/38, 45/37.
+
+      Bar 4: 49/36, 52/38, 53/37, 57/36, 60/38, 61/37.
+
+
+      The channel now has 24 trigs in a repeating one-bar (four-beat) drum figure. Press Play and listen
+      before you continue: the same bar repeats four times. Press Stop.'
+  - title: Bass Channel
+    text: 'Starting point: channel 1 plays the drums and channel 2 is empty. Masks work as in the percussion
+      recipe: E2 chooses the value, E3 sets it, and holding a step gives that step its own value.
+
+
+      1. Select channel 2 (2,1). Press E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Polyperc
+      1 and press K3 to assign it.
+
+
+      2. Open Masks. With no step held, turn E2 to Note and set MIDI 48 (C2), turn E2 to Vel and set 42,
+      and turn E2 to Len and set ½ step.
+
+
+      3. In bar 1, hold K1 and tap steps 1, 5, 9 and 13.
+
+
+      4. Select Note with E2, hold step 9 and turn E3 to MIDI 55 (G2), then release. Steps 1, 5 and 13
+      keep the default MIDI 48.
+
+
+      5. Listen: press Play. The bass plays C2 on beats 1, 2 and 4 and G2 on beat 3, under the drums.
+      Press Stop.
+
+
+      6. Repeat steps 3 and 4 in bars 2 to 4, adding 16 to each step number of bar 1. Each trig list is
+      followed by the step that takes MIDI 55:
+
+      Bar 2: trigs on 17, 21, 25, 29; 25 is MIDI 55.
+
+      Bar 3: trigs on 33, 37, 41, 45; 41 is MIDI 55.
+
+      Bar 4: trigs on 49, 53, 57, 61; 57 is MIDI 55.
+
+
+      Listen for the pitch pattern C, C, G, C repeating once per bar under the drums.'
+  - title: Chord Channel
+    text: 'Starting point: channels 1 and 2 play the drums and bass; channel 3 is empty. Doubledecker
+      plays several notes at once, so it can sound the chord. The grid shows sixteen steps at a time:
+      bar 1 is steps 1-16, bar 2 steps 17-32, bar 3 steps 33-48 and bar 4 steps 49-64, so move to that
+      bar''s page before tapping its steps. Hold K1 and tap a step to add or remove a trig; hold a step
+      and turn E3 to give that step its own value.
+
+
+      1. Select channel 3 (3,1). Press E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Doubledecker
+      and press K3 to assign it.
+
+
+      2. Open Masks. With no step held, set Note to MIDI 60 (C3), Vel to 26 and Len to 3 steps. Select
+      Chd1 and set 3rd; select Chd2 and set 5th. Every chord now plays the root plus the notes a third
+      and a fifth above it in the scale.
+
+
+      3. In bar 1, hold K1 and tap steps 1 and 9. Select Note, hold step 9 and turn E3 to MIDI 62 (D3),
+      then release. Step 1 keeps the default MIDI 60. Press Play: the chord alternates C-E-G and D-F-A,
+      two chords a bar, quietly above the bass. Press Stop.
+
+
+      4. In bar 2, add trigs on steps 17 and 25, and set step 25 to MIDI 62 as in step 3.
+
+
+      5. In bar 3, add trigs on steps 33 and 41, and set step 41 to MIDI 62.
+
+
+      6. In bar 4, hold K1 and tap steps 49 and 57. Hold step 49 and set Note to MIDI 67 (G3). Step 57
+      keeps the default MIDI 60.
+
+
+      7. Listen to the whole four bars: press Play and wait for bar 4. The drums and bass repeat unchanged,
+      but the chords move to G-B-D and then back to C-E-G. The chord intervals follow the C-major scale,
+      so the 3rd above D is F and the 3rd above G is B. Press Stop.'
+  scene_refs:
+  - mask-precedence
+  - mask-chords
+  - mask-expression
+  review:
+    status: verified
+    cases:
+    - M-MASK-007
+    - M-MASK-010
+    - M-MASK-008
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Mask controls and the authored three-player recording are demonstrated. Each player contributes
+      verified solo PCM before the mix publishes. Suggested song-slot mutes use their own native workflow
+      evidence; physical norns output and player installation are separate.
+    audio_refs:
+    - three-voice-conversation
+    audio_cases:
+    - MA-AUDIO-three-voice-conversation
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: pocket-rhythm
+  title: Adding a Ghost Note
+  audience: intermediate
+  summary: Compare two bars of main hits with two bars that add a quiet hit before an accent.
+  prose: 'Compare two ways of playing the same four-beat drum figure on Oilcan 1. Bars 1 and 2 contain
+    only the main hits (MIDI 36 on steps 1 and 9, MIDI 37 on steps 5 and 13, all at velocity 90). Bars
+    3 and 4 add one quiet hit, MIDI 38 at velocity 35, on step 12 of the bar, just before the accent on
+    step 13. This is a ghost note: a soft hit that adds movement without changing the main hits.
+
+
+    Settings: 90 BPM, Rate /1 (the default, one step is a sixteenth note), range 1–64 and length ½ step
+    on all notes. Play "Adding a Ghost Note" under Listen to hear the target, then build it with the first
+    recipe.
+
+
+    Two further recipes follow: an optional probability variation of the ghost notes, and a separate,
+    denser drum pattern at velocity 48 (the "Three sounds, one pocket" recording) that does not use ghost
+    notes.'
+  musical_use: Add one quiet hit just before an accent and compare the bar with and without it. Use a
+    ghost note to add movement to a drum pattern without changing the main hits.
+  related:
+  - adding-trigs
+  - adding-velocity
+  - trig-probability
+  - clocks-swing-and-shuffle
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-EDIT-002
+    - M-PARAM-018
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+  controls: []
+  details:
+  - title: Comparison settings
+    text: The ghost-note comparison uses Oilcan 1. Every bar has four main attacks at velocity 90. Bars
+      3 and 4 each add one velocity-35 hit. The "Three sounds, one pocket" recording is an independent
+      pattern at a constant velocity of 48. MIDI note mappings can differ on another instrument.
+  recipes:
+  - title: Make the recorded ghost-note comparison
+    text: 'Starting point: an empty project with playback stopped and channel 1 selected. The numbers
+      1–64 are step numbers across four bars: bar 1 is steps 1–16, bar 2 is 17–32, bar 3 is 33–48 and
+      bar 4 is 49–64. The grid shows sixteen steps at a time, so move to the sixteen-step page of the
+      bar you are editing.
+
+
+
+      Setup (steps 1 to 3 prepare the instrument; do them once).
+
+
+      1. Assign Oilcan 1 to channel 1 and set its range to steps 1–64 (see Channel Length). Leave Rate
+      at /1.
+
+
+      2. Set 90 BPM: open Song tasks, choose Tempo & feel, turn E3 to 90 and press K3.
+
+
+      3. Open PARAMS > MOSAIC and set Snap note masks to scale to Off, then return to Mosaic. MIDI 37
+      (C#1) is not in C major and would otherwise be snapped to a scale note.
+
+
+
+      Main hits (steps 4 to 7 build and audition the bar without ghost notes).
+
+
+      4. Add the main hits. Open Pattern Trig on pattern 1 and tap steps 1, 5, 9 and 13 in each bar: bar
+      1 uses 1, 5, 9, 13; bar 2 uses 17, 21, 25, 29; bar 3 uses 33, 37, 41, 45; bar 4 uses 49, 53, 57,
+      61. Sixteen trigs are lit.
+
+
+      5. Open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). With no step held, select Note and set
+      MIDI 36 (C1), select Vel and set 90, select Len and set ½. All sixteen hits now play MIDI 36 at
+      velocity 90.
+
+
+      6. Select Note. Hold step 5 and turn E3 to MIDI 37 (C#1), then release. Do the same for steps 13,
+      21, 29, 37, 45, 53 and 61, so that the second and fourth beat of each bar play MIDI 37.
+
+
+      7. Press Play and listen to four bars of main hits only, then press Stop. You hear two timbres alternating
+      on beats 1 to 4 of every bar.
+
+
+
+      Ghost notes (steps 8 to 10 add the quiet hit to bars 3 and 4).
+
+
+      8. Return to Pattern Trig and tap step 44 (step 12 of bar 3) and step 60 (step 12 of bar 4).
+
+
+      9. Open Masks and hold step 44. Select Note and turn E3 to MIDI 38 (D1), then select Vel and set
+      35, then release step 44. Repeat both edits on step 60: first Note 38, then Vel 35.
+
+
+      10. Press Play. Bars 1 and 2 are unchanged. In bars 3 and 4 you hear a quiet third timbre one step
+      before each MIDI 37 accent. Press Stop.
+
+
+
+      Undo (step 11 returns to the main-only phrase).
+
+
+      11. Open Masks, hold step 44 or 60 and press K2 to remove the values you set, then remove its trig
+      on Pattern Trig.'
+  - title: Optional probability variation
+    text: 'Starting point: the ghost-note comparison above, with ghost trigs on steps 44 and 60. This
+      variation is not part of the recording because its random result changes from loop to loop. The
+      extremes 0 and 100 are predictable, so check those first and then listen to 50.
+
+
+      1. Select channel 1 and open Channel tasks → Trig params. Turn E2 to a slot, press K2, turn E3 to
+      Trig Probability and press K3. With no step held, turn E3 until the channel default reads 100, so
+      every main hit plays every time.
+
+
+      2. Check 0 and 100 on the ghost notes. Move to the sixteen-step page for steps 33–48, hold step
+      44, turn E3 to 0 and release. Move to the page for steps 49–64 and set step 60 to 0 in the same
+      way. Play: the ghost note never sounds in bars 3 and 4. Stop, set both steps to 100 and play again:
+      it always sounds, exactly as in the recording.
+
+
+      3. Now set both steps to 50 in the same way. Play several loops. In bars 3 and 4 the quiet hit is
+      sometimes present and sometimes missing, while the main hits always play. No two runs need match.
+
+
+      Return the two steps to 100 or remove the lock (hold the step and press K2) to restore the fixed
+      comparison. For a captured example of probability at 0 and 100, see Trig Probability, "Turn chance
+      into explicit rests".'
+  - title: Separate fixed percussion example
+    text: 'This is the "Three sounds, one pocket" recording. It is a different, denser four-bar drum pattern
+      and does not use ghost notes. It teaches one idea: a third sound (MIDI 38) fills the gaps between
+      the two accents. Every hit is at velocity 48, a constant quiet level chosen so you hear rhythm and
+      timbre only, with no accent or quiet ghost hit. Starting point: the ghost-note comparison recipe''s
+      steps 1 to 3 (Oilcan 1 on channel 1, range 1–64, 90 BPM, Snap note masks to scale Off) and an empty
+      channel.
+
+
+      The bar template, as step/MIDI note: 1/36, 4/38, 5/37, 7/38, 9/36, 12/38, 13/37 and 15/38.
+
+
+      Step:  1   4   5   7   9   12  13  15
+
+
+      Note:  36  38  37  38  36  38  37  38
+
+
+      1. Open Masks. With no step held, set Note to MIDI 36, Vel to 48 and Len to ½.
+
+
+      2. Enter the trigs. In bar 1, hold K1 and tap steps 1, 4, 5, 7, 9, 12, 13 and 15 to add eight trigs.
+
+
+      3. Edit the notes. Select Note and give steps 4, 7, 12 and 15 MIDI 38, and steps 5 and 13 MIDI 37,
+      holding each step and turning E3. Steps 1 and 9 keep MIDI 36.
+
+
+      4. Repeat steps 2 and 3 in bars 2 to 4, adding 16 to each step number.
+
+
+      Play four bars. Listen for MIDI 36 on beats 1 and 3, MIDI 37 on beats 2 and 4, and the MIDI 38 hits
+      filling the gaps between them. Unlike the ghost-note comparison, every hit has the same velocity,
+      so nothing sounds accented or quiet. Listen to "Three sounds, one pocket" under Listen to compare.'
+  scene_refs:
+  - pocket-ghost-bar
+  review:
+    status: verified
+    cases:
+    - M-EDIT-002
+    - M-PARAM-018
+    - M-MANUAL-CLOSURE-GHOST-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The new exact main-only/ghost comparison is authored and awaiting native capture. Existing
+      fixed Oilcan evidence and probability endpoint scenes retain their separate scope. The optional
+      50% version is not a matching recording.
+    audio_refs:
+    - ghost-note-comparison
+    - oilcan-pocket
+    audio_cases:
+    - MA-AUDIO-ghost-note-comparison
+    - MA-AUDIO-oilcan-pocket
+    native_evidence_catalogues:
+    - generated/reference-parameter-scenes.json
+    audio_comparison_status: pending-native-capture
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: tilting-harmony
+  title: Changing Harmony with Scale Slots
+  audience: intermediate
+  summary: Compare the same relative patterns under C major for two bars and D major for two bars.
+  prose: 'Hear one pair of relative-note patterns in two keys. Doubledecker on channel 1 plays an upper
+    phrase and Polyperc 1 on channel 2 plays a bass. For bars 1 and 2 the global scale is C major (scale
+    slot 1); for bars 3 and 4 it is D major (scale slot 2). The patterns hold scale degrees, not fixed
+    pitches, and the Note masks stay X (unset), so changing the applied scale moves every pitch while
+    rhythm, velocity and length stay the same. Play "Changing Harmony with Scale Slots" under Listen to
+    hear the target.
+
+
+    Settings: 90 BPM, Rate /1 (the default, one step is a sixteenth note) and a 16-step range that loops
+    once per bar. The bass velocity is 60 and its notes last ½ step in this comparison. The "A bass with
+    room above it" recording is a different example, in fixed notes in C major.'
+  musical_use: Change the applied scale slot to move a whole phrase and bass to a new key while keeping
+    its rhythm. Use it to make a simple pattern sound like a chord progression.
+  related:
+  - scale-editor
+  - scale-locks
+  - adding-notes
+  - adding-chords
+  - chord-strum
+  sources:
+    readme: manual/legacy/README-1.4.0.md#scale-editor
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-SCALE-001
+    - M-MASK-010
+    - M-PARAM-001
+    - M-HARMONY-REVOICE-001
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+  controls: []
+  details:
+  - title: Pitch and output scope
+    text: This comparison uses relative pattern notes (scale degrees) with the Note masks left at X. A
+      Note mask would replace the pattern note and fix the pitch, so no scale change could move it. Polyperc
+      1 is assigned once, to the bass. Numeric MIDI notes are used for expected results because the controls
+      label octaves differently.
+  recipes:
+  - title: Make the relative-note scale comparison
+    text: 'Starting point: an empty project with playback stopped. Part 1 builds the upper phrase on channel
+      1, part 2 builds the bass on channel 2, part 3 prepares the second key and part 4 performs the change.
+      In the note page, the column is the step and the row is the degree: y=7 is degree 0 (I), y=6 is
+      degree 1 (II) and y=3 is degree 4 (V).
+
+
+      Part 1: upper phrase
+
+
+      1. Set 90 BPM (Song tasks, Tempo & feel, E3, K3). Leave Rate at /1.
+
+
+      2. Open the Scale editor (4,8). Slot 1 at (1,3) is the applied slot. Check Root C and Scale Major
+      on the Scale screen; if you change either, press K3 to save it.
+
+
+      3. Assign Doubledecker to channel 1. Open Pattern Trig, select pattern 1 and tap steps 1, 5, 9 and
+      13.
+
+
+      4. Open Pattern Note (tap Pattern (5,8) until Note is shown) and set the degrees: tap (1,7), (5,7)
+      and (9,7) for degree 0, and (13,6) for degree 1. Set the channel range to steps 1-16.
+
+
+      5. Open Masks. Leave Note at X. Set Vel to 80 and Len to ½. Hold step 13 and set Vel to 50, then
+      release. The phrase ends with a softer last note. Press Play and listen: in C major the upper phrase
+      is MIDI 60, 60, 60, 62. Press Stop.
+
+
+      Part 2: bass
+
+
+      6. Assign Polyperc 1 to channel 2 and select pattern 2 for the channel. On pattern 2, tap steps
+      1 and 9 on Pattern Trig, then on Pattern Note tap (1,7) for degree 0 and (9,3) for degree 4. Set
+      the range to steps 1-16 and the channel octave to -1 with (9,8).
+
+
+      7. Open Masks with channel 2 selected, leave Note at X, set Vel to 60 and Len ½. Press Play: the
+      bass adds MIDI 48 on beat 1 and MIDI 55 on beat 3 under the upper phrase. Press Stop.
+
+
+      Part 3: prepare the second key
+
+
+      8. While stopped, open the Scale editor. Hold K1 and press slot 2 at (2,3) to select it for editing
+      without applying it. On the Scale screen set Root to D and Scale to Major with E2 and E3, and press
+      K3 to save the slot. Slot 1 stays applied, so playback is still C major.
+
+
+      Part 4: perform the change (choose one)
+
+
+      9a. Stopped: play two bars in C major and stop. Short-press slot 2 at (2,3) to apply D major and
+      play two more bars.
+
+
+      9b. Live: while playing, short-press slot 2 at (2,3) at the end of bar 2.
+
+
+      In D major the upper phrase becomes MIDI 62, 62, 62, 64 and the bass becomes MIDI 50 and 57: the
+      same rhythm moved up a whole tone. Short-press slot 1 at (1,3) to restore C major.'
+  - title: Separate fixed bass-and-chord example
+    text: 'Why it is here: this example uses fixed Note masks, so its pitches do not move when the scale
+      changes. It is the counterpart of the scale-slot comparison above, where the notes are relative
+      degrees that move with the scale, and it shows how to layer quiet chords above a bass. It is the
+      "A bass with room above it" recording and stays in C major.
+
+
+      Starting point: an empty project, 90 BPM, Rate /1, Snap note masks to scale at its default, and
+      channels 1 and 2 with their range set to steps 1-16 (hold step 1 and tap step 16 on the channel
+      page).
+
+
+      1. Assign Polyperc 1 to channel 1. Open Masks and set Note to MIDI 48, Vel to 48 and Len to ½.
+
+
+      2. Hold K1 and tap steps 1, 5, 9 and 13. Hold step 9 and set Note to MIDI 55.
+
+
+      3. Assign Doubledecker to channel 2. Open Masks and set Note to MIDI 60, Vel to 32 and Len to 3
+      steps. Set Chd1 to 3rd and Chd2 to 5th.
+
+
+      4. Hold K1 and tap steps 1 and 9, then hold step 9 and set Note to MIDI 62.
+
+
+      5. Press Play. The bass plays C2, C2, G2, C2 on beats 1 to 4 and the chords sound C-E-G on beat
+      1 and D-F-A on beat 3. The chords are deliberately quieter (velocity 32) than the bass (velocity
+      48), so they sit above it without covering it.'
+  scene_refs:
+  - scale-edit-versus-apply
+  - mask-chords
+  - harmony-revoice-two-voices
+  review:
+    status: verified
+    cases:
+    - M-SCALE-001
+    - M-MASK-010
+    - M-PARAM-001
+    - M-HARMONY-REVOICE-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The new exact C-to-D relative-note comparison is authored and awaiting native capture.
+      Existing fixed C-major bass-and-chord evidence remains separate.
+    audio_refs:
+    - scale-slot-comparison
+    - bass-and-intervals
+    audio_cases:
+    - MA-AUDIO-scale-slot-comparison
+    - MA-AUDIO-bass-and-intervals
+    audio_comparison_status: pending-native-capture
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: loops-that-meet
+  title: Combining Four-Step and Three-Step Loops
+  audience: intermediate
+  summary: Use independent channel lengths to create a 12-step repeating relationship.
+  prose: 'Run two channels at the same clock rate with different lengths: channel 1 loops a four-step
+    phrase and channel 2 loops a three-step phrase. Both channels start together on step 1, drift apart,
+    and meet again after 12 steps, the smallest number that both 4 and 3 divide into. At the default Rate
+    /1 and 90 BPM, 12 steps last two seconds. Playback is continuous: each channel simply starts its own
+    loop again when it reaches the end of its range.
+
+
+    1. On channel 1, assign a pattern with active steps 1–4. Using the default C-major scale, set relative
+    pattern notes 0, 1, 2 and 3, which produce MIDI 60, 62, 64 and 65. Set the velocities to 127, 117,
+    107 and 97 and each note length to one step. Set the range to steps 1–4 (hold step 1, tap step 4,
+    release step 1).
+
+
+    2. On channel 2, assign the same pattern and set the range to steps 1–3.
+
+
+    3. Open channel 2 Masks. With no step held, set the channel defaults to Note MIDI 79, Vel 40 and Len
+    ½.
+
+
+    4. Hold step 2 and set Note MIDI 81, Vel 60 and Len 1¼. Release the step. Channel 2 now repeats MIDI
+    79, 81, 79, independent of the four notes on channel 1.
+
+
+    5. Start playback. Both channels begin together. Compare their first steps again after 12 steps (about
+    two seconds).
+
+
+    6. Stop playback before changing the arrangement.
+
+
+    Use separate MIDI routes for the two instruments. For internal sound, assign different supported players,
+    for example Polyperc 1 for channel 1 and Doubledecker for channel 2. Song transitions and reset options
+    can restart channels earlier than 12 steps; the second recipe shows how.'
+  musical_use: Give two channels different lengths so a short and a long phrase drift apart and realign.
+    Use it for evolving rhythmic patterns from simple loops, and use song reset options when each section
+    should restart together.
+  related:
+  - channel-length
+  - clocks-swing-and-shuffle
+  - reset-at-song-editor-pattern-change
+  - reset-at-pattern-repeat
+  - song-composition
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-RANGE-REJECT-005
+    - M-RANGE-REJECT-006
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+    - tests/behaviour/range_rejection.py
+  controls: []
+  details:
+  - title: Example Scope
+    text: These recipes specify suggested musical settings. Attached audio demonstrates only its authored
+      version. Suggested variations are not covered by that recording.
+  recipes:
+  - title: Comparing the Loop Alignment
+    text: 'Starting point: the six steps above are done and playback is stopped. Both channels run at
+      the same rate. At 90 BPM and Rate /1 one step is a sixth of a second, so you can count 12 steps
+      in two seconds.
+
+
+      1. Press Play and count steps. Channel 1 plays MIDI 60, 62, 64, 65 and then repeats, so it completes
+      three phrases in 12 steps. Channel 2 plays MIDI 79, 81, 79 and repeats, so it completes four phrases
+      in the same 12 steps.
+
+
+      2. Listen at step 1: MIDI 60 and MIDI 79 sound together. They do not coincide again on steps 2 to
+      12: for example, on step 4 channel 1 plays MIDI 65 while channel 2 starts a new phrase with MIDI
+      79.
+
+
+      3. Listen at step 13, two seconds after step 1: MIDI 60 and MIDI 79 sound together again, and the
+      pattern repeats every 12 steps. Press Stop when you have heard the alignment.
+
+
+      4. Optional extra check, unrelated to the alignment: with both channels playing, try a reversed
+      range on channel 1. Hold step 4 as the start, press step 2 as the end and release both. The reversed
+      range is rejected with a message, the ranges stay 1–4 and 1–3, and neither phrase changes timing.'
+  - title: Comparing Song Boundary Resets
+    text: 'Starting point: the two looping channels above (channel 1 range 1–4, channel 2 range 1–3),
+      with Song slot 1 holding them and playback stopped. Song mode is On by default, so the slots play
+      in turn, and Reset on song seq change (PARAMS > MOSAIC) is On by default while Reset on pattern
+      repeat is Off. This comparison hears how the first option changes both channels at a slot boundary.
+
+
+      1. Copy the slot. Open the Song Editor, hold slot 1 at (1,1), tap slot 2 at (2,1) and release slot
+      1. Slot 2 is now a copy of slot 1, so slots 1 and 2 play one after the other.
+
+
+      2. Set the slot length. Use the global length fader at the lower left of the Song Editor (see Adjusting
+      Song Sequence Length) to set 10 steps. The length belongs to the whole song, so both slots get it.
+      10 is not a multiple of 4 or of 3, so each channel is part-way through its loop when a slot ends.
+
+
+      3. Open PARAMS > MOSAIC and check that Reset on song seq change reads On. Play both slots. At the
+      start of slot 2 both channels restart from step 1: channel 1 plays MIDI 60 and channel 2 plays MIDI
+      79. The 4-against-3 pattern starts again from the beginning in every slot. Press Stop.
+
+
+      4. Set Reset on song seq change to Off and play both slots again. Now neither channel restarts:
+      at the start of slot 2 channel 1 continues with MIDI 64, the third note of its phrase (10 steps
+      is two phrases and two steps), and channel 2 continues with MIDI 81, the second note of its phrase
+      (10 steps is three phrases and one step). The two channels no longer meet at the slot boundary.
+      Press Stop.
+
+
+      5. Set Reset on song seq change back to On to restore the default.
+
+
+      Use Off when you want the 12-step relationship to carry across slots without a restart; use On when
+      each slot should begin with both loops on their first step.'
+  - title: Run two channels at different lengths
+    text: 'Starting point: two channels with audible notes. Give each channel a voice (for example Oilcan
+      1 on channel 1 and Polyperc 1 on channel 2, or any two MIDI outputs) and set Note, Vel and Len on
+      each channel''s Masks page as in Make your first loop (a channel needs at least one audible note
+      to be heard).
+
+
+      Enter the two patterns. Tap Pattern (5,8) for the Trig view. In pattern 1 tap steps (1,4), (5,4),
+      (9,4) and (13,4): a drum pattern with trigs on steps 1, 5, 9 and 13. In pattern 2 tap steps (1,4),
+      (3,4) and (4,4): a short figure with trigs on steps 1, 3 and 4.
+
+
+      1. Channel 1: tap (1,1) and assign pattern 1 at (1,2). Hold step 1 (grid (1,4)), tap step 16 ((16,4)),
+      then release step 1. Steps 1-16 on row 4 are now brighter.
+
+
+      2. Channel 2: tap (2,1) and assign pattern 2 at (2,2). Hold step 1, tap step 5 ((5,4)), then release
+      step 1. On this channel only steps 1-5 are brighter.
+
+
+      3. Tap Play at (1,8). The drum channel repeats every 16 steps (four hits per bar) and the figure
+      repeats every 5 steps, so its three notes slide across the drum hits. Listen for the figure landing
+      on a different drum beat each bar.
+
+
+      4. Keep listening until the start of drum bar 6. After 80 steps (five drum bars, sixteen figure
+      passes) both channels start together again. 80 is the first step count that both 16 and 5 divide.
+      Tap Play again to stop.
+
+
+      If the song moves to another song pattern, channels are reset together while Reset at Song Sequence
+      Change (on by default) is enabled, so the 80-step cycle only completes while the same song pattern
+      keeps playing. Use the Options page to change how channels of different length behave. The captured
+      example [Play sixteen steps against five](#loops-that-meet/loops-sixteen-against-five) builds this
+      setup and plays the 80 steps until both channels start together again. The captured example "Keep
+      a valid range when a gesture is reversed" shows the range gesture and what happens when the end
+      comes before the start.'
+  scene_refs:
+  - loops-four-against-three
+  - loops-sixteen-against-five
+  - polymeter-song-reset
+  review:
+    status: verified
+    cases:
+    - M-RANGE-REJECT-006
+    - M-MANUAL-CLOSURE-RESET-001
+    - M-RANGE-LCM-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The unchanged native case verifies independent four-/three-step phrases, simultaneous
+      first onsets, exact timing and gates, and a rejected range edit preserving both schedules. The 12-step
+      relationship is the least common multiple of those lengths. Physical sound and the optional song-reset
+      comparison are separately scoped.
+    native_evidence_catalogues:
+    - generated/reference-polymeter-scenes.json
+    native_evidence:
+    - scene: loops-four-against-three
+      clock_mode: real-time
+      data: generated/reference-polymeter-scenes.json
+      data_sha256: edf2b56a0da99b175b76dbf4d9ee75a3803c2d1c4af15bb3f33b6eac67a1da15
+      evidence:
+        path: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/M-RANGE-REJECT-005-base-midi
+        session_context:
+          session_ordinal: 0
+          clock_mode: real-time
+          profile: base-midi
+          app_root: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/application
+          experimental_install: null
+          installation_sha256: null
+          session_id: d53a687cef154ea5b0f33620fc5b30a4
+          runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+          application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+          finished: true
+          held_inputs: []
+          cleanup_verified: true
+        results_sha256: b491345196c7aaa5a758ccd1fb26d6738509d0b299307dc6f4b45fdd14df9385
+        identity_sha256: 06a8d09bfaab1cef576ef46a0b1382ef9e45c92194176636ddfd3f388bf2f679
+        recipe_sha256: 287dbc8c4b95e317680d81cde159910a1446f758dcd45804907628e25dae5c3f
+        native_events_sha256: b4fe491dee2d6258e4d9e76b090ca9d90385ea251c8aee526fabe3fc06b0dab7
+        capture_trace_sha256: 6594dbadb7d0a5d54239c90db2781b414d3d90c452b1deb1e58203fe344b328f
+        session_context_sha256: b1e92971f1894eb823fddb3d6db4a0b4b9ac7694c49682e2735b46bdfba1388d
+        native_config_sha256: 49ba7d3fcb2d8d9ed91c23974af446f9d776dc14ab80e921c812364b7a06350c
+        cleanup_sha256: fa41c7b8a7411886f63a0817a038252d2f7fea73982d495605f542296491fdf0
+        case_participants:
+        - path: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/M-RANGE-REJECT-005-base-midi
+          session_context:
+            session_ordinal: 0
+            clock_mode: real-time
+            profile: base-midi
+            app_root: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/application
+            experimental_install: null
+            installation_sha256: null
+            session_id: d53a687cef154ea5b0f33620fc5b30a4
+            runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+            application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+            finished: true
+            held_inputs: []
+            cleanup_verified: true
+          results_sha256: b491345196c7aaa5a758ccd1fb26d6738509d0b299307dc6f4b45fdd14df9385
+          identity_sha256: 06a8d09bfaab1cef576ef46a0b1382ef9e45c92194176636ddfd3f388bf2f679
+          recipe_sha256: 287dbc8c4b95e317680d81cde159910a1446f758dcd45804907628e25dae5c3f
+          native_events_sha256: b4fe491dee2d6258e4d9e76b090ca9d90385ea251c8aee526fabe3fc06b0dab7
+          capture_trace_sha256: 6594dbadb7d0a5d54239c90db2781b414d3d90c452b1deb1e58203fe344b328f
+          session_context_sha256: b1e92971f1894eb823fddb3d6db4a0b4b9ac7694c49682e2735b46bdfba1388d
+          native_config_sha256: 49ba7d3fcb2d8d9ed91c23974af446f9d776dc14ab80e921c812364b7a06350c
+          cleanup_sha256: fa41c7b8a7411886f63a0817a038252d2f7fea73982d495605f542296491fdf0
+        case_participants_path: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/M-RANGE-REJECT-005-base-midi/case-participants.json
+        case_participants_sha256: 0e48f3c9cdad0a61d9e98e9e96388f17c8412b272401f613254231b7d9ddd0b9
+  category: workflow
+  parent: typical-workflow
+  level: 3
+  teaching_bindings:
+  - id: play-loops-four-against-three-step-4-offset
+    binding:
+      status: verified
+      scene: loops-four-against-three
+      step: step-4-offset
+    teaching_binding:
+      from_step_id: channel-2
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 79, 60, 81, 62.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: step-4-offset
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 2
+          bytes:
+          - 145
+          - 79
+          - 40
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 127
+        - port: 2
+          bytes:
+          - 145
+          - 81
+          - 60
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 117
+      human_outcome: The captured MIDI notes include MIDI 79 at velocity 40, MIDI 60 at velocity 127,
+        MIDI 81 at velocity 60, MIDI 62 at velocity 117.
+  - id: play-loops-sixteen-against-five-play-eighty
+    binding:
+      status: verified
+      scene: loops-sixteen-against-five
+      step: play-eighty
+    teaching_binding:
+      from_step_id: figure-range
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 72, 36, 72, 72.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: play-eighty
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 2
+          bytes:
+          - 145
+          - 72
+          - 90
+        - port: 1
+          bytes:
+          - 144
+          - 36
+          - 100
+        - port: 2
+          bytes:
+          - 145
+          - 72
+          - 90
+        - port: 2
+          bytes:
+          - 145
+          - 72
+          - 90
+      human_outcome: The captured MIDI notes include MIDI 72 at velocity 90, MIDI 36 at velocity 100,
+        MIDI 72 at velocity 90, MIDI 72 at velocity 90.
+  - id: play-polymeter-song-reset-reset-on
+    binding:
+      status: verified
+      scene: polymeter-song-reset
+      step: reset-on
+    teaching_binding:
+      from_step_id: reset-on-option
+      transition_scope: adjacent
+      actions:
+      - id: play
+        kind: tap-grid
+        x: 1
+        y: 8
+        label: Play the captured phrase and listen for 79, 60, 81, 62.
+      - id: preview
+        kind: preview-recorded-result
+        target_step_id: reset-on
+        label: Preview the captured result
+      semantic_requires:
+        midi_events_at_target:
+        - port: 2
+          bytes:
+          - 145
+          - 79
+          - 40
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 127
+        - port: 2
+          bytes:
+          - 145
+          - 81
+          - 60
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 117
+      human_outcome: The captured MIDI notes include MIDI 79 at velocity 40, MIDI 60 at velocity 127,
+        MIDI 81 at velocity 60, MIDI 62 at velocity 117.

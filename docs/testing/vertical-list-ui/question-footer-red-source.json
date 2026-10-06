@@ -1,0 +1,11 @@
+{
+  "exit_code": 2,
+  "files": {
+    "lib/ui_live.lua": "7d344b84ce202d3efe99d2e9235a23064eb97d0c5edfd1ae4b2c28c7c0c8960d",
+    "lib/tests/lib/ui_live_tests.lua": "eb435bb7f7d03916eac25c92a1a7e63d801f9e99abd8bfeb284d0aa06f1997bc"
+  },
+  "frozen_unfixed_production": {
+    "path": "question-footer-unfixed-ui-live.txt",
+    "sha256": "7d344b84ce202d3efe99d2e9235a23064eb97d0c5edfd1ae4b2c28c7c0c8960d"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "kind": "doctor-task-reentry-fixture-diagnosis",
+  "report": "/home/andy/mosaic-doctor-options-runs/bc84db0aa4f94e9fa2c3ce18156da282/report.json",
+  "report_sha256": "7711c6272a613e6eac2acd8e06c334afbc56de121a573e1615173da4315433f5",
+  "passed": false,
+  "cleanup_failure": null,
+  "expected": "R05 WINDOW",
+  "actual_frame": "PATTERN TRIG / PAT01 CH01",
+  "failure_scope": "Retained-alignment reentry before correction; capture/Manual100/right routing/MIDI passed separately.",
+  "source_proof": [
+    {
+      "path": "lib/ui_grid_outcomes.lua",
+      "line": 603,
+      "meaning": "5 -> 5 has no navigation branch; refresh/tooltip only"
+    },
+    {
+      "path": "lib/ui_spec_data.lua",
+      "line": 2190,
+      "meaning": "Trig Tasks Rhythm Doctor entry is visible when algorithm 5 active"
+    },
+    {
+      "path": "lib/ui_live.lua",
+      "line": 431,
+      "meaning": "Current Doctor provider or modal reconciles to owner route"
+    }
+  ],
+  "correction": "Use public Trig Tasks Rhythm Doctor entry to reopen existing bank; no production change or relaxed screen oracle."
+}

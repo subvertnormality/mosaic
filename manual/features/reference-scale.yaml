@@ -1,0 +1,331 @@
+features:
+- id: scale-editor
+  title: Scale Editor
+  audience: all
+  summary: Choose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose,
+    Rotation) without changing playback until you apply it.
+  prose: 'The Scale Editor sets the harmony of the whole song and holds 16 scale slots. Changing the scale
+    changes the pitches that pattern degrees produce; it does not change rhythm or pattern degrees.
+
+
+    Apply a scale:
+
+
+    1. Press Grid (4, 8) to open the Scale Editor. The scale slots are the 16 buttons on Grid row 3. The
+    applied slot is brightly lit.
+
+    2. Short-press a slot. It is applied to every channel and selected for editing.
+
+    3. To turn global scale off, short-press the applied slot again. The slot stays selected for editing.
+    With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. Press
+    the slot again to apply it.
+
+
+    A pattern uses the applied scale unless a global scale lock or a channel scale lock overrides it.
+
+
+    Edit a slot:
+
+
+    1. Turn E2 to select Root, Scale, Degree, Transpose or Rotation. Scale tasks are Scale, Scale clock
+    and Overview.
+
+    2. Turn E3 to change the value of the selected row. The title row names the slot you are editing.
+
+    3. Release all grid keys, then press K3 to apply the changes or K2 to cancel. Tapping any grid key,
+    including Play/Stop, cancels an unapplied edit, so press K3 first.
+
+
+    Edit a slot without playing it:
+
+
+    1. Hold K1 and press the slot, or long-press a slot that is not selected for editing.
+
+    2. Edit the slot as above and press K3. Playback does not change. A dim indicator marks the editing
+    slot when it differs from the applied slot.
+
+    3. Long-press the slot already selected for editing to turn global scale off and clear the editing
+    selection.
+
+
+    Applying changes to the slot that is playing changes the sound immediately.
+
+
+    Set a scale lock: hold a step and press a scale slot. On the Scale page the lock is global for channels
+    without a channel scale lock; on a channel page it applies to that channel. See [Scale Locks](#scale-locks).
+
+
+    The global scale track has its own rate and length, so a chord progression can run over a different
+    number of steps from the patterns. On the Scale clock task, E2 selects Rate and E3 changes it; K3
+    applies. The same screen shows the selected range, the global cap and the playable range as read-only
+    values. To change the length, hold the first step of the range on the scale track and press its last
+    step. The end must come after the start: a reversed selection is rejected with the tooltip End must
+    follow start and the previous range stays, and ranges do not wrap from the last step back to the first.
+
+
+    Video: [Scale editor demo](https://youtu.be/J1ckUZvhFJ0?t=2741)'
+  musical_use: Change the harmony of a melody without changing its rhythm or pattern degrees. Prepare
+    a different scale in an unused slot, then apply it when you want to hear it.
+  related:
+  - scale-locks
+  - dig-deeper
+  sources:
+    readme: manual/legacy/README-1.4.0.md#scale-editor
+    behaviour_cases:
+    - M-SCALE-001
+    - M-SCALE-002
+    - M-SCALE-003
+    - M-SCALE-004
+    - M-SCALE-DISPLAY-001
+    code:
+    - lib/pages/scale_edit_page/scale_edit_page.lua
+    - lib/pages/scale_edit_page/scale_edit_page_ui.lua
+    - lib/ui_adapters/scale.lua
+    - lib/models/program.lua
+    - lib/quantiser.lua
+    - lib/step.lua
+  controls:
+  - gesture: Press Grid (4, 8).
+    result: The Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.
+  - gesture: Short-press a scale slot on row 3.
+    result: Apply it globally and select it for editing. Press the applied slot again to turn global scale
+      off while it stays selected for editing.
+  - gesture: Hold K1 and press a scale slot, or long-press a different editing slot.
+    result: Select the slot for editing without changing which scale playback uses.
+  - gesture: Long-press the slot already selected for editing.
+    result: Turn global scale off and clear the editing selection.
+  - gesture: On the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3
+      to change its value.
+    result: The value changes in the draft for the slot named in the title row. Nothing sounds different
+      yet.
+  - gesture: Release all grid keys, then press K3 or K2.
+    result: K3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes
+      its harmony immediately.
+  - gesture: On the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.
+    result: Set the rate of the global scale track. Selected range, Global cap and Playable range are
+      shown for reference and cannot be edited there.
+  - gesture: On the Scale page, hold the first step of a range on the scale track and press its last step.
+    result: Set the length of the scale track independently of the channels. The tooltip reads Channel
+      17 length changed.
+  - gesture: Hold a sequencer step, then press a scale slot.
+    result: 'Set or toggle a scale lock at that step: global on the Scale page, channel-specific on a
+      channel page.'
+  details:
+  - title: Editing selection and applied scale
+    text: The title row names the slot selected for editing. The editing indicator is dim when that slot
+      differs from the applied scale. With global scale off and no scale lock, pattern degrees play as
+      chromatic semitone offsets. An active channel scale lock takes precedence over the global scale.
+  - title: Vertical list controls
+    text: Scale settings appear as vertical rows. Turn E2 to select a row and bring later fields into
+      view. E3 edits the selected slot's draft; K3 applies it and K2 cancels it. Selecting another row
+      does not apply a draft. Tapping a grid key, including Play/Stop, cancels an unapplied draft, so
+      press K3 before using the grid to keep your edit. A long scale name uses a separate full-width value
+      row.
+  - title: Scale lock lifetime
+    text: A global scale lock lasts until another global lock or until the global scale track wraps. A
+      channel scale lock follows PARAMS > MOSAIC > Scales lock until ptn end, which is On by default.
+      See Scale Locks.
+  - title: Scale clock and Overview
+    text: 'Scale clock sets the rate of the global scale track. Overview is a read-only dashboard: it
+      lists the playing scale, the scale being edited, the step range, the transposition and any step
+      lock. Both are Scale tasks beside Scale.'
+  recipes:
+  - title: Prepare and apply a second scale
+    text: 'Start with a channel that plays a four-step melody on pattern degrees 1 to 4 (see [Build a
+      phrase](#build-a-phrase)) and scale slot 1 applied as C major. The melody sounds MIDI 60, 62, 64
+      and 65 (C, D, E, F). The captured examples below start from the same setup: Save D major, then apply
+      it follows steps 1 to 5, and Prepare a scale before applying it adds browsing a slot with a long
+      press, editing the applied slot and turning the global scale Off.
+
+
+      1. Press Grid (4, 8) to open the Scale Editor. Slot 1, the left button on row 3, is bright.
+
+
+      2. Hold K1, press slot 2 at (2, 3), then release both. The title row names slot 2 and a dim indicator
+      marks it. Playback is still in C major.
+
+
+      3. Turn E2 to Root and turn E3 two clicks to D. Release all grid keys and press K3. The draft is
+      saved to slot 2. Tap Play (1,8), listen, then tap Stop: the melody still plays C, D, E, F because
+      slot 1 is still applied.
+
+
+      4. Short-press slot 2 at (2, 3). It becomes the bright applied slot. Tap Play (1,8), listen, then
+      tap Stop: the melody plays D, E, F sharp, G (MIDI 62, 64, 66, 67). The rhythm has not changed.
+
+
+      5. Short-press slot 1 at (1, 3), tap Play and listen: C, D, E, F are restored.'
+  scene_refs:
+  - scale-save-d-and-apply
+  - scale-edit-versus-apply
+  review:
+    status: verified
+    cases:
+    - M-SCALE-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: scale-edit-versus-apply
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-SCALE-001
+      assertions:
+      - kind: midi
+        complete_cycles: 3
+      - kind: midi
+        complete_cycles: 3
+      - kind: midi
+        complete_cycles: 3
+      - kind: midi
+        complete_cycles: 3
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    applicability: native-ui
+    native_gap: null
+  category: scale
+  parent: dig-deeper
+  level: 3
+- id: transposition
+  title: Transposition
+  audience: all
+  summary: Transpose the whole selected Song Sequence by -12 to +12 semitones with one fader. Locks change
+    it from chosen steps.
+  prose: 'Use the transposition fader on the Scale page to transpose every channel of the selected Song
+    Sequence without editing any note. Rhythm and intervals stay the same.
+
+
+    Set global transposition:
+
+
+    1. Press Grid (4, 8) to open the Scale Editor.
+
+    2. Press a button on the transposition fader, Grid row 8, columns 8–16. The tooltip shows Transpose
+    and the new value.
+
+
+    The fader buttons set these values: (9,8) is -12, (10,8) -8, (11,8) -4, (12,8) 0, (13,8) +4, (14,8)
+    +8 and (15,8) +12. The end buttons, (8,8) and (16,8), lower or raise the value by one semitone each
+    press.
+
+
+    The global value is added to the active scale slot''s Transpose value. With scale slot 1 as C major
+    and the melody 60, 62, 64, 65, +2 plays 62, 64, 66, 67.
+
+
+    You can change transposition while playing. A note that is already sounding keeps its pitch and length.
+    The next notes use the new value.
+
+
+    To change transposition from a certain step onwards, use [transposition locks](#transposition-locks).
+
+
+    Video: [Global transposition demo](https://youtu.be/J1ckUZvhFJ0?t=2905)'
+  musical_use: Move a section up or down while keeping its rhythm and intervals, for example repeat a
+    verse a tone higher in a copied Song slot.
+  related:
+  - transposition-locks
+  - scale-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#transposition
+    behaviour_cases:
+    - M-TRANS-006
+    - M-TRANS-007
+    - M-TRANS-008
+    - M-TRANS-009
+    code:
+    - lib/pages/scale_edit_page/scale_edit_page.lua
+    - lib/controls/fader.lua
+    - lib/models/program.lua
+    - lib/step.lua
+  controls:
+  - gesture: On the Scale page, press a button on the transposition fader, Grid row 8, columns 8–16.
+    result: Set the selected Song Sequence's global transposition within -12 to +12 semitones.
+  - gesture: Press the left end button (8,8) or the right end button (16,8).
+    result: Lower or raise by one semitone. The centre button (12,8) returns to zero.
+  - gesture: Hold a scale-track step and press a fader button.
+    result: Set a transposition lock for that step. Repeating the same value removes the lock.
+  details:
+  - title: Transposition precedence
+    text: The current global value, or the persistent step-lock value, is added to the active scale slot's
+      Transpose value. For its lifetime, a step lock replaces the global fader value.
+  - title: Each Song slot has its own transposition
+    text: Transposition belongs to the selected Song Sequence. Copying a Song slot copies its transposition,
+      and changing the copy leaves the original as it was.
+  - title: Edits during playback
+    text: A change made while notes sound does not cut the sounding note or change its length. The next
+      onset uses the new value. In the captured example, +1 and then -12 raise the following notes by
+      one semitone and then drop them an octave from the written pitch.
+  recipes:
+  - title: Play a copied Song slot a tone higher
+    text: 'This recipe changes the transposition fader on a copy of a slot, so the copy plays a tone higher
+      while the original stays put. It is a different workflow from the captured example below, which
+      shows the fader being pressed while a note is sounding.
+
+
+      Start with Song slot 1 holding a finished sequence, such as a four-note melody on MIDI 60, 62, 64,
+      65, with playback stopped and Song mode at its default (On).
+
+
+      1. Press Grid (6, 8) to open the Song Editor. Slot 1 at (1, 1) is lit: it is the slot you are working
+      on.
+
+
+      2. Hold slot 1 at (1, 1) and press slot 2 at (2, 1), then release both. Slot 2 now holds a copy
+      of slot 1 (copying overwrites whatever slot 2 held).
+
+
+      3. Press slot 2 at (2, 1) to select it while stopped.
+
+
+      4. Press Grid (4, 8) to open the Scale Editor.
+
+
+      5. Press the right end of the transposition fader, (16, 8), twice. Each press adds one semitone
+      and the tooltip shows Transpose: 2.
+
+
+      6. Press Play. Slot 2 plays 62, 64, 66, 67. With Song mode On, playback moves on to the next slot
+      after the repeats set in Slot setup; to hold on one slot, open PARAMS > MOSAIC and turn Song mode
+      Off (E3). Press Stop.
+
+
+      7. Press Grid (6, 8), then slot 1 at (1, 1), and press Play to hear the original at 60, 62, 64,
+      65, because slot 1 kept its transposition of 0.
+
+
+      Check that the raised notes are still inside the usable range of the sound you are playing.'
+  scene_refs:
+  - transpose-next-onset
+  - transpose-song-slot-copy
+  review:
+    status: verified
+    cases:
+    - M-TRANS-009
+    - M-TRANS-010
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: transpose-next-onset
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-TRANS-009
+      assertions:
+      - kind: transpose-global-live-edit
+        passed: true
+      scope: The cited public workflow and stated native semantic outcomes.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Reference source audit and the cited public native workflow are complete for publication.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: transpose-next-onset
+      clock_mode: controlled-experimental
+  category: scale
+  parent: scale-editor
+  level: 4

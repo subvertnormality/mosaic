@@ -1,4 +1,5 @@
 """Scale, pattern, channel and memory cases using the semantic UI layer."""
+from channel_gestures import shift_mute_channel
 
 
 def scale_edit_selection(c):
@@ -161,6 +162,22 @@ def trig_merge_sets(c):
     mode(5, [2, 4])  # Two contributors only.
     ui.tap_control("trig_merge_mode")
     mode(8, [1, 2, 3, 4])  # Set union.
+
+    def all_to_skip():
+        # The shipped Strategy cycle is Skip, Only, All, Foundation, Fragments
+        # (manual/features/reference-musical.yaml:1177-1181). From All, grid
+        # (14,8) first selects Foundation, refused without an anchor (LED 11,
+        # NEEDS ANCHOR; that refusal has its own acceptance in
+        # contract/merge_strategy_ui.py and LED 11 has no name in the UI map,
+        # so only the steps around it are asserted here), then Fragments
+        # (LED 15, "selected"), then wraps to Skip. Skip,
+        # Only and All restore legacy trig merging (same yaml lines;
+        # manual/legacy/README-1.4.0.md:857-863).
+        ui.tap_control("trig_merge_mode")
+        ui.tap_control("trig_merge_mode")
+        ui.expect_leds({("trig_merge_mode", None): "selected"})
+        ui.tap_control("trig_merge_mode")
+
     # A third pattern overlapping step 2 distinguishes exactly-one from odd
     # parity and proves Only accepts two or more contributors.
     ui.tap_control("pattern_editor")
@@ -169,7 +186,7 @@ def trig_merge_sets(c):
         ui.tap_step(step)
     ui.tap_control("channel_editor")
     ui.tap_control("pattern_slot", 3)
-    ui.tap_control("trig_merge_mode")
+    all_to_skip()
     mode(2, [1])
     ui.tap_control("trig_merge_mode")
     mode(5, [2, 3, 4])
@@ -179,8 +196,8 @@ def trig_merge_sets(c):
     # not keep a stale merged pattern after unassignment.
     ui.tap_control("pattern_slot", 2)
     ui.tap_control("pattern_slot", 3)
-    ui.tap_control("trig_merge_mode")
-    ui.tap_control("trig_merge_mode")
+    all_to_skip()
+    ui.tap_control("trig_merge_mode")  # Skip -> Only.
     ui.expect_leds({("trig_merge_mode", None): "in_range"})
     before = c.snapshot()["midi_count"]
     ui.tap_control("play_stop")
@@ -328,9 +345,7 @@ def channel_mute_gestures(c):
             c.elapse(seconds)
 
     def shift_mute():
-        with ui.hold_keys(1):
-            c.elapse(.3)
-            ui.tap_control("channel", 1)
+        shift_mute_channel(c, 1)
 
     def silence(seconds):
         before = c.snapshot()["midi_count"]

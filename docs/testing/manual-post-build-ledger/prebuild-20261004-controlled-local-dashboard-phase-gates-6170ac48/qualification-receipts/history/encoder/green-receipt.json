@@ -1,0 +1,20 @@
+{
+  "runs": [
+    {
+      "command": "python3 -m unittest test_manual_case_capture.Checkpoints.test_live_record_replay_tempo_reset_uses_schema_valid_public_encoder_and_selects_one",
+      "exit_code": 0,
+      "log": "green-focused-1.log",
+      "log_sha256": "a9a4c86fbf700482169f1f180341a118bad662f00f975ed17083bedc72549d50"
+    },
+    {
+      "command": "python3 -m unittest test_manual_case_capture",
+      "exit_code": 0,
+      "log": "green-focused-2.log",
+      "log_sha256": "f74e5c6a8b53feb4c23098dde87e606ccb6549371ed0eef7b88dc106074b2ac1"
+    }
+  ],
+  "sources": {
+    "tests/behaviour/cases.py": "b08e182100c8b059b54dfbfe2c344650c56bda9afcb3697d4f2149ff3ca8ef16",
+    "tests/behaviour/test_manual_case_capture.py": "5b7acecf9a219839a4088d1b442f80563cf9104b47a0b3c6c178557d41078ffe"
+  }
+}

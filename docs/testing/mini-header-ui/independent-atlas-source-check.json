@@ -1,0 +1,847 @@
+{
+  "kind": "read-only-literal-source-comparison",
+  "v1_sha256": "ed4d8972b1012b7570d402b6ba997c6c78c6c0926e577f974e03758782ed3c54",
+  "v2_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+  "lua_sha256": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+  "identities_exact": true,
+  "screens": [
+    {
+      "id": "H01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H04",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H06",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H07",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H08",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H09",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H10",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H11",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H12",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H13",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M04",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M06",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M07",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M08",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M09",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M10",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M11",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H14",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H18",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H15",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H16",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H17",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M12",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M13",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M14",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "H19",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M15",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M16",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "M18",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R04",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R06",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R07",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R08",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R09",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R10",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R11",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R12",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R13",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R14",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R15",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "R16",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C04",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C06",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C07",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C08",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C09",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "S01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "S02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "S03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "S04",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "S05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P04",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "A01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "A02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "A03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F04",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F06",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F07",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "F08",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "N01",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "N02",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "N03",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C10",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P06",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P07",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "P08",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "N05",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C11",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C12",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    },
+    {
+      "id": "C13",
+      "literal_frames_exact": true,
+      "width_exact": true,
+      "loop_exact": true,
+      "rest_exact_v1": true,
+      "footprint_exact_v1": true,
+      "poses": 8
+    }
+  ],
+  "native_acceptance": false
+}

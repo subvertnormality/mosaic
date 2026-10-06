@@ -43,7 +43,8 @@ function test_channel_merge_shape_editor_cancel_discards_complete_draft()
   local _, channel = setup()
   local value = feature_editor.new("merge")
   value:enter()
-  value:enc(3, 1)
+  -- Unit draft seam; Strategy is selected through shared C09/grid controls.
+  value.draft.mode, value.dirty = "foundation", true
   luaunit.assert_true(value.dirty)
   value:key(2)
   luaunit.assert_false(value.dirty)
@@ -96,7 +97,7 @@ end
 function test_merge_child_draft_is_atomic_and_cancel_discards_parent_and_child_changes()
   local _,channel=setup();channel.selected_patterns[1]=true
   local value=feature_editor.new("merge");value:enter()
-  value:enc(3,1) -- Foundation on M01
+  value.draft.mode, value.dirty = "foundation", true -- unit draft seam
   open_label(value,"Rhythm");select_label(value,"Anchor");value:enc(3,1)
   select_label(value,"Add amount");value:enc(3,-1)
   luaunit.assert_true(value.dirty);value:key(2)
@@ -487,7 +488,7 @@ end
 function test_merge_fragments_mode_routes_rhythm_to_fragments_and_hides_foundation_rows()
   local _,channel=setup();channel.selected_patterns[1]=true;channel.selected_patterns[2]=true
   local value=feature_editor.new("merge");value:enter()
-  value:enc(3,1);value:enc(3,1)
+  value.draft.mode, value.dirty = "fragments", true -- unit draft seam
   luaunit.assert_equals(value.draft.mode,"fragments")
   open_label(value,"Rhythm");luaunit.assert_equals(value:get_screen(),"FRAGMENTS")
   luaunit.assert_equals(labels(value),{"Size","Keep anchor","Seed"})
@@ -501,7 +502,7 @@ function test_merge_fragments_mode_routes_rhythm_to_fragments_and_hides_foundati
   luaunit.assert_equals(channel.musical_merge.mode,"fragments")
   luaunit.assert_equals(channel.musical_merge.fragments,{size=16,keep_anchor=true})
   value:encoder_one();open_label(value,"Phrase");luaunit.assert_equals(labels(value),{"Cycles","Variation"})
-  value:encoder_one();luaunit.assert_equals(labels(value),{"Mode","Rhythm","Phrase","Result"})
+  value:encoder_one();luaunit.assert_equals(labels(value),{"Strategy","Rhythm","Phrase","Result","Strategy selector"})
 end
 
 function test_merge_fragments_keep_anchor_rejects_an_unassigned_anchor()

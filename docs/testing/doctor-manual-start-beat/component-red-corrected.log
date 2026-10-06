@@ -1,0 +1,210 @@
+test_a_corrected_origin_keeps_relevant_beats_before_it (test_manual_beat_grid.ManualBeatGridTests.test_a_corrected_origin_keeps_relevant_beats_before_it) ... 
+  test_a_corrected_origin_keeps_relevant_beats_before_it (test_manual_beat_grid.ManualBeatGridTests.test_a_corrected_origin_keeps_relevant_beats_before_it) (backend='native', rate=48000, bpm=120, origin=30000) ... FAIL
+  test_a_corrected_origin_keeps_relevant_beats_before_it (test_manual_beat_grid.ManualBeatGridTests.test_a_corrected_origin_keeps_relevant_beats_before_it) (backend='python', rate=48000, bpm=120, origin=30000) ... FAIL
+test_fractional_spacing_is_rounded_from_the_origin_without_drift (test_manual_beat_grid.ManualBeatGridTests.test_fractional_spacing_is_rounded_from_the_origin_without_drift) ... 
+  test_fractional_spacing_is_rounded_from_the_origin_without_drift (test_manual_beat_grid.ManualBeatGridTests.test_fractional_spacing_is_rounded_from_the_origin_without_drift) (backend='native', rate=44100, bpm=137, origin=12345) ... FAIL
+  test_fractional_spacing_is_rounded_from_the_origin_without_drift (test_manual_beat_grid.ManualBeatGridTests.test_fractional_spacing_is_rounded_from_the_origin_without_drift) (backend='python', rate=44100, bpm=137, origin=12345) ... FAIL
+test_manual_capture_start_has_more_than_one_addressable_beat (test_manual_beat_grid.ManualBeatGridTests.test_manual_capture_start_has_more_than_one_addressable_beat) ... 
+  test_manual_capture_start_has_more_than_one_addressable_beat (test_manual_beat_grid.ManualBeatGridTests.test_manual_capture_start_has_more_than_one_addressable_beat) (backend='native', rate=48000, bpm=120, origin=0) ... FAIL
+  test_manual_capture_start_has_more_than_one_addressable_beat (test_manual_beat_grid.ManualBeatGridTests.test_manual_capture_start_has_more_than_one_addressable_beat) (backend='python', rate=48000, bpm=120, origin=0) ... FAIL
+test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) ... 
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=44100, bpm=40, origin=0) ... FAIL
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=44100, bpm=40, origin=0) ... FAIL
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=44100, bpm=240, origin=0) ... FAIL
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=44100, bpm=240, origin=0) ... FAIL
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=48000, bpm=40, origin=0) ... FAIL
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=48000, bpm=40, origin=0) ... FAIL
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=48000, bpm=240, origin=0) ... FAIL
+  test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=48000, bpm=240, origin=0) ... FAIL
+
+======================================================================
+FAIL: test_a_corrected_origin_keeps_relevant_beats_before_it (test_manual_beat_grid.ManualBeatGridTests.test_a_corrected_origin_keeps_relevant_beats_before_it) (backend='native', rate=48000, bpm=120, origin=30000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: Lists differ: [30000] != [6000, 30000, 54000, 78000]
+
+First differing element 0:
+30000
+6000
+
+Second list contains 3 additional elements.
+First extra element 1:
+30000
+
+- [30000]
++ [6000, 30000, 54000, 78000] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_a_corrected_origin_keeps_relevant_beats_before_it (test_manual_beat_grid.ManualBeatGridTests.test_a_corrected_origin_keeps_relevant_beats_before_it) (backend='python', rate=48000, bpm=120, origin=30000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: None != [6000, 30000, 54000, 78000] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_fractional_spacing_is_rounded_from_the_origin_without_drift (test_manual_beat_grid.ManualBeatGridTests.test_fractional_spacing_is_rounded_from_the_origin_without_drift) (backend='native', rate=44100, bpm=137, origin=12345)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: Lists differ: [12345] != [12345, 31659, 50973, 70287, 89600]
+
+Second list contains 4 additional elements.
+First extra element 1:
+31659
+
+- [12345]
++ [12345, 31659, 50973, 70287, 89600] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_fractional_spacing_is_rounded_from_the_origin_without_drift (test_manual_beat_grid.ManualBeatGridTests.test_fractional_spacing_is_rounded_from_the_origin_without_drift) (backend='python', rate=44100, bpm=137, origin=12345)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: None != [12345, 31659, 50973, 70287, 89600] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_manual_capture_start_has_more_than_one_addressable_beat (test_manual_beat_grid.ManualBeatGridTests.test_manual_capture_start_has_more_than_one_addressable_beat) (backend='native', rate=48000, bpm=120, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: Lists differ: [0] != [0, 24000, 48000, 72000]
+
+Second list contains 3 additional elements.
+First extra element 1:
+24000
+
+- [0]
++ [0, 24000, 48000, 72000] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_manual_capture_start_has_more_than_one_addressable_beat (test_manual_beat_grid.ManualBeatGridTests.test_manual_capture_start_has_more_than_one_addressable_beat) (backend='python', rate=48000, bpm=120, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: None != [0, 24000, 48000, 72000] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=44100, bpm=40, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: Lists differ: [0] != [0, 66150]
+
+Second list contains 1 additional elements.
+First extra element 1:
+66150
+
+- [0]
++ [0, 66150] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=44100, bpm=40, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: None != [0, 66150] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=44100, bpm=240, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: Lists differ: [0] != [0, 11025, 22050, 33075, 44100, 55125, 6615[34 chars]1275]
+
+Second list contains 11 additional elements.
+First extra element 1:
+11025
+
+- [0]
++ [0,
++  11025,
++  22050,
++  33075,
++  44100,
++  55125,
++  66150,
++  77175,
++  88200,
++  99225,
++  110250,
++  121275] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=44100, bpm=240, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: None != [0, 11025, 22050, 33075, 44100, 55125, 66[36 chars]1275] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=48000, bpm=40, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: Lists differ: [0] != [0, 72000]
+
+Second list contains 1 additional elements.
+First extra element 1:
+72000
+
+- [0]
++ [0, 72000] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=48000, bpm=40, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: None != [0, 72000] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='native', rate=48000, bpm=240, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: Lists differ: [0] != [0, 12000, 24000, 36000, 48000, 60000, 7200[35 chars]2000]
+
+Second list contains 11 additional elements.
+First extra element 1:
+12000
+
+- [0]
++ [0,
++  12000,
++  24000,
++  36000,
++  48000,
++  60000,
++  72000,
++  84000,
++  96000,
++  108000,
++  120000,
++  132000] : Manual Start Beat needs the confirmed capture beat grid
+
+======================================================================
+FAIL: test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) (backend='python', rate=48000, bpm=240, origin=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/test_manual_beat_grid.py", line 55, in _check
+    self.assertEqual(value.get('beat_positions'), expected,
+AssertionError: None != [0, 12000, 24000, 36000, 48000, 60000, 72[37 chars]2000] : Manual Start Beat needs the confirmed capture beat grid
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.351s
+
+FAILED (failures=14)

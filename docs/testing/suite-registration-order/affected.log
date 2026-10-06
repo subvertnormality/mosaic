@@ -1,0 +1,33 @@
+test_every_existing_test_file_is_classified (test_suite.CollectionTests) ... ok
+test_persisted_digest_lua_contract_receives_norns_root_and_project (test_suite.CollectionTests) ... ok
+test_unclassified_or_stale_declarations_fail (test_suite.CollectionTests) ... ok
+test_cli_exit_has_same_registrations_as_import (test_suite.CommandLineRegistrationTests) ... ok
+test_a_layer_regression_fails_even_with_all_cases_green (test_suite.CompareTests) ... ok
+test_identical_passing_reports_compare_clean (test_suite.CompareTests) ... ok
+test_pass_to_fail_and_missing_items_are_regressions (test_suite.CompareTests) ... ok
+test_real_time_subset_skips_are_listed_not_counted_as_regressions (test_suite.CompareTests) ... ok
+test_native_startup_is_not_a_case_result (test_suite.FailureClassTests) ... ok
+test_runtime_sources_are_recaptured_as_exact_start_identities (test_suite.RuntimeIdentityTests) ... ok
+test_runtime_stability_detects_either_emulator_or_norns_change (test_suite.RuntimeIdentityTests) ... ok
+test_suite_run_fails_source_stability_when_a_runtime_changes (test_suite.RuntimeIdentityTests) ... ok
+test_controlled_only_cases_are_not_applicable_in_real_time (test_suite.SchedulingTests) ... ok
+test_controlled_only_declarations_match_the_clock_mode_guards (test_suite.SchedulingTests) ... ok
+test_lanes_run_concurrently_within_each_lane_budget (test_suite.SchedulingTests) ... ok
+test_longest_first_puts_unknown_then_longest_cases_first (test_suite.SchedulingTests) ... ok
+test_mod_patches_are_forwarded_only_when_requested (test_suite.SchedulingTests) ... ok
+test_real_time_history_reads_failed_real_time_first_attempts (test_suite.SchedulingTests) ... ok
+test_real_time_only_cases_are_not_applicable_in_controlled_time (test_suite.SchedulingTests) ... ok
+test_real_time_only_declarations_match_the_clock_mode_guards (test_suite.SchedulingTests) ... ok
+test_real_time_subset_names_live_requirements (test_suite.SchedulingTests) ... ok
+test_real_time_subset_records_skipped_runs_as_required_not_run (test_suite.SchedulingTests) ... ok
+test_real_time_subset_selects_timing_requirements_profiles_and_history (test_suite.SchedulingTests) ... ok
+test_recorded_durations_reads_case_seconds (test_suite.SchedulingTests) ... ok
+test_session_budget_fits_the_jack_server_cap (test_suite.SchedulingTests) ... ok
+test_launches_are_spaced_by_the_interval (test_suite.StartGateTests) ... ok
+test_runner_is_excluded_from_the_tested_tree (test_suite.TreeIdentityTests) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 5.181s
+
+OK
+{"suite": "/tmp/tmpfec9u1ky/suite-output/suite.json", "passed": false, "complete": false, "failed_case_runs": 0, "failed_layer_items": []}

@@ -1,0 +1,9 @@
+test_all_scene_plan_selectors_use_the_exact_six_image_scope_contract (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... ok
+test_captured_foundation_result_matches_scoped_selector_not_legacy_sha (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... ok
+test_only_two_selector_metadata_maps_changed_in_musical_plan (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... ok
+test_wrong_baseline_page_or_atlas_is_rejected_by_actual_adapter (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.660s
+
+OK

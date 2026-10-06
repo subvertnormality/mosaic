@@ -1,0 +1,1244 @@
+{
+  "identity": "Engineering v2 exact source review: final YAML documentary deltas, unchanged Lua/miniature model, Doctor Start beat native backend separately qualified",
+  "read_on": "2026-10-03",
+  "head": "69df623e06efd6721e1cc53e961a1dd845d2a48c",
+  "baseline_inventory": "history/source-inventory-56a9ba239526e7d01e757ea5e89f7ca5ad45e019.json",
+  "files": {
+    "lib/m_grid.lua": {
+      "sha256": "3abd77f7360344bb799525614e0b6f74d8b8a3c2ec696ee6776dfe2cf2691386",
+      "meaning": "Read-only post-owner grid outcome/hold/disconnect notifications added; original64callbacks retain their existing branches. Hold targeting includes Note/Velocity page offsets. Native UI ownership regressions and held-step tests are separate evidence."
+    },
+    "lib/pages/channel_edit_page/channel_edit_clock_controls.lua": {
+      "sha256": "4c76afe36435bf16b161e528414684beb5bfbe0b711c35f8cf5dae15ce9b8132",
+      "meaning": "Added stable read-only field metadata matching existing Rate/Feel/Swing/Shuffle control order; existing setters/navigation retained."
+    },
+    "lib/pages/channel_edit_page/channel_edit_history.lua": {
+      "sha256": "4c83ed3ea18e21bc11151a95315fb39a39c17aaedca19884edb70166a15dbdd3",
+      "meaning": "Added stable history descriptor IDs; existing undo/redo owner and event history retained."
+    },
+    "lib/pages/channel_edit_page/channel_edit_masks.lua": {
+      "sha256": "020dcc2693ec16e6f49b204bdd8d34d471eacaeb1388cacb42d3e4e8d13f8627",
+      "meaning": "Added stable descriptor IDs/short labels/sentinels for eight existing mask controls; no old handler/body changes."
+    },
+    "lib/pages/channel_edit_page/channel_edit_navigation.lua": {
+      "sha256": "158fc5a26c68e0ac6da4b86e5e2b848d803bcfb5f6828b6719ce0be9f92ea54e",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page.lua": {
+      "sha256": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+      "meaning": "Old grid three-state branch replaced by shared request; Fragments prevents legacy note/velocity/length cycle and direct pattern assignment; shared validated editor transaction keeps retained legacy settings."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui.lua": {
+      "sha256": "5ecd63e70de462af8e94db01143835dc5bebb3f9f0cf3b445c2c252bc4cc2228",
+      "meaning": "Added adapter_owners exposing existing objects/selectors/controller instances; no copied ownership or repeated input handlers."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua": {
+      "sha256": "f5e2035cec55c7ab568802dd595e6b9ac779384305c70de4fb2551a64a96dde6",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua": {
+      "sha256": "4d29c5aafc271747c7f46abc25465e5d25a69954cdc3806ae481efb3c706b3ae",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_parameters.lua": {
+      "sha256": "435fe1841f32efc06cf8a09bfadddb9ca8c366f106d02d5b0105f69cf6a911f5",
+      "meaning": "Added ten-slot stable IDs, Device metadata and current control accessor. Existing trig locks, assignment and setters retain ownership."
+    },
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": {
+      "sha256": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+      "meaning": "Merge root Strategy read-only; selector action reload discards unapplied draft before route; parameter editing/apply owner remains transactional."
+    },
+    "lib/pages/note_edit_page/note_edit_page.lua": {
+      "sha256": "d4658759c6ee301ebf301f2219d22b4a00f4f0b12405f367800896199e5b03b0",
+      "meaning": "Added read-only step offset accessor for held fader targeting; unchanged registered inputs."
+    },
+    "lib/pages/note_edit_page/note_edit_page_ui.lua": {
+      "sha256": "d9718ed3b571d9338a81dc088d6113dd15066b93071ead60cdc619778d726e9f",
+      "meaning": "Added accessor exposing existing grid viewer; unchanged next/previous channel owner."
+    },
+    "lib/pages/pages.lua": {
+      "sha256": "6eb2f6d17847e28bd2b3aed2210820bb24b05c5696b1f368ed8555e5c1574e8f",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/scale_edit_page/scale_edit_page.lua": {
+      "sha256": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/scale_edit_page/scale_edit_page_ui.lua": {
+      "sha256": "7c6c6a50a187cc42d8526c927478718ca1bbbd96906adf993f368cc7e2ab3e23",
+      "meaning": "Added accessor exposing existing page/viewer/selectors for live adapters. No old control body changes."
+    },
+    "lib/pages/song_edit_page/song_edit_page.lua": {
+      "sha256": "006fcbbaf05510e0050f9b20a0335b0b9b0303d0b21e6230f5d392fafce0c2c6",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/song_edit_page/song_edit_page_ui.lua": {
+      "sha256": "9228f92c828d709f6f26e63e323018bcacbb9b2bdab7d1b6c8105048edad6755",
+      "meaning": "Added accessor exposing existing song/feel selectors and grid viewer. No old control body changes."
+    },
+    "lib/pages/trigger_edit_page/trigger_edit_page.lua": {
+      "sha256": "45f3b115dafc5d4977d9d0a754620042c1bb7f52e30ab76bf8a28bea26d8dde9",
+      "meaning": "Extracted algorithm_selected helper retains exact Doctor enter/leave guards, refresh, tooltip and paint preview. Grid callback invokes it once; screen select_algorithm uses same path. Added read-only generator/paint/Doctor accessors; record/paint/window callbacks retain original ordered source."
+    },
+    "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua": {
+      "sha256": "a87469638ecbdfce617a5749bb4ff6091b2f9b38fa5431d467d288b3ad87e78d",
+      "meaning": "Added accessor exposing existing Trig selector/pages/viewer; existing grid-view navigation retained."
+    },
+    "lib/pages/velocity_edit_page/velocity_edit_page.lua": {
+      "sha256": "c295bd601c907350f57252eedf6f2a3d7567e0277e78f17676ea74a68e99d207",
+      "meaning": "Added read-only fader page step offset; original registered handlers retained."
+    },
+    "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua": {
+      "sha256": "d06d53fbb4f6e47e7882a75cd53608927ad5a2b012836f63a50959da958fc3dd",
+      "meaning": "Added accessor exposing existing viewer; existing next/previous navigation retained."
+    },
+    "lib/ui.lua": {
+      "sha256": "64870c05585fa02615d1ad6e6e95963153b47687ae4ef1155fd1f2864da5ab28",
+      "meaning": "Live ui_live installation/redraw/encoder/key dispatch replaces legacy page multiplexing; owner adapters and router preserve existing documented musical setters. This is intended live UI architecture, not unchanged draw-only extraction."
+    },
+    "lib/rhythm_doctor/ui_adapter.lua": {
+      "sha256": "ec03592c858ecefb448f9c649e3f711ecefee3539ffd68717a0eb0bcad9eb06e",
+      "meaning": "Record sends confirmed manual_bpm/input_source, never draft. Existing setup draft K2 cancellation/K3 commit remains owner."
+    },
+    "lib/application_parameters.lua": {
+      "sha256": "19de1bd408a242305b20975629facee550b571d157315e12575a74114d4f6290",
+      "meaning": "Native group count39->41 accounts for Screen separator and UI motion option Off/On defaultOn. Existing native parameter IDs retained."
+    },
+    "mosaic.lua": {
+      "sha256": "2a7434f627ec5f7e20ce6a974757683f8f52286d3b9857cbba83f044b1d5ddca",
+      "meaning": "Live redraw/native return detection plus input-preserving splash, idle-autosave resets for norns keys/encoders and bounded GC lifecycle replace historical drawing. Musical clock owners remain independent; historical snapshot is preserved rather than claiming this startup/UI was unchanged."
+    },
+    "README.md": {
+      "sha256": "a06498ce330b93157ddbf3c853a528d9c87a3c61d8e7f9cd5c4af543945bb5c9",
+      "meaning": "User-approved thin overview of the authoritative interactive YAML manual; does not supply or fabricate the125 historical MAN heading slices."
+    },
+    "cheat_sheet.html": {
+      "sha256": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+      "meaning": "Regenerated quick reference from current authoritative YAML. Reviewed delta adds accurate Doctor stopped transport, ADC Stereo/L/R routing, lane selection, retained recording Alignment/regular confirmed-tempo Manual Start beat controls; n.b. parent replay source context retained. Generated reference does not qualify pending native evidence."
+    },
+    "lib/ui_live.lua": {
+      "sha256": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+      "meaning": "Owner route reconciliation before redraw fixes asynchronous Doctor stale route; C09-to-M02 return re-enters accepted editor; vertical footers show actions and confirmation ownership. Header beat sampled read-only through ui_mini.beat: actualplaying lattice quarter pulses or selectedstopped norns musicalclock; no owner/input/musical mutations introduced."
+    },
+    "lib/ui_render.lua": {
+      "sha256": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+      "meaning": "Approved shared vertical renderer plus literal top-right miniatures. Existing Masks/Trig Params cells, semantic labels, exact values, title/scope/row/footer coordinates retained; decoration yields to full title. New report suppresses old corner mark only when miniature draws, and excludes unsafe fallback."
+    },
+    "lib/ui_spec_data.lua": {
+      "sha256": "65b26e5ba2838bbce449d213191d9d881cf11be6c1e1d69c45e9544bae34932e",
+      "meaning": "Generated current declarative registry preserves approved UI controls/routes and selected overflow marquee, adding documentary header miniature bounds/timing. Byte-identical to2444-test full Lua green snapshot."
+    },
+    "lib/rhythm_doctor/file_mailbox.lua": {
+      "sha256": "c580c40f9b562da4c471b19297a5968dcce0d5207a9f6ae2a3dd52720f256b89",
+      "meaning": "Earlier independent path-budget fix accepts absolute long native roots, validates actual direction/temp filenames against4095 bytes; not modified by current Doctor option task."
+    },
+    "lib/ui_adapters/read_only.lua": {
+      "sha256": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+      "meaning": "C09 presents requested Strategy plus Active/Pending/Boundary/Request; owned attribute rows are readonly inactive with SAVED value; editable selector shares same owner."
+    },
+    "lib/musical_merge/strategy.lua": {
+      "sha256": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+      "meaning": "Five shared choices; accepted versus requested cursor, queued boundary, Foundation trig-only/Fragments all-attribute ownership; grid wrapping and screen clamping; refused anchor maps NEEDS ANCHOR without accepted state mutation."
+    },
+    "lib/rhythm_doctor/runtime.lua": {
+      "sha256": "c19a660b367c6f260837a10f619f3975acda1d3e9deb7a89689a9136669f51ca",
+      "meaning": "Validate mode, integer BPM40\u2013240 and stereo/left/right before acquisition; lease snapshot restored on refusal; Manual alignment BPM/origin0 unless explicit correction, Auto detector estimates; project load clears capture settings."
+    },
+    "lib/rhythm_doctor/capture_controller.lua": {
+      "sha256": "8d9fba25659f80f021fcb1633205f252d6658c3858b110dbb612cc5b14496203",
+      "meaning": "Preflight validates input source and sends it to recorder; source does not stay UI-only."
+    },
+    "lib/rhythm_doctor/softcut_recorder.lua": {
+      "sha256": "46e36d8d4bdbef00e43323ff460c2940b9f351e99b75a9bcd807724bfdd1ba95",
+      "meaning": "Stereo ADC1/ADC2 separately; left/right duplicate selected ADC into both buffers; invalid source rejected before arm/acquisition."
+    },
+    "lib/ui_motion.lua": {
+      "sha256": "e8710327daa4a73dec1f7cf45e508fbbf2d581d493e2dc43a65765ec905241d6",
+      "meaning": "Existing motion controls, selected overflow marquee, overview glide and input responsiveness retained. Motion Off clears header beat to acceptedrest; drawn miniature suppresses old tile overlay. Reuses existing12Hz art worker, without changing musical clock scheduling or engine state."
+    },
+    "lib/ui_mini.lua": {
+      "sha256": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+      "meaning": "Read-only validated musical beat sampler and literal raster renderer. Playing onlyactual(lattice.transport-1)/ppqn; stoppedselectedclockgetbeats withpositive finite tempo; Off/error/NaN/missingdata rest, no wallclock/RNG/start/notes. Geometryy0..7 atmaxx96..127 orscope-safe121..127, entireicon yields when titleownsroom. Eightposes over2/4quarter loops; integer groupedfills match independently frozen744 authored bitmaps."
+    },
+    "lib/ui_mini_atlas.lua": {
+      "sha256": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+      "meaning": "Literal approved93 page-specific scenes, eight poses each, exactv2 design4b1623dd\u2026; all restingpixels/widths unchanged fromacceptedv1. No generatedID encoding, application values, clock calls or random data; nativeX routes absent. Registered includes dormant/retired variants, not93 publicreachability claim."
+    },
+    "AGENTS.md": {
+      "sha256": "2b45240fc4350c6de0c47bf8c442728783f8bf6f497eeaf482df29113ca2bd5b",
+      "meaning": "User-chosen YAML manual authority and generated quick-reference policy; existing red-green/native bothlane evidence requirements preserved."
+    },
+    "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md": {
+      "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+      "meaning": "Exact finalized full UI reference archivedbefore README overview replacement;125 historical MAN slices retain theiridentity againstactualcomplete frozen text. This archival reference does not replace authoritativecurrentYAML."
+    },
+    "manual/legacy/cheat-sheet-before-authority-6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed.html": {
+      "sha256": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+      "meaning": "Exact finalized full cheat reference archived before YAML-generated quick reference; historical77 rows/aliases remain reviewable, separately fromcurrentgenerated reference."
+    },
+    "manual/book.yaml": {
+      "sha256": "422934c09a9aa2c4b97e223c4d9aaeb4144b30d6be5fa2e43c77461cf43a95cc",
+      "meaning": "Current user-authoritative authored YAML manual index/routes and discoverability. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/course.yaml": {
+      "sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
+      "meaning": "Current user-authoritative authored YAML course structure and explicit teaching handoffs. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: Rate /1 realizes the unchanged intended one-bar 16-step phrase, and the C-major comparison is listened to before preparing Root D; Apply procedure and38 stage IDs remain intact. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate. Explicit authored Song-length correction: use the public grid Global length gesture to persist Length16 for each section before listening to the unchanged two one-bar sections. This is a corrected teaching procedure, not a post-build metadata exception."
+    },
+    "manual/player-routes.yaml": {
+      "sha256": "5e60341faa3c1c354a330d4996d0cfe0b6dc943965038adc1bc1d5e150286b3e",
+      "meaning": "Current user-authoritative authored YAML manual index/routes and discoverability. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/cookbook.yaml": {
+      "sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/first-sound-capture.yaml": {
+      "sha256": "7c6e8a21329ed7a8ef7a308704048d269ab8648d7a73cf734559fecbe53cb85a",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/masks.yaml": {
+      "sha256": "4ee9691bf731f934bba71c86f62c91ec0eab1526f3991449641de0cff70b9a0d",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-channel.yaml": {
+      "sha256": "bef96579573279e6244596a40e721bebdcfff7b81ac3b800f6a84d002188aafd",
+      "meaning": "Reviewed semantic delta: n.b. parent voice-picker replay links three existing scenes/catalogue and explicit subsequent K3/real audio acceptance; no mod-installation, post-apply persistence or hardware routing claim. YAML reformatting elsewhere preserves semantic content."
+    },
+    "manual/features/reference-developer.yaml": {
+      "sha256": "662cbaea52f8a3235054957316ba7f2384288cfa1133abe4bc8a59385aab9fa1",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-learn.yaml": {
+      "sha256": "ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: distinguish four researched/pinned voices from three recorded voices; Emplaitress has no recording because MiPlaits is unavailable. No substituted audio claim. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate."
+    },
+    "manual/features/reference-locks.yaml": {
+      "sha256": "89283a2cd968ebb3b99a15c001d708f8d83181b6b47bc869a09971faf430b8c5",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-musical.yaml": {
+      "sha256": "721510468370160a264122c7b8357f60d5d4d0eb6a84ffda4f3f707ddf3c115f",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-options.yaml": {
+      "sha256": "85f3f0a06727e60d9bf856091567bd6cc940db8c1ab4f724cbf03134124d9d39",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-pattern.yaml": {
+      "sha256": "03d48e5fb111831c11818bfd52c77c8db1b5242871af3aad363e245b1c9a3c14",
+      "meaning": "Reviewed semantic delta: stopped capture/setup/Alignment versus playing READY browse/paint; exact BD/SD/CYM public lane inputs; Stereo versus duplicated L/R ADC; retained recording K3 reanalysis, explicit BPM/origin precedence and regular confirmed-tempo Manual Start beat grid. Intended contract separate from preserved historical native bindings; no new case identity. Reviewed metadata-only extension: rhythm-doctor appends canonical tools/doctor-qualification-inventory.json source and pending MA-DOCTOR-MANUAL-START-BEAT-001 specialized qualification; all prose, controls, historical review/source evidence and global behaviour-case IDs exactly retained. Registration does not promote native acceptance."
+    },
+    "manual/features/reference-scale.yaml": {
+      "sha256": "68f5389591462169e8b448e900c7f9e07317fbf4e7d6de6fc66077229bfa98d3",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: pressing grid transport cancels the unapplied Scale draft, matching ordinary production press/save behavior. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate."
+    },
+    "manual/features/reference-song.yaml": {
+      "sha256": "93b05f827f6a732a22bd22fefe0fafc68d43c7070f80640d1954bf7cb76397eb",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-workflow.yaml": {
+      "sha256": "305fe19ee02d961f73d64ed359a29957b8aff31d7e220d194e1d11bcce58406a",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: one-bar Rate /1 and baseline-first C listening before the D-major pending draft; final Apply and exact intended MIDI comparisons remain intact. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate. Explicit authored Song-length correction: use the public grid Global length gesture to persist Length16 for each section before listening to the unchanged two one-bar sections. This is a corrected teaching procedure, not a post-build metadata exception."
+    },
+    "manual/features/scenes-doctor-scenes.yaml": {
+      "sha256": "09bab660df9b7b98bafaa03f7a432dc85602d1c16f7ea0e3ab0b85ced1117359",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-player-routes.yaml": {
+      "sha256": "4d091759c5e5eec9d7fe2a258686619e6674b46e57aa80457a62de7f24c94fba",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-device-scenes.yaml": {
+      "sha256": "55287f34c2c71bc83a673315f66e84a1ef0330622c246b1a9a57e73a30d22557",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-lock-scenes.yaml": {
+      "sha256": "d461fffea62843e1830a4e1f055ce6a8e6725f706521c83d452a9b544edd0438",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-modulation-scenes.yaml": {
+      "sha256": "78d23ca37a52e428b14ed3f17e36f2e6bdc50b6d0fc187eac48b710776686b41",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-musical-scenes.yaml": {
+      "sha256": "329924c793b75426499bb3b9e7314205b99060639deab346c206eb5c3a22b830",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-navigation-scenes.yaml": {
+      "sha256": "286fcb39d96d00ff3eece722032974281e53ff201204632d3c72c737aca55d02",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-nested-scenes.yaml": {
+      "sha256": "cba4e49eca7296e7e5971deeb657c26d5f2e42e964b4e5741b8a7a3e43630a23",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-option-scenes.yaml": {
+      "sha256": "ec3ad6994e9fa60bda204360e71d96e5a28a2b9d962c0fdd3e7b14f5d08d7da3",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-parameter-scenes.yaml": {
+      "sha256": "602bb4059b30757dceb2f585e38d7b321a39c0850d233d4106b0a44e19871579",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-polymeter-scenes.yaml": {
+      "sha256": "d664e3aec6044b10d812b67f5ea595efd2b0350a959aca6682c7949edb768475",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-reason-swing-scenes.yaml": {
+      "sha256": "13c5d9aa6258b561caa9955fe00ebd475aef3d575ddd942cb7ec48d5be8e9666",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-record-scenes.yaml": {
+      "sha256": "60675dfec90321f9699510bd5f5aab0b43299325c796f6b5bad8d00d5a33f517",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-remaining-scenes.yaml": {
+      "sha256": "8c7ecaa953f52f9c5a79a0fdf4e1eef0234f222af2514320c077225aacef4a94",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-scenes.yaml": {
+      "sha256": "039b06d5a7ee9b3cea172782781257da6be7bd0f9d7f9592d99c617378e9f1fc",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-stop-scenes.yaml": {
+      "sha256": "b5c29d403a37963f3ce6dd6d4da7b6acd17ec079a789b993b26595b7f36ed496",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-vertical-list-scenes.yaml": {
+      "sha256": "49d96e0793e08b323b9f314bc559b4b3d5734654d61ad83b1485a82b39f69c85",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-workflow-scenes.yaml": {
+      "sha256": "a2f58bc29bd6eb9624b33ac7b1bb73ba07c4f6042bc6c1a2a7867e09ede20b30",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/tutorials.yaml": {
+      "sha256": "4a900da83f50145373889b69174ff352fc8652d703b77e5f7cf9bb7bb79ab343",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: set Clock Rate /1 for the already-intended one-bar16step lesson; no musical period or stage identity change. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate."
+    }
+  },
+  "new_manual_sections": {
+    "Screen Options": {
+      "id": "MAN.CURRENT.001",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "X04"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "UI Motion": {
+      "id": "MAN.CURRENT.002",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "X04"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Fragments": {
+      "id": "MAN.CURRENT.003",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M15"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Interlock": {
+      "id": "MAN.CURRENT.004",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M16"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Structure": {
+      "id": "MAN.CURRENT.005",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M18"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Result and Reason": {
+      "id": "MAN.CURRENT.006",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M05",
+        "M14"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    }
+  },
+  "branch_transformations": {
+    "channel_edit_page.08.trig_merge_skip": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "2590888be2e04904203d1af1536a1c969bef9bc4d7428e648a6f07056a8f7d42",
+      "replacement": "        local next_strategy = merge_strategy.step(target_song, target_channel, 1, true)\n        channel_edit_page.set_merge_strategy(next_strategy)\n        channel_edit_page_ui.show_merge_gesture(\"STRATEGY \" .. string.upper(next_strategy))",
+      "meaning": "Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.08.trig_merge_only": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "ac2a2777519d4432cdad2bdb3f76add502e44b2b0e07038906eae1aee0734f7e",
+      "replacement": "        local next_strategy = merge_strategy.step(target_song, target_channel, 1, true)\n        channel_edit_page.set_merge_strategy(next_strategy)\n        channel_edit_page_ui.show_merge_gesture(\"STRATEGY \" .. string.upper(next_strategy))",
+      "meaning": "Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.08.trig_merge_all": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "450f2262f6d50e8bdb76ad6546d0ee93a04eef021f45905b19835153690eab1d",
+      "replacement": "        local next_strategy = merge_strategy.step(target_song, target_channel, 1, true)\n        channel_edit_page.set_merge_strategy(next_strategy)\n        channel_edit_page_ui.show_merge_gesture(\"STRATEGY \" .. string.upper(next_strategy))",
+      "meaning": "Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.14.note_pattern_priority": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "344abef03205ec531f07a6a5341ae8d191fe4f4f0f8d3c40e41b286c1b3e69c1",
+      "replacement": "        if note_merge_mode_button:is_this(x, y) then\n          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, \"note\") then\n            tooltip:show(\"FRAGMENTS NOTE INACTIVE\"); return\n          end\n          target_channel.note_merge_mode = \"pattern_number_\" .. x2\n          note_merge_mode_button:set_state(4)\n          target_song.active = true\n          pattern.update_working_patterns(target_song, {[target_channel.number] = true})\n          tooltip:show(\n            \"Note merge mode pattern \" ..x2\n          )\n          shape_in_use(target_channel, \"note\")\n        end",
+      "meaning": "Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.14.velocity_pattern_priority": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "be104c1c67d190eaa1a9aca0bdb1aa1d2baac1ff3b0f30f32c877bbc0a88ba55",
+      "replacement": "        if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then\n          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, \"velocity\") then\n            tooltip:show(\"FRAGMENTS VELOCITY INACTIVE\"); return\n          end\n          target_channel.velocity_merge_mode = \"pattern_number_\" .. x2\n          velocity_merge_mode_button:set_state(4)\n          target_song.active = true\n          pattern.update_working_patterns(target_song, {[target_channel.number] = true})\n          tooltip:show(\n            \"Velocity merge mode pattern \" ..x2\n          )\n          shape_in_use(target_channel, \"velocity\")\n        end",
+      "meaning": "Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.14.length_pattern_priority": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "57f0e92747d0c1b945bd506c7f252b9e9e7d9bf930e522985bec995229be90bb",
+      "replacement": "        if length_merge_mode_button:is_this(x, y) and is_key1_down then\n          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, \"length\") then\n            tooltip:show(\"FRAGMENTS LENGTH INACTIVE\"); return\n          end\n          target_channel.length_merge_mode = \"pattern_number_\" .. x2\n          length_merge_mode_button:set_state(4)\n          target_song.active = true\n          pattern.update_working_patterns(target_song, {[target_channel.number] = true})\n          tooltip:show(\n            \"Length merge mode pattern \" ..x2\n          )\n          shape_in_use(target_channel, \"length\")\n        end",
+      "meaning": "Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    }
+  },
+  "manual_source": {
+    "file": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+    "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+    "meaning": "Keep125 historical MAN IDs bound to exactly frozen full UI README8e93de46 after user-approved thin-overview migration. Current intendedmanualauthority isbook/course/features YAML; no historicalheading is fabricated fromoverview."
+  },
+  "explicit_authored_review": {
+    "scope": "Root-approved exact authored rate/voice/harmony corrections; not a metadata-only mutation waiver",
+    "read_on": "2026-10-04",
+    "receipts": [
+      {
+        "kind": "rate",
+        "receipt": "manual/evidence/course-rate-one-bar-correction/authored-receipt.json",
+        "sha256": "52486ae820f34c6c4b76557e5b5323a9c3ff601312e206e025a51826849d80e5",
+        "files": [
+          "manual/course.yaml",
+          "manual/features/tutorials.yaml",
+          "manual/features/reference-workflow.yaml",
+          "manual/scene-plans-course.yaml"
+        ]
+      },
+      {
+        "kind": "voice",
+        "receipt": "manual/evidence/voice-scope-prose-correction/receipt.json",
+        "sha256": "a69ee42057e8fe4f1087c85c1cdd38700db1910d66a3f49bbb41a7b4b802a37d",
+        "files": [
+          "manual/features/reference-learn.yaml",
+          "manual/VOICES.md"
+        ]
+      },
+      {
+        "kind": "harmony",
+        "receipt": "manual/evidence/course-harmony-baseline-correction/authored-receipt.json",
+        "sha256": "be8d6c82b678b854acafabf58a21778474b5e866d8d8a1070181d11d0204d311",
+        "files": [
+          "manual/course.yaml",
+          "manual/features/reference-workflow.yaml",
+          "manual/scene-plans-course.yaml",
+          "manual/features/reference-scale.yaml"
+        ]
+      },
+      {
+        "kind": "song-length-prose",
+        "receipt": "manual/evidence/course-song-length-correction/authored-receipt.json",
+        "sha256": "50847953575b8daa721d9a9721cf91df38d67c49d78a53c1c53627dec96aed82",
+        "files": [
+          "manual/course.yaml",
+          "manual/features/reference-workflow.yaml",
+          "manual/scene-plans-course.yaml"
+        ]
+      },
+      {
+        "kind": "song-length-pictured-feedback",
+        "receipt": "manual/evidence/course-song-length-pictured-feedback/authored-receipt.json",
+        "sha256": "e1bbefd6f0faf766b3181f9565bf1c9aa73811176d62471490e882cc0f571057",
+        "files": [
+          "manual/scene-plans-course.yaml"
+        ]
+      },
+      {
+        "kind": "engineering-checkpoint-count",
+        "receipt": "manual/evidence/course-song-length-pictured-feedback/build-count-receipt.json",
+        "sha256": "cf58a3137490a7c7574766e0e78184675d133a2b50276d6fc32f16004a71f75e",
+        "files": [
+          "manual/BUILD.md"
+        ]
+      }
+    ],
+    "separate_nonledger_files": {
+      "manual/scene-plans-course.yaml": {
+        "sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+        "review_chain": [
+          {
+            "kind": "rate",
+            "before_sha256": "a401daf93e4fd19a5b222b89f488394417e653f4ec999df1cb753bfa360c703c",
+            "after_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+            "before_archive": "manual/evidence/course-rate-one-bar-correction/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-rate-one-bar-correction/after/manual/scene-plans-course.yaml"
+          },
+          {
+            "kind": "harmony",
+            "before_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+            "after_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
+            "before_archive": "manual/evidence/course-harmony-baseline-correction/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-harmony-baseline-correction/after/manual/scene-plans-course.yaml"
+          },
+          {
+            "kind": "song-length-prose",
+            "before_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
+            "after_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5",
+            "before_archive": "manual/evidence/course-song-length-correction/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-song-length-correction/after/manual/scene-plans-course.yaml"
+          },
+          {
+            "kind": "song-length-pictured-feedback",
+            "before_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5",
+            "after_sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+            "before_archive": "manual/evidence/course-song-length-pictured-feedback/before/manual/scene-plans-course.yaml",
+            "after_archive": "manual/evidence/course-song-length-pictured-feedback/after/manual/scene-plans-course.yaml"
+          }
+        ]
+      },
+      "manual/VOICES.md": {
+        "sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+        "review_chain": [
+          {
+            "kind": "voice",
+            "before_sha256": "bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc",
+            "after_sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+            "before_archive": "manual/evidence/voice-scope-prose-correction/bb861947944c4076916d2787047e1c8a53340f37b671f7bb70ca80115393f9dc-VOICES.md",
+            "after_archive": "manual/evidence/voice-scope-prose-correction/d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574-VOICES.md"
+          }
+        ]
+      },
+      "manual/BUILD.md": {
+        "sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
+        "review_chain": [
+          {
+            "kind": "engineering-checkpoint-count",
+            "before_sha256": "ddb32c65f05abe4c604791f9b635156921f4df5bb1125e941d5b30fd5c9f375f",
+            "after_sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
+            "before_archive": "manual/evidence/course-song-length-pictured-feedback/objects/ddb32c65f05abe4c604791f9b635156921f4df5bb1125e941d5b30fd5c9f375f",
+            "after_archive": "manual/evidence/course-song-length-pictured-feedback/objects/81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089"
+          }
+        ]
+      }
+    },
+    "qualification_closure": {
+      "status": "whole-course-qualified-awaiting-root-live-apply",
+      "passed": true,
+      "combined_independent_audit": {
+        "path": "docs/testing/manual-publication-new-kinds/course-whole-both-lanes-qualified-independent-audit.json",
+        "sha256": "cd4cdba09b6ab7f16131f61469bc73867a5cd8934a6d55688be036aadb45c5c2"
+      },
+      "lanes": [
+        {
+          "clock_mode": "real-time",
+          "report": "/home/andy/mosaic-manual-runs/604bf5d6d5d24822b5d9f41eb7f0b958/reference-scenes.json",
+          "report_sha256": "9a5c53fb862462407dffcfd0dc700bf8f768d686ad5a22844cceff8e11e1edbf",
+          "audit": {
+            "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/course-604-whole-real-audit.json",
+            "sha256": "49379a4055a8d905ae1e58720926bc28e379bd436bdd77c0ba863e9223beada0"
+          },
+          "continuous_case": "/home/andy/mosaic-manual-runs/604bf5d6d5d24822b5d9f41eb7f0b958/M-MANUAL-COURSE-001-base-midi",
+          "identity_sha256": "7cfa7b50513dc1b8d43fffd497857a923a30258f349b0dc6218465f6a79fca1d",
+          "cleanup_sha256": "2f3981e07cd286ee370d7f5f43bb0ac5049201039d83e71c775b421541806f94",
+          "start_source_identity": {
+            "path": "/home/andy/mosaic-manual-runs/604bf5d6d5d24822b5d9f41eb7f0b958/start-source-identity.json",
+            "sha256": "833cf9973de30b15df32ac32a677525a3aa508780248b4b768c1974c18530ea6"
+          },
+          "frozen_source_maps": {
+            "plan_files": {
+              "manual/scene-plans-course.yaml": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad"
+            },
+            "case_sources": {
+              "tests/behaviour/recorded_note_page_key_held.py": "3a669fe481651b9efdb099a5572743c89cae4d42a91d75cb4eec46b6e26b7b95",
+              "tests/behaviour/midi_mapping.py": "414e486d69bebdae241b42516f8d5d24749baf2036880d284ff2f523f57b51ca",
+              "tests/behaviour/device_configs.py": "42a51a5381572dc27b350b3a81795636dc8d9b7ce4b78ce662851d8972e97c91",
+              "tests/behaviour/syntakt_pedal_params.py": "60843586dc8022d6816693bd50f1bb61b11cef67fd467690439e4de319d2e013",
+              "tests/behaviour/perf_dense.py": "64756ef7d736e9dabe276ec3375866b3931a154d75658c8409b07a6d7e62ca90",
+              "tests/behaviour/nb_device_switch_slots.py": "b194e71e177330c3f8d49148447ce3886b169bea282bbb0d97ee686c7a2ee8ef",
+              "tests/behaviour/recorded_same_key_sources.py": "e27a7ee827a270569ba7ee06774c0d9edbb08b1049d0582f971e45fff3a43b97",
+              "tests/behaviour/shuffle_mixed_channels.py": "2bbc720b3756cb690a88173f7c484db83553246bc0ff38aa9bff7ebbb553aa03",
+              "tests/behaviour/internal_clock_stall_phase.py": "89787a60223409fe8fccea87cfcaa0f5562e68b691bcb938d31a1766b2ff47ce",
+              "tests/behaviour/length_persistence.py": "bd5c12fea2c1740ab15cc3ed92e973507c7074e8db9c9282189dd3ced290ab4d",
+              "tests/behaviour/note_accounting.py": "19eecf0b386f8724ebf42509a9a5b4749bdefb3f46d2a5630e851292dcb27189",
+              "tests/behaviour/probe_overhead.py": "f04196fe94b73c506ab62104c8f382e0d7a99499a71421a1a2c9aedf91d9f654",
+              "tests/behaviour/real_norns.py": "d11c30047837dcfe4b0da0b0e04bb56249a1eb25fb151f5fdb4628b66f8ccf11",
+              "tests/behaviour/pcm_oracle.py": "f5ce34d7701440e964f26d984db21c2bc07a968d12195cb7dd242c31f9e55d15",
+              "tests/behaviour/merge_strategy_routes.py": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+              "tests/behaviour/external_clock_backlog.py": "430acd32267de059890510e917703c7701ba61f2b5f681fc84f3b441aca93940",
+              "tests/behaviour/slide_reset_mid_step.py": "fda3f4aa67065ae5b179d50d11e61bb5df60d4c3406c1ee96bfd9a7e94f57596",
+              "tests/behaviour/manual_authority.py": "4d6a82b694080662e97026526830c663f54d882084f4ef8f7533c4c0bddf6a24",
+              "tests/behaviour/project_dialog_lifecycle.py": "9e62cd4337db98c120554c06d3070c4bddce3fee3e97561c39d4ba704c49329f",
+              "tests/behaviour/shuffle_first_bar_record.py": "95f12dff06cf1b97a025fae47133af59d21367c38deec4a11b0c1b3c2c4a62b0",
+              "tests/behaviour/ast_digest.py": "d13bd4f9a03e53c68013fc4a1783436ed696be5f3be3732ec20cc553f4fb6f5f",
+              "tests/behaviour/master_multi_output.py": "c1955b9500760807e9022a9d41e91794028292eb4a1d50bed191e160f6ecb79f",
+              "tests/behaviour/keyboard_repeated_note_on.py": "54ad7a2bc85fb6a69a9c680f16acc6f5376c8531223df65ec8bd15d6d36f46ab",
+              "tests/behaviour/swing_window_oracle.py": "965626183e8d983b208073b123b4dff6d1e6214f67e8b4c9bd32e7714ea604eb",
+              "tests/behaviour/heldout_workloads.py": "f23014b4298a7d736cd4644f72ecbf91112d6da694f343e8961e04268b2de532",
+              "tests/behaviour/pentatonic_options.py": "35c49c9eb217da2823c0f20003373f000db3d7da9d252351378cb1ec9178d658",
+              "tests/behaviour/hardware_performance.py": "b796e3f9f1714a8204c2c321e0a0de6b28a2c8048885f26ff36bb743370deaed",
+              "tests/behaviour/perf_input.py": "75ef3a2f38b305b93d4ccadd93fdb2a5025e07f4b4b1a1144934e07d5a72250d",
+              "tests/behaviour/master_clock.py": "aa103aad78f575892f2e77e1464a1f054ede624566a3f4e7f182b61b8445041d",
+              "tests/behaviour/gesture_release_order.py": "a1e7b25fadd89231cf0efbfdce743cb2d03fd0f3ddec47496e4fad40b5e4edd9",
+              "tests/behaviour/elektron_program_changes.py": "99cfa4908e9ea0410c773100921829fd6b4c73f1989fc682f36f84562c7e3f7b",
+              "tests/behaviour/memory_step_undo.py": "2060c817e7a5106f332c63304d557801b44cf66544d79b41279a82c400e98ca4",
+              "tests/behaviour/named_save.py": "b33985da225a1a58e910337e1969bf037b7ef8b7a14e40c1434042de64dec3d8",
+              "tests/behaviour/sinfonion_software.py": "a5e77cecc194dcb4fc111a09d5b3bc135ad6e935bd56c88e72a8454a8cf3e0f3",
+              "tests/behaviour/jf_oracle.py": "2d0e51a2fb9702cd43344826b727c94e6ee287ca9492dc595cde68c4c30dd2ab",
+              "tests/behaviour/ui.py": "aceab55b5a763ad6d27fa65c34cbb76666261967c859ad47ff60198833fcccd8",
+              "tests/behaviour/song_queue_stop.py": "0de016acea9a03d3ecf0d8a877aa3fcffeb4598ad5bdeeab67f7a80f22b6287d",
+              "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+              "tests/behaviour/mask_clearing.py": "e6810645c6377ff9bc1c170cc23ce8bb12165688cc38a96348e9855069604081",
+              "tests/behaviour/composition_workflow.py": "ba36a0ffced49a3d701cee0a90e1f9434b4eedea307462bb0a227efaab64aacc",
+              "tests/behaviour/scale_lock_precedence.py": "9b3600718b7fb0c2d435314bfad9fe7ba10e3ae9f30f4ed484eb9ca07594e426",
+              "tests/behaviour/numeric_merging.py": "624b448f9c7a2e5ea4139ce3c11eb32192f686a6eafdd4837f1a23b1580d1b40",
+              "tests/behaviour/ui_baseline_import.py": "2f0e620d48cd40bb4623f0e6f84de12a2e6963ad0b5694892a4050b6e982c430",
+              "tests/behaviour/frame_oracle.py": "44c29d29034eb5060501be628394331312a9e23d41bdc45903e48983b5059b1e",
+              "tests/behaviour/memory_chord_three_held.py": "83cdfc9aa839020f18155363d7910f66b849a5841fc986302ccc02d279bf2c15",
+              "tests/behaviour/song_slot_copy.py": "720643a72a244fe08dc46a25b04a1b0ac7af9b98a15ed1af66cc98315ea34b63",
+              "tests/behaviour/modulation_interactions.py": "82a04d2f071e7ad3fc7edccfb9030583ecf3b8dbe1b7d49294fbdffc069f62a1",
+              "tests/behaviour/patch_params_batch.py": "95a626901d4a7dfd2c34be1b4bad68980fe993046dd5ccf8a540c21237333d05",
+              "tests/behaviour/pending_note_mask_song_transition.py": "94c35a4506a52bf24685a133fb0e41981b970b0a735d8e61711b195da2e93869",
+              "tests/behaviour/scale_lock_order.py": "7c47d41ff57e0d061b3f40899ed30b5bfba8a8792ea6b86b18a1d6fb9e01fcff",
+              "tests/behaviour/scale_memory.py": "892a9c3019c1760c44753ba47b8b5a5e351e68c04857a16fdd305ca1a340dee1",
+              "tests/behaviour/reconcile_manual.py": "39370ecddb8ba1554f3944e7ac156bc6ef6caf2613a3e111d6c8f5ca300b04c8",
+              "tests/behaviour/song_tempo.py": "f846d3d76f11ece3321cedc0637643b7853151f3e42839c9179ac6ff2b41dc62",
+              "tests/behaviour/range_workflows.py": "aa9d7b6cfc08f728b62fc0d0cb088dd4821e45d3a5623893278b55259c96e3e8",
+              "tests/behaviour/rhythm_doctor_correction.py": "1a88a126bcd80cc41f13a4677fad3094f6cd0ce56adb836d1a42355859be3ffb",
+              "tests/behaviour/dense_workload.py": "b5bd87a34159f3e444b01b65a36e638a73588772b762e63a492ca1a1a8f193bb",
+              "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+              "tests/behaviour/recording_song_transition.py": "f1d2cf328f9409a3a0df75f390fe2bce4012bd5c8188c5984661ba8a0d2ce9e3",
+              "tests/behaviour/record_placement_oracle.py": "677094663c4d96dcefce541ab641a297108d576c2f4864445778939e53cc9d96",
+              "tests/behaviour/ui_migration_gate.py": "8c847f6f415b5c44ad0c4cbfcb09406fbf0af181f2b63ae48147a462ea790481",
+              "tests/behaviour/memory_truncate.py": "906821102a447ef6e92ed7d0b2d6f21223db32052e2b78842911f6e4681d09a7",
+              "tests/behaviour/reset_pending_voice.py": "a35562be3875d059669c8bd7cec54056afd6395f8775310d13af3c5e2f79f341",
+              "tests/behaviour/memory_lock_slide_undo.py": "a320e3dc4ce6840adb19c655fe9fdfcf0f5b7e46412a54781cc8484e158aeb4d",
+              "tests/behaviour/forwarded_clock.py": "67cfb119b1ed3c8a2adb5512a36d823b809ba2e5e5edff42c4e75d2dcaea24c0",
+              "tests/behaviour/perf_calibration_emulator.py": "3fd1f45a937c0d30ddb9526a556428d8292f715090def76bf6d76eb99abb42db",
+              "tests/behaviour/startup_transport.py": "f14bd1694a7b08b060ecfc978f426aef03d95d42e4bac14d81909cddc3e7b9cf",
+              "tests/behaviour/hardware_driver.py": "cfda02270fc4d38c6c778495a171c27343b1dff17af11ae47bde101b2af4c347",
+              "tests/behaviour/patch_params_batch2.py": "c73514c0773304f6b0b5fa5dfbbe8a39afd44848337affa1bf73506b12d6bb18",
+              "tests/behaviour/repeated_external_start.py": "daac4eacc11bf90e0198e3328b8eda35dc4706c26b68a76e531f6b47b5daf5d4",
+              "tests/behaviour/manual_audio_contract.py": "bdd365c71f44c14dcd675bc347084f6f4e75b44770866db4575994c1c7248d1b",
+              "tests/behaviour/memory_persistence.py": "58e101310115d065c83490b92edadded6e5a86e16b1fd0fb78717d5df1bf6389",
+              "tests/behaviour/scale_slot_matrix.py": "3cb7c680d18d21e4a04ff8ebeba0333cf1f53172af18e6ed8acbe956e2af082c",
+              "tests/behaviour/panic_transport.py": "a43bcd93cdf6a6f968c2cdb0f38129f4bdb65e3dffbd7a9eaa0dfab48c1e5e95",
+              "tests/behaviour/memory_held_velocity.py": "d0fd22b2c3f71bbb9a3dad4592d6ad2b5e41717f37548141beb364f0b45abc01",
+              "tests/behaviour/driver.py": "924cf69c0c32ce6e06657587585ed893ba72ce5af5ee288a5a3b4fbf81e47007",
+              "tests/behaviour/merge_lock_random.py": "d4f23ebe209fcab641d406f38a9352d99d4e01af965003d865359186e7da2469",
+              "tests/behaviour/keyboard_options.py": "8729beb8963427700496bbe65cae173d9b1ff6cec450b618443dfa72e9e5169c",
+              "tests/behaviour/lock_lead_time.py": "42746727578ed0a764388b5547adfdb9e2c0169a262dc8c8c36c46199df2d99b",
+              "tests/behaviour/trigless_slide_clock.py": "811c7aeab8529a17e6020108b3ac4898ba1804087e6000fcb6b46b138c3ee084",
+              "tests/behaviour/parameter_lock_domain.py": "d3532c2dd127000702c3596b81eeca5a153c7a4201b4b56c22ab863b722a8e69",
+              "tests/behaviour/pitch_lock_isolation.py": "b24252a70d55038872fabaf787f0f0c119ebb4745d8d0ac409cfcb457e4de0bb",
+              "tests/behaviour/merge_workloads.py": "c235f12704683436e6801907c0e6a811b5f801a9281929a6369d96efb610e7a0",
+              "tests/behaviour/fractional_deadlines.py": "b818e5527932f4cfcce068f2a62e824fd99dd9d7d40e0ea9706a8655235149f3",
+              "tests/behaviour/panic_hotplug_trace.py": "d9f2efb877974f3f85fa2862985859cf586151908623ffb5d80a58aeae6eed5e",
+              "tests/behaviour/rhythm_doctor.py": "4aa0d9308280d5159a8a4c00f2d66d6f1e1062fe50accb8dcae12da10318c338",
+              "tests/behaviour/persisted_digest.py": "7ef0baf1759005e3f68ef83d65d0830d9689f654df90248469374514b4e0da19",
+              "tests/behaviour/held_mask_extra_key.py": "488bb2fdcdfa430f735e0179696e120ff622b7e0b8b1003bb6451ab241a944f4",
+              "tests/behaviour/cases.py": "71fe6596753fb9b12b419d6e1ad45acc2c908bcfecf597084c65d3458531ea6c",
+              "tests/behaviour/external_start_phase.py": "cfb6d7b95d41105e0126e6e13f8432bf4ad41461e9b7bc991af05000f599c91c",
+              "tests/behaviour/midi_cc_page_return.py": "af12125868191d293467c553d338ccf42b536a91fe8d95305d711928c8d820ec",
+              "tests/behaviour/persisted_fixture.py": "f506aaef78fe252e194b3ebc7f4422cb3a32445c632298c7730a4188ef115fff",
+              "tests/behaviour/perf_storage.py": "7b4bbba6d9f5d7bdf9a70e77e080b2db3a3a4529828fa78cd9f7a4e6f11f2ce0",
+              "tests/behaviour/midi_mapping_held_step.py": "c8cbe13b1f94a01c49f881159b07c537a45fd9978b057025c2b2c66acd17d3cf",
+              "tests/behaviour/shuffle_field_inheritance.py": "f9728457e28773fae8a3b3abe82bdad3beef946c5c7b48bdf0e2a700243a17a6",
+              "tests/behaviour/fractional_deadline_contract.py": "c7b3a84381875dea4fba2d3ab63f39c202b64eb82a74c2a52e720260c9e4834b",
+              "tests/behaviour/memory_new_project.py": "a1122c59f9017e5b88747d86976d6ce4d02195cfda0e83c8c12e0a38bdfa88ee",
+              "tests/behaviour/mask_quantisation.py": "0076ef46b799200598d85bb493fe7b03d64f2d7f5301c62f8af305ba6fda0cf9",
+              "tests/behaviour/song_length_sparse.py": "a689aec664e28f62ab00aff0f5eb5a07dcf47252aa79949b64e613d4bfdb23be",
+              "tests/behaviour/pulse_probe.py": "9a95889a81637969fd9fc6379fe85ab1e7b54f0a77b6e70dcb775779be059d34",
+              "tests/behaviour/lead_timing_oracle.py": "b2a74e81434560c9791aeb30aa77cef378fdfedd4a140241abedbf3e591db16a",
+              "tests/behaviour/swing_reset_mid_step.py": "e702d5bc9aa134252434e13d4a408f8df15920c7b5a1f44205471add3381ed7f",
+              "tests/behaviour/memory_redo_chord_merge.py": "5b3ca6ad0cae59d8d25aca3e66b391bd8c8d371723fb0e0c1c69580496c2f7e1",
+              "tests/behaviour/mask_gestures.py": "48a81641e1c6eceacd139cb23c1af603d109d02ce33f609be6c25fafbf0d7572",
+              "tests/behaviour/external_clock_faults.py": "29119e923c615f0621236dc023b5d61a0708f686398e26a7cc434c421bd74adf",
+              "tests/behaviour/range_rejection.py": "21a1de552b798b833aa86f4e21909ab59ea30c746ae3fb4d241523bfe6179e99",
+              "tests/behaviour/memory_truncate_isolation.py": "1f95c43193703945858a62ae6df3b8f856f25cfe5048734911c73935d9b0bcf4",
+              "tests/behaviour/channel_scale_display.py": "5cff3416b83bb7372d511108cc679fc50e6908c8b1c9a276b5180304a5f0969a",
+              "tests/behaviour/recording_lifetimes.py": "4c32c736a790572e19021cd11ec0a9abb25634f834f441573a0c48bea51c4f74",
+              "tests/behaviour/harmony_merge_workflow.py": "f77417ba05971236729bf68e9c26b259889c13c1ea324cbab6854e6c2eb4fe1e",
+              "tests/behaviour/external_cold_start.py": "bfe4e7c0ea8be73a47b6b1d617c89d6844e3a40d52c71625c064d243c6d22687",
+              "tests/behaviour/random_note_domains.py": "e3c72a7a6d939a2c3ec54d80bb8b76e634bb982dbc5092e926ce86f696ab1ad0",
+              "tests/behaviour/elektron_two_ports.py": "0a8803093c471d335b59b66aee80d8945e196b74c3d73a0a91c0a925d474db32",
+              "tests/behaviour/perf_provenance.py": "5d0c4e755e3e14a56fd0bde045d355cf0ee1b0be80c11e6e1e06afc2c7242638",
+              "tests/behaviour/midi_window.py": "2868b6531f303c59947224ab67ed5a1ed202b0f59e3343e3a6b14c32f08d5ced",
+              "tests/behaviour/merge_extension_acceptance.py": "8b3a65ca6eca4b39d89091477caee0f9bae38e2c419a60416835dabdc7b2bc46",
+              "tests/behaviour/ui_migration_drill.py": "dbe38cc48729d5f75d70a35059f04d1dd52ed3f0260b3e69b7bfe0b065da1247",
+              "tests/behaviour/perf_overload.py": "c0690590e0a955dbad934fa7cbd0c232711712dde7cc5e59f1ac28bdf8cc88fa",
+              "tests/behaviour/oracle_contract.py": "3c6d1f6d191272756de6afc53955e573bbb4c59914d276999a30286048ec93df",
+              "tests/behaviour/memory_scale_lock_display.py": "b1fce159032c3ce0439e80c801ce9c2b9cae915c8516f6c7fd8ee8706c5c9c14",
+              "tests/behaviour/editor_hold_evidence.py": "ce8039b6d048b2ea3a7b9be319ace5dff7b0be555bb98a7a24f87cba45248887",
+              "tests/behaviour/scale_cache.py": "2927e8c63ade7e23251d739b3c25257e4a4d73155f6d253a3ff5a25f5f8c4610",
+              "tests/behaviour/perf_campaign.py": "9c9ad64946b9d6df6dac24d7c848103ca7ef6dd15dc31bf07afc6bcbcb523b4a",
+              "tests/behaviour/external_clock_long.py": "3b8709806db9ec26fd60900ae207391aca7c3eecdbfc5fe7e163830b14241d5d",
+              "tests/behaviour/persisted_ranges.py": "061ebc91aec32f8a6f99c6f21f07c7761c17c8c6f23379350286d1df2019f01b",
+              "tests/behaviour/persisted_fixture_builder.py": "ae63184e1a9b87c0f10ee0f87c10a7a90be14de97c6b8e157bf5ddc0059c6d12",
+              "tests/behaviour/ui_layer_guard.py": "ccc5c2662e091c39a787228f10ec53f4dedb8f4420c674eba5f211144dcef14e",
+              "tests/behaviour/rhythm_doctor_surface.py": "84d1d5930f42af20cfa5aeda14de0f3c5d0604b40d2d29251de55c9ef0a7a247",
+              "tests/behaviour/mask_off_probe.py": "e8b90e52ec3c025752c40bb52155faf940ad3db552553848ac914372a7f625c5",
+              "tests/behaviour/repeat.py": "6efe472cf0494d6814032207dd0acd7a7079e3ad38b300147ca8c7a87d569779",
+              "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+              "tests/behaviour/nb_chord_acceleration_lock.py": "0848df96b70c7039676468943ec1af884714bf4e8211a8b0830ea7a679ef9151",
+              "tests/behaviour/duration_witness.py": "050023d2ab7302ab8a9b76b8dd4c5a5513f4dc357b675200073691a9ce98a17b",
+              "tests/behaviour/trig_parameter_interactions.py": "b27808f66704012ef5483f5c79c83309408403c835077c46d9c236ed35fcfab7",
+              "tests/behaviour/patch_params.py": "0751816be6c8743e18d204440f40157bc306f2b33da2db0d1e182474ba15d512",
+              "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+              "tests/behaviour/shuffle_inheritance.py": "7bc819ea9ad4763241541725029d00fce88d8bc369eaee20a1e6ee3521363009",
+              "tests/behaviour/step_slides.py": "0d75e79b172c9473c11397b147f3140c9e5b7e8430a8fb4b4b4150b3d4e6ba28",
+              "tests/behaviour/nb_param_lock.py": "4f3fe905e406906ffe8ef8a1becaea0c9a56a1c4ecc057e9afef02e2d9a36a8e",
+              "tests/behaviour/pattern_boundary_edit.py": "b67eeda6e2b269cadf9454abebbd0f6c5c5effe92b32d54110fc55568a1dcd40",
+              "tests/behaviour/shuffle_matrix.py": "3e42c66f590740ba37bf438854bbb42824c0bfa28b2015a260060e9d3aa52729",
+              "tests/behaviour/trig_note_merge.py": "da87a47ba596c9ded16cc094ce5bfb7dd35225cd1791698d79597f62710606fb",
+              "tests/behaviour/song_mode_flow.py": "11a37ba4f789d8343196484513763bb8df0b7a25224f83a1d4768441e4894ee8",
+              "tests/behaviour/ui_map.py": "8fb570618c8076b9f0ef1073f7599e170933ba108ad15fc486730af16116685f",
+              "tests/behaviour/contract/navigation_matrix.py": "f5bc3544521180a699305b0d9621fda2b91035a80e90e1be1164e1faae565f42",
+              "tests/behaviour/contract/autosave_failure.py": "5fbc3fa20cbf86767e0806cc1834706ef4f5183554b839962768a33b41d3bf17",
+              "tests/behaviour/contract/harmony_workflows.py": "ed84440427318606bd626bc72648fdb6a6a1e67458ed3c93c4c4456a0f4ae007",
+              "tests/behaviour/contract/device_configs.py": "0efef0d8510e2c7f3ee897af0c2d849997187a6a743f47142185f4e63e4e22df",
+              "tests/behaviour/contract/syntakt_pedal_params.py": "d35e68c9a79d4875dcf135778898d5f4536b3598b8fee4ae4f02845ebd183435",
+              "tests/behaviour/contract/persisted_range_rejection.py": "bc6e7bd63d0beb55c0d774a163d66b47038aa8de6cd7a74a5462d3e1a4220dfa",
+              "tests/behaviour/contract/nb_device_switch_slots.py": "8484aae3e34b97d0bdfa285bd81f97ff2074702f1bb446a7e34d6330dba04acb",
+              "tests/behaviour/contract/rhythm_doctor_options.py": "baf935a163066dfb81f6160c5137ff6c695b0937fa71f11d24c47768cfdd761d",
+              "tests/behaviour/contract/master_multi_output.py": "98d8b518cb37d5b6020c19f535a8b41c719e99c15c52cd9154d951aa4d502b48",
+              "tests/behaviour/contract/strum_reset_continuity.py": "6a81cf3fb0dc6c2e1f4f59d7fdd15a4b7288a1d09f1db6c477824fb526aa0ed3",
+              "tests/behaviour/contract/rhythm_doctor_start_beat.py": "695f7b3254a246b87d0e011d9435e1b4ceb3cd145cc450c1746bc74f54670763",
+              "tests/behaviour/contract/master_clock.py": "ebc4a7a90144dcc0162e75da7dd0de853d159a8d6b24bc697ed8d2909d39b190",
+              "tests/behaviour/contract/rhythm_doctor_capture_options.py": "7d531bb90162d68901de3ac6d91bc049cf8997e4e9530ea7d5799abb8e7783ff",
+              "tests/behaviour/contract/patch_matrix.py": "3ea1f1b0f653deff94ff2edc997bbc06dc395861cb2be3829ed202e42abfc8df",
+              "tests/behaviour/contract/lock_lead_clock_matrix.py": "4f3c41da810c529095f9d0eb5c0a10624394978e78cc7521f21e17bd89207040",
+              "tests/behaviour/contract/panic_hotplug.py": "2770f089941484b6b4869346afaf5fa76ad6e49b9e3d96cf624e52fb1db1ac24",
+              "tests/behaviour/contract/stop_safety.py": "7dc16e27be60abf4b8e8919359e272c9dd94b19a239a91d51749277d0513c929",
+              "tests/behaviour/contract/merge_extensions.py": "2ae2777fbb8907e0f10ffb49e74d47d24b5cd09fe8fdc44b2ebc48ffcc38e2ac",
+              "tests/behaviour/contract/numeric_merging.py": "28077393a6142baf4fa44681b9a731c8d7357271cc1111b4285e29f15f0cdbad",
+              "tests/behaviour/contract/recording_lock_song.py": "51ed189406c46d3c179efac1c5722b7c3b2eec491d28c5aef5374f9c9e9c12a4",
+              "tests/behaviour/contract/performance_visuals.py": "ed55400afd2873c35a7032a4cec0ce16bd2ca391fd7b10ec1ce32fa3d36d8a87",
+              "tests/behaviour/contract/dashboard_channel_select.py": "25c51925e8ee2b9cc9b333c29138e6bfd1538c3951acd49b57e69ca792a7992a",
+              "tests/behaviour/contract/dial_off_display.py": "df19b74c87819321bab3a66c340e23bed3e55f5d273f5d7182499015d3b2d74e",
+              "tests/behaviour/contract/tooltips.py": "6e2e8170ccd6e479e54692f5f9165738cf5dadcd19cde6ea6e1d95d7cfbf7832",
+              "tests/behaviour/contract/chord_shapes.py": "f3e2efcbfa6ebeb6dc47f34f9233de2f79886c9a5fa71bf0e2447cad4f8cbf0f",
+              "tests/behaviour/contract/playhead_feedback.py": "76d75a111faeacc237b9327907842d74bf4c3368b19db5eb26f992a4b071a991",
+              "tests/behaviour/contract/song_length_domain.py": "abde87af4d99655f03bba3ac0a2bcddd7c99a8dd677d588e55aee8498a1417b8",
+              "tests/behaviour/contract/song_divisions.py": "c9ec5e4eed3edc64939d4425847d6d6d8d6bd76586a628163bbee67905712c8b",
+              "tests/behaviour/contract/song_tempo.py": "7c411d311e36492954208bb520e977cdafc724ee386814a16d2abd80fda3e886",
+              "tests/behaviour/contract/parameter_divisions.py": "8f2941da10d9835d12fc31c73a55d5073f65e314f14c582b4f77b356ea62d674",
+              "tests/behaviour/contract/panic_navigation.py": "25d838987484c4df293fa1c425c45738cd86c80c7672ed3edf6eea5433e8b8b2",
+              "tests/behaviour/contract/external_started_handoff.py": "e932e64f083f62c810ab5bc76aa2a8aecec6a1160d6214006f9950313d4ccde6",
+              "tests/behaviour/contract/slide_capacity.py": "fd8951ff3b4dcf37c466aaade19e27f4c65e077158967b9056a906858b601dfd",
+              "tests/behaviour/contract/unreadable_device_config.py": "356c4fef5f397cfa52de9c7af46ab36ec4355d8a8690928faa6d42666ac5f900",
+              "tests/behaviour/contract/ui_readability.py": "a2e2dbfe0623566a5bb35b842d3e3781f7ad6807ec4c8f3af5cbc65d0ab34d45",
+              "tests/behaviour/contract/memory_lock_slide_undo.py": "838523ade8930fbc247d016a43d1d4caeacfe11b77665003b15bc332f5c55661",
+              "tests/behaviour/contract/forwarded_clock.py": "218540a500e81ee29c19c1f3223cd22884ebce3be371f1803eb2f3630ca82881",
+              "tests/behaviour/contract/chord_mask_start_x.py": "a1adce57ca6d82c22c4651c9c2048187f83a4638a72a35a4f0cc260214e866d2",
+              "tests/behaviour/contract/endurance.py": "046e05ee3ba4d8acdee768426cff1d9cb73ae5b6bc23e6290cf79b535f3156a0",
+              "tests/behaviour/contract/fast_acquisition.py": "b7fdc0be7a16b254bde4197570b0eeabfb9a7034467392cb536db5331e52f6bb",
+              "tests/behaviour/contract/foundation_workflow.py": "1fe0b023d69fca4d9cac99129ac3bdcfd7aeac044bfede13fe1c149dcaadc138",
+              "tests/behaviour/contract/song_repetitions.py": "312208560681a873173967e378080035b535b818218beb9b06274d4002a7bbe0",
+              "tests/behaviour/contract/tooltip_autosave.py": "12a5ffdc6a7eb4575ed871975259b20fc60080d36ee1e177dfcc63e356e94f5c",
+              "tests/behaviour/contract/repeated_external_start.py": "5b3ed77a820b611eeed805a01119094cf266f5051a20180eaa74e4f6fb6aff6f",
+              "tests/behaviour/contract/paint_race.py": "85b38e77c5a9386d5471ef0bb1525a82162b89abcc4012ffc12f6af40e8889bf",
+              "tests/behaviour/contract/output_cases.py": "dfe839a661a61d35ea7e9b91d8c6f78981b95231fa6060c367c1807ec70bd038",
+              "tests/behaviour/contract/keyboard_chord_after_stop.py": "ce045206139c4d8beb8b7b431a403557b711140f98e53029728870856f94c068",
+              "tests/behaviour/contract/lock_lead_time.py": "30e1ca9d7c31b73776dfa8e876c43163505a199d126240e99b13688d7112ecf1",
+              "tests/behaviour/contract/harmony_merge_visual.py": "0f9b3aa105dfb0ab3870bba938bbdc52e9d3c461bcc76c93f93fc068615f277f",
+              "tests/behaviour/contract/parameter_lock_domain.py": "5844510254726b40a77055243506f73d8f9628f4f42fcb8f143537f4b9970f11",
+              "tests/behaviour/contract/live_ui.py": "198451e59d97eb64305ecf4aa37557a39802b49dbed52d081673234efce7fdd7",
+              "tests/behaviour/contract/live_ui_feedback.py": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d",
+              "tests/behaviour/contract/autosave_idle.py": "44eb061b86f2fd6f7e9a7c67eaef850fedcab6c3e30f90ef15642935ccf409da",
+              "tests/behaviour/contract/recording_stop_safety.py": "927f649794929dae532f45a18f58d632767f01529b1a9b1e1394efc077f7d7cd",
+              "tests/behaviour/contract/acquisition_stop.py": "ff9eeb4958d669a61829901e99747d781a2fee66c140f9bf3110970387006ab7",
+              "tests/behaviour/contract/inactive_note_positions.py": "ec47ba50117280fedef9ec4227a37839a99100613066d72539e6fac0da31cc12",
+              "tests/behaviour/contract/dashboard_chord_slots.py": "9b0608571f666684015a88f88ea496f42862ef56ca444a2802f23843f3754fe4",
+              "tests/behaviour/contract/grid_viewer.py": "9cbe53e37639b59cade0ae3762577c5bb82f737a43d7349542139f192c1c759b",
+              "tests/behaviour/contract/midi_mapping_targets.py": "28b35947b3a5b27239340d74a4b05c63f605fd859f490148857e20e35ff209c4",
+              "tests/behaviour/contract/live_ui_acceptance.py": "4ef870ebe836ab3ff61aa087e1fa23de455cbfeb4a4094293d9a393cb1de502c",
+              "tests/behaviour/contract/mask_gestures.py": "b97097077982777717ccafcab2c6909d483a16688a5338d75ca8e988b616abd8",
+              "tests/behaviour/contract/grid_hot_disconnect.py": "24c77a51b81ccaec245f0a3b4b24dc07c8e34e3367f98d2f57575f17d1f601a8",
+              "tests/behaviour/contract/mini_header_ui.py": "adce2c90322bfbca04992c4ec7af4738c972ece22d874fe859e8889c8c36adb2",
+              "tests/behaviour/contract/vertical_list_ui.py": "d57852494d8a96ab97752a40f88a9ef0eb05e1f35c94e708b34fa250ef8f7f26",
+              "tests/behaviour/contract/duration_assertions.py": "60ad75da10292e4edc9ef043471267d09cddc99b71450c7b6727d0a32c384472",
+              "tests/behaviour/contract/live_ui_sweep.py": "aaaa8d94691e7ed7c62168d52700a29fe617a7a51e4852ccc18787c818eb5eb3",
+              "tests/behaviour/contract/range_rejection.py": "a6c68405cf4c1d4427e3d9e5ce033aac8584d36cb9c82777c6e672a6c793794e",
+              "tests/behaviour/contract/device_picker_names.py": "3f2f6275d30f1f65219adf2a1ffd3be30d11e0abc9c21934a9cef57a07c33225",
+              "tests/behaviour/contract/mini_header_animation_ui.py": "050c7ff3deaaf4401014d148f989075ab03fcac5be050b03e4ad10f0f8ab40b8",
+              "tests/behaviour/contract/recording_lifetimes.py": "1bd242aeb06c198f43cf0202e5b2731359977c1f25b2a189cb06c0b4a4dabab5",
+              "tests/behaviour/contract/external_cold_start.py": "da513d9e8802db8074c7fb9c0cedccdedd3f4fda5e890e0e1e5da4b7eb6b4e62",
+              "tests/behaviour/contract/memory_redo_encoder_lock.py": "db8ab16bfd570356ec6cf676b6bd1d6f9d8103baeafbfebd4cfa779737df4b61",
+              "tests/behaviour/contract/oracle_contract.py": "99151ffb59f05907c7c3824c5b7f0c1a5d94668648c86fafe3037f9e38dcc34b",
+              "tests/behaviour/contract/transpose_global_live_edit.py": "f67f34f9913356e938d5dca8f0bb9692219668569b6791c0ba8f4463cd1b6bac",
+              "tests/behaviour/contract/lifecycle_cycles.py": "6072a804c8cbe8692d410d88513cf3e397a7cad17db38f97c4ab333f7e07962d",
+              "tests/behaviour/contract/__init__.py": "74e74ce15e84324afbd055b83d16470e41938f016903b34614719b2e08642fbd",
+              "tests/behaviour/contract/nb_chord_acceleration_lock.py": "2e0ef8eb2f793c60d46d12677447cfa5dc16e349009e8e241b593230cfffbdc0",
+              "tests/behaviour/contract/memory_wrap.py": "2b2a1ac3a1676c547505cb222369c6f976553a595a10ec0f7cb3fad74a781049",
+              "tests/behaviour/contract/trig_parameter_interactions.py": "2fb9b3afd0a55b2add70d602b26b7930af959d33ea02e28395783942580eb486",
+              "tests/behaviour/contract/patch_params.py": "4554b178430b51081ba3f53858b7904560b4288e19c7c7324148fcfe4143129b",
+              "tests/behaviour/contract/editor_pattern_flicker.py": "64fef174fb5c6b0866ed5130ad39c48e1bd1c95bb5ad0e2c742b0db6ca290391",
+              "tests/behaviour/contract/master_lifecycle.py": "51d3321de51560212964f0509f616c7cb04bcd64d87afa9e71560edbb4bd594b",
+              "tests/behaviour/contract/merge_strategy_ui.py": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+              "tests/behaviour/contract/nb_param_lock.py": "1047c7dcc2d5d05ba3a95d516452bbf75f232b28d431c83eccca1c495ec63e96",
+              "tests/behaviour/contract/clock_divisions.py": "e5c7ad3475358f4029a1a9c21433a5eda3dd4c2f93bd922df68a35f163eff54a",
+              "tests/behaviour/contract/continue_spp.py": "385cecc484f5a389167694a88f09cd55105c77dc5185e14c3bc8c8146516d306",
+              "tests/behaviour/ci/verify-smoke.py": "abf91e74af31c12555dd4ff1773e83da4044640d2665f7381dd7f89d89b95390",
+              "tests/behaviour/ci/run-ui-migration-drift.py": "81b1c5849cb2632ae64522e807252e3849d084cfc4ca9b910781c8f7aa4879ff",
+              "tests/behaviour/ci/verify-full.py": "26efa963d54ae6a9bd3dc2633351dbaa2171b30c2a6b19ca3d0868ac166a164d",
+              "tests/behaviour/ci/targeted-ui-migration.py": "d07566defa19b73770b7fc7851a15a77405d06363cedf7c702335fb6215a6976",
+              "tests/behaviour/ci/targeted_ui_evidence_import.py": "0b2ba19dd813d1d87402f65ad4b8871f21c453f16b84290f8aafa5c25fc2f89f",
+              "tests/behaviour/ci/select-shard.py": "ffcb2249f342d67f0e4ab85e97f51576996dc69c3f679ee1ebd11761de8bac51"
+            },
+            "capture_sources": {
+              "tools/manual_capture.py": "04755a77c44597b5d5d824f2bd11cc0edb36e1b568f5e0a02d8d512688a7bbd0",
+              "tools/manual_model.py": "22be5eaf517c5d00080c98a56638945d940eaba95a2dd6f4153364262d728f89",
+              "tools/manual_case_capture.py": "e01e02cae29c527f9ca52860e1bdf8c502f03db8c910ba216d081c73d121f61d",
+              "tools/manual_course_cases.py": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5"
+            },
+            "fixture_sources": {
+              "tests/behaviour/config/emu-midi.json": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442"
+            }
+          },
+          "installation": {
+            "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+            "sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+            "exact_native_runtime_identity": true
+          },
+          "runtime_status": "experimental-unadmitted",
+          "checkpoints": 50,
+          "musical_windows": 19,
+          "one_participant": true
+        },
+        {
+          "clock_mode": "controlled-experimental",
+          "report": "/home/andy/mosaic-manual-runs/439d9e93bfb0400e9eaaf4c1b7606cd9/reference-scenes.json",
+          "report_sha256": "90e2d766beaeca8da391389ee5dd0f1fad34d83addb135dbfdb8c73819b8ad2a",
+          "audit": {
+            "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/course-439-whole-controlled-audit.json",
+            "sha256": "a59f3c1ec5201a4b5a7872fefdf7a509e52e7aeade48b6a9b3e5a3cbc8b06209"
+          },
+          "continuous_case": "/home/andy/mosaic-manual-runs/439d9e93bfb0400e9eaaf4c1b7606cd9/M-MANUAL-COURSE-001-base-midi",
+          "identity_sha256": "a07455c8433eab01b6be951041aea28ee7586a5ea9458e5c5fbf8f49e1e44e24",
+          "cleanup_sha256": "55e19586f5a6fd732dbf438cb0e72c4fda82426370785c12c7e320dfb709c4a5",
+          "start_source_identity": {
+            "path": "/home/andy/mosaic-manual-runs/439d9e93bfb0400e9eaaf4c1b7606cd9/start-source-identity.json",
+            "sha256": "ec84337131245f4d6b2b1d2f0573ae4eaca742f8bbc2f0daf22fcacbaf3ef57c"
+          },
+          "frozen_source_maps": {
+            "plan_files": {
+              "manual/scene-plans-course.yaml": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad"
+            },
+            "case_sources": {
+              "tests/behaviour/recorded_note_page_key_held.py": "3a669fe481651b9efdb099a5572743c89cae4d42a91d75cb4eec46b6e26b7b95",
+              "tests/behaviour/midi_mapping.py": "414e486d69bebdae241b42516f8d5d24749baf2036880d284ff2f523f57b51ca",
+              "tests/behaviour/device_configs.py": "42a51a5381572dc27b350b3a81795636dc8d9b7ce4b78ce662851d8972e97c91",
+              "tests/behaviour/syntakt_pedal_params.py": "60843586dc8022d6816693bd50f1bb61b11cef67fd467690439e4de319d2e013",
+              "tests/behaviour/perf_dense.py": "64756ef7d736e9dabe276ec3375866b3931a154d75658c8409b07a6d7e62ca90",
+              "tests/behaviour/nb_device_switch_slots.py": "b194e71e177330c3f8d49148447ce3886b169bea282bbb0d97ee686c7a2ee8ef",
+              "tests/behaviour/recorded_same_key_sources.py": "e27a7ee827a270569ba7ee06774c0d9edbb08b1049d0582f971e45fff3a43b97",
+              "tests/behaviour/shuffle_mixed_channels.py": "2bbc720b3756cb690a88173f7c484db83553246bc0ff38aa9bff7ebbb553aa03",
+              "tests/behaviour/internal_clock_stall_phase.py": "89787a60223409fe8fccea87cfcaa0f5562e68b691bcb938d31a1766b2ff47ce",
+              "tests/behaviour/length_persistence.py": "bd5c12fea2c1740ab15cc3ed92e973507c7074e8db9c9282189dd3ced290ab4d",
+              "tests/behaviour/note_accounting.py": "19eecf0b386f8724ebf42509a9a5b4749bdefb3f46d2a5630e851292dcb27189",
+              "tests/behaviour/probe_overhead.py": "f04196fe94b73c506ab62104c8f382e0d7a99499a71421a1a2c9aedf91d9f654",
+              "tests/behaviour/real_norns.py": "d11c30047837dcfe4b0da0b0e04bb56249a1eb25fb151f5fdb4628b66f8ccf11",
+              "tests/behaviour/pcm_oracle.py": "f5ce34d7701440e964f26d984db21c2bc07a968d12195cb7dd242c31f9e55d15",
+              "tests/behaviour/merge_strategy_routes.py": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+              "tests/behaviour/external_clock_backlog.py": "430acd32267de059890510e917703c7701ba61f2b5f681fc84f3b441aca93940",
+              "tests/behaviour/slide_reset_mid_step.py": "fda3f4aa67065ae5b179d50d11e61bb5df60d4c3406c1ee96bfd9a7e94f57596",
+              "tests/behaviour/manual_authority.py": "4d6a82b694080662e97026526830c663f54d882084f4ef8f7533c4c0bddf6a24",
+              "tests/behaviour/project_dialog_lifecycle.py": "9e62cd4337db98c120554c06d3070c4bddce3fee3e97561c39d4ba704c49329f",
+              "tests/behaviour/shuffle_first_bar_record.py": "95f12dff06cf1b97a025fae47133af59d21367c38deec4a11b0c1b3c2c4a62b0",
+              "tests/behaviour/ast_digest.py": "d13bd4f9a03e53c68013fc4a1783436ed696be5f3be3732ec20cc553f4fb6f5f",
+              "tests/behaviour/master_multi_output.py": "c1955b9500760807e9022a9d41e91794028292eb4a1d50bed191e160f6ecb79f",
+              "tests/behaviour/keyboard_repeated_note_on.py": "54ad7a2bc85fb6a69a9c680f16acc6f5376c8531223df65ec8bd15d6d36f46ab",
+              "tests/behaviour/swing_window_oracle.py": "965626183e8d983b208073b123b4dff6d1e6214f67e8b4c9bd32e7714ea604eb",
+              "tests/behaviour/heldout_workloads.py": "f23014b4298a7d736cd4644f72ecbf91112d6da694f343e8961e04268b2de532",
+              "tests/behaviour/pentatonic_options.py": "35c49c9eb217da2823c0f20003373f000db3d7da9d252351378cb1ec9178d658",
+              "tests/behaviour/hardware_performance.py": "b796e3f9f1714a8204c2c321e0a0de6b28a2c8048885f26ff36bb743370deaed",
+              "tests/behaviour/perf_input.py": "75ef3a2f38b305b93d4ccadd93fdb2a5025e07f4b4b1a1144934e07d5a72250d",
+              "tests/behaviour/master_clock.py": "aa103aad78f575892f2e77e1464a1f054ede624566a3f4e7f182b61b8445041d",
+              "tests/behaviour/gesture_release_order.py": "a1e7b25fadd89231cf0efbfdce743cb2d03fd0f3ddec47496e4fad40b5e4edd9",
+              "tests/behaviour/elektron_program_changes.py": "99cfa4908e9ea0410c773100921829fd6b4c73f1989fc682f36f84562c7e3f7b",
+              "tests/behaviour/memory_step_undo.py": "2060c817e7a5106f332c63304d557801b44cf66544d79b41279a82c400e98ca4",
+              "tests/behaviour/named_save.py": "b33985da225a1a58e910337e1969bf037b7ef8b7a14e40c1434042de64dec3d8",
+              "tests/behaviour/sinfonion_software.py": "a5e77cecc194dcb4fc111a09d5b3bc135ad6e935bd56c88e72a8454a8cf3e0f3",
+              "tests/behaviour/jf_oracle.py": "2d0e51a2fb9702cd43344826b727c94e6ee287ca9492dc595cde68c4c30dd2ab",
+              "tests/behaviour/ui.py": "aceab55b5a763ad6d27fa65c34cbb76666261967c859ad47ff60198833fcccd8",
+              "tests/behaviour/song_queue_stop.py": "0de016acea9a03d3ecf0d8a877aa3fcffeb4598ad5bdeeab67f7a80f22b6287d",
+              "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+              "tests/behaviour/mask_clearing.py": "e6810645c6377ff9bc1c170cc23ce8bb12165688cc38a96348e9855069604081",
+              "tests/behaviour/composition_workflow.py": "ba36a0ffced49a3d701cee0a90e1f9434b4eedea307462bb0a227efaab64aacc",
+              "tests/behaviour/scale_lock_precedence.py": "9b3600718b7fb0c2d435314bfad9fe7ba10e3ae9f30f4ed484eb9ca07594e426",
+              "tests/behaviour/numeric_merging.py": "624b448f9c7a2e5ea4139ce3c11eb32192f686a6eafdd4837f1a23b1580d1b40",
+              "tests/behaviour/ui_baseline_import.py": "2f0e620d48cd40bb4623f0e6f84de12a2e6963ad0b5694892a4050b6e982c430",
+              "tests/behaviour/frame_oracle.py": "44c29d29034eb5060501be628394331312a9e23d41bdc45903e48983b5059b1e",
+              "tests/behaviour/memory_chord_three_held.py": "83cdfc9aa839020f18155363d7910f66b849a5841fc986302ccc02d279bf2c15",
+              "tests/behaviour/song_slot_copy.py": "720643a72a244fe08dc46a25b04a1b0ac7af9b98a15ed1af66cc98315ea34b63",
+              "tests/behaviour/modulation_interactions.py": "82a04d2f071e7ad3fc7edccfb9030583ecf3b8dbe1b7d49294fbdffc069f62a1",
+              "tests/behaviour/patch_params_batch.py": "95a626901d4a7dfd2c34be1b4bad68980fe993046dd5ccf8a540c21237333d05",
+              "tests/behaviour/pending_note_mask_song_transition.py": "94c35a4506a52bf24685a133fb0e41981b970b0a735d8e61711b195da2e93869",
+              "tests/behaviour/scale_lock_order.py": "7c47d41ff57e0d061b3f40899ed30b5bfba8a8792ea6b86b18a1d6fb9e01fcff",
+              "tests/behaviour/scale_memory.py": "892a9c3019c1760c44753ba47b8b5a5e351e68c04857a16fdd305ca1a340dee1",
+              "tests/behaviour/reconcile_manual.py": "39370ecddb8ba1554f3944e7ac156bc6ef6caf2613a3e111d6c8f5ca300b04c8",
+              "tests/behaviour/song_tempo.py": "f846d3d76f11ece3321cedc0637643b7853151f3e42839c9179ac6ff2b41dc62",
+              "tests/behaviour/range_workflows.py": "aa9d7b6cfc08f728b62fc0d0cb088dd4821e45d3a5623893278b55259c96e3e8",
+              "tests/behaviour/rhythm_doctor_correction.py": "1a88a126bcd80cc41f13a4677fad3094f6cd0ce56adb836d1a42355859be3ffb",
+              "tests/behaviour/dense_workload.py": "b5bd87a34159f3e444b01b65a36e638a73588772b762e63a492ca1a1a8f193bb",
+              "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+              "tests/behaviour/recording_song_transition.py": "f1d2cf328f9409a3a0df75f390fe2bce4012bd5c8188c5984661ba8a0d2ce9e3",
+              "tests/behaviour/record_placement_oracle.py": "677094663c4d96dcefce541ab641a297108d576c2f4864445778939e53cc9d96",
+              "tests/behaviour/ui_migration_gate.py": "8c847f6f415b5c44ad0c4cbfcb09406fbf0af181f2b63ae48147a462ea790481",
+              "tests/behaviour/memory_truncate.py": "906821102a447ef6e92ed7d0b2d6f21223db32052e2b78842911f6e4681d09a7",
+              "tests/behaviour/reset_pending_voice.py": "a35562be3875d059669c8bd7cec54056afd6395f8775310d13af3c5e2f79f341",
+              "tests/behaviour/memory_lock_slide_undo.py": "a320e3dc4ce6840adb19c655fe9fdfcf0f5b7e46412a54781cc8484e158aeb4d",
+              "tests/behaviour/forwarded_clock.py": "67cfb119b1ed3c8a2adb5512a36d823b809ba2e5e5edff42c4e75d2dcaea24c0",
+              "tests/behaviour/perf_calibration_emulator.py": "3fd1f45a937c0d30ddb9526a556428d8292f715090def76bf6d76eb99abb42db",
+              "tests/behaviour/startup_transport.py": "f14bd1694a7b08b060ecfc978f426aef03d95d42e4bac14d81909cddc3e7b9cf",
+              "tests/behaviour/hardware_driver.py": "cfda02270fc4d38c6c778495a171c27343b1dff17af11ae47bde101b2af4c347",
+              "tests/behaviour/patch_params_batch2.py": "c73514c0773304f6b0b5fa5dfbbe8a39afd44848337affa1bf73506b12d6bb18",
+              "tests/behaviour/repeated_external_start.py": "daac4eacc11bf90e0198e3328b8eda35dc4706c26b68a76e531f6b47b5daf5d4",
+              "tests/behaviour/manual_audio_contract.py": "bdd365c71f44c14dcd675bc347084f6f4e75b44770866db4575994c1c7248d1b",
+              "tests/behaviour/memory_persistence.py": "58e101310115d065c83490b92edadded6e5a86e16b1fd0fb78717d5df1bf6389",
+              "tests/behaviour/scale_slot_matrix.py": "3cb7c680d18d21e4a04ff8ebeba0333cf1f53172af18e6ed8acbe956e2af082c",
+              "tests/behaviour/panic_transport.py": "a43bcd93cdf6a6f968c2cdb0f38129f4bdb65e3dffbd7a9eaa0dfab48c1e5e95",
+              "tests/behaviour/memory_held_velocity.py": "d0fd22b2c3f71bbb9a3dad4592d6ad2b5e41717f37548141beb364f0b45abc01",
+              "tests/behaviour/driver.py": "924cf69c0c32ce6e06657587585ed893ba72ce5af5ee288a5a3b4fbf81e47007",
+              "tests/behaviour/merge_lock_random.py": "d4f23ebe209fcab641d406f38a9352d99d4e01af965003d865359186e7da2469",
+              "tests/behaviour/keyboard_options.py": "8729beb8963427700496bbe65cae173d9b1ff6cec450b618443dfa72e9e5169c",
+              "tests/behaviour/lock_lead_time.py": "42746727578ed0a764388b5547adfdb9e2c0169a262dc8c8c36c46199df2d99b",
+              "tests/behaviour/trigless_slide_clock.py": "811c7aeab8529a17e6020108b3ac4898ba1804087e6000fcb6b46b138c3ee084",
+              "tests/behaviour/parameter_lock_domain.py": "d3532c2dd127000702c3596b81eeca5a153c7a4201b4b56c22ab863b722a8e69",
+              "tests/behaviour/pitch_lock_isolation.py": "b24252a70d55038872fabaf787f0f0c119ebb4745d8d0ac409cfcb457e4de0bb",
+              "tests/behaviour/merge_workloads.py": "c235f12704683436e6801907c0e6a811b5f801a9281929a6369d96efb610e7a0",
+              "tests/behaviour/fractional_deadlines.py": "b818e5527932f4cfcce068f2a62e824fd99dd9d7d40e0ea9706a8655235149f3",
+              "tests/behaviour/panic_hotplug_trace.py": "d9f2efb877974f3f85fa2862985859cf586151908623ffb5d80a58aeae6eed5e",
+              "tests/behaviour/rhythm_doctor.py": "4aa0d9308280d5159a8a4c00f2d66d6f1e1062fe50accb8dcae12da10318c338",
+              "tests/behaviour/persisted_digest.py": "7ef0baf1759005e3f68ef83d65d0830d9689f654df90248469374514b4e0da19",
+              "tests/behaviour/held_mask_extra_key.py": "488bb2fdcdfa430f735e0179696e120ff622b7e0b8b1003bb6451ab241a944f4",
+              "tests/behaviour/cases.py": "71fe6596753fb9b12b419d6e1ad45acc2c908bcfecf597084c65d3458531ea6c",
+              "tests/behaviour/external_start_phase.py": "cfb6d7b95d41105e0126e6e13f8432bf4ad41461e9b7bc991af05000f599c91c",
+              "tests/behaviour/midi_cc_page_return.py": "af12125868191d293467c553d338ccf42b536a91fe8d95305d711928c8d820ec",
+              "tests/behaviour/persisted_fixture.py": "f506aaef78fe252e194b3ebc7f4422cb3a32445c632298c7730a4188ef115fff",
+              "tests/behaviour/perf_storage.py": "7b4bbba6d9f5d7bdf9a70e77e080b2db3a3a4529828fa78cd9f7a4e6f11f2ce0",
+              "tests/behaviour/midi_mapping_held_step.py": "c8cbe13b1f94a01c49f881159b07c537a45fd9978b057025c2b2c66acd17d3cf",
+              "tests/behaviour/shuffle_field_inheritance.py": "f9728457e28773fae8a3b3abe82bdad3beef946c5c7b48bdf0e2a700243a17a6",
+              "tests/behaviour/fractional_deadline_contract.py": "c7b3a84381875dea4fba2d3ab63f39c202b64eb82a74c2a52e720260c9e4834b",
+              "tests/behaviour/memory_new_project.py": "a1122c59f9017e5b88747d86976d6ce4d02195cfda0e83c8c12e0a38bdfa88ee",
+              "tests/behaviour/mask_quantisation.py": "0076ef46b799200598d85bb493fe7b03d64f2d7f5301c62f8af305ba6fda0cf9",
+              "tests/behaviour/song_length_sparse.py": "a689aec664e28f62ab00aff0f5eb5a07dcf47252aa79949b64e613d4bfdb23be",
+              "tests/behaviour/pulse_probe.py": "9a95889a81637969fd9fc6379fe85ab1e7b54f0a77b6e70dcb775779be059d34",
+              "tests/behaviour/lead_timing_oracle.py": "b2a74e81434560c9791aeb30aa77cef378fdfedd4a140241abedbf3e591db16a",
+              "tests/behaviour/swing_reset_mid_step.py": "e702d5bc9aa134252434e13d4a408f8df15920c7b5a1f44205471add3381ed7f",
+              "tests/behaviour/memory_redo_chord_merge.py": "5b3ca6ad0cae59d8d25aca3e66b391bd8c8d371723fb0e0c1c69580496c2f7e1",
+              "tests/behaviour/mask_gestures.py": "48a81641e1c6eceacd139cb23c1af603d109d02ce33f609be6c25fafbf0d7572",
+              "tests/behaviour/external_clock_faults.py": "29119e923c615f0621236dc023b5d61a0708f686398e26a7cc434c421bd74adf",
+              "tests/behaviour/range_rejection.py": "21a1de552b798b833aa86f4e21909ab59ea30c746ae3fb4d241523bfe6179e99",
+              "tests/behaviour/memory_truncate_isolation.py": "1f95c43193703945858a62ae6df3b8f856f25cfe5048734911c73935d9b0bcf4",
+              "tests/behaviour/channel_scale_display.py": "5cff3416b83bb7372d511108cc679fc50e6908c8b1c9a276b5180304a5f0969a",
+              "tests/behaviour/recording_lifetimes.py": "4c32c736a790572e19021cd11ec0a9abb25634f834f441573a0c48bea51c4f74",
+              "tests/behaviour/harmony_merge_workflow.py": "f77417ba05971236729bf68e9c26b259889c13c1ea324cbab6854e6c2eb4fe1e",
+              "tests/behaviour/external_cold_start.py": "bfe4e7c0ea8be73a47b6b1d617c89d6844e3a40d52c71625c064d243c6d22687",
+              "tests/behaviour/random_note_domains.py": "e3c72a7a6d939a2c3ec54d80bb8b76e634bb982dbc5092e926ce86f696ab1ad0",
+              "tests/behaviour/elektron_two_ports.py": "0a8803093c471d335b59b66aee80d8945e196b74c3d73a0a91c0a925d474db32",
+              "tests/behaviour/perf_provenance.py": "5d0c4e755e3e14a56fd0bde045d355cf0ee1b0be80c11e6e1e06afc2c7242638",
+              "tests/behaviour/midi_window.py": "2868b6531f303c59947224ab67ed5a1ed202b0f59e3343e3a6b14c32f08d5ced",
+              "tests/behaviour/merge_extension_acceptance.py": "8b3a65ca6eca4b39d89091477caee0f9bae38e2c419a60416835dabdc7b2bc46",
+              "tests/behaviour/ui_migration_drill.py": "dbe38cc48729d5f75d70a35059f04d1dd52ed3f0260b3e69b7bfe0b065da1247",
+              "tests/behaviour/perf_overload.py": "c0690590e0a955dbad934fa7cbd0c232711712dde7cc5e59f1ac28bdf8cc88fa",
+              "tests/behaviour/oracle_contract.py": "3c6d1f6d191272756de6afc53955e573bbb4c59914d276999a30286048ec93df",
+              "tests/behaviour/memory_scale_lock_display.py": "b1fce159032c3ce0439e80c801ce9c2b9cae915c8516f6c7fd8ee8706c5c9c14",
+              "tests/behaviour/editor_hold_evidence.py": "ce8039b6d048b2ea3a7b9be319ace5dff7b0be555bb98a7a24f87cba45248887",
+              "tests/behaviour/scale_cache.py": "2927e8c63ade7e23251d739b3c25257e4a4d73155f6d253a3ff5a25f5f8c4610",
+              "tests/behaviour/perf_campaign.py": "9c9ad64946b9d6df6dac24d7c848103ca7ef6dd15dc31bf07afc6bcbcb523b4a",
+              "tests/behaviour/external_clock_long.py": "3b8709806db9ec26fd60900ae207391aca7c3eecdbfc5fe7e163830b14241d5d",
+              "tests/behaviour/persisted_ranges.py": "061ebc91aec32f8a6f99c6f21f07c7761c17c8c6f23379350286d1df2019f01b",
+              "tests/behaviour/persisted_fixture_builder.py": "ae63184e1a9b87c0f10ee0f87c10a7a90be14de97c6b8e157bf5ddc0059c6d12",
+              "tests/behaviour/ui_layer_guard.py": "ccc5c2662e091c39a787228f10ec53f4dedb8f4420c674eba5f211144dcef14e",
+              "tests/behaviour/rhythm_doctor_surface.py": "84d1d5930f42af20cfa5aeda14de0f3c5d0604b40d2d29251de55c9ef0a7a247",
+              "tests/behaviour/mask_off_probe.py": "e8b90e52ec3c025752c40bb52155faf940ad3db552553848ac914372a7f625c5",
+              "tests/behaviour/repeat.py": "6efe472cf0494d6814032207dd0acd7a7079e3ad38b300147ca8c7a87d569779",
+              "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+              "tests/behaviour/nb_chord_acceleration_lock.py": "0848df96b70c7039676468943ec1af884714bf4e8211a8b0830ea7a679ef9151",
+              "tests/behaviour/duration_witness.py": "050023d2ab7302ab8a9b76b8dd4c5a5513f4dc357b675200073691a9ce98a17b",
+              "tests/behaviour/trig_parameter_interactions.py": "b27808f66704012ef5483f5c79c83309408403c835077c46d9c236ed35fcfab7",
+              "tests/behaviour/patch_params.py": "0751816be6c8743e18d204440f40157bc306f2b33da2db0d1e182474ba15d512",
+              "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+              "tests/behaviour/shuffle_inheritance.py": "7bc819ea9ad4763241541725029d00fce88d8bc369eaee20a1e6ee3521363009",
+              "tests/behaviour/step_slides.py": "0d75e79b172c9473c11397b147f3140c9e5b7e8430a8fb4b4b4150b3d4e6ba28",
+              "tests/behaviour/nb_param_lock.py": "4f3fe905e406906ffe8ef8a1becaea0c9a56a1c4ecc057e9afef02e2d9a36a8e",
+              "tests/behaviour/pattern_boundary_edit.py": "b67eeda6e2b269cadf9454abebbd0f6c5c5effe92b32d54110fc55568a1dcd40",
+              "tests/behaviour/shuffle_matrix.py": "3e42c66f590740ba37bf438854bbb42824c0bfa28b2015a260060e9d3aa52729",
+              "tests/behaviour/trig_note_merge.py": "da87a47ba596c9ded16cc094ce5bfb7dd35225cd1791698d79597f62710606fb",
+              "tests/behaviour/song_mode_flow.py": "11a37ba4f789d8343196484513763bb8df0b7a25224f83a1d4768441e4894ee8",
+              "tests/behaviour/ui_map.py": "8fb570618c8076b9f0ef1073f7599e170933ba108ad15fc486730af16116685f",
+              "tests/behaviour/contract/navigation_matrix.py": "f5bc3544521180a699305b0d9621fda2b91035a80e90e1be1164e1faae565f42",
+              "tests/behaviour/contract/autosave_failure.py": "5fbc3fa20cbf86767e0806cc1834706ef4f5183554b839962768a33b41d3bf17",
+              "tests/behaviour/contract/harmony_workflows.py": "ed84440427318606bd626bc72648fdb6a6a1e67458ed3c93c4c4456a0f4ae007",
+              "tests/behaviour/contract/device_configs.py": "0efef0d8510e2c7f3ee897af0c2d849997187a6a743f47142185f4e63e4e22df",
+              "tests/behaviour/contract/syntakt_pedal_params.py": "d35e68c9a79d4875dcf135778898d5f4536b3598b8fee4ae4f02845ebd183435",
+              "tests/behaviour/contract/persisted_range_rejection.py": "bc6e7bd63d0beb55c0d774a163d66b47038aa8de6cd7a74a5462d3e1a4220dfa",
+              "tests/behaviour/contract/nb_device_switch_slots.py": "8484aae3e34b97d0bdfa285bd81f97ff2074702f1bb446a7e34d6330dba04acb",
+              "tests/behaviour/contract/rhythm_doctor_options.py": "baf935a163066dfb81f6160c5137ff6c695b0937fa71f11d24c47768cfdd761d",
+              "tests/behaviour/contract/master_multi_output.py": "98d8b518cb37d5b6020c19f535a8b41c719e99c15c52cd9154d951aa4d502b48",
+              "tests/behaviour/contract/strum_reset_continuity.py": "6a81cf3fb0dc6c2e1f4f59d7fdd15a4b7288a1d09f1db6c477824fb526aa0ed3",
+              "tests/behaviour/contract/rhythm_doctor_start_beat.py": "695f7b3254a246b87d0e011d9435e1b4ceb3cd145cc450c1746bc74f54670763",
+              "tests/behaviour/contract/master_clock.py": "ebc4a7a90144dcc0162e75da7dd0de853d159a8d6b24bc697ed8d2909d39b190",
+              "tests/behaviour/contract/rhythm_doctor_capture_options.py": "7d531bb90162d68901de3ac6d91bc049cf8997e4e9530ea7d5799abb8e7783ff",
+              "tests/behaviour/contract/patch_matrix.py": "3ea1f1b0f653deff94ff2edc997bbc06dc395861cb2be3829ed202e42abfc8df",
+              "tests/behaviour/contract/lock_lead_clock_matrix.py": "4f3c41da810c529095f9d0eb5c0a10624394978e78cc7521f21e17bd89207040",
+              "tests/behaviour/contract/panic_hotplug.py": "2770f089941484b6b4869346afaf5fa76ad6e49b9e3d96cf624e52fb1db1ac24",
+              "tests/behaviour/contract/stop_safety.py": "7dc16e27be60abf4b8e8919359e272c9dd94b19a239a91d51749277d0513c929",
+              "tests/behaviour/contract/merge_extensions.py": "2ae2777fbb8907e0f10ffb49e74d47d24b5cd09fe8fdc44b2ebc48ffcc38e2ac",
+              "tests/behaviour/contract/numeric_merging.py": "28077393a6142baf4fa44681b9a731c8d7357271cc1111b4285e29f15f0cdbad",
+              "tests/behaviour/contract/recording_lock_song.py": "51ed189406c46d3c179efac1c5722b7c3b2eec491d28c5aef5374f9c9e9c12a4",
+              "tests/behaviour/contract/performance_visuals.py": "ed55400afd2873c35a7032a4cec0ce16bd2ca391fd7b10ec1ce32fa3d36d8a87",
+              "tests/behaviour/contract/dashboard_channel_select.py": "25c51925e8ee2b9cc9b333c29138e6bfd1538c3951acd49b57e69ca792a7992a",
+              "tests/behaviour/contract/dial_off_display.py": "df19b74c87819321bab3a66c340e23bed3e55f5d273f5d7182499015d3b2d74e",
+              "tests/behaviour/contract/tooltips.py": "6e2e8170ccd6e479e54692f5f9165738cf5dadcd19cde6ea6e1d95d7cfbf7832",
+              "tests/behaviour/contract/chord_shapes.py": "f3e2efcbfa6ebeb6dc47f34f9233de2f79886c9a5fa71bf0e2447cad4f8cbf0f",
+              "tests/behaviour/contract/playhead_feedback.py": "76d75a111faeacc237b9327907842d74bf4c3368b19db5eb26f992a4b071a991",
+              "tests/behaviour/contract/song_length_domain.py": "abde87af4d99655f03bba3ac0a2bcddd7c99a8dd677d588e55aee8498a1417b8",
+              "tests/behaviour/contract/song_divisions.py": "c9ec5e4eed3edc64939d4425847d6d6d8d6bd76586a628163bbee67905712c8b",
+              "tests/behaviour/contract/song_tempo.py": "7c411d311e36492954208bb520e977cdafc724ee386814a16d2abd80fda3e886",
+              "tests/behaviour/contract/parameter_divisions.py": "8f2941da10d9835d12fc31c73a55d5073f65e314f14c582b4f77b356ea62d674",
+              "tests/behaviour/contract/panic_navigation.py": "25d838987484c4df293fa1c425c45738cd86c80c7672ed3edf6eea5433e8b8b2",
+              "tests/behaviour/contract/external_started_handoff.py": "e932e64f083f62c810ab5bc76aa2a8aecec6a1160d6214006f9950313d4ccde6",
+              "tests/behaviour/contract/slide_capacity.py": "fd8951ff3b4dcf37c466aaade19e27f4c65e077158967b9056a906858b601dfd",
+              "tests/behaviour/contract/unreadable_device_config.py": "356c4fef5f397cfa52de9c7af46ab36ec4355d8a8690928faa6d42666ac5f900",
+              "tests/behaviour/contract/ui_readability.py": "a2e2dbfe0623566a5bb35b842d3e3781f7ad6807ec4c8f3af5cbc65d0ab34d45",
+              "tests/behaviour/contract/memory_lock_slide_undo.py": "838523ade8930fbc247d016a43d1d4caeacfe11b77665003b15bc332f5c55661",
+              "tests/behaviour/contract/forwarded_clock.py": "218540a500e81ee29c19c1f3223cd22884ebce3be371f1803eb2f3630ca82881",
+              "tests/behaviour/contract/chord_mask_start_x.py": "a1adce57ca6d82c22c4651c9c2048187f83a4638a72a35a4f0cc260214e866d2",
+              "tests/behaviour/contract/endurance.py": "046e05ee3ba4d8acdee768426cff1d9cb73ae5b6bc23e6290cf79b535f3156a0",
+              "tests/behaviour/contract/fast_acquisition.py": "b7fdc0be7a16b254bde4197570b0eeabfb9a7034467392cb536db5331e52f6bb",
+              "tests/behaviour/contract/foundation_workflow.py": "1fe0b023d69fca4d9cac99129ac3bdcfd7aeac044bfede13fe1c149dcaadc138",
+              "tests/behaviour/contract/song_repetitions.py": "312208560681a873173967e378080035b535b818218beb9b06274d4002a7bbe0",
+              "tests/behaviour/contract/tooltip_autosave.py": "12a5ffdc6a7eb4575ed871975259b20fc60080d36ee1e177dfcc63e356e94f5c",
+              "tests/behaviour/contract/repeated_external_start.py": "5b3ed77a820b611eeed805a01119094cf266f5051a20180eaa74e4f6fb6aff6f",
+              "tests/behaviour/contract/paint_race.py": "85b38e77c5a9386d5471ef0bb1525a82162b89abcc4012ffc12f6af40e8889bf",
+              "tests/behaviour/contract/output_cases.py": "dfe839a661a61d35ea7e9b91d8c6f78981b95231fa6060c367c1807ec70bd038",
+              "tests/behaviour/contract/keyboard_chord_after_stop.py": "ce045206139c4d8beb8b7b431a403557b711140f98e53029728870856f94c068",
+              "tests/behaviour/contract/lock_lead_time.py": "30e1ca9d7c31b73776dfa8e876c43163505a199d126240e99b13688d7112ecf1",
+              "tests/behaviour/contract/harmony_merge_visual.py": "0f9b3aa105dfb0ab3870bba938bbdc52e9d3c461bcc76c93f93fc068615f277f",
+              "tests/behaviour/contract/parameter_lock_domain.py": "5844510254726b40a77055243506f73d8f9628f4f42fcb8f143537f4b9970f11",
+              "tests/behaviour/contract/live_ui.py": "198451e59d97eb64305ecf4aa37557a39802b49dbed52d081673234efce7fdd7",
+              "tests/behaviour/contract/live_ui_feedback.py": "14113d23724130069867c159e88e0c1c9a0841cff974e92a12bdf926a209fc8d",
+              "tests/behaviour/contract/autosave_idle.py": "44eb061b86f2fd6f7e9a7c67eaef850fedcab6c3e30f90ef15642935ccf409da",
+              "tests/behaviour/contract/recording_stop_safety.py": "927f649794929dae532f45a18f58d632767f01529b1a9b1e1394efc077f7d7cd",
+              "tests/behaviour/contract/acquisition_stop.py": "ff9eeb4958d669a61829901e99747d781a2fee66c140f9bf3110970387006ab7",
+              "tests/behaviour/contract/inactive_note_positions.py": "ec47ba50117280fedef9ec4227a37839a99100613066d72539e6fac0da31cc12",
+              "tests/behaviour/contract/dashboard_chord_slots.py": "9b0608571f666684015a88f88ea496f42862ef56ca444a2802f23843f3754fe4",
+              "tests/behaviour/contract/grid_viewer.py": "9cbe53e37639b59cade0ae3762577c5bb82f737a43d7349542139f192c1c759b",
+              "tests/behaviour/contract/midi_mapping_targets.py": "28b35947b3a5b27239340d74a4b05c63f605fd859f490148857e20e35ff209c4",
+              "tests/behaviour/contract/live_ui_acceptance.py": "4ef870ebe836ab3ff61aa087e1fa23de455cbfeb4a4094293d9a393cb1de502c",
+              "tests/behaviour/contract/mask_gestures.py": "b97097077982777717ccafcab2c6909d483a16688a5338d75ca8e988b616abd8",
+              "tests/behaviour/contract/grid_hot_disconnect.py": "24c77a51b81ccaec245f0a3b4b24dc07c8e34e3367f98d2f57575f17d1f601a8",
+              "tests/behaviour/contract/mini_header_ui.py": "adce2c90322bfbca04992c4ec7af4738c972ece22d874fe859e8889c8c36adb2",
+              "tests/behaviour/contract/vertical_list_ui.py": "d57852494d8a96ab97752a40f88a9ef0eb05e1f35c94e708b34fa250ef8f7f26",
+              "tests/behaviour/contract/duration_assertions.py": "60ad75da10292e4edc9ef043471267d09cddc99b71450c7b6727d0a32c384472",
+              "tests/behaviour/contract/live_ui_sweep.py": "aaaa8d94691e7ed7c62168d52700a29fe617a7a51e4852ccc18787c818eb5eb3",
+              "tests/behaviour/contract/range_rejection.py": "a6c68405cf4c1d4427e3d9e5ce033aac8584d36cb9c82777c6e672a6c793794e",
+              "tests/behaviour/contract/device_picker_names.py": "3f2f6275d30f1f65219adf2a1ffd3be30d11e0abc9c21934a9cef57a07c33225",
+              "tests/behaviour/contract/mini_header_animation_ui.py": "050c7ff3deaaf4401014d148f989075ab03fcac5be050b03e4ad10f0f8ab40b8",
+              "tests/behaviour/contract/recording_lifetimes.py": "1bd242aeb06c198f43cf0202e5b2731359977c1f25b2a189cb06c0b4a4dabab5",
+              "tests/behaviour/contract/external_cold_start.py": "da513d9e8802db8074c7fb9c0cedccdedd3f4fda5e890e0e1e5da4b7eb6b4e62",
+              "tests/behaviour/contract/memory_redo_encoder_lock.py": "db8ab16bfd570356ec6cf676b6bd1d6f9d8103baeafbfebd4cfa779737df4b61",
+              "tests/behaviour/contract/oracle_contract.py": "99151ffb59f05907c7c3824c5b7f0c1a5d94668648c86fafe3037f9e38dcc34b",
+              "tests/behaviour/contract/transpose_global_live_edit.py": "f67f34f9913356e938d5dca8f0bb9692219668569b6791c0ba8f4463cd1b6bac",
+              "tests/behaviour/contract/lifecycle_cycles.py": "6072a804c8cbe8692d410d88513cf3e397a7cad17db38f97c4ab333f7e07962d",
+              "tests/behaviour/contract/__init__.py": "74e74ce15e84324afbd055b83d16470e41938f016903b34614719b2e08642fbd",
+              "tests/behaviour/contract/nb_chord_acceleration_lock.py": "2e0ef8eb2f793c60d46d12677447cfa5dc16e349009e8e241b593230cfffbdc0",
+              "tests/behaviour/contract/memory_wrap.py": "2b2a1ac3a1676c547505cb222369c6f976553a595a10ec0f7cb3fad74a781049",
+              "tests/behaviour/contract/trig_parameter_interactions.py": "2fb9b3afd0a55b2add70d602b26b7930af959d33ea02e28395783942580eb486",
+              "tests/behaviour/contract/patch_params.py": "4554b178430b51081ba3f53858b7904560b4288e19c7c7324148fcfe4143129b",
+              "tests/behaviour/contract/editor_pattern_flicker.py": "64fef174fb5c6b0866ed5130ad39c48e1bd1c95bb5ad0e2c742b0db6ca290391",
+              "tests/behaviour/contract/master_lifecycle.py": "51d3321de51560212964f0509f616c7cb04bcd64d87afa9e71560edbb4bd594b",
+              "tests/behaviour/contract/merge_strategy_ui.py": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+              "tests/behaviour/contract/nb_param_lock.py": "1047c7dcc2d5d05ba3a95d516452bbf75f232b28d431c83eccca1c495ec63e96",
+              "tests/behaviour/contract/clock_divisions.py": "e5c7ad3475358f4029a1a9c21433a5eda3dd4c2f93bd922df68a35f163eff54a",
+              "tests/behaviour/contract/continue_spp.py": "385cecc484f5a389167694a88f09cd55105c77dc5185e14c3bc8c8146516d306",
+              "tests/behaviour/ci/verify-smoke.py": "abf91e74af31c12555dd4ff1773e83da4044640d2665f7381dd7f89d89b95390",
+              "tests/behaviour/ci/run-ui-migration-drift.py": "81b1c5849cb2632ae64522e807252e3849d084cfc4ca9b910781c8f7aa4879ff",
+              "tests/behaviour/ci/verify-full.py": "26efa963d54ae6a9bd3dc2633351dbaa2171b30c2a6b19ca3d0868ac166a164d",
+              "tests/behaviour/ci/targeted-ui-migration.py": "d07566defa19b73770b7fc7851a15a77405d06363cedf7c702335fb6215a6976",
+              "tests/behaviour/ci/targeted_ui_evidence_import.py": "0b2ba19dd813d1d87402f65ad4b8871f21c453f16b84290f8aafa5c25fc2f89f",
+              "tests/behaviour/ci/select-shard.py": "ffcb2249f342d67f0e4ab85e97f51576996dc69c3f679ee1ebd11761de8bac51"
+            },
+            "capture_sources": {
+              "tools/manual_capture.py": "04755a77c44597b5d5d824f2bd11cc0edb36e1b568f5e0a02d8d512688a7bbd0",
+              "tools/manual_model.py": "22be5eaf517c5d00080c98a56638945d940eaba95a2dd6f4153364262d728f89",
+              "tools/manual_case_capture.py": "e01e02cae29c527f9ca52860e1bdf8c502f03db8c910ba216d081c73d121f61d",
+              "tools/manual_course_cases.py": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5"
+            },
+            "fixture_sources": {
+              "tests/behaviour/config/emu-midi.json": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442"
+            }
+          },
+          "installation": {
+            "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+            "sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+            "exact_native_runtime_identity": true
+          },
+          "runtime_status": "experimental-unadmitted",
+          "checkpoints": 50,
+          "musical_windows": 19,
+          "one_participant": true
+        }
+      ],
+      "course_fixture_regressions": [
+        {
+          "path": "docs/testing/mini-header-ui/course-rate-fixture-rgr.json",
+          "sha256": "de17fbdc148f20c41cdb0458a1d8e595cae17b659f30f8a979da727126133bb4"
+        },
+        {
+          "path": "docs/testing/mini-header-ui/course-octave-route-fixture-rgr.json",
+          "sha256": "ada7c5a48433d5a5872d85120f984a7aea7cb65c0591a527133c528b1d352cb1"
+        },
+        {
+          "path": "docs/testing/mini-header-ui/course-scale-draft-order-fixture-rgr.json",
+          "sha256": "2f931b64832e0566ced64465a596cc68cf41d070c23491ddab5b1f8c65f3158b"
+        },
+        {
+          "path": "docs/testing/mini-header-ui/course-song-route-fixture-rgr.json",
+          "sha256": "62ca3bebbbba5ed9f9a068af007a12b60d6c3dd8de65e5f60023b379282682d7"
+        },
+        {
+          "path": "docs/testing/mini-header-ui/course-song-length-fixture-rgr.json",
+          "sha256": "577faf0c69d3f095b875810e183d893c58cd1a295b964532945f2601e54666cb"
+        }
+      ],
+      "auditor_red_green": {
+        "path": "docs/testing/manual-publication-new-kinds/course-dashboard-length-source-freeze.json",
+        "sha256": "cbf578ef6acbb6d5473746d7639700db961b3433e7ab1b88a58b74e574b88030"
+      },
+      "builder_gate": {
+        "application": {
+          "path": "manual/evidence/build-stage-gate/application-receipt.json",
+          "sha256": "f8595237aaf7bb035d368338c33290602692c0b70e10d3384d020059e9d76620"
+        },
+        "plan_comparison": {
+          "path": "manual/evidence/build-stage-gate/plan-comparison-receipt.json",
+          "sha256": "ad86d207ae345721ef0bb85aadcb6ce2d82201d596dde6bd0d7074369f612633"
+        },
+        "focused_tests": 54,
+        "original_tests_preserved": 38,
+        "exact_ordered_stages": 72
+      },
+      "additional_nonledger_qualification_pins": [
+        {
+          "path": "tools/manual_course_cases.py",
+          "sha256": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5"
+        },
+        {
+          "path": "tools/manual_publication_verify.py",
+          "sha256": "10b339ed62fd08b12926abffb67e72f2dce466a84f3b714e0d6b7a05703974a9"
+        },
+        {
+          "path": "tools/manual_audio.py",
+          "sha256": "4583b55b74e3a4fb63dcec6d073bb90b4928ed81f613919af1417f58aa935774"
+        },
+        {
+          "path": "tools/manual_closure_cases.py",
+          "sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be"
+        },
+        {
+          "path": "tools/manual_build.py",
+          "sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8"
+        },
+        {
+          "path": "tests/behaviour/test_manual_build.py",
+          "sha256": "2dc2d988de7f28fd366808fc8ce05adb600277cef7b632ff1562740cecb16ddf"
+        }
+      ],
+      "external_controller_preparation": {
+        "original_receipt": "/tmp/mosaic-build-stage-gate-preparation/controller/prefix-preparation-receipt.json",
+        "preserved_receipt": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/prefix-preparation-receipt.json",
+        "sha256": "8dde41a5f3ba6f19b4bb1ab194d60fc52a136a6f1ab608669c38688c95258f76",
+        "tests": 42,
+        "pins": [
+          {
+            "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/controller.py",
+            "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/controller.py",
+            "sha256": "d12d98fc1741cedcf7eef03c3d4f22a0e74ab2f733f54018963dd260a199bfc4"
+          },
+          {
+            "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/test_controller.py",
+            "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/test_controller.py",
+            "sha256": "ca82986257a8848259ade9d2687fa4de0d0592f272eaa2539e1d9b42f87e7646"
+          },
+          {
+            "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/prefix_plan.py",
+            "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/prefix_plan.py",
+            "sha256": "58a957da6d0c83941d5eb3c88241cdf3bee6c125c30056eca921489a7827b992"
+          },
+          {
+            "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/test_prefix_plan.py",
+            "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/test_prefix_plan.py",
+            "sha256": "528d0b5b18f821bcc25c5014df8adf711e34fc6bf7764f168041f615f333ca38"
+          },
+          {
+            "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/README.md",
+            "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/README.md",
+            "sha256": "1f7b7252f42c23b839bb5cc57a4d20630587f09ceafac3f588318f342c2174d9"
+          },
+          {
+            "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/prefix-synthetic-green.log",
+            "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/prefix-synthetic-green.log",
+            "sha256": "257ee3ed597a97d2fd84a61f350119918f0cf97a12b0eb50e26792023d2ca4ea"
+          }
+        ],
+        "native_actions": false
+      },
+      "experimental_runtime_unadmitted": true,
+      "hardware_timing_equivalent": false,
+      "complete_regression_run": false,
+      "broader_manual_build_and_editorial_review_complete": false,
+      "approved_for_live_apply": false,
+      "authority_activation": false
+    },
+    "authority_activation": false,
+    "complete_regression_run": false,
+    "previous_proposal": {
+      "path": "manual/evidence/authored-source-review-20261004-rate-voice-harmony-song-length-50/current-source-review.proposed.json",
+      "sha256": "cd65ca8e632934545918b3f32dcf5402a2c0d234cc266e245ac554188cf850cd"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+FF
+======================================================================
+FAIL: test_vertical_list_capture_pins_its_local_helper_in_both_lanes (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 97, in test_vertical_list_capture_pins_its_local_helper_in_both_lanes
+    self.assertIn("--extra-cases",command)
+AssertionError: '--extra-cases' not found in ['/usr/bin/python3', '/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py', '--plans', '/home/andy/mosaic-manual-1.4.0/manual/scene-plans-vertical-list.yaml', '--profile', 'base-midi', '--output', 'reference-vertical-list-scenes.json', '--clock-mode', 'real-time', '--publish']
+
+======================================================================
+FAIL: test_multiple_additive_helpers_are_retained_for_mixed_plans (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 106, in test_multiple_additive_helpers_are_retained_for_mixed_plans
+    self.assertEqual(set(helpers),{str(root/"tools/manual_vertical_list_cases.py"),str(root/"tools/manual_course_cases.py")})
+AssertionError: Items in the second set but not the first:
+'/tmp/tmp6vqd8k3z/tools/manual_vertical_list_cases.py'
+'/tmp/tmp6vqd8k3z/tools/manual_course_cases.py'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.006s
+
+FAILED (failures=2)

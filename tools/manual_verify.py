@@ -2,29 +2,29 @@
 import base64, hashlib, json
 from pathlib import Path
 from manual_model import ROOT, MANUAL, load, validate, source_hash, validate_capture
+from manual_screen_codec import decode_screen_payload, ScreenEncodingError
 
 def digest(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def check_frame(output, case, results, observations):
-    levels=[]
-    for value,count in output["screen_rle"]:
-        if type(count) is not int or count<1 or len(levels)+count>8192:
-            raise ValueError("Invalid RLE")
-        levels.extend([value]*count)
-    validate_capture(dict(levels=levels,grid=output["grid"]))
+    try: screen_format,samples=decode_screen_payload(output)
+    except ScreenEncodingError as error: raise ValueError(str(error)) from error
+    grid=output.get("grid")
+    if screen_format=="legacy16": validate_capture(dict(levels=samples,grid=grid))
+    else: validate_capture(dict(levels=[0]*8192,grid=grid))
     binding=output["binding"]
-    native=[o["state"] for o in observations if o["state"]["frame"]["sha256"]==binding["sha256"]
-            and o["state"]["grid"]==output["grid"]]
-    if not native:raise ValueError("Missing native observation")
-    # Native BGRA includes zero-alpha black pixels; browser paints brightness opaque.
-    if not any(hashlib.sha256(base64.b64decode(o["frame"]["pixels_base64"])).hexdigest()==binding["sha256"]
-               and [v//17 for v in base64.b64decode(o["frame"]["pixels_base64"])[::4]]==levels for o in native):
-        raise ValueError("Framebuffer brightness/hash mismatch")
-    if hashlib.sha256(bytes(output["grid"])).hexdigest()!=binding["grid_sha256"]:
-        raise ValueError("Grid hash mismatch")
-    if binding not in results or not binding["passed"] or binding["semantic_assertions"]<1:
-        raise ValueError("Unbound capture")
-    if not binding["name"].startswith("manual/"+case+"/"):
-        raise ValueError("Wrong behaviour case")
+    native=[o["state"] for o in observations if o["state"]["frame"]["sha256"]==binding["sha256"] and o["state"]["grid"]==grid]
+    if not native: raise ValueError("Missing native observation")
+    def matches(state):
+        pixels=base64.b64decode(state["frame"]["pixels_base64"],validate=True)
+        if len(pixels)!=32768 or hashlib.sha256(pixels).hexdigest()!=binding["sha256"]: return False
+        channel0=pixels[::4]
+        if screen_format=="legacy16": return all(value%17==0 for value in channel0) and [value//17 for value in channel0]==samples
+        if any(pixels[i]!=pixels[i+1] or pixels[i]!=pixels[i+2] for i in range(0,len(pixels),4)): return False
+        return list(channel0)==samples
+    if not any(matches(state) for state in native): raise ValueError("Framebuffer brightness/hash mismatch")
+    if hashlib.sha256(bytes(grid)).hexdigest()!=binding["grid_sha256"]: raise ValueError("Grid hash mismatch")
+    if binding not in results or not binding["passed"] or binding["semantic_assertions"]<1: raise ValueError("Unbound capture")
+    if not binding["name"].startswith("manual/"+case+"/"): raise ValueError("Wrong behaviour case")
 
 def main():
     authored=validate(load())

@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
- "manual": "README.md",
- "manual_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c",
+ "manual": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+ "manual_sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -197,8 +197,8 @@
    "title": "Norns Menu Navigation",
    "level": 3,
    "start_line": 345,
-   "end_line": 380,
-   "text_sha256": "971fefc89d55776f43cc75b35abd73b557ce2c0901936ad6f68a129a5886074e",
+   "end_line": 382,
+   "text_sha256": "224bdc0bee4a96d8746bad39a33f01001aa5800b2859e92827757f52faa7d7c1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "NAV-CONFIRM"
@@ -209,8 +209,8 @@
    "id": "MAN-016",
    "title": "Tooltips",
    "level": 3,
-   "start_line": 381,
-   "end_line": 384,
+   "start_line": 383,
+   "end_line": 386,
    "text_sha256": "f0a8ada83f2847d91e306bad962d0f4efb030943d16ba5aa54305b826a10996c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -222,8 +222,8 @@
    "id": "MAN-114",
    "title": "External MIDI Transport",
    "level": 3,
-   "start_line": 385,
-   "end_line": 390,
+   "start_line": 387,
+   "end_line": 392,
    "text_sha256": "38c389e250750e595c711869072196149ab1862d5c64dc03b575f53a13c0c668",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -237,8 +237,8 @@
    "id": "MAN-017",
    "title": "MIDI Panic",
    "level": 3,
-   "start_line": 391,
-   "end_line": 394,
+   "start_line": 393,
+   "end_line": 396,
    "text_sha256": "5ad89e6ca37bbcab107af1cdec23b35ce9e6fd1ad4efe77077ae41d522f62149",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -250,8 +250,8 @@
    "id": "MAN-018",
    "title": "Cheat Sheet",
    "level": 3,
-   "start_line": 395,
-   "end_line": 398,
+   "start_line": 397,
+   "end_line": 400,
    "text_sha256": "c514dca5086d6bf1db302f3742ad43e3a4161df97750429e19d771212d71f94a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -261,8 +261,8 @@
    "id": "MAN-019",
    "title": "Typical Workflow",
    "level": 2,
-   "start_line": 399,
-   "end_line": 402,
+   "start_line": 401,
+   "end_line": 404,
    "text_sha256": "ea3762faa8923506a196f20206e4fe78bafb23d3af0c3cc0a5b36cb4d3a4aa1e",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -272,8 +272,8 @@
    "id": "MAN-020",
    "title": "Sound Design",
    "level": 3,
-   "start_line": 403,
-   "end_line": 410,
+   "start_line": 405,
+   "end_line": 412,
    "text_sha256": "4a4664ca7079ccd5df4fb5fab4298b67134a7e5639616d1eed307fb26069f1df",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -285,8 +285,8 @@
    "id": "MAN-021",
    "title": "Rhythm Section Design",
    "level": 3,
-   "start_line": 411,
-   "end_line": 418,
+   "start_line": 413,
+   "end_line": 420,
    "text_sha256": "5afb68aeaa1ac9b8b41addbd2e0ac31135920b598fcfa200223e65f71d00f35c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -298,8 +298,8 @@
    "id": "MAN-022",
    "title": "Harmony Design",
    "level": 3,
-   "start_line": 419,
-   "end_line": 426,
+   "start_line": 421,
+   "end_line": 428,
    "text_sha256": "43353056569f1cdfbab6a1d3c46fb43a501678ce5e524ec291619d1b29ff29d0",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -311,8 +311,8 @@
    "id": "MAN-023",
    "title": "Sequence Composition",
    "level": 3,
-   "start_line": 427,
-   "end_line": 430,
+   "start_line": 429,
+   "end_line": 432,
    "text_sha256": "1e293968de77f874b1ccf7a3e83294ac18952b6d3924575c1d329d0afc92dcd4",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -324,8 +324,8 @@
    "id": "MAN-024",
    "title": "Using Merge Modes",
    "level": 4,
-   "start_line": 431,
-   "end_line": 434,
+   "start_line": 433,
+   "end_line": 436,
    "text_sha256": "3f30424f614595c6c9529f96904b765cb798fe916c52df341ee2d7ba3b6445ba",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -337,8 +337,8 @@
    "id": "MAN-025",
    "title": "Melody Composition",
    "level": 4,
-   "start_line": 435,
-   "end_line": 440,
+   "start_line": 437,
+   "end_line": 442,
    "text_sha256": "49defb9b79964467e2f44f6db0c4529751ab840e1f16d2d0f960544a4234eecc",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -350,8 +350,8 @@
    "id": "MAN-026",
    "title": "Modulation, Movement, and Interest",
    "level": 3,
-   "start_line": 441,
-   "end_line": 444,
+   "start_line": 443,
+   "end_line": 446,
    "text_sha256": "be20a25319a1bf8b1acc1e1e4debd447e1b6305882277868a325cfd2f8ce3a4f",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -363,8 +363,8 @@
    "id": "MAN-027",
    "title": "Song Composition",
    "level": 3,
-   "start_line": 445,
-   "end_line": 450,
+   "start_line": 447,
+   "end_line": 452,
    "text_sha256": "4e41f8bae91e28143bb478286229fe0c21cb39897bd0e77537fc76b93099296e",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -376,8 +376,8 @@
    "id": "MAN-028",
    "title": "Dig Deeper",
    "level": 2,
-   "start_line": 451,
-   "end_line": 454,
+   "start_line": 453,
+   "end_line": 456,
    "text_sha256": "c8a74289619f2cd0236652afca58ffc129f25f977aa758736b2639ba18e7030a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -387,8 +387,8 @@
    "id": "MAN-029",
    "title": "Pattern Editor",
    "level": 3,
-   "start_line": 455,
-   "end_line": 467,
+   "start_line": 457,
+   "end_line": 469,
    "text_sha256": "2a13ca80bc0e92bc1db34925474cfd2a82809cfd3cac0b02f78423da03941ebc",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -398,8 +398,8 @@
    "id": "MAN-030",
    "title": "Adding Trigs",
    "level": 4,
-   "start_line": 468,
-   "end_line": 490,
+   "start_line": 470,
+   "end_line": 492,
    "text_sha256": "30120a6ce480cc50f570d882302945d2b9a1cf76df6c7787cc99dde2d6b10653",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -427,9 +427,9 @@
    "id": "MAN-115",
    "title": "Rhythm Doctor",
    "level": 5,
-   "start_line": 491,
-   "end_line": 672,
-   "text_sha256": "40647f8bfbfcfb729d0ec819b9971bd2cdf76a55eb4d81206c7aad09672c5d57",
+   "start_line": 493,
+   "end_line": 680,
+   "text_sha256": "c8622658be3ba84792f585f5c757509b450d60a07ed94dc86367293790d755a0",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "RD-LANES",
@@ -446,8 +446,8 @@
    "id": "MAN-031",
    "title": "Adding Notes",
    "level": 4,
-   "start_line": 673,
-   "end_line": 708,
+   "start_line": 681,
+   "end_line": 716,
    "text_sha256": "247dd8d7e94985b05098d572d74a1819ac5250d716782dfd861439fc8e333f14",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -466,8 +466,8 @@
    "id": "MAN-032",
    "title": "Adding Velocity",
    "level": 4,
-   "start_line": 709,
-   "end_line": 723,
+   "start_line": 717,
+   "end_line": 731,
    "text_sha256": "4645f929a70566e335b266204b54e24a9653f08c61b90a33166c78cb6c804067",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -480,8 +480,8 @@
    "id": "MAN-033",
    "title": "Channel Editor",
    "level": 3,
-   "start_line": 724,
-   "end_line": 736,
+   "start_line": 732,
+   "end_line": 744,
    "text_sha256": "17efe19834fd5f84ac8d905c0cbbcfb936bc83b594c8ca27d9bd29b493ef29f1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -493,8 +493,8 @@
    "id": "MAN-034",
    "title": "Devices",
    "level": 4,
-   "start_line": 737,
-   "end_line": 747,
+   "start_line": 745,
+   "end_line": 755,
    "text_sha256": "f416516e58e326f35c93581dc476a9898fe0c3f3f9ed3c468bca1ca73195fcf6",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -506,8 +506,8 @@
    "id": "MAN-035",
    "title": "MIDI Sound Sources",
    "level": 5,
-   "start_line": 748,
-   "end_line": 753,
+   "start_line": 756,
+   "end_line": 761,
    "text_sha256": "89169e670534434d971ae303aeb6fdfc5377c229c1078e373e5b5f246d2930eb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -519,8 +519,8 @@
    "id": "MAN-036",
    "title": "Norns Sound Sources with n.b.",
    "level": 5,
-   "start_line": 754,
-   "end_line": 769,
+   "start_line": 762,
+   "end_line": 777,
    "text_sha256": "cf69cc2e19481bf2be072c05b96a1160e11a75aec64a4a864dd89f7d7f7390d8",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -530,8 +530,8 @@
    "id": "MAN-037",
    "title": "Device Parameters",
    "level": 4,
-   "start_line": 770,
-   "end_line": 780,
+   "start_line": 778,
+   "end_line": 788,
    "text_sha256": "52ba5d77a27314e1a79ef4b742162d71511284414426d2791da86ecefaf32c92",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -544,8 +544,8 @@
    "id": "MAN-038",
    "title": "Adding Patterns to Channels",
    "level": 4,
-   "start_line": 781,
-   "end_line": 793,
+   "start_line": 789,
+   "end_line": 801,
    "text_sha256": "bed3b0532206401ab32351008247f26b7efcb254482dd6feb994aff4ea8ce815",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -557,8 +557,8 @@
    "id": "MAN-039",
    "title": "Masks",
    "level": 4,
-   "start_line": 794,
-   "end_line": 806,
+   "start_line": 802,
+   "end_line": 814,
    "text_sha256": "513d26ff5a4fff4619a6e028d856ba0dccc6f5b5d80c46062d6c40760ba79268",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -571,8 +571,8 @@
    "id": "MAN-040",
    "title": "Adding Trig Masks",
    "level": 5,
-   "start_line": 807,
-   "end_line": 818,
+   "start_line": 815,
+   "end_line": 826,
    "text_sha256": "14eb7aedb79c929a2c625492f7a81828c5779889458d92f9e38eb2b2cac3e07d",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -584,8 +584,8 @@
    "id": "MAN-041",
    "title": "Adding Melodic Notes over Harmony and Drums",
    "level": 5,
-   "start_line": 819,
-   "end_line": 824,
+   "start_line": 827,
+   "end_line": 832,
    "text_sha256": "0cc497a8c2edb72c57bad5b5e2ee0c51475f2a5c9928815895b84e7213576b21",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -598,8 +598,8 @@
    "id": "MAN-042",
    "title": "Adding Chords",
    "level": 5,
-   "start_line": 825,
-   "end_line": 830,
+   "start_line": 833,
+   "end_line": 838,
    "text_sha256": "4f47c2c4008b0fbcb8955fc9e48b73bfe488557325a3cdcdb25be13d8b0845e8",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -611,8 +611,8 @@
    "id": "MAN-043",
    "title": "Removing Masks",
    "level": 5,
-   "start_line": 831,
-   "end_line": 842,
+   "start_line": 839,
+   "end_line": 850,
    "text_sha256": "ba82df18e08ebbac095b84129bb0d95521bf4d1fc20fa07c306085e15c41ac7c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -625,9 +625,9 @@
    "id": "MAN-044",
    "title": "Merge Modes",
    "level": 4,
-   "start_line": 843,
-   "end_line": 855,
-   "text_sha256": "3873e18f2771907bac76f937d917639a4df1ada3d34de252ee7cf400bf414f64",
+   "start_line": 851,
+   "end_line": 869,
+   "text_sha256": "d2e2cdaba535d5687e3c413e243e3e335dc989273d143e1b006c68b9c692ae34",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
    "status": "unreviewed"
@@ -636,9 +636,9 @@
    "id": "MAN-045",
    "title": "Trig Merge Modes",
    "level": 5,
-   "start_line": 856,
-   "end_line": 865,
-   "text_sha256": "838f3597035c39f17f4f5cf5586cd7537076f135b645763fceb10ef88eac82ee",
+   "start_line": 870,
+   "end_line": 879,
+   "text_sha256": "63831da8a986b6b4c7df268d5c849dfa2437fcefe9a0ea3101ed58f8b26247f1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "MERGE-TRIG-ALL",
@@ -651,8 +651,8 @@
    "id": "MAN-046",
    "title": "Note Merge Modes",
    "level": 5,
-   "start_line": 866,
-   "end_line": 878,
+   "start_line": 880,
+   "end_line": 892,
    "text_sha256": "3b7732216e0ea9e1d2a3c072feaa9f59bb694af7ca41ee44f550d4c61e4eb391",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -667,8 +667,8 @@
    "id": "MAN-047",
    "title": "Velocity Merge Modes",
    "level": 5,
-   "start_line": 879,
-   "end_line": 889,
+   "start_line": 893,
+   "end_line": 903,
    "text_sha256": "f7290cc1a7a35465c84cc6f020c562a10af5110c4dc0051a22e0a6d5b2e84672",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -680,8 +680,8 @@
    "id": "MAN-048",
    "title": "Length Merge Modes",
    "level": 5,
-   "start_line": 890,
-   "end_line": 902,
+   "start_line": 904,
+   "end_line": 916,
    "text_sha256": "a0d7346461fff3277d86e44f88b2b7074d42a07256b8ed1a501044a60833cbd1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -693,8 +693,8 @@
    "id": "MAN-049",
    "title": "Note Dashboard",
    "level": 4,
-   "start_line": 903,
-   "end_line": 906,
+   "start_line": 917,
+   "end_line": 920,
    "text_sha256": "3734d8a0ee967badbf0a741802dede468b0721fb6a25eef5c5149d61bf9489ea",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -706,9 +706,9 @@
    "id": "MAN-050",
    "title": "Clocks, Swing and Shuffle",
    "level": 4,
-   "start_line": 907,
-   "end_line": 921,
-   "text_sha256": "6a040a5a2490af1ac77df1effe58020063f25f2072c68666cf51bbce5e950054",
+   "start_line": 921,
+   "end_line": 935,
+   "text_sha256": "f87362e80d6daa6c45b6c23880f385b6c5d490dfd42c935ae42101de31964f57",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "CH-CLOCK-INHERIT",
@@ -726,8 +726,8 @@
    "id": "MAN-051",
    "title": "Memory (undo and redo)",
    "level": 4,
-   "start_line": 922,
-   "end_line": 942,
+   "start_line": 936,
+   "end_line": 956,
    "text_sha256": "3e1a2f500dff2329c467913cb9d97b31240732edd30eb082f5fdf34d9e3c087c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -741,8 +741,8 @@
    "id": "MAN-052",
    "title": "Channel Length",
    "level": 4,
-   "start_line": 943,
-   "end_line": 960,
+   "start_line": 957,
+   "end_line": 974,
    "text_sha256": "ce85e7fc9080983aebed704622a8f69da5df19cd573f1ca10dc30214ee3232c1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -754,8 +754,8 @@
    "id": "MAN-053",
    "title": "Muting Channels",
    "level": 4,
-   "start_line": 961,
-   "end_line": 973,
+   "start_line": 975,
+   "end_line": 987,
    "text_sha256": "d4693f6a37a0edf2f58ff8b48568995924a75ba9b69589d756f46a71588c7bc9",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -767,8 +767,8 @@
    "id": "MAN-054",
    "title": "Trig Parameters",
    "level": 3,
-   "start_line": 974,
-   "end_line": 997,
+   "start_line": 988,
+   "end_line": 1011,
    "text_sha256": "d5592d12b5e7c507b4bab8886787308e2783c5346785d57ec00378e0a67b4183",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -781,8 +781,8 @@
    "id": "MAN-055",
    "title": "Sequencer Params",
    "level": 4,
-   "start_line": 998,
-   "end_line": 1001,
+   "start_line": 1012,
+   "end_line": 1015,
    "text_sha256": "5b7bd6f92824c01002ca8fff6a995fed732b5dd84e58df1d2db112c0c5c5561c",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -792,8 +792,8 @@
    "id": "MAN-056",
    "title": "Trig Probability",
    "level": 5,
-   "start_line": 1002,
-   "end_line": 1005,
+   "start_line": 1016,
+   "end_line": 1019,
    "text_sha256": "6345e2014ace2bf5b0c75dc224c429f3ed59dd0287bcace2123d415740b2d020",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -805,8 +805,8 @@
    "id": "MAN-057",
    "title": "Fixed Note",
    "level": 5,
-   "start_line": 1006,
-   "end_line": 1009,
+   "start_line": 1020,
+   "end_line": 1023,
    "text_sha256": "5e80c36332bb3bde2b5c766dca144d2f440a9b93f6685b38c6e6ac9c74edc9e7",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -818,8 +818,8 @@
    "id": "MAN-058",
    "title": "Quantised Fixed Note",
    "level": 5,
-   "start_line": 1010,
-   "end_line": 1013,
+   "start_line": 1024,
+   "end_line": 1027,
    "text_sha256": "b4291012d2edb193e1d8230576a4d545489f0fb0e315b0b67bdfcbf02bbd9e89",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -831,8 +831,8 @@
    "id": "MAN-059",
    "title": "Random Note",
    "level": 5,
-   "start_line": 1014,
-   "end_line": 1017,
+   "start_line": 1028,
+   "end_line": 1031,
    "text_sha256": "43e4bbd83e0d0189095f844f48e1fabafa1051ffb2019a9155bb4d0c7bdded2a",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -844,8 +844,8 @@
    "id": "MAN-060",
    "title": "Random Twos Note",
    "level": 5,
-   "start_line": 1018,
-   "end_line": 1021,
+   "start_line": 1032,
+   "end_line": 1035,
    "text_sha256": "9da9f1100341333ad65bd7faaa787a1603644cda384d1339e515182f59b21ca5",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -857,8 +857,8 @@
    "id": "MAN-061",
    "title": "Chord Strum",
    "level": 5,
-   "start_line": 1022,
-   "end_line": 1025,
+   "start_line": 1036,
+   "end_line": 1039,
    "text_sha256": "9b9dc1490387e933020beca0b013e5d22754e84ee11fd7b9b586d7d7f4bce4a2",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -870,8 +870,8 @@
    "id": "MAN-062",
    "title": "Chord Arpeggio",
    "level": 5,
-   "start_line": 1026,
-   "end_line": 1035,
+   "start_line": 1040,
+   "end_line": 1049,
    "text_sha256": "1cfa612aa9df7502564124367b78cea6db4f477e1a5b7820323401b24b3ccdce",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -883,8 +883,8 @@
    "id": "MAN-063",
    "title": "Chord Acceleration",
    "level": 5,
-   "start_line": 1036,
-   "end_line": 1052,
+   "start_line": 1050,
+   "end_line": 1066,
    "text_sha256": "9516fc6e1a31a17bd608dd443db02944defb5e62870178af3ec22d02ae28a708",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -896,8 +896,8 @@
    "id": "MAN-064",
    "title": "Chord Spread",
    "level": 5,
-   "start_line": 1053,
-   "end_line": 1056,
+   "start_line": 1067,
+   "end_line": 1070,
    "text_sha256": "7ad4157066b524b9c4fceda4170659c7f0d85b3621b0e0bb3d0864e2fc29fc90",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -909,8 +909,8 @@
    "id": "MAN-065",
    "title": "Chord Velocity Modifier",
    "level": 5,
-   "start_line": 1057,
-   "end_line": 1060,
+   "start_line": 1071,
+   "end_line": 1074,
    "text_sha256": "7dd51af2cf1b90014f30f83d9a36f7caafb63f87269a3ee08d7a57e544b035eb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -922,8 +922,8 @@
    "id": "MAN-066",
    "title": "Chord Shape Modifier",
    "level": 5,
-   "start_line": 1061,
-   "end_line": 1064,
+   "start_line": 1075,
+   "end_line": 1078,
    "text_sha256": "5a13c29f0b3ddc6ed3279973efddf8d887f699391d94f7ca15dedc6002a38b38",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -935,8 +935,8 @@
    "id": "MAN-067",
    "title": "Mute Root Note",
    "level": 5,
-   "start_line": 1065,
-   "end_line": 1068,
+   "start_line": 1079,
+   "end_line": 1082,
    "text_sha256": "88111a4c6b3d6cf200a2303fdaa69094327fb6c6d8ee04850c5d882e1108cb01",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -948,8 +948,8 @@
    "id": "MAN-068",
    "title": "Fully Quantise Mask",
    "level": 5,
-   "start_line": 1069,
-   "end_line": 1072,
+   "start_line": 1083,
+   "end_line": 1086,
    "text_sha256": "4bd6d1bcf77c8050c6e26126dae7926ad1e3f0da0a6ede6f900ec34d8dd44749",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -961,9 +961,9 @@
    "id": "MAN-069",
    "title": "Scale Editor",
    "level": 3,
-   "start_line": 1073,
-   "end_line": 1095,
-   "text_sha256": "ad970acc3c36b9df104157eedcc6c4392305e8763f63efc114cc85c99a6d696f",
+   "start_line": 1087,
+   "end_line": 1109,
+   "text_sha256": "7248594d084db1ce6b9b29f18aa13b2ec7ec97cfb6ef08fceb335871ed410d52",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "SCALE-EDIT",
@@ -976,8 +976,8 @@
    "id": "MAN-070",
    "title": "Transposition",
    "level": 4,
-   "start_line": 1096,
-   "end_line": 1108,
+   "start_line": 1110,
+   "end_line": 1122,
    "text_sha256": "5336961e5456d860865534b599798373ec80018a8203669d9f0d1a52e3fd8742",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -989,8 +989,8 @@
    "id": "MAN-071",
    "title": "Song Editor",
    "level": 3,
-   "start_line": 1109,
-   "end_line": 1120,
+   "start_line": 1123,
+   "end_line": 1134,
    "text_sha256": "cdae67432e7bf5e54a432c6a3c472d981faae4fd2880f8c3e9197acc63e5db4b",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1002,8 +1002,8 @@
    "id": "MAN-072",
    "title": "Button Indicators",
    "level": 4,
-   "start_line": 1121,
-   "end_line": 1126,
+   "start_line": 1135,
+   "end_line": 1140,
    "text_sha256": "be3fc63e1627c5f9cc57a52cb50eb44ae1f247f0aaa67962766821a91309d06b",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1015,8 +1015,8 @@
    "id": "MAN-073",
    "title": "Interacting with Slots",
    "level": 4,
-   "start_line": 1127,
-   "end_line": 1134,
+   "start_line": 1141,
+   "end_line": 1148,
    "text_sha256": "072a47fe0374c191133c4e53c319ca79377ad2f09ddef8f5c980d12d66199689",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1028,8 +1028,8 @@
    "id": "MAN-074",
    "title": "Song Mode Operations",
    "level": 4,
-   "start_line": 1135,
-   "end_line": 1138,
+   "start_line": 1149,
+   "end_line": 1152,
    "text_sha256": "8d805187ee9019217468edf12d3c615b1ffea37c60ca17808c311049443b79f2",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1041,8 +1041,8 @@
    "id": "MAN-075",
    "title": "Adjusting Song Sequence Length",
    "level": 4,
-   "start_line": 1139,
-   "end_line": 1154,
+   "start_line": 1153,
+   "end_line": 1168,
    "text_sha256": "2d86d97021b2582174e3e867a7e5e27daadc1ab46283510d116c6efda3711bc3",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1054,9 +1054,9 @@
    "id": "MAN-076",
    "title": "Navigating the Norns Display",
    "level": 4,
-   "start_line": 1155,
-   "end_line": 1161,
-   "text_sha256": "8d7712162f080264c3263de40b9b3b25a7d525c48929abad1ea6e133afa77cb5",
+   "start_line": 1169,
+   "end_line": 1175,
+   "text_sha256": "d1ceebba4ec87ab9b2d46c914618b1066a749bdbc9873edf9b855f984fb205b3",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "SONG-SETTINGS"
@@ -1067,8 +1067,8 @@
    "id": "MAN-077",
    "title": "Locks",
    "level": 2,
-   "start_line": 1162,
-   "end_line": 1165,
+   "start_line": 1176,
+   "end_line": 1179,
    "text_sha256": "d6b36696cd868adb542b004eaf87c165c3e05e4e4cdaa037adeab3001206b8cb",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1078,8 +1078,8 @@
    "id": "MAN-078",
    "title": "Trig Param Locks",
    "level": 3,
-   "start_line": 1166,
-   "end_line": 1190,
+   "start_line": 1180,
+   "end_line": 1204,
    "text_sha256": "3eef50c96d0a03aff3953c7755c7d0a33854b58b7d33bbecc593e0b31425564e",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1092,8 +1092,8 @@
    "id": "MAN-079",
    "title": "Param Slides",
    "level": 4,
-   "start_line": 1191,
-   "end_line": 1208,
+   "start_line": 1205,
+   "end_line": 1222,
    "text_sha256": "2ba111203cec78292fed4bbd58780461fb34800f48d93e3b59d66a1e5f633b53",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1106,8 +1106,8 @@
    "id": "MAN-080",
    "title": "Mask Locks",
    "level": 3,
-   "start_line": 1209,
-   "end_line": 1233,
+   "start_line": 1223,
+   "end_line": 1247,
    "text_sha256": "107d3bfc2b51c496700a7454e66ee498f6c88a3fd8e80f0817a858922d3a039c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1119,8 +1119,8 @@
    "id": "MAN-081",
    "title": "Scale Locks",
    "level": 3,
-   "start_line": 1234,
-   "end_line": 1252,
+   "start_line": 1248,
+   "end_line": 1266,
    "text_sha256": "cf5abf336ea77377a81dbc2dee556fdfa50c78f1eaeb1c0ed7a6929caea07b09",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1132,8 +1132,8 @@
    "id": "MAN-082",
    "title": "Transposition Locks",
    "level": 3,
-   "start_line": 1253,
-   "end_line": 1266,
+   "start_line": 1267,
+   "end_line": 1280,
    "text_sha256": "1460b116233a23b003c8b8fe57c4f0f89223f6b83805fd7ccae04aff59f5ed73",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1145,8 +1145,8 @@
    "id": "MAN-083",
    "title": "Octave Locks",
    "level": 3,
-   "start_line": 1267,
-   "end_line": 1278,
+   "start_line": 1281,
+   "end_line": 1292,
    "text_sha256": "049b9380f75ab62c2c6c5431015f141fbf56f55526c5f94d4fb4ddf7fce804ff",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1158,8 +1158,8 @@
    "id": "MAN-084",
    "title": "Save and Load",
    "level": 2,
-   "start_line": 1279,
-   "end_line": 1286,
+   "start_line": 1293,
+   "end_line": 1300,
    "text_sha256": "037991ed7ca9958389ddb78f420698c7de846ecd171b932d9c5f9b7b5cbab656",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1173,8 +1173,8 @@
    "id": "MAN-085",
    "title": "Options",
    "level": 3,
-   "start_line": 1287,
-   "end_line": 1290,
+   "start_line": 1301,
+   "end_line": 1304,
    "text_sha256": "804652c99130b6e05e1674aee0ccb9b0911c3a814e1cfc17eee7d17930e33912",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1184,8 +1184,8 @@
    "id": "MAN-086",
    "title": "Sequencer Options",
    "level": 4,
-   "start_line": 1291,
-   "end_line": 1292,
+   "start_line": 1305,
+   "end_line": 1306,
    "text_sha256": "62b109384a5bdaa837429ca58f271923454d08b303d4a9c201eb9631c1b2c17b",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1195,8 +1195,8 @@
    "id": "MAN-087",
    "title": "Shift press stop",
    "level": 5,
-   "start_line": 1293,
-   "end_line": 1296,
+   "start_line": 1307,
+   "end_line": 1310,
    "text_sha256": "41bbc1b85ee606f3dad9e8eb6da930633549c161707906efa2fc259c71d02af5",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1208,8 +1208,8 @@
    "id": "MAN-088",
    "title": "Song Mode",
    "level": 5,
-   "start_line": 1297,
-   "end_line": 1300,
+   "start_line": 1311,
+   "end_line": 1314,
    "text_sha256": "f23336e64501c742cde537f4ecc5df1b8d83293c6687c9117aa37f270ffa1ebb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1221,8 +1221,8 @@
    "id": "MAN-089",
    "title": "Reset at Song Editor Pattern Change",
    "level": 5,
-   "start_line": 1301,
-   "end_line": 1304,
+   "start_line": 1315,
+   "end_line": 1318,
    "text_sha256": "38cf83228d1b01c9cd84eae77de4d746495d7f9f66caac547ef1224e683c684a",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1234,8 +1234,8 @@
    "id": "MAN-090",
    "title": "Reset at Pattern Repeat",
    "level": 5,
-   "start_line": 1305,
-   "end_line": 1308,
+   "start_line": 1319,
+   "end_line": 1322,
    "text_sha256": "3995abf998e5d234142e01c2dbf6f8a6f5bd65d965289c75b4a23354d0b1e368",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1247,8 +1247,8 @@
    "id": "MAN-091",
    "title": "Parameter Slides Wrap",
    "level": 5,
-   "start_line": 1309,
-   "end_line": 1312,
+   "start_line": 1323,
+   "end_line": 1326,
    "text_sha256": "1126b92230a10a63aa1cb785c248fd602cde00bd79d9ee0db70ef471eb8f069b",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1260,8 +1260,8 @@
    "id": "MAN-092",
    "title": "Elektron Program Changes",
    "level": 5,
-   "start_line": 1313,
-   "end_line": 1316,
+   "start_line": 1327,
+   "end_line": 1330,
    "text_sha256": "1cba70fdce2ca5bb2ad162f362319a1e064d77556ef2ce6703674d96f3abe8de",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1273,8 +1273,8 @@
    "id": "MAN-093",
    "title": "Elektron Program Change Channel",
    "level": 5,
-   "start_line": 1317,
-   "end_line": 1320,
+   "start_line": 1331,
+   "end_line": 1334,
    "text_sha256": "d20a2bca639e7721431fb5ced41c2ee67dc4b6000635eca3523d0e9d47ea47c1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1286,8 +1286,8 @@
    "id": "MAN-094",
    "title": "Parameter Lock Options",
    "level": 4,
-   "start_line": 1321,
-   "end_line": 1322,
+   "start_line": 1335,
+   "end_line": 1336,
    "text_sha256": "eb807418d84eae137ff8d7539ae2e5c95f8f88b99db7a2a6edf07d7e22c8d02a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1297,8 +1297,8 @@
    "id": "MAN-095",
    "title": "Trigless Locks",
    "level": 5,
-   "start_line": 1323,
-   "end_line": 1326,
+   "start_line": 1337,
+   "end_line": 1340,
    "text_sha256": "68986f0fa56d488e241131fc44c8cc7ab250ee2e2c11d7ab77ab0a8446f18d0c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1310,8 +1310,8 @@
    "id": "MAN-096",
    "title": "Quantiser Options",
    "level": 4,
-   "start_line": 1327,
-   "end_line": 1328,
+   "start_line": 1341,
+   "end_line": 1342,
    "text_sha256": "71cff99220f53087fa5f5af920c346fea5ff43a8b6bc81e5a033509edf174874",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1321,8 +1321,8 @@
    "id": "MAN-097",
    "title": "Snap Note Masks to Scale",
    "level": 5,
-   "start_line": 1329,
-   "end_line": 1332,
+   "start_line": 1343,
+   "end_line": 1346,
    "text_sha256": "00eea8b20f2428b91dded6ee8e27d333201bf035e8adb88a3f2647912d97d127",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1334,8 +1334,8 @@
    "id": "MAN-098",
    "title": "Quantise Note Masks",
    "level": 5,
-   "start_line": 1333,
-   "end_line": 1336,
+   "start_line": 1347,
+   "end_line": 1350,
    "text_sha256": "eaa7a26cc59730712354f00158d3aee68e047106ca779b043618532cdb65d888",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1347,8 +1347,8 @@
    "id": "MAN-099",
    "title": "Scales Lock Until Pattern End",
    "level": 5,
-   "start_line": 1337,
-   "end_line": 1340,
+   "start_line": 1351,
+   "end_line": 1354,
    "text_sha256": "da8498011d5eae9759a4b2b04d31e68e4d592fdb25a95bc9c28e306a4462c73e",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1360,8 +1360,8 @@
    "id": "MAN-100",
    "title": "Lock All to Pentatonic",
    "level": 5,
-   "start_line": 1341,
-   "end_line": 1344,
+   "start_line": 1355,
+   "end_line": 1358,
    "text_sha256": "af037466acd892dec1c4f2e818fa161081d3309bcd3fc530d42f9e131b7368b1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1373,8 +1373,8 @@
    "id": "MAN-101",
    "title": "Lock Random to Pentatonic",
    "level": 5,
-   "start_line": 1345,
-   "end_line": 1348,
+   "start_line": 1359,
+   "end_line": 1362,
    "text_sha256": "7f245bbcdcd317be8f0035988ff10f0738150feb5834064db63f6306c22b7659",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1386,8 +1386,8 @@
    "id": "MAN-102",
    "title": "Lock Merged to Pentatonic",
    "level": 5,
-   "start_line": 1349,
-   "end_line": 1352,
+   "start_line": 1363,
+   "end_line": 1366,
    "text_sha256": "d5ba3e6bd470acc257b1e2d9ae925a9fee14d104e3426ab2cf3266791e927eb4",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1399,8 +1399,8 @@
    "id": "MAN-103",
    "title": "MIDI Controller Options",
    "level": 4,
-   "start_line": 1353,
-   "end_line": 1354,
+   "start_line": 1367,
+   "end_line": 1368,
    "text_sha256": "669023112eee3c6b79e78753c55ef07530a73d307e8bda1601da8a9851397b8f",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1410,8 +1410,8 @@
    "id": "MAN-104",
    "title": "Map Scale to White Keys",
    "level": 5,
-   "start_line": 1355,
-   "end_line": 1358,
+   "start_line": 1369,
+   "end_line": 1372,
    "text_sha256": "8b71583873d815aa7592538200cbac5da5b3e4630a3e0209f2d4a8b14f0225ed",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1423,8 +1423,8 @@
    "id": "MAN-105",
    "title": "Honor Scale Rotations",
    "level": 5,
-   "start_line": 1359,
-   "end_line": 1362,
+   "start_line": 1373,
+   "end_line": 1376,
    "text_sha256": "4382eff70dbb6472724d3d1a0a825b88cca2dd0daf6c5cf5b1bd61dec39b08ba",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1436,8 +1436,8 @@
    "id": "MAN-106",
    "title": "Honor Scale Degree",
    "level": 5,
-   "start_line": 1363,
-   "end_line": 1366,
+   "start_line": 1377,
+   "end_line": 1380,
    "text_sha256": "820ae209d5121b182c7213e76e8b9e83ec4d62e14b8fb8d56a30a0e1ac8455bb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1449,8 +1449,8 @@
    "id": "MAN-107",
    "title": "Honour Scale Transpose",
    "level": 5,
-   "start_line": 1367,
-   "end_line": 1370,
+   "start_line": 1381,
+   "end_line": 1384,
    "text_sha256": "c1a9d97479c644a3c988dd8f79dbe8528a42cdd23b56462eebf9c30afc8f0dac",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1465,8 +1465,8 @@
    "status": "unreviewed",
    "title": "Screen Options",
    "level": 4,
-   "start_line": 1371,
-   "end_line": 1372,
+   "start_line": 1385,
+   "end_line": 1386,
    "text_sha256": "8f83cb2835a050d0e98e975bbb46a3874d7ae7119617f1715ee7c8b6a32bc85f"
   },
   {
@@ -1476,16 +1476,16 @@
    "status": "unreviewed",
    "title": "UI Motion",
    "level": 5,
-   "start_line": 1373,
-   "end_line": 1376,
-   "text_sha256": "e49c66fe5878b834618b2d66159a51ccc6e24fef6d3c8ebf4a7c95ca277ca9cb"
+   "start_line": 1387,
+   "end_line": 1394,
+   "text_sha256": "3a49137cf294e303b2e615b990d291f3d7d397933be6658d6763d27d2c931f9c"
   },
   {
    "id": "MAN-108",
    "title": "Sinfonion Connect",
    "level": 3,
-   "start_line": 1377,
-   "end_line": 1380,
+   "start_line": 1395,
+   "end_line": 1398,
    "text_sha256": "d4cbd415db5e6c577bf2a170c6c583727f414d7030ba7823a665b1fc005d3d06",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1497,8 +1497,8 @@
    "id": "MAN-109",
    "title": "LFOs and Modulation",
    "level": 3,
-   "start_line": 1381,
-   "end_line": 1385,
+   "start_line": 1399,
+   "end_line": 1403,
    "text_sha256": "247817a1e4ef185b4be509a053544ef510ba4fd93d4566db639b408970638edc",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1516,9 +1516,9 @@
    "status": "unreviewed",
    "title": "Musical Merge and Voice Leading",
    "level": 2,
-   "start_line": 1386,
-   "end_line": 1404,
-   "text_sha256": "6a479eda156d86bf66a0c1d2a377462887f5cca7fb8cad2d4b7c0c7ecabb6554"
+   "start_line": 1404,
+   "end_line": 1420,
+   "text_sha256": "e038578b71f56c755123ce5c71d0970bf45f347804b490592c9c5a59b5b53480"
   },
   {
    "id": "MAN-120",
@@ -1527,9 +1527,9 @@
    "status": "unreviewed",
    "title": "Merge Shape",
    "level": 3,
-   "start_line": 1405,
-   "end_line": 1440,
-   "text_sha256": "8c913c8c176aedf2ef59b9cee92c023cd4066aed7c104ed4643695058df2c3f4"
+   "start_line": 1421,
+   "end_line": 1456,
+   "text_sha256": "f5e954f6ba8dfb68e948666be637164bd69c065e61237a4af3b354b04b698dfd"
   },
   {
    "id": "MAN-122",
@@ -1540,9 +1540,9 @@
    "status": "unreviewed",
    "title": "Fragments",
    "level": 4,
-   "start_line": 1441,
-   "end_line": 1468,
-   "text_sha256": "1bdb40a724ed6a598f520461bac7ae1c8dec34830d3d6ed8c76a2f8d5ce6631a"
+   "start_line": 1457,
+   "end_line": 1484,
+   "text_sha256": "662b19a59a78b832720e347547190bf7c3f853a8b8d087d72ee0e65ebd8cd565"
   },
   {
    "id": "MAN-123",
@@ -1553,8 +1553,8 @@
    "status": "unreviewed",
    "title": "Interlock",
    "level": 4,
-   "start_line": 1469,
-   "end_line": 1501,
+   "start_line": 1485,
+   "end_line": 1517,
    "text_sha256": "3a75ef8e7f03ad6f62e5690036c7f16a9789fb288efbcba56a2d62df4dd4237a"
   },
   {
@@ -1566,8 +1566,8 @@
    "status": "unreviewed",
    "title": "Structure",
    "level": 4,
-   "start_line": 1502,
-   "end_line": 1528,
+   "start_line": 1518,
+   "end_line": 1544,
    "text_sha256": "c0c74ff6ff8e5210d8b3f1ef2a338be574343ba95aedbfe6f2359b1b5bd365fd"
   },
   {
@@ -1581,8 +1581,8 @@
    "status": "unreviewed",
    "title": "Result and Reason",
    "level": 4,
-   "start_line": 1529,
-   "end_line": 1549,
+   "start_line": 1545,
+   "end_line": 1565,
    "text_sha256": "bb960d435bc92e322ca4d461ce674e885f09a0452ac4a110a5b1d6600cec6d63"
   },
   {
@@ -1592,16 +1592,16 @@
    "status": "unreviewed",
    "title": "Harmony",
    "level": 3,
-   "start_line": 1550,
-   "end_line": 1618,
+   "start_line": 1566,
+   "end_line": 1634,
    "text_sha256": "745dce1fb57a252fda5ca69b22994403776394537ef77153b37b4d70c1698ae8"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1619,
-   "end_line": 1630,
+   "start_line": 1635,
+   "end_line": 1646,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1613,8 +1613,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1631,
-   "end_line": 1640,
+   "start_line": 1647,
+   "end_line": 1656,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1624,8 +1624,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1641,
-   "end_line": 1644,
+   "start_line": 1657,
+   "end_line": 1660,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1635,8 +1635,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1645,
-   "end_line": 1651,
+   "start_line": 1661,
+   "end_line": 1667,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1661,11 +1661,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c"
+   "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "edf0df405c75727a8ff29a16d3640b71af2c6bfe4b5ddb5db603474e02bed561"
+   "sha256": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -2569,6 +2569,74 @@
     "end_line": 293,
     "text": "Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you press K2 or navigate away from the page without applying, the change will be cancelled.\n\nIn general, the K3 button is used to confirm changes, K2 is used to cancel, and K1 is held to access shift functions.",
     "sha256": "398cda14ac6b892121854cb992555dc78973ea7d70e56fdde9cd9d2f8fb7886e"
+   },
+   "current_control_review": {
+    "historical_source_preserved": true,
+    "claims": [
+     {
+      "path": "manual/legacy/README-1.4.0.md",
+      "line": 356,
+      "text": "- **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.",
+      "sha256": "a388bd85cc2918942f453911663a241e71a7dcf0eda3c2196ee94a5e7a7fb9ac"
+     },
+     {
+      "path": "manual/legacy/README-before-authority-11fff062bcb9a5f03480abc2e223702c779152c969b0f5ce4e9157d0d18103cb.md",
+      "line": 357,
+      "text": "- **E2** chooses a row in a settings or task list, or a field on Masks and Trig params.",
+      "sha256": "3209e88779c243a047125e59531bc75d5cbbb3ccf4527b1d6ca87217fabb4a8e"
+     },
+     {
+      "path": "manual/legacy/README-1.4.0.md",
+      "line": 358,
+      "text": "- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.",
+      "sha256": "e7aadd56ec014f5df62afce90aa6249fbcf5e1835806e569ca563382da8320ef"
+     },
+     {
+      "path": "manual/legacy/README-1.4.0.md",
+      "line": 359,
+      "text": "- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`; when the name would crowd out the screen's other controls it just says `K3 OPEN`.",
+      "sha256": "273f783a46f27c715a6a1132c9707d210217f8d4862e809dda5896ce35e35b19"
+     },
+     {
+      "path": "manual/legacy/README-1.4.0.md",
+      "line": 360,
+      "text": "- **K2** goes back, or cancels a staged change or a question.",
+      "sha256": "63c6b5500dd520ef500bc5f00a4ac900aaf101e42fd202aefc8d92d600f9f60d"
+     }
+    ],
+    "note": "The original requirement and source remain historical. Current contextual controls supersede the old generic navigation wording; remaining coverage is not erased.",
+    "historical_claim_records": [
+     {
+      "path": "README.md",
+      "line": 356,
+      "text": "- **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.",
+      "sha256": "a388bd85cc2918942f453911663a241e71a7dcf0eda3c2196ee94a5e7a7fb9ac"
+     },
+     {
+      "path": "README.md",
+      "line": 357,
+      "text": "- **E2** chooses a row in a settings or task list, or a field on Masks and Trig params.",
+      "sha256": "3209e88779c243a047125e59531bc75d5cbbb3ccf4527b1d6ca87217fabb4a8e"
+     },
+     {
+      "path": "README.md",
+      "line": 358,
+      "text": "- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.",
+      "sha256": "e7aadd56ec014f5df62afce90aa6249fbcf5e1835806e569ca563382da8320ef"
+     },
+     {
+      "path": "README.md",
+      "line": 359,
+      "text": "- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`; when the name would crowd out the screen's other controls it just says `K3 OPEN`.",
+      "sha256": "273f783a46f27c715a6a1132c9707d210217f8d4862e809dda5896ce35e35b19"
+     },
+     {
+      "path": "README.md",
+      "line": 360,
+      "text": "- **K2** goes back, or cancels a staged change or a question.",
+      "sha256": "63c6b5500dd520ef500bc5f00a4ac900aaf101e42fd202aefc8d92d600f9f60d"
+     }
+    ]
    }
   },
   {
@@ -2811,7 +2879,8 @@
    "statement": "Assign multiple patterns per channel and one pattern to multiple channels.",
    "cases": [
     "M-PAT-002",
-    "M-CHANNEL-001"
+    "M-CHANNEL-001",
+    "M-UI-READABILITY-001"
    ],
    "status": "partial-domain-coverage",
    "domain": "All16x16 individual assignments; empty/all sets; toggles; shared-pattern edits.",
@@ -2872,7 +2941,8 @@
     "M-MASK-CHORD-X-001",
     "M-MASK-OFF-001",
     "M-MASK-032",
-    "M-MERGE-FRAGMENTS-003"
+    "M-MERGE-FRAGMENTS-003",
+    "M-MASK-NOTE-X-001"
    ],
    "status": "in_progress",
    "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed). M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time. M-MEMORY-008 (E and D): stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; suspected defect S15 (velocity written before the release commits) is not reproduced and the case stays as a regression guard. M-MEMORY-009 (E and D, 3 fresh D repeats): redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702). The baseline silenced the step until the next edit (defect memory-redo-working-pattern, fixed).",
@@ -3021,7 +3091,8 @@
     "M-MERGE-042",
     "M-MASK-HELD-EXTRA-001",
     "M-MASK-OFF-001",
-    "M-MERGE-FRAGMENTS-003"
+    "M-MERGE-FRAGMENTS-003",
+    "M-MASK-NOTE-X-001"
    ],
    "status": "partial-domain-coverage",
    "domain": "Nonempty trig/note/velocity/length/chord defaults and step overrides validated in both clocks, including clear-step fallback, length default removal/restoration and routed channel isolation. Playing edits and comprehensive display assertions remain pending.",
@@ -3554,7 +3625,8 @@
     "M-MERGE-INTERLOCK-003",
     "M-MERGE-INTERLOCK-006",
     "M-MERGE-INTERLOCK-007",
-    "M-MERGE-INTERLOCK-008"
+    "M-MERGE-INTERLOCK-008",
+    "M-UI-VERTICAL-001"
    ],
    "status": "in_progress",
    "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected.",
@@ -3571,7 +3643,14 @@
     "end_line": 681,
     "text": "You can easily adjust the tempo of your entire composition directly from the song editor page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.",
     "sha256": "e96ad951cf41820b6365d5012ceb727fcb3cbd1d0ee0c93d6fa52be2b337a6fd"
-   }
+   },
+   "case_extensions": [
+    {
+     "case": "M-UI-VERTICAL-001",
+     "scope": "Visible Clock list neighbors, selected values, scroll boundaries, PARAMS return, retained Masks overview and single-row Trig options via public norns inputs.",
+     "acceptance": "Candidate native evidence pending; this addition does not close the full CH-TEMPO domain."
+    }
+   ]
   },
   {
    "id": "CH-SWING",
@@ -3812,6 +3891,8 @@
     "M-RANGE-REJECT-003",
     "M-RANGE-REJECT-004",
     "M-RANGE-REJECT-005",
+    "M-RANGE-REJECT-006",
+    "M-RANGE-LCM-001",
     "M-RANGE-GLOBAL-001",
     "M-RANGE-GLOBAL-002",
     "M-RANGE-GLOBAL-003",
@@ -3980,7 +4061,10 @@
     "M-PARAM-DIAL-OFF-001",
     "M-PATCH-065",
     "M-PATCH-066",
-    "M-PARAM-CHORD-X-001"
+    "M-PARAM-CHORD-X-001",
+    "M-STRUM-GATE-001",
+    "M-TRIGPARAM-SLOT-001",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "in_progress",
    "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -4375,6 +4459,7 @@
     "M-CHORDVEL-003",
     "M-CHORDVEL-004",
     "M-CHORDSHAPE-257",
+    "M-CHORDSHAPE-260",
     "M-CHORDSHAPE-258",
     "M-CHORDSHAPE-259",
     "M-PANIC-007",
@@ -4392,7 +4477,10 @@
     "M-CHORDVEL-009",
     "M-CHORDVEL-010",
     "M-CHORDVEL-011",
-    "M-MERGE-STRUCTURE-002"
+    "M-MERGE-STRUCTURE-002",
+    "M-STRUM-GATE-001",
+    "M-TRIGPARAM-SLOT-001",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "in_progress",
    "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate. Native035-038 now validate simultaneous distinct/same-pitch zero/negative voices with exact interleaved On/Off order and repeated transport in both modes.",
@@ -4636,6 +4724,7 @@
     "M-ARP-012",
     "M-ARP-013",
     "M-CHORDSHAPE-257",
+    "M-CHORDSHAPE-260",
     "M-XA-006-NB-CHORD-ACCEL"
    ],
    "status": "in_progress",
@@ -4692,7 +4781,10 @@
     "M-SPREAD-027",
     "M-ARP-012",
     "M-ARP-013",
-    "M-CHORDSHAPE-257"
+    "M-CHORDSHAPE-257",
+    "M-CHORDSHAPE-260",
+    "M-STRUM-GATE-001",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "in_progress",
    "domain": "Every legal value; negative/zero/positive if supported; tempo/division and acceleration pairs.",
@@ -4983,6 +5075,7 @@
     "M-CHORDVEL-003",
     "M-CHORDVEL-004",
     "M-CHORDSHAPE-257",
+    "M-CHORDSHAPE-260",
     "M-CHORDSHAPE-258",
     "M-CHORDSHAPE-259",
     "M-DASHBOARD-005",
@@ -5284,6 +5377,7 @@
     "M-CHORDVEL-003",
     "M-CHORDVEL-004",
     "M-CHORDSHAPE-257",
+    "M-CHORDSHAPE-260",
     "M-CHORDSHAPE-258",
     "M-CHORDSHAPE-259",
     "M-DASHBOARD-001",
@@ -5743,7 +5837,8 @@
     "M-TRANS-006",
     "M-TRANS-007",
     "M-TRANS-008",
-    "M-TRANS-009"
+    "M-TRANS-009",
+    "M-TRANS-010"
    ],
    "status": "partial-domain-coverage",
    "domain": "M-TRANS-006 validates every advertised -12..+12 value through the physical scale-page fader with exact four-note MIDI, gates and accumulated phase in both clocks. M-TRANS-007 covers independent copied song values and live 1,536-pulse boundaries; M-TRANS-008 covers autosave and fresh-process restoration. Lock, octave and MIDI-boundary interactions are covered by M-TRANS-001..005; live-edit timing is covered by M-TRANS-009.",
@@ -5779,6 +5874,7 @@
     "M-TIME-005",
     "M-TRANS-007",
     "M-TRANS-008",
+    "M-TRANS-010",
     "M-TRIPLE-002",
     "M-WORKFLOW-001",
     "M-OPT-ELEK-001",
@@ -5787,7 +5883,9 @@
     "M-SONG-TEMPO-001",
     "M-SONG-COPY-001",
     "M-PARAM-047",
-    "M-MASK-032"
+    "M-MASK-032",
+    "M-TRIGPARAM-SLOT-001",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "in_progress",
    "domain": "All slots including row edges; self-copy; filled/empty targets; playing source/target. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-PERSIST-COMBINED-001 (E and D, 3 fresh D repeats): the M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2 locks, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream. Tempo is norns system state (clock_tempo save=false), outside the script autosave. Skipping the pset read on load is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected. M-SONG-COPY-001 (E and D, 3 fresh D repeats): slot copy and erase take the first-pressed slot as the source in either release order (arbitrated SEM-016); source and other slots unchanged. The baseline erased the source when it was released first (defect song-slot-copy-press-order, fixed).",
@@ -6186,6 +6284,7 @@
     "M-TRANS-003",
     "M-TRANS-004",
     "M-TRANS-005",
+    "M-TRANS-011",
     "M-LIFECYCLE-001"
    ],
    "status": "partial-domain-coverage",
@@ -6256,7 +6355,8 @@
     "M-SAVE-NAMED-001",
     "M-MEMORY-005",
     "M-SAVE-FAIL-001",
-    "M-MERGE-STRUCTURE-005"
+    "M-MERGE-STRUCTURE-005",
+    "M-TRIGPARAM-STRUM-PERSIST-001"
    ],
    "status": "partial-domain-coverage",
    "domain": "M-SAVE-NAMED-001 (E and D, 3 fresh D repeats): save with the default name and with a typed name (one character appended through the native text entry), idle autosave leaves both named saves byte-identical, cancel writes nothing, re-saving the default name overwrites only it, and loading each name restores its exact phrase in-session. M-PROJECT-LIVE-001..004 cover dialogs while playing. Remaining: long/empty/non-ASCII names, delete in text entry, corrupt/missing/unwritable files at load and save. M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-SAVE-FAIL-001 (E and D, 3 fresh D repeats): while a rejected load suspends autosave, a named save into a read-only project directory fails and autosave stays suspended; a successful named save resumes it (file writes, not bytes, are the evidence). Characterised: an unsuspended failed idle autosave is retried after the next input. A failed save that resumes autosave is detected.",
@@ -7076,6 +7176,26 @@
     "line": 947,
     "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>",
     "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35"
+   },
+   "current_control_review": {
+    "historical_source_preserved": true,
+    "claims": [
+     {
+      "path": "manual/legacy/README-1.4.0.md",
+      "line": 358,
+      "text": "- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.",
+      "sha256": "e7aadd56ec014f5df62afce90aa6249fbcf5e1835806e569ca563382da8320ef"
+     }
+    ],
+    "note": "The original requirement and source remain historical. Current contextual controls supersede the old generic navigation wording; remaining coverage is not erased.",
+    "historical_claim_records": [
+     {
+      "path": "README.md",
+      "line": 358,
+      "text": "- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.",
+      "sha256": "e7aadd56ec014f5df62afce90aa6249fbcf5e1835806e569ca563382da8320ef"
+     }
+    ]
    }
   },
   {
@@ -7587,7 +7707,8 @@
    "sections": [],
    "statement": "Foundation protects an explicit assigned anchor pattern and admits deterministic, accented and phrase-shaped additions without rewriting source patterns.",
    "cases": [
-    "M-MERGE-FOUNDATION-001"
+    "M-MERGE-FOUNDATION-001",
+    "M-MERGE-STRATEGY-001"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical Channel-page setup covers one anchor, one addition source, a non-64 loop, projected grid trigs, literal accented MIDI and complete real/controlled loops; pure tests cover seeds, density, gaps, wrap, masks and phrase curves.",
@@ -7643,7 +7764,8 @@
    "cases": [
     "M-MERGE-FRAGMENTS-001",
     "M-MERGE-FRAGMENTS-002",
-    "M-MERGE-FRAGMENTS-003"
+    "M-MERGE-FRAGMENTS-003",
+    "M-MERGE-STRATEGY-001"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical Merge Shape workflows cover Size 4 and seeds 0/1 on an eight-step loop; a six-step loop shorter than Size 8 with Keep anchor Off/On and source-wins overlap; and an offset 3..10 loop cut into Size 4 fragments with explicit trig-mask N suppression and X restoration. Every public case checks literal MIDI and grid output in controlled-time and real-time lanes. Pure tests additionally cover the fragment length resolver and wider seed/offset combinations.",
@@ -8239,7 +8361,8 @@
    ],
    "statement": "While Merge Shape Foundation decides a channel's trigs, Merge modes shows the trig mode as SHAPE (<mode>) and the grid trig merge button's tooltip says Merge Shape is in use; the saved trig mode applies again when Merge Shape is off.",
    "cases": [
-    "M-LIVEUI-SHAPETRIG-001"
+    "M-LIVEUI-SHAPETRIG-001",
+    "M-LIVEUI-SHAPETRIG-002"
    ],
    "status": "partial-domain-coverage",
    "domain": "Covered: Foundation applied through the Merge Shape editor; Trig mode SHAPE (SKIP), SHAPE (ONLY), SHAPE (ALL) with the Merge Shape in use tooltips and trig merge LEDs; Foundation MIDI (additions at accent 70) with the saved mode at All; Mode Off applied reads ALL and plays the legacy All merge (pattern 2 at 100); the next press is Skip with the plain tooltip. Not covered: other Merge Shape modes, Merge Shape on channels other than 1."
@@ -8261,7 +8384,7 @@
  "statement_mappings": [
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 794,
     "sha256": "f5ca640d31bc7ed32f87291e0fddd550b74782dc81b62019a5411eaf1cbc2f3f",
     "text": "Start/Stop: Bottom-left button. Press to play. Press again to stop."
@@ -8269,11 +8392,35 @@
    "proposed_requirements": [
     "NAV-TRANSPORT"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 794,
+    "sha256": "f5ca640d31bc7ed32f87291e0fddd550b74782dc81b62019a5411eaf1cbc2f3f",
+    "text": "Start/Stop: Bottom-left button. Press to play. Press again to stop."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 794,
+     "sha256": "f5ca640d31bc7ed32f87291e0fddd550b74782dc81b62019a5411eaf1cbc2f3f",
+     "text": "Start/Stop: Bottom-left button. Press to play. Press again to stop."
+    },
+    "proposed_requirements": [
+     "NAV-TRANSPORT"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 794,
+     "sha256": "f5ca640d31bc7ed32f87291e0fddd550b74782dc81b62019a5411eaf1cbc2f3f",
+     "text": "Start/Stop: Bottom-left button. Press to play. Press again to stop."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 798,
     "sha256": "cd489e790ca5cfe573aabd825bd44c254a0b7800e012e7c61ecfa7dfa1b30db6",
     "text": "Arm record: Press to arm recording. Press again to stop recording."
@@ -8281,11 +8428,35 @@
    "proposed_requirements": [
     "REC-ARM"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 798,
+    "sha256": "cd489e790ca5cfe573aabd825bd44c254a0b7800e012e7c61ecfa7dfa1b30db6",
+    "text": "Arm record: Press to arm recording. Press again to stop recording."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 798,
+     "sha256": "cd489e790ca5cfe573aabd825bd44c254a0b7800e012e7c61ecfa7dfa1b30db6",
+     "text": "Arm record: Press to arm recording. Press again to stop recording."
+    },
+    "proposed_requirements": [
+     "REC-ARM"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 798,
+     "sha256": "cd489e790ca5cfe573aabd825bd44c254a0b7800e012e7c61ecfa7dfa1b30db6",
+     "text": "Arm record: Press to arm recording. Press again to stop recording."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 802,
     "sha256": "47c99b5ab9b7803b2fbf6855716e2b24f907176bfa7c4e396589fc4f7738be3b",
     "text": "Channel Editor: First menu button"
@@ -8293,11 +8464,35 @@
    "proposed_requirements": [
     "NAV-PAGES"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 802,
+    "sha256": "47c99b5ab9b7803b2fbf6855716e2b24f907176bfa7c4e396589fc4f7738be3b",
+    "text": "Channel Editor: First menu button"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 802,
+     "sha256": "47c99b5ab9b7803b2fbf6855716e2b24f907176bfa7c4e396589fc4f7738be3b",
+     "text": "Channel Editor: First menu button"
+    },
+    "proposed_requirements": [
+     "NAV-PAGES"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 802,
+     "sha256": "47c99b5ab9b7803b2fbf6855716e2b24f907176bfa7c4e396589fc4f7738be3b",
+     "text": "Channel Editor: First menu button"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 806,
     "sha256": "54de52631e9c5b3040838a1996fb3f8b08d4b930a7c4f30600fd64e040525eaa",
     "text": "Scale Editor: Second menu button"
@@ -8305,11 +8500,35 @@
    "proposed_requirements": [
     "NAV-PAGES"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 806,
+    "sha256": "54de52631e9c5b3040838a1996fb3f8b08d4b930a7c4f30600fd64e040525eaa",
+    "text": "Scale Editor: Second menu button"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 806,
+     "sha256": "54de52631e9c5b3040838a1996fb3f8b08d4b930a7c4f30600fd64e040525eaa",
+     "text": "Scale Editor: Second menu button"
+    },
+    "proposed_requirements": [
+     "NAV-PAGES"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 806,
+     "sha256": "54de52631e9c5b3040838a1996fb3f8b08d4b930a7c4f30600fd64e040525eaa",
+     "text": "Scale Editor: Second menu button"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 810,
     "sha256": "cfdd53867cb2a44b8b372363f4f73fb3f2311d3839d5e69de3dc38f221b382b3",
     "text": "Pattern Editor: Third button (press to cycle views)"
@@ -8317,11 +8536,35 @@
    "proposed_requirements": [
     "NAV-PAGES"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 810,
+    "sha256": "cfdd53867cb2a44b8b372363f4f73fb3f2311d3839d5e69de3dc38f221b382b3",
+    "text": "Pattern Editor: Third button (press to cycle views)"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 810,
+     "sha256": "cfdd53867cb2a44b8b372363f4f73fb3f2311d3839d5e69de3dc38f221b382b3",
+     "text": "Pattern Editor: Third button (press to cycle views)"
+    },
+    "proposed_requirements": [
+     "NAV-PAGES"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 810,
+     "sha256": "cfdd53867cb2a44b8b372363f4f73fb3f2311d3839d5e69de3dc38f221b382b3",
+     "text": "Pattern Editor: Third button (press to cycle views)"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 814,
     "sha256": "0566833c70b674549af85b5450193e0adb66d3800877141c08576f59925fa848",
     "text": "Song Editor: Fourth menu button"
@@ -8329,11 +8572,35 @@
    "proposed_requirements": [
     "NAV-PAGES"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 814,
+    "sha256": "0566833c70b674549af85b5450193e0adb66d3800877141c08576f59925fa848",
+    "text": "Song Editor: Fourth menu button"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 814,
+     "sha256": "0566833c70b674549af85b5450193e0adb66d3800877141c08576f59925fa848",
+     "text": "Song Editor: Fourth menu button"
+    },
+    "proposed_requirements": [
+     "NAV-PAGES"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 814,
+     "sha256": "0566833c70b674549af85b5450193e0adb66d3800877141c08576f59925fa848",
+     "text": "Song Editor: Fourth menu button"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 822,
     "sha256": "3c466d542fe4aa81b0483c329931b8860901f9d41cc57bcdeee99f528c63d0e3",
     "text": "Select Channel: Top row (hold/shift-press to mute)"
@@ -8342,11 +8609,36 @@
     "CH-SELECT",
     "CH-MUTE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 822,
+    "sha256": "3c466d542fe4aa81b0483c329931b8860901f9d41cc57bcdeee99f528c63d0e3",
+    "text": "Select Channel: Top row (hold/shift-press to mute)"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 822,
+     "sha256": "3c466d542fe4aa81b0483c329931b8860901f9d41cc57bcdeee99f528c63d0e3",
+     "text": "Select Channel: Top row (hold/shift-press to mute)"
+    },
+    "proposed_requirements": [
+     "CH-SELECT",
+     "CH-MUTE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 822,
+     "sha256": "3c466d542fe4aa81b0483c329931b8860901f9d41cc57bcdeee99f528c63d0e3",
+     "text": "Select Channel: Top row (hold/shift-press to mute)"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 826,
     "sha256": "26a5d8e7b2c2a43fad92eb6173be9363be00a21975ccb93755eb4400bc27a4ab",
     "text": "Assign Pattern: Second row buttons. Multiple patterns can be assigned to one or more channels."
@@ -8354,11 +8646,35 @@
    "proposed_requirements": [
     "CH-ASSIGN"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 826,
+    "sha256": "26a5d8e7b2c2a43fad92eb6173be9363be00a21975ccb93755eb4400bc27a4ab",
+    "text": "Assign Pattern: Second row buttons. Multiple patterns can be assigned to one or more channels."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 826,
+     "sha256": "26a5d8e7b2c2a43fad92eb6173be9363be00a21975ccb93755eb4400bc27a4ab",
+     "text": "Assign Pattern: Second row buttons. Multiple patterns can be assigned to one or more channels."
+    },
+    "proposed_requirements": [
+     "CH-ASSIGN"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 826,
+     "sha256": "26a5d8e7b2c2a43fad92eb6173be9363be00a21975ccb93755eb4400bc27a4ab",
+     "text": "Assign Pattern: Second row buttons. Multiple patterns can be assigned to one or more channels."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 830,
     "sha256": "85b6e13441548249ce4f31d124679f4037a071fff2fc2c27e6a7c9311bb5de8c",
     "text": "Scale slots: Displays currently active scale slot."
@@ -8366,11 +8682,35 @@
    "proposed_requirements": [
     "CH-ACTIVE-SCALE-DISPLAY"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 830,
+    "sha256": "85b6e13441548249ce4f31d124679f4037a071fff2fc2c27e6a7c9311bb5de8c",
+    "text": "Scale slots: Displays currently active scale slot."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 830,
+     "sha256": "85b6e13441548249ce4f31d124679f4037a071fff2fc2c27e6a7c9311bb5de8c",
+     "text": "Scale slots: Displays currently active scale slot."
+    },
+    "proposed_requirements": [
+     "CH-ACTIVE-SCALE-DISPLAY"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 830,
+     "sha256": "85b6e13441548249ce4f31d124679f4037a071fff2fc2c27e6a7c9311bb5de8c",
+     "text": "Scale slots: Displays currently active scale slot."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 834,
     "sha256": "7c2fdb75c9118324e64f699c4093c34938ed085c2857dddc4a3b85411efd45f6",
     "text": "Set Length: Hold start step, press end step"
@@ -8378,11 +8718,35 @@
    "proposed_requirements": [
     "CH-RANGE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 834,
+    "sha256": "7c2fdb75c9118324e64f699c4093c34938ed085c2857dddc4a3b85411efd45f6",
+    "text": "Set Length: Hold start step, press end step"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 834,
+     "sha256": "7c2fdb75c9118324e64f699c4093c34938ed085c2857dddc4a3b85411efd45f6",
+     "text": "Set Length: Hold start step, press end step"
+    },
+    "proposed_requirements": [
+     "CH-RANGE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 834,
+     "sha256": "7c2fdb75c9118324e64f699c4093c34938ed085c2857dddc4a3b85411efd45f6",
+     "text": "Set Length: Hold start step, press end step"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 838,
     "sha256": "52dbdeeeabc85128d3468227205ca8f9d85b5931fe385e5f3dd63eeaecffd43b",
     "text": "Set Global Octave: Applies to entire pattern. Press middle fader button to switch off."
@@ -8390,11 +8754,35 @@
    "proposed_requirements": [
     "CH-GLOBAL-OCTAVE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 838,
+    "sha256": "52dbdeeeabc85128d3468227205ca8f9d85b5931fe385e5f3dd63eeaecffd43b",
+    "text": "Set Global Octave: Applies to entire pattern. Press middle fader button to switch off."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 838,
+     "sha256": "52dbdeeeabc85128d3468227205ca8f9d85b5931fe385e5f3dd63eeaecffd43b",
+     "text": "Set Global Octave: Applies to entire pattern. Press middle fader button to switch off."
+    },
+    "proposed_requirements": [
+     "CH-GLOBAL-OCTAVE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 838,
+     "sha256": "52dbdeeeabc85128d3468227205ca8f9d85b5931fe385e5f3dd63eeaecffd43b",
+     "text": "Set Global Octave: Applies to entire pattern. Press middle fader button to switch off."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 842,
     "sha256": "e2dfa142b90faf84c517d88615c851693d240fa1c5e7b86115f35700b74b432e",
     "text": "Merge Modes: 1: trig, 2: note, 3: velocity. Hold shift for length merge modes using button 3."
@@ -8402,11 +8790,35 @@
    "proposed_requirements": [
     "MERGE-CONTROL"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 842,
+    "sha256": "e2dfa142b90faf84c517d88615c851693d240fa1c5e7b86115f35700b74b432e",
+    "text": "Merge Modes: 1: trig, 2: note, 3: velocity. Hold shift for length merge modes using button 3."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 842,
+     "sha256": "e2dfa142b90faf84c517d88615c851693d240fa1c5e7b86115f35700b74b432e",
+     "text": "Merge Modes: 1: trig, 2: note, 3: velocity. Hold shift for length merge modes using button 3."
+    },
+    "proposed_requirements": [
+     "MERGE-CONTROL"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 842,
+     "sha256": "e2dfa142b90faf84c517d88615c851693d240fa1c5e7b86115f35700b74b432e",
+     "text": "Merge Modes: 1: trig, 2: note, 3: velocity. Hold shift for length merge modes using button 3."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 846,
     "sha256": "967233ff50564ef05d5ae040fc9f9b09f1b7cc3bbecf28ee5e0f45afd143ddbc",
     "text": "Trig: All/Skip/Only"
@@ -8416,11 +8828,37 @@
     "MERGE-TRIG-SKIP",
     "MERGE-TRIG-ONLY"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 846,
+    "sha256": "967233ff50564ef05d5ae040fc9f9b09f1b7cc3bbecf28ee5e0f45afd143ddbc",
+    "text": "Trig: All/Skip/Only"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 846,
+     "sha256": "967233ff50564ef05d5ae040fc9f9b09f1b7cc3bbecf28ee5e0f45afd143ddbc",
+     "text": "Trig: All/Skip/Only"
+    },
+    "proposed_requirements": [
+     "MERGE-TRIG-ALL",
+     "MERGE-TRIG-SKIP",
+     "MERGE-TRIG-ONLY"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 846,
+     "sha256": "967233ff50564ef05d5ae040fc9f9b09f1b7cc3bbecf28ee5e0f45afd143ddbc",
+     "text": "Trig: All/Skip/Only"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 847,
     "sha256": "0e8c44b75f9a0cea17eb9e7e6c56e666620b6418f12c887c2462f0456e414d47",
     "text": "Note: Avg/High/Low/Pattern"
@@ -8431,11 +8869,38 @@
     "MERGE-NOTE-LOWER",
     "MERGE-NOTE-PATTERN"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 847,
+    "sha256": "0e8c44b75f9a0cea17eb9e7e6c56e666620b6418f12c887c2462f0456e414d47",
+    "text": "Note: Avg/High/Low/Pattern"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 847,
+     "sha256": "0e8c44b75f9a0cea17eb9e7e6c56e666620b6418f12c887c2462f0456e414d47",
+     "text": "Note: Avg/High/Low/Pattern"
+    },
+    "proposed_requirements": [
+     "MERGE-NOTE-AVERAGE",
+     "MERGE-NOTE-HIGHER",
+     "MERGE-NOTE-LOWER",
+     "MERGE-NOTE-PATTERN"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 847,
+     "sha256": "0e8c44b75f9a0cea17eb9e7e6c56e666620b6418f12c887c2462f0456e414d47",
+     "text": "Note: Avg/High/Low/Pattern"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 848,
     "sha256": "f6bacc62702de6972585aaa8004d59c61047a685cf7b8135d7b4f02e0b71ce26",
     "text": "Velocity: Avg/High/Low/Pattern"
@@ -8443,11 +8908,35 @@
    "proposed_requirements": [
     "MERGE-VELOCITY"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 848,
+    "sha256": "f6bacc62702de6972585aaa8004d59c61047a685cf7b8135d7b4f02e0b71ce26",
+    "text": "Velocity: Avg/High/Low/Pattern"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 848,
+     "sha256": "f6bacc62702de6972585aaa8004d59c61047a685cf7b8135d7b4f02e0b71ce26",
+     "text": "Velocity: Avg/High/Low/Pattern"
+    },
+    "proposed_requirements": [
+     "MERGE-VELOCITY"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 848,
+     "sha256": "f6bacc62702de6972585aaa8004d59c61047a685cf7b8135d7b4f02e0b71ce26",
+     "text": "Velocity: Avg/High/Low/Pattern"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 849,
     "sha256": "f825a4eb0e0d2019e96cbdaaddee69f3e747823a62df5d97a158551e213215c8",
     "text": "Length: Avg/Long/Short/Pattern"
@@ -8455,11 +8944,35 @@
    "proposed_requirements": [
     "MERGE-LENGTH"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 849,
+    "sha256": "f825a4eb0e0d2019e96cbdaaddee69f3e747823a62df5d97a158551e213215c8",
+    "text": "Length: Avg/Long/Short/Pattern"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 849,
+     "sha256": "f825a4eb0e0d2019e96cbdaaddee69f3e747823a62df5d97a158551e213215c8",
+     "text": "Length: Avg/Long/Short/Pattern"
+    },
+    "proposed_requirements": [
+     "MERGE-LENGTH"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 849,
+     "sha256": "f825a4eb0e0d2019e96cbdaaddee69f3e747823a62df5d97a158551e213215c8",
+     "text": "Length: Avg/Long/Short/Pattern"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 853,
     "sha256": "d5e2db98507991f3b534a7c2d27def1500340fd87ac4d1ed0da296943ef861aa",
     "text": "Trig Locks: Hold step, modify desired trig param"
@@ -8467,11 +8980,35 @@
    "proposed_requirements": [
     "LOCK-PARAM-SET"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 853,
+    "sha256": "d5e2db98507991f3b534a7c2d27def1500340fd87ac4d1ed0da296943ef861aa",
+    "text": "Trig Locks: Hold step, modify desired trig param"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 853,
+     "sha256": "d5e2db98507991f3b534a7c2d27def1500340fd87ac4d1ed0da296943ef861aa",
+     "text": "Trig Locks: Hold step, modify desired trig param"
+    },
+    "proposed_requirements": [
+     "LOCK-PARAM-SET"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 853,
+     "sha256": "d5e2db98507991f3b534a7c2d27def1500340fd87ac4d1ed0da296943ef861aa",
+     "text": "Trig Locks: Hold step, modify desired trig param"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 854,
     "sha256": "df0690e59aa5db47f074a4fc6ebe553c853aa14e4aaa4b37a93255056da3b65c",
     "text": "Mask Lock: Hold step, modify desired mask"
@@ -8479,11 +9016,35 @@
    "proposed_requirements": [
     "LOCK-MASK"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 854,
+    "sha256": "df0690e59aa5db47f074a4fc6ebe553c853aa14e4aaa4b37a93255056da3b65c",
+    "text": "Mask Lock: Hold step, modify desired mask"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 854,
+     "sha256": "df0690e59aa5db47f074a4fc6ebe553c853aa14e4aaa4b37a93255056da3b65c",
+     "text": "Mask Lock: Hold step, modify desired mask"
+    },
+    "proposed_requirements": [
+     "LOCK-MASK"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 854,
+     "sha256": "df0690e59aa5db47f074a4fc6ebe553c853aa14e4aaa4b37a93255056da3b65c",
+     "text": "Mask Lock: Hold step, modify desired mask"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 855,
     "sha256": "f9db2be9ae93c0ff81633a702359669948334dfb19aefeead5545488b690f583",
     "text": "Octave Lock: Hold step, press desired octave"
@@ -8491,11 +9052,35 @@
    "proposed_requirements": [
     "LOCK-OCTAVE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 855,
+    "sha256": "f9db2be9ae93c0ff81633a702359669948334dfb19aefeead5545488b690f583",
+    "text": "Octave Lock: Hold step, press desired octave"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 855,
+     "sha256": "f9db2be9ae93c0ff81633a702359669948334dfb19aefeead5545488b690f583",
+     "text": "Octave Lock: Hold step, press desired octave"
+    },
+    "proposed_requirements": [
+     "LOCK-OCTAVE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 855,
+     "sha256": "f9db2be9ae93c0ff81633a702359669948334dfb19aefeead5545488b690f583",
+     "text": "Octave Lock: Hold step, press desired octave"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 856,
     "sha256": "bf12446aea614785fbfad92f57101013118fa45ad86d58a51320c7221540ac0a",
     "text": "Channel Scale Lock: Hold step, press desired scale slot. Applies only to this channel. Persists until channel wrap when hold-until-end is on, or the next active trig passing probability when off; a new channel lock replaces it."
@@ -8503,11 +9088,35 @@
    "proposed_requirements": [
     "LOCK-SCALE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 856,
+    "sha256": "bf12446aea614785fbfad92f57101013118fa45ad86d58a51320c7221540ac0a",
+    "text": "Channel Scale Lock: Hold step, press desired scale slot. Applies only to this channel. Persists until channel wrap when hold-until-end is on, or the next active trig passing probability when off; a new channel lock replaces it."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 856,
+     "sha256": "bf12446aea614785fbfad92f57101013118fa45ad86d58a51320c7221540ac0a",
+     "text": "Channel Scale Lock: Hold step, press desired scale slot. Applies only to this channel. Persists until channel wrap when hold-until-end is on, or the next active trig passing probability when off; a new channel lock replaces it."
+    },
+    "proposed_requirements": [
+     "LOCK-SCALE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 856,
+     "sha256": "bf12446aea614785fbfad92f57101013118fa45ad86d58a51320c7221540ac0a",
+     "text": "Channel Scale Lock: Hold step, press desired scale slot. Applies only to this channel. Persists until channel wrap when hold-until-end is on, or the next active trig passing probability when off; a new channel lock replaces it."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 866,
     "sha256": "a005b40a392b77c94013eedfdaf3f149733559c045f5169bfbdc52149c0c096e",
     "text": "Pattern Select: Top row buttons (1-16)"
@@ -8515,11 +9124,35 @@
    "proposed_requirements": [
     "PAT-SELECT"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 866,
+    "sha256": "a005b40a392b77c94013eedfdaf3f149733559c045f5169bfbdc52149c0c096e",
+    "text": "Pattern Select: Top row buttons (1-16)"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 866,
+     "sha256": "a005b40a392b77c94013eedfdaf3f149733559c045f5169bfbdc52149c0c096e",
+     "text": "Pattern Select: Top row buttons (1-16)"
+    },
+    "proposed_requirements": [
+     "PAT-SELECT"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 866,
+     "sha256": "a005b40a392b77c94013eedfdaf3f149733559c045f5169bfbdc52149c0c096e",
+     "text": "Pattern Select: Top row buttons (1-16)"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 870,
     "sha256": "fec5efbe7f3f7e61614f1839bbf452553ad9d55a6ab315e36020f37d56774b96",
     "text": "Algorithm Select: Drums, Tresillo, Euclidean, NE"
@@ -8527,11 +9160,35 @@
    "proposed_requirements": [
     "PAT-ALGORITHM"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 870,
+    "sha256": "fec5efbe7f3f7e61614f1839bbf452553ad9d55a6ab315e36020f37d56774b96",
+    "text": "Algorithm Select: Drums, Tresillo, Euclidean, NE"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 870,
+     "sha256": "fec5efbe7f3f7e61614f1839bbf452553ad9d55a6ab315e36020f37d56774b96",
+     "text": "Algorithm Select: Drums, Tresillo, Euclidean, NE"
+    },
+    "proposed_requirements": [
+     "PAT-ALGORITHM"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 870,
+     "sha256": "fec5efbe7f3f7e61614f1839bbf452553ad9d55a6ab315e36020f37d56774b96",
+     "text": "Algorithm Select: Drums, Tresillo, Euclidean, NE"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 883,
     "sha256": "d21d9d8329d0c0d4d790c834273b0dd2c95a54f579f7225c9e7883460ac56b7e",
     "text": "Bank Select: Choose pattern bank/variation"
@@ -8539,11 +9196,35 @@
    "proposed_requirements": [
     "PAT-FADERS"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 883,
+    "sha256": "d21d9d8329d0c0d4d790c834273b0dd2c95a54f579f7225c9e7883460ac56b7e",
+    "text": "Bank Select: Choose pattern bank/variation"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 883,
+     "sha256": "d21d9d8329d0c0d4d790c834273b0dd2c95a54f579f7225c9e7883460ac56b7e",
+     "text": "Bank Select: Choose pattern bank/variation"
+    },
+    "proposed_requirements": [
+     "PAT-FADERS"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 883,
+     "sha256": "d21d9d8329d0c0d4d790c834273b0dd2c95a54f579f7225c9e7883460ac56b7e",
+     "text": "Bank Select: Choose pattern bank/variation"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 888,
     "sha256": "de54d1e7a3d4a80dd735bc7d5937aa916ea06d6b642eca608c797bd16c3cfe88",
     "text": "Pattern Select: Fine/coarse control for algorithm"
@@ -8551,11 +9232,35 @@
    "proposed_requirements": [
     "PAT-FADERS"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 888,
+    "sha256": "de54d1e7a3d4a80dd735bc7d5937aa916ea06d6b642eca608c797bd16c3cfe88",
+    "text": "Pattern Select: Fine/coarse control for algorithm"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 888,
+     "sha256": "de54d1e7a3d4a80dd735bc7d5937aa916ea06d6b642eca608c797bd16c3cfe88",
+     "text": "Pattern Select: Fine/coarse control for algorithm"
+    },
+    "proposed_requirements": [
+     "PAT-FADERS"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 888,
+     "sha256": "de54d1e7a3d4a80dd735bc7d5937aa916ea06d6b642eca608c797bd16c3cfe88",
+     "text": "Pattern Select: Fine/coarse control for algorithm"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 892,
     "sha256": "be9e1356089b6d0e45916f827f1619e781033cdf8d535207601cb6edcd54b8ce",
     "text": "Pattern Param: Secondary algorithm parameter"
@@ -8563,11 +9268,35 @@
    "proposed_requirements": [
     "PAT-FADERS"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 892,
+    "sha256": "be9e1356089b6d0e45916f827f1619e781033cdf8d535207601cb6edcd54b8ce",
+    "text": "Pattern Param: Secondary algorithm parameter"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 892,
+     "sha256": "be9e1356089b6d0e45916f827f1619e781033cdf8d535207601cb6edcd54b8ce",
+     "text": "Pattern Param: Secondary algorithm parameter"
+    },
+    "proposed_requirements": [
+     "PAT-FADERS"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 892,
+     "sha256": "be9e1356089b6d0e45916f827f1619e781033cdf8d535207601cb6edcd54b8ce",
+     "text": "Pattern Param: Secondary algorithm parameter"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 896,
     "sha256": "dec2525e9a386a3c1fa614754fd21b8770b26a01f926ab1fe1a9e6320f9884b6",
     "text": "Prime/Paint: Preview then commit changes"
@@ -8576,11 +9305,36 @@
     "PAT-PREVIEW",
     "PAT-PAINT"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 896,
+    "sha256": "dec2525e9a386a3c1fa614754fd21b8770b26a01f926ab1fe1a9e6320f9884b6",
+    "text": "Prime/Paint: Preview then commit changes"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 896,
+     "sha256": "dec2525e9a386a3c1fa614754fd21b8770b26a01f926ab1fe1a9e6320f9884b6",
+     "text": "Prime/Paint: Preview then commit changes"
+    },
+    "proposed_requirements": [
+     "PAT-PREVIEW",
+     "PAT-PAINT"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 896,
+     "sha256": "dec2525e9a386a3c1fa614754fd21b8770b26a01f926ab1fe1a9e6320f9884b6",
+     "text": "Prime/Paint: Preview then commit changes"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 900,
     "sha256": "dc6d5a46658972bfc04be68673b9d010c04b219908bf1f527df1bbcc26415c37",
     "text": "Cancel: Discard primed changes"
@@ -8588,11 +9342,35 @@
    "proposed_requirements": [
     "PAT-CANCEL"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 900,
+    "sha256": "dc6d5a46658972bfc04be68673b9d010c04b219908bf1f527df1bbcc26415c37",
+    "text": "Cancel: Discard primed changes"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 900,
+     "sha256": "dc6d5a46658972bfc04be68673b9d010c04b219908bf1f527df1bbcc26415c37",
+     "text": "Cancel: Discard primed changes"
+    },
+    "proposed_requirements": [
+     "PAT-CANCEL"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 900,
+     "sha256": "dc6d5a46658972bfc04be68673b9d010c04b219908bf1f527df1bbcc26415c37",
+     "text": "Cancel: Discard primed changes"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 904,
     "sha256": "867926ff7960707042bf889561f6365d6e491292e5045efa4c230d951b33d3f0",
     "text": "Move: Shift pattern left/right, reset position"
@@ -8600,11 +9378,35 @@
    "proposed_requirements": [
     "PAT-MOVE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 904,
+    "sha256": "867926ff7960707042bf889561f6365d6e491292e5045efa4c230d951b33d3f0",
+    "text": "Move: Shift pattern left/right, reset position"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 904,
+     "sha256": "867926ff7960707042bf889561f6365d6e491292e5045efa4c230d951b33d3f0",
+     "text": "Move: Shift pattern left/right, reset position"
+    },
+    "proposed_requirements": [
+     "PAT-MOVE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 904,
+     "sha256": "867926ff7960707042bf889561f6365d6e491292e5045efa4c230d951b33d3f0",
+     "text": "Move: Shift pattern left/right, reset position"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 913,
     "sha256": "510df0d2fa0d3043833cb5677d613b332a4e76e9f29e0e282900aee43dcddf8c",
     "text": "Scale Select: Quick press toggles the global scale. K1+press selects editing only. Hold another editing slot to select it; hold the already selected editing slot to turn the global scale off."
@@ -8613,11 +9415,36 @@
     "SCALE-SELECT",
     "SCALE-EDIT"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 913,
+    "sha256": "510df0d2fa0d3043833cb5677d613b332a4e76e9f29e0e282900aee43dcddf8c",
+    "text": "Scale Select: Quick press toggles the global scale. K1+press selects editing only. Hold another editing slot to select it; hold the already selected editing slot to turn the global scale off."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 913,
+     "sha256": "510df0d2fa0d3043833cb5677d613b332a4e76e9f29e0e282900aee43dcddf8c",
+     "text": "Scale Select: Quick press toggles the global scale. K1+press selects editing only. Hold another editing slot to select it; hold the already selected editing slot to turn the global scale off."
+    },
+    "proposed_requirements": [
+     "SCALE-SELECT",
+     "SCALE-EDIT"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 913,
+     "sha256": "510df0d2fa0d3043833cb5677d613b332a4e76e9f29e0e282900aee43dcddf8c",
+     "text": "Scale Select: Quick press toggles the global scale. K1+press selects editing only. Hold another editing slot to select it; hold the already selected editing slot to turn the global scale off."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 917,
     "sha256": "ae97d7d7319b933166b36de4334b4030ea87d78b734fe90e5da6787051d96304",
     "text": "Scale Lock: Hold step + press scale button"
@@ -8625,11 +9452,35 @@
    "proposed_requirements": [
     "LOCK-SCALE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 917,
+    "sha256": "ae97d7d7319b933166b36de4334b4030ea87d78b734fe90e5da6787051d96304",
+    "text": "Scale Lock: Hold step + press scale button"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 917,
+     "sha256": "ae97d7d7319b933166b36de4334b4030ea87d78b734fe90e5da6787051d96304",
+     "text": "Scale Lock: Hold step + press scale button"
+    },
+    "proposed_requirements": [
+     "LOCK-SCALE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 917,
+     "sha256": "ae97d7d7319b933166b36de4334b4030ea87d78b734fe90e5da6787051d96304",
+     "text": "Scale Lock: Hold step + press scale button"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 921,
     "sha256": "8977a9fb97ecb8d9cd490738efcc0f8fbd7dd3df089d0a9597cf2e28f8de72d6",
     "text": "Transpose: Global or per-step using locks"
@@ -8638,11 +9489,36 @@
     "TRANSPOSE-GLOBAL",
     "LOCK-TRANSPOSE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 921,
+    "sha256": "8977a9fb97ecb8d9cd490738efcc0f8fbd7dd3df089d0a9597cf2e28f8de72d6",
+    "text": "Transpose: Global or per-step using locks"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 921,
+     "sha256": "8977a9fb97ecb8d9cd490738efcc0f8fbd7dd3df089d0a9597cf2e28f8de72d6",
+     "text": "Transpose: Global or per-step using locks"
+    },
+    "proposed_requirements": [
+     "TRANSPOSE-GLOBAL",
+     "LOCK-TRANSPOSE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 921,
+     "sha256": "8977a9fb97ecb8d9cd490738efcc0f8fbd7dd3df089d0a9597cf2e28f8de72d6",
+     "text": "Transpose: Global or per-step using locks"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 925,
     "sha256": "22b428a35eda8ad60ace8c4aee2dd257039b62a8d24a3ad59dcdebdbe752ee30",
     "text": "Scale Lock: Hold step, press desired scale slot. Applies globally from this step until another global lock or global-track wrap, independently of the channel hold-until-end option."
@@ -8650,11 +9526,35 @@
    "proposed_requirements": [
     "LOCK-SCALE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 925,
+    "sha256": "22b428a35eda8ad60ace8c4aee2dd257039b62a8d24a3ad59dcdebdbe752ee30",
+    "text": "Scale Lock: Hold step, press desired scale slot. Applies globally from this step until another global lock or global-track wrap, independently of the channel hold-until-end option."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 925,
+     "sha256": "22b428a35eda8ad60ace8c4aee2dd257039b62a8d24a3ad59dcdebdbe752ee30",
+     "text": "Scale Lock: Hold step, press desired scale slot. Applies globally from this step until another global lock or global-track wrap, independently of the channel hold-until-end option."
+    },
+    "proposed_requirements": [
+     "LOCK-SCALE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 925,
+     "sha256": "22b428a35eda8ad60ace8c4aee2dd257039b62a8d24a3ad59dcdebdbe752ee30",
+     "text": "Scale Lock: Hold step, press desired scale slot. Applies globally from this step until another global lock or global-track wrap, independently of the channel hold-until-end option."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 926,
     "sha256": "f9653da5ae3e76829ebabda5fdd94836943fb4eb3666d74c996029f9820f89e4",
     "text": "Transposition Lock: Hold step, select desired transposition using the transposition fader. Applies transposition on top of current scale values."
@@ -8662,11 +9562,35 @@
    "proposed_requirements": [
     "LOCK-TRANSPOSE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 926,
+    "sha256": "f9653da5ae3e76829ebabda5fdd94836943fb4eb3666d74c996029f9820f89e4",
+    "text": "Transposition Lock: Hold step, select desired transposition using the transposition fader. Applies transposition on top of current scale values."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 926,
+     "sha256": "f9653da5ae3e76829ebabda5fdd94836943fb4eb3666d74c996029f9820f89e4",
+     "text": "Transposition Lock: Hold step, select desired transposition using the transposition fader. Applies transposition on top of current scale values."
+    },
+    "proposed_requirements": [
+     "LOCK-TRANSPOSE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 926,
+     "sha256": "f9653da5ae3e76829ebabda5fdd94836943fb4eb3666d74c996029f9820f89e4",
+     "text": "Transposition Lock: Hold step, select desired transposition using the transposition fader. Applies transposition on top of current scale values."
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 930,
     "sha256": "c696074bd32c7b6cf82782742af4c1c14904c9180ef8b547a5935d4b4c4a87c0",
     "text": "Scale locks applied per channel in the channel editor > Scale locks applied globally in the scale editor > Global scale selection"
@@ -8674,11 +9598,35 @@
    "proposed_requirements": [
     "SCALE-PRECEDENCE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 930,
+    "sha256": "c696074bd32c7b6cf82782742af4c1c14904c9180ef8b547a5935d4b4c4a87c0",
+    "text": "Scale locks applied per channel in the channel editor > Scale locks applied globally in the scale editor > Global scale selection"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 930,
+     "sha256": "c696074bd32c7b6cf82782742af4c1c14904c9180ef8b547a5935d4b4c4a87c0",
+     "text": "Scale locks applied per channel in the channel editor > Scale locks applied globally in the scale editor > Global scale selection"
+    },
+    "proposed_requirements": [
+     "SCALE-PRECEDENCE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 930,
+     "sha256": "c696074bd32c7b6cf82782742af4c1c14904c9180ef8b547a5935d4b4c4a87c0",
+     "text": "Scale locks applied per channel in the channel editor > Scale locks applied globally in the scale editor > Global scale selection"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 941,
     "sha256": "a09381eb811a6e73455d702b3917ae9559f591f3b907b9071fa98125ed24ba74",
     "text": "Slots: Press to select, hold source + press target to copy"
@@ -8686,11 +9634,35 @@
    "proposed_requirements": [
     "SONG-SLOTS"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 941,
+    "sha256": "a09381eb811a6e73455d702b3917ae9559f591f3b907b9071fa98125ed24ba74",
+    "text": "Slots: Press to select, hold source + press target to copy"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 941,
+     "sha256": "a09381eb811a6e73455d702b3917ae9559f591f3b907b9071fa98125ed24ba74",
+     "text": "Slots: Press to select, hold source + press target to copy"
+    },
+    "proposed_requirements": [
+     "SONG-SLOTS"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 941,
+     "sha256": "a09381eb811a6e73455d702b3917ae9559f591f3b907b9071fa98125ed24ba74",
+     "text": "Slots: Press to select, hold source + press target to copy"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 945,
     "sha256": "5e7644d4be7044bd69ab0838a6db5096665bd62dad6140b4a4f8484176f8caea",
     "text": "Length: Adjust sequence length (1-64 steps)"
@@ -8698,47 +9670,305 @@
    "proposed_requirements": [
     "SONG-LENGTH"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 945,
+    "sha256": "5e7644d4be7044bd69ab0838a6db5096665bd62dad6140b4a4f8484176f8caea",
+    "text": "Length: Adjust sequence length (1-64 steps)"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 945,
+     "sha256": "5e7644d4be7044bd69ab0838a6db5096665bd62dad6140b4a4f8484176f8caea",
+     "text": "Length: Adjust sequence length (1-64 steps)"
+    },
+    "proposed_requirements": [
+     "SONG-LENGTH"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 945,
+     "sha256": "5e7644d4be7044bd69ab0838a6db5096665bd62dad6140b4a4f8484176f8caea",
+     "text": "Length: Adjust sequence length (1-64 steps)"
+    }
+   }
   },
   {
    "source": {
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
+    "line": 954,
+    "text": "E1: Masks, Trig params, Channel tasks (other pages: open tasks)",
+    "sha256": "6b6e5c9a29f541f4f6768787be99148c344a11b952bc30de428ff631dd7ceb7b"
+   },
+   "proposed_requirements": [
+    "NAV-PAGES"
+   ],
+   "status": "historical-mapping-retained-with-reviewed-current-controls",
+   "historical_source": {
     "path": "cheat_sheet.html",
     "line": 954,
     "sha256": "6b6e5c9a29f541f4f6768787be99148c344a11b952bc30de428ff631dd7ceb7b",
     "text": "E1: Masks, Trig params, Channel tasks (other pages: open tasks)"
    },
-   "proposed_requirements": [
-    "NAV-PAGES"
+   "historical_mapping_status": "statement-changed-with-ui",
+   "current_claims": [
+    {
+     "path": "manual/legacy/README-1.4.0.md",
+     "line": 356,
+     "text": "- **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.",
+     "sha256": "a388bd85cc2918942f453911663a241e71a7dcf0eda3c2196ee94a5e7a7fb9ac"
+    },
+    {
+     "path": "manual/legacy/cheat-sheet-before-authority-353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91.html",
+     "line": 955,
+     "text": "            <li>E1: Open the current page\u2019s task list; with channel steps held, switch Masks / Trig params</li>",
+     "sha256": "d8a3cf30817fe9a888fafab6975d5985b4a99b5860f2d7ecc0afba58b36c005e"
+    }
    ],
-   "status": "statement-changed-with-ui"
+   "review": {
+    "status": "historical-control-superseded-current-claim-reviewed",
+    "note": "E1 no longer cycles those three screens without held steps; it opens the page task list. The current cheat retains the held-step Masks/Trig params shortcut explicitly.",
+    "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+   },
+   "historical_record": {
+    "source": {
+     "path": "manual/legacy/cheat-sheet-1.4.0.html",
+     "line": 954,
+     "text": "E1: Masks, Trig params, Channel tasks (other pages: open tasks)",
+     "sha256": "6b6e5c9a29f541f4f6768787be99148c344a11b952bc30de428ff631dd7ceb7b"
+    },
+    "proposed_requirements": [
+     "NAV-PAGES"
+    ],
+    "status": "historical-mapping-retained-with-reviewed-current-controls",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 954,
+     "sha256": "6b6e5c9a29f541f4f6768787be99148c344a11b952bc30de428ff631dd7ceb7b",
+     "text": "E1: Masks, Trig params, Channel tasks (other pages: open tasks)"
+    },
+    "historical_mapping_status": "statement-changed-with-ui",
+    "current_claims": [
+     {
+      "path": "README.md",
+      "line": 356,
+      "text": "- **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.",
+      "sha256": "a388bd85cc2918942f453911663a241e71a7dcf0eda3c2196ee94a5e7a7fb9ac"
+     },
+     {
+      "path": "cheat_sheet.html",
+      "line": 955,
+      "text": "            <li>E1: Open the current page\u2019s task list; with channel steps held, switch Masks / Trig params</li>",
+      "sha256": "d8a3cf30817fe9a888fafab6975d5985b4a99b5860f2d7ecc0afba58b36c005e"
+     }
+    ],
+    "review": {
+     "status": "historical-control-superseded-current-claim-reviewed",
+     "note": "E1 no longer cycles those three screens without held steps; it opens the page task list. The current cheat retains the held-step Masks/Trig params shortcut explicitly.",
+     "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+    }
+   },
+   "current_claim_history": [
+    {
+     "path": "README.md",
+     "line": 356,
+     "text": "- **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.",
+     "sha256": "a388bd85cc2918942f453911663a241e71a7dcf0eda3c2196ee94a5e7a7fb9ac"
+    },
+    {
+     "path": "cheat_sheet.html",
+     "line": 955,
+     "text": "            <li>E1: Open the current page\u2019s task list; with channel steps held, switch Masks / Trig params</li>",
+     "sha256": "d8a3cf30817fe9a888fafab6975d5985b4a99b5860f2d7ecc0afba58b36c005e"
+    }
+   ]
   },
   {
    "source": {
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
+    "line": 955,
+    "text": "E2: Choose a field or task",
+    "sha256": "ee4038f8b6148b2dfd297c1840b68a0c08137ac5629cb3dff1f3aa9e97a3e25e"
+   },
+   "proposed_requirements": [
+    "NAV-CONFIRM"
+   ],
+   "status": "historical-mapping-retained-with-reviewed-current-controls",
+   "historical_source": {
     "path": "cheat_sheet.html",
     "line": 955,
     "sha256": "ee4038f8b6148b2dfd297c1840b68a0c08137ac5629cb3dff1f3aa9e97a3e25e",
     "text": "E2: Choose a field or task"
    },
-   "proposed_requirements": [
-    "NAV-CONFIRM"
+   "historical_mapping_status": "statement-changed-with-ui",
+   "current_claims": [
+    {
+     "path": "manual/legacy/README-before-authority-11fff062bcb9a5f03480abc2e223702c779152c969b0f5ce4e9157d0d18103cb.md",
+     "line": 357,
+     "text": "- **E2** chooses a row in a settings or task list, or a field on Masks and Trig params.",
+     "sha256": "3209e88779c243a047125e59531bc75d5cbbb3ccf4527b1d6ca87217fabb4a8e"
+    },
+    {
+     "path": "manual/legacy/cheat-sheet-before-authority-353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91.html",
+     "line": 956,
+     "text": "            <li>E2: Choose a vertical-list row, overview field or task</li>",
+     "sha256": "27635986cf0bc708ff1f2523bc13ca3a56cd53401075f64c01f99a39e28d2dad"
+    }
    ],
-   "status": "statement-changed-with-ui"
+   "review": {
+    "status": "historical-control-superseded-current-claim-reviewed",
+    "note": "The current claim distinguishes vertical-list rows, overview fields and task choices.",
+    "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+   },
+   "historical_record": {
+    "source": {
+     "path": "manual/legacy/cheat-sheet-1.4.0.html",
+     "line": 955,
+     "text": "E2: Choose a field or task",
+     "sha256": "ee4038f8b6148b2dfd297c1840b68a0c08137ac5629cb3dff1f3aa9e97a3e25e"
+    },
+    "proposed_requirements": [
+     "NAV-CONFIRM"
+    ],
+    "status": "historical-mapping-retained-with-reviewed-current-controls",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 955,
+     "sha256": "ee4038f8b6148b2dfd297c1840b68a0c08137ac5629cb3dff1f3aa9e97a3e25e",
+     "text": "E2: Choose a field or task"
+    },
+    "historical_mapping_status": "statement-changed-with-ui",
+    "current_claims": [
+     {
+      "path": "README.md",
+      "line": 357,
+      "text": "- **E2** chooses a row in a settings or task list, or a field on Masks and Trig params.",
+      "sha256": "3209e88779c243a047125e59531bc75d5cbbb3ccf4527b1d6ca87217fabb4a8e"
+     },
+     {
+      "path": "cheat_sheet.html",
+      "line": 956,
+      "text": "            <li>E2: Choose a vertical-list row, overview field or task</li>",
+      "sha256": "27635986cf0bc708ff1f2523bc13ca3a56cd53401075f64c01f99a39e28d2dad"
+     }
+    ],
+    "review": {
+     "status": "historical-control-superseded-current-claim-reviewed",
+     "note": "The current claim distinguishes vertical-list rows, overview fields and task choices.",
+     "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+    }
+   },
+   "current_claim_history": [
+    {
+     "path": "README.md",
+     "line": 357,
+     "text": "- **E2** chooses a row in a settings or task list, or a field on Masks and Trig params.",
+     "sha256": "3209e88779c243a047125e59531bc75d5cbbb3ccf4527b1d6ca87217fabb4a8e"
+    },
+    {
+     "path": "cheat_sheet.html",
+     "line": 956,
+     "text": "            <li>E2: Choose a vertical-list row, overview field or task</li>",
+     "sha256": "27635986cf0bc708ff1f2523bc13ca3a56cd53401075f64c01f99a39e28d2dad"
+    }
+   ]
   },
   {
    "source": {
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
+    "line": 957,
+    "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>",
+    "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35"
+   },
+   "proposed_requirements": [
+    "NAV-FINE-K1"
+   ],
+   "status": "historical-mapping-retained-with-reviewed-current-controls",
+   "historical_source": {
     "path": "cheat_sheet.html",
     "line": 957,
     "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35",
     "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>"
    },
-   "proposed_requirements": [
-    "NAV-FINE-K1"
+   "historical_mapping_status": "mapped-to-tested-requirement",
+   "current_claims": [
+    {
+     "path": "manual/legacy/README-1.4.0.md",
+     "line": 358,
+     "text": "- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.",
+     "sha256": "e7aadd56ec014f5df62afce90aa6249fbcf5e1835806e569ca563382da8320ef"
+    },
+    {
+     "path": "manual/legacy/cheat-sheet-before-authority-353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91.html",
+     "line": 958,
+     "text": "            <li>E3: Adjust the selected value (hold K1 for fine control); staged settings need K3 Apply</li>",
+     "sha256": "813ae02de1ae5c929a3377dbaaf9947f0edc94825be84bc0f6b24a00d3d892ed"
+    }
    ],
-   "status": "mapped-to-tested-requirement"
+   "review": {
+    "status": "historical-control-superseded-current-claim-reviewed",
+    "note": "The old unqualified fine-control wording is superseded by the README scope: fine changes only where supported. Live edits and staged K3 Apply are distinct.",
+    "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+   },
+   "historical_record": {
+    "source": {
+     "path": "manual/legacy/cheat-sheet-1.4.0.html",
+     "line": 957,
+     "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>",
+     "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35"
+    },
+    "proposed_requirements": [
+     "NAV-FINE-K1"
+    ],
+    "status": "historical-mapping-retained-with-reviewed-current-controls",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 957,
+     "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35",
+     "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>"
+    },
+    "historical_mapping_status": "mapped-to-tested-requirement",
+    "current_claims": [
+     {
+      "path": "README.md",
+      "line": 358,
+      "text": "- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.",
+      "sha256": "e7aadd56ec014f5df62afce90aa6249fbcf5e1835806e569ca563382da8320ef"
+     },
+     {
+      "path": "cheat_sheet.html",
+      "line": 958,
+      "text": "            <li>E3: Adjust the selected value (hold K1 for fine control); staged settings need K3 Apply</li>",
+      "sha256": "813ae02de1ae5c929a3377dbaaf9947f0edc94825be84bc0f6b24a00d3d892ed"
+     }
+    ],
+    "review": {
+     "status": "historical-control-superseded-current-claim-reviewed",
+     "note": "The old unqualified fine-control wording is superseded by the README scope: fine changes only where supported. Live edits and staged K3 Apply are distinct.",
+     "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+    }
+   },
+   "current_claim_history": [
+    {
+     "path": "README.md",
+     "line": 358,
+     "text": "- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.",
+     "sha256": "e7aadd56ec014f5df62afce90aa6249fbcf5e1835806e569ca563382da8320ef"
+    },
+    {
+     "path": "cheat_sheet.html",
+     "line": 958,
+     "text": "            <li>E3: Adjust the selected value (hold K1 for fine control); staged settings need K3 Apply</li>",
+     "sha256": "813ae02de1ae5c929a3377dbaaf9947f0edc94825be84bc0f6b24a00d3d892ed"
+    }
+   ]
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 958,
     "sha256": "3cb9230ae95eedb508a858f4c83651b66db19c1c21e88ba8a6d688c0cc361781",
     "text": "Step + K2: Clear locks of type based on currently selected page on step"
@@ -8746,11 +9976,35 @@
    "proposed_requirements": [
     "LOCK-CLEAR-PAGE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 959,
+    "sha256": "3cb9230ae95eedb508a858f4c83651b66db19c1c21e88ba8a6d688c0cc361781",
+    "text": "Step + K2: Clear locks of type based on currently selected page on step"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 959,
+     "sha256": "3cb9230ae95eedb508a858f4c83651b66db19c1c21e88ba8a6d688c0cc361781",
+     "text": "Step + K2: Clear locks of type based on currently selected page on step"
+    },
+    "proposed_requirements": [
+     "LOCK-CLEAR-PAGE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 959,
+     "sha256": "3cb9230ae95eedb508a858f4c83651b66db19c1c21e88ba8a6d688c0cc361781",
+     "text": "Step + K2: Clear locks of type based on currently selected page on step"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 959,
     "sha256": "33ebda00b32167821956b9c6a7d1f6426dbcb771e70ea96e02a70ae086fd9f8f",
     "text": "K1 + K2: Clear all locks of type based on currently selected page on channel"
@@ -8758,11 +10012,35 @@
    "proposed_requirements": [
     "LOCK-CLEAR-PAGE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 960,
+    "sha256": "33ebda00b32167821956b9c6a7d1f6426dbcb771e70ea96e02a70ae086fd9f8f",
+    "text": "K1 + K2: Clear all locks of type based on currently selected page on channel"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 960,
+     "sha256": "33ebda00b32167821956b9c6a7d1f6426dbcb771e70ea96e02a70ae086fd9f8f",
+     "text": "K1 + K2: Clear all locks of type based on currently selected page on channel"
+    },
+    "proposed_requirements": [
+     "LOCK-CLEAR-PAGE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 960,
+     "sha256": "33ebda00b32167821956b9c6a7d1f6426dbcb771e70ea96e02a70ae086fd9f8f",
+     "text": "K1 + K2: Clear all locks of type based on currently selected page on channel"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 964,
     "sha256": "8d3cc4bf13f3767182a7a683dbf062eafd16b6adb025b20ca4b49cdc3e414235",
     "text": "Hold step + turn E3: Create parameter lock"
@@ -8770,11 +10048,35 @@
    "proposed_requirements": [
     "LOCK-PARAM-SET"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 965,
+    "sha256": "8d3cc4bf13f3767182a7a683dbf062eafd16b6adb025b20ca4b49cdc3e414235",
+    "text": "Hold step + turn E3: Create parameter lock"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 965,
+     "sha256": "8d3cc4bf13f3767182a7a683dbf062eafd16b6adb025b20ca4b49cdc3e414235",
+     "text": "Hold step + turn E3: Create parameter lock"
+    },
+    "proposed_requirements": [
+     "LOCK-PARAM-SET"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 965,
+     "sha256": "8d3cc4bf13f3767182a7a683dbf062eafd16b6adb025b20ca4b49cdc3e414235",
+     "text": "Hold step + turn E3: Create parameter lock"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 965,
     "sha256": "0a6a39221fff4ce2379f6edc67bcec3cefabd09c09585b077903bd99f386e19b",
     "text": "Hold step + press scale: Create scale lock"
@@ -8782,11 +10084,35 @@
    "proposed_requirements": [
     "LOCK-SCALE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 966,
+    "sha256": "0a6a39221fff4ce2379f6edc67bcec3cefabd09c09585b077903bd99f386e19b",
+    "text": "Hold step + press scale: Create scale lock"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 966,
+     "sha256": "0a6a39221fff4ce2379f6edc67bcec3cefabd09c09585b077903bd99f386e19b",
+     "text": "Hold step + press scale: Create scale lock"
+    },
+    "proposed_requirements": [
+     "LOCK-SCALE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 966,
+     "sha256": "0a6a39221fff4ce2379f6edc67bcec3cefabd09c09585b077903bd99f386e19b",
+     "text": "Hold step + press scale: Create scale lock"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 966,
     "sha256": "af5114b16a94e0c8e91777b45da451fbe40bbabe1d3234df1798b6b14b10565f",
     "text": "Hold step + press transpose: Create transpose lock"
@@ -8794,11 +10120,35 @@
    "proposed_requirements": [
     "LOCK-TRANSPOSE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 967,
+    "sha256": "af5114b16a94e0c8e91777b45da451fbe40bbabe1d3234df1798b6b14b10565f",
+    "text": "Hold step + press transpose: Create transpose lock"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 967,
+     "sha256": "af5114b16a94e0c8e91777b45da451fbe40bbabe1d3234df1798b6b14b10565f",
+     "text": "Hold step + press transpose: Create transpose lock"
+    },
+    "proposed_requirements": [
+     "LOCK-TRANSPOSE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 967,
+     "sha256": "af5114b16a94e0c8e91777b45da451fbe40bbabe1d3234df1798b6b14b10565f",
+     "text": "Hold step + press transpose: Create transpose lock"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 967,
     "sha256": "629de72658af093afab650317087e6f62fea7f899e3a3e6f54a91f261107d22a",
     "text": "Hold step + press octave: Create octave lock"
@@ -8806,11 +10156,35 @@
    "proposed_requirements": [
     "LOCK-OCTAVE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 968,
+    "sha256": "629de72658af093afab650317087e6f62fea7f899e3a3e6f54a91f261107d22a",
+    "text": "Hold step + press octave: Create octave lock"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 968,
+     "sha256": "629de72658af093afab650317087e6f62fea7f899e3a3e6f54a91f261107d22a",
+     "text": "Hold step + press octave: Create octave lock"
+    },
+    "proposed_requirements": [
+     "LOCK-OCTAVE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 968,
+     "sha256": "629de72658af093afab650317087e6f62fea7f899e3a3e6f54a91f261107d22a",
+     "text": "Hold step + press octave: Create octave lock"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 972,
     "sha256": "d26914e30eb8761193537f907bcf7e2ebd25f9f7be406470564a231fa9b34917",
     "text": "Hold K1 + press step: Add/remove trig mask"
@@ -8818,11 +10192,35 @@
    "proposed_requirements": [
     "MASK-TRIG-GESTURE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 973,
+    "sha256": "d26914e30eb8761193537f907bcf7e2ebd25f9f7be406470564a231fa9b34917",
+    "text": "Hold K1 + press step: Add/remove trig mask"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 973,
+     "sha256": "d26914e30eb8761193537f907bcf7e2ebd25f9f7be406470564a231fa9b34917",
+     "text": "Hold K1 + press step: Add/remove trig mask"
+    },
+    "proposed_requirements": [
+     "MASK-TRIG-GESTURE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 973,
+     "sha256": "d26914e30eb8761193537f907bcf7e2ebd25f9f7be406470564a231fa9b34917",
+     "text": "Hold K1 + press step: Add/remove trig mask"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 973,
     "sha256": "f31a39f69b184cdc9d04251d6dda29bf4ad79a6ae8c0fe96653287f179ad63cd",
     "text": "Hold step on mask page: Set note/velocity/length"
@@ -8830,11 +10228,35 @@
    "proposed_requirements": [
     "MASK-STEP-ENTRY"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 974,
+    "sha256": "f31a39f69b184cdc9d04251d6dda29bf4ad79a6ae8c0fe96653287f179ad63cd",
+    "text": "Hold step on mask page: Set note/velocity/length"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 974,
+     "sha256": "f31a39f69b184cdc9d04251d6dda29bf4ad79a6ae8c0fe96653287f179ad63cd",
+     "text": "Hold step on mask page: Set note/velocity/length"
+    },
+    "proposed_requirements": [
+     "MASK-STEP-ENTRY"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 974,
+     "sha256": "f31a39f69b184cdc9d04251d6dda29bf4ad79a6ae8c0fe96653287f179ad63cd",
+     "text": "Hold step on mask page: Set note/velocity/length"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 987,
     "sha256": "68401e25c996474787fc409cbb5455e91a47119499f30069183fdb226982a4a4",
     "text": "Add/Remove trig: Hold K1 + press step"
@@ -8842,11 +10264,35 @@
    "proposed_requirements": [
     "MASK-TRIG-GESTURE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 988,
+    "sha256": "68401e25c996474787fc409cbb5455e91a47119499f30069183fdb226982a4a4",
+    "text": "Add/Remove trig: Hold K1 + press step"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 988,
+     "sha256": "68401e25c996474787fc409cbb5455e91a47119499f30069183fdb226982a4a4",
+     "text": "Add/Remove trig: Hold K1 + press step"
+    },
+    "proposed_requirements": [
+     "MASK-TRIG-GESTURE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 988,
+     "sha256": "68401e25c996474787fc409cbb5455e91a47119499f30069183fdb226982a4a4",
+     "text": "Add/Remove trig: Hold K1 + press step"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 988,
     "sha256": "d8005b4d2f8094c582ce3432acc82bff41549c2482a4f3290896e2eb7362ed77",
     "text": "Clear lock: Hold step + K2"
@@ -8854,11 +10300,35 @@
    "proposed_requirements": [
     "LOCK-CLEAR-PAGE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 989,
+    "sha256": "d8005b4d2f8094c582ce3432acc82bff41549c2482a4f3290896e2eb7362ed77",
+    "text": "Clear lock: Hold step + K2"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 989,
+     "sha256": "d8005b4d2f8094c582ce3432acc82bff41549c2482a4f3290896e2eb7362ed77",
+     "text": "Clear lock: Hold step + K2"
+    },
+    "proposed_requirements": [
+     "LOCK-CLEAR-PAGE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 989,
+     "sha256": "d8005b4d2f8094c582ce3432acc82bff41549c2482a4f3290896e2eb7362ed77",
+     "text": "Clear lock: Hold step + K2"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 989,
     "sha256": "3618a1aeeb2c55ddb3692c712db969b1c7d404686fc8d7a7da0bc85a6af611f6",
     "text": "Clear all locks of selected page type: Hold K1 + K2"
@@ -8866,11 +10336,35 @@
    "proposed_requirements": [
     "LOCK-CLEAR-PAGE"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 990,
+    "sha256": "3618a1aeeb2c55ddb3692c712db969b1c7d404686fc8d7a7da0bc85a6af611f6",
+    "text": "Clear all locks of selected page type: Hold K1 + K2"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 990,
+     "sha256": "3618a1aeeb2c55ddb3692c712db969b1c7d404686fc8d7a7da0bc85a6af611f6",
+     "text": "Clear all locks of selected page type: Hold K1 + K2"
+    },
+    "proposed_requirements": [
+     "LOCK-CLEAR-PAGE"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 990,
+     "sha256": "3618a1aeeb2c55ddb3692c712db969b1c7d404686fc8d7a7da0bc85a6af611f6",
+     "text": "Clear all locks of selected page type: Hold K1 + K2"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 990,
     "sha256": "5b8259476fca0571040fefac0871f18090a697cb9f4d216156ab686f948d2a76",
     "text": "Global set: Press without holding step"
@@ -8879,11 +10373,36 @@
     "MASK-PRECEDENCE",
     "PARAM-SLOTS"
    ],
-   "status": "mapped-to-draft-not-tested"
+   "status": "mapped-to-draft-not-tested",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 991,
+    "sha256": "5b8259476fca0571040fefac0871f18090a697cb9f4d216156ab686f948d2a76",
+    "text": "Global set: Press without holding step"
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 991,
+     "sha256": "5b8259476fca0571040fefac0871f18090a697cb9f4d216156ab686f948d2a76",
+     "text": "Global set: Press without holding step"
+    },
+    "proposed_requirements": [
+     "MASK-PRECEDENCE",
+     "PARAM-SLOTS"
+    ],
+    "status": "mapped-to-draft-not-tested",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 991,
+     "sha256": "5b8259476fca0571040fefac0871f18090a697cb9f4d216156ab686f948d2a76",
+     "text": "Global set: Press without holding step"
+    }
+   }
   },
   {
    "source": {
-    "path": "cheat_sheet.html",
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
     "line": 991,
     "sha256": "917526b6468131273844b69e97c7f3921250b15200b25593751c7171902c1e50",
     "text": "Change a slot's param: on Trig params press K2, E3 to browse, K3 to assign, K2 to return."
@@ -8891,35 +10410,215 @@
    "proposed_requirements": [
     "PARAM-SLOTS"
    ],
-   "status": "statement-changed-with-ui"
+   "status": "statement-changed-with-ui",
+   "historical_source": {
+    "path": "cheat_sheet.html",
+    "line": 992,
+    "sha256": "917526b6468131273844b69e97c7f3921250b15200b25593751c7171902c1e50",
+    "text": "Change a slot's param: on Trig params press K2, E3 to browse, K3 to assign, K2 to return."
+   },
+   "historical_record": {
+    "source": {
+     "path": "cheat_sheet.html",
+     "line": 992,
+     "sha256": "917526b6468131273844b69e97c7f3921250b15200b25593751c7171902c1e50",
+     "text": "Change a slot's param: on Trig params press K2, E3 to browse, K3 to assign, K2 to return."
+    },
+    "proposed_requirements": [
+     "PARAM-SLOTS"
+    ],
+    "status": "statement-changed-with-ui",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 992,
+     "sha256": "917526b6468131273844b69e97c7f3921250b15200b25593751c7171902c1e50",
+     "text": "Change a slot's param: on Trig params press K2, E3 to browse, K3 to assign, K2 to return."
+    }
+   }
   },
   {
    "source": {
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
+    "line": 992,
+    "text": "Save action: K3",
+    "sha256": "6782e433156c192f4f69bc3f244d78cc4d35327530ca62308a54c536ee85064a"
+   },
+   "proposed_requirements": [
+    "NAV-CONFIRM"
+   ],
+   "status": "historical-mapping-retained-with-reviewed-current-controls",
+   "historical_source": {
     "path": "cheat_sheet.html",
     "line": 992,
     "sha256": "6782e433156c192f4f69bc3f244d78cc4d35327530ca62308a54c536ee85064a",
     "text": "Save action: K3"
    },
-   "proposed_requirements": [
-    "NAV-CONFIRM"
+   "historical_mapping_status": "mapped-to-draft-not-tested",
+   "current_claims": [
+    {
+     "path": "manual/legacy/README-1.4.0.md",
+     "line": 359,
+     "text": "- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`; when the name would crowd out the screen's other controls it just says `K3 OPEN`.",
+     "sha256": "273f783a46f27c715a6a1132c9707d210217f8d4862e809dda5896ce35e35b19"
+    },
+    {
+     "path": "manual/legacy/cheat-sheet-before-authority-353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91.html",
+     "line": 993,
+     "text": "            <li>Staged settings: K3 Apply; live Masks / Trig params edits take effect directly</li>",
+     "sha256": "b118460af7b8860196b291913c049653533ad6123c4ae2e609032126efb596ba"
+    }
    ],
-   "status": "mapped-to-draft-not-tested"
+   "review": {
+    "status": "historical-control-superseded-current-claim-reviewed",
+    "note": "K3 is contextual: open, apply or confirm. Live Masks/Trig params edits apply directly and are not a generic Save action.",
+    "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+   },
+   "historical_record": {
+    "source": {
+     "path": "manual/legacy/cheat-sheet-1.4.0.html",
+     "line": 992,
+     "text": "Save action: K3",
+     "sha256": "6782e433156c192f4f69bc3f244d78cc4d35327530ca62308a54c536ee85064a"
+    },
+    "proposed_requirements": [
+     "NAV-CONFIRM"
+    ],
+    "status": "historical-mapping-retained-with-reviewed-current-controls",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 992,
+     "sha256": "6782e433156c192f4f69bc3f244d78cc4d35327530ca62308a54c536ee85064a",
+     "text": "Save action: K3"
+    },
+    "historical_mapping_status": "mapped-to-draft-not-tested",
+    "current_claims": [
+     {
+      "path": "README.md",
+      "line": 359,
+      "text": "- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`; when the name would crowd out the screen's other controls it just says `K3 OPEN`.",
+      "sha256": "273f783a46f27c715a6a1132c9707d210217f8d4862e809dda5896ce35e35b19"
+     },
+     {
+      "path": "cheat_sheet.html",
+      "line": 993,
+      "text": "            <li>Staged settings: K3 Apply; live Masks / Trig params edits take effect directly</li>",
+      "sha256": "b118460af7b8860196b291913c049653533ad6123c4ae2e609032126efb596ba"
+     }
+    ],
+    "review": {
+     "status": "historical-control-superseded-current-claim-reviewed",
+     "note": "K3 is contextual: open, apply or confirm. Live Masks/Trig params edits apply directly and are not a generic Save action.",
+     "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+    }
+   },
+   "current_claim_history": [
+    {
+     "path": "README.md",
+     "line": 359,
+     "text": "- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`; when the name would crowd out the screen's other controls it just says `K3 OPEN`.",
+     "sha256": "273f783a46f27c715a6a1132c9707d210217f8d4862e809dda5896ce35e35b19"
+    },
+    {
+     "path": "cheat_sheet.html",
+     "line": 993,
+     "text": "            <li>Staged settings: K3 Apply; live Masks / Trig params edits take effect directly</li>",
+     "sha256": "b118460af7b8860196b291913c049653533ad6123c4ae2e609032126efb596ba"
+    }
+   ]
   },
   {
    "source": {
+    "path": "manual/legacy/cheat-sheet-1.4.0.html",
+    "line": 993,
+    "text": "Cancel action: K2",
+    "sha256": "6fd82b6a79f314b475f686ad265c6df7c39c064ecd0337b95266e9c3f12b8924"
+   },
+   "proposed_requirements": [
+    "NAV-CONFIRM"
+   ],
+   "status": "historical-mapping-retained-with-reviewed-current-controls",
+   "historical_source": {
     "path": "cheat_sheet.html",
     "line": 993,
     "sha256": "6fd82b6a79f314b475f686ad265c6df7c39c064ecd0337b95266e9c3f12b8924",
     "text": "Cancel action: K2"
    },
-   "proposed_requirements": [
-    "NAV-CONFIRM"
+   "historical_mapping_status": "mapped-to-draft-not-tested",
+   "current_claims": [
+    {
+     "path": "manual/legacy/README-1.4.0.md",
+     "line": 360,
+     "text": "- **K2** goes back, or cancels a staged change or a question.",
+     "sha256": "63c6b5500dd520ef500bc5f00a4ac900aaf101e42fd202aefc8d92d600f9f60d"
+    },
+    {
+     "path": "manual/legacy/cheat-sheet-before-authority-353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91.html",
+     "line": 994,
+     "text": "            <li>K2: Cancel a draft / Back; Trig params opens assignment; held steps clear their locks</li>",
+     "sha256": "e5135b432d1323023d13aa27f20ca6721ebd025de1f8b97e18602d132dd6393b"
+    }
    ],
-   "status": "mapped-to-draft-not-tested"
+   "review": {
+    "status": "historical-control-superseded-current-claim-reviewed",
+    "note": "K2 is contextual: back/cancel or Trig params assignment/held-step lock clearing, rather than unconditional cancellation.",
+    "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+   },
+   "historical_record": {
+    "source": {
+     "path": "manual/legacy/cheat-sheet-1.4.0.html",
+     "line": 993,
+     "text": "Cancel action: K2",
+     "sha256": "6fd82b6a79f314b475f686ad265c6df7c39c064ecd0337b95266e9c3f12b8924"
+    },
+    "proposed_requirements": [
+     "NAV-CONFIRM"
+    ],
+    "status": "historical-mapping-retained-with-reviewed-current-controls",
+    "historical_source": {
+     "path": "cheat_sheet.html",
+     "line": 993,
+     "sha256": "6fd82b6a79f314b475f686ad265c6df7c39c064ecd0337b95266e9c3f12b8924",
+     "text": "Cancel action: K2"
+    },
+    "historical_mapping_status": "mapped-to-draft-not-tested",
+    "current_claims": [
+     {
+      "path": "README.md",
+      "line": 360,
+      "text": "- **K2** goes back, or cancels a staged change or a question.",
+      "sha256": "63c6b5500dd520ef500bc5f00a4ac900aaf101e42fd202aefc8d92d600f9f60d"
+     },
+     {
+      "path": "cheat_sheet.html",
+      "line": 994,
+      "text": "            <li>K2: Cancel a draft / Back; Trig params opens assignment; held steps clear their locks</li>",
+      "sha256": "e5135b432d1323023d13aa27f20ca6721ebd025de1f8b97e18602d132dd6393b"
+     }
+    ],
+    "review": {
+     "status": "historical-control-superseded-current-claim-reviewed",
+     "note": "K2 is contextual: back/cancel or Trig params assignment/held-step lock clearing, rather than unconditional cancellation.",
+     "acceptance": "Source reconciliation only; existing requirement gaps remain, and candidate native acceptance is separate."
+    }
+   },
+   "current_claim_history": [
+    {
+     "path": "README.md",
+     "line": 360,
+     "text": "- **K2** goes back, or cancels a staged change or a question.",
+     "sha256": "63c6b5500dd520ef500bc5f00a4ac900aaf101e42fd202aefc8d92d600f9f60d"
+    },
+    {
+     "path": "cheat_sheet.html",
+     "line": 994,
+     "text": "            <li>K2: Cancel a draft / Back; Trig params opens assignment; held steps clear their locks</li>",
+     "sha256": "e5135b432d1323023d13aa27f20ca6721ebd025de1f8b97e18602d132dd6393b"
+    }
+   ]
   },
   {
    "source": {
-    "path": "README.md",
+    "path": "manual/legacy/README-1.4.0.md",
     "line": 388,
     "sha256": "3fe513c4c75dc63c0f1a9cf156f6a592e25d6c43cea3820e48ed303dd439d2ee",
     "text": "With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi clock in** to select one input when other devices also send transport or clock. Mosaic follows received pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns estimates timing between received pulses from recent intervals. If clock pulses disappear without Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step 1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase."
@@ -8939,7 +10638,43 @@
     "M-SYNC-019",
     "M-SYNC-020"
    ],
-   "status": "mapped-scoped-native-evidence"
+   "status": "mapped-scoped-native-evidence",
+   "historical_source": {
+    "path": "README.md",
+    "line": 390,
+    "sha256": "3fe513c4c75dc63c0f1a9cf156f6a592e25d6c43cea3820e48ed303dd439d2ee",
+    "text": "With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi clock in** to select one input when other devices also send transport or clock. Mosaic follows received pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns estimates timing between received pulses from recent intervals. If clock pulses disappear without Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step 1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase."
+   },
+   "historical_record": {
+    "source": {
+     "path": "README.md",
+     "line": 390,
+     "sha256": "3fe513c4c75dc63c0f1a9cf156f6a592e25d6c43cea3820e48ed303dd439d2ee",
+     "text": "With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi clock in** to select one input when other devices also send transport or clock. Mosaic follows received pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns estimates timing between received pulses from recent intervals. If clock pulses disappear without Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step 1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase."
+    },
+    "proposed_requirements": [
+     "CLOCK-MIDI-TRANSPORT-001",
+     "MIDI-RELEASE-001",
+     "NAV-TRANSPORT"
+    ],
+    "cases": [
+     "M-SYNC-006",
+     "M-TIM-004",
+     "M-SYNC-015",
+     "M-SYNC-016",
+     "M-SYNC-017",
+     "M-SYNC-018",
+     "M-SYNC-019",
+     "M-SYNC-020"
+    ],
+    "status": "mapped-scoped-native-evidence",
+    "historical_source": {
+     "path": "README.md",
+     "line": 390,
+     "sha256": "3fe513c4c75dc63c0f1a9cf156f6a592e25d6c43cea3820e48ed303dd439d2ee",
+     "text": "With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi clock in** to select one input when other devices also send transport or clock. Mosaic follows received pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns estimates timing between received pulses from recent intervals. If clock pulses disappear without Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step 1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase."
+    }
+   }
   }
  ],
  "image_references": [
@@ -9026,14 +10761,14 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 371,
+   "line": 373,
    "reference": "images/norns/splash.png",
    "path": "images/norns/splash.png",
    "sha256": "780ffc676fabaf246469c210a77049229732d5d362f95ee5cd1e1b37a79296c7"
   },
   {
    "source": "README.md",
-   "line": 473,
+   "line": 475,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/pattern-select-buttons.svg",
@@ -9041,7 +10776,7 @@
   },
   {
    "source": "README.md",
-   "line": 477,
+   "line": 479,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg",
@@ -9049,7 +10784,7 @@
   },
   {
    "source": "README.md",
-   "line": 490,
+   "line": 492,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg",
@@ -9057,7 +10792,7 @@
   },
   {
    "source": "README.md",
-   "line": 643,
+   "line": 651,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg",
@@ -9065,7 +10800,7 @@
   },
   {
    "source": "README.md",
-   "line": 644,
+   "line": 652,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-2-select-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/bank-pattern-2-select-fader.svg",
@@ -9073,7 +10808,7 @@
   },
   {
    "source": "README.md",
-   "line": 649,
+   "line": 657,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg",
@@ -9081,7 +10816,7 @@
   },
   {
    "source": "README.md",
-   "line": 653,
+   "line": 661,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/arm-paint-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/arm-paint-button.svg",
@@ -9089,7 +10824,7 @@
   },
   {
    "source": "README.md",
-   "line": 659,
+   "line": 667,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg",
@@ -9097,7 +10832,7 @@
   },
   {
    "source": "README.md",
-   "line": 663,
+   "line": 671,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg",
@@ -9105,7 +10840,7 @@
   },
   {
    "source": "README.md",
-   "line": 684,
+   "line": 692,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-select-faders.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/note_editor/note-select-faders.svg",
@@ -9113,7 +10848,7 @@
   },
   {
    "source": "README.md",
-   "line": 690,
+   "line": 698,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-step-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/note_editor/note-step-select-buttons.svg",
@@ -9121,7 +10856,7 @@
   },
   {
    "source": "README.md",
-   "line": 694,
+   "line": 702,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-value-range-select-faders.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/note_editor/note-value-range-select-faders.svg",
@@ -9129,7 +10864,7 @@
   },
   {
    "source": "README.md",
-   "line": 729,
+   "line": 737,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/channel-select-buttons.svg",
@@ -9137,7 +10872,7 @@
   },
   {
    "source": "README.md",
-   "line": 786,
+   "line": 794,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/pattern-assign-buttons.svg",
@@ -9145,7 +10880,7 @@
   },
   {
    "source": "README.md",
-   "line": 848,
+   "line": 862,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/merge-mode-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/merge-mode-buttons.svg",
@@ -9153,7 +10888,7 @@
   },
   {
    "source": "README.md",
-   "line": 865,
+   "line": 879,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/trigger-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/trigger-merge-mode-select-button.svg",
@@ -9161,7 +10896,7 @@
   },
   {
    "source": "README.md",
-   "line": 878,
+   "line": 892,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/note-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/note-merge-mode-select-button.svg",
@@ -9169,7 +10904,7 @@
   },
   {
    "source": "README.md",
-   "line": 889,
+   "line": 903,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
@@ -9177,7 +10912,7 @@
   },
   {
    "source": "README.md",
-   "line": 902,
+   "line": 916,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
@@ -9185,7 +10920,7 @@
   },
   {
    "source": "README.md",
-   "line": 950,
+   "line": 964,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/channel-sequencer-step-buttons.svg",
@@ -9193,7 +10928,7 @@
   },
   {
    "source": "README.md",
-   "line": 966,
+   "line": 980,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/channel-select-buttons.svg",
@@ -9202,14 +10937,14 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 981,
+   "line": 995,
    "reference": "images/norns/trig-params.png",
    "path": "images/norns/trig-params.png",
    "sha256": "2e867683ec1516bb48ed3609d081c630a63994404824e1a00f027281ab59e8c9"
   },
   {
    "source": "README.md",
-   "line": 1080,
+   "line": 1094,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/scale_editor/scale-slot-select-buttons.svg",
@@ -9217,7 +10952,7 @@
   },
   {
    "source": "README.md",
-   "line": 1086,
+   "line": 1100,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/scale_editor/scale-step-buttons.svg",
@@ -9225,7 +10960,7 @@
   },
   {
    "source": "README.md",
-   "line": 1101,
+   "line": 1115,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/transposition-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/scale_editor/transposition-fader.svg",
@@ -9233,7 +10968,7 @@
   },
   {
    "source": "README.md",
-   "line": 1134,
+   "line": 1148,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-pattern-slot-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/song_editor/song-pattern-slot-button.svg",
@@ -9241,7 +10976,7 @@
   },
   {
    "source": "README.md",
-   "line": 1147,
+   "line": 1161,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-slot-pattern-length-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/song_editor/song-slot-pattern-length-fader.svg",
@@ -9250,7 +10985,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1408,
+   "line": 1424,
    "reference": "images/merge-shape-phrase.png",
    "path": "images/merge-shape-phrase.png",
    "sha256": "1035cc59a67748a7500a9e36ce43411a4edd73dc77f470e15f9e7f4b2fa3410c"
@@ -9258,7 +10993,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1410,
+   "line": 1426,
    "reference": "images/merge-shape-foundation.png",
    "path": "images/merge-shape-foundation.png",
    "sha256": "1dac205f0379af973f62703cc49507cddacea68d019fcac9a172d46ec7ea9850"
@@ -9266,7 +11001,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1444,
+   "line": 1460,
    "reference": "images/merge-shape-fragments.png",
    "path": "images/merge-shape-fragments.png",
    "sha256": "7984c43100cc0c290f1f9639d32ed0aae7102f10c0d7efa03e8c3f3afa6f014a"
@@ -9274,7 +11009,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1472,
+   "line": 1488,
    "reference": "images/merge-shape-interlock.png",
    "path": "images/merge-shape-interlock.png",
    "sha256": "533d8bbbb5553040db390a0dd79c89873fd58a37b1f8d8a1a218c62bbbb5f4e2"
@@ -9282,7 +11017,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1505,
+   "line": 1521,
    "reference": "images/merge-shape-structure.png",
    "path": "images/merge-shape-structure.png",
    "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223"
@@ -9290,7 +11025,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1553,
+   "line": 1569,
    "reference": "images/harmony-register.png",
    "path": "images/harmony-register.png",
    "sha256": "73482ae4abfb0bb1964c08aa65ee04215cef7a778a31761f6f661517d82104b1"
@@ -9298,7 +11033,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1555,
+   "line": 1571,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
    "sha256": "9ada7d5dfae6b9d849e19f4228b1475459595d3f9eefe57af08ef87904e6f823"
@@ -9306,7 +11041,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1590,
+   "line": 1606,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
    "sha256": "f55f4b3fb68a92d1721a928b3e587ba0716dc174ab05a9cf1e4bb6d094eac7ea"
@@ -9315,5 +11050,829 @@
  "integration_basis": {
   "manifest_sha256": "728b96d796f77d330f372a5029b3bdd2165f7dbfb9b3b00c8dfd156c4ad4a330",
   "remaining": "Split grouped domains, reconcile remaining text and image specifications, resolve existing semantics, implement all cases and acceptance lanes."
+ },
+ "inventory_extensions": [
+  {
+   "kind": "additive-case-registration",
+   "case": "M-UI-VERTICAL-001",
+   "requirement": "CH-TEMPO",
+   "original_requirement_count": 178,
+   "original_case_count": 876,
+   "original_case_ids_sha256": "aad75e995874a46d7b1ba153e0df7ffebd4507a1cc4118c87c37d51b666466b2",
+   "complete_regression_run": false
+  },
+  {
+   "kind": "additive-canonical-registration",
+   "case": "M-MERGE-STRATEGY-001",
+   "requirements": [
+    "MERGE-FOUNDATION",
+    "MERGE-FRAGMENTS"
+   ],
+   "registration_source": {
+    "path": "tests/behaviour/cases.py",
+    "sha256": "5439e36bac817df5be9ba8c6c2be6201036989693a95760e1b2307442a60016e"
+   },
+   "description": "Shared grid/norns Strategy selector: Skip, Only, All, Foundation and Fragments; actual and pending strategies, inactive saved modes, anchor refusal and recovery, draft discard, exact musical output and cycle-boundary handoff (shared selector characterized until final README merge entry is frozen)",
+   "prior_case_count": 877,
+   "prior_case_ids_sha256": "13043547314fe177c7ea1682ca0a31cdacfc4f8cf7f03635b767d2771a237150",
+   "acceptance": "Registration only; native qualification and remaining requirement domains are not promoted.",
+   "complete_regression_run": false
+  },
+  {
+   "kind": "additive-canonical-registration",
+   "case": "M-UI-READABILITY-001",
+   "requirements": [
+    "CH-ASSIGN"
+   ],
+   "registration_source": {
+    "path": "tests/behaviour/cases.py",
+    "sha256": "71fe6596753fb9b12b419d6e1ad45acc2c908bcfecf597084c65d3458531ea6c"
+   },
+   "description": "Public Trig Param assignment and long C07 selected-label readability with motion On/Off; fitting converted Clock/Scale text stability, unchanged Masks/Trig Params and exact four-note MIDI. Marquee timing and display bounds are characterized; positive overflowing vertical-list text is component-only because current public converted fields fit.",
+   "prior_case_count": 878,
+   "prior_case_ids_sha256": "80c3d9df2918be6c84b258374b5c1500ca41e96b83eef329c8fef04c36faadca",
+   "acceptance": "Registration only; native qualification and remaining requirement domains are not promoted.",
+   "complete_regression_run": false
+  },
+  {
+   "kind": "additive-canonical-registration",
+   "case": "M-STRUM-GATE-001",
+   "requirements": [
+    "CHORD-STRUM",
+    "CHORD-SPREAD",
+    "PARAM-SLOTS"
+   ],
+   "registration_source": {
+    "path": "tests/behaviour/cases.py",
+    "sha256": "7eec1558606041823206c93f30b4d2b8c9739e26fd0d09dfd0b69b78601b5a02"
+   },
+   "description": "Strummed voices at fractional onsets (Strum 1/2, Spread 1/4, Length 2 steps) each sound their full selected length from their own onset: releases 432, 594, 756, 918 and 1080 ticks (README Chord Spread)",
+   "prior_case_count": 885,
+   "prior_case_ids_sha256": "0edd5f394cf13897239ae20658113a6f7b2ca42b06311204a04a04186961181d",
+   "acceptance": "Registration only; native qualification and remaining requirement domains are not promoted.",
+   "complete_regression_run": false
+  },
+  {
+   "kind": "additive-canonical-registration",
+   "case": "M-TRIGPARAM-SLOT-001",
+   "requirements": [
+    "PARAM-SLOTS",
+    "CHORD-STRUM",
+    "SONG-SLOTS"
+   ],
+   "registration_source": {
+    "path": "tests/behaviour/cases.py",
+    "sha256": "7eec1558606041823206c93f30b4d2b8c9739e26fd0d09dfd0b69b78601b5a02"
+   },
+   "description": "A Strum trig param set with no step held in song slot 2 neither shows nor plays in slot 1, which stays a block chord, and survives changing slots (README Trig Parameters)",
+   "prior_case_count": 886,
+   "prior_case_ids_sha256": "c8fe8fb8cdd573aad0e1476edacedd202725088b5d34dc07223530d0c4f4050e",
+   "acceptance": "Registration only; native qualification and remaining requirement domains are not promoted.",
+   "complete_regression_run": false
+  },
+  {
+   "kind": "additive-canonical-registration",
+   "case": "M-TRIGPARAM-STRUM-PERSIST-001",
+   "requirements": [
+    "PARAM-SLOTS",
+    "CHORD-STRUM",
+    "CHORD-SPREAD",
+    "SONG-SLOTS",
+    "SAVE-NAMED"
+   ],
+   "registration_source": {
+    "path": "tests/behaviour/cases.py",
+    "sha256": "05dc1562e5a00c5ff3ed01561815e181cb667c895a89e6ba1d20f25c9b74c655"
+   },
+   "description": "Named-save cold-load keeps distinct Strum/Spread values per song slot; Off slot 1 plays three voices together and Strum 1/2 + Spread 1/4 slot 2 starts voices at 0, 162, 324 ticks with full two-step gates releasing at 432, 594, 756 ticks",
+   "prior_case_count": 887,
+   "prior_case_ids_sha256": "8a6cc4dc7b667d8e746c0784e2e16333b022e779d0f04f518d6e154ed053dc71",
+   "acceptance": "Registration only; native qualification and remaining requirement domains are not promoted.",
+   "complete_regression_run": false
+  }
+ ],
+ "legacy_cheat_history": {
+  "path": "manual/legacy/cheat-sheet-1.4.0.html",
+  "sha256": "edf0df405c75727a8ff29a16d3640b71af2c6bfe4b5ddb5db603474e02bed561",
+  "rows": [
+   {
+    "line": 794,
+    "text": "Start/Stop: Bottom-left button. Press to play. Press again to stop."
+   },
+   {
+    "line": 798,
+    "text": "Arm record: Press to arm recording. Press again to stop recording."
+   },
+   {
+    "line": 802,
+    "text": "Channel Editor: First menu button"
+   },
+   {
+    "line": 806,
+    "text": "Scale Editor: Second menu button"
+   },
+   {
+    "line": 810,
+    "text": "Pattern Editor: Third button (press to cycle views)"
+   },
+   {
+    "line": 814,
+    "text": "Song Editor: Fourth menu button"
+   },
+   {
+    "line": 822,
+    "text": "Select Channel: Top row (hold/shift-press to mute)"
+   },
+   {
+    "line": 826,
+    "text": "Assign Pattern: Second row buttons. Multiple patterns can be assigned to one or more channels."
+   },
+   {
+    "line": 830,
+    "text": "Scale slots: Displays currently active scale slot."
+   },
+   {
+    "line": 834,
+    "text": "Set Length: Hold start step, press end step"
+   },
+   {
+    "line": 838,
+    "text": "Set Global Octave: Applies to entire pattern. Press middle fader button to switch off."
+   },
+   {
+    "line": 842,
+    "text": "Merge Modes: 1: trig, 2: note, 3: velocity. Hold shift for length merge modes using button 3."
+   },
+   {
+    "line": 866,
+    "text": "Pattern Select: Top row buttons (1-16)"
+   },
+   {
+    "line": 870,
+    "text": "Algorithm Select: Drums, Tresillo, Euclidean, NE (columns 12\u201315). Rhythm Doctor is column 16."
+   },
+   {
+    "line": 873,
+    "text": "Rhythm Doctor (stopped only): Select column 16, row 2. Row 2: column 1 Record; column 2 reserved; columns 3\u20135 select BD, SD, CYM (hats and cymbals). Columns 6 and 7 are inert. Starting Mosaic stops an unfinished capture/analysis and clears its paint preview."
+   },
+   {
+    "line": 876,
+    "text": "Rhythm Doctor setup and paint: Before capture, E2 selects Auto/Manual tempo, manual BPM, or Stereo/L/R and E3 edits; K2 discards the setup draft and K3 keeps it. With a ready bank, E2/E3 select/edit bar or step window, lane sensitivity, and paint policy; K3 (or E3) on Alignment opens its draft. Paint (16,8) previews then commits; Cancel (14,8) discards; Shift/Reset/Shift are 10/11/12,8 during preview."
+   },
+   {
+    "line": 879,
+    "text": "Rhythm Doctor availability: analysis uses a model-free detector Mosaic builds from source on first use, with no downloads or configuration. Without a C compiler it reports ANALYSIS_BACKEND_UNAVAILABLE ; the input choice is not audio routing. No analysis quality or performance is claimed."
+   },
+   {
+    "line": 883,
+    "text": "Bank Select: Choose pattern bank/variation"
+   },
+   {
+    "line": 888,
+    "text": "Pattern Select: Fine/coarse control for algorithm"
+   },
+   {
+    "line": 892,
+    "text": "Pattern Param: Secondary algorithm parameter"
+   },
+   {
+    "line": 896,
+    "text": "Prime/Paint: Preview then commit changes"
+   },
+   {
+    "line": 900,
+    "text": "Cancel: Discard primed changes"
+   },
+   {
+    "line": 904,
+    "text": "Move: Shift pattern left/right, reset position"
+   },
+   {
+    "line": 913,
+    "text": "Scale Select: Quick press toggles the global scale. K1+press selects editing only. Hold another editing slot to select it; hold the already selected editing slot to turn the global scale off."
+   },
+   {
+    "line": 917,
+    "text": "Scale Lock: Hold step + press scale button"
+   },
+   {
+    "line": 921,
+    "text": "Transpose: Global or per-step using locks"
+   },
+   {
+    "line": 941,
+    "text": "Slots: Press to select, hold source + press target to copy"
+   },
+   {
+    "line": 945,
+    "text": "Length: Adjust sequence length (1-64 steps)"
+   },
+   {
+    "line": 954,
+    "text": "E1: Masks, Trig params, Channel tasks (other pages: open tasks)"
+   },
+   {
+    "line": 955,
+    "text": "E2: Choose a field or task"
+   },
+   {
+    "line": 956,
+    "text": "K3: Open the chosen task or OPEN > row (the last line names it), apply, or confirm"
+   },
+   {
+    "line": 957,
+    "text": "E3: Adjust values (hold K1 for fine control)"
+   },
+   {
+    "line": 958,
+    "text": "Step + K2: Clear locks of type based on currently selected page on step"
+   },
+   {
+    "line": 959,
+    "text": "K1 + K2: Clear all locks of type based on currently selected page on channel"
+   },
+   {
+    "line": 964,
+    "text": "Hold step + turn E3: Create parameter lock"
+   },
+   {
+    "line": 965,
+    "text": "Hold step + press scale: Create scale lock"
+   },
+   {
+    "line": 966,
+    "text": "Hold step + press transpose: Create transpose lock"
+   },
+   {
+    "line": 967,
+    "text": "Hold step + press octave: Create octave lock"
+   },
+   {
+    "line": 972,
+    "text": "Hold K1 + press step: Add/remove trig mask"
+   },
+   {
+    "line": 973,
+    "text": "Hold step on mask page: Set note/velocity/length"
+   },
+   {
+    "line": 987,
+    "text": "Add/Remove trig: Hold K1 + press step"
+   },
+   {
+    "line": 988,
+    "text": "Clear lock: Hold step + K2"
+   },
+   {
+    "line": 989,
+    "text": "Clear all locks of selected page type: Hold K1 + K2"
+   },
+   {
+    "line": 990,
+    "text": "Global set: Press without holding step"
+   },
+   {
+    "line": 991,
+    "text": "Change a slot's param: on Trig params press K2, E3 to browse, K3 to assign, K2 to return."
+   },
+   {
+    "line": 992,
+    "text": "Save action: K3"
+   },
+   {
+    "line": 993,
+    "text": "Cancel action: K2"
+   },
+   {
+    "line": 998,
+    "text": "Trig: Enable/disable steps"
+   },
+   {
+    "line": 999,
+    "text": "Note: Override pattern notes"
+   },
+   {
+    "line": 1000,
+    "text": "Velocity: Set specific velocities"
+   },
+   {
+    "line": 1001,
+    "text": "Length: Control note duration"
+   },
+   {
+    "line": 1002,
+    "text": "Chord: Add a chord note to trig relative to current scale"
+   },
+   {
+    "line": 1007,
+    "text": "Add chord: Hold step + select up to 4 notes"
+   },
+   {
+    "line": 1008,
+    "text": "Strum control: Use with Chord Strum param"
+   },
+   {
+    "line": 1009,
+    "text": "Velocity: Use Chord Velocity modifier param"
+   },
+   {
+    "line": 1010,
+    "text": "Shape: Use Chord Shape modifier param"
+   },
+   {
+    "line": 1011,
+    "text": "Spread: Use spread param to space chord notes"
+   },
+   {
+    "line": 1012,
+    "text": "Acceleration: Use acceleration param with spread param to create irregular spacing between chords"
+   },
+   {
+    "line": 1013,
+    "text": "Arpeggio: Use chord arpeggio param to create arpeggios across the length of the current trig"
+   },
+   {
+    "line": 1019,
+    "text": "Set note: Hold step + press MIDI key"
+   },
+   {
+    "line": 1020,
+    "text": "Preview: Play without holding step"
+   },
+   {
+    "line": 1021,
+    "text": "Scale map: White keys follow current scale"
+   },
+   {
+    "line": 1022,
+    "text": "Real-time: Input during playback"
+   },
+   {
+    "line": 1029,
+    "text": "Autosave occurs after 60s when not playing"
+   },
+   {
+    "line": 1038,
+    "text": "Masks \u2192 Trig params \u2192 Output \u2192 Clock \u2192 Merge modes \u2192 Merge Shape \u2192 Harmony \u2192 Device \u2192 History"
+   },
+   {
+    "line": 1039,
+    "text": "Channel tasks \u00b7 Merge Shape, Phrase and Harmony use vertical lists \u00b7 E2 field \u00b7 E3 draft \u00b7 K3 opens an OPEN > row, else applies \u00b7 K2 back or cancel"
+   },
+   {
+    "line": 1043,
+    "text": "Anchor + deterministic additions. Set Amount, Accent, circular Gap, Seed, Phrase cycles/shape and Fixed/Per phrase variation. Explicit masks still win."
+   },
+   {
+    "line": 1047,
+    "text": "Mode Fragments \u00b7 Rhythm opens Size 4/8/16, Keep anchor, Anchor, Seed. Each fragment plays one assigned pattern's own trigs, notes, velocities and lengths (seeded); legacy merge modes wait for Mode Off (Merge modes shows FRAGMENTS (\u2026))."
+   },
+   {
+    "line": 1051,
+    "text": "Rhythm \u2192 Interlock: Leader (another channel) + Window 0\u20134 steps. Additions near the leader's anchors are removed; anchors never. No chains: LEADER HAS LEADER / CHANNEL IS A LEADER. Status ON or RESYNC / PLAN LIMIT / LEADER OFF / LEADER MISSING."
+   },
+   {
+    "line": 1055,
+    "text": "Pitch \u2192 Structure: Markers Off / Anchors / Every 4 / Every 8 + an enabled Harmony group. Marker notes snap to its chord (lower on ties); between markers keep their pitch. Deleting the group turns markers Off. Reason: MARKER CHORD Gnn, CHORD MISSING, or BYPASS NOTE MASK / RANDOM / FIXED / QUANTISED FIXED."
+   },
+   {
+    "line": 1059,
+    "text": "Keep Anchor is before scale. Additions: Legacy / effective Scale / selected Degrees / enabled Ensemble material. Lower pitch wins ties."
+   },
+   {
+    "line": 1063,
+    "text": "Off / Revoice / Pattern / Ensemble. Pattern leaves unmapped tones Raw. Ensemble members keep rhythm, velocity, gate, clock and route."
+   },
+   {
+    "line": 1064,
+    "text": "After playback, Pattern Note LEDs show final effective Harmony positions across the normal upper/centre/lower banks. Off, Raw and Bypass show ordinary positions. A projected fader still edits its source value; an out-of-range pitch is shown exactly in Result/Dashboard instead of as a false LED."
+   },
+   {
+    "line": 1065,
+    "text": "H05 Result: E2 selects Step, E3 selects the event step. An empty step says NO EVENT; group member bypass/failure wins over a healthy member. Status names LOCAL SCALE/OCTAVE BYPASS, LEGACY reason or NO VOICING reason. Note Dashboard: hold a grid step to inspect its planned \u2192 scheduled \u2192 emitted chain."
+   },
+   {
+    "line": 1069,
+    "text": "Stopped: immediate. Merge while playing: NEXT CYCLE (NEXT PATTERN while a Harmony group change for the channel is pending). Harmony while playing: NEXT PATTERN. Stop activates the latest applied request for the next start."
+   },
+   {
+    "line": 1073,
+    "text": "No solution silences affected voices unless Legacy fallback is chosen. Source patterns never change. Strum/arp pitch snapshots and Note Off ownership stay fixed."
+   },
+   {
+    "line": 1130,
+    "text": "MIDI lock lead: Norns params \u2192 MOSAIC \u2192 Parameter locks \u2192 Lock lead time (ms). Global, 0\u201350 ms, default 25 ms. Values leave an earlier clock pulse ahead of their step; nothing is delayed, so notes and MIDI clock keep their lead-0 timing. The wait is the setting rounded up to a whole pulse (about 28.8 ms for 25 ms at 130 bpm). When notes on a channel are less than twice the lead apart, values wait until halfway between notes, so every note keeps its own lock. The first step after Play, and a step whose parameter is mid-slide, get no lead."
+   }
+  ],
+  "scope": "All original quick-reference rows retained verbatim; content preservation is not native acceptance."
+ },
+ "original_manual": {
+  "original_path": "README.md",
+  "path": "manual/legacy/README-1.4.0.md",
+  "sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c"
+ },
+ "manual_source_aliases": {
+  "README.md": {
+   "path": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+   "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+   "original_path": "README.md"
+  },
+  "cheat_sheet.html": {
+   "path": "manual/legacy/cheat-sheet-before-authority-6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed.html",
+   "sha256": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+   "original_path": "cheat_sheet.html"
+  }
+ },
+ "section_manual": {
+  "path": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+  "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+  "original_path": "README.md"
+ },
+ "source_transition": {
+  "status": "frozen-provisional-full-manual",
+  "authority_active": false,
+  "complete_regression_run": false
+ },
+ "manual_authority": {
+  "status": "inactive",
+  "prepared": true,
+  "feature_links": {
+   "MAN-001": [
+    "getting-started"
+   ],
+   "MAN-002": [
+    "install"
+   ],
+   "MAN-003": [
+    "setup"
+   ],
+   "MAN-004": [
+    "hardware"
+   ],
+   "MAN-005": [
+    "midi-device-configuration"
+   ],
+   "MAN-006": [
+    "stock-devices"
+   ],
+   "MAN-007": [
+    "adding-custom-devices"
+   ],
+   "MAN-116": [
+    "lock-lead-time"
+   ],
+   "MAN-008": [
+    "mods-and-software-devices"
+   ],
+   "MAN-009": [
+    "midi-keyboard-input"
+   ],
+   "MAN-010": [
+    "midi-controller-mapping"
+   ],
+   "MAN-011": [
+    "getting-around-mosaic"
+   ],
+   "MAN-012": [
+    "sequencer-start-and-stop"
+   ],
+   "MAN-013": [
+    "arm-live-record"
+   ],
+   "MAN-014": [
+    "grid-menu-navigation"
+   ],
+   "MAN-015": [
+    "norns-menu-navigation"
+   ],
+   "MAN-016": [
+    "tooltips"
+   ],
+   "MAN-114": [
+    "external-midi-transport"
+   ],
+   "MAN-017": [
+    "midi-panic"
+   ],
+   "MAN-018": [
+    "cheat-sheet"
+   ],
+   "MAN-019": [
+    "typical-workflow"
+   ],
+   "MAN-020": [
+    "sound-design"
+   ],
+   "MAN-021": [
+    "rhythm-section-design"
+   ],
+   "MAN-022": [
+    "harmony-design"
+   ],
+   "MAN-023": [
+    "sequence-composition"
+   ],
+   "MAN-024": [
+    "using-merge-modes"
+   ],
+   "MAN-025": [
+    "melody-composition"
+   ],
+   "MAN-026": [
+    "modulation-movement-and-interest"
+   ],
+   "MAN-027": [
+    "song-composition"
+   ],
+   "MAN-028": [
+    "dig-deeper"
+   ],
+   "MAN-029": [
+    "pattern-editor"
+   ],
+   "MAN-030": [
+    "adding-trigs"
+   ],
+   "MAN-115": [
+    "rhythm-doctor"
+   ],
+   "MAN-031": [
+    "adding-notes"
+   ],
+   "MAN-032": [
+    "adding-velocity"
+   ],
+   "MAN-033": [
+    "channel-editor"
+   ],
+   "MAN-034": [
+    "devices"
+   ],
+   "MAN-035": [
+    "midi-sound-sources"
+   ],
+   "MAN-036": [
+    "norns-sound-sources-with-n-b"
+   ],
+   "MAN-037": [
+    "device-parameters"
+   ],
+   "MAN-038": [
+    "adding-patterns-to-channels"
+   ],
+   "MAN-039": [
+    "masks"
+   ],
+   "MAN-040": [
+    "adding-trig-masks"
+   ],
+   "MAN-041": [
+    "adding-melodic-notes-over-harmony-and-drums"
+   ],
+   "MAN-042": [
+    "adding-chords"
+   ],
+   "MAN-043": [
+    "removing-masks"
+   ],
+   "MAN-044": [
+    "merge-modes"
+   ],
+   "MAN-045": [
+    "trig-merge-modes"
+   ],
+   "MAN-046": [
+    "note-merge-modes"
+   ],
+   "MAN-047": [
+    "velocity-merge-modes"
+   ],
+   "MAN-048": [
+    "length-merge-modes"
+   ],
+   "MAN-049": [
+    "note-dashboard"
+   ],
+   "MAN-050": [
+    "clocks-swing-and-shuffle"
+   ],
+   "MAN-051": [
+    "memory-undo-and-redo"
+   ],
+   "MAN-052": [
+    "channel-length"
+   ],
+   "MAN-053": [
+    "muting-channels"
+   ],
+   "MAN-054": [
+    "trig-parameters"
+   ],
+   "MAN-055": [
+    "sequencer-params"
+   ],
+   "MAN-056": [
+    "trig-probability"
+   ],
+   "MAN-057": [
+    "fixed-note"
+   ],
+   "MAN-058": [
+    "quantised-fixed-note"
+   ],
+   "MAN-059": [
+    "random-note"
+   ],
+   "MAN-060": [
+    "random-twos-note"
+   ],
+   "MAN-061": [
+    "chord-strum"
+   ],
+   "MAN-062": [
+    "chord-arpeggio"
+   ],
+   "MAN-063": [
+    "chord-acceleration"
+   ],
+   "MAN-064": [
+    "chord-spread"
+   ],
+   "MAN-065": [
+    "chord-velocity-modifier"
+   ],
+   "MAN-066": [
+    "chord-shape-modifier"
+   ],
+   "MAN-067": [
+    "mute-root-note"
+   ],
+   "MAN-068": [
+    "fully-quantise-mask"
+   ],
+   "MAN-069": [
+    "scale-editor"
+   ],
+   "MAN-070": [
+    "transposition"
+   ],
+   "MAN-071": [
+    "song-editor"
+   ],
+   "MAN-072": [
+    "button-indicators"
+   ],
+   "MAN-073": [
+    "interacting-with-slots"
+   ],
+   "MAN-074": [
+    "song-mode-operations"
+   ],
+   "MAN-075": [
+    "adjusting-song-sequence-length"
+   ],
+   "MAN-076": [
+    "navigating-the-norns-display"
+   ],
+   "MAN-077": [
+    "locks"
+   ],
+   "MAN-078": [
+    "trig-param-locks"
+   ],
+   "MAN-079": [
+    "param-slides"
+   ],
+   "MAN-080": [
+    "mask-locks"
+   ],
+   "MAN-081": [
+    "scale-locks"
+   ],
+   "MAN-082": [
+    "transposition-locks"
+   ],
+   "MAN-083": [
+    "octave-locks"
+   ],
+   "MAN-084": [
+    "save-and-load"
+   ],
+   "MAN-085": [
+    "options"
+   ],
+   "MAN-086": [
+    "sequencer-options"
+   ],
+   "MAN-087": [
+    "shift-press-stop"
+   ],
+   "MAN-088": [
+    "song-mode"
+   ],
+   "MAN-089": [
+    "reset-at-song-editor-pattern-change"
+   ],
+   "MAN-090": [
+    "reset-at-pattern-repeat"
+   ],
+   "MAN-091": [
+    "parameter-slides-wrap"
+   ],
+   "MAN-092": [
+    "elektron-program-changes"
+   ],
+   "MAN-093": [
+    "elektron-program-change-channel"
+   ],
+   "MAN-094": [
+    "parameter-lock-options"
+   ],
+   "MAN-095": [
+    "trigless-locks"
+   ],
+   "MAN-096": [
+    "quantiser-options"
+   ],
+   "MAN-097": [
+    "snap-note-masks-to-scale"
+   ],
+   "MAN-098": [
+    "quantise-note-masks"
+   ],
+   "MAN-099": [
+    "scales-lock-until-pattern-end"
+   ],
+   "MAN-100": [
+    "lock-all-to-pentatonic"
+   ],
+   "MAN-101": [
+    "lock-random-to-pentatonic"
+   ],
+   "MAN-102": [
+    "lock-merged-to-pentatonic"
+   ],
+   "MAN-103": [
+    "midi-controller-options"
+   ],
+   "MAN-104": [
+    "map-scale-to-white-keys"
+   ],
+   "MAN-105": [
+    "honor-scale-rotations"
+   ],
+   "MAN-106": [
+    "honor-scale-degree"
+   ],
+   "MAN-107": [
+    "honour-scale-transpose"
+   ],
+   "MAN-117": [
+    "screen-options"
+   ],
+   "MAN-118": [
+    "ui-motion"
+   ],
+   "MAN-108": [
+    "sinfonion-connect"
+   ],
+   "MAN-109": [
+    "lfos-and-modulation"
+   ],
+   "MAN-119": [
+    "musical-merge-and-voice-leading"
+   ],
+   "MAN-120": [
+    "merge-shape"
+   ],
+   "MAN-122": [
+    "fragments"
+   ],
+   "MAN-123": [
+    "interlock"
+   ],
+   "MAN-124": [
+    "structure"
+   ],
+   "MAN-125": [
+    "result-and-reason"
+   ],
+   "MAN-121": [
+    "harmony"
+   ],
+   "MAN-110": [
+    "performance-management"
+   ],
+   "MAN-111": [
+    "development"
+   ],
+   "MAN-112": [
+    "roadmap"
+   ],
+   "MAN-113": [
+    "interesting-components-for-norns-script-developers"
+   ]
+  },
+  "campaign_complete": false
  }
 }

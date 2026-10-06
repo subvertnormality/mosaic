@@ -6,12 +6,14 @@
   "required": [
     "schema_version",
     "feature",
-    "scenes",
-    "audio"
+    "scenes"
   ],
   "properties": {
     "schema_version": {
-      "const": 1
+      "enum": [
+        1,
+        2
+      ]
     },
     "feature": {
       "type": "object",
@@ -111,7 +113,8 @@
               "fixture": {
                 "enum": [
                   "four-note-pattern",
-                  "four-note-eight-step"
+                  "four-note-eight-step",
+                  "empty"
                 ]
               },
               "seed": {
@@ -145,7 +148,7 @@
                 },
                 "citation": {
                   "type": "string",
-                  "pattern": "^(README.md#|characterisation:)"
+                  "pattern": "^(README.md#|characterisation:|manual:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S]))"
                 },
                 "inputs": {
                   "type": "array",
@@ -290,6 +293,119 @@
                       "type": "integer",
                       "minimum": 1,
                       "maximum": 64
+                    },
+                    "header": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "page"
+                      ],
+                      "properties": {
+                        "page": {
+                          "enum": [
+                            "assignment",
+                            "channel_tasks",
+                            "channel_view",
+                            "clock_mods",
+                            "harmony",
+                            "harmony_delete_group",
+                            "harmony_ensemble",
+                            "harmony_entry",
+                            "harmony_members",
+                            "harmony_register",
+                            "harmony_result",
+                            "harmony_tone_map",
+                            "masks",
+                            "memory",
+                            "merge_detail",
+                            "merge_fragments",
+                            "merge_interlock",
+                            "merge_phrase",
+                            "merge_pitch",
+                            "merge_reason",
+                            "merge_result",
+                            "merge_rhythm",
+                            "merge_shape",
+                            "merge_structure",
+                            "midi_config",
+                            "note_dashboard",
+                            "note_editor",
+                            "paint_preview",
+                            "pattern_tasks",
+                            "scale",
+                            "scale_clock",
+                            "scale_overview",
+                            "scale_source",
+                            "scale_tasks",
+                            "song",
+                            "trig_algorithm",
+                            "trig_locks",
+                            "trig_step_edit",
+                            "trigger_editor",
+                            "trigger_editor_confirmation",
+                            "velocity_editor"
+                          ]
+                        },
+                        "params": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "device": {
+                      "type": "string"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "layout",
+                          "label",
+                          "value"
+                        ],
+                        "properties": {
+                          "layout": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "art": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    "leds": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "x",
+                          "y",
+                          "level"
+                        ],
+                        "properties": {
+                          "x": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 16
+                          },
+                          "y": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 8
+                          },
+                          "level": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 15
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -343,5 +459,21 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": 1
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "audio"
+        ]
+      }
+    }
+  ]
 }
