@@ -177,7 +177,9 @@ PREFLIGHT_EVIDENCE="$(awk '$1 == "Evidence" { path = $2 } END { print path }' "$
 [[ -n "$PREFLIGHT_EVIDENCE" && -d "$PREFLIGHT_EVIDENCE" ]] || { echo "Fresh Masks asset evidence was not recorded" >&2; exit 4; }
 echo "Fresh controlled Masks and audio asset evidence: $PREFLIGHT_EVIDENCE"
 
-python3 "$ROOT/tools/manual_build.py" \
+# Audio adoption re-audits the report inside the builder process, where the screen oracle
+# needs the emulator root that the audio stage itself is given.
+MONOME_EMULATOR="$EMULATOR_ROOT" python3 "$ROOT/tools/manual_build.py" \
   --controlled-local \
   --emulator "$EMULATOR_ROOT" \
   --audio-emulator "$EMULATOR_ROOT" \

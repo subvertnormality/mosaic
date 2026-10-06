@@ -83,6 +83,21 @@ class AudioReportAdoptionTests(unittest.TestCase):
         }
         return record, manifest
 
+    def test_recorder_python_harness_names_are_accepted_and_unsafe_names_rejected(self):
+        # Regression: the recorder pins driver.py, ui.py, ui_map.py, pcm_oracle.py and
+        # channel_gestures.py, but adoption accepted only .cjs names and refused every real report.
+        report = {"harness_sha256": {name: "a" * 64 for name in ("driver.py", "ui.py", "manual_audio_browser.cjs")}}
+        for name in report["harness_sha256"]:
+            path = self.root / "tests/behaviour" / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("harness:" + name)
+        hashes = adoption._source_hashes(self.root, report)
+        self.assertIn("tests/behaviour/driver.py", hashes)
+        self.assertIn("tests/behaviour/manual_audio_browser.cjs", hashes)
+        for unsafe in ("../driver.py", "sub/driver.py", "driver.sh", "/tmp/driver.py"):
+            with self.subTest(name=unsafe), self.assertRaisesRegex(ValueError, "Unsafe audio harness identity"):
+                adoption._source_hashes(self.root, {"harness_sha256": {unsafe: "a" * 64}})
+
     def test_complete_published_report_is_adopted_and_reaudited_at_final_gate(self):
         record, manifest = self.build_manifest()
         result = adoption.audit_build_audio_adoption(self.evidence, manifest, self.root)

@@ -26,7 +26,7 @@ def digest(path):
 def _source_hashes(root, report):
     paths = set(SOURCE_PATHS)
     for name in report.get("harness_sha256", {}):
-        if Path(name).name != name or not name.endswith(".cjs"):
+        if Path(name).name != name or Path(name).suffix not in (".py", ".cjs"):
             raise ValueError("Unsafe audio harness identity")
         paths.add("tests/behaviour/" + name)
     return {name: digest(Path(root) / name) for name in sorted(paths)}
