@@ -75,10 +75,15 @@ if [[ -n "${PR_HEAD_SHA:-}" ]]; then
 fi
 
 EMULATOR_REVISION="68ab70903d22500237ce68edc7e31c3b867cf179"
+# The runtime cache restore may already have created $EMULATOR_ROOT/.runtime, so make
+# the checkout in place rather than cloning into a non-empty directory.
 if [[ ! -d "$EMULATOR_ROOT/.git" ]]; then
-  git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git "$EMULATOR_ROOT"
+  mkdir -p "$EMULATOR_ROOT"
+  git -C "$EMULATOR_ROOT" init -q
+  git -C "$EMULATOR_ROOT" remote add origin https://github.com/subvertnormality/monome-emulator.git
+  git -C "$EMULATOR_ROOT" fetch -q --filter=blob:none origin "$EMULATOR_REVISION"
 fi
-git -C "$EMULATOR_ROOT" checkout --detach "$EMULATOR_REVISION"
+git -C "$EMULATOR_ROOT" checkout -q --detach "$EMULATOR_REVISION"
 [[ "$(git -C "$EMULATOR_ROOT" rev-parse HEAD)" == "$EMULATOR_REVISION" ]]
 
 # Reuse the behavior CI's qualified native provisioning and verifier.

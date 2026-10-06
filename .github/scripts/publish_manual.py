@@ -18,10 +18,11 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # re-pinned after splitting real-time audio into its own job (adopted via --adopt-audio-report) and adding the
     # scene-plan lint and manual unit suites as a fail-fast preflight. Workflow re-pinned again the same day after
     # moving runner.temp paths out of job-level env (no runner context there), and installing git before checkout
-    # in the bare container so checkout makes a real repository with submodules.
+    # in the bare container so checkout makes a real repository with submodules. Both re-pinned again after making
+    # the emulator checkout in place under the restored runtime cache and naming the audio artifact per run.
     PRODUCER_TOOLING_POLICY_VERSION: {
-        ".github/workflows/manual-build.yml": "148cb96a3fb955d6ee97c1cb01e61b2c339306c056d71d1da86892f648db2a82",
-        ".github/scripts/manual-build.sh": "beadd2c7ecae72ca825dc14c4e6b9d9574e90456c94001a93acc1927ecd803ac",
+        ".github/workflows/manual-build.yml": "3a47905a013308d4999032c47859c0bdb44bdc124def7a71d59159769cfc9b50",
+        ".github/scripts/manual-build.sh": "4216a817234aac74b996b0b4b4e0aaa13647ee3c8bc0cc3c0985a57e94437b70",
         ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
     },
 }
