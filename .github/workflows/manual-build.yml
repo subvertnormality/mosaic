@@ -26,7 +26,6 @@ jobs:
       options: --shm-size 256m
     timeout-minutes: 360
     env:
-      EMULATOR_ROOT: ${{ runner.temp }}/monome-emulator
       PR_NUMBER: ${{ github.event.pull_request.number || '' }}
       PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
       PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
@@ -87,11 +86,9 @@ jobs:
       options: --shm-size 256m
     timeout-minutes: 360
     env:
-      EMULATOR_ROOT: ${{ runner.temp }}/monome-emulator
       PR_NUMBER: ${{ github.event.pull_request.number || '' }}
       PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
       PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
-      NODE_PATH: ${{ runner.temp }}/mosaic-manual-ci/playwright-node/node_modules
       MANUAL_CI_MODE: build
     steps:
       - name: Check out exact PR source or dispatch ref

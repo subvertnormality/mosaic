@@ -16,9 +16,10 @@ PRODUCER_TOOLING_POLICY_VERSION = "codex-manual-tooling-allowlist-v1-candidate"
 PRODUCER_TOOLING_ALLOWLISTS = {
     # 2026-10-06 (Claude, owner-requested CI gap fixes): manual-build.yml a3aa1d41... and manual-build.sh daa921e9...
     # re-pinned after splitting real-time audio into its own job (adopted via --adopt-audio-report) and adding the
-    # scene-plan lint and manual unit suites as a fail-fast preflight.
+    # scene-plan lint and manual unit suites as a fail-fast preflight. Workflow re-pinned again the same day after
+    # moving runner.temp paths out of job-level env, where GitHub does not provide the runner context.
     PRODUCER_TOOLING_POLICY_VERSION: {
-        ".github/workflows/manual-build.yml": "ca4522f1115fccf52b9fddd54d9bec57852e3c423d04f8bc4316673a23d72b9a",
+        ".github/workflows/manual-build.yml": "1bdaa53781a5700b2bf2f6900b5785f0389165d646b5a51e062ffe9f223ffcf8",
         ".github/scripts/manual-build.sh": "beadd2c7ecae72ca825dc14c4e6b9d9574e90456c94001a93acc1927ecd803ac",
         ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
     },
