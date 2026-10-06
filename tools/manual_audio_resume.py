@@ -302,10 +302,10 @@ def _absolute_paths(value):
   for item in value:out.extend(_absolute_paths(item))
  return out
 
-def verify_resume_aliases(provenance,original_rows,old_run,native_run):
+def verify_resume_aliases(provenance,original_rows,old_run,native_run,ids=None):
  old_run=Path(old_run).resolve(strict=True);native_run=Path(native_run).resolve(strict=True)
  expected={}
- for ident in PIN["ids"]:
+ for ident in ids or PIN["ids"]:
   for source_text in _absolute_paths(original_rows[ident]):
    source=Path(source_text).resolve(strict=True)
    try:rel=source.relative_to(old_run)
@@ -336,19 +336,20 @@ def require_resume_provenance(report,native_run):
   raise Rejected("report provenance has no durable run marker")
  return bool(roots)
 
-def verify_current_reused_rows(original_rows,current_rows,provenance,staged_assets,old_run,native_run):
+def verify_current_reused_rows(original_rows,current_rows,provenance,staged_assets,old_run,native_run,ids=None):
+ ids=list(ids or PIN["ids"])
  current_list=list(current_rows)
  current={}
  for row in current_list:
   need(isinstance(row,dict) and isinstance(row.get("id"),str),"invalid current report row")
   need(row["id"] not in current,"duplicate current report row")
   current[row["id"]]=row
- expected_ids=set(PIN["ids"])
+ expected_ids=set(ids)
  need(expected_ids<=set(current),"missing reused current report row")
  aliases=provenance.get("evidence_aliases",{})
  old_to_alias={source:alias for alias,source in aliases.items()}
  asset_map={entry["id"]:entry["assets"] for entry in staged_assets}
- for ident in PIN["ids"]:
+ for ident in ids:
   expected=copy.deepcopy(original_rows[ident])
   def rewrite(value):
    if isinstance(value,dict):
@@ -422,6 +423,7 @@ def prepare_continuation(ma,root,old_run,old_report,new_run,ffmpeg,identity_rece
 
 def audit_resume_provenance(ma,report,native_run,root,asset_root=None):
  provenance=report.get("resume_provenance")
+ if isinstance(provenance,dict) and provenance.get("kind")==SAME:return audit_same_lineage_provenance(ma,report,native_run,root,asset_root)
  need(isinstance(provenance,dict) and provenance.get("kind")=="strict-partial-audio-resume","missing strict resume provenance")
  need(provenance.get("passed") is False and provenance.get("complete_regression_run") is False,"resume provenance falsely claims completion")
  marker_path=Path(native_run).resolve(strict=True)/"resume-provenance.required.json"
@@ -461,6 +463,160 @@ def audit_resume_provenance(ma,report,native_run,root,asset_root=None):
    p=Path(asset_root or root)/"manual"/asset["path"]
    need(p.is_file() and sha(p)==asset["sha256"],"reused encoded asset hash changed: "+asset["path"])
  return {"reused_examples":8,"reused_raw_wavs":22,"deferred_examples":13,"deferred_raw_wavs":32,"passed":True}
+
+# --- Same-lineage continuation: any failed run whose recording identity is identical to the current one. ---
+SAME="strict-same-lineage-audio-resume"
+LINEAGE_KEYS=("schema_version","source_sha256","tool_sha256","helper_sha256","setups_sha256","schema_sha256","harness_sha256","voice_pins",
+ "clock_mode","validation_scope","realtime_qualification","audio_capture_clock_mode","controlled_lane")
+FROZEN_FILES={"source.yaml":"source_sha256","capture-tool.py":"tool_sha256","capture-helpers.py":"helper_sha256","capture-setups.py":"setups_sha256","audio.schema.json":"schema_sha256"}
+def _default_session_check(path,clock_mode,voices):
+ from manual_publication_verify import check_audio_native_session
+ return check_audio_native_session(path,clock_mode,voices)
+def _sessions(rows):
+ audio=[];midi=[]
+ for row in rows:
+  for rec in [row]+list(row.get("solo_contributions",[])):audio.append(Path(rec["evidence"]["path"]))
+  for lane in row.get("musical_evidence",[]):midi.append(Path(lane["path"]))
+ return audio,midi
+def native_identity_classes(rows):
+ """{audio|midi:{runtime|application|emulator:digest or None}}; every session of a class must carry the same identity."""
+ out={}
+ for kind,paths in zip(("audio","midi"),_sessions(rows)):
+  seen={"runtime":set(),"application":set(),"emulator":set()}
+  for p in paths:
+   ident=json.loads((p/"native/identity.json").read_text()); runtime=ident.get("runtime_identity")
+   need(isinstance(runtime,dict),"missing native runtime identity")
+   seen["runtime"].add(canon(runtime));seen["application"].add(_identity_file_manifest(ident.get("application_identity",{})));seen["emulator"].add(_identity_file_manifest(ident.get("emulator_identity",{})))
+  for what,values in seen.items():need(len(values)<=1,"native "+kind+" "+what+" identity is not uniform")
+  out[kind]={what:next(iter(values)) if values else None for what,values in seen.items()}
+ return out
+def _verify_current_runtime(rows,installs,emulators):
+ """The recorded runtime/emulator identity of the old sessions must equal the installations this invocation will record with."""
+ for kind,paths in zip(("audio","midi"),_sessions(rows)):
+  if not paths:continue
+  need(installs.get(kind) and emulators.get(kind),kind+" installation and emulator root are required for same-lineage resume")
+  ident=json.loads((paths[0]/"native/identity.json").read_text())
+  need(canon(ident["runtime_identity"])==canon(json.loads(Path(installs[kind]).read_text())),kind+" runtime identity differs from the current installation")
+  root=Path(emulators[kind]).resolve(strict=True)
+  for item in ident["emulator_identity"]["files"]:
+   f=root/item["path"];need(f.is_file() and sha(f)==item["sha256"],kind+" emulator source changed: "+item["path"])
+def verify_same_lineage(root,old_run,old_report,current,new_run,installs,emulators):
+ """Fail closed unless the failed run and this invocation share one recording identity; returns the identity record."""
+ root=Path(root).resolve(strict=True);old_run=Path(old_run).resolve(strict=True)
+ need(not old_report.get("resume_provenance") and not (old_run/"resume-provenance.required.json").exists(),"nested resume is not supported")
+ need(old_report.get("passed") is False and old_report.get("complete_regression_run") is False,"same-lineage resume requires a failed partial report")
+ need(old_report.get("examples"),"no completed example to reuse")
+ bad=[k for k in LINEAGE_KEYS if old_report.get(k)!=current.get(k)]
+ need(not bad,"identity mismatch between the failed run and this invocation: "+", ".join(bad))
+ for run in [old_run]+([Path(new_run).resolve(strict=True)] if new_run else []):
+  for name,key in FROZEN_FILES.items():need((run/name).is_file() and sha(run/name)==old_report[key],"frozen run file changed: "+name)
+  for name,value in old_report["harness_sha256"].items():need((run/name).is_file() and sha(run/name)==value,"frozen run file changed: "+name)
+ for name,value in old_report["harness_sha256"].items():need((root/"tests/behaviour"/name).is_file() and sha(root/"tests/behaviour"/name)==value,"harness identity mismatch: "+name)
+ old_app=run_appmap(old_run)
+ need(appmap(root)==old_app and (not new_run or run_appmap(Path(new_run))==old_app),"application source tree changed")
+ _verify_current_runtime(old_report["examples"],installs,emulators)
+ return {"fields":{k:old_report.get(k) for k in LINEAGE_KEYS},"application_source_sha256":canon(old_app),"native_identity":native_identity_classes(old_report["examples"])}
+def _alias_rows(rows,old_run,new_run):
+ aliases={};out=[]
+ for row in rows:
+  row=copy.deepcopy(row)
+  def rewrite(value):
+   if isinstance(value,dict):
+    for key,item in list(value.items()):
+     if key=="path" and isinstance(item,str) and os.path.isabs(item):
+      source=Path(item).resolve(strict=True)
+      try:rel=source.relative_to(old_run)
+      except ValueError:raise Rejected("reused evidence path escapes original run")
+      alias=new_run/rel;link=new_run/rel.parts[0];target=old_run/rel.parts[0]
+      if not link.exists() and not link.is_symlink():link.symlink_to(target,target_is_directory=True)
+      need(link.is_symlink() and link.resolve(strict=True)==target.resolve(strict=True),"unexpected evidence alias")
+      value[key]=str(alias);aliases[str(alias)]=str(source)
+     else:rewrite(item)
+   elif isinstance(value,list):
+    for item in value:rewrite(item)
+  rewrite(row);out.append(row)
+ return out,aliases
+def prepare_same_lineage(ma,root,old_run,old_report,new_run,current,authored,ffmpeg,audio_install=None,midi_install=None,audio_emulator=None,midi_emulator=None,converter=None,session_check=None):
+ """Reuse every completed example of a failed run with an identical recording identity; returns rows, provenance and the staged-asset directory."""
+ old_run=Path(old_run).resolve(strict=True);new_run=Path(new_run).resolve(strict=True);session_check=session_check or _default_session_check
+ lineage=verify_same_lineage(root,old_run,old_report,current,new_run,{"audio":audio_install,"midi":midi_install},{"audio":audio_emulator,"midi":midi_emulator})
+ by={v["id"]:v for v in authored["examples"]};old_rows=list(old_report["examples"]);ids=[v.get("id") for v in old_rows]
+ need(len(set(ids))==len(ids),"duplicate example in the failed report")
+ captures=[]
+ for row in old_rows:
+  ident=row["id"];need(ident in by,"example outside the authored inventory: "+ident)
+  for k,v in by[ident].items():need(row.get(k)==v,"authored field changed "+ident+"."+k)
+  for path in _absolute_paths(row):inside(path,old_run)
+  try:
+   ma.audit_example_native(row,by[ident],True)
+   for lane in row.get("musical_evidence",[]):session_check(Path(lane["path"]),lane["clock_mode"],False)
+   for rec in [row]+list(row.get("solo_contributions",[])):session_check(Path(rec["evidence"]["path"]),"real-time",True)
+  except Exception as error:raise Rejected("reused example failed its audit: "+ident+": "+str(error)) from error
+  ev=row["evidence"];wav=Path(ev["path"])/"native/audio-captures"/ev["job"]["job_id"]/"output.wav"
+  need(wav.is_file() and sha(wav)==ev["wav_sha256"],"raw WAV changed: "+ident)
+  captures.append({"id":ident,"captures":[{"label":"mix","path":ev["path"],"job_id":ev["job"]["job_id"],"wav_sha256":ev["wav_sha256"]}]})
+ report_hash=sha(old_run/"report.json")
+ stage_dir=new_run/"resume-reuse"
+ staged_path=stage({"kind":SAME,"original_report_sha256":report_hash,"examples":captures,"lineage":lineage,
+  "inventory":{"examples_reused":len(ids),"examples_deferred":len(by)-len(ids)}},old_run,old_report,stage_dir,ffmpeg,converter)
+ staged=json.loads(staged_path.read_text());assets={v["id"]:v["assets"] for v in staged["staged_encoded_assets"]}
+ rows,aliases=_alias_rows(old_rows,old_run,new_run)
+ for row in rows:
+  row["files"]=[a["path"] for a in assets[row["id"]]];row["file_sha256"]={a["path"]:a["sha256"] for a in assets[row["id"]]}
+ provenance={"schema_version":1,"kind":SAME,"original_run":str(old_run),"original_report":str(old_run/"report.json"),"original_report_sha256":report_hash,
+  "qualification_manifest":str(staged_path),"qualification_manifest_sha256":sha(staged_path),
+  "original_record_sha256":{v["id"]:canon(v) for v in old_rows},"evidence_aliases":aliases,"lineage":lineage,
+  "reused_ids":ids,"deferred_ids":sorted(set(by)-set(ids)),"staged_encoded_assets":staged["staged_encoded_assets"],"passed":False,"complete_regression_run":False}
+ marker={"schema":"mosaic-audio-resume-required-v1","kind":SAME,"required":True,"original_report_sha256":report_hash,
+  "original_record_sha256":provenance["original_record_sha256"],"evidence_aliases":aliases,"qualification_manifest_sha256":provenance["qualification_manifest_sha256"],
+  "lineage":lineage,"reused_ids":ids,"staged_encoded_assets":provenance["staged_encoded_assets"]}
+ marker_path=new_run/"resume-provenance.required.json";marker_path.write_text(json.dumps(marker,indent=2,sort_keys=True)+"\n")
+ provenance["marker_path"]=str(marker_path);provenance["marker_sha256"]=sha(marker_path)
+ return rows,provenance,stage_dir
+def audit_same_lineage_provenance(ma,report,native_run,root,asset_root=None):
+ """Strict publication-time verification of a same-lineage continuation; every reused byte is re-hashed."""
+ native_run=Path(native_run).resolve(strict=True);prov=report.get("resume_provenance")
+ need(isinstance(prov,dict) and prov.get("kind")==SAME,"missing same-lineage resume provenance")
+ need(prov.get("passed") is False and prov.get("complete_regression_run") is False,"resume provenance falsely claims completion")
+ marker_path=native_run/"resume-provenance.required.json"
+ need(prov.get("marker_path")==str(marker_path) and marker_path.is_file() and sha(marker_path)==prov.get("marker_sha256"),"durable resume marker missing or changed")
+ marker=json.loads(marker_path.read_text())
+ need(marker.get("required") is True and marker.get("kind")==SAME and all(marker.get(k)==prov.get(k) for k in
+  ("original_report_sha256","original_record_sha256","evidence_aliases","qualification_manifest_sha256","lineage","reused_ids","staged_encoded_assets")),"durable resume marker binding mismatch")
+ old_run=Path(prov["original_run"]).resolve(strict=True);old_path=Path(prov["original_report"]).resolve(strict=True)
+ need(old_run!=native_run and old_path==old_run/"report.json" and sha(old_path)==prov.get("original_report_sha256"),"original report changed")
+ original=json.loads(old_path.read_text())
+ need(original.get("passed") is False and original.get("complete_regression_run") is False and not original.get("resume_provenance"),"origin is not a failed non-resumed partial run")
+ rows={v["id"]:v for v in original["examples"]};ids=[v["id"] for v in original["examples"]]
+ need(prov.get("reused_ids")==ids and marker.get("reused_ids")==ids and ids,"reused ids are not every completed original example")
+ need(prov.get("original_record_sha256")=={i:canon(rows[i]) for i in ids},"origin record hashes changed")
+ bad=[k for k in LINEAGE_KEYS if original.get(k)!=report.get(k)]
+ need(not bad,"identity mismatch between the failed run and the resumed report: "+", ".join(bad))
+ for run in (old_run,native_run):
+  for name,key in FROZEN_FILES.items():need((run/name).is_file() and sha(run/name)==original[key],"frozen run file changed: "+name)
+  for name,value in original["harness_sha256"].items():need((run/name).is_file() and sha(run/name)==value,"frozen run file changed: "+name)
+ verify_resume_aliases(prov,rows,old_run,native_run,ids)
+ old_app=run_appmap(old_run);need(run_appmap(native_run)==old_app,"application source tree changed")
+ lineage=prov.get("lineage")
+ need(lineage=={"fields":{k:original.get(k) for k in LINEAGE_KEYS},"application_source_sha256":canon(old_app),"native_identity":native_identity_classes(original["examples"])},"recorded lineage identity changed")
+ need(native_identity_classes(report.get("examples",[]))==lineage["native_identity"],"native session identity differs between reused and fresh sessions")
+ manifest=Path(prov["qualification_manifest"]).resolve(strict=True)
+ need(manifest.parent==native_run/"resume-reuse","qualification manifest escaped current run")
+ need(sha(manifest)==prov.get("qualification_manifest_sha256"),"qualification manifest changed")
+ qualified=json.loads(manifest.read_text())
+ need(qualified.get("kind")==SAME and qualified.get("original_report_sha256")==prov["original_report_sha256"] and qualified.get("lineage")==lineage
+      and qualified.get("passed") is False and qualified.get("complete_regression_run") is False and qualified.get("staged_encoded_assets")==prov.get("staged_encoded_assets"),"invalid same-lineage qualification manifest")
+ verify_current_reused_rows(rows,report.get("examples",[]),prov,qualified["staged_encoded_assets"],old_run,native_run,ids)
+ for entry in qualified["staged_encoded_assets"]:
+  ev=rows[entry["id"]]["evidence"];wav=Path(ev["path"])/"native/audio-captures"/ev["job"]["job_id"]/"output.wav"
+  need(wav.is_file() and sha(wav)==ev["wav_sha256"],"raw WAV changed: "+entry["id"])
+  for asset in entry["assets"]:
+   p=Path(asset_root or root)/"manual"/asset["path"]
+   need(asset["source_raw_wav_sha256"]==ev["wav_sha256"],"staged asset names another source WAV: "+asset["path"])
+   need(p.is_file() and sha(p)==asset["sha256"],"reused encoded asset hash changed: "+asset["path"])
+ deferred=prov.get("deferred_ids")
+ need(isinstance(deferred,list) and not set(deferred)&set(ids) and {v.get("id") for v in report.get("examples",[])}==set(ids)|set(deferred),"deferred ids do not complete the reported inventory")
+ return {"reused_examples":len(ids),"deferred_examples":len(deferred),"reused_raw_wavs":sum(len(v.get("solo_contributions",[]))+1 for v in original["examples"]),"passed":True}
 
 def load_audio(candidate):
  sys.path.insert(0,str(candidate/"tools"));sys.path.insert(0,str(candidate/"tests/behaviour"))

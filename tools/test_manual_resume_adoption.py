@@ -93,6 +93,31 @@ class PortableResumeTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,"evidence tree changed"):
                     resume_adoption.verify_adopted_doctor_stage(evidence,name,record,ROOT)
 
+    def test_resume_lineage_accepts_historical_migration_or_same_builder_only(self):
+        # A failed build may resume from its own builder; previously only one historical
+        # parent builder was accepted, so every current failure meant a full rebuild.
+        old, current, other = resume_adoption.SUPPORTED_PARENT_BUILDER_SHA256, "a" * 64, "b" * 64
+        self.assertTrue(resume_adoption.supported_lineage(old, current))
+        self.assertTrue(resume_adoption.supported_lineage(current, current))
+        self.assertFalse(resume_adoption.supported_lineage(other, current))
+        self.assertFalse(resume_adoption.supported_lineage(None, current))
+        self.assertFalse(resume_adoption.supported_lineage(current, None))
+
+    def test_same_builder_parent_passes_the_lineage_gate_and_reaches_source_checks(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            parent = Path(temporary)
+            manifest = {"passed": False, "build_complete": False, "controlled_local": True,
+                        "tool_sha256": "c" * 64, "stages": [], **resume_adoption.SCOPE}
+            (parent / "manifest.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "Current builder hash does not match resume process"):
+                resume_adoption.prepare_resume(parent, ROOT, [], expected_parent_manifest_sha256=sha(parent / "manifest.json"),
+                    current_builder_sha="c" * 64, producer_hashes={}, audit_native=None, proof_path=parent / "proof.json")
+            manifest["tool_sha256"] = "d" * 64
+            (parent / "manifest.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "Unsupported parent/current builder lineage"):
+                resume_adoption.prepare_resume(parent, ROOT, [], expected_parent_manifest_sha256=sha(parent / "manifest.json"),
+                    current_builder_sha="c" * 64, producer_hashes={}, audit_native=None, proof_path=parent / "proof.json")
+
     def test_repository_reconciler_matches_approved_source_pin(self):
         reconciler = TOOLS / "manual_reconcile_build.py"
         self.assertTrue(reconciler.is_file())

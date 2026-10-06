@@ -82,7 +82,7 @@ def audit_resumed_audio_sessions(module, report, authored, sessions, session_exa
     if not isinstance(resume_audit, dict) or resume_audit.get("passed") is not True:
         raise OriginAuditError("strict audio resume provenance audit was not completed")
     provenance = report.get("resume_provenance")
-    if not isinstance(provenance, dict) or provenance.get("kind") != "strict-partial-audio-resume":
+    if not isinstance(provenance, dict) or provenance.get("kind") not in ("strict-partial-audio-resume", "strict-same-lineage-audio-resume"):
         raise OriginAuditError("mixed-origin audit requires approved strict resume provenance")
     new_run = Path(run).resolve(strict=True)
     old_run = Path(provenance["original_run"]).resolve(strict=True)

@@ -816,7 +816,7 @@ def main():
     parser.add_argument("--application",type=Path,help=argparse.SUPPRESS)
     parser.add_argument("--clock-mode",default="real-time",help=argparse.SUPPRESS)
     parser.add_argument("--example",action="append")
-    parser.add_argument("--resume-from",type=Path,help="Reuse only the fixed, independently qualified preserved 8-example partial run; capture the remaining inventory normally.")
+    parser.add_argument("--resume-from",type=Path,help="Continue a failed run: reuse every completed example of a failed --controlled-local run with an identical recording identity (re-audited, fail closed on any difference) and record only the missing ones. The fixed historical partial run keeps its own pinned qualification.")
     parser.add_argument("--validate-only",action="store_true")
     parser.add_argument("--course-dry-run",action="store_true",
                         help="Controlled-time rehearsal of the course before/after MIDI check for the selected --example ids: "
@@ -877,9 +877,20 @@ def main():
         import manual_audio_resume
         old_run=options.resume_from.resolve(strict=True)
         old_report=json.loads((old_run/"report.json").read_text())
-        parity_receipt=Path("/home/andy/mosaic-manual-build-operators/luna-audio-batch-preflight-20261005-01/recording-f36a766fd2-fc66abb9a71c4de2bef51de71bdc5d75/runtime-identity-reuse-check.json")
-        reused,resume_provenance,resume_stage=manual_audio_resume.prepare_continuation(
-            sys.modules[__name__],ROOT,old_run,old_report,run,options.ffmpeg,parity_receipt,Path(__file__))
+        if old_run.name==manual_audio_resume.PIN["run"]:
+            parity_receipt=Path("/home/andy/mosaic-manual-build-operators/luna-audio-batch-preflight-20261005-01/recording-f36a766fd2-fc66abb9a71c4de2bef51de71bdc5d75/runtime-identity-reuse-check.json")
+            reused,resume_provenance,resume_stage=manual_audio_resume.prepare_continuation(
+                sys.modules[__name__],ROOT,old_run,old_report,run,options.ffmpeg,parity_receipt,Path(__file__))
+        else:
+            try:
+                reused,resume_provenance,resume_stage=manual_audio_resume.prepare_same_lineage(
+                    sys.modules[__name__],ROOT,old_run,old_report,run,report,data,options.ffmpeg,
+                    audio_install=options.audio_install,midi_install=options.midi_controlled_install,
+                    audio_emulator=os.environ.get("MONOME_EMULATOR"),midi_emulator=options.midi_emulator)
+            except manual_audio_resume.Rejected as error:
+                shutil.rmtree(run)
+                print("resume rejected: "+str(error),file=sys.stderr,flush=True)
+                return 2
         report["examples"].extend(reused)
         report["resume_provenance"]=resume_provenance
     try:
@@ -1048,6 +1059,50 @@ def freeze_setups(run):
     shutil.copyfile(source,Path(run)/"capture-setups.py")
     return digest(source)
 
+def audit_example_native(example,expected_example,controlled_local=False):
+    """The native-evidence audit of one example (MIDI lanes, solos, PCM, timeline); returns its audited frame count."""
+    checked=0
+    if example.get("purpose")=="lesson-comparison":
+        audit_lesson_midi(example,example["musical_evidence"],controlled_local=controlled_local)
+        audit_lesson_capture(example,example["tracks"],example)
+        for solo in example["solo_contributions"]:
+            audit_lesson_capture(example,[next(t for t in example["tracks"] if t["channel"]==solo["channel"])],solo)
+    for key,value in expected_example.items():
+        if example.get(key)!=value:raise ValueError("authored audio mismatch "+key)
+    voices=[]
+    for evidence,observed in [(example["evidence"],example["metrics"])]+[(v["evidence"],v["metrics"]) for v in example["solo_contributions"]]:
+        out=Path(evidence["path"])
+        wav=out/"native/audio-captures"/evidence["job"]["job_id"]/"output.wav"
+        job=json.loads((wav.parent/"result.json").read_text())
+        if job!=evidence["job"] or job["status"]!="complete" or job.get("input_sha256") is not None:raise ValueError("Changed native capture job")
+        finished=job["finished"]
+        if finished["frames"]!=finished["expected_frames"] or any(finished[k] for k in ("xruns","nonfinite","server_dead")):raise ValueError("Native capture quality")
+        if digest(wav)!=evidence["wav_sha256"]:raise ValueError("native PCM hash")
+        if metrics(wav,example["bars"]*4*60/example["bpm"])!=observed:raise ValueError("PCM metrics changed")
+        cleanup=json.loads((out/"native/cleanup.json").read_text())
+        if not cleanup or any(v.get("returncode") is None for v in cleanup):raise ValueError("native session cleanup")
+        results=json.loads((out/"results.json").read_text())
+        if not any(v.get("kind")=="manual-audio-PCM" and v.get("passed") and v.get("metrics")==observed for v in results):
+            raise ValueError("missing PCM acceptance")
+    if {v["voice"] for v in example["solo_contributions"]}!={v["voice"] for v in example["tracks"]}:raise ValueError("solo voice inventory")
+    out=Path(example["evidence"]["path"])
+    results=json.loads((out/"results.json").read_text())
+    observations=json.loads((out/"observations.json").read_text())
+    frames={}
+    for row in observations:
+        state=row["state"]
+        frames[(state["frame"]["sha256"],hashlib.sha256(bytes(state["grid"])).hexdigest())]=state
+    for row in example["timeline"]:
+        output=row["output"];binding=output["binding"]
+        if binding not in results or not binding["passed"]:raise ValueError("unbound audio timeline")
+        state=frames.get((binding["sha256"],binding["grid_sha256"]))
+        if state is None:raise ValueError("missing native audio frame")
+        levels=[value for value,count in output["screen_rle"] for _ in range(count)]
+        pixels=base64.b64decode(state["frame"]["pixels_base64"])
+        if levels!=[v//17 for v in pixels[::4]] or output["grid"]!=state["grid"]:raise ValueError("changed audio framebuffer/grid")
+        checked+=1
+    return checked
+
 def audit_publication(path=MANUAL/"generated/audio-scenes.json",controlled_local=False):
     """Independently audit authoring, native observations, PCM and encoded assets."""
     report=json.loads(Path(path).read_text())
@@ -1083,45 +1138,7 @@ def audit_publication(path=MANUAL/"generated/audio-scenes.json",controlled_local
             for key in ("timeline","metrics","evidence","solo_contributions","tracks","bars","bpm","profile","musical_evidence","midi_witness","phase_observations","lesson_pcm","course_before_after"):
                 if example.get(key)!=originals[example["id"]].get(key):raise ValueError("publication changed native evidence")
     for example in report["examples"]:
-        if example.get("purpose")=="lesson-comparison":
-            audit_lesson_midi(example,example["musical_evidence"],controlled_local=controlled_local)
-            audit_lesson_capture(example,example["tracks"],example)
-            for solo in example["solo_contributions"]:
-                audit_lesson_capture(example,[next(t for t in example["tracks"] if t["channel"]==solo["channel"])],solo)
-        for key,value in expected[example["id"]].items():
-            if example.get(key)!=value:raise ValueError("authored audio mismatch "+key)
-        voices=[]
-        for evidence,observed in [(example["evidence"],example["metrics"])]+[(v["evidence"],v["metrics"]) for v in example["solo_contributions"]]:
-            out=Path(evidence["path"])
-            wav=out/"native/audio-captures"/evidence["job"]["job_id"]/"output.wav"
-            job=json.loads((wav.parent/"result.json").read_text())
-            if job!=evidence["job"] or job["status"]!="complete" or job.get("input_sha256") is not None:raise ValueError("Changed native capture job")
-            finished=job["finished"]
-            if finished["frames"]!=finished["expected_frames"] or any(finished[k] for k in ("xruns","nonfinite","server_dead")):raise ValueError("Native capture quality")
-            if digest(wav)!=evidence["wav_sha256"]:raise ValueError("native PCM hash")
-            if metrics(wav,example["bars"]*4*60/example["bpm"])!=observed:raise ValueError("PCM metrics changed")
-            cleanup=json.loads((out/"native/cleanup.json").read_text())
-            if not cleanup or any(v.get("returncode") is None for v in cleanup):raise ValueError("native session cleanup")
-            results=json.loads((out/"results.json").read_text())
-            if not any(v.get("kind")=="manual-audio-PCM" and v.get("passed") and v.get("metrics")==observed for v in results):
-                raise ValueError("missing PCM acceptance")
-        if {v["voice"] for v in example["solo_contributions"]}!={v["voice"] for v in example["tracks"]}:raise ValueError("solo voice inventory")
-        out=Path(example["evidence"]["path"])
-        results=json.loads((out/"results.json").read_text())
-        observations=json.loads((out/"observations.json").read_text())
-        frames={}
-        for row in observations:
-            state=row["state"]
-            frames[(state["frame"]["sha256"],hashlib.sha256(bytes(state["grid"])).hexdigest())]=state
-        for row in example["timeline"]:
-            output=row["output"];binding=output["binding"]
-            if binding not in results or not binding["passed"]:raise ValueError("unbound audio timeline")
-            state=frames.get((binding["sha256"],binding["grid_sha256"]))
-            if state is None:raise ValueError("missing native audio frame")
-            levels=[value for value,count in output["screen_rle"] for _ in range(count)]
-            pixels=base64.b64decode(state["frame"]["pixels_base64"])
-            if levels!=[v//17 for v in pixels[::4]] or output["grid"]!=state["grid"]:raise ValueError("changed audio framebuffer/grid")
-            checked+=1
+        checked+=audit_example_native(example,expected[example["id"]],controlled_local)
         files=example["files"] if isinstance(example["files"],list) else list(example["files"].values())
         for value in files:
             if not value.startswith("audio/") or not (MANUAL/value).is_file():raise ValueError("missing audio file")

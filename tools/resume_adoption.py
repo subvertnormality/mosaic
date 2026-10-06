@@ -12,6 +12,15 @@ SUPPORTED_PARENT_BUILDER_SHA256 = "cdf8b1cb1fdca9d6d2384e7e954acc7f992ddf6e4ca0d
 QUALIFIED_RECONCILER_SHA256 = "6eba8cd1cd6cb1eca2a5ba90107e36eb49d73fd6fcac0b6d18aaff99b8015619"
 SCOPE = {"validation_scope": "controlled-manual-generation", "realtime_qualification": "pending-ci", "clock_mode": "controlled-experimental", "complete_regression_run": False}
 
+def supported_lineage(parent_builder, current_builder):
+    """A failed build resumes from the historical qualified builder (one-hop migration) or
+    from the same builder; every adopted stage is still re-proved against current sources."""
+    if not parent_builder or not current_builder:
+        return False
+    if parent_builder == SUPPORTED_PARENT_BUILDER_SHA256 and current_builder != SUPPORTED_PARENT_BUILDER_SHA256:
+        return True
+    return parent_builder == current_builder
+
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -213,7 +222,7 @@ def prepare_resume(parent, root, planned_stages, *, expected_parent_manifest_sha
         raise ValueError("Parent must be a terminal failed build")
     if manifest.get("controlled_local") is not True or any(manifest.get(k) != v for k, v in SCOPE.items()):
         raise ValueError("Parent is not controlled-only evidence")
-    if manifest.get("tool_sha256") != SUPPORTED_PARENT_BUILDER_SHA256 or current_builder_sha == SUPPORTED_PARENT_BUILDER_SHA256:
+    if not supported_lineage(manifest.get("tool_sha256"), current_builder_sha):
         raise ValueError("Unsupported parent/current builder lineage")
     current_builder = root / "tools/manual_build.py"
     if not current_builder.is_file() or sha(current_builder) != current_builder_sha:
@@ -380,7 +389,7 @@ def audit_resume_lineage(build, manifest, current_root):
     if not parent_manifest.is_file() or sha(parent_manifest) != proof.get("parent_manifest_sha256"):
         raise ValueError("Original failed parent manifest changed")
     parent = read_json(parent_manifest)
-    if parent.get("passed") is not False or parent.get("build_complete") is not False or parent.get("controlled_local") is not True or any(parent.get(key) != value for key,value in SCOPE.items()) or parent.get("tool_sha256") != proof.get("parent_builder_sha256") or proof.get("parent_builder_sha256") != SUPPORTED_PARENT_BUILDER_SHA256:
+    if parent.get("passed") is not False or parent.get("build_complete") is not False or parent.get("controlled_local") is not True or any(parent.get(key) != value for key,value in SCOPE.items()) or parent.get("tool_sha256") != proof.get("parent_builder_sha256") or not supported_lineage(proof.get("parent_builder_sha256"), proof.get("resume_builder_sha256")):
         raise ValueError("Resume parent identity or failed scope changed")
     if manifest.get("tool_sha256") != proof.get("resume_builder_sha256") or proof.get("resume_source_start_sha256") is None:
         raise ValueError("Resume builder or actual new source-start identity missing")
