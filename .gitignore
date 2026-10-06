@@ -59,3 +59,8 @@ docs/testing/reviews/*-raw.stderr.log
 tools/rhythm_doctor_server/larsnet/
 tools/rhythm_doctor_server/*.zip
 tools/rhythm_doctor_server/__pycache__/
+
+# Pinned manual test fixtures (digest-checked by their tests) are committed despite the archive rules above.
+!test-fixtures/*.tar.gz
+!tests/fixtures/*.tar.gz
+!tests/fixtures/*.zip
