@@ -70,7 +70,8 @@ jobs:
           inputs="$(git ls-files -s -- mosaic.lua lib docs/ui-reimplementation/code tests/behaviour \
             tools/manual_audio.py tools/manual_audio_setups.py tools/manual_audio_resume.py \
             tools/manual_audio_origin_audit.py tools/manual_capture.py manual/audio-scenes.yaml \
-            manual/audio.schema.json manual/voices.lock.json .github/scripts/manual_runtime.py)"
+            manual/audio.schema.json manual/voices.lock.json .github/scripts/manual_runtime.py \
+            ':(exclude)tests/behaviour/test_*' ':(exclude)tests/behaviour/ci')"
           identity="$(printf '%s\n%s\n%s\n' "$EMULATOR_REVISION" "$CONTAINER_IMAGE" "$inputs" | sha256sum | cut -c1-40)"
           echo "id=$identity" >> "$GITHUB_OUTPUT"
           echo "Audio input identity: $identity"

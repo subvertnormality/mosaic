@@ -90,6 +90,16 @@ PYTHON_UNITTEST.add('test_manual_caption_rebind')
 PYTHON_UNITTEST.add('test_manual_course_bind')
 PYTHON_UNITTEST.add('test_manual_feature_bind')
 PYTHON_UNITTEST.add('test_manual_authority_transition')
+PYTHON_UNITTEST.add('test_doctor_setup_options_registration')
+PYTHON_UNITTEST.add('test_manual_capture_catalogue')
+PYTHON_UNITTEST.add('test_manual_course_cases')
+PYTHON_UNITTEST.add('test_manual_course_device_configuration')
+PYTHON_UNITTEST.add('test_manual_screen_codec')
+PYTHON_UNITTEST.add('test_mask_clearing_midi_packets')
+PYTHON_UNITTEST.add('test_mask_note_default_x')
+PYTHON_UNITTEST.add('test_parameter_recording_checkpoint_append')
+PYTHON_UNITTEST.add('test_trig_param_strum_persistence')
+PYTHON_UNITTEST.add('test_trig_parameter_controlled_playback')
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.
