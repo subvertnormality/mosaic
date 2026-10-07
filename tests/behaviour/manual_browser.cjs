@@ -25,7 +25,7 @@ const root=path.resolve(__dirname,"../..");
   const page=await browser.newPage({viewport:{width:1440,height:1100}});
   page.on("pageerror",e=>errors.push(e.message));
   await page.goto((process.env.MOSAIC_MANUAL_URL||"http://localhost:8765/manual/")+"#masks");
-  await page.waitForFunction(()=>!document.body.classList.contains("book-loading")&&document.getElementById("scene").options.length>0);
+  await page.waitForFunction(()=>!document.body.classList.contains("book-loading")&&document.body.dataset.routeReady==="1"&&document.getElementById("scene").options.length>0);
   assert.equal(await page.locator("h1").textContent(),"Masks");
   async function frameCheck(output){
     const actual=await page.evaluate(()=>({pixels:Array.from(document.getElementById("screen").getContext("2d").getImageData(0,0,128,64).data).filter((_,i)=>i%4===0),grid:Array.from(document.querySelectorAll("#grid button")).map(b=>Number(b.dataset.level))}));
@@ -43,18 +43,19 @@ const root=path.resolve(__dirname,"../..");
     for(let j=scene.steps.length-2;j>=0;j--){await page.click("#previous");await frameCheck(scene.steps[j].output);}
   }
   report.checks.push("All scene captions, forward/back frames and 128 LED values");
-  await page.selectOption("#scene","0");
+  const noCue=/No recorded control cue is available here/;
+  const counterAt=async n=>assert.equal(await page.locator("#counter").textContent(),String(n).padStart(2,"0")+" / "+String(data.scenes[0].steps.length).padStart(2,"0"));
+  await page.selectOption("#scene","0");await counterAt(1);
+  // Characterisation: the free guided replay was removed. With no active recorded cue every pictured control is inert and says so.
   await page.locator(".encoder[data-n='3']").click();
-  assert.equal(await page.locator("#counter").textContent(),"02 / "+String(data.scenes[0].steps.length).padStart(2,"0"),"A single captured turn advances; an encoder alone cannot complete the following hold and turn");
-  await page.locator(".encoder[data-n='3']").focus();
-  await page.keyboard.press("ArrowRight");
-  assert.equal(await page.locator("#counter").textContent(),"02 / "+String(data.scenes[0].steps.length).padStart(2,"0"),"A single captured turn advances; an encoder alone cannot complete the following hold and turn");
-  report.checks.push("Single encoder turn participates; following compound gesture rejects encoder without hold");
-  await page.selectOption("#scene","0");
+  await counterAt(1);assert.match(await page.locator("#notice").textContent(),noCue);
+  await page.locator(".encoder[data-n='3']").focus();await page.keyboard.press("ArrowRight");
+  await counterAt(1);
   const knob=await page.locator(".encoder[data-n='3']").boundingBox();
   await page.mouse.move(knob.x+knob.width/2,knob.y+knob.height/2);
   await page.mouse.down();await page.mouse.move(knob.x+knob.width/2+25,knob.y+knob.height/2);await page.mouse.up();
-  await frameCheck(data.scenes[0].steps[1].output);
+  await counterAt(1);await frameCheck(data.scenes[0].steps[0].output);
+  report.checks.push("Without a recorded cue encoder click, key press and drag leave the captured frame and step unchanged");
   for(const kind of ["grid","key"]){
     const si=data.scenes.findIndex(scene=>scene.steps.slice(1).some(step=>step.inputs.some(a=>a.type===kind)));
     if(si<0)throw Error("Missing control acceptance fixture");
@@ -65,6 +66,8 @@ const root=path.resolve(__dirname,"../..");
     if(kind==="key")await page.locator("[data-key='"+input.n+"']").click();
     else await page.locator("#grid button").nth((input.y-1)*16+input.x-1).click();
     await frameCheck(data.scenes[si].steps[target-1].output);
+    assert.match(await page.locator("#notice").textContent(),noCue);
+    assert.equal(await page.locator(".held").count(),0,"An uncued pad press must not mark a control as held");
     await page.click("#next");await frameCheck(data.scenes[si].steps[target].output);
   }
   await page.locator("#grid button").first().focus();await page.keyboard.press("ArrowRight");
@@ -72,7 +75,39 @@ const root=path.resolve(__dirname,"../..");
   await page.selectOption("#scene","0");await page.click("#autoplay");
   await page.waitForFunction(()=>document.getElementById("counter").textContent.startsWith("02"));
   await page.click("#autoplay");await frameCheck(data.scenes[0].steps[1].output);
-  report.checks.push("Pictured controls preserve current frame; explicit Next, grid focus and autoplay");
+  report.checks.push("Uncued pictured controls preserve current frame; explicit Next, grid focus and autoplay");
+
+  // Recorded-cue flow: Masks course lessons advance only on the matching recorded control.
+  const courseMasks=JSON.parse(fs.readFileSync(path.join(root,"manual/generated/book.json"))).scenes["course-masks"];
+  const cframe=async id=>{await frameCheckScene(courseMasks.steps.find(s=>s.id===id).output);};
+  async function frameCheckScene(output){await frameCheck(output);}
+  const rejected=/does not match the current recorded cue/;
+  await page.goto((process.env.MOSAIC_MANUAL_URL||"http://localhost:8765/manual/")+"#masks/lesson/masks-hold");
+  await page.waitForFunction(()=>document.body.dataset.routeReady==="1"&&document.getElementById("counter").textContent.startsWith("02"));
+  await cframe("masks-open");
+  const hold=page.locator("#grid button").nth(3*16+12);
+  await page.locator(".encoder[data-n='3']").focus();await page.keyboard.press("ArrowRight");
+  assert.match(await page.locator("#notice").textContent(),rejected);assert.equal(await hold.evaluate(b=>b.classList.contains("held")),false);
+  await page.locator("#grid button").nth(3*16+11).focus();await page.keyboard.down("Space");await page.keyboard.up("Space");
+  assert.match(await page.locator("#notice").textContent(),rejected);assert.equal(await page.locator(".held").count(),0);
+  await cframe("masks-open");
+  await hold.focus();await page.keyboard.down("Space");
+  assert.equal(await hold.evaluate(b=>b.classList.contains("held")),true,"Matching hold cue marks the pad held");
+  await cframe("masks-open");
+  await page.click("#next");await cframe("masks-hold");
+  await page.keyboard.up("Space");
+  report.checks.push("Recorded hold cue rejects wrong encoder and pad, accepts the matching pad and reveals the exact held result only on View next result");
+  await page.goto((process.env.MOSAIC_MANUAL_URL||"http://localhost:8765/manual/")+"#masks/lesson/masks-edit");
+  await page.waitForFunction(()=>document.body.dataset.routeReady==="1"&&document.getElementById("counter").textContent.startsWith("03"));
+  await cframe("masks-hold");
+  await page.locator(".encoder[data-n='3']").focus();await page.keyboard.press("ArrowLeft");
+  assert.match(await page.locator("#notice").textContent(),rejected);await cframe("masks-hold");
+  await page.keyboard.press("ArrowRight");
+  assert.match(await page.locator("#notice").textContent(),/Captured walkthrough cue completed/);await cframe("masks-hold");
+  await page.click("#next");await cframe("masks-edit");
+  report.checks.push("Recorded encoder cue rejects the wrong direction and accepts the recorded clockwise turn");
+  await page.goto((process.env.MOSAIC_MANUAL_URL||"http://localhost:8765/manual/")+"#masks");
+  await page.waitForFunction(()=>document.body.dataset.routeReady==="1"&&document.getElementById("scene").options.length>0);
 
   await page.fill("#search","clear");
   await page.waitForFunction(()=>document.querySelectorAll("#search-results a").length>0);
@@ -105,7 +140,11 @@ const root=path.resolve(__dirname,"../..");
     if(pilotAudio){const pilotDurations=await page.evaluate(async files=>{const ctx=new AudioContext();try{return await Promise.all(files.map(file=>fetch(file).then(r=>r.arrayBuffer()).then(bytes=>ctx.decodeAudioData(bytes)).then(audio=>audio.duration)));}finally{await ctx.close();}},pilotAudio.files);const pilotExpected=pilotAudio.bars*4*60/pilotAudio.bpm+2;for(const duration of pilotDurations)assert(Math.abs(duration-pilotExpected)<.06,"Historical pilot retains its exact independent two-second tail");report.checks.push("Historical pilot duration oracle preserved separately");}
     await page.locator("#audio").evaluate(async a=>{await a.play();a.currentTime=2;});
     await page.waitForFunction(()=>document.getElementById("counter").textContent.startsWith("LISTEN"));
+    // Pausing restores the scene the reader was showing before playback; the playhead frame is painted again by a seek.
     await page.locator("#audio").evaluate(a=>a.pause());
+    await page.waitForFunction(()=>!document.getElementById("counter").textContent.startsWith("LISTEN"));
+    await page.locator("#audio").evaluate(a=>new Promise(resolve=>{a.addEventListener("seeked",resolve,{once:true});a.currentTime=2;}));
+    await page.waitForFunction(()=>document.getElementById("counter").textContent.startsWith("LISTEN"));
     const current=await page.locator("#audio").evaluate(a=>a.currentTime);
     const frame=data.audio.timeline.filter(f=>f.time<=current).at(-1)||data.audio.timeline[0];
     await frameCheck(frame.output);

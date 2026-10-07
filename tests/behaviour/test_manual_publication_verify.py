@@ -279,24 +279,28 @@ class MotionSampleIntegrity(unittest.TestCase):
    mark=bytes(pixels[(yy*128+xx)*4+k] for yy in range(8) for xx in range(96,128) for k in range(3))
    item.update(grid_sha256=audit.canonical_hash(state['grid']),logical_ns=state['clock']['logical_ns'],mark_sha256=hashlib.sha256(mark).hexdigest())
   motion=dict(enabled=True,samples=samples,decorative_mark_changed=True,public_mini_header_assertion=row)
-  return motion,observations,events,[row,motion]
+  return motion,observations,events,self.layout(row,motion)
+ def layout(self,mini,motion):
+  # Real capture order: mini proof, rest pose + frame, moved pose + frame, then the motion row at index 5.
+  enabled=motion['enabled']
+  return [mini,dict(kind='manual-motion-pose',enabled=enabled,phase='rest'),dict(kind='documentation-frame'),dict(kind='manual-motion-pose',enabled=enabled,phase='moved'),dict(kind='documentation-frame'),motion]
  def test_full_authored_motion_requires_original_native_mini_proof(self):
   row,obs,events,results=self.fixture()
-  audit.check_motion_samples(row,obs,'controlled-experimental',events,results,1)
+  audit.check_motion_samples(row,obs,'controlled-experimental',events,results,5)
   for field in ('public_mini_header_assertion','mark_sha256','phase_check','grid_sha256','logical_ns'):
    bad=copy.deepcopy(row)
    if field=='public_mini_header_assertion':bad.pop(field)
    else:bad['samples'][0][field]='fabricated'
-   with self.subTest(field=field),self.assertRaises(ValueError):audit.check_motion_samples(bad,obs,'controlled-experimental',events,results,1)
+   with self.subTest(field=field),self.assertRaises(ValueError):audit.check_motion_samples(bad,obs,'controlled-experimental',events,results,5)
   with self.assertRaises(ValueError):audit.check_motion_samples(row,obs,'controlled-experimental',events,[row],0)
   for field in ('grid','midi_count'):
    badobs=copy.deepcopy(obs)
    if field=='grid':badobs[-1]['state']['grid'][0]=15
    else:badobs[-1]['state']['midi_count']=1
-   with self.subTest(native=field),self.assertRaises(ValueError):audit.check_motion_samples(row,badobs,'controlled-experimental',events,results,1)
-  with self.assertRaises(ValueError):audit.check_motion_samples(row,obs,'controlled-experimental',[],results,1)
+   with self.subTest(native=field),self.assertRaises(ValueError):audit.check_motion_samples(row,badobs,'controlled-experimental',events,results,5)
+  with self.assertRaises(ValueError):audit.check_motion_samples(row,obs,'controlled-experimental',[],results,5)
   bad=copy.deepcopy(row);bad['public_mini_header_assertion']['all_distinct_poses_required']=False
-  with self.assertRaises(ValueError):audit.check_motion_samples(bad,obs,'controlled-experimental',events,[bad['public_mini_header_assertion'],bad],1)
+  with self.assertRaises(ValueError):audit.check_motion_samples(bad,obs,'controlled-experimental',events,self.layout(bad['public_mini_header_assertion'],bad),5)
  def test_old_tiny_crop_without_native_phase_is_refused(self):
   with self.assertRaises(ValueError):audit.check_motion_samples(dict(enabled=False,samples=[],decorative_mark_changed=False),[],'controlled-experimental',[],[],0)
 class MotionResponseAndMusicIntegrity(unittest.TestCase):

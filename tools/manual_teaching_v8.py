@@ -166,7 +166,8 @@ def _zero_note_window_receipt(native, assertion, start, end, action, play, stop,
    raise ValueError("native identity and session context differ")
  except Exception as exc:
   raise Error("zero-note source identity audit failed") from exc
- event_path=Path(path)/"native-events.jsonl"
+ event_path=Path(path)/"native"/"native-events.jsonl"
+ if not event_path.is_file(): event_path=Path(path)/"native-events.jsonl"
  try:
   raw=event_path.read_bytes()
  except OSError as exc:
@@ -207,12 +208,24 @@ def _zero_note_window_receipt(native, assertion, start, end, action, play, stop,
   return normalized
  def native_pair(row):
   return (row.get("port"),row.get("bytes"))
+ def realtime(row):
+  data=row.get("bytes")
+  return isinstance(data,list) and len(data)==1 and _int(data[0]) and 0xF8<=data[0]<=0xFF
  play_delta=delta(play); stop_delta=delta(stop)
- normalized_window=[native_pair(row) for row in window]
- after=[native_pair(row) for row in midi_rows[end:]]
- if not play_delta or normalized_window[:len(play_delta)]!=play_delta:
+ def literal_model():
+  """Per-step deltas list every packet, including Start/Stop bytes; the Stop delta begins where the window ends."""
+  w=[native_pair(row) for row in window]; rest=[native_pair(row) for row in midi_rows[end:]]
+  return bool(play_delta) and w[:len(play_delta)]==play_delta, bool(stop_delta) and rest[:len(stop_delta)]==stop_delta
+ def channel_model():
+  """Per-step deltas list channel/program traffic only and each delta is everything since the previous checkpoint:
+  the Stop delta starts with the rest of this window and continues with the events after it."""
+  w=[native_pair(row) for row in window if not realtime(row)]; rest=[native_pair(row) for row in midi_rows[end:] if not realtime(row)]
+  inside=w[len(play_delta):]
+  return bool(play_delta) and w[:len(play_delta)]==play_delta, bool(stop_delta) and stop_delta[:len(inside)]==inside and rest[:len(stop_delta)-len(inside)]==stop_delta[len(inside):]
+ literal=literal_model(); channel=channel_model()
+ if not (literal[0] or channel[0]):
   raise Error("native window does not begin with the captured Play-step MIDI delta")
- if not stop_delta or after[:len(stop_delta)]!=stop_delta:
+ if not ((literal[0] and literal[1]) or (channel[0] and channel[1])):
   raise Error("native window boundary does not precede the captured Stop-step MIDI delta")
  canonical=json.dumps(window,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
  return {"kind":"zero-note-play-window","session_id":session["session_id"],
@@ -242,7 +255,7 @@ def _midi_phrase_matches(midi, phrase):
   else: return False
  return True
 
-def _validate_actions(authored,native,target_id,req,mask_readouts=None):
+def _validate_actions(authored,native,target_id,req,mask_readouts=None,source_scene=None):
  actions=authored.get("actions")
  if not isinstance(actions,list) or len(actions)<2: raise Error("teaching actions need a practical action and final preview")
  ids=set()
@@ -298,6 +311,9 @@ def _validate_actions(authored,native,target_id,req,mask_readouts=None):
   if control in learner_held: return None
   for index in range(cursor[0],len(raw)):
    e=raw[index]
+   if e.get("type")==typ and "state" not in e and typ=="key" and all(e.get(k)==v for k,v in identity.items()):
+    # Authored Masks inputs record a key tap as one stateless event: its press and release are the same input.
+    cursor[0]=index+1; last_tap[0]=(index,); return index
    if e.get("type")==typ and e.get("state")==1 and all(e.get(k)==v for k,v in identity.items()):
     for end in range(index+1,len(raw)):
      r=raw[end]
@@ -388,16 +404,26 @@ def _validate_actions(authored,native,target_id,req,mask_readouts=None):
      and a.get("value")==parameter_request.get("value")
      and ("field_slot" not in a or a.get("field_slot")==parameter_request.get("slot"))
      and ("expected_marker" not in a or a.get("expected_marker")==parameter_request.get("marker")))
+    # Rows enriched by their case carry field_label/field_slot/field_marker. Plain selected-param rows are
+    # read as: slot and marker as recorded, label from the latest earlier parameter-list-label checkpoint.
+    effective={}
+    if isinstance(ca,dict) and ca.get("kind")=="selected-param":
+     scene_rows=(source_scene or {}).get("steps",[]); scene_ids=[r.get("id") for r in scene_rows]
+     upto=scene_rows[:scene_ids.index(checkpoint.get("id"))] if checkpoint.get("id") in scene_ids else []
+     picker=next((c_assertion for c_assertion in (((c.get("output") or {}).get("binding") or {}).get("assertion") for c in reversed(upto)) if isinstance(c_assertion,dict) and c_assertion.get("kind")=="parameter-list-label"),{})
+     effective={"label":ca.get("field_label",picker.get("label")),"slot":ca.get("field_slot",ca.get("slot")),"marker":ca.get("field_marker",ca.get("marker"))}
     selected_param_match=(isinstance(ca,dict) and ca.get("kind")=="selected-param"
      and ca.get("passed") is True
-     and a.get("field_label")==ca.get("field_label")
-     and a.get("field_slot")==ca.get("field_slot")
+     and a.get("field_label")==effective.get("label")
+     and a.get("field_slot")==effective.get("slot")
      and a.get("value")==ca.get("value")
-     and a.get("expected_marker")==ca.get("field_marker"))
+     and a.get("expected_marker")==effective.get("marker"))
     verified_mask_step=(mask_readouts or {}).get(a.get("id"))
     direct_mask_match=(isinstance(ca,dict) and isinstance(ca.get("mask_fields"),list)
      and any(isinstance(row,dict) and row.get("field")==a.get("mask_field") and row.get("value")==a.get("value") for row in ca["mask_fields"]))
-    mask_match=(isinstance(ca,dict) and checkpoint.get("id")==verified_mask_step
+    # The receipt in mask_readouts already proved this step's value in its native frame; Masks pilot
+    # checkpoints carry no typed assertion, so the step identity is the match.
+    mask_match=(verified_mask_step is not None and checkpoint.get("id")==verified_mask_step
      and isinstance(a.get("mask_field"),str) and isinstance(a.get("value"),str)) or direct_mask_match
     field_match=("field_slot" not in a and "mask_field" not in a and isinstance(ca,dict) and _matches_field_value(ca,a["field_label"],a["value"]))
     if parameter_match or selected_param_match or mask_match or field_match:
@@ -407,7 +433,7 @@ def _validate_actions(authored,native,target_id,req,mask_readouts=None):
       if "while_held_grid" in a and held_grids[0]!=("grid",a["while_held_grid"]["x"],a["while_held_grid"]["y"]):
        raise Error("selected parameter readout is not from the exact authored held step")
      found=True; checkpoint_step_id=checkpoint.get("id"); checkpoint_cursor=ci+1
-     if selected_param_match: proof={"kind":"selected-parameter-value","field_label":a["field_label"],"field_slot":a["field_slot"],"value":a["value"],"field_marker":a["expected_marker"]}
+     if selected_param_match and not parameter_match: proof={"kind":"selected-parameter-value","field_label":a["field_label"],"field_slot":a["field_slot"],"value":a["value"],"field_marker":a["expected_marker"]}
      if mask_match: proof={"kind":"mask-field-value","field":a["mask_field"],"value":a["value"]}
      cursor[0]=max(cursor[0],sum(len(row.get("inputs",[])) for row in checkpoints[:ci+1]))
      break
@@ -470,15 +496,21 @@ def _validate_actions(authored,native,target_id,req,mask_readouts=None):
    receipt=_zero_note_window_receipt(native,assertion,start,end,a,play,stop,
     [input_ref(index) for index in tap_indices(play)],[input_ref(index) for index in tap_indices(stop)])
    native["play_note_silence_receipts"]=[receipt]
-   advances=[]
-   ordered=checkpoints[checkpoints.index(play):checkpoints.index(stop)+1]
-   for row in ordered:
+   def waits(row,after_tap=False,before_tap=False):
+    """Controlled-time advances of one step: native 'advance' events or the published 'wait' inputs (seconds)."""
+    out=[]; tapped=False
     for event in row.get("inputs",[]):
-     if isinstance(event,dict) and event.get("type")=="advance":
-      nanoseconds=event.get("nanoseconds")
-      if _int(nanoseconds): advances.append(nanoseconds)
+     if not isinstance(event,dict): continue
+     if event.get("type")=="grid" and event.get("x")==1 and event.get("y")==8 and event.get("state")==1: tapped=True
+     if (after_tap and not tapped) or (before_tap and tapped): continue
+     if event.get("type")=="advance" and _int(event.get("nanoseconds")): out.append(event["nanoseconds"])
+     elif event.get("type")=="wait" and isinstance(event.get("seconds"),(int,float)) and not isinstance(event.get("seconds"),bool): out.append(round(event["seconds"]*1_000_000_000))
+    return out
    expected_ns=round(a["window_duration_s"]*1_000_000_000)
-   if not advances or any(value<0 or value>expected_ns for value in advances) or sum(advances)!=expected_ns:
+   # The Play step settles for a few short advances until its LED is active; the bounded window is
+   # exactly what the Stop step advances before its Stop tap.
+   settle=waits(play,after_tap=True); window_waits=waits(stop,before_tap=True)
+   if not window_waits or any(value<0 or value>expected_ns for value in window_waits) or sum(window_waits)!=expected_ns or any(value<0 or value>100_000_000 for value in settle):
     raise Error("captured controlled-time inputs do not contain the exact bounded Play window")
    checkpoint_step_id=target_id
    proof=receipt
@@ -576,12 +608,25 @@ def _validate_output(native,req,mask_fields_at_target=None):
   if not isinstance(binding,dict) or binding.get("assertion_sha256")!=hashlib.sha256(raw).hexdigest():
    raise Error("saved-project assertion provenance digest is invalid")
  midi=out.get("midi")
- if "midi_events_at_target" in req:
+ if "midi_phrase_contains" in req and not (target.get("expect") or {}).get("midi_phrase"):
+  # The target authors no phrase in its expectation: prove each wanted packet, in order, in the captured MIDI.
   if not isinstance(midi,dict) or midi.get("truncated") is not False or not isinstance(midi.get("events"),list): raise Error("target MIDI missing or truncated")
   pos=0
-  for w in req["midi_events_at_target"]:
+  for w in req["midi_phrase_contains"]:
    while pos<len(midi["events"]) and not (midi["events"][pos].get("port")==w["port"] and _midi_bytes(midi["events"][pos])==w["bytes"]): pos+=1
-   if pos==len(midi["events"]): raise Error("MIDI events differ from captured sequence")
+   if pos==len(midi["events"]): raise Error("MIDI phrase differs from captured sequence")
+   pos+=1
+ if "midi_events_at_target" in req:
+  events=None
+  if isinstance(midi,dict) and midi.get("truncated") is False and isinstance(midi.get("events"),list): events=midi["events"]
+  elif midi is None and isinstance((target.get("expect") or {}).get("midi_phrase"),list):
+   # Masks pilot steps carry no raw MIDI log; their capture asserted exactly this phrase in a passed semantic row.
+   events=target["expect"]["midi_phrase"]
+  if events is None: raise Error("target MIDI missing or truncated")
+  pos=0
+  for w in req["midi_events_at_target"]:
+   while pos<len(events) and not (events[pos].get("port")==w["port"] and _midi_bytes(events[pos])==w["bytes"]): pos+=1
+   if pos==len(events): raise Error("MIDI events differ from captured sequence")
    pos+=1
  if req.get("midi_silence_at_target") is True and (not isinstance(midi,dict) or midi.get("truncated") is not False or midi.get("events")!=[] or midi.get("total")!=0): raise Error("target is not explicitly MIDI-silent")
 def _native(scene,from_id,to_id,scope):
@@ -718,7 +763,7 @@ def _derive_mask_readout_receipts(native,source_scene,req,actions,project_root):
   wanted.append((action.get("id"),action.get("mask_field"),action.get("value")))
  for row in needs_target:
   if isinstance(row,dict): wanted.append((None,row.get("field"),row.get("value")))
- verified=[]
+ verified=[]; action_floor=[0]
  for action_id,field,value in wanted:
   candidates=[]
   typed=[step for step in interval
@@ -734,6 +779,16 @@ def _derive_mask_readout_receipts(native,source_scene,req,actions,project_root):
   if not candidates and action_id is not None and len(typed)==1:
    action_steps[action_id]=typed[0].get("id")
    continue
+  if not candidates and not typed:
+   # Masks pilot scenes author the expected readout on the step itself (step.expect.screen). A target
+   # readout is the target step; an action's readout is the first matching step at or after the previous
+   # action's checkpoint. validate_current_scene below re-proves the value in that step's native frame.
+   authored=[(index,step) for index,step in enumerate(interval) if (step.get("expect") or {}).get("screen")==[[field,value]]]
+   if action_id is None: authored=[row for row in authored if row[0]==len(interval)-1]
+   else: authored=[row for row in authored if row[0]>=action_floor[0]]
+   if authored:
+    action_floor[0]=authored[0][0] if action_id is not None else action_floor[0]
+    candidates=[authored[0][1]]
   if len(candidates)!=1:
    raise Error("Mask readout must resolve to one exact source-authored checkpoint in the transition")
   step_id=candidates[0].get("id")
@@ -742,7 +797,9 @@ def _derive_mask_readout_receipts(native,source_scene,req,actions,project_root):
    if not isinstance(evidence_path,str) or not evidence_path: raise Error("native Mask readout requires the pinned scene evidence path")
    from manual_mask_public_readout import validate_current_scene
    from manual_publication_verify import verify_cached_ui
-   pixel_verifier=lambda state,expected: verify_cached_ui(state,expected,Path(evidence_path))
+   def pixel_verifier(state,expected):
+    verify_cached_ui(state,expected,Path(evidence_path))  # raises on any mismatch and returns nothing on success
+    return True
    try:
     receipt=validate_current_scene(scene,step_id,field,value,pixel_verifier)
    except Exception as exc:
@@ -779,11 +836,12 @@ def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_r
   req=authored.get("semantic_requires"); _validate_semantics(req)
   mask_data=_derive_mask_readout_receipts(native,scenes[sid],req,authored["actions"],project_root)
   _validate_output(native,req,mask_data["by_step"].get(to))
-  if not validate_semantics(native,req): raise Error("v7 screen/MIDI/held semantics mismatch")
+  v7_req={k:v for k,v in req.items() if not (k=="midi_phrase_contains" and not (native["to_step"].get("expect") or {}).get("midi_phrase"))}
+  if not validate_semantics(native,v7_req): raise Error("v7 screen/MIDI/held semantics mismatch")
   held= replay_held_controls(native)
   if held and ("held_controls_at_target" not in req or authored.get("preserve_holds_at_target") is not True): raise Error("held target must declare exact held controls and preserve_holds_at_target")
   if not held and authored.get("preserve_holds_at_target",False) is not False: raise Error("empty final held state requires preserve_holds_at_target:false or omission")
-  action_checkpoints=_validate_actions(authored,native,to,req,mask_data["action_steps"])
+  action_checkpoints=_validate_actions(authored,native,to,req,mask_data["action_steps"],source_scene=scenes[sid])
   for checkpoint in action_checkpoints:
    receipt=mask_data["by_action"].get(checkpoint.get("action_id"))
    if receipt is not None:

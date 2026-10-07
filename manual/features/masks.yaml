@@ -361,7 +361,7 @@ feature:
       scene: mask-melody-ending
       step: ending-d
     teaching_binding:
-      transition_scope: adjacent
+      transition_scope: interval
       from_step_id: step-four
       actions:
       - kind: hold-grid
@@ -607,9 +607,8 @@ scenes:
         - 67
         - 97
     citation: README.md#adding-melodic-notes-over-harmony-and-drums
-  - id: step-two
-    caption: Hold step 2 at (2,4), turn E3 right until the screen reads D4 (MIDI 74) and release the step. Steps
-      1 and 2 each have their own note (C4, D4), and steps 3 and 4 still play the channel note G.
+  - id: step-two-held
+    caption: 'Hold step 2 at (2,4) and turn E3 right until the screen reads D4 (MIDI 74). While a step is held, the screen shows that step''s own note.'
     inputs:
     - type: grid
       x: 2
@@ -618,6 +617,14 @@ scenes:
     - type: enc
       n: 3
       delta: 7
+    expect:
+      screen:
+      - - note
+        - D4
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: step-two
+    caption: 'Release step 2. Steps 1 and 2 each have their own note (C4, D4), and steps 3 and 4 still play the channel note G.'
+    inputs:
     - type: grid
       x: 2
       y: 4
@@ -796,10 +803,8 @@ scenes:
         - 65
         - 50
     citation: README.md#adding-melodic-notes-over-harmony-and-drums
-  - id: accent
-    caption: Hold step 1 at (1,4), turn E3 right until the screen reads 90 and release the step. A step mask overrides
-      the channel mask, so step 1 plays at 90 as an accent while steps 2 to 4 keep the channel velocity of 50. The
-      screen goes back to the channel value, 50.
+  - id: accent-held
+    caption: 'Hold step 1 at (1,4) and turn E3 right until the screen reads 90. While a step is held, the screen shows that step''s own velocity.'
     inputs:
     - type: grid
       x: 1
@@ -808,6 +813,14 @@ scenes:
     - type: enc
       n: 3
       delta: 40
+    expect:
+      screen:
+      - - velocity
+        - '90'
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: accent
+    caption: 'Release step 1. A step mask overrides the channel mask, so step 1 plays at 90 as an accent while steps 2 to 4 keep the channel velocity of 50. The screen goes back to the channel value, 50.'
+    inputs:
     - type: grid
       x: 1
       y: 4
@@ -1451,9 +1464,8 @@ scenes:
       - 3
       cycle_steps: 4
     citation: README.md#adding-melodic-notes-over-harmony-and-drums
-  - id: ending-d
-    caption: 'Hold step 4 and turn E3 left until it reads D4 (two detents), then release. Only step 4 changed: the
-      phrase now ends 72, 74, 79, 74.'
+  - id: ending-d-held
+    caption: 'Hold step 4 and turn E3 left until it reads D4 (two detents).'
     inputs:
     - type: grid
       x: 4
@@ -1462,6 +1474,14 @@ scenes:
     - type: enc
       n: 3
       delta: -2
+    expect:
+      screen:
+      - - note
+        - D4
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: ending-d
+    caption: 'Release step 4. Only step 4 changed: the phrase now ends 72, 74, 79, 74.'
+    inputs:
     - type: grid
       x: 4
       y: 4

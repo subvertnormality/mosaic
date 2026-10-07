@@ -22,8 +22,10 @@ def validate_semantics(native, requirements):
     target=native["to_step"]
     actual_screen=target["expect"].get("screen", [])
     if any(item not in actual_screen for item in requirements.get("screen_contains", [])): return False
-    actual_midi=target["expect"].get("midi_phrase", [])
-    if any(item not in actual_midi for item in requirements.get("midi_phrase_contains", [])): return False
+    actual_midi=target["expect"].get("midi_phrase")
+    # A target that authors no phrase in its expectation (a typed MIDI assertion instead) has its wanted packets
+    # proved in order against the captured MIDI by manual_teaching_v8._validate_output.
+    if actual_midi is not None and any(item not in actual_midi for item in requirements.get("midi_phrase_contains", [])): return False
     expected={tuple(("grid",x["x"],x["y"]) if x["type"]=="grid" else ("key",x["n"])) for x in requirements.get("held_controls_at_target", [])}
     return replay_held_controls(native)==expected
 

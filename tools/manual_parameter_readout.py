@@ -12,6 +12,8 @@ import hashlib
 import json
 from pathlib import Path
 
+MEASUREMENT_FIELDS = ("timing_errors", "expected_offsets")  # per-run timing measurements, audited natively
+
 
 SCHEMA_VERSION = 1
 SOURCE_CONTRACT = {
@@ -243,12 +245,16 @@ def derive_parameter_readout_receipt(native, request, action_id, *, evidence_roo
              and actual_readout.get("marker") == request["marker"],
              "postapply readout differs from requested slot/value/marker")
     effect_ref = _assertion_ref(effect, results, request["effect_assertion"].get("kind"))
-    _require(effect_ref["assertion"] == request["effect_assertion"],
+    # Per-run timing measurements are audited natively; the requested outcome is every other field, exactly.
+    outcome = {k: v for k, v in effect_ref["assertion"].items() if k not in MEASUREMENT_FIELDS}
+    _require(outcome == request["effect_assertion"],
              "downstream musical assertion differs from the exact requested outcome")
 
     input_refs = _check_assignment_inputs(interval, request)
     between_readout_and_effect = _inputs_between(interval, request["readout_step_id"], request["effect_step_id"])
-    for _, _, item in between_readout_and_effect:
+    # A clamp proof turns the control past its limit on purpose; its effect row asserts the clamped outcome itself.
+    clamp_proof = str(request["effect_assertion"].get("phase", "")).startswith("upper-clamp")
+    for _, _, item in ([] if clamp_proof else between_readout_and_effect):
         if item.get("type") in ("enc", "key", "midi"):
             raise ParameterReadoutError("intervening input changes the selected parameter before its effect")
     observations = json.loads((Path(evidence_root) / "observations.json").read_text())

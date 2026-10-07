@@ -1525,8 +1525,8 @@ learning_path:
     action: '1. Turn E3 left seven detents until the channel Note reads C3.
 
       2. Tap Play (1,8), listen for two passes, then tap Play to stop.'
-    result: The channel Note default reads C3 again; the MIDI strip shows 60, 60, 60
-      and 62 (velocity 50), so step 13 keeps its D3 and velocity 50 exception.
+    result: The channel Note default reads C3 again; the MIDI strip shows 60, 60,
+      60 and 62 (velocity 50), so step 13 keeps its D3 and velocity 50 exception.
     binding:
       status: controlled-verified
       scene: course-masks
@@ -2021,10 +2021,10 @@ learning_path:
           header.title: NOTE MASKS
           header.scope: CH02 OCT-1
           header.layout: overview_masks
-      human_outcome: 'NOTE MASKS CH02 OCT-1 shows Ch. 2 octave: -1; channel 2 has its own output, pattern
-        2 and the same 16-step range as channel 1.'
-      practice_prompt: Route channel 2 to its own output, give it pattern 2 and the same 16-step range, then
-        set its octave to -1.
+      human_outcome: 'NOTE MASKS CH02 OCT-1 shows Ch. 2 octave: -1; channel 2 has
+        its own output, pattern 2 and the same 16-step range as channel 1.'
+      practice_prompt: Route channel 2 to its own output, give it pattern 2 and the
+        same 16-step range, then set its octave to -1.
   - id: sequence-composition-both
     title: Finish the bass and hear both parts
     goal: Hear the bass under the phrase.
@@ -2095,11 +2095,12 @@ learning_path:
           - 144
           - 62
           - 50
-      human_outcome: The NOTE MASKS screen reads CH02 OCT-1. Pattern 2 plays C2 then G2 on channel 2, one
-        octave below its C-major notes, with a 16-step loop. With both parts playing, channel 1 keeps its
-        four-note phrase and channel 2 supplies the two-note bass on its own output.
-      practice_prompt: "Assign pattern 2 to channel 2, set its loop to steps 1\u201316, move it down one octave,\
-        \ and play both parts."
+      human_outcome: The NOTE MASKS screen reads CH02 OCT-1. Pattern 2 plays C2 then
+        G2 on channel 2, one octave below its C-major notes, with a 16-step loop.
+        With both parts playing, channel 1 keeps its four-note phrase and channel
+        2 supplies the two-note bass on its own output.
+      practice_prompt: Assign pattern 2 to channel 2, set its loop to steps 1–16,
+        move it down one octave, and play both parts.
   - id: sequence-composition-merge-skip
     title: 'Detour: add pattern 2 to channel 1'
     goal: Hear why assigning a second pattern to a channel can remove a trig. This

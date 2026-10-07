@@ -141,3 +141,23 @@ def test_zero_note_proof_rejects_foreign_session_identity_and_wrong_evidence_pat
     native["scene"]["evidence"]["path"] = str(foreign)
     with pytest.raises(Error, match="source identity audit"):
         _validate_actions({"actions": actions}, native, "silent", {"play_note_silence_at_target": True})
+
+
+def test_zero_note_proof_accepts_the_real_capture_layout(tmp_path):
+    """Real captures keep native-events.jsonl under native/ and list channel traffic only in each per-step delta,
+    the Stop delta being everything since the Play checkpoint."""
+    native, actions, rows = _fixture(tmp_path)
+    (tmp_path / "native").mkdir(exist_ok=True)
+    (tmp_path / "native" / "native-events.jsonl").write_bytes((tmp_path / "native-events.jsonl").read_bytes())
+    (tmp_path / "native-events.jsonl").unlink()
+    channel = {"port": 3, "bytes": [192, 0]}
+    window_channel = [row for row in rows[178:253] if len(row["bytes"]) > 1]
+    play, stop = native["step_interval"][1], native["step_interval"][2]
+    play["output"]["midi"] = {"events": [channel] * 4, "total": 4, "truncated": False}
+    remaining = len(window_channel) - 4
+    stop["output"]["midi"] = {"events": [channel] * remaining, "total": remaining, "truncated": False}
+    checkpoints = _validate_actions({"actions": actions}, native, "silent", {"play_note_silence_at_target": True})
+    assert checkpoints[0]["proof"]["window_event_count"] == 75
+    stop["output"]["midi"] = {"events": [channel] * (remaining + 1), "total": remaining + 1, "truncated": False}
+    with pytest.raises(Error, match="Stop-step MIDI delta"):
+        _validate_actions({"actions": actions}, native, "silent", {"play_note_silence_at_target": True})
