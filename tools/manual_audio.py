@@ -1121,6 +1121,29 @@ def audit_example_native(example,expected_example,controlled_local=False):
         checked+=1
     return checked
 
+# Editorial-only authoring fields: they describe which features an example belongs to and cannot change a recording.
+EDITORIAL_FIELDS=("feature_ids",)
+
+def editorial_view(row):
+    """A row without its editorial-only fields (for recording-identity comparisons)."""
+    return {k:v for k,v in row.items() if k not in EDITORIAL_FIELDS}
+
+def native_source_sha256(report):
+    """The source identity the recording was made from: a refreshed publication keeps the native one."""
+    return report.get("publication",{}).get("native_source_sha256",report["source_sha256"])
+
+def verify_editorial_publication(report,native_run,authored):
+    """A refreshed publication may differ from its native recording's authoring only in EDITORIAL_FIELDS."""
+    publication=report["publication"]
+    if publication.get("kind")!="editorial-refresh" or publication.get("editorial_fields")!=list(EDITORIAL_FIELDS):raise ValueError("unknown audio publication kind")
+    baseline_path=native_run/"audio-scenes.json"
+    if digest(baseline_path)!=publication.get("native_report_sha256"):raise ValueError("native audio baseline changed")
+    native=validate(yaml.safe_load((native_run/"source.yaml").read_text()))
+    if {k:v for k,v in native.items() if k!="examples"}!={k:v for k,v in authored.items() if k!="examples"}:raise ValueError("editorial publication changed non-example authoring")
+    if [v["id"] for v in native["examples"]]!=[v["id"] for v in authored["examples"]]:raise ValueError("editorial publication changed the example inventory")
+    for old,new in zip(native["examples"],authored["examples"]):
+        if editorial_view(old)!=editorial_view(new):raise ValueError("editorial publication changed a recorded field of "+old["id"])
+
 def audit_publication(path=MANUAL/"generated/audio-scenes.json",controlled_local=False):
     """Independently audit authoring, native observations, PCM and encoded assets."""
     report=json.loads(Path(path).read_text())
@@ -1137,7 +1160,8 @@ def audit_publication(path=MANUAL/"generated/audio-scenes.json",controlled_local
     if set(expected)!={v["id"] for v in report["examples"]}:raise ValueError("audio inventory")
     checked=0
     native_run=Path(report["examples"][0]["evidence"]["path"]).parent
-    native_source=report.get("publication",{}).get("native_source_sha256",report["source_sha256"])
+    native_source=native_source_sha256(report)
+    if "publication" in report:verify_editorial_publication(report,Path(report["examples"][0]["evidence"]["path"]).parent,authored)
     if digest(native_run/"source.yaml")!=native_source:raise ValueError("native source identity")
     if digest(native_run/"capture-tool.py")!=report["tool_sha256"]:raise ValueError("native tool identity")
     if report.get("schema_sha256") and (digest(native_run/"audio.schema.json")!=report["schema_sha256"] or digest(MANUAL/"audio.schema.json")!=report["schema_sha256"]):raise ValueError("Audio schema identity")

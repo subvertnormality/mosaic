@@ -35,14 +35,14 @@ class ControlledEditorialRefresh(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
 
-    def test_controlled_publication_uses_the_controlled_audit_and_keeps_audio_receipts(self):
+    def test_controlled_publication_refreshes_the_audio_receipt_then_uses_the_controlled_audit(self):
         manual = self.publish(CONTROLLED)
         with patch.object(verify, "MANUAL", manual), \
              patch.object(verify, "audit_controlled_pilot", return_value=dict(frames=118)) as controlled, \
              patch.object(verify, "refresh_compression_receipt") as receipt:
             result = verify.refresh_pilot_editorial()
         controlled.assert_called_once_with()
-        receipt.assert_not_called()
+        receipt.assert_called_once()
         self.assertEqual(result["verified"], dict(frames=118))
         self.assertEqual(result["validation_scope"], "controlled-manual-generation")
         self.assertEqual(result["realtime_qualification"], "pending-ci")

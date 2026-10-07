@@ -6,9 +6,6 @@ starting_states:
 - scene_id: channel-task-navigation
   text: 'A new empty project that has just started: stopped, Record off, no pattern or output
     set up. Channel 1 is the selected channel and nothing is held.'
-- scene_id: course-getting-started
-  text: 'A new, empty project with the transport stopped: no output, pattern or tempo has
-    been set up yet. Channel 1 is selected.'
 - scene_id: doctor-local-auto-capture-and-paint
   text: Channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps 1-64), and
     playback is stopped. The audio input will receive a synthetic test recording, 29 seconds

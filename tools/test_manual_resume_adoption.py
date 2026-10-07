@@ -80,7 +80,7 @@ class PortableResumeTests(unittest.TestCase):
                   "parent_stage_receipt_sha256":sha(parent/(name+".json")),
                   "parent_log_sha256":sha(log),"doctor_evidence_files":tree,
                   "doctor_evidence_tree_sha256":hashlib.sha256(json.dumps(tree,sort_keys=True).encode()).hexdigest()}
-            proof={"parent_manifest":str(manifest_path),"parent_manifest_sha256":sha(manifest_path),"adopted":[item]}
+            proof={"parent_manifest":str(manifest_path),"parent_manifest_sha256":sha(manifest_path),"parent_builder_sha256":resume_adoption.SUPPORTED_PARENT_BUILDER_SHA256,"resume_builder_sha256":"c"*64,"adopted":[item]}
             (evidence/"resume-adoption.json").write_text(json.dumps(proof))
             record={"native_report":ref}
             with patch("manual_publication_verify.audit_doctor") as strict_audit, \

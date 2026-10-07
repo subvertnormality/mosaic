@@ -159,7 +159,7 @@ def verify_adopted_doctor_stage(evidence,name,record,current_root):
     if not parent_manifest.is_file() or sha(parent_manifest)!=proof.get('parent_manifest_sha256'):
         raise ValueError('Doctor parent manifest changed')
     parent=read_json(parent_manifest)
-    if parent.get("passed") is not False or parent.get("build_complete") is not False or parent.get("controlled_local") is not True or parent.get("tool_sha256") != SUPPORTED_PARENT_BUILDER_SHA256 or any(parent.get(key) != value for key,value in SCOPE.items()):
+    if parent.get("passed") is not False or parent.get("build_complete") is not False or parent.get("controlled_local") is not True or parent.get("tool_sha256") != proof.get("parent_builder_sha256") or not supported_lineage(proof.get("parent_builder_sha256"), proof.get("resume_builder_sha256")) or any(parent.get(key) != value for key,value in SCOPE.items()):
         raise ValueError("Doctor parent manifest is not the pinned failed controlled build")
     parent_row=next((x for x in parent.get('stages',[]) if x.get('name')==name),None)
     receipt=parent_manifest.parent/(name+'.json');log=parent_manifest.parent/(name+'.log')
@@ -188,7 +188,7 @@ def verify_adopted_reference_stage(evidence,name,record,current_root):
     parent_manifest=Path(proof['parent_manifest'])
     if not parent_manifest.is_file() or sha(parent_manifest)!=proof.get('parent_manifest_sha256'):raise ValueError('Reference parent manifest changed')
     parent=read_json(parent_manifest)
-    if parent.get("passed") is not False or parent.get("build_complete") is not False or parent.get("controlled_local") is not True or parent.get("tool_sha256") != SUPPORTED_PARENT_BUILDER_SHA256 or any(parent.get(key) != value for key,value in SCOPE.items()):
+    if parent.get("passed") is not False or parent.get("build_complete") is not False or parent.get("controlled_local") is not True or parent.get("tool_sha256") != proof.get("parent_builder_sha256") or not supported_lineage(proof.get("parent_builder_sha256"), proof.get("resume_builder_sha256")) or any(parent.get(key) != value for key,value in SCOPE.items()):
         raise ValueError("Reference parent manifest is not the pinned failed controlled build")
     parent_row=next((x for x in parent.get('stages',[]) if x.get('name')==name),None)
     receipt=parent_manifest.parent/(name+'.json');log=parent_manifest.parent/(name+'.log')

@@ -19,16 +19,25 @@ def verify(step, observations, path, clock_mode, results):
     ek=11 if clock_mode=="controlled-experimental" else 3
     tk="logical_ns" if clock_mode=="controlled-experimental" else "monotonic_ns"
 
+    segment_bounds=[]
+
     def exact_stream(entries, relative=False):
         if not isinstance(entries,list) or not entries:
             raise ValueError("missing complete native MIDI stream")
         packets=[e for e in events if e.get("kind")==ek and e.get("port")==1 and e.get("bytes") and 0x80<=e["bytes"][0]<0xf0]
         if relative:
-            notes=[e for e in packets if 0x90<=e["bytes"][0]<=0x9f and e["bytes"][2]>0]
-            if not notes: raise ValueError("missing native MIDI onsets")
-            origin=notes[0][tk]
-            actual=[{"port":e["port"],"bytes":e["bytes"],"logical_ns":e[tk]-origin} for e in packets if e[tk]>=origin]
-            if actual!=entries: raise ValueError("relative complete native MIDI differs")
+            # One native playback per segment (MIDI Start to the next Start): a scene may hold several playbacks (UI Motion Off, then On).
+            starts=[e["index"] for e in events if e.get("kind")==ek and e.get("port")==1 and e.get("bytes")==[250]]
+            bounds=starts+[float("inf")]
+            actual=None
+            for lo,hi in zip(starts,bounds[1:]):
+                segment=[e for e in packets if lo<e["index"]<hi]
+                notes=[e for e in segment if 0x90<=e["bytes"][0]<=0x9f and e["bytes"][2]>0]
+                if not notes: continue
+                origin=notes[0][tk]
+                candidate=[{"port":e["port"],"bytes":e["bytes"],"logical_ns":e[tk]-origin} for e in segment if e[tk]>=origin]
+                if candidate==entries: actual=candidate;segment_bounds[:]=[lo,hi];break
+            if actual is None: raise ValueError("relative complete native MIDI differs")
             return actual
         indices=[r.get("index") for r in entries]
         if any(type(i) is not int for i in indices) or indices!=sorted(set(indices)):
@@ -159,8 +168,9 @@ def verify(step, observations, path, clock_mode, results):
                     raise ValueError("UI Motion natural sixteenth-note gate differs")
             elif release["logical_ns"]-attack["logical_ns"]<=0 or release["logical_ns"]-attack["logical_ns"]>=round(1e9/144):
                 raise ValueError("UI Motion final gate is not shorter than one source tick")
-        stops=[e for e in events if e.get("kind")==ek and e.get("port")==1 and e.get("bytes")==[252]]
-        final_offs=[e for e in events if e.get("kind")==ek and e.get("port")==1 and e.get("bytes")==[128,60,127]]
+        lo,hi=segment_bounds
+        stops=[e for e in events if e.get("kind")==ek and e.get("port")==1 and e.get("bytes")==[252] and lo<e["index"]<hi]
+        final_offs=[e for e in events if e.get("kind")==ek and e.get("port")==1 and e.get("bytes")==[128,60,127] and lo<e["index"]<hi]
         if len(stops)!=1 or not final_offs or max(e[tk] for e in final_offs)!=stops[0].get(tk):
             raise ValueError("UI Motion final gate does not end at native MIDI Stop")
         final_duration=actual[-1]["logical_ns"]-actual[-2]["logical_ns"]

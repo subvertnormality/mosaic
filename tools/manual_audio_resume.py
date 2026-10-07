@@ -366,7 +366,7 @@ def verify_current_reused_rows(original_rows,current_rows,provenance,staged_asse
   need(isinstance(assets,list) and len(assets)==2,"reused asset inventory incomplete")
   expected["files"]=[asset["path"] for asset in assets]
   expected["file_sha256"]={asset["path"]:asset["sha256"] for asset in assets}
-  need(canon(current[ident])==canon(expected),"current reused report row differs from exact origin/alias/asset record: "+ident)
+  need(canon(_editorial_view(current[ident]))==canon(_editorial_view(expected)),"current reused report row differs from exact origin/alias/asset record: "+ident)
  return True
 
 def prepare_continuation(ma,root,old_run,old_report,new_run,ffmpeg,identity_receipt,adapter=None):
@@ -466,6 +466,8 @@ def audit_resume_provenance(ma,report,native_run,root,asset_root=None):
 
 # --- Same-lineage continuation: any failed run whose recording identity is identical to the current one. ---
 SAME="strict-same-lineage-audio-resume"
+EDITORIAL_FIELDS=("feature_ids",)  # kept equal to manual_audio.EDITORIAL_FIELDS (tools/test_manual_audio_editorial.py)
+def _editorial_view(row):return {k:v for k,v in row.items() if k not in EDITORIAL_FIELDS}
 LINEAGE_KEYS=("schema_version","source_sha256","tool_sha256","helper_sha256","setups_sha256","schema_sha256","harness_sha256","voice_pins",
  "clock_mode","validation_scope","realtime_qualification","audio_capture_clock_mode","controlled_lane")
 FROZEN_FILES={"source.yaml":"source_sha256","capture-tool.py":"tool_sha256","capture-helpers.py":"helper_sha256","capture-setups.py":"setups_sha256","audio.schema.json":"schema_sha256"}
@@ -590,7 +592,8 @@ def audit_same_lineage_provenance(ma,report,native_run,root,asset_root=None):
  rows={v["id"]:v for v in original["examples"]};ids=[v["id"] for v in original["examples"]]
  need(prov.get("reused_ids")==ids and marker.get("reused_ids")==ids and ids,"reused ids are not every completed original example")
  need(prov.get("original_record_sha256")=={i:canon(rows[i]) for i in ids},"origin record hashes changed")
- bad=[k for k in LINEAGE_KEYS if original.get(k)!=report.get(k)]
+ recorded=dict(report,source_sha256=report.get("publication",{}).get("native_source_sha256",report.get("source_sha256")))  # an editorial refresh keeps the native source identity
+ bad=[k for k in LINEAGE_KEYS if original.get(k)!=recorded.get(k)]
  need(not bad,"identity mismatch between the failed run and the resumed report: "+", ".join(bad))
  for run in (old_run,native_run):
   for name,key in FROZEN_FILES.items():need((run/name).is_file() and sha(run/name)==original[key],"frozen run file changed: "+name)

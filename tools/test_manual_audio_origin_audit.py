@@ -175,6 +175,17 @@ class AudioOriginAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"stale frozen source"):
             origin.audit_resumed_audio_sessions(
                 module,report,authored,sessions,by_session,new,{"passed":True})
+
+    def test_editorial_publication_audits_the_frozen_recording_tool_not_the_current_one(self):
+        module,report,authored,sessions,by_session,new,old,alias,source_paths=self.complete_fixture()
+        (module.ROOT/"tools/manual_audio.py").write_text("newer audit tooling")
+        with self.assertRaisesRegex(ValueError,"stale frozen source"):
+            origin.audit_resumed_audio_sessions(module,report,authored,sessions,by_session,new,{"passed":True})
+        report["publication"]=dict(kind="editorial-refresh",native_source_sha256=report["source_sha256"])
+        origin.audit_resumed_audio_sessions(module,report,authored,sessions,by_session,new,{"passed":True})
+        (new/"capture-tool.py").write_text("tampered recording tool")
+        with self.assertRaisesRegex(ValueError,"stale frozen source"):
+            origin.audit_resumed_audio_sessions(module,report,authored,sessions,by_session,new,{"passed":True})
         
 if __name__=="__main__":
     unittest.main()

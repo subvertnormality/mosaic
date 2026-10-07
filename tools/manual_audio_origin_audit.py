@@ -129,7 +129,7 @@ def audit_resumed_audio_sessions(module, report, authored, sessions, session_exa
     if not fresh_baseline_path.is_file():
         raise OriginAuditError("fresh resumed run has no immutable native report baseline")
     fresh_baseline = json.loads(fresh_baseline_path.read_text())
-    if fresh_baseline.get("passed") is not True or fresh_baseline.get("source_sha256") != report.get("source_sha256"):
+    if fresh_baseline.get("passed") is not True or fresh_baseline.get("source_sha256") != report.get("publication", {}).get("native_source_sha256", report.get("source_sha256")):
         raise OriginAuditError("fresh native audio baseline is not a passed same-source report")
     fresh_rows = {row["id"]: row for row in fresh_baseline.get("examples", [])}
     current_rows = {row["id"]: row for row in examples}
@@ -155,7 +155,9 @@ def audit_resumed_audio_sessions(module, report, authored, sessions, session_exa
             ("capture-setups.py", "setups_sha256", module.ROOT / "tools/manual_audio_setups.py"),
         ):
             frozen = new_run / name
-            if not frozen.is_file() or digest(current_path) != report.get(key) or digest(frozen) != report.get(key):
+            # An editorial publication is audited by newer tooling; the recording tool is the frozen run copy.
+            current_matches = "publication" in report or digest(current_path) == report.get(key)
+            if not frozen.is_file() or not current_matches or digest(frozen) != report.get(key):
                 raise OriginAuditError("fresh audio origin has stale frozen source: " + key)
     for (out, clock, voices), (_, origin, kind) in zip(sessions, origins):
         module.check_audio_native_session(out, clock, voices)

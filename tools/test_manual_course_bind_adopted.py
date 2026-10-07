@@ -41,7 +41,7 @@ class AdoptedCourseCapture(unittest.TestCase):
         item = {"name": NAME, "kind": "controlled-reference", "native_report": ref,
                 "parent_stage_receipt_sha256": sha(parent / (NAME + ".json")), "parent_log_sha256": sha(log)}
         (evidence / "resume-adoption.json").write_text(json.dumps(
-            {"parent_manifest": str(manifest_path), "parent_manifest_sha256": sha(manifest_path), "adopted": [item]}))
+            {"parent_manifest": str(manifest_path), "parent_manifest_sha256": sha(manifest_path), "parent_builder_sha256": resume_adoption.SUPPORTED_PARENT_BUILDER_SHA256, "resume_builder_sha256": "c" * 64, "adopted": [item]}))
         record = dict(row, execution_status="adopted-verified",
                       adopted_from={"parent_manifest_sha256": sha(manifest_path),
                                     "parent_stage_receipt_sha256": item["parent_stage_receipt_sha256"],

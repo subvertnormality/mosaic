@@ -17,7 +17,7 @@ def digest_bytes(value):
 def native_snapshot(root):
     return {path.relative_to(root).as_posix():path.read_bytes()
             for path in sorted((root/"manual/generated").glob("*.json"))
-            if path.name!="book.json"}
+            if path.name not in ("book.json","reader-index.json")}  # derived reader artifacts, not native publications
 
 def catalogue(snapshot):
     result={}

@@ -170,7 +170,7 @@ export PLAYWRIGHT_BROWSERS_PATH="$TEMP_ROOT/playwright-browsers"
 # Recreate the authored Masks proof and its audio asset in this ephemeral runner.
 # This is controlled visual generation plus real-time DSP asset recording; it is
 # not the separate real-time visual/MIDI qualification campaign.
-python3 "$ROOT/tools/manual_capture.py" \
+MONOME_EMULATOR="$EMULATOR_ROOT" python3 "$ROOT/tools/manual_capture.py" \
   --source "$ROOT/manual/features/masks.yaml" \
   --controlled-local \
   --clock-mode controlled-experimental \

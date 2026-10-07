@@ -23,9 +23,11 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # script once more for a plain fetch (git 2.25 in the container rejects --filter without partial-clone config),
     # and again to give the builder MONOME_EMULATOR for in-process audio adoption. Both re-pinned for reusing a
     # recorded audio bundle across runs when the audio inputs are byte-identical (test files excluded from the identity).
+    # 2026-10-07 (Claude): manual-build.sh re-pinned after giving the Masks provisioning capture MONOME_EMULATOR (CI run
+    # 37503722733 failed there with "MONOME_EMULATOR is required").
     PRODUCER_TOOLING_POLICY_VERSION: {
         ".github/workflows/manual-build.yml": "a70fc1d76e359a4b086ad365a4c79a4bf16fd86ce2a4f336cad3aaa9a06f93e0",
-        ".github/scripts/manual-build.sh": "f20d7ced85d1324ffb83fbfc32ca4d11cb5dae7e467f56a20b40c2e420a911e2",
+        ".github/scripts/manual-build.sh": "599cb6ca83dbc4e2a08859cda90d389b7b33ac0a210d2bd89bd3ad4df344b63f",
         ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
     },
 }

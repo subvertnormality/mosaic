@@ -217,7 +217,7 @@ def stage_reports(build,controlled_local=False):
 def catalogue(root):
  scenes={}
  for path in sorted((root/'manual/generated').glob('*.json')):
-  if path.name=='book.json':continue
+  if path.name in ('book.json','reader-index.json'):continue
   document=read(path)
   for scene in document.get('scenes',[]):
    identifier=scene['id']
@@ -356,7 +356,7 @@ def bind(build,evidence,root=ROOT,mappings=None,audit_functions=None,controlled_
     audit_lane(document);audited_lanes.add(id(document))
   for fid,identifiers in mappings.items():
    path,feature=feature_owners[fid]
-   if feature.get('review',{}).get('status') not in ('pending','verified'):raise ValueError('Unsupported feature review state: '+fid)
+   if feature.get('review',{}).get('status') not in ('pending','verified','controlled-verified'):raise ValueError('Unsupported feature review state: '+fid)
    refs=[];lanes=[];cases=[];exception=None
    for identifier in identifiers:
     if identifier not in scenes:raise ValueError('Missing audited scene: '+identifier)

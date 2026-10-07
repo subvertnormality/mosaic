@@ -27,7 +27,7 @@ def check_editorial_overlay(baseline,current):
  if before!=after:raise ValueError('Changed non-editorial feature identity')
  return dict(baseline_sha256=source_hash(baseline),current_sha256=source_hash(current),scope='feature editorial fields, scene titles/step captions, and audio title/description only')
 def check_custom_kind(kind):
- supported={'manual-reason-dashboard','manual-reason-midi','manual-course-ui','manual-course-midi','manual-course-persistence','manual-song-indicators','manual-song-slot-setting','manual-song-queue-blink','manual-song-queue-transition','manual-motion-stable-rows','manual-motion-music'}
+ supported={'manual-reason-dashboard','manual-reason-midi','manual-course-ui','manual-course-midi','manual-course-persistence','manual-song-indicators','manual-song-slot-setting','manual-song-queue-blink','manual-song-queue-transition','manual-motion-stable-rows','manual-motion-music','manual-motion-pose','manual-song-repeat-advance','manual-modulation-cc-phase'}
  supported.update({'manual-player-apply-start','manual-player-apply-pending','manual-player-apply-applied','manual-player-apply-reopened'})
  supported.update({'manual-repeat-reset-public-midi','manual-snap-mask-public-midi','manual-ui-motion-public-frames','manual-ui-motion-public-midi','manual-ui-motion-midi-pair'})
  supported.update({'merge-strategy-ui','effective-foundation-musical-result','effective-fragments-musical-result','restored-legacy-musical-result','merge-strategy-next-cycle','effective-only-silence','public-assignment-marquee','public-fitting-vertical-text','public-readability-summary','public-mini-header'})
@@ -168,6 +168,7 @@ def audit_reference(document):
    verify_vertical_checkpoint(step,observations,path)
    verify_teaching_checkpoint(step,observations,path,document['clock_mode'],results)
    verify_motion_checkpoint(step,observations,path,document['clock_mode'])
+   verify_closure_checkpoint(step,observations,path,document['clock_mode'],results)
    verify_new_public_checkpoint(step,observations,path,document['clock_mode'],results,scene.get('session_ordinal',0))
    if step['output']['binding']['assertion'].get('kind')=='parameter-recording-selected-value':
     if not plan:raise ValueError('Recorded-value checkpoint lacks pinned native readout authoring')
@@ -625,14 +626,14 @@ def check_song_queue_blink(row,observations,recipe,events,actions,clock_mode):
  return dict(sample_span_ns=times[-1]-times[0],sample_intervals_ns=intervals,clock_mode=clock_mode,real_waveform=waveform,hardware_timing_verified=False)
 def check_song_queue_transition(row,state,events,clock_mode):
  allowed=2e-9 if clock_mode=='controlled-experimental' else .01;kind=11 if clock_mode=='controlled-experimental' else 3;key='logical_ns' if clock_mode=='controlled-experimental' else 'monotonic_ns'
- wanted=dict(from_slot=2,to_slot=1,transition_index=64,old_phrase=[60,62,64,65],new_phrase=[72,74,76,77],velocities=[127,117,107,97],onset_spacing_seconds=1/6,tolerance_seconds=allowed,levels=[15,7,2])
+ wanted=dict(from_slot=2,to_slot=1,transition_index=32,old_phrase=[60,62,64,65],new_phrase=[72,74,76,77],velocities=[127,117,107,97],onset_spacing_seconds=1/6,tolerance_seconds=allowed,levels=[15,7,2])
  if any(row.get(field)!=value for field,value in wanted.items()) or type(row.get('midi_start_index'))is not int:raise ValueError('Changed literal Song queued transition contract')
  if state['grid'][:3]!=wanted['levels'] or state['grid'][112]!=2 or state['midi_capture']['outstanding']!=[]:raise ValueError('Song queue transport/notes not stopped at destination')
  packets=[event for event in events if event.get('kind')==kind and row['midi_start_index']<event.get('index',0)<=state['midi_count'] and len(event.get('bytes',[]))==3];notes=[event for event in packets if 144<=event['bytes'][0]<=159 and event['bytes'][2]>0]
- if len(notes)<69 or row.get('onsets')!=len(notes):raise ValueError('Song queue lacks complete old cycles and destination phrase')
+ if len(notes)<37 or row.get('onsets')!=len(notes):raise ValueError('Song queue lacks complete old cycles and destination phrase')
  releases=[]
  for index,note in enumerate(notes):
-  phrase=wanted['old_phrase'] if index<64 else wanted['new_phrase'];expected=[144,phrase[index%4],wanted['velocities'][index%4]]
+  phrase=wanted['old_phrase'] if index<32 else wanted['new_phrase'];expected=[144,phrase[index%4],wanted['velocities'][index%4]]
   if note['port']!=1 or note['bytes']!=expected or abs((note[key]-notes[0][key])/1e9-index/6)>allowed:raise ValueError('Song queue wire phrase or exact transition pulse differs')
   matching=[event for event in packets if event['index']>note['index'] and event['port']==1 and event['bytes']==[128,expected[1],expected[2]]]
   if not matching:raise ValueError('Missing exact native Song queue gate release')
@@ -661,7 +662,7 @@ def check_course_dashboard(row,observations,binding,grid):
 def verify_teaching_checkpoint(step,observations,path,clock_mode,results):
  row=step['output']['binding']['assertion'];kind=row.get('kind','')
  if not kind.startswith(('manual-course-','manual-song-')):return
- supported={'manual-course-ui','manual-course-midi','manual-course-persistence','manual-song-indicators','manual-song-slot-setting','manual-song-queue-blink','manual-song-queue-transition'}
+ supported={'manual-course-ui','manual-course-midi','manual-course-persistence','manual-song-indicators','manual-song-slot-setting','manual-song-queue-blink','manual-song-queue-transition','manual-song-repeat-advance'}
  if kind not in supported:raise ValueError('Unsupported new manual semantic kind requires independent native verification')
  binding=step['output']['binding'];states=[item['state'] for item in observations if item['state']['frame']['sha256']==binding['sha256'] and item['state']['grid']==step['output']['grid']]
  if not states:raise ValueError('Missing bound native teaching image')
@@ -706,7 +707,7 @@ def check_motion_samples(row,observations,clock_mode,events,results,assertion_in
  import base64
  mini=row.get('public_mini_header_assertion')
  if not isinstance(mini,dict) or mini.get('kind')!='public-mini-header' or mini.get('page')!='C04' or mini.get('enabled')!=row.get('enabled') or mini.get('tempo')!=90 or mini.get('all_distinct_poses_required') is not row.get('enabled'):raise ValueError('Motion requires complete original C04 native mini proof')
- if type(assertion_index)is not int or not 0<=assertion_index<len(results) or results[assertion_index]!=row or assertion_index==0 or results[assertion_index-1]!=mini:raise ValueError('Motion mini proof is not its exact preceding native result')
+ if type(assertion_index)is not int or not 0<=assertion_index<len(results) or results[assertion_index]!=row or assertion_index<5 or results[assertion_index-5]!=mini or [(r.get('kind'),r.get('enabled'),r.get('phase')) for r in results[assertion_index-4:assertion_index]]!=[('manual-motion-pose',row.get('enabled'),'rest'),('documentation-frame',None,None),('manual-motion-pose',row.get('enabled'),'moved'),('documentation-frame',None,None)]:raise ValueError('Motion mini proof is not its exact preceding native result')
  check_mini_samples(mini,observations,events)
  spec=next(item for item in json.loads((ROOT/'tests/behaviour/contract/mini_header_atlas_v2.json').read_text())['screens'] if item['id']=='C04')
  x,y=spec['origin'];height=len(spec['frames'][0]);width=len(spec['frames'][0][0]);samples=row.get('samples',[])
@@ -771,6 +772,56 @@ def verify_motion_checkpoint(step,observations,path,clock_mode):
  verify_cached_ui(state,dict(literal_header=['CLOCK','CH01','vertical_list'],vertical_labels=labels,vertical_values=[['/1',27,True],['GLOBAL',36,False],['X',45,False]]),path)
  if receipts[0]['response_observation_index']>=row['samples'][0]['observation_index'] or receipts[1]['before_observation_index']<=row['samples'][-1]['observation_index']:raise ValueError('Motion sample sequence lies outside acknowledged edit/restore')
  for receipt,value in zip(receipts,['/1.5','/1']):verify_cached_ui(observations[receipt['response_observation_index']]['state'],dict(literal_header=['CLOCK','CH01','vertical_list'],field=dict(layout='vertical_list',label='Rate',value=value)),path)
+CLOSURE_REPEAT_STAGES={'slot-1':([15,7,2],'1 / 1',[60,62,64,65],4),'slot-2-pass-1':([7,15,2],'1 / 2',[72,74,76,77],12),'slot-2-pass-2':([7,15,2],'2 / 2',[72,74,76,77],20),'wrapped':([15,7,2],'1 / 1',[60,62,64,65],28)}
+def check_motion_pose(row,state,results):
+ # README UI Motion: the Clock mark moves only with UI motion On. Recompute the mark from the bound native frame.
+ import base64
+ from contract.mini_header_animation_ui import atlas,left_edge
+ spec=atlas()['C04'];pixels=base64.b64decode(state['frame']['pixels_base64'])
+ mark=hashlib.sha256(bytes(pixels[(y*128+x)*4+k] for y in range(8) for x in range(left_edge(spec),128) for k in range(3))).hexdigest()
+ if row.get('clock_value')!='/1.5' or type(row.get('enabled'))is not bool or row.get('phase')not in('rest','moved') or row.get('mark_sha256')!=mark:raise ValueError('Motion pose mark differs from its bound native frame')
+ rest=[r for r in results if r.get('kind')=='manual-motion-pose' and r.get('enabled')is row['enabled'] and r.get('phase')=='rest']
+ if len(rest)!=1 or rest[0]['mark_sha256']!=row['rest_mark_sha256'] or row['at_rest']is not (mark==row['rest_mark_sha256']):raise ValueError('Motion pose rest comparison differs')
+ if (not row['enabled'] or row['phase']=='rest') != row['at_rest']:raise ValueError('UI motion Off must stay at rest; On must have moved')
+def native_midi_events(events,clock_mode):
+ kind=11 if clock_mode=='controlled-experimental' else 3
+ return [e for e in events if e.get('kind')==kind and e.get('bytes')]
+def check_song_repeat_advance(row,state,events,clock_mode):
+ expected=CLOSURE_REPEAT_STAGES.get(row.get('stage'))
+ if not expected or [row.get(k) for k in('levels','pass_text','latest_pitches','onsets_so_far')]!=[expected[0],expected[1],expected[2],expected[3]]:raise ValueError('Changed literal Song repeat contract')
+ if state['grid'][:3]!=row['levels']:raise ValueError('Song repeat grid levels differ from native state')
+ low=[60,62,64,65];high=[72,74,76,77];velocity=[127,117,107,97]
+ sequence=[low[i%4] for i in range(8)]+[high[i%4] for i in range(16)]+[low[i%4] for i in range(4)]
+ notes=[e for e in native_midi_events(events,clock_mode) if e['index']<=state['midi_count'] and e.get('port')==1 and 144<=e['bytes'][0]<=159 and e['bytes'][2]>0]
+ count=row['onsets_so_far']
+ if len(notes)<count:raise ValueError('Song repeat lacks native onsets')
+ window=notes[len(notes)-count:]
+ if [e['bytes'][1] for e in window]!=sequence[:count] or [e['bytes'][2] for e in window]!=[velocity[i%4] for i in range(count)]:raise ValueError('Song repeat native wire sequence differs from Repeats contract')
+def check_modulation_cc_phase(row,events,clock_mode):
+ import math
+ phase=row.get('phase');depth=row.get('depth');source=row.get('source');cc=row.get('cc')
+ if phase not in('route-depth','zero-source','halfway','cleared-depth','clear-baseline','returned-to-source-baseline'):raise ValueError('Unknown modulation phase')
+ if cc!=(math.floor(32+128*depth*source+.5) if depth is not None else 32):raise ValueError('Modulation CC differs from Matrix formula')
+ if phase not in('zero-source','halfway','clear-baseline'):return
+ if row.get('notes')!=9 or row.get('late_window_onsets')!=0:raise ValueError('Changed literal modulation phrase contract')
+ midi=native_midi_events(events,clock_mode);field='logical_ns' if clock_mode=='controlled-experimental' else 'monotonic_ns';allowed=2e-9 if clock_mode=='controlled-experimental' else .01
+ phrase=[(60,127),(62,117),(64,107),(65,97)]
+ for start in (e for e in midi if e['bytes']==[250]):
+  before=[e for e in midi if e['index']<start['index'] and e['bytes'][0]&240==176]
+  after=[e for e in midi if e['index']>start['index']]
+  notes=[e for e in after if e.get('port')==1 and e['bytes'][0]==144 and e['bytes'][2]>0][:9]
+  if not before or before[-1]['bytes']!=[176,1,cc] or before[-1].get('port')!=1 or len(notes)<9:continue
+  if all(e['port']==1 and e['bytes']==[144,*phrase[i%4]] and abs((e[field]-notes[0][field])/1e9-i/6)<=allowed for i,e in enumerate(notes)):return
+ raise ValueError('No native playback matches the modulation phase CC and phrase')
+def verify_closure_checkpoint(step,observations,path,clock_mode,results):
+ row=step['output']['binding']['assertion'];kind=row.get('kind')
+ if kind not in('manual-motion-pose','manual-song-repeat-advance','manual-modulation-cc-phase'):return
+ binding=step['output']['binding'];events=[json.loads(line) for line in (path/'native/native-events.jsonl').read_text().splitlines()]
+ if kind=='manual-modulation-cc-phase':return check_modulation_cc_phase(row,events,clock_mode)
+ states=[item['state'] for item in observations if item['state']['frame']['sha256']==binding['sha256'] and item['state']['grid']==step['output']['grid']]
+ if not states:raise ValueError('Missing bound native image for closure checkpoint')
+ if kind=='manual-motion-pose':check_motion_pose(row,states[0],results)
+ else:check_song_repeat_advance(row,states[0],events,clock_mode)
 def pre_finish_rows(expected):
  if not expected or set(expected)-{'header','field','menu','menu_label','menu_value'}:raise ValueError('Missing or unsupported pre-finish UI expectation')
  rows=[]
@@ -961,9 +1012,11 @@ def refresh_pilot_editorial(ffmpeg=None):
  path=MANUAL/'generated/pilot.json';data=json.loads(path.read_text())
  current=yaml.safe_load((MANUAL/'features/masks.yaml').read_text())
  if data.get('validation',{}).get('validation_scope')=='controlled-manual-generation':
-  # Controlled Masks visuals keep the preserved audio and its existing receipt; pilot_complete stays False until CI.
+  # The controlled Masks capture re-records the pilot audio, so accept the new compressed bytes only after
+  # reproducing their decoded signal from the immutable native WAV; pilot_complete stays False until CI.
+  refresh_compression_receipt(data,ffmpeg)
   return dict(overlay_required=False,verified=audit_controlled_pilot(),validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',
-              scope='Controlled masks publication verified with preserved audio receipt; publication bytes unchanged')
+              scope='Controlled masks publication verified with its decoded-signal audio receipt refreshed')
  if data['source_sha256']==source_hash(current):
   verified=audit_fresh_pilot(data,current,check_receipt=False)
   refresh_compression_receipt(data,ffmpeg)

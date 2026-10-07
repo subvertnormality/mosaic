@@ -530,14 +530,14 @@ class SongQueuedNativeIntegrity(unittest.TestCase):
       transitions.append(dict(native_event_index=i,id=e['id'],monotonic_ns=e['monotonic_ns'],leds_sha256=audit.canonical_hash(e['leds']),levels=e['leds'][:3]));previous=e['leds'][0]
     row['native_grid_transitions']=transitions
    with self.subTest(change=change),self.assertRaises(ValueError):audit.check_song_queue_blink(row,obs,recipe,events,actions,'real-time')
- def test_transition_checks_onset64_all_gates_and_final_transport(self):
+ def test_transition_checks_onset32_all_gates_and_final_transport(self):
   events=[]
-  for index in range(69):
-   pitch=[60,62,64,65][index%4]+(12 if index>=64 else 0);velocity=[127,117,107,97][index%4];t=1000000000+round(index/6*1e9)
-   events.append(dict(kind=11,index=2*index+1,port=1,bytes=[144,pitch,velocity],logical_ns=t));events.append(dict(kind=11,index=2*index+2,port=1,bytes=[128,pitch,velocity],logical_ns=t+round((1/6 if index<68 else .01)*1e9)))
+  for index in range(37):
+   pitch=[60,62,64,65][index%4]+(12 if index>=32 else 0);velocity=[127,117,107,97][index%4];t=1000000000+round(index/6*1e9)
+   events.append(dict(kind=11,index=2*index+1,port=1,bytes=[144,pitch,velocity],logical_ns=t));events.append(dict(kind=11,index=2*index+2,port=1,bytes=[128,pitch,velocity],logical_ns=t+round((1/6 if index<36 else .01)*1e9)))
   events.sort(key=lambda e:(e['logical_ns'],e['index']))
   for index,event in enumerate(events):event['index']=index+1
-  row=dict(midi_start_index=0,from_slot=2,to_slot=1,transition_index=64,old_phrase=[60,62,64,65],new_phrase=[72,74,76,77],velocities=[127,117,107,97],onsets=69,onset_spacing_seconds=1/6,tolerance_seconds=2e-9,levels=[15,7,2]);state=dict(grid=[15,7,2]+[0]*109+[2]+[0]*15,midi_count=len(events),midi_capture=dict(outstanding=[]))
+  row=dict(midi_start_index=0,from_slot=2,to_slot=1,transition_index=32,old_phrase=[60,62,64,65],new_phrase=[72,74,76,77],velocities=[127,117,107,97],onsets=37,onset_spacing_seconds=1/6,tolerance_seconds=2e-9,levels=[15,7,2]);state=dict(grid=[15,7,2]+[0]*109+[2]+[0]*15,midi_count=len(events),midi_capture=dict(outstanding=[]))
   audit.check_song_queue_transition(row,state,events,'controlled-experimental')
   bad=copy.deepcopy(events);next(e for e in bad if e['bytes'][0]==144 and e['bytes'][1]==72)['bytes'][1]=60
   with self.assertRaisesRegex(ValueError,'queue wire phrase'):audit.check_song_queue_transition(row,state,bad,'controlled-experimental')

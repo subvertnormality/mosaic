@@ -302,3 +302,14 @@ New checks, so these classes fail in seconds rather than after a native run:
 - Rule for authors: any new or changed case gets a focused native capture before a full build.
 - Macro navigation, final: after the halfway phase the menu is on the PARAMS page. The route back is M-MOD-004's E1 −4 then K3 ×3 (Matrix remembered on Macro 1), without the stray K1. A K2 back-out only reaches the PARAMS list, where K3 on Control 1 does nothing (observed frame). Focused run `claude-focused-fixes-20261006-04` passes, and all reference stages pass in focused runs.
 - Fresh full build launched: `full-controlled-local-20261006-02`.
+
+## Claude, 2026-10-06 afternoon: CI split and audio-stage findings
+
+- PR #106 (draft, to `codex/1.4.0`) is the CI test. Workflow fixes so far:
+  - `runner.temp` in job env (`30566ec8`);
+  - git installed before checkout in the container (`87278d08`);
+  - three digest-pinned fixtures that `*.tar.gz`/`*.zip` ignore rules had hidden (`643cc466`, caught by the new pre-flight).
+- Full build `-02` audio failed on song-sections solo 2: the witness origin was the first heard onset, but that part enters on step 18. Fixed with `witness_origin()` in `tools/manual_audio.py`, used by both capture and audit. Regression in `tools/test_manual_audio_witness_packets.py`. The failed take passes when replayed at 10 ms.
+- `--resume-from` refuses current-builder parents (pinned `SUPPORTED_PARENT_BUILDER_SHA256`); left as is.
+- Full build `-04` audio failed on a matron SIGSEGV at shutdown after swing-comparison solo 2. The local audio runtime `combined-audio-crow-tools-01` lacked the SDL-ownership and screen-worker teardown patches that CI's `build-audio` applies (the known upstream issue). Local builds now use `.runtime/screen-shutdown-tools-01`, which is identical except for the patched matron. The secondary FileExistsError in the cleanup chain is cosmetic; the cause is in the chained traceback.
+- Full build `-05` launched with that runtime.
