@@ -643,27 +643,15 @@ def note_pattern_selectors(c):
 
 
 def editor_hold_boundaries(c):
-    import time
     from editor_hold_evidence import record_hold_input_bounds
+    from contract.hold_input_bounds import assert_hold_input_boundary, hold_input_bounds_sample, hold_sample_durations
     c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger')
-    before=.999999999 if c.clock_mode=='controlled-experimental' else .95
-    after=1.000000001 if c.clock_mode=='controlled-experimental' else 1.05
+    before,after=hold_sample_durations(c.clock_mode)
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]
     def hold(control,seconds,expected_long,interrupt=False):
-        logical_start=c.logical_ns;t0=time.monotonic_ns()
-        c.ui.control_edge(control,True);t1=time.monotonic_ns()
-        if interrupt:
-            c.elapse(.5);c.ui.tap_control('pattern_note_degree',(4,4));c.elapse(.6)
-        else:c.elapse(seconds)
-        t2=time.monotonic_ns();logical_end=c.logical_ns
-        c.ui.control_edge(control,False);t3=time.monotonic_ns()
-        lower=(t2-t1)/1e9;upper=(t3-t0)/1e9
-        x = c.ui.control_cell(control)[0]
-        record_hold_input_bounds(c,dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
-            expected_long=expected_long,logical_seconds=(logical_end-logical_start)/1e9,
-            wall_lower_seconds=lower,wall_upper_seconds=upper))
-        if c.clock_mode=='real-time' and not interrupt:
-            assert lower>1 if expected_long else upper<1, 'Host input delivery crossed the intended one-second hold boundary'
+        sample=hold_input_bounds_sample(c,control,seconds,expected_long,interrupt)
+        record_hold_input_bounds(c,sample)
+        assert_hold_input_boundary(c.clock_mode,sample)
         c.elapse(.06)
     for label,duration,pitch in [('before',before,72),('after',after,83),('cancelled',0,71)]:
         c.ui.tap_control('pattern_note_octave_reset') # Return the displayed note range to the root page.
