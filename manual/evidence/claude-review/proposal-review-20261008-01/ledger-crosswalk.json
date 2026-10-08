@@ -1,0 +1,1426 @@
+{
+  "review_id": "proposal-review-20261008-01",
+  "review_sha256": "22e5ab006310a3dbd9ff883e3637490fb152dd3d6f15f161480e399e3b7e94dd",
+  "decision": "HOLD",
+  "review_ledger_pin": "4ceb17deba072d7c5a4b4ee75da6c8a5ae87f362a09c8a4b612541645c650917",
+  "current_ledger": {
+    "sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+    "candidate_id": "source19-final425-course-crossref-refresh-v01",
+    "unit_count": 425
+  },
+  "pin_note": "Historical review pin differs from current ledger bytes; mapping uses current IDs and transfers no scores.",
+  "counts": {
+    "review_units": 52,
+    "direct_subunits": 41,
+    "standalone_units": 11,
+    "unique_direct_ids": 38,
+    "unique_dependency_ids": 63,
+    "below_threshold": 10
+  },
+  "locks_v04": {
+    "decision": "HOLD",
+    "unit": "feature:locks:recipes[4]",
+    "ledger_id": "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+    "scores": {
+      "coherence": 9,
+      "usefulness": 8,
+      "understandability": 8,
+      "representation": 9,
+      "granularity": 8,
+      "flow": 7,
+      "integration": 8,
+      "vocabulary": 8,
+      "naming": 8,
+      "canonical_home": 9
+    },
+    "note": "Separate v04 score; flow 7 and blockers preserved, no overwrite of original score."
+  },
+  "rows": [
+    {
+      "review_unit_id": "recipe-text-overlay:pocket-rhythm:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#pocket-rhythm.recipes[0].text",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 6,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 5,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:pocket-rhythm:1-make-the-recorded-ghost-note-comparison"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature pocket-rhythm, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:pocket-rhythm:recipes[1]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#pocket-rhythm.recipes[1].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:pocket-rhythm:2-optional-probability-variation"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature pocket-rhythm, authored recipes[1] mapped to one-based ledger ordinal 2."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:small-hours:prose",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.prose",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 6,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 5,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "standalone cookbook prose",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "recipe:small-hours:1-percussion-channel",
+        "recipe:small-hours:2-bass-channel",
+        "recipe:small-hours:3-chord-channel",
+        "recording:three-voice-conversation"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature overview/setup is not an independent 425 teaching-unit row."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:small-hours:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[0].text",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:small-hours:1-percussion-channel"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature small-hours, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:small-hours:recipes[1]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[1].text",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:small-hours:2-bass-channel"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature small-hours, authored recipes[1] mapped to one-based ledger ordinal 2."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:small-hours:recipes[2]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[2].text",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:small-hours:3-chord-channel"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature small-hours, authored recipes[2] mapped to one-based ledger ordinal 3."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:tilting-harmony:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#tilting-harmony.recipes[0].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 7,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 7,
+        "vocabulary": 9,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:tilting-harmony:1-make-the-relative-note-scale-comparison"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature tilting-harmony, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:loops-that-meet:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#loops-that-meet.recipes[0].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:loops-that-meet:1-comparing-the-loop-alignment"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature loops-that-meet, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:masks:recipes[4]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/masks.yaml#masks.recipes[4].text",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:masks:5-build-the-recording-small-hours-four-bars-in-c-m"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature masks, authored recipes[4] mapped to one-based ledger ordinal 5."
+    },
+    {
+      "review_unit_id": "recipe-text-overlay:note-merge-modes:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/reference-channel.yaml#note-merge-modes.recipes[0].text",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 7,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 6,
+        "integration": 7,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:note-merge-modes:1-build-the-recording-average-then-higher"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature note-merge-modes, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "practical-small:scale-editor:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-scale.yaml#scale-editor.recipes[0].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:scale-editor:1-prepare-and-apply-a-second-scale"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature scale-editor, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "practical-small:song-editor:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-song.yaml#song-editor.recipes[0].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:song-editor:1-create-a-two-slot-group"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature song-editor, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "practical-small:interacting-with-slots:recipes[2]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-song.yaml#interacting-with-slots.recipes[2].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:interacting-with-slots:3-build-the-recording-intro-verse-and-outro"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature interacting-with-slots, authored recipes[2] mapped to one-based ledger ordinal 3."
+    },
+    {
+      "review_unit_id": "practical-small:lock-random-to-pentatonic:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-options.yaml#lock-random-to-pentatonic.recipes[0].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:lock-random-to-pentatonic:1-compare-random-notes-with-and-without-the-filter"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature lock-random-to-pentatonic, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "practical-small:lock-all-to-pentatonic:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-options.yaml#lock-all-to-pentatonic.recipes[0].text",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:lock-all-to-pentatonic:1-hear-every-note-restricted"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature lock-all-to-pentatonic, authored recipes[0] mapped to one-based ledger ordinal 1."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:midi-panic:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-learn.yaml#feature.midi-panic.details[0]",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:midi-panic:panic-from-song-channel",
+        "lesson:midi-panic:panic-from-song-pattern",
+        "lesson:midi-panic:play-panic-stops-sounding-note-note-sounding",
+        "recipe:midi-panic:1-silence-connected-midi-notes-from-song-view-with",
+        "recipe:midi-panic:2-silence-connected-midi-notes-from-song-view-with",
+        "scene:panic-stops-sounding-note"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:lock-lead-time:prose",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-learn.yaml#feature.lock-lead-time.prose",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:lock-lead-time:play-lock-lead-menu-values-play-0",
+        "scene:lock-lead-menu-values"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:locks:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.locks.details[0]",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:locks:clear-transpose-lock-to-global",
+        "lesson:locks:device-cc1-lock-and-play",
+        "lesson:locks:mask-default-exceptions-and-clear",
+        "lesson:locks:octave-step-2-local-minus-one",
+        "lesson:locks:play-global-parameter-slide-play",
+        "lesson:locks:play-parameter-slot-endpoints-clamped-slots",
+        "lesson:locks:play-trig-parameter-locks-default",
+        "recipe:locks:1-make-one-step-override-a-channel-note-default-th",
+        "recipe:locks:2-compare-a-stored-device-value-with-one-step-loca",
+        "recipe:locks:3-use-a-channel-octave-for-a-bass-line-and-a-local",
+        "recipe:locks:4-distinguish-an-explicit-zero-transpose-lock-from",
+        "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+        "scene:trig-parameter-locks"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:locks:recipes[4]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.locks.recipes[4].text",
+      "review_scores": {
+        "coherence": 7,
+        "usefulness": 6,
+        "understandability": 7,
+        "representation": 8,
+        "granularity": 7,
+        "flow": 6,
+        "integration": 4,
+        "vocabulary": 6,
+        "naming": 7,
+        "canonical_home": 6
+      },
+      "below_threshold": true,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:locks:5-practice-longer-and-shorter-decay-envelopes"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature locks, authored recipes[4] mapped to one-based ledger ordinal 5."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:save-and-load:detail-demo",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.save-and-load.details[0]",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:save-and-load:save-named-arrangement",
+        "scene:course-save-dialog",
+        "scene:named-project-roundtrip"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:save-and-load:binding-outcome",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.save-and-load.teaching_bindings[0].teaching_binding.human_outcome",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:save-and-load:save-named-arrangement",
+        "scene:course-save-dialog",
+        "scene:named-project-roundtrip"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:midi-controller-options:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.midi-controller-options.details[0]",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:midi-controller-options:field-keyboard-honour-degree-pick-natural-minor",
+        "lesson:midi-controller-options:keyboard-honour-all",
+        "lesson:midi-controller-options:keyboard-honour-degree-rotation",
+        "lesson:midi-controller-options:play-mapping-child-selected-and-fixed-raw",
+        "recipe:midi-controller-options:1-map-an-external-keyboard-through-the-scale-s-rot",
+        "recipe:midi-controller-options:2-apply-scale-rotation-and-global-transpose-to-eve",
+        "scene:keyboard-honour-all",
+        "scene:keyboard-honour-degree-rotation",
+        "scene:mapping-child-selected-and-fixed"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:honor-scale-rotations:details[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.honor-scale-rotations.details[1]",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:honor-scale-rotations:keyboard-honour-degree-rotation",
+        "recipe:honor-scale-rotations:1-map-an-external-keyboard-through-the-scale-s-rot",
+        "scene:keyboard-honour-degree-rotation"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:honour-scale-transpose:details[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.honour-scale-transpose.details[1]",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": false,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "lesson:honour-scale-transpose:keyboard-honour-all",
+        "recipe:honour-scale-transpose:1-apply-scale-rotation-and-global-transpose-to-eve",
+        "scene:keyboard-honour-all"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:performance-management:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-musical.yaml#feature.performance-management.details[0]",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 7,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": true,
+      "mapping_kind": "standalone feature prose/detail/projected outcome",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Dependent lesson/recipe/scene IDs are listed; this text has no direct ledger row."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:feature:interacting-with-slots:recipes[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-song.yaml#feature.interacting-with-slots.recipes[1].text",
+      "review_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "below_threshold": false,
+      "mapping_kind": "recipe teaching unit",
+      "direct_425_ledger_ids": [
+        "recipe:interacting-with-slots:2-copy-a-song-slot-then-raise-the-copy-by-one-octa"
+      ],
+      "dependent_425_ledger_ids": [],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": "Feature interacting-with-slots, authored recipes[1] mapped to one-based ledger ordinal 2."
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:oilcan-pocket:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:oilcan-pocket"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:pocket-rhythm:3-separate-fixed-percussion-example"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:bass-and-intervals:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:bass-and-intervals"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:tilting-harmony:2-separate-fixed-bass-and-chord-example"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:three-voice-conversation"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:small-hours:1-percussion-channel"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[1]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:three-voice-conversation"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:small-hours:2-bass-channel"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[2]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:three-voice-conversation"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:small-hours:3-chord-channel"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:ghost-note-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:ghost-note-comparison"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:pocket-rhythm:1-make-the-recorded-ghost-note-comparison"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:scale-slot-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:scale-slot-comparison"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:tilting-harmony:1-make-the-relative-note-scale-comparison"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:polymeter:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:polymeter"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:loops-that-meet:4-listening-extension-sixteen-steps-against-twelve"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:swing-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:swing-comparison"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:clocks-swing-and-shuffle:1-build-the-recording-straight-then-swung"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:note-merge-modes:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:note-merge-modes"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:note-merge-modes:1-build-the-recording-average-then-higher"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:song-sections:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:song-sections"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:interacting-with-slots:3-build-the-recording-intro-verse-and-outro"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:harmony-strum-arp:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:harmony-strum-arp"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:adding-chords:2-build-the-recording-block-chords-strummed-then-a"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:voice-leading-revoice:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:voice-leading-revoice"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:harmony:2-build-the-recording-block-chords-then-revoice"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:masks-small-hours:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:masks-small-hours"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:masks:5-build-the-recording-small-hours-four-bars-in-c-m"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-first-sound-hear:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-first-sound-hear"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:first-sound-hear"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-build-a-phrase-compare:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-build-a-phrase-compare"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:build-a-phrase-compare"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-masks-listen:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-masks-listen"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:masks-listen"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-masks-keep:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-masks-keep"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:masks-keep"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-sequence-composition-both:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-sequence-composition-both"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:sequence-composition-both"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-harmony-design-apply:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-harmony-design-apply"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:harmony-design-apply"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-modulation-movement-and-interest-level:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-modulation-movement-and-interest-level"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:modulation-movement-and-interest-level"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-song-composition-transition:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-song-composition-transition"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:song-composition-transition"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:course-keep-your-work-perform:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:course-keep-your-work-perform"
+      ],
+      "dependent_425_ledger_ids": [
+        "course:keep-your-work-perform"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:param-lock-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording relationship subunit",
+      "direct_425_ledger_ids": [
+        "recording:param-lock-comparison"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:locks:5-practice-longer-and-shorter-decay-envelopes"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:recording:param-lock-comparison:build_steps[4]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/recordings.yaml#param-lock-comparison.build_steps[4]",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "recording build-step subunit",
+      "direct_425_ledger_ids": [
+        "recording:param-lock-comparison"
+      ],
+      "dependent_425_ledger_ids": [
+        "recipe:locks:5-practice-longer-and-shorter-decay-envelopes"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    },
+    {
+      "review_unit_id": "doc-language-cleanup:caption:chord-strum-a-timed-chord:assign-strum",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/scene-captions.yaml#overlays.append.chord-strum-a-timed-chord.assign-strum",
+      "review_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "below_threshold": false,
+      "mapping_kind": "scene-caption projection",
+      "direct_425_ledger_ids": [],
+      "dependent_425_ledger_ids": [
+        "scene:chord-strum-a-timed-chord",
+        "lesson:chord-strum:play-chord-strum-a-timed-chord-forward"
+      ],
+      "score_transfer": "none; review HOLD",
+      "mapping_note": ""
+    }
+  ]
+}

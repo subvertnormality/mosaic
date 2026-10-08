@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 from manual_player_device_readout import validate_player_device_readout, PlayerDeviceReadoutError
 from manual_panic_release_readout import (
-    validate_panic_release_readout, PanicReleaseReadoutError, _validated_midi_60_release,
+    validate_panic_release_readout as _validate_panic_release_readout_source, PanicReleaseReadoutError, _validated_midi_60_release,
     is_retained_panic_source,
 )
 
@@ -16,10 +16,21 @@ PLAYER = BOOK["scenes"]["player-apply-polyperc"]
 PANIC = BOOK["scenes"]["panic-stops-sounding-note"]
 DEVICE = {"device": "Polyperc 1"}
 PANIC_EVENT = [{"port": 1, "bytes": [128, 60, 0]}]
+from manual_native_test_evidence import PortableNativeEvidence
+
+PORTABLE_NATIVE_EVIDENCE = PortableNativeEvidence()
+
+def _validate_panic_release_readout(scene, step_id, wanted, project_root=ROOT):
+    return _validate_panic_release_readout_source(scene, step_id, wanted, project_root,
+                                                  resolve_evidence=PORTABLE_NATIVE_EVIDENCE.resolve)
+
+def _panic_file(relative):
+    return PORTABLE_NATIVE_EVIDENCE.resolve(PANIC["evidence"]["path"]) / relative
+
 
 class PlayerDeviceReadoutTests(unittest.TestCase):
     def call_player(self, scene=None, wanted=DEVICE):
-        return validate_player_device_readout(copy.deepcopy(scene or PLAYER), "polyperc-applied", wanted, ROOT)
+        return validate_player_device_readout(copy.deepcopy(scene or PLAYER), "polyperc-applied", wanted, ROOT, resolve_evidence=PORTABLE_NATIVE_EVIDENCE.resolve)
 
     def test_retained_apply_frame_admits_exact_device(self):
         receipt = self.call_player()
@@ -87,7 +98,7 @@ class PlayerDeviceReadoutTests(unittest.TestCase):
 
 class PanicReleaseReadoutTests(unittest.TestCase):
     def test_actual_midi_60_cutoff_is_admitted_from_full_source(self):
-        receipt = validate_panic_release_readout(copy.deepcopy(PANIC), "panic-released", PANIC_EVENT, ROOT)
+        receipt = _validate_panic_release_readout(copy.deepcopy(PANIC), "panic-released", PANIC_EVENT, ROOT)
         self.assertEqual(receipt["events"], PANIC_EVENT)
         self.assertEqual(receipt["note_on_event_index"], 18)
         self.assertEqual(receipt["native_event_index"], 2927)
@@ -96,49 +107,49 @@ class PanicReleaseReadoutTests(unittest.TestCase):
 
     def test_generic_sweep_packet_cannot_substitute_for_sounding_note(self):
         with self.assertRaises(PanicReleaseReadoutError):
-            validate_panic_release_readout(copy.deepcopy(PANIC), "panic-released",
+            _validate_panic_release_readout(copy.deepcopy(PANIC), "panic-released",
                                            [{"port": 1, "bytes": [134, 44, 0]}], ROOT)
 
     def test_failed_early_release_assertion_is_rejected(self):
         scene = copy.deepcopy(PANIC)
         next(row for row in scene["steps"] if row["id"] == "panic-released")["output"]["binding"]["assertion"]["released_early"] = False
         with self.assertRaises(PanicReleaseReadoutError):
-            validate_panic_release_readout(scene, "panic-released", PANIC_EVENT, ROOT)
+            _validate_panic_release_readout(scene, "panic-released", PANIC_EVENT, ROOT)
 
     def test_panic_published_rle_must_match_native_frame(self):
         scene = copy.deepcopy(PANIC)
         step = next(row for row in scene["steps"] if row["id"] == "panic-released")
         step["output"]["screen_rle"][0][0] = (step["output"]["screen_rle"][0][0] + 1) % 16
         with self.assertRaises(PanicReleaseReadoutError):
-            validate_panic_release_readout(scene, "panic-released", PANIC_EVENT, ROOT)
+            _validate_panic_release_readout(scene, "panic-released", PANIC_EVENT, ROOT)
 
     def test_foreign_panic_session_is_rejected(self):
         scene = copy.deepcopy(PANIC)
         scene["evidence"]["session_context"]["session_id"] = "0" * 32
         with self.assertRaises(PanicReleaseReadoutError):
-            validate_panic_release_readout(scene, "panic-released", PANIC_EVENT, ROOT)
+            _validate_panic_release_readout(scene, "panic-released", PANIC_EVENT, ROOT)
 
     def test_missing_actual_onset_is_rejected(self):
-        rows = [json.loads(line) for line in (Path(PANIC["evidence"]["path"]) / "native/native-events.jsonl").read_text().splitlines() if line.strip()]
+        rows = [json.loads(line) for line in (_panic_file("native/native-events.jsonl")).read_text().splitlines() if line.strip()]
         midi = [row for row in rows if row.get("kind") in (3, 11) and row.get("index") != 18]
         with self.assertRaises(PanicReleaseReadoutError):
             _validated_midi_60_release(midi, next(row for row in results_rows() if row.get("kind") == "panic-releases-sounding-note"))
 
     def test_missing_actual_cutoff_is_rejected(self):
-        rows = [json.loads(line) for line in (Path(PANIC["evidence"]["path"]) / "native/native-events.jsonl").read_text().splitlines() if line.strip()]
+        rows = [json.loads(line) for line in (_panic_file("native/native-events.jsonl")).read_text().splitlines() if line.strip()]
         midi = [row for row in rows if row.get("kind") in (3, 11) and row.get("index") != 2927]
         with self.assertRaises(PanicReleaseReadoutError):
             _validated_midi_60_release(midi, next(row for row in results_rows() if row.get("kind") == "panic-releases-sounding-note"))
 
     def test_misordered_native_journal_is_rejected(self):
-        rows = [json.loads(line) for line in (Path(PANIC["evidence"]["path"]) / "native/native-events.jsonl").read_text().splitlines() if line.strip()]
+        rows = [json.loads(line) for line in (_panic_file("native/native-events.jsonl")).read_text().splitlines() if line.strip()]
         midi = [row for row in rows if row.get("kind") in (3, 11)]
         midi[17], midi[18] = midi[18], midi[17]
         with self.assertRaises(PanicReleaseReadoutError):
             _validated_midi_60_release(midi, next(row for row in results_rows() if row.get("kind") == "panic-releases-sounding-note"))
 
     def test_actual_cutoff_before_onset_is_rejected(self):
-        rows = [json.loads(line) for line in (Path(PANIC["evidence"]["path"]) / "native/native-events.jsonl").read_text().splitlines() if line.strip()]
+        rows = [json.loads(line) for line in (_panic_file("native/native-events.jsonl")).read_text().splitlines() if line.strip()]
         midi = [row for row in rows if row.get("kind") in (3, 11)]
         onset = next(row for row in midi if row.get("index") == 18)
         cutoff = next(row for row in midi if row.get("index") == 2927)
@@ -158,7 +169,7 @@ class PanicReleaseReadoutTests(unittest.TestCase):
         _validate_output(native, requirement)
 
 def results_rows():
-    return json.loads((Path(PANIC["evidence"]["path"]) / "results.json").read_text(encoding="utf-8"))
+    return json.loads((_panic_file("results.json")).read_text(encoding="utf-8"))
 
 if __name__ == "__main__":
     unittest.main()

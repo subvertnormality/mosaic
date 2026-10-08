@@ -12,6 +12,10 @@ import pytest
 CANDIDATE_TOOLS = Path(__file__).parent
 sys.path.insert(0, str(CANDIDATE_TOOLS))
 import manual_reader_projection as projection
+import manual_pilot_midi
+from manual_native_test_evidence import PortableNativeEvidence
+
+PORTABLE_NATIVE_EVIDENCE = PortableNativeEvidence()
 
 ROOT = Path(__file__).parents[1]
 PORTABLE_ASSETS = ROOT / "test-fixtures/reader-projection-portable-v1.tar.gz"
@@ -19,6 +23,17 @@ PORTABLE_ASSETS = ROOT / "test-fixtures/reader-projection-portable-v1.tar.gz"
 
 def load(path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module", autouse=True)
+def portable_retained_pilot_evidence():
+    original = manual_pilot_midi.project_pilot_midi
+    def portable_project(scene):
+        return original(scene, resolve=PORTABLE_NATIVE_EVIDENCE.resolve)
+    manual_pilot_midi.project_pilot_midi = portable_project
+    yield
+    manual_pilot_midi.project_pilot_midi = original
+    PORTABLE_NATIVE_EVIDENCE.close()
 
 
 @pytest.fixture(scope="module")
@@ -80,9 +95,30 @@ def test_scene_search_projection_is_exact_and_all_full_chunks_round_trip(sources
             {key: step.get(key) for key in ("id", "title", "caption")} for step in canonical["steps"]
         ]
         loaded_scene = loaded.load_scene(scene_id)
-        assert loaded_scene == canonical
+        # Complete reader chunks include the source-backed retained-MIDI projection.
+        expected_scene = manual_pilot_midi.project_pilot_midi(canonical)
+        assert_reader_scene_matches(loaded_scene, expected_scene)
         ref = index["scene_chunks"][scene_id]
         assert hashlib.sha256((out / ref["path"]).read_bytes()).hexdigest() == ref["sha256"]
+
+
+def assert_reader_scene_matches(actual, expected):
+    assert actual == expected
+
+
+def test_reader_round_trip_rejects_a_changed_retained_midi_packet(sources, materialized):
+    book, _ = sources
+    _, _, loaded = materialized
+    scene_id, canonical = next((scene_id, scene) for scene_id, scene in book["scenes"].items()
+                               if any(step.get("expect", {}).get("midi_phrase") for step in scene["steps"]))
+    actual = loaded.load_scene(scene_id)
+    expected = manual_pilot_midi.project_pilot_midi(canonical)
+    changed = copy.deepcopy(actual)
+    event = next(event for step in changed["steps"] for event in step.get("output", {}).get("midi", {}).get("events", []) if len(event.get("bytes", [])) >= 3)
+    event["bytes"][1] ^= 1
+    with pytest.raises(AssertionError):
+        assert_reader_scene_matches(changed, expected)
+    assert_reader_scene_matches(actual, expected)
 
 
 def test_search_records_match_current_reader_fields_for_every_feature(sources, materialized):
@@ -421,3 +457,4 @@ def test_real_course_mask_held_source_can_begin_with_exact_release(portable_asse
     authored["actions"] = [authored["actions"][-1]]
     with pytest.raises(TeachingContractError):
         build_teaching_contracts(missing_release, scene_rows)
+

@@ -1,0 +1,197 @@
+{
+  "assets": {
+    "generated/reader-index.json": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+    "book.js": "6ca93f90d90196ac2c1ee6cbef31ae73bce2e9b065228016f65eae501c68ca18"
+  },
+  "data": [
+    {
+      "label": "home-1440",
+      "text": "MOSAIC / MANUAL\nMosaic manual\n\nMosaic is a grid-first rhythm and harmony sequencer for norns and a 128 grid. Build patterns, combine them on channels, then shape their output with masks, scales and parameter locks.\n\nMake your first piece\n\nA guided tutorial, from your first loop to a saved arrangement.\n\nMeet Mosaic\n\nLearn what a pattern, a channel and a song slot each do, and how this manual names grid buttons and norns controls, before you change anything.\n\nChoose one sound\n\nSend channel 1 to one instrument you can hear, and set a known tempo of 90 BPM.\n\nMake four equal notes\n\nWrite four trigs, give them a pitch and hear them repeat as a very fast four-note loop.\n\nSpread the rhythm across a bar\n\nTurn the four fast trigs into four evenly spaced beats by stretching the loop to 16 steps.\n\nGive the phrase an ending\n\nRaise the last beat from C to D and make it softer. One step gets its own pitch and velocity while the other three keep the channel defaults.\n\nAdd a second part\n\nAdd a second channel that plays a root-and-fifth bass beneath the phrase.\n\nChange harmony without changing the rhythm\n\nMove the phrase and bass from C major to D major without changing their rhythm. First make one deliberate change: let the pattern carry the melody instead of fixed Note masks. Keep the softer ending.\n\nAdd a pickup\n\nExtend the phrase with a quiet extra note just before the loop restarts.\n\nArrange two sections\n\nAlternate a bass-only section and the full two-part phrase.\n\nSave, reload and perform\n\nSave the two-section arrangement as Four notes, make one temporary change, then reload and hear the saved version return.\n\nIf the instrument is silent: Troubleshoot no sound\n\nTask guides\nAssigning Instruments to Channels\nChoose one sound. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.\nCreating a Rhythm Pattern\nSpread the rhythm across a bar. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.\nChange harmony without changing the rhythm\nCompare C and D major on the chapter 6 phrase and bass, then restore C major at the end for chapter 8.\nEntering a Melody\nGive the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\nAssigning Patterns to Channels\nAdd a second part. Start with the softer C, C, C, D ending from chapter 5 and an independent second sound. Add a root-and-fifth bass beneath it.\nAdding Parameter Variation\nContinue the phrase and bass in C major restored at the end of chapter 7. Add a quiet C pickup before the next bar.\nArranging Song Slots\nArrange two sections. Start with the completed phrase, bass and pickup from chapter 8. Use empty slots 2 and 3; copying overwrites the destination with no undo.\nCombining Four-Step and Three-Step Loops\nUse independent channel lengths to create a 12-step repeating relationship.\nTry an idea\n\nChoose a musical result, then open its complete instructions and example.\n\nMake one step override a channel Note default, then restore inheritance\n\nEntering a Melody · Give the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\n\nContrast inherited velocity with explicit zero and a cleared exception\n\nEntering a Melody · Give the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\n\nPreview a shifted Numeric pattern, cancel it, then commit a fresh preview\n\nAdding Trigs · Enter pattern trigs manually or preview and paint a generated rhythm.\n\nBrighten the last note with a cutoff lock\n\nTrig Param Locks · Give one step its own value for an assigned device parameter, such as filter cutoff.\n\nTry a different ending for a four-note melody\n\nMasks · Override channel and step trig, note, velocity, length and chord values.\n\nAdd a ghost note before an accent\n\nMasks · Override channel and step trig, note, velocity, length and chord values.\n\nView all ideas →\nRecordings\n\nEach recording has its own setup, build and listening notes.\n\nA bass with room above it - fixed C-major bass and chord contrast\n\nThe C-major/D-major relative-scale recipe changes with the scale; this fixed-note recipe stays in C major when the scale changes. Its MIDI-note Masks keep their pitches instead of following the scale.\n\nFour notes across a bar\n\nHear the same note spread across a bar.\n\nFour equal notes\n\nHear the four trigs repeat.\n\nThe phrase moved to D\n\nHear the same rhythm transposed.\n\nThe saved song, reloaded\n\nHear that the loaded project plays the same arrangement.\n\nQuieter last note\n\nFinish the optional comparisons with the same softer D ending you had before them.\n\nRaising the last note\n\nHear the exception on the beat it belongs to.\n\nA quiet pickup\n\nShape the dynamics: main beats 80, ending 50, pickup 35.\n\nA bass under the phrase\n\nHear the bass under the phrase.\n\nTwo song sections\n\nHear the two sections alternate.\n\nAdding a Ghost Note\n\nHear adding a ghost note.\n\nBlock chords, strummed, then arpeggiated\n\nThe four chord roots and progression stay fixed. Chord Strum spreads chord notes over time; Spread controls their spacing, and Acceleration changes that spacing as the strum goes on. Chord Arpeggio plays the selected chord notes in sequence. Only these per-slot behaviors change.\n\nSmall hours · four bars in C major\n\nWith channel 2 muted, only the bass remains. Unmuting restores the chord layer over the same four-bar bass phrase.\n\nAverage, then Higher\n\nWhen both patterns trigger on the same step, Note merge chooses the pitch they produce together. Average uses the midpoint of the two pattern pitches; Higher raises that midpoint using the gap between the inputs. Trig merge All combines the triggers from both patterns. Lock merged to pent. is a separate pitch restriction, kept Off here so the comparison isolates the two Note modes.\n\nThree sounds, one pocket\n\nRemoving the MIDI 38 trigs leaves the two beat timbres; restoring them fills the gaps without adding accents.\n\nParameter locks on and off\n\nA parameter lock sets a device parameter for one trig only. A Decay lock changes how long that note's sound fades; it does not change the note pattern. In this example, longer Decay locks are on steps 1 and 9; shorter Decay locks are on steps 5 and 13.\n\nSixteen steps against twelve\n\nRange sets how many steps a channel plays before its loop restarts. Here the 16-step drums and 12-step bass begin together, drift apart, and meet after 48 steps at the start of bar 4.\n\nChanging Harmony with Scale Slots\n\nThe same relative-note patterns and rhythm play under C major in bars 1-2 and D major in bars 3-4. The upper line changes from MIDI 60, 60, 60, 62 to 62, 62, 62, 64; the lower line changes from MIDI 48 and 55 to 50 and 57. Note masks stay X.\n\nIntro, verse and outro\n\nSlot 1 mutes the lead; slot 2 unmutes it; slot 3 raises the lead octave and lowers bass velocity.\n\nStraight, then swung\n\nBars 1–2 are straight. Bars 3–4 use Swing 25. Only each pair’s second step moves.\n\nRhythm, bass and a changing chord\n\nHear three separate layers over four bars: Oilcan drums and Polyperc bass repeat, while Doubledecker chord roots change only in bar 4.\n\nBlock chords, then Revoice\n\nHarmony Off keeps each chord in its written root-position voicing. Revoice moves those same chord notes to different octaves while preserving their pitch classes, note count and rhythm; ROOT keeps each chord root lowest.\n\nManual\n/\nOverview",
+      "headings": [
+        "Mosaic manual",
+        "Make your first piece",
+        "Task guides",
+        "Try an idea",
+        "Recordings",
+        "Masks.",
+        "Before you explore Masks",
+        "A place to start",
+        "Interactive examples",
+        "Set channel and step note masks",
+        "Controls",
+        "Musical examples",
+        "Try a different ending for a four-note melody",
+        "Add a ghost note before an accent",
+        "Make the ghost note intermittent",
+        "Add chord voices over a bass",
+        "Small hours · four bars in C major",
+        "Related features"
+      ],
+      "links": [
+        {
+          "text": "Meet Mosaic",
+          "href": "#getting-started/course"
+        },
+        {
+          "text": "Choose one sound",
+          "href": "#setup/course"
+        },
+        {
+          "text": "Make four equal notes",
+          "href": "#first-sound/course"
+        },
+        {
+          "text": "Spread the rhythm across a bar",
+          "href": "#build-a-phrase/course"
+        },
+        {
+          "text": "Give the phrase an ending",
+          "href": "#masks/course"
+        },
+        {
+          "text": "Add a second part",
+          "href": "#sequence-composition/course"
+        },
+        {
+          "text": "Change harmony without changing the rhythm",
+          "href": "#harmony-design/course"
+        },
+        {
+          "text": "Add a pickup",
+          "href": "#modulation-movement-and-interest/course"
+        },
+        {
+          "text": "Arrange two sections",
+          "href": "#song-composition/course"
+        },
+        {
+          "text": "Save, reload and perform",
+          "href": "#keep-your-work/course"
+        },
+        {
+          "text": "Troubleshoot no sound",
+          "href": "#no-sound"
+        },
+        {
+          "text": "Assigning Instruments to Channels\nChoose one sound. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.",
+          "href": "#sound-design"
+        },
+        {
+          "text": "Creating a Rhythm Pattern\nSpread the rhythm across a bar. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.",
+          "href": "#rhythm-section-design"
+        },
+        {
+          "text": "Change harmony without changing the rhythm\nCompare C and D major on the chapter 6 phrase and bass, then restore C major at the end for chapter 8.",
+          "href": "#harmony-design/course"
+        },
+        {
+          "text": "Entering a Melody\nGive the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.",
+          "href": "#melody-composition"
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "tutorial-destination-1440",
+      "hash": "#getting-started/course",
+      "heading": "1. Meet Mosaic",
+      "text": "Manual\n/\nMake a piece\n/\n1. Meet Mosaic\nMOSAIC / LEARN\n1. Meet Mosaic\n\nInstall Mosaic and configure one channel before creating a song.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Getting Started reference\n\nYour starting point: Mosaic is running on norns with a 128 grid connected. Start a new project (PARAMS > MOSAIC > + New) so the course begins from an empty project. Have a MIDI instrument, or a norns voice such as Polyperc 1, ready for chapter 2.\n\nLearn the three objects\n\nKnow what a pattern, a channel and a song slot are for before you edit any of them.\n\nRead these three ideas first. Nothing changes until the last line.\n\nA pattern holds a rhythm of trigs (steps that play a note) and relative notes. You write patterns on the Pattern page.\nA channel plays patterns through one sound: a MIDI instrument or a norns voice. Its masks are values that override pitch, velocity and length, for the whole channel or for single steps.\nA song slot stores one section of the song. You arrange slots in chapter 9.\n\nThen do one thing: tap Channel (3,8) on the grid to open channel 1.\n\nBefore\nShow result\nWhat to look "
+    },
+    {
+      "label": "home-390",
+      "text": "MOSAIC / MANUAL\nMosaic manual\n\nMosaic is a grid-first rhythm and harmony sequencer for norns and a 128 grid. Build patterns, combine them on channels, then shape their output with masks, scales and parameter locks.\n\nMake your first piece\n\nA guided tutorial, from your first loop to a saved arrangement.\n\nMeet Mosaic\n\nLearn what a pattern, a channel and a song slot each do, and how this manual names grid buttons and norns controls, before you change anything.\n\nChoose one sound\n\nSend channel 1 to one instrument you can hear, and set a known tempo of 90 BPM.\n\nMake four equal notes\n\nWrite four trigs, give them a pitch and hear them repeat as a very fast four-note loop.\n\nSpread the rhythm across a bar\n\nTurn the four fast trigs into four evenly spaced beats by stretching the loop to 16 steps.\n\nGive the phrase an ending\n\nRaise the last beat from C to D and make it softer. One step gets its own pitch and velocity while the other three keep the channel defaults.\n\nAdd a second part\n\nAdd a second channel that plays a root-and-fifth bass beneath the phrase.\n\nChange harmony without changing the rhythm\n\nMove the phrase and bass from C major to D major without changing their rhythm. First make one deliberate change: let the pattern carry the melody instead of fixed Note masks. Keep the softer ending.\n\nAdd a pickup\n\nExtend the phrase with a quiet extra note just before the loop restarts.\n\nArrange two sections\n\nAlternate a bass-only section and the full two-part phrase.\n\nSave, reload and perform\n\nSave the two-section arrangement as Four notes, make one temporary change, then reload and hear the saved version return.\n\nIf the instrument is silent: Troubleshoot no sound\n\nTask guides\nAssigning Instruments to Channels\nChoose one sound. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.\nCreating a Rhythm Pattern\nSpread the rhythm across a bar. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.\nChange harmony without changing the rhythm\nCompare C and D major on the chapter 6 phrase and bass, then restore C major at the end for chapter 8.\nEntering a Melody\nGive the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\nAssigning Patterns to Channels\nAdd a second part. Start with the softer C, C, C, D ending from chapter 5 and an independent second sound. Add a root-and-fifth bass beneath it.\nAdding Parameter Variation\nContinue the phrase and bass in C major restored at the end of chapter 7. Add a quiet C pickup before the next bar.\nArranging Song Slots\nArrange two sections. Start with the completed phrase, bass and pickup from chapter 8. Use empty slots 2 and 3; copying overwrites the destination with no undo.\nCombining Four-Step and Three-Step Loops\nUse independent channel lengths to create a 12-step repeating relationship.\nTry an idea\n\nChoose a musical result, then open its complete instructions and example.\n\nMake one step override a channel Note default, then restore inheritance\n\nEntering a Melody · Give the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\n\nContrast inherited velocity with explicit zero and a cleared exception\n\nEntering a Melody · Give the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\n\nPreview a shifted Numeric pattern, cancel it, then commit a fresh preview\n\nAdding Trigs · Enter pattern trigs manually or preview and paint a generated rhythm.\n\nBrighten the last note with a cutoff lock\n\nTrig Param Locks · Give one step its own value for an assigned device parameter, such as filter cutoff.\n\nTry a different ending for a four-note melody\n\nMasks · Override channel and step trig, note, velocity, length and chord values.\n\nAdd a ghost note before an accent\n\nMasks · Override channel and step trig, note, velocity, length and chord values.\n\nView all ideas →\nRecordings\n\nEach recording has its own setup, build and listening notes.\n\nA bass with room above it - fixed C-major bass and chord contrast\n\nThe C-major/D-major relative-scale recipe changes with the scale; this fixed-note recipe stays in C major when the scale changes. Its MIDI-note Masks keep their pitches instead of following the scale.\n\nFour notes across a bar\n\nHear the same note spread across a bar.\n\nFour equal notes\n\nHear the four trigs repeat.\n\nThe phrase moved to D\n\nHear the same rhythm transposed.\n\nThe saved song, reloaded\n\nHear that the loaded project plays the same arrangement.\n\nQuieter last note\n\nFinish the optional comparisons with the same softer D ending you had before them.\n\nRaising the last note\n\nHear the exception on the beat it belongs to.\n\nA quiet pickup\n\nShape the dynamics: main beats 80, ending 50, pickup 35.\n\nA bass under the phrase\n\nHear the bass under the phrase.\n\nTwo song sections\n\nHear the two sections alternate.\n\nAdding a Ghost Note\n\nHear adding a ghost note.\n\nBlock chords, strummed, then arpeggiated\n\nThe four chord roots and progression stay fixed. Chord Strum spreads chord notes over time; Spread controls their spacing, and Acceleration changes that spacing as the strum goes on. Chord Arpeggio plays the selected chord notes in sequence. Only these per-slot behaviors change.\n\nSmall hours · four bars in C major\n\nWith channel 2 muted, only the bass remains. Unmuting restores the chord layer over the same four-bar bass phrase.\n\nAverage, then Higher\n\nWhen both patterns trigger on the same step, Note merge chooses the pitch they produce together. Average uses the midpoint of the two pattern pitches; Higher raises that midpoint using the gap between the inputs. Trig merge All combines the triggers from both patterns. Lock merged to pent. is a separate pitch restriction, kept Off here so the comparison isolates the two Note modes.\n\nThree sounds, one pocket\n\nRemoving the MIDI 38 trigs leaves the two beat timbres; restoring them fills the gaps without adding accents.\n\nParameter locks on and off\n\nA parameter lock sets a device parameter for one trig only. A Decay lock changes how long that note's sound fades; it does not change the note pattern. In this example, longer Decay locks are on steps 1 and 9; shorter Decay locks are on steps 5 and 13.\n\nSixteen steps against twelve\n\nRange sets how many steps a channel plays before its loop restarts. Here the 16-step drums and 12-step bass begin together, drift apart, and meet after 48 steps at the start of bar 4.\n\nChanging Harmony with Scale Slots\n\nThe same relative-note patterns and rhythm play under C major in bars 1-2 and D major in bars 3-4. The upper line changes from MIDI 60, 60, 60, 62 to 62, 62, 62, 64; the lower line changes from MIDI 48 and 55 to 50 and 57. Note masks stay X.\n\nIntro, verse and outro\n\nSlot 1 mutes the lead; slot 2 unmutes it; slot 3 raises the lead octave and lowers bass velocity.\n\nStraight, then swung\n\nBars 1–2 are straight. Bars 3–4 use Swing 25. Only each pair’s second step moves.\n\nRhythm, bass and a changing chord\n\nHear three separate layers over four bars: Oilcan drums and Polyperc bass repeat, while Doubledecker chord roots change only in bar 4.\n\nBlock chords, then Revoice\n\nHarmony Off keeps each chord in its written root-position voicing. Revoice moves those same chord notes to different octaves while preserving their pitch classes, note count and rhythm; ROOT keeps each chord root lowest.\n\nManual\n/\nOverview",
+      "headings": [
+        "Mosaic manual",
+        "Make your first piece",
+        "Task guides",
+        "Try an idea",
+        "Recordings",
+        "Masks.",
+        "Before you explore Masks",
+        "A place to start",
+        "Interactive examples",
+        "Set channel and step note masks",
+        "Controls",
+        "Musical examples",
+        "Try a different ending for a four-note melody",
+        "Add a ghost note before an accent",
+        "Make the ghost note intermittent",
+        "Add chord voices over a bass",
+        "Small hours · four bars in C major",
+        "Related features"
+      ],
+      "links": [
+        {
+          "text": "Meet Mosaic",
+          "href": "#getting-started/course"
+        },
+        {
+          "text": "Choose one sound",
+          "href": "#setup/course"
+        },
+        {
+          "text": "Make four equal notes",
+          "href": "#first-sound/course"
+        },
+        {
+          "text": "Spread the rhythm across a bar",
+          "href": "#build-a-phrase/course"
+        },
+        {
+          "text": "Give the phrase an ending",
+          "href": "#masks/course"
+        },
+        {
+          "text": "Add a second part",
+          "href": "#sequence-composition/course"
+        },
+        {
+          "text": "Change harmony without changing the rhythm",
+          "href": "#harmony-design/course"
+        },
+        {
+          "text": "Add a pickup",
+          "href": "#modulation-movement-and-interest/course"
+        },
+        {
+          "text": "Arrange two sections",
+          "href": "#song-composition/course"
+        },
+        {
+          "text": "Save, reload and perform",
+          "href": "#keep-your-work/course"
+        },
+        {
+          "text": "Troubleshoot no sound",
+          "href": "#no-sound"
+        },
+        {
+          "text": "Assigning Instruments to Channels\nChoose one sound. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.",
+          "href": "#sound-design"
+        },
+        {
+          "text": "Creating a Rhythm Pattern\nSpread the rhythm across a bar. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.",
+          "href": "#rhythm-section-design"
+        },
+        {
+          "text": "Change harmony without changing the rhythm\nCompare C and D major on the chapter 6 phrase and bass, then restore C major at the end for chapter 8.",
+          "href": "#harmony-design/course"
+        },
+        {
+          "text": "Entering a Melody\nGive the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.",
+          "href": "#melody-composition"
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "tutorial-destination-390",
+      "hash": "#getting-started/course",
+      "heading": "1. Meet Mosaic",
+      "text": "Manual\n/\nMake a piece\n/\n1. Meet Mosaic\nMOSAIC / LEARN\n1. Meet Mosaic\n\nInstall Mosaic and configure one channel before creating a song.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Getting Started reference\n\nYour starting point: Mosaic is running on norns with a 128 grid connected. Start a new project (PARAMS > MOSAIC > + New) so the course begins from an empty project. Have a MIDI instrument, or a norns voice such as Polyperc 1, ready for chapter 2.\n\nLearn the three objects\n\nKnow what a pattern, a channel and a song slot are for before you edit any of them.\n\nRead these three ideas first. Nothing changes until the last line.\n\nA pattern holds a rhythm of trigs (steps that play a note) and relative notes. You write patterns on the Pattern page.\nA channel plays patterns through one sound: a MIDI instrument or a norns voice. Its masks are values that override pitch, velocity and length, for the whole channel or for single steps.\nA song slot stores one section of the song. You arrange slots in chapter 9.\n\nThen do one thing: tap Channel (3,8) on the grid to open channel 1.\n\nBefore\nShow result\nWhat to look "
+    }
+  ],
+  "errors": []
+}

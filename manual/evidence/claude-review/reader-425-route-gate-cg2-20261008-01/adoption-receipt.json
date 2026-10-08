@@ -1,0 +1,165 @@
+{
+  "schema": "mosaic-reader-425-cg2-evidence-adoption-v1",
+  "status": "PASS",
+  "scope": "browser-only 425-row route/content proof against current CG2 CSS/JS; does not qualify style/publication/native/CI",
+  "preview": "http://localhost:8785/manual/",
+  "source": {
+    "root": "/home/andy/mosaic-manual-1.4.0",
+    "book_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+    "reader_index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+    "authority_sha256": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+    "runtime_assets": {
+      "index.html": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+      "book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+      "manual.js": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+      "manual.css": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a"
+    },
+    "authoring_source_file_count": 14
+  },
+  "coverage": {
+    "units": 425,
+    "passed": 425,
+    "failed": 0,
+    "scenes": 146,
+    "verified_chunks": 146,
+    "course_only_scene_ids": [
+      "course-build-a-phrase",
+      "course-first-sound",
+      "course-getting-started",
+      "course-harmony-design",
+      "course-keep-your-work",
+      "course-masks",
+      "course-modulation-movement-and-interest",
+      "course-sequence-composition",
+      "course-setup",
+      "course-song-composition"
+    ],
+    "recording_routes_paused": 22,
+    "browser_errors": 0,
+    "http_errors": 0
+  },
+  "manifest_sha256": "d3bb5d410a86d9d71ef9353f581d2fd66cc81d9c2c1af2971cb662ec52a3583b",
+  "report_sha256": "ecb71218e5376c4bb1b952ae58ed62a3b5053dc7528bf02f38eae371addca084",
+  "harness_sha256": "552e5295de5fee73a426c7e5ccba699cbf587403b2446639663ffafeee46c093",
+  "authoring_source_hashes": {
+    "manual/course.yaml": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a",
+    "manual/features/reference-channel.yaml": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d",
+    "manual/features/reference-pattern.yaml": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+    "manual/features/reference-song.yaml": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9",
+    "manual/features/reference-learn.yaml": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7",
+    "manual/features/reference-options.yaml": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff",
+    "manual/features/reference-musical.yaml": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7",
+    "manual/features/reference-locks.yaml": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074",
+    "manual/features/cookbook.yaml": "f2d9bcf4c5bf824f9e809c8a9ae83772a87455cdc97c1b1db7c7fd44d6469ba6",
+    "manual/features/masks.yaml": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de",
+    "manual/features/reference-workflow.yaml": "ffc2fb674ab034d4608f301296fd6bb7cbe3ad1d22d3799ebc35db2525788055",
+    "manual/features/reference-scale.yaml": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38",
+    "manual/recordings.yaml": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585",
+    "manual/features/tutorials.yaml": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8"
+  },
+  "previous_gate": {
+    "status": "preserved",
+    "manifest_sha256": "8620ce3df63d35489e9473257313117a3d56c37f034d2f75cc2f986e488829f9",
+    "report_sha256": "caa9973c061f75f384466f23bd59ffe3e9775bb48a9ff317572184ca39a78653",
+    "receipt_sha256": "17b60c7f2b1c571ffd52002e17bef1111d6f5421c9bdb0b42f446cc259618ca2",
+    "adopted_in": "../reader-425-route-gate-20261008-01/",
+    "note": "Prior CSS v2 report and diagnostics remain unchanged."
+  },
+  "files": [
+    {
+      "path": "authoring-inputs/manual/course.yaml",
+      "sha256": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a",
+      "bytes": 130534
+    },
+    {
+      "path": "authoring-inputs/manual/features/cookbook.yaml",
+      "sha256": "f2d9bcf4c5bf824f9e809c8a9ae83772a87455cdc97c1b1db7c7fd44d6469ba6",
+      "bytes": 117687
+    },
+    {
+      "path": "authoring-inputs/manual/features/masks.yaml",
+      "sha256": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de",
+      "bytes": 60256
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-channel.yaml",
+      "sha256": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d",
+      "bytes": 1064984
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-learn.yaml",
+      "sha256": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7",
+      "bytes": 307439
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-locks.yaml",
+      "sha256": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074",
+      "bytes": 234386
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-musical.yaml",
+      "sha256": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7",
+      "bytes": 1106267
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-options.yaml",
+      "sha256": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff",
+      "bytes": 10133124
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-pattern.yaml",
+      "sha256": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+      "bytes": 161410
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-scale.yaml",
+      "sha256": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38",
+      "bytes": 168992
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-song.yaml",
+      "sha256": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9",
+      "bytes": 4096091
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-workflow.yaml",
+      "sha256": "ffc2fb674ab034d4608f301296fd6bb7cbe3ad1d22d3799ebc35db2525788055",
+      "bytes": 45969
+    },
+    {
+      "path": "authoring-inputs/manual/features/tutorials.yaml",
+      "sha256": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8",
+      "bytes": 90095
+    },
+    {
+      "path": "authoring-inputs/manual/recordings.yaml",
+      "sha256": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585",
+      "bytes": 32862
+    },
+    {
+      "path": "current-route-report.json",
+      "sha256": "ecb71218e5376c4bb1b952ae58ed62a3b5053dc7528bf02f38eae371addca084",
+      "bytes": 156170
+    },
+    {
+      "path": "previous-gate-reference.json",
+      "sha256": "9f750d5fa7d83e9c0ccb084ef2fc4c0c7cb820a64935756e82c6cb40a2004fc7",
+      "bytes": 416
+    },
+    {
+      "path": "route-gate-harness.cjs",
+      "sha256": "552e5295de5fee73a426c7e5ccba699cbf587403b2446639663ffafeee46c093",
+      "bytes": 22279
+    },
+    {
+      "path": "unit-route-manifest-v5-cg2.json",
+      "sha256": "d3bb5d410a86d9d71ef9353f581d2fd66cc81d9c2c1af2971cb662ec52a3583b",
+      "bytes": 1089174
+    }
+  ],
+  "limits": [
+    "No audio playback or native execution.",
+    "No generated files or source files were modified.",
+    "CG2 layout qualification and publication remain separate pending gates."
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "candidate": "installed combined candidate07",
+  "url": "http://localhost:8785/manual/",
+  "verdict": "conditional failure",
+  "all_seven_at_least_8": false,
+  "scores": {
+    "readability": 8,
+    "comprehensibility": 8,
+    "flow": 7,
+    "understandability": 8,
+    "user_friendliness": 8,
+    "usefulness_of_interactive_examples": 7,
+    "cohesion": 8
+  },
+  "served_sha256": {
+    "manual/generated/reader-index.json": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca",
+    "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual/manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "manual/manual.css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+    "manual/index.html": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+    "cheat_sheet.html": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+  },
+  "root_receipt_pins": {
+    "book": "38beead5d88faa3a5aa1a5a0fc27c25796308c4d84bd831060035fe5085ef89f",
+    "authoring": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+    "original_receipt": "c8b434bcada1bcb2a2b302503ac80c3aa70b7c62d91b15ca5ca1f314cba7ed2f"
+  },
+  "coverage": {
+    "public_features": 133,
+    "course_openings": 10,
+    "route_viewport_observations": 116,
+    "widths": [
+      1440,
+      390
+    ],
+    "browser_errors": 0,
+    "unintended_page_overflows": 0,
+    "evidence": [
+      "collection.json",
+      "browser-observations.json",
+      "workflow-observations.json",
+      "interaction-observations.json",
+      "parity.json"
+    ],
+    "journeys": [
+      "ordered first-loop actions and result focus",
+      "keyboard Degree picker all 11 steps",
+      "independent Harmony transition",
+      "exact/partial search and keyboard activation",
+      "private route/search guards",
+      "original norns and persistent Shield layouts",
+      "standard and enlarged grid",
+      "advanced LFO",
+      "recording muted playback and navigation teardown",
+      "quick reference search/theme/navigation"
+    ]
+  },
+  "parity": {
+    "sceneCount": 146,
+    "audioCount": 21,
+    "sceneRefChanges": [
+      "chord-strum-a-timed-chord"
+    ],
+    "audioRefChanges": [],
+    "courseExact": true,
+    "strumChunkHash": "ab66f15b4ef80baa60e7607616bf1f6cb0a477cc29a1da4d6a43ef7ef8fd67e8",
+    "strumCaption": "From the half-step Strum slot, turn E2 to the next slot, press K2 and turn E3 to Chord Pattern.",
+    "endIndexHash": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca"
+  },
+  "open_findings": [
+    {
+      "id": "C07-1",
+      "severity": "blocking",
+      "route": "#locks",
+      "field": "features[id=locks].recipes[4].text",
+      "problem": "Separate endpoint practice copies plain Song slot 1 over Song slot 2, replacing the Decay assignment made only in slot 2, then asks the reader to edit Decay.",
+      "minimal_fix": "After copying and selecting Song slot 2, explicitly assign Decay to parameter slot 1 through Channel tasks > Trig params before editing the held step.",
+      "evidence": [
+        "decay-blocker-1440.png",
+        "decay-blocker-390.png"
+      ],
+      "semantics_evidence": "Root independently confirmed program.lua Song-pattern deep-copy and per-Song-slot channel trig_lock_params; no new native execution by reviewer."
+    },
+    {
+      "id": "C07-N1",
+      "severity": "nonblocking",
+      "field": "Small Hours Bass/Chord interim listening paragraphs",
+      "problem": "Name which part is silent in bars 2–4 and that previously completed parts continue."
+    }
+  ],
+  "prior_findings": {
+    "R1": "closed",
+    "R2": "closed",
+    "R3": "closed",
+    "R4": "closed as blocker; C07-N1 wording observation",
+    "R5": "closed",
+    "smaller_findings": "closed",
+    "F01": "closed",
+    "F02": "closed",
+    "F03": "closed within recorded-walkthrough scope",
+    "F04": "closed",
+    "F05": "closed",
+    "F06": "conditional/open via C07-1",
+    "F07": "closed",
+    "F08": "closed",
+    "F09": "closed",
+    "F10": "closed",
+    "F11": "closed"
+  },
+  "limitations": [
+    "No listening claim; media checks were muted.",
+    "No native capture, audio generation, CI campaign, hardware or scheduling certification.",
+    "Root 425-unit ratings and native/chunk qualification remain separately attributed.",
+    "Owned browser sessions closed; production source and services unchanged."
+  ],
+  "prior_failed_review_preserved": "../final-whole-manual-astra-review-20261008-01/review.md"
+}

@@ -1,0 +1,35 @@
+{
+  "installed": [
+    {
+      "root": "/home/andy/mosaic-manual-1.4.0",
+      "path": "manual/manual.js",
+      "sha256": "044e9eb9317007ff306e894d00cef43dc4e1db258812abec623ba5f41b01624c"
+    },
+    {
+      "root": "/home/andy/mosaic-manual-1.4.0",
+      "path": "manual/manual.css",
+      "sha256": "fe941dd362280a148edc9afe20f4e6e05c86df34468d11d48445fdef4c17fe21"
+    },
+    {
+      "root": "/home/andy/mosaic-manual-1.4.0",
+      "path": "tests/behaviour/manual_browser.cjs",
+      "sha256": "b41b3c188784a2463c0af4d603b67876b602a010344295e8d18e91386f45f38a"
+    },
+    {
+      "root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+      "path": "manual/manual.js",
+      "sha256": "044e9eb9317007ff306e894d00cef43dc4e1db258812abec623ba5f41b01624c"
+    },
+    {
+      "root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+      "path": "manual/manual.css",
+      "sha256": "fe941dd362280a148edc9afe20f4e6e05c86df34468d11d48445fdef4c17fe21"
+    },
+    {
+      "root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+      "path": "tests/behaviour/manual_browser.cjs",
+      "sha256": "b41b3c188784a2463c0af4d603b67876b602a010344295e8d18e91386f45f38a"
+    }
+  ],
+  "native_rebuild": false
+}

@@ -46,7 +46,7 @@ class ControlledGenerationPhaseIntegrity(unittest.TestCase):
    self.assertTrue(result['manual_generation_complete']);self.assertEqual(result['realtime_qualification'],'pending-ci');self.assertEqual(result['inventory_sources'],dict(passed=True,sources=3))
    # Reader projection (reader-shell install, 2026-10-06): the final audit re-derives it from source-bound files and
    # binds the manifest's stage receipt to it; a missing, failed or differing receipt is rejected.
-   reader.assert_called_once_with();self.assertEqual(result['reader_projection'],projection)
+   reader.assert_called_once_with(None);self.assertEqual(result['reader_projection'],projection)
    def audited(stages,projection_now=projection):
     changed=dict(manifest,stages=stages);(build/'manifest.json').write_text(json.dumps(changed))
     with patch.object(audit,'ROOT',root),patch.object(audit,'MANUAL',manual),patch.object(audit,'audit_reference',return_value=1),patch.object(audit,'audit_raw_publications',return_value=dict(passed=True,complete_regression_run=False)),patch.object(audit,'compile_book',return_value=actual),patch.object(audit,'load',return_value=book_source),patch.object(audit,'capture_catalogue',return_value={'one':dict(id='one')}),patch.object(audit,'check_compiled_scene_contract'),patch.object(audit,'audit_reader_projection',return_value=projection_now):

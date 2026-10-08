@@ -1,0 +1,103 @@
+{
+  "manifest_id": "source19-explicit-425-score-ledger-refresh",
+  "package_root": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01",
+  "base_ledger_sha256": "cd2e1f67a498e211c0524e432997b11acb1e02752d77b5c65844cd04f61cb990",
+  "updated_ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+  "fresh_review_sha256": "a76fbe9b9babd5abc58e4a88bd204129bc38dfd25868f031f7d7a5c1ed6160d2",
+  "fresh_review_id": "six-unit-fresh-rendered-review-v02",
+  "fresh_units": 6,
+  "retained_v06_units": 419,
+  "total_units": 425,
+  "score_threshold_all_units": true,
+  "fresh_current_reader_review_all_425": false,
+  "structural_carry_pending": true,
+  "overall_astra_review_pending": true,
+  "publication_qualified": false,
+  "current_reader_pins": {
+    "book_json_sha256": "54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+    "index_json_sha256": "39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf",
+    "authored_source_sha256": "80cc81d39ab276c32da0561588cafad4ac3f4123b065043573a78b1483312d46",
+    "book_js_sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "reader_chunks_count": 167,
+    "reader_chunks_unchanged": true,
+    "source": "parent-provided current snapshot pins; the fresh six-unit browser report separately records its tested projection-v02 index and runtime JS"
+  },
+  "files": {
+    "ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v07.json": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+    "source-v06-ledger.json": "cd2e1f67a498e211c0524e432997b11acb1e02752d77b5c65844cd04f61cb990",
+    "fresh-review-v02.json": "a76fbe9b9babd5abc58e4a88bd204129bc38dfd25868f031f7d7a5c1ed6160d2",
+    "fresh-review-v02.md": "ed4ee72ce62879e6eae0c231f36ff11d746889d52d34d4e16bf575ae26ab2581",
+    "fresh-review-v02-manifest.json": "78a53d948c0ba78ccf556cb83648a1b5730d4bd191cf04d355b5badd2ea0f106",
+    "browser-observations-v02.json": "654295a2f991c09a1251d6aa97a245d041872e5185fb59f27042186cbfb9ef92"
+  },
+  "screenshots": [
+    {
+      "path": "evidence-v07/course-getting-started-notation-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-notation-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-notation.png",
+      "sha256": "68edd00151bb9638850e57e79d3d225045c6b32087ee72ac68fcb59c5da6c0c2"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-objects-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-objects-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-objects.png",
+      "sha256": "24aeba71d821547ff0fc212712758b2d5dcdac0bbe6d6b06e611f3341e16d068"
+    },
+    {
+      "path": "evidence-v07/course-setup-apply-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-setup-apply-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-setup-apply.png",
+      "sha256": "9d94de190c78f54710778e41d430196c3ffd997e1f0558f4b47b1bdc65e28bf5"
+    },
+    {
+      "path": "evidence-v07/course-setup-route-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-setup-route-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-setup-route.png",
+      "sha256": "01feebcf866eb170c026dbbd6d2be92b605e4b79127ed330e2a358da6a41bf0d"
+    },
+    {
+      "path": "evidence-v07/course-setup-tempo-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-setup-tempo-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-setup-tempo.png",
+      "sha256": "ae791840249eb888e7a66ae91dd6a6d193d79f646a5e69ea6e6f6cde20cae976"
+    },
+    {
+      "path": "evidence-v07/lesson-mods-and-software-devices-play-polyperc-apply-confirm-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/lesson-mods-and-software-devices-play-polyperc-apply-confirm.png",
+      "sha256": "7103b6a8dbcb9724ce308e99af6bb25e3449287b529e58036369eac73fbd57d3"
+    }
+  ]
+}

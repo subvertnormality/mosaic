@@ -1,0 +1,100 @@
+{
+  "schema": "reader-425-current-route-preflight-v3",
+  "candidate_id": "final-reader-qualified-425-ledger-20261008-01",
+  "ledger_sha256": "78d46761bfe935c480d50cd5a8aedb26f8b9e9fcd59cf063e824ad4cbbe2f4bc",
+  "book_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+  "index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+  "authority_sha256": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+  "ledger_rows": 425,
+  "unique_ledger_ids": 425,
+  "public_route_mappings": 425,
+  "unique_routes": 425,
+  "unit_family_counts": {
+    "course": 55,
+    "lesson": 138,
+    "recipe": 74,
+    "recording": 22,
+    "scene": 136
+  },
+  "source_projection_errors": [],
+  "source_file_hashes": {
+    "manual/course.yaml": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a",
+    "manual/features/reference-channel.yaml": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d",
+    "manual/features/reference-pattern.yaml": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+    "manual/features/reference-song.yaml": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9",
+    "manual/features/reference-learn.yaml": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7",
+    "manual/features/reference-options.yaml": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff",
+    "manual/features/reference-musical.yaml": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7",
+    "manual/features/reference-locks.yaml": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074",
+    "manual/features/cookbook.yaml": "f2d9bcf4c5bf824f9e809c8a9ae83772a87455cdc97c1b1db7c7fd44d6469ba6",
+    "manual/features/masks.yaml": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de",
+    "manual/features/reference-workflow.yaml": "ffc2fb674ab034d4608f301296fd6bb7cbe3ad1d22d3799ebc35db2525788055",
+    "manual/features/reference-scale.yaml": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38",
+    "manual/recordings.yaml": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585",
+    "manual/features/tutorials.yaml": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8"
+  },
+  "browser_execution": "baseline run completed; candidate harness corrected for numeric scene-option, markdown list markers, recording expectations, and documented canonical handoffs; rerun pending",
+  "masks_small_hours": "explicit route mapping; browser must verify recording workspace and paused pilot audio without calling play().",
+  "route_handoff_counts": {
+    "lesson_context_links": 5,
+    "recipe_full_walkthroughs": 3
+  },
+  "route_handoffs": [
+    {
+      "ledger_id": "lesson:elektron-program-change-channel:play-elektron-child-enable-and-announce-off",
+      "requested_route": "#elektron-program-change-channel/lesson/play-elektron-child-enable-and-announce-off",
+      "expected_final_route": "#elektron-program-changes/lesson/play-elektron-child-enable-and-announce-off",
+      "owner_title": "Elektron Program Changes",
+      "kind": "lesson-context-link"
+    },
+    {
+      "ledger_id": "lesson:honor-scale-degree:field-keyboard-honour-degree-pick-natural-minor",
+      "requested_route": "#honor-scale-degree/lesson/field-keyboard-honour-degree-pick-natural-minor",
+      "expected_final_route": "#midi-controller-options/lesson/field-keyboard-honour-degree-pick-natural-minor",
+      "owner_title": "MIDI Controller Options",
+      "kind": "lesson-context-link"
+    },
+    {
+      "ledger_id": "lesson:honor-scale-rotations:keyboard-honour-degree-rotation",
+      "requested_route": "#honor-scale-rotations/lesson/keyboard-honour-degree-rotation",
+      "expected_final_route": "#midi-controller-options/lesson/keyboard-honour-degree-rotation",
+      "owner_title": "MIDI Controller Options",
+      "kind": "lesson-context-link"
+    },
+    {
+      "ledger_id": "lesson:masks:add-scale-third-to-chord",
+      "requested_route": "#masks/lesson/add-scale-third-to-chord",
+      "expected_final_route": "#adding-chords/lesson/add-scale-third-to-chord",
+      "owner_title": "Adding Chords",
+      "kind": "lesson-context-link"
+    },
+    {
+      "ledger_id": "lesson:midi-controller-options:play-mapping-child-selected-and-fixed-raw",
+      "requested_route": "#midi-controller-options/lesson/play-mapping-child-selected-and-fixed-raw",
+      "expected_final_route": "#midi-controller-mapping/lesson/play-mapping-child-selected-and-fixed-raw",
+      "owner_title": "MIDI Controller Mapping",
+      "kind": "lesson-context-link"
+    },
+    {
+      "ledger_id": "recipe:locks:1-make-one-step-override-a-channel-note-default-th",
+      "requested_route": "#locks/recipe/1",
+      "expected_final_route": "#melody-composition/recipe/1",
+      "owner_title": "Entering a Melody",
+      "kind": "recipe-full-walkthrough"
+    },
+    {
+      "ledger_id": "recipe:locks:2-compare-a-stored-device-value-with-one-step-loca",
+      "requested_route": "#locks/recipe/2",
+      "expected_final_route": "#device-parameters/recipe/2",
+      "owner_title": "Device Parameters",
+      "kind": "recipe-full-walkthrough"
+    },
+    {
+      "ledger_id": "recipe:mask-locks:1-make-one-step-override-a-channel-note-default-th",
+      "requested_route": "#mask-locks/recipe/1",
+      "expected_final_route": "#melody-composition/recipe/1",
+      "owner_title": "Entering a Melody",
+      "kind": "recipe-full-walkthrough"
+    }
+  ]
+}

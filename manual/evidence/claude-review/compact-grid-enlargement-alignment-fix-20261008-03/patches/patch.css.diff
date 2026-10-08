@@ -1,0 +1,13 @@
+--- a/manual/manual.css
++++ b/manual/manual.css
+@@ -142,3 +142,10 @@
+ /* At 1440px the lesson instructions and paired hardware can share a row; below that, preserve the instruction column and give the paired hardware the full workspace. */
+ @media(min-width:1121px) and (max-width:1439px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(0,1fr)}.lesson-mode #lesson-workspace>.player{grid-column:1;grid-row:2}.lesson-mode #lesson-instructions{grid-column:1;grid-row:1}}
+ @media(min-width:1440px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(270px,.27fr) minmax(0,.73fr)}}
++
++/* Enlarged pad and column-label tracks share one sizing source. */
++.instruments.grid-enlarged{--enlarged-pad-size:clamp(44px,calc(8vw - 24px),80px);--enlarged-pad-gap:clamp(3px,.5vw,7px);--enlarged-pad-inset:13px}
++.grid-enlarged .grid-columns{width:max-content;min-width:0;grid-template-columns:repeat(16,var(--enlarged-pad-size));column-gap:var(--enlarged-pad-gap);padding:0 var(--enlarged-pad-inset) 4px}
++.grid-enlarged #grid{width:max-content;min-width:0;grid-template-columns:repeat(16,var(--enlarged-pad-size));gap:var(--enlarged-pad-gap);padding:var(--enlarged-pad-inset)}
++
++.grid-enlarged #grid button{scroll-margin-inline:10px}

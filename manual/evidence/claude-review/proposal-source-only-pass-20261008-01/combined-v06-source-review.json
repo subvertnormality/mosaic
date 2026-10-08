@@ -1,0 +1,1156 @@
+{
+  "below_threshold_units": [
+    {
+      "unit_id": "recipe-text-overlay:tilting-harmony:recipes[0]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 7,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 5,
+        "vocabulary": 9,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "blocker": "No install/enable route for required Doubledecker and Polyperc 1 in an empty project."
+    },
+    {
+      "unit_id": "practical-small:interacting-with-slots:recipes[2]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 7,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 5,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 8
+      },
+      "blocker": "Separate empty-project recipe uses Polyperc 1 and Doubledecker without a conditional install/enable route."
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:interacting-with-slots:recipes[1]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 6,
+        "integration": 7,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "blocker": "After copying slot 1 to slot 2, the recipe never selects slot 2 before raising the octave."
+    }
+  ],
+  "fresh_rerated_count": 12,
+  "carry_count": 40,
+  "affected_unit_count": 52,
+  "review_id": "combined-teaching-candidate-20261008-06-source-review-v01",
+  "candidate_manifest_sha256": "10ad7cbd1e0534d94e588e98fd8c893cafb838c9a5757876e06cc9e822e52e29",
+  "source_review_notes": [
+    "42 previously passing unit scores retained only where content is unchanged; current WSL crosswalk maps these units to the refreshed ledger.",
+    "Three remaining sub-threshold units prevent qualification.",
+    "Masks recipe uses absolute MIDI Note masks; it does not need Pattern Note scale degrees.",
+    "Locks setup explicitly selects Channel 1, assigns Pattern 1, selects slot 2 after copying, and selects slot 1 before both A/B auditions; the 32-step setting is explicit."
+  ],
+  "candidate_patch_sha256": "ae097aa9d479d572bf034868aba2a16f5a2d4c983849401c6ed37c181f5745dc",
+  "additional_performance_review": [
+    {
+      "rationale": "The page explains workload factors and gives practical mitigations; detail text uses current-device experience without test-history framing.",
+      "unit_id": "feature:performance-management:prose",
+      "scores": {
+        "granularity": 8,
+        "vocabulary": 9,
+        "usefulness": 8,
+        "integration": 8,
+        "understandability": 9,
+        "representation": 8,
+        "flow": 8,
+        "naming": 9,
+        "coherence": 9,
+        "canonical_home": 9
+      }
+    },
+    {
+      "rationale": "The heading “When playback slows” precisely names the practical response section and matches its device-specific advice.",
+      "unit_id": "feature:performance-management:details[0].title",
+      "scores": {
+        "granularity": 8,
+        "vocabulary": 9,
+        "usefulness": 8,
+        "integration": 8,
+        "understandability": 9,
+        "representation": 8,
+        "flow": 8,
+        "naming": 9,
+        "coherence": 9,
+        "canonical_home": 9
+      }
+    }
+  ],
+  "current_crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+  "threshold": 8,
+  "decision": "HOLD",
+  "unit_ratings": [
+    {
+      "unit_id": "recipe-text-overlay:pocket-rhythm:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#pocket-rhythm.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Correct full-grid map and Pattern 1 assignment; missing nb_oilcan installation/enabling prerequisite or setup link.",
+      "blocker": "Oilcan may be absent from Device picker on a fresh norns.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:pocket-rhythm:recipes[1]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#pocket-rhythm.recipes[1].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Probability boundaries and 50% variability are described accurately; 44=(12,6), 60=(12,7).",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:prose",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.prose",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "The timeline and 64-step map are clear; no pattern assignment plan or n.b. installation/enabling precondition for the three voices.",
+      "blocker": "Arrangement needs distinct channel pattern assignments and installed/enabled Oilcan, Polyperc and Doubledecker mods.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Step coordinates are accurate; empty channel 1 gets Oilcan but no Pattern 1 assignment or mod prerequisite.",
+      "blocker": "Added trigs will not play without a selected pattern; Oilcan may not be available.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[1]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[1].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Bass pitches/step lists are coherent; channel 2 lacks Pattern 2 assignment and Polyperc prerequisite.",
+      "blocker": "Channel 2 has no pattern selection.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[2]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[2].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Chord notes and scale intervals are consistent; channel 3 lacks Pattern 3 assignment and Doubledecker prerequisite.",
+      "blocker": "Channel 3 has no pattern selection.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:tilting-harmony:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#tilting-harmony.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 7,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 5,
+        "vocabulary": 9,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Pattern assignments and C/D-major MIDI predictions are internally consistent; prerequisite does not ensure Doubledecker/Polyperc are installed and enabled.",
+      "blocker": "No install/enable route for required Doubledecker and Polyperc 1 in an empty project.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:loops-that-meet:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#loops-that-meet.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Three- and four-step loops realign after 12 steps; timing and pitches cohere.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:masks:recipes[4]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/masks.yaml#masks.recipes[4].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Full-grid mapping and chord choices are sensible; empty project omits separate Pattern 1/2 assignments and n.b. setup prerequisite.",
+      "blocker": "Bass/chord layers cannot be reproduced as described without distinct channel pattern selections.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "recipe-text-overlay:note-merge-modes:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/reference-channel.yaml#note-merge-modes.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Pattern assignments and copy order preserve Average in slot 1 and Higher in slot 2; it leaves slot 2 selected, then says play “in order” without returning to slot 1. Polyperc setup also unstated.",
+      "blocker": "Playback can begin at slot 2 and skip the Average-to-Higher comparison; fresh norns may lack Polyperc.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "practical-small:scale-editor:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-scale.yaml#scale-editor.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Identifies Pattern 1, Pattern Note degrees 0–3, C major and Note mask X; D-major MIDI predictions are correct.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "practical-small:song-editor:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-song.yaml#song-editor.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Pattern assignment and copy-before-edit sequence are clear; the 90 BPM duration estimate is conditional and no tempo is stated in the starting point.",
+      "blocker": "Minor: make the 90 BPM/Rate /1 assumption explicit if the duration informs this audition.",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "practical-small:interacting-with-slots:recipes[2]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-song.yaml#interacting-with-slots.recipes[2].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 7,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 5,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 8
+      },
+      "rationale": "Adds distinct pattern assignments before slot construction; three-part arrangement and MIDI checkpoints cohere.",
+      "blocker": "Separate empty-project recipe uses Polyperc 1 and Doubledecker without a conditional install/enable route.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "practical-small:lock-random-to-pentatonic:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-options.yaml#lock-random-to-pentatonic.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Correctly removes a guarantee about stochastic F/B outcomes while preserving the invariant.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "practical-small:lock-all-to-pentatonic:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-options.yaml#lock-all-to-pentatonic.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Pattern Note degrees, Note mask X, E2/E3 Scale edit and K3 apply are explicit; expected MIDI values agree with natural minor.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:midi-panic:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-learn.yaml#feature.midi-panic.details[0]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Separates sent Note Off from the receiving instrument’s release; states Panic neither stops the sequencer nor cancels scheduled voices.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:lock-lead-time:prose",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-learn.yaml#feature.lock-lead-time.prose",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Dense but useful advanced explanation includes controls, pulse rounding, musical invariants and exceptions.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:locks:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.locks.details[0]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Clear result after clearing one transpose lock; preserves the separate zero lock.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:locks:recipes[4]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.locks.recipes[4].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Practical relative-turn caveat survives, but language still foregrounds “captured” gestures and “not a reconstruction”; empty-project recipe also omits Pattern 1 assignment and Polyperc install prerequisite.",
+      "blocker": "Rewrite the comparison in player terms, retain relative-turn/no-absolute-value caveat, add pattern assignment and device prerequisite.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:save-and-load:detail-demo",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.save-and-load.details[0]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Detailed name-entry workflow and distinct starting state are actionable; separate-demo framing is useful to avoid mistaking it for a continuation.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:save-and-load:binding-outcome",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.save-and-load.teaching_bindings[0].teaching_binding.human_outcome",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Outcome names the saved project, available picker item and cancel result.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:midi-controller-options:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.midi-controller-options.details[0]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Clarifies comparison after the full phrase rather than startup notes; relies on values displayed in the surrounding examples.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:honor-scale-rotations:details[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.honor-scale-rotations.details[1]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Same useful completed-phrase/MIDI-strip direction for this option.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:honour-scale-transpose:details[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.honour-scale-transpose.details[1]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Same useful completed-phrase/MIDI-strip direction for this option.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:performance-management:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-musical.yaml#feature.performance-management.details[0]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "The physical-device variability caution is useful; version 1.1.1 test history is stale production metadata.",
+      "blocker": "",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:interacting-with-slots:recipes[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-song.yaml#feature.interacting-with-slots.recipes[1].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 6,
+        "integration": 7,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Short copy/compare exercise is understandable and relies on an explicit pre-existing slot motif.",
+      "blocker": "After copying slot 1 to slot 2, the recipe never selects slot 2 before raising the octave.",
+      "score_method": "fresh source review of candidate v06 against current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:oilcan-pocket:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:bass-and-intervals:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[1]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[2]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:ghost-note-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:scale-slot-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:polymeter:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:swing-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:note-merge-modes:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:song-sections:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:harmony-strum-arp:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:voice-leading-revoice:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:masks-small-hours:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-first-sound-hear:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-build-a-phrase-compare:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-masks-listen:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-masks-keep:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-sequence-composition-both:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-harmony-design-apply:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-modulation-movement-and-interest-level:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-song-composition-transition:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-keep-your-work-perform:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:param-lock-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Explains the relative recorded gesture while retaining the caveat that the source did not show absolute Decay values.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:param-lock-comparison:build_steps[4]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/recordings.yaml#param-lock-comparison.build_steps[4]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Relative +200/+40 adjustments are distinguished from absolute displayed Decay values.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    },
+    {
+      "unit_id": "doc-language-cleanup:caption:chord-strum-a-timed-chord:assign-strum",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/scene-captions.yaml#overlays.append.chord-strum-a-timed-chord.assign-strum",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Removes the provenance adjective while keeping the exact half-step starting value and control instruction.",
+      "blocker": "",
+      "score_method": "carried unchanged from prior reviewed text; mapped via current WSL crosswalk"
+    }
+  ],
+  "rubric": [
+    "coherence",
+    "usefulness",
+    "understandability",
+    "representation",
+    "granularity",
+    "flow",
+    "integration",
+    "vocabulary",
+    "naming",
+    "canonical_home"
+  ],
+  "current_ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2"
+}

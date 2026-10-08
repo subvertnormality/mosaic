@@ -1,0 +1,2085 @@
+{
+  "data": [
+    {
+      "label": "original-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": 2173.359375,
+        "w": 520,
+        "h": 358
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": 2266.359375,
+        "w": 372,
+        "h": 186
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 478.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 742.234375,
+          "y": 2337.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 794.234375,
+          "y": 2337.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 383.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 742.234375,
+          "y": 2464.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 794.234375,
+          "y": 2464.359375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": 2614.046875,
+        "w": 1007.53125,
+        "h": 509.375,
+        "scrollWidth": 1006,
+        "clientWidth": 1006,
+        "first": {
+          "x": 347.234375,
+          "y": 2621.046875,
+          "w": 59.28125,
+          "h": 59.28125
+        },
+        "lastColumn": {
+          "x": 1281.46875,
+          "y": 2621.046875,
+          "w": 59.296875,
+          "h": 59.296875
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1006,
+            "clientWidth": 1006,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1008,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "shield-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "true"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": 322.359375,
+        "w": 520,
+        "h": 437.796875
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": 415.359375,
+        "w": 476,
+        "h": 238
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 759.734375,
+          "y": 352.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 638.734375,
+          "y": 665.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 759.734375,
+          "y": 665.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 638.734375,
+          "y": 352.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 396.734375,
+          "y": 665.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 517.734375,
+          "y": 665.359375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": 842.84375,
+        "w": 1007.53125,
+        "h": 509.375,
+        "scrollWidth": 1006,
+        "clientWidth": 1006,
+        "first": {
+          "x": 347.234375,
+          "y": 849.84375,
+          "w": 59.28125,
+          "h": 59.28125
+        },
+        "lastColumn": {
+          "x": 1281.46875,
+          "y": 849.84375,
+          "w": 59.296875,
+          "h": 59.296875
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1006,
+            "clientWidth": 1006,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1008,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": "Use norns Shield layout",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "shield-reload-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "true"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": 2173.359375,
+        "w": 520,
+        "h": 437.796875
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": 2266.359375,
+        "w": 476,
+        "h": 238
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 759.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 638.734375,
+          "y": 2516.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 759.734375,
+          "y": 2516.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 638.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 396.734375,
+          "y": 2516.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 517.734375,
+          "y": 2516.359375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": 2693.84375,
+        "w": 1007.53125,
+        "h": 509.375,
+        "scrollWidth": 1006,
+        "clientWidth": 1006,
+        "first": {
+          "x": 347.234375,
+          "y": 2700.84375,
+          "w": 59.28125,
+          "h": 59.28125
+        },
+        "lastColumn": {
+          "x": 1281.46875,
+          "y": 2700.84375,
+          "w": 59.296875,
+          "h": 59.296875
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1006,
+            "clientWidth": 1006,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1008,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "shield-other-scene-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "true"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": 1186.359375,
+        "w": 520,
+        "h": 437.796875
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": 1279.359375,
+        "w": 476,
+        "h": 238
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 759.734375,
+          "y": 1216.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 638.734375,
+          "y": 1529.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 759.734375,
+          "y": 1529.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 638.734375,
+          "y": 1216.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 396.734375,
+          "y": 1529.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 517.734375,
+          "y": 1529.359375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": 1706.84375,
+        "w": 1007.53125,
+        "h": 509.375,
+        "scrollWidth": 1006,
+        "clientWidth": 1006,
+        "first": {
+          "x": 347.234375,
+          "y": 1713.84375,
+          "w": 59.28125,
+          "h": 59.28125
+        },
+        "lastColumn": {
+          "x": 1281.46875,
+          "y": 1713.84375,
+          "w": 59.296875,
+          "h": 59.296875
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1006,
+            "clientWidth": 1006,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1008,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Create a four-step loop from an empty project"
+    },
+    {
+      "label": "original-restored-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": 2173.359375,
+        "w": 520,
+        "h": 358
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": 2266.359375,
+        "w": 372,
+        "h": 186
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 478.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 742.234375,
+          "y": 2337.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 794.234375,
+          "y": 2337.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 383.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 742.234375,
+          "y": 2464.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 794.234375,
+          "y": 2464.359375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": 2614.046875,
+        "w": 1007.53125,
+        "h": 509.375,
+        "scrollWidth": 1006,
+        "clientWidth": 1006,
+        "first": {
+          "x": 347.234375,
+          "y": 2621.046875,
+          "w": 59.28125,
+          "h": 59.28125
+        },
+        "lastColumn": {
+          "x": 1281.46875,
+          "y": 2621.046875,
+          "w": 59.296875,
+          "h": 59.296875
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1006,
+            "clientWidth": 1006,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1008,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": "Use norns Shield layout",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "compact-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": 2173.359375,
+        "w": 520,
+        "h": 358
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": 2266.359375,
+        "w": 372,
+        "h": 186
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 478.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 742.234375,
+          "y": 2337.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 794.234375,
+          "y": 2337.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 383.734375,
+          "y": 2203.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 742.234375,
+          "y": 2464.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 794.234375,
+          "y": 2464.359375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": 2614.046875,
+        "w": 1007.53125,
+        "h": 509.375,
+        "scrollWidth": 1006,
+        "clientWidth": 1006,
+        "first": {
+          "x": 347.234375,
+          "y": 2621.046875,
+          "w": 59.28125,
+          "h": 59.28125
+        },
+        "lastColumn": {
+          "x": 1281.46875,
+          "y": 2621.046875,
+          "w": 59.296875,
+          "h": 59.296875
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1006,
+            "clientWidth": 1006,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1008,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": "Use norns Shield layout",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "enlarged-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": 2169.359375,
+        "w": 520,
+        "h": 358
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": 2262.359375,
+        "w": 372,
+        "h": 186
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 478.734375,
+          "y": 2199.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 742.234375,
+          "y": 2333.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 794.234375,
+          "y": 2333.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 383.734375,
+          "y": 2199.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 742.234375,
+          "y": 2460.359375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 794.234375,
+          "y": 2460.359375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": 2610.046875,
+        "w": 1007.53125,
+        "h": 509.375,
+        "scrollWidth": 1006,
+        "clientWidth": 1006,
+        "first": {
+          "x": 347.234375,
+          "y": 2617.046875,
+          "w": 59.28125,
+          "h": 59.28125
+        },
+        "lastColumn": {
+          "x": 1281.46875,
+          "y": 2617.046875,
+          "w": 59.296875,
+          "h": 59.296875
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1006,
+            "clientWidth": 1006,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1008,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": true,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "enlarged-column16-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": -225.640625,
+        "w": 285,
+        "h": 292
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": -106.890625,
+        "w": 137,
+        "h": 68.5
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 390.609375,
+          "y": -195.640625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 507.234375,
+          "y": -94.640625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 559.234375,
+          "y": -94.640625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 354.359375,
+          "y": -195.640625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 507.234375,
+          "y": -0.640625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 559.234375,
+          "y": -0.640625,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": -64.765625,
+        "y": 149.046875,
+        "w": 1413,
+        "h": 717,
+        "scrollWidth": 1411,
+        "clientWidth": 1411,
+        "first": {
+          "x": -50.765625,
+          "y": 163.046875,
+          "w": 80,
+          "h": 80
+        },
+        "lastColumn": {
+          "x": 1254.234375,
+          "y": 163.046875,
+          "w": 80,
+          "h": 80
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1411,
+            "clientWidth": 1411,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1413,
+            "clientWidth": 1008,
+            "scrollLeft": 405,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments grid-enlarged",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": true,
+      "focus": "Grid column 16, row 1, brightness 2 of 15",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "next-after-layout-1440",
+      "before": "Set channel and step note masks",
+      "after": "Set channel and step note masks"
+    },
+    {
+      "label": "compact-restored-1440",
+      "width": 1440,
+      "docWidth": 1440,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 340.234375,
+        "y": -1123.390625,
+        "w": 285,
+        "h": 292
+      },
+      "screen": {
+        "x": 362.234375,
+        "y": -1004.640625,
+        "w": 137,
+        "h": 68.5
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 390.609375,
+          "y": -1093.390625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 507.234375,
+          "y": -992.390625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 559.234375,
+          "y": -992.390625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 354.359375,
+          "y": -1093.390625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 507.234375,
+          "y": -898.390625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 559.234375,
+          "y": -898.390625,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 340.234375,
+        "y": -748.703125,
+        "w": 1413,
+        "h": 717,
+        "scrollWidth": 1411,
+        "clientWidth": 1411,
+        "first": {
+          "x": 354.234375,
+          "y": -734.703125,
+          "w": 80,
+          "h": 80
+        },
+        "lastColumn": {
+          "x": 1659.234375,
+          "y": -734.703125,
+          "w": 80,
+          "h": 80
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 1411,
+            "clientWidth": 1411,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 1413,
+            "clientWidth": 1008,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments grid-enlarged",
+            "scrollWidth": 1058,
+            "clientWidth": 1058,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "original-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 31,
+        "y": 2691.328125,
+        "w": 328,
+        "h": 288
+      },
+      "screen": {
+        "x": 48,
+        "y": 2794.828125,
+        "w": 190,
+        "h": 95
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 96.25,
+          "y": 2719.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 246,
+          "y": 2820.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 298,
+          "y": 2820.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 46.75,
+          "y": 2719.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 246,
+          "y": 2914.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 298,
+          "y": 2914.328125,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": 3046.015625,
+        "w": 328,
+        "h": 169.5,
+        "scrollWidth": 326,
+        "clientWidth": 326,
+        "first": {
+          "x": 38,
+          "y": 3053.015625,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "lastColumn": {
+          "x": 335.1875,
+          "y": 3053.015625,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 326,
+            "clientWidth": 326,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 328,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "shield-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "true"
+      },
+      "device": {
+        "x": 31,
+        "y": 323.328125,
+        "w": 328,
+        "h": 342.796875
+      },
+      "screen": {
+        "x": 48,
+        "y": 414.328125,
+        "w": 294,
+        "h": 147
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 286.25,
+          "y": 351.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 210.75,
+          "y": 573.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 286.25,
+          "y": 573.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 210.75,
+          "y": 351.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 59.75,
+          "y": 573.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 135.25,
+          "y": 573.328125,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": 732.8125,
+        "w": 328,
+        "h": 169.5,
+        "scrollWidth": 326,
+        "clientWidth": 326,
+        "first": {
+          "x": 38,
+          "y": 739.8125,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "lastColumn": {
+          "x": 335.1875,
+          "y": 739.8125,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 326,
+            "clientWidth": 326,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 328,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": "Use norns Shield layout",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "shield-reload-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "true"
+      },
+      "device": {
+        "x": 31,
+        "y": 2691.328125,
+        "w": 328,
+        "h": 342.796875
+      },
+      "screen": {
+        "x": 48,
+        "y": 2782.328125,
+        "w": 294,
+        "h": 147
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 286.25,
+          "y": 2719.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 210.75,
+          "y": 2941.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 286.25,
+          "y": 2941.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 210.75,
+          "y": 2719.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 59.75,
+          "y": 2941.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 135.25,
+          "y": 2941.328125,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": 3100.8125,
+        "w": 328,
+        "h": 169.5,
+        "scrollWidth": 326,
+        "clientWidth": 326,
+        "first": {
+          "x": 38,
+          "y": 3107.8125,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "lastColumn": {
+          "x": 335.1875,
+          "y": 3107.8125,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 326,
+            "clientWidth": 326,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 328,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "shield-other-scene-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "true"
+      },
+      "device": {
+        "x": 31,
+        "y": 1509.6875,
+        "w": 328,
+        "h": 342.796875
+      },
+      "screen": {
+        "x": 48,
+        "y": 1600.6875,
+        "w": 294,
+        "h": 147
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 286.25,
+          "y": 1537.6875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 210.75,
+          "y": 1759.6875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 286.25,
+          "y": 1759.6875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 210.75,
+          "y": 1537.6875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 59.75,
+          "y": 1759.6875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 135.25,
+          "y": 1759.6875,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": 1919.171875,
+        "w": 328,
+        "h": 169.5,
+        "scrollWidth": 326,
+        "clientWidth": 326,
+        "first": {
+          "x": 38,
+          "y": 1926.171875,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "lastColumn": {
+          "x": 335.1875,
+          "y": 1926.171875,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 326,
+            "clientWidth": 326,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 328,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Create a four-step loop from an empty project"
+    },
+    {
+      "label": "original-restored-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 31,
+        "y": 2912.328125,
+        "w": 328,
+        "h": 288
+      },
+      "screen": {
+        "x": 48,
+        "y": 3015.828125,
+        "w": 190,
+        "h": 95
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 96.25,
+          "y": 2940.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 246,
+          "y": 3041.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 298,
+          "y": 3041.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 46.75,
+          "y": 2940.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 246,
+          "y": 3135.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 298,
+          "y": 3135.328125,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": 3267.015625,
+        "w": 328,
+        "h": 169.5,
+        "scrollWidth": 326,
+        "clientWidth": 326,
+        "first": {
+          "x": 38,
+          "y": 3274.015625,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "lastColumn": {
+          "x": 335.1875,
+          "y": 3274.015625,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 326,
+            "clientWidth": 326,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 328,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": "Use norns Shield layout",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "compact-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 31,
+        "y": 2912.328125,
+        "w": 328,
+        "h": 288
+      },
+      "screen": {
+        "x": 48,
+        "y": 3015.828125,
+        "w": 190,
+        "h": 95
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 96.25,
+          "y": 2940.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 246,
+          "y": 3041.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 298,
+          "y": 3041.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 46.75,
+          "y": 2940.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 246,
+          "y": 3135.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 298,
+          "y": 3135.328125,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": 3267.015625,
+        "w": 328,
+        "h": 169.5,
+        "scrollWidth": 326,
+        "clientWidth": 326,
+        "first": {
+          "x": 38,
+          "y": 3274.015625,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "lastColumn": {
+          "x": 335.1875,
+          "y": 3274.015625,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 326,
+            "clientWidth": 326,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 328,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": "Use norns Shield layout",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "enlarged-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 31,
+        "y": 2908.328125,
+        "w": 328,
+        "h": 288
+      },
+      "screen": {
+        "x": 48,
+        "y": 3011.828125,
+        "w": 190,
+        "h": 95
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 96.25,
+          "y": 2936.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 246,
+          "y": 3037.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 298,
+          "y": 3037.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 46.75,
+          "y": 2936.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 246,
+          "y": 3131.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 298,
+          "y": 3131.328125,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": 3277.515625,
+        "w": 801,
+        "h": 409,
+        "scrollWidth": 799,
+        "clientWidth": 799,
+        "first": {
+          "x": 42,
+          "y": 3288.515625,
+          "w": 44,
+          "h": 44
+        },
+        "lastColumn": {
+          "x": 777,
+          "y": 3288.515625,
+          "w": 44,
+          "h": 44
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 799,
+            "clientWidth": 799,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 801,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments grid-enlarged",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": true,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "enlarged-column16-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 31,
+        "y": -118.671875,
+        "w": 328,
+        "h": 288
+      },
+      "screen": {
+        "x": 48,
+        "y": -15.171875,
+        "w": 190,
+        "h": 95
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 96.25,
+          "y": -90.671875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 246,
+          "y": 10.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 298,
+          "y": 10.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 46.75,
+          "y": -90.671875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 246,
+          "y": 104.328125,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 298,
+          "y": 104.328125,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": -442,
+        "y": 250.515625,
+        "w": 801,
+        "h": 409,
+        "scrollWidth": 799,
+        "clientWidth": 799,
+        "first": {
+          "x": -431,
+          "y": 261.515625,
+          "w": 44,
+          "h": 44
+        },
+        "lastColumn": {
+          "x": 304,
+          "y": 261.515625,
+          "w": 44,
+          "h": 44
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 799,
+            "clientWidth": 799,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 801,
+            "clientWidth": 328,
+            "scrollLeft": 473,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments grid-enlarged",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": true,
+      "focus": "Grid column 16, row 1, brightness 2 of 15",
+      "step": "Set channel and step note masks"
+    },
+    {
+      "label": "next-after-layout-390",
+      "before": "Set channel and step note masks",
+      "after": "Set channel and step note masks"
+    },
+    {
+      "label": "compact-restored-390",
+      "width": 390,
+      "docWidth": 390,
+      "button": {
+        "text": "norns Shield layout",
+        "aria": "Use norns Shield layout",
+        "pressed": "false"
+      },
+      "device": {
+        "x": 31,
+        "y": -724.421875,
+        "w": 328,
+        "h": 288
+      },
+      "screen": {
+        "x": 48,
+        "y": -620.921875,
+        "w": 190,
+        "h": 95
+      },
+      "controls": [
+        {
+          "label": "E1, pictured encoder",
+          "x": 96.25,
+          "y": -696.421875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E2, pictured encoder",
+          "x": 246,
+          "y": -595.421875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "E3, pictured encoder",
+          "x": 298,
+          "y": -595.421875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K1",
+          "x": 46.75,
+          "y": -696.421875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K2",
+          "x": 246,
+          "y": -501.421875,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "label": "Norns K3",
+          "x": 298,
+          "y": -501.421875,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "grid": {
+        "x": 31,
+        "y": -369.734375,
+        "w": 328,
+        "h": 169.5,
+        "scrollWidth": 326,
+        "clientWidth": 326,
+        "first": {
+          "x": 38,
+          "y": -362.734375,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "lastColumn": {
+          "x": 335.1875,
+          "y": -362.734375,
+          "w": 16.8125,
+          "h": 16.8125
+        },
+        "parents": [
+          {
+            "id": "grid",
+            "cls": "",
+            "scrollWidth": 326,
+            "clientWidth": 326,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "scrollWidth": 328,
+            "clientWidth": 328,
+            "scrollLeft": 0,
+            "overflow": "auto"
+          },
+          {
+            "id": "",
+            "cls": "instruments",
+            "scrollWidth": 352,
+            "clientWidth": 352,
+            "scrollLeft": 0,
+            "overflow": "visible"
+          }
+        ]
+      },
+      "enlarged": false,
+      "focus": null,
+      "step": "Set channel and step note masks"
+    }
+  ],
+  "errors": []
+}

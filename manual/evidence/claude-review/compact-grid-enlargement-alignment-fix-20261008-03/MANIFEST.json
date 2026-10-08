@@ -1,0 +1,65 @@
+{
+  "task": "CG-2 enlarged-grid header alignment and keyboard reveal",
+  "status": "Installed in both source roots; actual-served focused verification passes. Broader route/content and 425-review gate is owned by root.",
+  "source_roots": [
+    "/home/andy/mosaic-manual-1.4.0",
+    "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout"
+  ],
+  "changed_source_files": {
+    "manual/manual.css": {
+      "baseline_sha256": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25",
+      "installed_sha256": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a"
+    },
+    "manual/manual.js": {
+      "baseline_sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+      "installed_sha256": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2"
+    },
+    "tests/behaviour/manual_browser.cjs": {
+      "baseline_sha256": "81ed1501edba2a7a34108640fc12e81891f8cf4e96c03f0bf20d263d6b9bec5b",
+      "installed_sha256": "222644db14483052ed41f40c90542995df76a079eca28417e9217816a6f1aff0"
+    }
+  },
+  "patches": [
+    "patches/patch.css.diff",
+    "patches/patch.manual.js.diff",
+    "patches/patch.tests.diff"
+  ],
+  "focused_harness": {
+    "path": "harness/grid_enlargement_alignment.cjs",
+    "sha256": "6a7e125b8edb73bd715e688139ec28ab17d080e4dcc4e95c0f851fa4902a139d",
+    "red": "proof/red.json",
+    "green": "proof/green.json",
+    "cases": [
+      "1121 Original",
+      "1121 Shield",
+      "1440 Original",
+      "1440 Shield"
+    ],
+    "focus_scroll_baseline": "Captured after focus enters pad 1; the <=4px scroll delta measures only ArrowRight row navigation."
+  },
+  "served_harness": {
+    "path": "harness/served_grid_enlargement_alignment.cjs",
+    "receipt": "proof/served-final.json",
+    "screenshots": [
+      "screenshots/served-original-column1.png",
+      "screenshots/served-original-column16-focused.png",
+      "screenshots/served-shield-column1.png",
+      "screenshots/served-shield-column16-focused.png"
+    ]
+  },
+  "assertions": [
+    "column 1 and 16 header centers within 2 CSS px of corresponding pad centers",
+    "ArrowRight from pad 1 reaches pad 16",
+    "focused pad remains inside the scroller with at least 8px visible margin",
+    "ArrowRight changes document scroll by no more than 4px after initial focus",
+    "all 128 LED levels and accessible labels unchanged"
+  ],
+  "focus_baseline_correction": "Final proof captures document scroll after focusing the first pad. Initial focus may legitimately scroll the page; the arrow-key assertion isolates row navigation.",
+  "actual_served_assets": {
+    "manual.css": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+    "manual.js": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2"
+  },
+  "preserved_baseline": "Baseline source snapshots are the installed v2 files from immediately before CG-2.",
+  "raw_filter_mismatches": [],
+  "scope": "Only manual CSS, manual JS, and the registered manual browser regression changed. Book, index, generated content, captured 128x64 pixels and grid data were not changed by this fix. No native/audio run or full build was performed."
+}

@@ -79,7 +79,16 @@ def verify_checkpoint(step, observations, path):
     manifest_path=fixture/'DERIVATION.json';manifest=json.loads(manifest_path.read_text())
     literal={'Four notes.ptn':'eae271198e0a439612dae3be8ee56035c181a73fc82f41a6e0a400844fc50c3e',
              'Four notes.pset':'929b42d76afee564354f744cb89af3f753e3dd8d179108010eb5cf2e0d2252fd'}
+    def fixture_source(raw):
+        source=Path(raw)
+        return source if source.is_absolute() else fixture/source
     if manifest['original_files']!=literal:raise ValueError('Changed literal original course persistence fixture')
+    for name,origin in zip(literal,manifest['origins']):
+        source=fixture_source(origin['path'])
+        if origin.get('original_name')!=name or origin.get('sha256')!=literal[name] or digest(source)!=literal[name]:raise ValueError('Changed captured original course project source')
+    report=fixture_source(manifest['original_course_report'])
+    if digest(report)!=manifest['original_course_report_sha256']:raise ValueError('Changed captured original course report')
+    if 'original_course_results' in manifest and digest(fixture_source(manifest['original_course_results']))!=manifest.get('original_course_results_sha256'):raise ValueError('Changed captured original course results')
     for name,value in manifest['derived_files'].items():
         if digest(fixture/name)!=value:raise ValueError('Changed derived seed fixture')
     witness=Path(path)/'save-dialog-evidence'
@@ -113,7 +122,7 @@ def verify_checkpoint(step, observations, path):
             if digest(witness/name)!=value:raise ValueError('Changed native saved project copy')
         from importlib.util import spec_from_file_location,module_from_spec
         spec=spec_from_file_location('frozen_project_canonical',source_root/'case-source/tests/behaviour/manual_save_project_canonical.py');helper=module_from_spec(spec);spec.loader.exec_module(helper)
-        original=Path(manifest['origins'][0]['path'])
+        original=fixture_source(manifest['origins'][0]['path'])
         if digest(original)!=literal['Four notes.ptn']:raise ValueError('Changed pinned original project bytes')
         content=helper.prove(witness/'Four notes.ptn',original,fixture,source_root/'case-source/tests/behaviour/persisted_digest.lua')
         if row.get('content')!=content:raise ValueError('Changed complete decoded project proof')

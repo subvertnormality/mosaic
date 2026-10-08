@@ -18,13 +18,13 @@ def _sha(path):
 def _canonical(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
-def validate_player_device_readout(scene, step_id, want, project_root):
+def validate_player_device_readout(scene, step_id, want, project_root, resolve_evidence=Path):
     """Verify the one retained Polyperc Apply capture against raw native bytes and pixel oracles."""
     _need(scene.get("id") == "player-apply-polyperc" and step_id == "polyperc-applied",
           "Player Device receipt is restricted to the retained Apply endpoint")
     _need(want == {"device": "Polyperc 1"}, "Player Device receipt requires the exact authored Device value")
     evidence = scene.get("evidence", {})
-    path = Path(evidence.get("path", "")).resolve()
+    path = Path(resolve_evidence(evidence.get("path", ""))).resolve()
     context = evidence.get("session_context")
     _need(path.is_dir() and isinstance(context, dict) and context.get("finished") is True
           and context.get("cleanup_verified") is True and context.get("held_inputs") == [],

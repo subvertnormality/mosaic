@@ -12,7 +12,7 @@ from pathlib import Path
 # so the shared, installed immutable fixture archive is reused.
 ROOT = Path(os.environ.get("MOSAIC_PROJECT_ROOT", Path(__file__).resolve().parents[1])).resolve()
 ARCHIVE = ROOT / "test-fixtures/reader-projection-portable-v1.tar.gz"
-ARCHIVE_SHA256 = "d829656150148ded99e79727c937cb494be31a2abfaf11206ecb4d34b26dc099"
+ARCHIVE_SHA256 = "aa36b815705835ce3f9a86a47d1648a94d8d29772354ca7daf889c6c5a25b2fd"
 BOOK_SHA256 = "b4646a9f869c5c60ed47a14585d6cd3db516b6f882c575b0e82fe3a1790ccc78"
 
 def load_pinned_projection_book():

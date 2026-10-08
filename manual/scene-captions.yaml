@@ -1100,3 +1100,8 @@ overlays:
     stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are
     already on does nothing. Playback is not stopped by a panic.
   contract_sha256: 9c72777103838ca27715b1976d88f29a531577da616556c520d03353e87b8b8a
+- scene_id: chord-strum-a-timed-chord
+  step_id: assign-strum
+  caption: From the half-step Strum slot, turn E2 to the next slot, press K2 and turn E3 to Chord Pattern.
+  baseline_caption: From the verified half-step Strum slot, turn E2 to the next slot, press K2 and turn E3 to Chord Pattern.
+  contract_sha256: c35c9ad783cebf90827eeefbf5dcc2ecfcf37107acd4b7fdfa5efe234e1cce46

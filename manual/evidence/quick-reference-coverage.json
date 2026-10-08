@@ -882,16 +882,24 @@
       "legacy_section": "Pattern Editor",
       "legacy_statement": "Rhythm Doctor availability: analysis uses a model-free detector Mosaic builds from source on first use, with no downloads or configuration. Without a C compiler it reports ANALYSIS_BACKEND_UNAVAILABLE ; the input choice is not audio routing. No analysis quality or performance is claimed.",
       "feature_id": "rhythm-doctor",
-      "status": "preserved",
-      "rationale": "Gesture and result retained in the authored feature reference.",
+      "status": "clarified",
+      "rationale": "Clarified against current authoring: local analysis is the norns default, dependencies and fail-closed behavior are named, Stereo/L/R describe captured input selection, and the optional server accuracy limit is explicit. Current authoring now gives approximate startup and 45-second analysis times, so the historical “no performance claim” wording is retained only as prior evidence and is not asserted as current behavior.",
       "authored_evidence": [
         {
-          "field": "prose",
-          "excerpt": "**Availability:** Mosaic starts a local capture helper when this mode opens,\nand analyses captures with a model-free detector it builds from source the\nfirst time this mode is used. Nothing is downloaded, no Python packages are\nneeded. The local worker uses python3 to launch the analysis and gcc to compile the shipped C source. No analysis server configuration is required. The build takes about half a\nminute on a Norns and is then reused. Analysis of a 45-second capture takes\nroughly half a minute on the device.\n\nIf no C compiler is available, or the build fails, analysis fails closed with\n`ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery profile can\nstill point the analysis worker at its own executable that accepts the worker\nrequest/result protocol and returns the lanes it declares, in which case that\none is used instead. No detector quality, transcription accuracy, or timing\nperformance is claimed here."
+          "field": "details",
+          "excerpt": "**Availability:** Rhythm Doctor analyses captures on norns by default. The first\ncapture may take about half a minute while local analysis starts; a 45-second\ncapture also takes about half a minute to analyse. If local analysis fails,\nMosaic reports `ANALYSIS_BACKEND_UNAVAILABLE` and does not create a bank. See\n**If local analysis fails** for the norns setup needed to retry."
+        },
+        {
+          "field": "details",
+          "excerpt": "Local analysis requires Python 3 and gcc (a C compiler) on norns. If either is missing or the analysis build fails, install or restore the dependency and try again. Mosaic reports `ANALYSIS_BACKEND_UNAVAILABLE` and does not create a bank until analysis succeeds. No third-party Python packages or network download are required."
         },
         {
           "field": "controls",
-          "excerpt": "If local analysis cannot compile its detector, check the local C compiler before another capture. → ANALYSIS_BACKEND_UNAVAILABLE is shown and no bank is produced. The default worker builds the detector from shipped source; it needs python3 and a C compiler, with no third-party Python packages."
+          "excerpt": "Before capture: E2/E3 edit setup → K3 confirm; K2 cancels. → Record uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start."
+        },
+        {
+          "field": "details",
+          "excerpt": "Capture, analysis and painting are separate stages. A backend failure shows an explicit error and does not produce a ready bank. The ten broad instrument lanes of the optional analysis server are experimental; no detection accuracy is specified."
         }
       ],
       "source_paths": [
@@ -2931,8 +2939,8 @@
       "legacy_section": "Essential Shortcuts",
       "legacy_statement": "Strum control: Use with Chord Strum param",
       "feature_id": "chord-strum",
-      "status": "preserved",
-      "rationale": "Gesture and result retained in the authored feature reference.",
+      "status": "clarified",
+      "rationale": "Clarified against current Chord Note Strum authoring. It documents channel-step division, the X off value, one onset per voice that follows the current scale, and the preserved positions of empty chord slots. The current control name and route are the authored labels; no extra gesture is inferred from the legacy shorthand.",
       "authored_evidence": [
         {
           "field": "controls",
@@ -2940,7 +2948,15 @@
         },
         {
           "field": "prose",
-          "excerpt": "Set Chord Strum to space the selected chord-mask slots using the chosen channel-step division. Notes are quantised to the current scale, including when it changes during a strum. Each chord note is played once. Empty mask slots keep their positions in the selected chord shape and consume spacing and acceleration ordinals, including trailing empty slots."
+          "excerpt": "Use Strum to roll a chord from one voice to the next instead of sounding its voices together. First add chord masks on a polyphonic output, then assign Chord Note Strum in Trig params and set its division with E3. At 1/2, successive voices start half a channel step apart. X switches strumming off. Each chord voice plays once and follows the current scale, including a scale change during the roll."
+        },
+        {
+          "field": "controls",
+          "excerpt": "E3 with no grid step held → Edit the channel default: X disables strumming; select a channel-step division."
+        },
+        {
+          "field": "details",
+          "excerpt": "Chord Shape orders the root and four chord-mask slots. Empty slots keep their positions and consume spacing and acceleration ordinals, including trailing empty slots. The advanced sparse-chord examples show these rests; start with the five-voice timed chord to learn the basic roll."
         }
       ],
       "source_paths": [
@@ -4679,16 +4695,16 @@
       "legacy_section": "Merge Shape & Harmony",
       "legacy_statement": "Off / Revoice / Pattern / Ensemble. Pattern leaves unmapped tones Raw. Ensemble members keep rhythm, velocity, gate, clock and route.",
       "feature_id": "harmony",
-      "status": "preserved",
-      "rationale": "Gesture and result retained in the authored feature reference.",
+      "status": "clarified",
+      "rationale": "Clarified against the current four-mode section: Off preserves the ordinary pitch path; Revoice selects legal octave assignments for actual root and enabled chord-mask voices; Pattern maps effective relative values while unmapped values stay Raw; Ensemble assigns harmonic roles to explicit monophonic channels and preserves member rhythm, velocity, gate, clock and route.",
       "authored_evidence": [
         {
           "field": "prose",
           "excerpt": "- Off follows the ordinary Mosaic pitch path exactly.\n- Revoice takes the actual root and enabled chord-mask voices after Mosaic's\n  pitch-class decisions, preserving their pitch classes and sounding count while\n  choosing legal octaves and assignments.\n- Pattern maps explicit effective relative values in the current merge binding\n  to Bass, Inner1–3 or Top. Repeated mapped values reuse one pitch for the entire\n  harmonic frame; unmapped values remain Raw. Random, fixed, absolute-mask and\n  chord-mask events visibly bypass Pattern. Conflicting aliases fail closed.\n- Ensemble assigns Bass/Inner/Top roles to one to five explicit monophonic\n  channels. Each member retains its own rhythm, velocity, gate, clock and route,\n  but its pitch is replaced by the shared frame. A conflicting local scale lock\n  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`); a channel or\n  step octave override does the same (`LOCAL OCTAVE BYPASS`)."
         },
         {
-          "field": "details",
-          "excerpt": "Mode selection Revoice places the actual root and enabled chord-mask voices in legal octaves. Pattern maps repeated effective relative values to roles. Ensemble assigns a shared harmonic frame to specified monophonic channels; each member retains its rhythm and route."
+          "field": "prose",
+          "excerpt": "Harmony offers four mutually exclusive channel modes:\n\n- Off follows the ordinary Mosaic pitch path exactly.\n- Revoice takes the actual root and enabled chord-mask voices after Mosaic's\n  pitch-class decisions, preserving their pitch classes and sounding count while\n  choosing legal octaves and assignments.\n- Pattern maps explicit effective relative values in the current merge binding\n  to Bass, Inner1–3 or Top. Repeated mapped values reuse one pitch for the entire\n  harmonic frame; unmapped values remain Raw. Random, fixed, absolute-mask and\n  chord-mask events visibly bypass Pattern. Conflicting aliases fail closed.\n- Ensemble assigns Bass/Inner/Top roles to one to five explicit monophonic\n  channels. Each member retains its own rhythm, velocity, gate, clock and route,\n  but its pitch is replaced by the shared frame. A conflicting local scale lock\n  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`); a channel or\n  step octave override does the same (`LOCAL OCTAVE BYPASS`)."
         }
       ],
       "source_paths": [
@@ -4907,9 +4923,9 @@
     }
   ],
   "counts": {
+    "preserved": 51,
+    "clarified": 26,
     "total": 77,
-    "preserved": 54,
-    "clarified": 23,
     "unresolved": 0
   },
   "complete_regression_run": false,
@@ -4925,14 +4941,17 @@
       956,
       992,
       993,
+      1008,
       1022,
       1038,
       1043,
       1047,
-      1059
+      1059,
+      1063
     ],
     "prior_receipt": "manual/evidence/quick-reference-coverage-before-authority-8be1e29ac7491bb628401cff2268e9bd9d53cd7cd942ab3715c1e5e93cbbbc26.json",
     "prior_sha256": "8be1e29ac7491bb628401cff2268e9bd9d53cd7cd942ab3715c1e5e93cbbbc26",
-    "native_acceptance": "Separately gated; source excerpts and registered cases do not establish native replay or exhaustive campaign completeness."
+    "native_acceptance": "Separately gated; source excerpts and registered cases do not establish native replay or exhaustive campaign completeness.",
+    "reason": "Rows 879, 1008 and 1063 were reconciled against the sealed combined authoring candidate. The exact historical legacy rows and prior evidence/receipt values are preserved; each current excerpt now matches authored source. Rhythm Doctor current performance statements are explicitly distinguished from the historical no-performance-claim wording."
   }
 }

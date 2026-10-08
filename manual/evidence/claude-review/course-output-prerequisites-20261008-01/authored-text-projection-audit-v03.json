@@ -1,0 +1,1772 @@
+{
+  "source_root": "/home/andy/mosaic-manual-1.4.0",
+  "candidate_root": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/course-output-prerequisites-20261008-01",
+  "candidate_compile": "passed: 133 stable feature destinations; 146 verified scenes; complete",
+  "compiler": {
+    "path": "scratch-v01/tools/manual_book.py",
+    "sha256": "037aec5f82d367f02417c06257f801bacfc91040840d2a2e65c4c450ce1683f5"
+  },
+  "projection": {
+    "path": "scratch-v01/tools/manual_reader_projection.py",
+    "sha256": "06adba454ab160637bd6e22b86a281299b76643a76ec9da1ea7051b97cf173ff",
+    "retained_midi_admissions": "scratch-v01/manual/evidence/retained-midi/retained-target-midi-admission-v1.json",
+    "retained_midi_admissions_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a",
+    "passed": true,
+    "chunk_inventory_sha256": "954a9370496262c8b820b245d801d7c8e12095595b20dae061b167ca73ea73e5",
+    "retained_midi_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a"
+  },
+  "authoring_identity_matches_compiler": true,
+  "authoring_identity_sha256": "9e02e204717d1f4abb4749a286187f4d6f15665d56c7827bf8a5b0a8ba844caa",
+  "book": {
+    "actual_sha256": "db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e",
+    "candidate_sha256": "b67b58422e7b978a28a073ab4dd18cc9f9fddebd5aa40c5edc67ce32398196f4",
+    "diff_path_count": 16,
+    "diff_paths": [
+      "/authoring_identity/files/manual/course.yaml",
+      "/authoring_identity/files/manual/features/reference-channel.yaml",
+      "/authoring_identity/files/manual/features/tutorials.yaml",
+      "/authoring_identity/sha256",
+      "/features/38/controls/0/result",
+      "/features/38/prose",
+      "/features/125/details/3/text",
+      "/learning_path/0/prerequisite",
+      "/learning_path/0/recovery",
+      "/learning_path/1/prerequisite",
+      "/learning_path/1/stages/1/action",
+      "/learning_path/1/stages/1/human_outcome",
+      "/learning_path/1/stages/1/result",
+      "/learning_path/1/stages/1/teaching_binding/human_outcome",
+      "/project/output",
+      "/source_sha256"
+    ],
+    "scene_payload_diff_count": 0
+  },
+  "reader_index": {
+    "actual_sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+    "candidate_sha256": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701",
+    "diff_path_count": 18,
+    "diff_paths": [
+      "/authoring_identity/files/manual/course.yaml",
+      "/authoring_identity/files/manual/features/reference-channel.yaml",
+      "/authoring_identity/files/manual/features/tutorials.yaml",
+      "/authoring_identity/sha256",
+      "/canonical_inputs/book_json_sha256",
+      "/features/38/controls/0/result",
+      "/features/38/prose",
+      "/features/125/details/3/text",
+      "/learning_path/0/prerequisite",
+      "/learning_path/0/recovery",
+      "/learning_path/1/prerequisite",
+      "/learning_path/1/stages/1/action",
+      "/learning_path/1/stages/1/human_outcome",
+      "/learning_path/1/stages/1/result",
+      "/learning_path/1/stages/1/teaching_binding/human_outcome",
+      "/project/output",
+      "/source_sha256",
+      "/teaching_contracts/setup-apply/human_outcome"
+    ],
+    "teaching_contract_diff_count": 1
+  },
+  "audio_input_identical": true,
+  "chunk_count": 167,
+  "chunks_identical_count": 167,
+  "chunk_differences": [],
+  "chunks": [
+    {
+      "kind": "scene",
+      "id": "algorithm-choose-and-preview",
+      "actual_path": "manual/generated/reader-chunks/scenes/algorithm-choose-and-preview-a7ca878bb341c83ed146352db9adff9da919ebde3c1de1c5e7cffb84e3b91403.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/algorithm-choose-and-preview-a7ca878bb341c83ed146352db9adff9da919ebde3c1de1c5e7cffb84e3b91403.json",
+      "actual_sha256": "a7ca878bb341c83ed146352db9adff9da919ebde3c1de1c5e7cffb84e3b91403",
+      "candidate_sha256": "a7ca878bb341c83ed146352db9adff9da919ebde3c1de1c5e7cffb84e3b91403",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "channel-routing-visible-scope",
+      "actual_path": "manual/generated/reader-chunks/scenes/channel-routing-visible-scope-ca649f5a7607c81f41a3c1ba595cd93ac5483d0eeeed117d5bafc446c2a773b6.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/channel-routing-visible-scope-ca649f5a7607c81f41a3c1ba595cd93ac5483d0eeeed117d5bafc446c2a773b6.json",
+      "actual_sha256": "ca649f5a7607c81f41a3c1ba595cd93ac5483d0eeeed117d5bafc446c2a773b6",
+      "candidate_sha256": "ca649f5a7607c81f41a3c1ba595cd93ac5483d0eeeed117d5bafc446c2a773b6",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "channel-task-navigation",
+      "actual_path": "manual/generated/reader-chunks/scenes/channel-task-navigation-ef8bc1a513ee03091e47374ab9fcee1092ebeeea6996e4b911c95e10eb0a234b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/channel-task-navigation-ef8bc1a513ee03091e47374ab9fcee1092ebeeea6996e4b911c95e10eb0a234b.json",
+      "actual_sha256": "ef8bc1a513ee03091e47374ab9fcee1092ebeeea6996e4b911c95e10eb0a234b",
+      "candidate_sha256": "ef8bc1a513ee03091e47374ab9fcee1092ebeeea6996e4b911c95e10eb0a234b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "chord-acceleration-slowing",
+      "actual_path": "manual/generated/reader-chunks/scenes/chord-acceleration-slowing-838599b92131de23d3e06d6150af7b6852ef713bbf057b7a358984abb5233de8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/chord-acceleration-slowing-838599b92131de23d3e06d6150af7b6852ef713bbf057b7a358984abb5233de8.json",
+      "actual_sha256": "838599b92131de23d3e06d6150af7b6852ef713bbf057b7a358984abb5233de8",
+      "candidate_sha256": "838599b92131de23d3e06d6150af7b6852ef713bbf057b7a358984abb5233de8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "chord-acceleration-termination",
+      "actual_path": "manual/generated/reader-chunks/scenes/chord-acceleration-termination-ad111ef731003689fed49b959d9cd5dfc8cf1c3de7fe49f90f133b8718b8a12d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/chord-acceleration-termination-ad111ef731003689fed49b959d9cd5dfc8cf1c3de7fe49f90f133b8718b8a12d.json",
+      "actual_sha256": "ad111ef731003689fed49b959d9cd5dfc8cf1c3de7fe49f90f133b8718b8a12d",
+      "candidate_sha256": "ad111ef731003689fed49b959d9cd5dfc8cf1c3de7fe49f90f133b8718b8a12d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "chord-arpeggio-timed-gates",
+      "actual_path": "manual/generated/reader-chunks/scenes/chord-arpeggio-timed-gates-e545f566b9f7c16746a990e5c62e67978fa8e6d20460a342e609cd7222520109.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/chord-arpeggio-timed-gates-e545f566b9f7c16746a990e5c62e67978fa8e6d20460a342e609cd7222520109.json",
+      "actual_sha256": "e545f566b9f7c16746a990e5c62e67978fa8e6d20460a342e609cd7222520109",
+      "candidate_sha256": "e545f566b9f7c16746a990e5c62e67978fa8e6d20460a342e609cd7222520109",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "chord-shape-forward",
+      "actual_path": "manual/generated/reader-chunks/scenes/chord-shape-forward-659a0d73d5dac973d13e11b675d098f1a703dcc5fc811f5507c72f710f013cdd.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/chord-shape-forward-659a0d73d5dac973d13e11b675d098f1a703dcc5fc811f5507c72f710f013cdd.json",
+      "actual_sha256": "659a0d73d5dac973d13e11b675d098f1a703dcc5fc811f5507c72f710f013cdd",
+      "candidate_sha256": "659a0d73d5dac973d13e11b675d098f1a703dcc5fc811f5507c72f710f013cdd",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "chord-spread-separate-gap",
+      "actual_path": "manual/generated/reader-chunks/scenes/chord-spread-separate-gap-2225170956c77da8741aaccd476adb4263177449b5609b3d365c11daeafe5b67.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/chord-spread-separate-gap-2225170956c77da8741aaccd476adb4263177449b5609b3d365c11daeafe5b67.json",
+      "actual_sha256": "2225170956c77da8741aaccd476adb4263177449b5609b3d365c11daeafe5b67",
+      "candidate_sha256": "2225170956c77da8741aaccd476adb4263177449b5609b3d365c11daeafe5b67",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "chord-strum-a-timed-chord",
+      "actual_path": "manual/generated/reader-chunks/scenes/chord-strum-a-timed-chord-31cbb39015b9883e138a7ad35189f4cffb1dde25ec80bb5f4b1fda93c07a11a7.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/chord-strum-a-timed-chord-31cbb39015b9883e138a7ad35189f4cffb1dde25ec80bb5f4b1fda93c07a11a7.json",
+      "actual_sha256": "31cbb39015b9883e138a7ad35189f4cffb1dde25ec80bb5f4b1fda93c07a11a7",
+      "candidate_sha256": "31cbb39015b9883e138a7ad35189f4cffb1dde25ec80bb5f4b1fda93c07a11a7",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "chord-velocity-ordinal",
+      "actual_path": "manual/generated/reader-chunks/scenes/chord-velocity-ordinal-16e85026ddcf10ee5c8dda16d8062c30cea33a69cdabdb8a7b70bcce1097c646.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/chord-velocity-ordinal-16e85026ddcf10ee5c8dda16d8062c30cea33a69cdabdb8a7b70bcce1097c646.json",
+      "actual_sha256": "16e85026ddcf10ee5c8dda16d8062c30cea33a69cdabdb8a7b70bcce1097c646",
+      "candidate_sha256": "16e85026ddcf10ee5c8dda16d8062c30cea33a69cdabdb8a7b70bcce1097c646",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "configured-device-value-boundaries",
+      "actual_path": "manual/generated/reader-chunks/scenes/configured-device-value-boundaries-1de281e230a47d3c7700e0ad083db8594b8d2b62ecc4735bcca7f837bc49e25d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/configured-device-value-boundaries-1de281e230a47d3c7700e0ad083db8594b8d2b62ecc4735bcca7f837bc49e25d.json",
+      "actual_sha256": "1de281e230a47d3c7700e0ad083db8594b8d2b62ecc4735bcca7f837bc49e25d",
+      "candidate_sha256": "1de281e230a47d3c7700e0ad083db8594b8d2b62ecc4735bcca7f837bc49e25d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-build-a-phrase",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-build-a-phrase-2964307df80ec6fbd74c7bd9179563c75f579d130368ce35a04cf091dffe9a48.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-build-a-phrase-2964307df80ec6fbd74c7bd9179563c75f579d130368ce35a04cf091dffe9a48.json",
+      "actual_sha256": "2964307df80ec6fbd74c7bd9179563c75f579d130368ce35a04cf091dffe9a48",
+      "candidate_sha256": "2964307df80ec6fbd74c7bd9179563c75f579d130368ce35a04cf091dffe9a48",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-first-sound",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-first-sound-152682e39ad2938bed6881d8b1ed43b04abb71962e9019072543e7a4b162465a.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-first-sound-152682e39ad2938bed6881d8b1ed43b04abb71962e9019072543e7a4b162465a.json",
+      "actual_sha256": "152682e39ad2938bed6881d8b1ed43b04abb71962e9019072543e7a4b162465a",
+      "candidate_sha256": "152682e39ad2938bed6881d8b1ed43b04abb71962e9019072543e7a4b162465a",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-getting-started",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-getting-started-0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-getting-started-0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b.json",
+      "actual_sha256": "0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b",
+      "candidate_sha256": "0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-harmony-design",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-harmony-design-f8d5821355e00953ee44071bce7df6f742940bc8bb3bdeadc70fceaae75197ce.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-harmony-design-f8d5821355e00953ee44071bce7df6f742940bc8bb3bdeadc70fceaae75197ce.json",
+      "actual_sha256": "f8d5821355e00953ee44071bce7df6f742940bc8bb3bdeadc70fceaae75197ce",
+      "candidate_sha256": "f8d5821355e00953ee44071bce7df6f742940bc8bb3bdeadc70fceaae75197ce",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-keep-your-work",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-keep-your-work-940ca27bb7a00d68bb5cfb9cb887580b64084d17730443539c1abee7e181bc4d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-keep-your-work-940ca27bb7a00d68bb5cfb9cb887580b64084d17730443539c1abee7e181bc4d.json",
+      "actual_sha256": "940ca27bb7a00d68bb5cfb9cb887580b64084d17730443539c1abee7e181bc4d",
+      "candidate_sha256": "940ca27bb7a00d68bb5cfb9cb887580b64084d17730443539c1abee7e181bc4d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-masks",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-masks-5dbf7f1e36774397360a64da73ddfb9b82e7f164b4b7c929c9b86d45794889ee.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-masks-5dbf7f1e36774397360a64da73ddfb9b82e7f164b4b7c929c9b86d45794889ee.json",
+      "actual_sha256": "5dbf7f1e36774397360a64da73ddfb9b82e7f164b4b7c929c9b86d45794889ee",
+      "candidate_sha256": "5dbf7f1e36774397360a64da73ddfb9b82e7f164b4b7c929c9b86d45794889ee",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-modulation-movement-and-interest",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-modulation-movement-and-interest-f5db72ae27ef064bd73138e8dff69f4d90cc606bfc46cd43c9a84c4ddd41cb53.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-modulation-movement-and-interest-f5db72ae27ef064bd73138e8dff69f4d90cc606bfc46cd43c9a84c4ddd41cb53.json",
+      "actual_sha256": "f5db72ae27ef064bd73138e8dff69f4d90cc606bfc46cd43c9a84c4ddd41cb53",
+      "candidate_sha256": "f5db72ae27ef064bd73138e8dff69f4d90cc606bfc46cd43c9a84c4ddd41cb53",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-save-dialog",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-save-dialog-288306dd6d3cb10e46d3ae7fa02f77b26d7d758ed9a56789a698211dc964c480.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-save-dialog-288306dd6d3cb10e46d3ae7fa02f77b26d7d758ed9a56789a698211dc964c480.json",
+      "actual_sha256": "288306dd6d3cb10e46d3ae7fa02f77b26d7d758ed9a56789a698211dc964c480",
+      "candidate_sha256": "288306dd6d3cb10e46d3ae7fa02f77b26d7d758ed9a56789a698211dc964c480",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-sequence-composition",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-sequence-composition-b306678275e274e751293949cd1d6fae3911ae80a039798aecb19bda91b9a3f8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-sequence-composition-b306678275e274e751293949cd1d6fae3911ae80a039798aecb19bda91b9a3f8.json",
+      "actual_sha256": "b306678275e274e751293949cd1d6fae3911ae80a039798aecb19bda91b9a3f8",
+      "candidate_sha256": "b306678275e274e751293949cd1d6fae3911ae80a039798aecb19bda91b9a3f8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-setup",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-setup-9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-setup-9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60.json",
+      "actual_sha256": "9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60",
+      "candidate_sha256": "9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "course-song-composition",
+      "actual_path": "manual/generated/reader-chunks/scenes/course-song-composition-6814ed40b2ae5a17e7949534a716c255dd920bd63e399d0a533e37c1e8097765.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/course-song-composition-6814ed40b2ae5a17e7949534a716c255dd920bd63e399d0a533e37c1e8097765.json",
+      "actual_sha256": "6814ed40b2ae5a17e7949534a716c255dd920bd63e399d0a533e37c1e8097765",
+      "candidate_sha256": "6814ed40b2ae5a17e7949534a716c255dd920bd63e399d0a533e37c1e8097765",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "device-stored-value-and-step-lock",
+      "actual_path": "manual/generated/reader-chunks/scenes/device-stored-value-and-step-lock-f992cd2fdb2ac436d32ec3bbad4600799cb6501b6456f991e92893370e63977c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/device-stored-value-and-step-lock-f992cd2fdb2ac436d32ec3bbad4600799cb6501b6456f991e92893370e63977c.json",
+      "actual_sha256": "f992cd2fdb2ac436d32ec3bbad4600799cb6501b6456f991e92893370e63977c",
+      "candidate_sha256": "f992cd2fdb2ac436d32ec3bbad4600799cb6501b6456f991e92893370e63977c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "doctor-local-auto-capture-and-paint",
+      "actual_path": "manual/generated/reader-chunks/scenes/doctor-local-auto-capture-and-paint-488353209be084fe5113db45f33638f48a2d6dce524eaab999f26438246fc27c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/doctor-local-auto-capture-and-paint-488353209be084fe5113db45f33638f48a2d6dce524eaab999f26438246fc27c.json",
+      "actual_sha256": "488353209be084fe5113db45f33638f48a2d6dce524eaab999f26438246fc27c",
+      "candidate_sha256": "488353209be084fe5113db45f33638f48a2d6dce524eaab999f26438246fc27c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "doctor-local-capture-and-paint",
+      "actual_path": "manual/generated/reader-chunks/scenes/doctor-local-capture-and-paint-22108d4315658c67ea9972e7a6752b1d532f0ede9a540398bbea29d6f7b9cdf8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/doctor-local-capture-and-paint-22108d4315658c67ea9972e7a6752b1d532f0ede9a540398bbea29d6f7b9cdf8.json",
+      "actual_sha256": "22108d4315658c67ea9972e7a6752b1d532f0ede9a540398bbea29d6f7b9cdf8",
+      "candidate_sha256": "22108d4315658c67ea9972e7a6752b1d532f0ede9a540398bbea29d6f7b9cdf8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "elektron-child-enable-and-announce",
+      "actual_path": "manual/generated/reader-chunks/scenes/elektron-child-enable-and-announce-74fe40134464527ae1653ce8247809c92b5613129fbe013c38ec527c1c1827af.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/elektron-child-enable-and-announce-74fe40134464527ae1653ce8247809c92b5613129fbe013c38ec527c1c1827af.json",
+      "actual_sha256": "74fe40134464527ae1653ce8247809c92b5613129fbe013c38ec527c1c1827af",
+      "candidate_sha256": "74fe40134464527ae1653ce8247809c92b5613129fbe013c38ec527c1c1827af",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "elektron-child-program-channel",
+      "actual_path": "manual/generated/reader-chunks/scenes/elektron-child-program-channel-a70e612bf78a451f3a74605b20a023090258738f53e15cf15466454ba1048d7b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/elektron-child-program-channel-a70e612bf78a451f3a74605b20a023090258738f53e15cf15466454ba1048d7b.json",
+      "actual_sha256": "a70e612bf78a451f3a74605b20a023090258738f53e15cf15466454ba1048d7b",
+      "candidate_sha256": "a70e612bf78a451f3a74605b20a023090258738f53e15cf15466454ba1048d7b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "external-midi-source-menu",
+      "actual_path": "manual/generated/reader-chunks/scenes/external-midi-source-menu-e5a1745a5d5cd615d45833c926c12e3e549ae5bc37db8f282bf406dadfa0ec65.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/external-midi-source-menu-e5a1745a5d5cd615d45833c926c12e3e549ae5bc37db8f282bf406dadfa0ec65.json",
+      "actual_sha256": "e5a1745a5d5cd615d45833c926c12e3e549ae5bc37db8f282bf406dadfa0ec65",
+      "candidate_sha256": "e5a1745a5d5cd615d45833c926c12e3e549ae5bc37db8f282bf406dadfa0ec65",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "first-sound-equal-note-loop",
+      "actual_path": "manual/generated/reader-chunks/scenes/first-sound-equal-note-loop-1a439ddb6538cc3c6987b714a6364dbfc6f6bafe10d917c80ee85a7fea09f222.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/first-sound-equal-note-loop-1a439ddb6538cc3c6987b714a6364dbfc6f6bafe10d917c80ee85a7fea09f222.json",
+      "actual_sha256": "1a439ddb6538cc3c6987b714a6364dbfc6f6bafe10d917c80ee85a7fea09f222",
+      "candidate_sha256": "1a439ddb6538cc3c6987b714a6364dbfc6f6bafe10d917c80ee85a7fea09f222",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "fixed-note-default-and-locks",
+      "actual_path": "manual/generated/reader-chunks/scenes/fixed-note-default-and-locks-62cc04982aaf0ac95aa1ae77cce52b80c0382c415098befba1435afe4a645ac4.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/fixed-note-default-and-locks-62cc04982aaf0ac95aa1ae77cce52b80c0382c415098befba1435afe4a645ac4.json",
+      "actual_sha256": "62cc04982aaf0ac95aa1ae77cce52b80c0382c415098befba1435afe4a645ac4",
+      "candidate_sha256": "62cc04982aaf0ac95aa1ae77cce52b80c0382c415098befba1435afe4a645ac4",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "foundation-protected-and-added",
+      "actual_path": "manual/generated/reader-chunks/scenes/foundation-protected-and-added-288e37084698abe66b6da3e864938a5d9466a46588dc41c62d6441aabe3b100d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/foundation-protected-and-added-288e37084698abe66b6da3e864938a5d9466a46588dc41c62d6441aabe3b100d.json",
+      "actual_sha256": "288e37084698abe66b6da3e864938a5d9466a46588dc41c62d6441aabe3b100d",
+      "candidate_sha256": "288e37084698abe66b6da3e864938a5d9466a46588dc41c62d6441aabe3b100d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "foundation-two-cycle-build",
+      "actual_path": "manual/generated/reader-chunks/scenes/foundation-two-cycle-build-d4a06c2fb441454c0d01b054fbac013955809fc7ee2c193af3808c201cd35b9a.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/foundation-two-cycle-build-d4a06c2fb441454c0d01b054fbac013955809fc7ee2c193af3808c201cd35b9a.json",
+      "actual_sha256": "d4a06c2fb441454c0d01b054fbac013955809fc7ee2c193af3808c201cd35b9a",
+      "candidate_sha256": "d4a06c2fb441454c0d01b054fbac013955809fc7ee2c193af3808c201cd35b9a",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "fragments-seed-source-choice",
+      "actual_path": "manual/generated/reader-chunks/scenes/fragments-seed-source-choice-bc28d09c57dde3a503cada36dd5b1ad32fc67a97a8d63710123ee73f6fe1195c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/fragments-seed-source-choice-bc28d09c57dde3a503cada36dd5b1ad32fc67a97a8d63710123ee73f6fe1195c.json",
+      "actual_sha256": "bc28d09c57dde3a503cada36dd5b1ad32fc67a97a8d63710123ee73f6fe1195c",
+      "candidate_sha256": "bc28d09c57dde3a503cada36dd5b1ad32fc67a97a8d63710123ee73f6fe1195c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "full-quantisation-channel-beats-global",
+      "actual_path": "manual/generated/reader-chunks/scenes/full-quantisation-channel-beats-global-3b84fdb65d8345161d6bad2907de94202b1b40db735dc2559e288eeb5684557d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/full-quantisation-channel-beats-global-3b84fdb65d8345161d6bad2907de94202b1b40db735dc2559e288eeb5684557d.json",
+      "actual_sha256": "3b84fdb65d8345161d6bad2907de94202b1b40db735dc2559e288eeb5684557d",
+      "candidate_sha256": "3b84fdb65d8345161d6bad2907de94202b1b40db735dc2559e288eeb5684557d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "full-quantisation-inherit-and-step-off",
+      "actual_path": "manual/generated/reader-chunks/scenes/full-quantisation-inherit-and-step-off-0c967cb7c4f457ef1fc90ceb7a979075fe8e1ee72f8de5c88a9d926b0bb3b0ad.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/full-quantisation-inherit-and-step-off-0c967cb7c4f457ef1fc90ceb7a979075fe8e1ee72f8de5c88a9d926b0bb3b0ad.json",
+      "actual_sha256": "0c967cb7c4f457ef1fc90ceb7a979075fe8e1ee72f8de5c88a9d926b0bb3b0ad",
+      "candidate_sha256": "0c967cb7c4f457ef1fc90ceb7a979075fe8e1ee72f8de5c88a9d926b0bb3b0ad",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "full-quantisation-precedence",
+      "actual_path": "manual/generated/reader-chunks/scenes/full-quantisation-precedence-753a3abad805744db12ed8dd85691cf2dede4c8c7882bf1d062c4444e53f64c6.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/full-quantisation-precedence-753a3abad805744db12ed8dd85691cf2dede4c8c7882bf1d062c4444e53f64c6.json",
+      "actual_sha256": "753a3abad805744db12ed8dd85691cf2dede4c8c7882bf1d062c4444e53f64c6",
+      "candidate_sha256": "753a3abad805744db12ed8dd85691cf2dede4c8c7882bf1d062c4444e53f64c6",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "global-parameter-slide",
+      "actual_path": "manual/generated/reader-chunks/scenes/global-parameter-slide-4d1ee6e94e82320af1fcfb32c87c50e8343494dcd37f9cf1851d6ca3119d3202.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/global-parameter-slide-4d1ee6e94e82320af1fcfb32c87c50e8343494dcd37f9cf1851d6ca3119d3202.json",
+      "actual_sha256": "4d1ee6e94e82320af1fcfb32c87c50e8343494dcd37f9cf1851d6ca3119d3202",
+      "candidate_sha256": "4d1ee6e94e82320af1fcfb32c87c50e8343494dcd37f9cf1851d6ca3119d3202",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "harmony-ensemble-and-local-bypass",
+      "actual_path": "manual/generated/reader-chunks/scenes/harmony-ensemble-and-local-bypass-307c3fde16630e8d4ec0712941643ad34629ac615fefa553f2a89e20e616045c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/harmony-ensemble-and-local-bypass-307c3fde16630e8d4ec0712941643ad34629ac615fefa553f2a89e20e616045c.json",
+      "actual_sha256": "307c3fde16630e8d4ec0712941643ad34629ac615fefa553f2a89e20e616045c",
+      "candidate_sha256": "307c3fde16630e8d4ec0712941643ad34629ac615fefa553f2a89e20e616045c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "harmony-range-failure-and-fallback",
+      "actual_path": "manual/generated/reader-chunks/scenes/harmony-range-failure-and-fallback-598cada4f49bfc27fb6977f8f0a47a80d10b2cd9cd20ef2fdbcabdf17bcbd890.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/harmony-range-failure-and-fallback-598cada4f49bfc27fb6977f8f0a47a80d10b2cd9cd20ef2fdbcabdf17bcbd890.json",
+      "actual_sha256": "598cada4f49bfc27fb6977f8f0a47a80d10b2cd9cd20ef2fdbcabdf17bcbd890",
+      "candidate_sha256": "598cada4f49bfc27fb6977f8f0a47a80d10b2cd9cd20ef2fdbcabdf17bcbd890",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "harmony-revoice-two-voices",
+      "actual_path": "manual/generated/reader-chunks/scenes/harmony-revoice-two-voices-1a93db6658a8745ffd01fe962c4689f3d254f9a9d33e266cb8153e68d6e97546.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/harmony-revoice-two-voices-1a93db6658a8745ffd01fe962c4689f3d254f9a9d33e266cb8153e68d6e97546.json",
+      "actual_sha256": "1a93db6658a8745ffd01fe962c4689f3d254f9a9d33e266cb8153e68d6e97546",
+      "candidate_sha256": "1a93db6658a8745ffd01fe962c4689f3d254f9a9d33e266cb8153e68d6e97546",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "hold-step-return",
+      "actual_path": "manual/generated/reader-chunks/scenes/hold-step-return-4960bf088e69c832ffd082804ff7699f961f37db4fde9a54da2d2d3f0c2e4c07.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/hold-step-return-4960bf088e69c832ffd082804ff7699f961f37db4fde9a54da2d2d3f0c2e4c07.json",
+      "actual_sha256": "4960bf088e69c832ffd082804ff7699f961f37db4fde9a54da2d2d3f0c2e4c07",
+      "candidate_sha256": "4960bf088e69c832ffd082804ff7699f961f37db4fde9a54da2d2d3f0c2e4c07",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "interlock-leader-window",
+      "actual_path": "manual/generated/reader-chunks/scenes/interlock-leader-window-e1ed41c2fe394501a88efae96f45abc488b791e00d647779a9d215c374b60d6e.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/interlock-leader-window-e1ed41c2fe394501a88efae96f45abc488b791e00d647779a9d215c374b60d6e.json",
+      "actual_sha256": "e1ed41c2fe394501a88efae96f45abc488b791e00d647779a9d215c374b60d6e",
+      "candidate_sha256": "e1ed41c2fe394501a88efae96f45abc488b791e00d647779a9d215c374b60d6e",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "keyboard-honour-all",
+      "actual_path": "manual/generated/reader-chunks/scenes/keyboard-honour-all-8ae4f9f41dc6748cdba0e03dec8bbb9dbdc177b204138face8e1551b3a2b51cd.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/keyboard-honour-all-8ae4f9f41dc6748cdba0e03dec8bbb9dbdc177b204138face8e1551b3a2b51cd.json",
+      "actual_sha256": "8ae4f9f41dc6748cdba0e03dec8bbb9dbdc177b204138face8e1551b3a2b51cd",
+      "candidate_sha256": "8ae4f9f41dc6748cdba0e03dec8bbb9dbdc177b204138face8e1551b3a2b51cd",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "keyboard-honour-degree",
+      "actual_path": "manual/generated/reader-chunks/scenes/keyboard-honour-degree-da67d2e4d9e3c511f36f62cecbe3f7eb5fc03122d65060553b84429fa0eb7f5d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/keyboard-honour-degree-da67d2e4d9e3c511f36f62cecbe3f7eb5fc03122d65060553b84429fa0eb7f5d.json",
+      "actual_sha256": "da67d2e4d9e3c511f36f62cecbe3f7eb5fc03122d65060553b84429fa0eb7f5d",
+      "candidate_sha256": "da67d2e4d9e3c511f36f62cecbe3f7eb5fc03122d65060553b84429fa0eb7f5d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "keyboard-honour-degree-rotation",
+      "actual_path": "manual/generated/reader-chunks/scenes/keyboard-honour-degree-rotation-e8db3ed73e909eb4a3c08784021b02bed4498007af783c794cc4fc6594b018e4.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/keyboard-honour-degree-rotation-e8db3ed73e909eb4a3c08784021b02bed4498007af783c794cc4fc6594b018e4.json",
+      "actual_sha256": "e8db3ed73e909eb4a3c08784021b02bed4498007af783c794cc4fc6594b018e4",
+      "candidate_sha256": "e8db3ed73e909eb4a3c08784021b02bed4498007af783c794cc4fc6594b018e4",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "keyboard-white-key-options",
+      "actual_path": "manual/generated/reader-chunks/scenes/keyboard-white-key-options-cbf4d4eee1b39e5adf81f80c4d6eecfd5a26d6ac905b78a23eff3f5ab9465a5d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/keyboard-white-key-options-cbf4d4eee1b39e5adf81f80c4d6eecfd5a26d6ac905b78a23eff3f5ab9465a5d.json",
+      "actual_sha256": "cbf4d4eee1b39e5adf81f80c4d6eecfd5a26d6ac905b78a23eff3f5ab9465a5d",
+      "candidate_sha256": "cbf4d4eee1b39e5adf81f80c4d6eecfd5a26d6ac905b78a23eff3f5ab9465a5d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "last-lock-slide-wrap",
+      "actual_path": "manual/generated/reader-chunks/scenes/last-lock-slide-wrap-cad3f1d6602baccab1137bb155c62890ab0089ea622ccdcc655c3572c418f84b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/last-lock-slide-wrap-cad3f1d6602baccab1137bb155c62890ab0089ea622ccdcc655c3572c418f84b.json",
+      "actual_sha256": "cad3f1d6602baccab1137bb155c62890ab0089ea622ccdcc655c3572c418f84b",
+      "candidate_sha256": "cad3f1d6602baccab1137bb155c62890ab0089ea622ccdcc655c3572c418f84b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "length-merge-numeric-output",
+      "actual_path": "manual/generated/reader-chunks/scenes/length-merge-numeric-output-d610067d70dd4ef5418b5a09c2621ca7dd545ffef0d0bf8b883f43fa0ea1e7a7.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/length-merge-numeric-output-d610067d70dd4ef5418b5a09c2621ca7dd545ffef0d0bf8b883f43fa0ea1e7a7.json",
+      "actual_sha256": "d610067d70dd4ef5418b5a09c2621ca7dd545ffef0d0bf8b883f43fa0ea1e7a7",
+      "candidate_sha256": "d610067d70dd4ef5418b5a09c2621ca7dd545ffef0d0bf8b883f43fa0ea1e7a7",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "local-parameter-slide",
+      "actual_path": "manual/generated/reader-chunks/scenes/local-parameter-slide-a53c59d0887868330cc470a23ea8d75b21fb4de126a982906fe326e510727ed5.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/local-parameter-slide-a53c59d0887868330cc470a23ea8d75b21fb4de126a982906fe326e510727ed5.json",
+      "actual_sha256": "a53c59d0887868330cc470a23ea8d75b21fb4de126a982906fe326e510727ed5",
+      "candidate_sha256": "a53c59d0887868330cc470a23ea8d75b21fb4de126a982906fe326e510727ed5",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "lock-lead-menu-values",
+      "actual_path": "manual/generated/reader-chunks/scenes/lock-lead-menu-values-bdc8d3ba3c7a5a88498640d242e90e6e53f69d5e55c7f18ca325368071dbb69e.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/lock-lead-menu-values-bdc8d3ba3c7a5a88498640d242e90e6e53f69d5e55c7f18ca325368071dbb69e.json",
+      "actual_sha256": "bdc8d3ba3c7a5a88498640d242e90e6e53f69d5e55c7f18ca325368071dbb69e",
+      "candidate_sha256": "bdc8d3ba3c7a5a88498640d242e90e6e53f69d5e55c7f18ca325368071dbb69e",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "loops-four-against-three",
+      "actual_path": "manual/generated/reader-chunks/scenes/loops-four-against-three-61551ba1c0fea982fde4deab0fe9292ea443461a964ca4df5c5d015bc3584fec.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/loops-four-against-three-61551ba1c0fea982fde4deab0fe9292ea443461a964ca4df5c5d015bc3584fec.json",
+      "actual_sha256": "61551ba1c0fea982fde4deab0fe9292ea443461a964ca4df5c5d015bc3584fec",
+      "candidate_sha256": "61551ba1c0fea982fde4deab0fe9292ea443461a964ca4df5c5d015bc3584fec",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "loops-sixteen-against-five",
+      "actual_path": "manual/generated/reader-chunks/scenes/loops-sixteen-against-five-0b0a226ea258f7a92403f485e75803ffd5c1a1b4c2df4561203bedf3967dc418.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/loops-sixteen-against-five-0b0a226ea258f7a92403f485e75803ffd5c1a1b4c2df4561203bedf3967dc418.json",
+      "actual_sha256": "0b0a226ea258f7a92403f485e75803ffd5c1a1b4c2df4561203bedf3967dc418",
+      "candidate_sha256": "0b0a226ea258f7a92403f485e75803ffd5c1a1b4c2df4561203bedf3967dc418",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mapping-child-selected-and-fixed",
+      "actual_path": "manual/generated/reader-chunks/scenes/mapping-child-selected-and-fixed-789283787fcd1ed1199e65a434c0da5acc709ecb07f8e9487622b6f63e94031a.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mapping-child-selected-and-fixed-789283787fcd1ed1199e65a434c0da5acc709ecb07f8e9487622b6f63e94031a.json",
+      "actual_sha256": "789283787fcd1ed1199e65a434c0da5acc709ecb07f8e9487622b6f63e94031a",
+      "candidate_sha256": "789283787fcd1ed1199e65a434c0da5acc709ecb07f8e9487622b6f63e94031a",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-chords",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-chords-03db447ea0faf581e8f1f56e67b071886a23600c20cff944aefa27bc328a713f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-chords-03db447ea0faf581e8f1f56e67b071886a23600c20cff944aefa27bc328a713f.json",
+      "actual_sha256": "03db447ea0faf581e8f1f56e67b071886a23600c20cff944aefa27bc328a713f",
+      "candidate_sha256": "03db447ea0faf581e8f1f56e67b071886a23600c20cff944aefa27bc328a713f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-expression",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-expression-6859a9946537de4f1f93956fa4235e3490dfb8077d4d21486d8eb3b2bab0c396.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-expression-6859a9946537de4f1f93956fa4235e3490dfb8077d4d21486d8eb3b2bab0c396.json",
+      "actual_sha256": "6859a9946537de4f1f93956fa4235e3490dfb8077d4d21486d8eb3b2bab0c396",
+      "candidate_sha256": "6859a9946537de4f1f93956fa4235e3490dfb8077d4d21486d8eb3b2bab0c396",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-ghost-note",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-ghost-note-f861d90ffd1e4eeece20961d041fb54e80c0e3349536de2fa54e6571d2a41ca6.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-ghost-note-f861d90ffd1e4eeece20961d041fb54e80c0e3349536de2fa54e6571d2a41ca6.json",
+      "actual_sha256": "f861d90ffd1e4eeece20961d041fb54e80c0e3349536de2fa54e6571d2a41ca6",
+      "candidate_sha256": "f861d90ffd1e4eeece20961d041fb54e80c0e3349536de2fa54e6571d2a41ca6",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-locks-clear-neighbours",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-locks-clear-neighbours-55370f5d71aaeb0cc9e79df23dc0594e29d4df0171ef9f158576ef652f13df15.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-locks-clear-neighbours-55370f5d71aaeb0cc9e79df23dc0594e29d4df0171ef9f158576ef652f13df15.json",
+      "actual_sha256": "55370f5d71aaeb0cc9e79df23dc0594e29d4df0171ef9f158576ef652f13df15",
+      "candidate_sha256": "55370f5d71aaeb0cc9e79df23dc0594e29d4df0171ef9f158576ef652f13df15",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-melody-ending",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-melody-ending-671a0e3f38c83a8165a70c2aa96e98be256fa9f71472eb1056473e73c1f9e712.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-melody-ending-671a0e3f38c83a8165a70c2aa96e98be256fa9f71472eb1056473e73c1f9e712.json",
+      "actual_sha256": "671a0e3f38c83a8165a70c2aa96e98be256fa9f71472eb1056473e73c1f9e712",
+      "candidate_sha256": "671a0e3f38c83a8165a70c2aa96e98be256fa9f71472eb1056473e73c1f9e712",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-note-default-x",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-note-default-x-11ed5e64654c8fcb8bbf3b011230824e394e6c9ec660155b0487a6c758c231c5.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-note-default-x-11ed5e64654c8fcb8bbf3b011230824e394e6c9ec660155b0487a6c758c231c5.json",
+      "actual_sha256": "11ed5e64654c8fcb8bbf3b011230824e394e6c9ec660155b0487a6c758c231c5",
+      "candidate_sha256": "11ed5e64654c8fcb8bbf3b011230824e394e6c9ec660155b0487a6c758c231c5",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-precedence",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-precedence-31630301f3ffd8ce1ae34109dee8f74496e5a70e096d7e1a06e508e7ffec93ac.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-precedence-31630301f3ffd8ce1ae34109dee8f74496e5a70e096d7e1a06e508e7ffec93ac.json",
+      "actual_sha256": "31630301f3ffd8ce1ae34109dee8f74496e5a70e096d7e1a06e508e7ffec93ac",
+      "candidate_sha256": "31630301f3ffd8ce1ae34109dee8f74496e5a70e096d7e1a06e508e7ffec93ac",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mask-trigs",
+      "actual_path": "manual/generated/reader-chunks/scenes/mask-trigs-b92edf56b3017fb335c1862ab8a499e1bcd557a28684728e355e6f717aadc03f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mask-trigs-b92edf56b3017fb335c1862ab8a499e1bcd557a28684728e355e6f717aadc03f.json",
+      "actual_sha256": "b92edf56b3017fb335c1862ab8a499e1bcd557a28684728e355e6f717aadc03f",
+      "candidate_sha256": "b92edf56b3017fb335c1862ab8a499e1bcd557a28684728e355e6f717aadc03f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "matrix-macro-modest-cc",
+      "actual_path": "manual/generated/reader-chunks/scenes/matrix-macro-modest-cc-989841f399d4a6c4a622a55326244b4f4af2e879924a1dcd999f1188f5e82d71.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/matrix-macro-modest-cc-989841f399d4a6c4a622a55326244b4f4af2e879924a1dcd999f1188f5e82d71.json",
+      "actual_sha256": "989841f399d4a6c4a622a55326244b4f4af2e879924a1dcd999f1188f5e82d71",
+      "candidate_sha256": "989841f399d4a6c4a622a55326244b4f4af2e879924a1dcd999f1188f5e82d71",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "matrix-macro-route-clear",
+      "actual_path": "manual/generated/reader-chunks/scenes/matrix-macro-route-clear-f803a78deb0dabb55a4eeb62cd47267502c67d9a07cee28beca22a9d403cfd81.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/matrix-macro-route-clear-f803a78deb0dabb55a4eeb62cd47267502c67d9a07cee28beca22a9d403cfd81.json",
+      "actual_sha256": "f803a78deb0dabb55a4eeb62cd47267502c67d9a07cee28beca22a9d403cfd81",
+      "candidate_sha256": "f803a78deb0dabb55a4eeb62cd47267502c67d9a07cee28beca22a9d403cfd81",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "memory-undo-redo-and-branch",
+      "actual_path": "manual/generated/reader-chunks/scenes/memory-undo-redo-and-branch-fc056201ae879e01ba13ed7a01c9b7fcceb07805f6a14012937f187813d714e8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/memory-undo-redo-and-branch-fc056201ae879e01ba13ed7a01c9b7fcceb07805f6a14012937f187813d714e8.json",
+      "actual_sha256": "fc056201ae879e01ba13ed7a01c9b7fcceb07805f6a14012937f187813d714e8",
+      "candidate_sha256": "fc056201ae879e01ba13ed7a01c9b7fcceb07805f6a14012937f187813d714e8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "merge-overlap-and-union",
+      "actual_path": "manual/generated/reader-chunks/scenes/merge-overlap-and-union-0fcd16f98a5b9e77fda35e25776dd4940e4770a218f7680c6b493386e16eb21c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/merge-overlap-and-union-0fcd16f98a5b9e77fda35e25776dd4940e4770a218f7680c6b493386e16eb21c.json",
+      "actual_sha256": "0fcd16f98a5b9e77fda35e25776dd4940e4770a218f7680c6b493386e16eb21c",
+      "candidate_sha256": "0fcd16f98a5b9e77fda35e25776dd4940e4770a218f7680c6b493386e16eb21c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "merge-shape-owns-trigs",
+      "actual_path": "manual/generated/reader-chunks/scenes/merge-shape-owns-trigs-2ab10138cb822f99a6bb5834c62c2f8daf41bbf0ffa8ffb98db8361cdf584f64.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/merge-shape-owns-trigs-2ab10138cb822f99a6bb5834c62c2f8daf41bbf0ffa8ffb98db8361cdf584f64.json",
+      "actual_sha256": "2ab10138cb822f99a6bb5834c62c2f8daf41bbf0ffa8ffb98db8361cdf584f64",
+      "candidate_sha256": "2ab10138cb822f99a6bb5834c62c2f8daf41bbf0ffa8ffb98db8361cdf584f64",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "merge-shape-skip-shared-step",
+      "actual_path": "manual/generated/reader-chunks/scenes/merge-shape-skip-shared-step-3d9e82ad78920b8afc6d8f5c80c317d4864a69d82561a21f0a0f65cccf17e2a9.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/merge-shape-skip-shared-step-3d9e82ad78920b8afc6d8f5c80c317d4864a69d82561a21f0a0f65cccf17e2a9.json",
+      "actual_sha256": "3d9e82ad78920b8afc6d8f5c80c317d4864a69d82561a21f0a0f65cccf17e2a9",
+      "candidate_sha256": "3d9e82ad78920b8afc6d8f5c80c317d4864a69d82561a21f0a0f65cccf17e2a9",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "merged-pentatonic-off",
+      "actual_path": "manual/generated/reader-chunks/scenes/merged-pentatonic-off-02b85be9e117c59923816447ff3128969297d10d1235120e2680c3fced545a8a.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/merged-pentatonic-off-02b85be9e117c59923816447ff3128969297d10d1235120e2680c3fced545a8a.json",
+      "actual_sha256": "02b85be9e117c59923816447ff3128969297d10d1235120e2680c3fced545a8a",
+      "candidate_sha256": "02b85be9e117c59923816447ff3128969297d10d1235120e2680c3fced545a8a",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "merged-pentatonic-on",
+      "actual_path": "manual/generated/reader-chunks/scenes/merged-pentatonic-on-f5cbb36c327b4e876276556123892db66a8d91cb534c0e9db153122379bf2a9c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/merged-pentatonic-on-f5cbb36c327b4e876276556123892db66a8d91cb534c0e9db153122379bf2a9c.json",
+      "actual_sha256": "f5cbb36c327b4e876276556123892db66a8d91cb534c0e9db153122379bf2a9c",
+      "candidate_sha256": "f5cbb36c327b4e876276556123892db66a8d91cb534c0e9db153122379bf2a9c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mute-live-resume",
+      "actual_path": "manual/generated/reader-chunks/scenes/mute-live-resume-c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mute-live-resume-c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315.json",
+      "actual_sha256": "c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315",
+      "candidate_sha256": "c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "mute-root-retains-slot",
+      "actual_path": "manual/generated/reader-chunks/scenes/mute-root-retains-slot-b996b9d61c975e05a7efa25710b1f887a185a89e94352f7ef93a42907a05704f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/mute-root-retains-slot-b996b9d61c975e05a7efa25710b1f887a185a89e94352f7ef93a42907a05704f.json",
+      "actual_sha256": "b996b9d61c975e05a7efa25710b1f887a185a89e94352f7ef93a42907a05704f",
+      "candidate_sha256": "b996b9d61c975e05a7efa25710b1f887a185a89e94352f7ef93a42907a05704f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "named-project-roundtrip",
+      "actual_path": "manual/generated/reader-chunks/scenes/named-project-roundtrip-fca8803179002df46e86b591cdfa408237cb174918e79e243d0b9242b2fa9340.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/named-project-roundtrip-fca8803179002df46e86b591cdfa408237cb174918e79e243d0b9242b2fa9340.json",
+      "actual_sha256": "fca8803179002df46e86b591cdfa408237cb174918e79e243d0b9242b2fa9340",
+      "candidate_sha256": "fca8803179002df46e86b591cdfa408237cb174918e79e243d0b9242b2fa9340",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "native-relative-midi-map",
+      "actual_path": "manual/generated/reader-chunks/scenes/native-relative-midi-map-9fd583dea7b260a70ec415176a943d1556ea9fe601c714c438628f8378708d7d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/native-relative-midi-map-9fd583dea7b260a70ec415176a943d1556ea9fe601c714c438628f8378708d7d.json",
+      "actual_sha256": "9fd583dea7b260a70ec415176a943d1556ea9fe601c714c438628f8378708d7d",
+      "candidate_sha256": "9fd583dea7b260a70ec415176a943d1556ea9fe601c714c438628f8378708d7d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "note-merge-numeric-output",
+      "actual_path": "manual/generated/reader-chunks/scenes/note-merge-numeric-output-ba3937319e491085a70a1ea6b3a6acad95c277ff543e8447e927f3e6bce40bb0.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/note-merge-numeric-output-ba3937319e491085a70a1ea6b3a6acad95c277ff543e8447e927f3e6bce40bb0.json",
+      "actual_sha256": "ba3937319e491085a70a1ea6b3a6acad95c277ff543e8447e927f3e6bce40bb0",
+      "candidate_sha256": "ba3937319e491085a70a1ea6b3a6acad95c277ff543e8447e927f3e6bce40bb0",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "octave-local-over-global",
+      "actual_path": "manual/generated/reader-chunks/scenes/octave-local-over-global-4497ebe8b30d7d940e98fab558078f0d6f78b543ee47d92e760e4dc647a8289f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/octave-local-over-global-4497ebe8b30d7d940e98fab558078f0d6f78b543ee47d92e760e4dc647a8289f.json",
+      "actual_sha256": "4497ebe8b30d7d940e98fab558078f0d6f78b543ee47d92e760e4dc647a8289f",
+      "candidate_sha256": "4497ebe8b30d7d940e98fab558078f0d6f78b543ee47d92e760e4dc647a8289f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "output-channel-selection",
+      "actual_path": "manual/generated/reader-chunks/scenes/output-channel-selection-0fe0c604d9124a29e99a38205f6e9b235ceb5d99849c41e0645520a0c382cf4f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/output-channel-selection-0fe0c604d9124a29e99a38205f6e9b235ceb5d99849c41e0645520a0c382cf4f.json",
+      "actual_sha256": "0fe0c604d9124a29e99a38205f6e9b235ceb5d99849c41e0645520a0c382cf4f",
+      "candidate_sha256": "0fe0c604d9124a29e99a38205f6e9b235ceb5d99849c41e0645520a0c382cf4f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "output-dashboard-readout",
+      "actual_path": "manual/generated/reader-chunks/scenes/output-dashboard-readout-ce3860bc37577d25dfc6aa4b6ab0d460618873cabad62f54c9f9db27f5241502.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/output-dashboard-readout-ce3860bc37577d25dfc6aa4b6ab0d460618873cabad62f54c9f9db27f5241502.json",
+      "actual_sha256": "ce3860bc37577d25dfc6aa4b6ab0d460618873cabad62f54c9f9db27f5241502",
+      "candidate_sha256": "ce3860bc37577d25dfc6aa4b6ab0d460618873cabad62f54c9f9db27f5241502",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "output-latest-event",
+      "actual_path": "manual/generated/reader-chunks/scenes/output-latest-event-b80160320851eda78dbc46c87d998cfad97722340cb2f4bae1caf5f42cd4a580.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/output-latest-event-b80160320851eda78dbc46c87d998cfad97722340cb2f4bae1caf5f42cd4a580.json",
+      "actual_sha256": "b80160320851eda78dbc46c87d998cfad97722340cb2f4bae1caf5f42cd4a580",
+      "candidate_sha256": "b80160320851eda78dbc46c87d998cfad97722340cb2f4bae1caf5f42cd4a580",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "paint-shift-and-cancel",
+      "actual_path": "manual/generated/reader-chunks/scenes/paint-shift-and-cancel-b7464a0caa257d024ae947ab93eba6efc359a71e6fcbe8c3ff6c9df368241acb.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/paint-shift-and-cancel-b7464a0caa257d024ae947ab93eba6efc359a71e6fcbe8c3ff6c9df368241acb.json",
+      "actual_sha256": "b7464a0caa257d024ae947ab93eba6efc359a71e6fcbe8c3ff6c9df368241acb",
+      "candidate_sha256": "b7464a0caa257d024ae947ab93eba6efc359a71e6fcbe8c3ff6c9df368241acb",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "panic-from-song-channel",
+      "actual_path": "manual/generated/reader-chunks/scenes/panic-from-song-channel-92b7daaaffdccff6a2e7bcaa492bb1604e92b7eb76f1612ba2ba6bb892c6394c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/panic-from-song-channel-92b7daaaffdccff6a2e7bcaa492bb1604e92b7eb76f1612ba2ba6bb892c6394c.json",
+      "actual_sha256": "92b7daaaffdccff6a2e7bcaa492bb1604e92b7eb76f1612ba2ba6bb892c6394c",
+      "candidate_sha256": "92b7daaaffdccff6a2e7bcaa492bb1604e92b7eb76f1612ba2ba6bb892c6394c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "panic-from-song-pattern",
+      "actual_path": "manual/generated/reader-chunks/scenes/panic-from-song-pattern-4b9ac1897334b95d03d1aa30432d8335b0725bc0ccd07c32b8c9a10b29839a9b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/panic-from-song-pattern-4b9ac1897334b95d03d1aa30432d8335b0725bc0ccd07c32b8c9a10b29839a9b.json",
+      "actual_sha256": "4b9ac1897334b95d03d1aa30432d8335b0725bc0ccd07c32b8c9a10b29839a9b",
+      "candidate_sha256": "4b9ac1897334b95d03d1aa30432d8335b0725bc0ccd07c32b8c9a10b29839a9b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "panic-stops-sounding-note",
+      "actual_path": "manual/generated/reader-chunks/scenes/panic-stops-sounding-note-d474fb0fcfc15a9218ced9685feab2e8692a9c5decffd517d129f9841e0ad8e0.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/panic-stops-sounding-note-d474fb0fcfc15a9218ced9685feab2e8692a9c5decffd517d129f9841e0ad8e0.json",
+      "actual_sha256": "d474fb0fcfc15a9218ced9685feab2e8692a9c5decffd517d129f9841e0ad8e0",
+      "candidate_sha256": "d474fb0fcfc15a9218ced9685feab2e8692a9c5decffd517d129f9841e0ad8e0",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "parameter-slot-endpoints",
+      "actual_path": "manual/generated/reader-chunks/scenes/parameter-slot-endpoints-e3e2943637885d027f792989bf82e5f34f148b6a1a733daad3b732dc8be259a8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/parameter-slot-endpoints-e3e2943637885d027f792989bf82e5f34f148b6a1a733daad3b732dc8be259a8.json",
+      "actual_sha256": "e3e2943637885d027f792989bf82e5f34f148b6a1a733daad3b732dc8be259a8",
+      "candidate_sha256": "e3e2943637885d027f792989bf82e5f34f148b6a1a733daad3b732dc8be259a8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "pattern-copy-groups",
+      "actual_path": "manual/generated/reader-chunks/scenes/pattern-copy-groups-2fce10df2952bdb33ed8273ba95fe56308d2e0091ba6409bf3960034d77fc675.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/pattern-copy-groups-2fce10df2952bdb33ed8273ba95fe56308d2e0091ba6409bf3960034d77fc675.json",
+      "actual_sha256": "2fce10df2952bdb33ed8273ba95fe56308d2e0091ba6409bf3960034d77fc675",
+      "candidate_sha256": "2fce10df2952bdb33ed8273ba95fe56308d2e0091ba6409bf3960034d77fc675",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "pattern-note-range",
+      "actual_path": "manual/generated/reader-chunks/scenes/pattern-note-range-f7e7f7432251768ccfca816336536fd526a38ee16348bbcc5d9b68a50d5c91a5.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/pattern-note-range-f7e7f7432251768ccfca816336536fd526a38ee16348bbcc5d9b68a50d5c91a5.json",
+      "actual_sha256": "f7e7f7432251768ccfca816336536fd526a38ee16348bbcc5d9b68a50d5c91a5",
+      "candidate_sha256": "f7e7f7432251768ccfca816336536fd526a38ee16348bbcc5d9b68a50d5c91a5",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "pattern-velocity-range",
+      "actual_path": "manual/generated/reader-chunks/scenes/pattern-velocity-range-9678c32450663d6ff372d8b93e20d91c55726c9e90a97a636c8b278990076a63.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/pattern-velocity-range-9678c32450663d6ff372d8b93e20d91c55726c9e90a97a636c8b278990076a63.json",
+      "actual_sha256": "9678c32450663d6ff372d8b93e20d91c55726c9e90a97a636c8b278990076a63",
+      "candidate_sha256": "9678c32450663d6ff372d8b93e20d91c55726c9e90a97a636c8b278990076a63",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "pentatonic-snap-all",
+      "actual_path": "manual/generated/reader-chunks/scenes/pentatonic-snap-all-22f16cfbd5e254dd4c0f31f88bd7fcfacd16a7e5c41ca6ae442b4d89971eba7d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/pentatonic-snap-all-22f16cfbd5e254dd4c0f31f88bd7fcfacd16a7e5c41ca6ae442b4d89971eba7d.json",
+      "actual_sha256": "22f16cfbd5e254dd4c0f31f88bd7fcfacd16a7e5c41ca6ae442b4d89971eba7d",
+      "candidate_sha256": "22f16cfbd5e254dd4c0f31f88bd7fcfacd16a7e5c41ca6ae442b4d89971eba7d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "player-apply-doubledecker",
+      "actual_path": "manual/generated/reader-chunks/scenes/player-apply-doubledecker-69e3f52b180c0f9c855b5dcd312dc641cd00c10d2901f4f4d9b30546a15dc993.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/player-apply-doubledecker-69e3f52b180c0f9c855b5dcd312dc641cd00c10d2901f4f4d9b30546a15dc993.json",
+      "actual_sha256": "69e3f52b180c0f9c855b5dcd312dc641cd00c10d2901f4f4d9b30546a15dc993",
+      "candidate_sha256": "69e3f52b180c0f9c855b5dcd312dc641cd00c10d2901f4f4d9b30546a15dc993",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "player-apply-oilcan",
+      "actual_path": "manual/generated/reader-chunks/scenes/player-apply-oilcan-0884740b3fc56acd3c893e183605260655c9aa5cae59dce35ad13227e5c23a1a.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/player-apply-oilcan-0884740b3fc56acd3c893e183605260655c9aa5cae59dce35ad13227e5c23a1a.json",
+      "actual_sha256": "0884740b3fc56acd3c893e183605260655c9aa5cae59dce35ad13227e5c23a1a",
+      "candidate_sha256": "0884740b3fc56acd3c893e183605260655c9aa5cae59dce35ad13227e5c23a1a",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "player-apply-polyperc",
+      "actual_path": "manual/generated/reader-chunks/scenes/player-apply-polyperc-72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/player-apply-polyperc-72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b.json",
+      "actual_sha256": "72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b",
+      "candidate_sha256": "72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "pocket-ghost-bar",
+      "actual_path": "manual/generated/reader-chunks/scenes/pocket-ghost-bar-b2ac2b69f88291fcff9fe0c3005e3058b4d1070fe7cdc0d7c76a8e87851b6b17.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/pocket-ghost-bar-b2ac2b69f88291fcff9fe0c3005e3058b4d1070fe7cdc0d7c76a8e87851b6b17.json",
+      "actual_sha256": "b2ac2b69f88291fcff9fe0c3005e3058b4d1070fe7cdc0d7c76a8e87851b6b17",
+      "candidate_sha256": "b2ac2b69f88291fcff9fe0c3005e3058b4d1070fe7cdc0d7c76a8e87851b6b17",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "polymeter-song-reset",
+      "actual_path": "manual/generated/reader-chunks/scenes/polymeter-song-reset-5156e1c5b8fc90d0183bf534bce7d48e4712ef0616d5039c847b1cc480a1bbe1.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/polymeter-song-reset-5156e1c5b8fc90d0183bf534bce7d48e4712ef0616d5039c847b1cc480a1bbe1.json",
+      "actual_sha256": "5156e1c5b8fc90d0183bf534bce7d48e4712ef0616d5039c847b1cc480a1bbe1",
+      "candidate_sha256": "5156e1c5b8fc90d0183bf534bce7d48e4712ef0616d5039c847b1cc480a1bbe1",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "probability-endpoints",
+      "actual_path": "manual/generated/reader-chunks/scenes/probability-endpoints-958a10f8b7e9b18751b682d0a5002cf9b62607457341581055852ce8576a2d4c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/probability-endpoints-958a10f8b7e9b18751b682d0a5002cf9b62607457341581055852ce8576a2d4c.json",
+      "actual_sha256": "958a10f8b7e9b18751b682d0a5002cf9b62607457341581055852ce8576a2d4c",
+      "candidate_sha256": "958a10f8b7e9b18751b682d0a5002cf9b62607457341581055852ce8576a2d4c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "protect-stop-gesture",
+      "actual_path": "manual/generated/reader-chunks/scenes/protect-stop-gesture-36bb5224d05a3fe7613fea03c892d61ae7ea0da126080ec63a911398d899f5e6.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/protect-stop-gesture-36bb5224d05a3fe7613fea03c892d61ae7ea0da126080ec63a911398d899f5e6.json",
+      "actual_sha256": "36bb5224d05a3fe7613fea03c892d61ae7ea0da126080ec63a911398d899f5e6",
+      "candidate_sha256": "36bb5224d05a3fe7613fea03c892d61ae7ea0da126080ec63a911398d899f5e6",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "public-display-readability",
+      "actual_path": "manual/generated/reader-chunks/scenes/public-display-readability-61b31722893e83f8af8cc17b9deff72240d9f3773b3537e98b3fd2fd8395054c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/public-display-readability-61b31722893e83f8af8cc17b9deff72240d9f3773b3537e98b3fd2fd8395054c.json",
+      "actual_sha256": "61b31722893e83f8af8cc17b9deff72240d9f3773b3537e98b3fd2fd8395054c",
+      "candidate_sha256": "61b31722893e83f8af8cc17b9deff72240d9f3773b3537e98b3fd2fd8395054c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "quantised-fixed-note-default-and-locks",
+      "actual_path": "manual/generated/reader-chunks/scenes/quantised-fixed-note-default-and-locks-ebb7c333225247ed2b37036f64a6da6c700a51b26e1b060e426fafa2a861c27d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/quantised-fixed-note-default-and-locks-ebb7c333225247ed2b37036f64a6da6c700a51b26e1b060e426fafa2a861c27d.json",
+      "actual_sha256": "ebb7c333225247ed2b37036f64a6da6c700a51b26e1b060e426fafa2a861c27d",
+      "candidate_sha256": "ebb7c333225247ed2b37036f64a6da6c700a51b26e1b060e426fafa2a861c27d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "random-note-seeded-offsets",
+      "actual_path": "manual/generated/reader-chunks/scenes/random-note-seeded-offsets-5e86ed891dca12fa1a969c6d4508cdb91e982b47cbe02b45f5dd1fa85203092d.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/random-note-seeded-offsets-5e86ed891dca12fa1a969c6d4508cdb91e982b47cbe02b45f5dd1fa85203092d.json",
+      "actual_sha256": "5e86ed891dca12fa1a969c6d4508cdb91e982b47cbe02b45f5dd1fa85203092d",
+      "candidate_sha256": "5e86ed891dca12fa1a969c6d4508cdb91e982b47cbe02b45f5dd1fa85203092d",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "random-pentatonic-off",
+      "actual_path": "manual/generated/reader-chunks/scenes/random-pentatonic-off-9a4cbe97e2054a0bbe5b6f51d29c0a9a33e5c0736164fc1464f52a9784cdb37b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/random-pentatonic-off-9a4cbe97e2054a0bbe5b6f51d29c0a9a33e5c0736164fc1464f52a9784cdb37b.json",
+      "actual_sha256": "9a4cbe97e2054a0bbe5b6f51d29c0a9a33e5c0736164fc1464f52a9784cdb37b",
+      "candidate_sha256": "9a4cbe97e2054a0bbe5b6f51d29c0a9a33e5c0736164fc1464f52a9784cdb37b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "random-pentatonic-on",
+      "actual_path": "manual/generated/reader-chunks/scenes/random-pentatonic-on-13d61e7f686e725bdc9e79c4d8864c24d9f90a3263e1af3e035fb47b2bf172b0.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/random-pentatonic-on-13d61e7f686e725bdc9e79c4d8864c24d9f90a3263e1af3e035fb47b2bf172b0.json",
+      "actual_sha256": "13d61e7f686e725bdc9e79c4d8864c24d9f90a3263e1af3e035fb47b2bf172b0",
+      "candidate_sha256": "13d61e7f686e725bdc9e79c4d8864c24d9f90a3263e1af3e035fb47b2bf172b0",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "random-twos-note-seeded-offsets",
+      "actual_path": "manual/generated/reader-chunks/scenes/random-twos-note-seeded-offsets-a95c8e6f1acfac92012be278a1c83b17c41b36ef698892787d343302766fcce8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/random-twos-note-seeded-offsets-a95c8e6f1acfac92012be278a1c83b17c41b36ef698892787d343302766fcce8.json",
+      "actual_sha256": "a95c8e6f1acfac92012be278a1c83b17c41b36ef698892787d343302766fcce8",
+      "candidate_sha256": "a95c8e6f1acfac92012be278a1c83b17c41b36ef698892787d343302766fcce8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "range-reject-and-recover",
+      "actual_path": "manual/generated/reader-chunks/scenes/range-reject-and-recover-6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/range-reject-and-recover-6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636.json",
+      "actual_sha256": "6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636",
+      "candidate_sha256": "6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "reason-ordered-rejections",
+      "actual_path": "manual/generated/reader-chunks/scenes/reason-ordered-rejections-45d78b927fe405df613063290e0295aa1659b87f65fe0d031c28f329444e726c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/reason-ordered-rejections-45d78b927fe405df613063290e0295aa1659b87f65fe0d031c28f329444e726c.json",
+      "actual_sha256": "45d78b927fe405df613063290e0295aa1659b87f65fe0d031c28f329444e726c",
+      "candidate_sha256": "45d78b927fe405df613063290e0295aa1659b87f65fe0d031c28f329444e726c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "record-keyboard-steps",
+      "actual_path": "manual/generated/reader-chunks/scenes/record-keyboard-steps-96b963d1b998d7a956dc04413558b5d399ac0c6ac0ebeddd84ab0a774c468085.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/record-keyboard-steps-96b963d1b998d7a956dc04413558b5d399ac0c6ac0ebeddd84ab0a774c468085.json",
+      "actual_sha256": "96b963d1b998d7a956dc04413558b5d399ac0c6ac0ebeddd84ab0a774c468085",
+      "candidate_sha256": "96b963d1b998d7a956dc04413558b5d399ac0c6ac0ebeddd84ab0a774c468085",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "record-parameter-lock",
+      "actual_path": "manual/generated/reader-chunks/scenes/record-parameter-lock-6185d7957651575c56af5576eb803e3938173d6caf64619d2e4fe9d650475f20.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/record-parameter-lock-6185d7957651575c56af5576eb803e3938173d6caf64619d2e4fe9d650475f20.json",
+      "actual_sha256": "6185d7957651575c56af5576eb803e3938173d6caf64619d2e4fe9d650475f20",
+      "candidate_sha256": "6185d7957651575c56af5576eb803e3938173d6caf64619d2e4fe9d650475f20",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "repeat-reset-first-boundary-public",
+      "actual_path": "manual/generated/reader-chunks/scenes/repeat-reset-first-boundary-public-a03543f971fa6b73def0c1c8cbf3ea67c802421ef3c285fbaf46ed254e0205a1.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/repeat-reset-first-boundary-public-a03543f971fa6b73def0c1c8cbf3ea67c802421ef3c285fbaf46ed254e0205a1.json",
+      "actual_sha256": "a03543f971fa6b73def0c1c8cbf3ea67c802421ef3c285fbaf46ed254e0205a1",
+      "candidate_sha256": "a03543f971fa6b73def0c1c8cbf3ea67c802421ef3c285fbaf46ed254e0205a1",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "repeat-reset-policies",
+      "actual_path": "manual/generated/reader-chunks/scenes/repeat-reset-policies-e09b4a31a30804542b89b6a71ff914d88843ca1a95ba354cf971921c380b0107.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/repeat-reset-policies-e09b4a31a30804542b89b6a71ff914d88843ca1a95ba354cf971921c380b0107.json",
+      "actual_sha256": "e09b4a31a30804542b89b6a71ff914d88843ca1a95ba354cf971921c380b0107",
+      "candidate_sha256": "e09b4a31a30804542b89b6a71ff914d88843ca1a95ba354cf971921c380b0107",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "scale-edit-versus-apply",
+      "actual_path": "manual/generated/reader-chunks/scenes/scale-edit-versus-apply-76de1d1cc6661d936b5abfaf553740b500f8300b7a90f99f4bf158eea9213918.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/scale-edit-versus-apply-76de1d1cc6661d936b5abfaf553740b500f8300b7a90f99f4bf158eea9213918.json",
+      "actual_sha256": "76de1d1cc6661d936b5abfaf553740b500f8300b7a90f99f4bf158eea9213918",
+      "candidate_sha256": "76de1d1cc6661d936b5abfaf553740b500f8300b7a90f99f4bf158eea9213918",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "scale-lock-replacement",
+      "actual_path": "manual/generated/reader-chunks/scenes/scale-lock-replacement-a90b16ec371db2b007b6cea00a562d8b9e8255419284fd0d3ee02ba150884106.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/scale-lock-replacement-a90b16ec371db2b007b6cea00a562d8b9e8255419284fd0d3ee02ba150884106.json",
+      "actual_sha256": "a90b16ec371db2b007b6cea00a562d8b9e8255419284fd0d3ee02ba150884106",
+      "candidate_sha256": "a90b16ec371db2b007b6cea00a562d8b9e8255419284fd0d3ee02ba150884106",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "scale-lock-scope-and-lifetime",
+      "actual_path": "manual/generated/reader-chunks/scenes/scale-lock-scope-and-lifetime-2d63be265b102e14d344aa0e967fd3c9bfa85e4fff32cf59120ae134dc785bcc.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/scale-lock-scope-and-lifetime-2d63be265b102e14d344aa0e967fd3c9bfa85e4fff32cf59120ae134dc785bcc.json",
+      "actual_sha256": "2d63be265b102e14d344aa0e967fd3c9bfa85e4fff32cf59120ae134dc785bcc",
+      "candidate_sha256": "2d63be265b102e14d344aa0e967fd3c9bfa85e4fff32cf59120ae134dc785bcc",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "scale-lock-skipped-trig",
+      "actual_path": "manual/generated/reader-chunks/scenes/scale-lock-skipped-trig-a910f5f792e4136f2a8fe0f9c5f887b6e88fdd7c022588412765b0e0d8e4318c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/scale-lock-skipped-trig-a910f5f792e4136f2a8fe0f9c5f887b6e88fdd7c022588412765b0e0d8e4318c.json",
+      "actual_sha256": "a910f5f792e4136f2a8fe0f9c5f887b6e88fdd7c022588412765b0e0d8e4318c",
+      "candidate_sha256": "a910f5f792e4136f2a8fe0f9c5f887b6e88fdd7c022588412765b0e0d8e4318c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "scale-save-d-and-apply",
+      "actual_path": "manual/generated/reader-chunks/scenes/scale-save-d-and-apply-cb2b84c0ff1231b19873fa9b8be1ef9721762437efd73761ffea3859ccb90a29.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/scale-save-d-and-apply-cb2b84c0ff1231b19873fa9b8be1ef9721762437efd73761ffea3859ccb90a29.json",
+      "actual_sha256": "cb2b84c0ff1231b19873fa9b8be1ef9721762437efd73761ffea3859ccb90a29",
+      "candidate_sha256": "cb2b84c0ff1231b19873fa9b8be1ef9721762437efd73761ffea3859ccb90a29",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "screen-motion-on-and-off",
+      "actual_path": "manual/generated/reader-chunks/scenes/screen-motion-on-and-off-cae033bef3f79aaa0bc12d03c028d85b5f447cd17f7df096607ccc91db89f981.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/screen-motion-on-and-off-cae033bef3f79aaa0bc12d03c028d85b5f447cd17f7df096607ccc91db89f981.json",
+      "actual_sha256": "cae033bef3f79aaa0bc12d03c028d85b5f447cd17f7df096607ccc91db89f981",
+      "candidate_sha256": "cae033bef3f79aaa0bc12d03c028d85b5f447cd17f7df096607ccc91db89f981",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "shared-merge-strategy-workflow",
+      "actual_path": "manual/generated/reader-chunks/scenes/shared-merge-strategy-workflow-1e8eaddd6837f883d291adc73a15b9663f79878b386095ea7a2c14aedc660904.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/shared-merge-strategy-workflow-1e8eaddd6837f883d291adc73a15b9663f79878b386095ea7a2c14aedc660904.json",
+      "actual_sha256": "1e8eaddd6837f883d291adc73a15b9663f79878b386095ea7a2c14aedc660904",
+      "candidate_sha256": "1e8eaddd6837f883d291adc73a15b9663f79878b386095ea7a2c14aedc660904",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "shuffle-smooth-amount-boundaries",
+      "actual_path": "manual/generated/reader-chunks/scenes/shuffle-smooth-amount-boundaries-7b4b2bb1e46ef2633004f76ee6b8074991e11084967bfc97aef5069e8d2e0d8b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/shuffle-smooth-amount-boundaries-7b4b2bb1e46ef2633004f76ee6b8074991e11084967bfc97aef5069e8d2e0d8b.json",
+      "actual_sha256": "7b4b2bb1e46ef2633004f76ee6b8074991e11084967bfc97aef5069e8d2e0d8b",
+      "candidate_sha256": "7b4b2bb1e46ef2633004f76ee6b8074991e11084967bfc97aef5069e8d2e0d8b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "snap-note-masks-public-pair",
+      "actual_path": "manual/generated/reader-chunks/scenes/snap-note-masks-public-pair-14697b85825bc89fccb74b3ac8fc4f1dd8e0e48303dc487da14e2187a9372405.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/snap-note-masks-public-pair-14697b85825bc89fccb74b3ac8fc4f1dd8e0e48303dc487da14e2187a9372405.json",
+      "actual_sha256": "14697b85825bc89fccb74b3ac8fc4f1dd8e0e48303dc487da14e2187a9372405",
+      "candidate_sha256": "14697b85825bc89fccb74b3ac8fc4f1dd8e0e48303dc487da14e2187a9372405",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "software-player-doubledecker",
+      "actual_path": "manual/generated/reader-chunks/scenes/software-player-doubledecker-8a0103ed8d337acb207a43942e2739a421b574392b03c8bf8714f49a256bb47a.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/software-player-doubledecker-8a0103ed8d337acb207a43942e2739a421b574392b03c8bf8714f49a256bb47a.json",
+      "actual_sha256": "8a0103ed8d337acb207a43942e2739a421b574392b03c8bf8714f49a256bb47a",
+      "candidate_sha256": "8a0103ed8d337acb207a43942e2739a421b574392b03c8bf8714f49a256bb47a",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "software-player-oilcan",
+      "actual_path": "manual/generated/reader-chunks/scenes/software-player-oilcan-67cdac54c229d0013bbfe0347b67140071e9424bcf219738a6c1c10cec6192c4.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/software-player-oilcan-67cdac54c229d0013bbfe0347b67140071e9424bcf219738a6c1c10cec6192c4.json",
+      "actual_sha256": "67cdac54c229d0013bbfe0347b67140071e9424bcf219738a6c1c10cec6192c4",
+      "candidate_sha256": "67cdac54c229d0013bbfe0347b67140071e9424bcf219738a6c1c10cec6192c4",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "software-player-polyperc",
+      "actual_path": "manual/generated/reader-chunks/scenes/software-player-polyperc-76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/software-player-polyperc-76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53.json",
+      "actual_sha256": "76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53",
+      "candidate_sha256": "76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-build-two-groups",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-build-two-groups-30e5aae4326572849bcb37b8c92e84d6602befb4837cd9809ca0a4db0d334f98.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-build-two-groups-30e5aae4326572849bcb37b8c92e84d6602befb4837cd9809ca0a4db0d334f98.json",
+      "actual_sha256": "30e5aae4326572849bcb37b8c92e84d6602befb4837cd9809ca0a4db0d334f98",
+      "candidate_sha256": "30e5aae4326572849bcb37b8c92e84d6602befb4837cd9809ca0a4db0d334f98",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-change-reset-policies",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-change-reset-policies-77c43eea87522b884c89ff7c35d0c596fbfd0ab0522c0574a4c3de6e82a40108.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-change-reset-policies-77c43eea87522b884c89ff7c35d0c596fbfd0ab0522c0574a4c3de6e82a40108.json",
+      "actual_sha256": "77c43eea87522b884c89ff7c35d0c596fbfd0ab0522c0574a4c3de6e82a40108",
+      "candidate_sha256": "77c43eea87522b884c89ff7c35d0c596fbfd0ab0522c0574a4c3de6e82a40108",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-copy-and-compare",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-copy-and-compare-bd2472d7ffd6333cec3fd32cd62cdc05dec33361ba675fae500f6bc4c40e1dc2.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-copy-and-compare-bd2472d7ffd6333cec3fd32cd62cdc05dec33361ba675fae500f6bc4c40e1dc2.json",
+      "actual_sha256": "bd2472d7ffd6333cec3fd32cd62cdc05dec33361ba675fae500f6bc4c40e1dc2",
+      "candidate_sha256": "bd2472d7ffd6333cec3fd32cd62cdc05dec33361ba675fae500f6bc4c40e1dc2",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-global-length",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-global-length-54211e2a433e8b86ef21d826ad0cd5c62fcd42ec6c6f06b2e42d05bc468360ab.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-global-length-54211e2a433e8b86ef21d826ad0cd5c62fcd42ec6c6f06b2e42d05bc468360ab.json",
+      "actual_sha256": "54211e2a433e8b86ef21d826ad0cd5c62fcd42ec6c6f06b2e42d05bc468360ab",
+      "candidate_sha256": "54211e2a433e8b86ef21d826ad0cd5c62fcd42ec6c6f06b2e42d05bc468360ab",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-mode-groups-and-selection",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-mode-groups-and-selection-ba6fb6f441033b67609c3b59c6803a0e33ca8ecdfafef959b8d18ffd78b70c3f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-mode-groups-and-selection-ba6fb6f441033b67609c3b59c6803a0e33ca8ecdfafef959b8d18ffd78b70c3f.json",
+      "actual_sha256": "ba6fb6f441033b67609c3b59c6803a0e33ca8ecdfafef959b8d18ffd78b70c3f",
+      "candidate_sha256": "ba6fb6f441033b67609c3b59c6803a0e33ca8ecdfafef959b8d18ffd78b70c3f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-repeats-advance",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-repeats-advance-9d228da7e5ca8eaf0838973b1c9f840725d12bed2f44c5e146ba307333eba3a0.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-repeats-advance-9d228da7e5ca8eaf0838973b1c9f840725d12bed2f44c5e146ba307333eba3a0.json",
+      "actual_sha256": "9d228da7e5ca8eaf0838973b1c9f840725d12bed2f44c5e146ba307333eba3a0",
+      "candidate_sha256": "9d228da7e5ca8eaf0838973b1c9f840725d12bed2f44c5e146ba307333eba3a0",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-slot-light-states",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-slot-light-states-cf58471fe22e21b2062f7a6ea3f7e0cb4a6e2602bc45cab1e226cc2952e860d8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-slot-light-states-cf58471fe22e21b2062f7a6ea3f7e0cb4a6e2602bc45cab1e226cc2952e860d8.json",
+      "actual_sha256": "cf58471fe22e21b2062f7a6ea3f7e0cb4a6e2602bc45cab1e226cc2952e860d8",
+      "candidate_sha256": "cf58471fe22e21b2062f7a6ea3f7e0cb4a6e2602bc45cab1e226cc2952e860d8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-slot-repeat-values",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-slot-repeat-values-43dc849252e52f886638a5e5a47895de14776ba32c1a0b2787e8afc736e696ae.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-slot-repeat-values-43dc849252e52f886638a5e5a47895de14776ba32c1a0b2787e8afc736e696ae.json",
+      "actual_sha256": "43dc849252e52f886638a5e5a47895de14776ba32c1a0b2787e8afc736e696ae",
+      "candidate_sha256": "43dc849252e52f886638a5e5a47895de14776ba32c1a0b2787e8afc736e696ae",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "song-tempo-across-slots",
+      "actual_path": "manual/generated/reader-chunks/scenes/song-tempo-across-slots-00d635d7bffa198dc17141174e00644f1199660513aeec8253c04f8c749fe576.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/song-tempo-across-slots-00d635d7bffa198dc17141174e00644f1199660513aeec8253c04f8c749fe576.json",
+      "actual_sha256": "00d635d7bffa198dc17141174e00644f1199660513aeec8253c04f8c749fe576",
+      "candidate_sha256": "00d635d7bffa198dc17141174e00644f1199660513aeec8253c04f8c749fe576",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "structure-anchor-chord-and-delete",
+      "actual_path": "manual/generated/reader-chunks/scenes/structure-anchor-chord-and-delete-0291e02d5dfd51170e664c55bad05db169deff214a929b78e6fcc08391e38175.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/structure-anchor-chord-and-delete-0291e02d5dfd51170e664c55bad05db169deff214a929b78e6fcc08391e38175.json",
+      "actual_sha256": "0291e02d5dfd51170e664c55bad05db169deff214a929b78e6fcc08391e38175",
+      "candidate_sha256": "0291e02d5dfd51170e664c55bad05db169deff214a929b78e6fcc08391e38175",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "structure-every-4-markers",
+      "actual_path": "manual/generated/reader-chunks/scenes/structure-every-4-markers-cd74573976092ae8fcdc6e0983d6429e173a2df5bf9190a389d697c616e1287f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/structure-every-4-markers-cd74573976092ae8fcdc6e0983d6429e173a2df5bf9190a389d697c616e1287f.json",
+      "actual_sha256": "cd74573976092ae8fcdc6e0983d6429e173a2df5bf9190a389d697c616e1287f",
+      "candidate_sha256": "cd74573976092ae8fcdc6e0983d6429e173a2df5bf9190a389d697c616e1287f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "strum-division-bounds",
+      "actual_path": "manual/generated/reader-chunks/scenes/strum-division-bounds-a4021a80bf2f654c19bfa0e7fd4f7380d4b409f7855d0c2bbba1c1b6fba1602e.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/strum-division-bounds-a4021a80bf2f654c19bfa0e7fd4f7380d4b409f7855d0c2bbba1c1b6fba1602e.json",
+      "actual_sha256": "a4021a80bf2f654c19bfa0e7fd4f7380d4b409f7855d0c2bbba1c1b6fba1602e",
+      "candidate_sha256": "a4021a80bf2f654c19bfa0e7fd4f7380d4b409f7855d0c2bbba1c1b6fba1602e",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "swing-interlock-pulse-times",
+      "actual_path": "manual/generated/reader-chunks/scenes/swing-interlock-pulse-times-f94c0deee3cc43afcb88c12c7ebcf96204bd781a4006cb304670ca0fe9fc8efd.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/swing-interlock-pulse-times-f94c0deee3cc43afcb88c12c7ebcf96204bd781a4006cb304670ca0fe9fc8efd.json",
+      "actual_sha256": "f94c0deee3cc43afcb88c12c7ebcf96204bd781a4006cb304670ca0fe9fc8efd",
+      "candidate_sha256": "f94c0deee3cc43afcb88c12c7ebcf96204bd781a4006cb304670ca0fe9fc8efd",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "toolkit-clocked-lfo-menu",
+      "actual_path": "manual/generated/reader-chunks/scenes/toolkit-clocked-lfo-menu-ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/toolkit-clocked-lfo-menu-ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c.json",
+      "actual_sha256": "ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c",
+      "candidate_sha256": "ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "transpose-explicit-zero-and-clear",
+      "actual_path": "manual/generated/reader-chunks/scenes/transpose-explicit-zero-and-clear-af4ac1533e03c924bcf61c8bb594df596221c62afbaf5a9ad8ba448d4fa9f67a.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/transpose-explicit-zero-and-clear-af4ac1533e03c924bcf61c8bb594df596221c62afbaf5a9ad8ba448d4fa9f67a.json",
+      "actual_sha256": "af4ac1533e03c924bcf61c8bb594df596221c62afbaf5a9ad8ba448d4fa9f67a",
+      "candidate_sha256": "af4ac1533e03c924bcf61c8bb594df596221c62afbaf5a9ad8ba448d4fa9f67a",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "transpose-lock-direct-taps",
+      "actual_path": "manual/generated/reader-chunks/scenes/transpose-lock-direct-taps-3ad53b4eeb38d5757df13e4b1cf0d9f9dcb27218d93b04e454ce26dedadade7f.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/transpose-lock-direct-taps-3ad53b4eeb38d5757df13e4b1cf0d9f9dcb27218d93b04e454ce26dedadade7f.json",
+      "actual_sha256": "3ad53b4eeb38d5757df13e4b1cf0d9f9dcb27218d93b04e454ce26dedadade7f",
+      "candidate_sha256": "3ad53b4eeb38d5757df13e4b1cf0d9f9dcb27218d93b04e454ce26dedadade7f",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "transpose-next-onset",
+      "actual_path": "manual/generated/reader-chunks/scenes/transpose-next-onset-97172e50725ebdbe4a9756d23fa55b1a12d709b70f8339de979de9153427eda8.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/transpose-next-onset-97172e50725ebdbe4a9756d23fa55b1a12d709b70f8339de979de9153427eda8.json",
+      "actual_sha256": "97172e50725ebdbe4a9756d23fa55b1a12d709b70f8339de979de9153427eda8",
+      "candidate_sha256": "97172e50725ebdbe4a9756d23fa55b1a12d709b70f8339de979de9153427eda8",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "transpose-song-slot-copy",
+      "actual_path": "manual/generated/reader-chunks/scenes/transpose-song-slot-copy-573ceda2e965953f78e4c4a423be738e63818f4786dfff761b296af3cb0c1f94.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/transpose-song-slot-copy-573ceda2e965953f78e4c4a423be738e63818f4786dfff761b296af3cb0c1f94.json",
+      "actual_sha256": "573ceda2e965953f78e4c4a423be738e63818f4786dfff761b296af3cb0c1f94",
+      "candidate_sha256": "573ceda2e965953f78e4c4a423be738e63818f4786dfff761b296af3cb0c1f94",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "trig-parameter-locks",
+      "actual_path": "manual/generated/reader-chunks/scenes/trig-parameter-locks-e0ebaf0f31b50d8f2e05fefda126f32d12274be822c469c336be1a517d6783d5.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/trig-parameter-locks-e0ebaf0f31b50d8f2e05fefda126f32d12274be822c469c336be1a517d6783d5.json",
+      "actual_sha256": "e0ebaf0f31b50d8f2e05fefda126f32d12274be822c469c336be1a517d6783d5",
+      "candidate_sha256": "e0ebaf0f31b50d8f2e05fefda126f32d12274be822c469c336be1a517d6783d5",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "trigless-locks-off",
+      "actual_path": "manual/generated/reader-chunks/scenes/trigless-locks-off-f9057cebb7fd924d4f501c38fe1b703b49d374949601550614b02c6983d2c31b.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/trigless-locks-off-f9057cebb7fd924d4f501c38fe1b703b49d374949601550614b02c6983d2c31b.json",
+      "actual_sha256": "f9057cebb7fd924d4f501c38fe1b703b49d374949601550614b02c6983d2c31b",
+      "candidate_sha256": "f9057cebb7fd924d4f501c38fe1b703b49d374949601550614b02c6983d2c31b",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "trigless-locks-on",
+      "actual_path": "manual/generated/reader-chunks/scenes/trigless-locks-on-d06e658e2118e55efe28f0c10026afe118fe5a0e23b2483edce6ca84abac8742.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/trigless-locks-on-d06e658e2118e55efe28f0c10026afe118fe5a0e23b2483edce6ca84abac8742.json",
+      "actual_sha256": "d06e658e2118e55efe28f0c10026afe118fe5a0e23b2483edce6ca84abac8742",
+      "candidate_sha256": "d06e658e2118e55efe28f0c10026afe118fe5a0e23b2483edce6ca84abac8742",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "ui-motion-public-frames",
+      "actual_path": "manual/generated/reader-chunks/scenes/ui-motion-public-frames-cb6a9f8db8b6547e7dc7dda7404ce32b287860df40c7847889800fb4488aa1fa.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/ui-motion-public-frames-cb6a9f8db8b6547e7dc7dda7404ce32b287860df40c7847889800fb4488aa1fa.json",
+      "actual_sha256": "cb6a9f8db8b6547e7dc7dda7404ce32b287860df40c7847889800fb4488aa1fa",
+      "candidate_sha256": "cb6a9f8db8b6547e7dc7dda7404ce32b287860df40c7847889800fb4488aa1fa",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "velocity-merge-numeric-output",
+      "actual_path": "manual/generated/reader-chunks/scenes/velocity-merge-numeric-output-0e51840a5b1fa184691944d22d1af57034573d9eab5ca0c82ac546765c76a9a4.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/velocity-merge-numeric-output-0e51840a5b1fa184691944d22d1af57034573d9eab5ca0c82ac546765c76a9a4.json",
+      "actual_sha256": "0e51840a5b1fa184691944d22d1af57034573d9eab5ca0c82ac546765c76a9a4",
+      "candidate_sha256": "0e51840a5b1fa184691944d22d1af57034573d9eab5ca0c82ac546765c76a9a4",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "vertical-clock-neighbors",
+      "actual_path": "manual/generated/reader-chunks/scenes/vertical-clock-neighbors-a940cd20735f329c21741eea0de5eea90c5ee244867f5cb0aa017dabda9b9af3.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/vertical-clock-neighbors-a940cd20735f329c21741eea0de5eea90c5ee244867f5cb0aa017dabda9b9af3.json",
+      "actual_sha256": "a940cd20735f329c21741eea0de5eea90c5ee244867f5cb0aa017dabda9b9af3",
+      "candidate_sha256": "a940cd20735f329c21741eea0de5eea90c5ee244867f5cb0aa017dabda9b9af3",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "workflow-compose-two-channels",
+      "actual_path": "manual/generated/reader-chunks/scenes/workflow-compose-two-channels-7bf24ef6a7c3603ca77a8542448a4d39ed0a3c2475774aa94c5ecab0a3ddf4e0.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/workflow-compose-two-channels-7bf24ef6a7c3603ca77a8542448a4d39ed0a3c2475774aa94c5ecab0a3ddf4e0.json",
+      "actual_sha256": "7bf24ef6a7c3603ca77a8542448a4d39ed0a3c2475774aa94c5ecab0a3ddf4e0",
+      "candidate_sha256": "7bf24ef6a7c3603ca77a8542448a4d39ed0a3c2475774aa94c5ecab0a3ddf4e0",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "workflow-patterns-and-scale",
+      "actual_path": "manual/generated/reader-chunks/scenes/workflow-patterns-and-scale-27dc408b35475fb6fdd5777ea8b7b67c8ce5ddd87f48c149d6e7c3a36c820d20.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/workflow-patterns-and-scale-27dc408b35475fb6fdd5777ea8b7b67c8ce5ddd87f48c149d6e7c3a36c820d20.json",
+      "actual_sha256": "27dc408b35475fb6fdd5777ea8b7b67c8ce5ddd87f48c149d6e7c3a36c820d20",
+      "candidate_sha256": "27dc408b35475fb6fdd5777ea8b7b67c8ce5ddd87f48c149d6e7c3a36c820d20",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "workflow-second-channel",
+      "actual_path": "manual/generated/reader-chunks/scenes/workflow-second-channel-f6c3c4d50834240af2da1ea137c26697bdcdb1ffbf1739c5663a677286028b70.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/workflow-second-channel-f6c3c4d50834240af2da1ea137c26697bdcdb1ffbf1739c5663a677286028b70.json",
+      "actual_sha256": "f6c3c4d50834240af2da1ea137c26697bdcdb1ffbf1739c5663a677286028b70",
+      "candidate_sha256": "f6c3c4d50834240af2da1ea137c26697bdcdb1ffbf1739c5663a677286028b70",
+      "identical": true
+    },
+    {
+      "kind": "scene",
+      "id": "workflow-song-chain",
+      "actual_path": "manual/generated/reader-chunks/scenes/workflow-song-chain-8dbdc63ed1dcfeb3a33dcb4968d4b1bc4c4f5fa35ec1844f40461c65c71c0e04.json",
+      "candidate_path": "projection-v02/reader-chunks/scenes/workflow-song-chain-8dbdc63ed1dcfeb3a33dcb4968d4b1bc4c4f5fa35ec1844f40461c65c71c0e04.json",
+      "actual_sha256": "8dbdc63ed1dcfeb3a33dcb4968d4b1bc4c4f5fa35ec1844f40461c65c71c0e04",
+      "candidate_sha256": "8dbdc63ed1dcfeb3a33dcb4968d4b1bc4c4f5fa35ec1844f40461c65c71c0e04",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "bass-and-intervals",
+      "actual_path": "manual/generated/reader-chunks/audio/bass-and-intervals-ca3338aba88cffe878d91d24f977a7a5654d4dbb9f5267baae5a1f7f5d7e0870.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/bass-and-intervals-ca3338aba88cffe878d91d24f977a7a5654d4dbb9f5267baae5a1f7f5d7e0870.json",
+      "actual_sha256": "ca3338aba88cffe878d91d24f977a7a5654d4dbb9f5267baae5a1f7f5d7e0870",
+      "candidate_sha256": "ca3338aba88cffe878d91d24f977a7a5654d4dbb9f5267baae5a1f7f5d7e0870",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-build-a-phrase-compare",
+      "actual_path": "manual/generated/reader-chunks/audio/course-build-a-phrase-compare-4da256865fdaa9707819ae8f6aaa9d63767d92afcb81ec7d483de024b77433ae.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-build-a-phrase-compare-4da256865fdaa9707819ae8f6aaa9d63767d92afcb81ec7d483de024b77433ae.json",
+      "actual_sha256": "4da256865fdaa9707819ae8f6aaa9d63767d92afcb81ec7d483de024b77433ae",
+      "candidate_sha256": "4da256865fdaa9707819ae8f6aaa9d63767d92afcb81ec7d483de024b77433ae",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-first-sound-hear",
+      "actual_path": "manual/generated/reader-chunks/audio/course-first-sound-hear-932f16ca92e2072067f1a5c935b1db5037fafd488a38bfdfdfab063f844b2d9d.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-first-sound-hear-932f16ca92e2072067f1a5c935b1db5037fafd488a38bfdfdfab063f844b2d9d.json",
+      "actual_sha256": "932f16ca92e2072067f1a5c935b1db5037fafd488a38bfdfdfab063f844b2d9d",
+      "candidate_sha256": "932f16ca92e2072067f1a5c935b1db5037fafd488a38bfdfdfab063f844b2d9d",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-harmony-design-apply",
+      "actual_path": "manual/generated/reader-chunks/audio/course-harmony-design-apply-40f2cb8a1dbfa0d9f15936420790bf8a261060d37cf373a701b86b8dc37854f7.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-harmony-design-apply-40f2cb8a1dbfa0d9f15936420790bf8a261060d37cf373a701b86b8dc37854f7.json",
+      "actual_sha256": "40f2cb8a1dbfa0d9f15936420790bf8a261060d37cf373a701b86b8dc37854f7",
+      "candidate_sha256": "40f2cb8a1dbfa0d9f15936420790bf8a261060d37cf373a701b86b8dc37854f7",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-keep-your-work-perform",
+      "actual_path": "manual/generated/reader-chunks/audio/course-keep-your-work-perform-1496cda15f6a6cdf5303d190f4979253f05f57972ddeaa40b0f9ac4b035ecb7c.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-keep-your-work-perform-1496cda15f6a6cdf5303d190f4979253f05f57972ddeaa40b0f9ac4b035ecb7c.json",
+      "actual_sha256": "1496cda15f6a6cdf5303d190f4979253f05f57972ddeaa40b0f9ac4b035ecb7c",
+      "candidate_sha256": "1496cda15f6a6cdf5303d190f4979253f05f57972ddeaa40b0f9ac4b035ecb7c",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-masks-keep",
+      "actual_path": "manual/generated/reader-chunks/audio/course-masks-keep-88e3b5a0b4b7f540ac230894e26076c8ebe879dbe6adca7e6165b4bfc9b20724.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-masks-keep-88e3b5a0b4b7f540ac230894e26076c8ebe879dbe6adca7e6165b4bfc9b20724.json",
+      "actual_sha256": "88e3b5a0b4b7f540ac230894e26076c8ebe879dbe6adca7e6165b4bfc9b20724",
+      "candidate_sha256": "88e3b5a0b4b7f540ac230894e26076c8ebe879dbe6adca7e6165b4bfc9b20724",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-masks-listen",
+      "actual_path": "manual/generated/reader-chunks/audio/course-masks-listen-4093a1f72b33fbe84a268892bbeb14bfcd2019c356ab3a5e98fffa9185d470fa.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-masks-listen-4093a1f72b33fbe84a268892bbeb14bfcd2019c356ab3a5e98fffa9185d470fa.json",
+      "actual_sha256": "4093a1f72b33fbe84a268892bbeb14bfcd2019c356ab3a5e98fffa9185d470fa",
+      "candidate_sha256": "4093a1f72b33fbe84a268892bbeb14bfcd2019c356ab3a5e98fffa9185d470fa",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-modulation-movement-and-interest-level",
+      "actual_path": "manual/generated/reader-chunks/audio/course-modulation-movement-and-interest-level-29a94e8a9161c7cb633e965df49232b70500726db54c57c4f75c105e29387f27.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-modulation-movement-and-interest-level-29a94e8a9161c7cb633e965df49232b70500726db54c57c4f75c105e29387f27.json",
+      "actual_sha256": "29a94e8a9161c7cb633e965df49232b70500726db54c57c4f75c105e29387f27",
+      "candidate_sha256": "29a94e8a9161c7cb633e965df49232b70500726db54c57c4f75c105e29387f27",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-sequence-composition-both",
+      "actual_path": "manual/generated/reader-chunks/audio/course-sequence-composition-both-3d0a8cb3cdcc9b2664689917715299d4e6d78d37b0ada77c0ef230f7af5f11ea.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-sequence-composition-both-3d0a8cb3cdcc9b2664689917715299d4e6d78d37b0ada77c0ef230f7af5f11ea.json",
+      "actual_sha256": "3d0a8cb3cdcc9b2664689917715299d4e6d78d37b0ada77c0ef230f7af5f11ea",
+      "candidate_sha256": "3d0a8cb3cdcc9b2664689917715299d4e6d78d37b0ada77c0ef230f7af5f11ea",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "course-song-composition-transition",
+      "actual_path": "manual/generated/reader-chunks/audio/course-song-composition-transition-c262e9d86ae6016681f6ae10f3a0e4bf65da194b12a3a55c3383908203bc7f79.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/course-song-composition-transition-c262e9d86ae6016681f6ae10f3a0e4bf65da194b12a3a55c3383908203bc7f79.json",
+      "actual_sha256": "c262e9d86ae6016681f6ae10f3a0e4bf65da194b12a3a55c3383908203bc7f79",
+      "candidate_sha256": "c262e9d86ae6016681f6ae10f3a0e4bf65da194b12a3a55c3383908203bc7f79",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "ghost-note-comparison",
+      "actual_path": "manual/generated/reader-chunks/audio/ghost-note-comparison-f858c49a5acfdc2dcf9d00217ba6619358fabfe86d48894491b2ff49cfe11024.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/ghost-note-comparison-f858c49a5acfdc2dcf9d00217ba6619358fabfe86d48894491b2ff49cfe11024.json",
+      "actual_sha256": "f858c49a5acfdc2dcf9d00217ba6619358fabfe86d48894491b2ff49cfe11024",
+      "candidate_sha256": "f858c49a5acfdc2dcf9d00217ba6619358fabfe86d48894491b2ff49cfe11024",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "harmony-strum-arp",
+      "actual_path": "manual/generated/reader-chunks/audio/harmony-strum-arp-78de249e1b1624cf6bdb6176d0628f3d0bd3a9674f5ebc5cef7e220d72a97a92.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/harmony-strum-arp-78de249e1b1624cf6bdb6176d0628f3d0bd3a9674f5ebc5cef7e220d72a97a92.json",
+      "actual_sha256": "78de249e1b1624cf6bdb6176d0628f3d0bd3a9674f5ebc5cef7e220d72a97a92",
+      "candidate_sha256": "78de249e1b1624cf6bdb6176d0628f3d0bd3a9674f5ebc5cef7e220d72a97a92",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "note-merge-modes",
+      "actual_path": "manual/generated/reader-chunks/audio/note-merge-modes-4eb52b4d1dd95d0b8a26683b2d5ea4b0cf285bb7c4e7267a94e1229518c326c3.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/note-merge-modes-4eb52b4d1dd95d0b8a26683b2d5ea4b0cf285bb7c4e7267a94e1229518c326c3.json",
+      "actual_sha256": "4eb52b4d1dd95d0b8a26683b2d5ea4b0cf285bb7c4e7267a94e1229518c326c3",
+      "candidate_sha256": "4eb52b4d1dd95d0b8a26683b2d5ea4b0cf285bb7c4e7267a94e1229518c326c3",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "oilcan-pocket",
+      "actual_path": "manual/generated/reader-chunks/audio/oilcan-pocket-db9ec8144e0b290ddde037d6bdd38429af074d4fa9eab475ff7b2c6a244e2a4c.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/oilcan-pocket-db9ec8144e0b290ddde037d6bdd38429af074d4fa9eab475ff7b2c6a244e2a4c.json",
+      "actual_sha256": "db9ec8144e0b290ddde037d6bdd38429af074d4fa9eab475ff7b2c6a244e2a4c",
+      "candidate_sha256": "db9ec8144e0b290ddde037d6bdd38429af074d4fa9eab475ff7b2c6a244e2a4c",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "param-lock-comparison",
+      "actual_path": "manual/generated/reader-chunks/audio/param-lock-comparison-e70d37b53112426986584e22434a21d574cc83decf42e1622ba1bbf220f766ed.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/param-lock-comparison-e70d37b53112426986584e22434a21d574cc83decf42e1622ba1bbf220f766ed.json",
+      "actual_sha256": "e70d37b53112426986584e22434a21d574cc83decf42e1622ba1bbf220f766ed",
+      "candidate_sha256": "e70d37b53112426986584e22434a21d574cc83decf42e1622ba1bbf220f766ed",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "polymeter",
+      "actual_path": "manual/generated/reader-chunks/audio/polymeter-d4dae0ee4510dbfb6ee0c5f308ce76b3563eae3b0bfdb917a16655f16b8540f2.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/polymeter-d4dae0ee4510dbfb6ee0c5f308ce76b3563eae3b0bfdb917a16655f16b8540f2.json",
+      "actual_sha256": "d4dae0ee4510dbfb6ee0c5f308ce76b3563eae3b0bfdb917a16655f16b8540f2",
+      "candidate_sha256": "d4dae0ee4510dbfb6ee0c5f308ce76b3563eae3b0bfdb917a16655f16b8540f2",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "scale-slot-comparison",
+      "actual_path": "manual/generated/reader-chunks/audio/scale-slot-comparison-574a9c1f074620fd4871a452287890f7009c92d95f64989a783a9adb191defca.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/scale-slot-comparison-574a9c1f074620fd4871a452287890f7009c92d95f64989a783a9adb191defca.json",
+      "actual_sha256": "574a9c1f074620fd4871a452287890f7009c92d95f64989a783a9adb191defca",
+      "candidate_sha256": "574a9c1f074620fd4871a452287890f7009c92d95f64989a783a9adb191defca",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "song-sections",
+      "actual_path": "manual/generated/reader-chunks/audio/song-sections-548da0614d0aae1db2b6ec24f65ee70b10c6b0244a75c9c2833d492052d82f47.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/song-sections-548da0614d0aae1db2b6ec24f65ee70b10c6b0244a75c9c2833d492052d82f47.json",
+      "actual_sha256": "548da0614d0aae1db2b6ec24f65ee70b10c6b0244a75c9c2833d492052d82f47",
+      "candidate_sha256": "548da0614d0aae1db2b6ec24f65ee70b10c6b0244a75c9c2833d492052d82f47",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "swing-comparison",
+      "actual_path": "manual/generated/reader-chunks/audio/swing-comparison-6bdcdf311a874c628f9e7d0749ec0e8354804850019045948341e49b380788bf.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/swing-comparison-6bdcdf311a874c628f9e7d0749ec0e8354804850019045948341e49b380788bf.json",
+      "actual_sha256": "6bdcdf311a874c628f9e7d0749ec0e8354804850019045948341e49b380788bf",
+      "candidate_sha256": "6bdcdf311a874c628f9e7d0749ec0e8354804850019045948341e49b380788bf",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "three-voice-conversation",
+      "actual_path": "manual/generated/reader-chunks/audio/three-voice-conversation-a8ed421956a5e825f7cbac8d7b89d09641402555ca4fedf0e16b000140eb3c94.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/three-voice-conversation-a8ed421956a5e825f7cbac8d7b89d09641402555ca4fedf0e16b000140eb3c94.json",
+      "actual_sha256": "a8ed421956a5e825f7cbac8d7b89d09641402555ca4fedf0e16b000140eb3c94",
+      "candidate_sha256": "a8ed421956a5e825f7cbac8d7b89d09641402555ca4fedf0e16b000140eb3c94",
+      "identical": true
+    },
+    {
+      "kind": "audio",
+      "id": "voice-leading-revoice",
+      "actual_path": "manual/generated/reader-chunks/audio/voice-leading-revoice-9a21b0d92c08a35f18645add3671c0f8e0d5494334db8574a5be53e7210a90c8.json",
+      "candidate_path": "projection-v02/reader-chunks/audio/voice-leading-revoice-9a21b0d92c08a35f18645add3671c0f8e0d5494334db8574a5be53e7210a90c8.json",
+      "actual_sha256": "9a21b0d92c08a35f18645add3671c0f8e0d5494334db8574a5be53e7210a90c8",
+      "candidate_sha256": "9a21b0d92c08a35f18645add3671c0f8e0d5494334db8574a5be53e7210a90c8",
+      "identical": true
+    }
+  ],
+  "install_manifest": [
+    {
+      "path": "manual/generated/book.json",
+      "sha256": "b67b58422e7b978a28a073ab4dd18cc9f9fddebd5aa40c5edc67ce32398196f4"
+    },
+    {
+      "path": "manual/generated/reader-index.json",
+      "sha256": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701"
+    }
+  ],
+  "source_authoring_input_sha256": {
+    "manual/course.yaml": "41ffc82cfaef102a738b69ac7a7a85a85b0f05f25b2b94247adb8ed25e9bd449",
+    "manual/features/reference-channel.yaml": "2d9ceadbe122f403a89194a08111badbf1b690ac7771e57cf4d85db7662197bf",
+    "manual/features/tutorials.yaml": "613240583b1675ac86c71a3fa21a4385634923a9600d4a0386b11f69e4bb5ced",
+    "manual/features/reference-learn.yaml": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+    "manual/book.yaml": "8d45d9d748445d12488e8fc445ac05b6aaaa9c1213cc98677db183467b054508",
+    "manual/scene-captions.yaml": "40c8d33cabc50a1f292083202c28ff1632790cdce24222d89b087f9c7e56f822",
+    "manual/scene-starting-states.yaml": "932f867400610f255ee7ffd0d18b61695dba2126bae94f798e6d66cb647bfbd2",
+    "manual/book.js": "5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf",
+    "manual/manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4"
+  },
+  "baseline_current_projection_validation": {
+    "passed": true,
+    "reader_index_sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+    "chunk_inventory_sha256": "954a9370496262c8b820b245d801d7c8e12095595b20dae061b167ca73ea73e5",
+    "chunk_count": 167,
+    "validation_inputs": "current book/audio + pinned retained MIDI admission SHA above"
+  },
+  "authoring_identity_files": {
+    "manual/audio-scenes.yaml": "ffc775971ce1fa3bfca8ba55c1059798519cd4a82241eb8827e9852afeebcd74",
+    "manual/book.schema.json": "f08c18a674c4342b4f6882845ac5195a984890cae884d87aac0528ebf48ec28c",
+    "manual/book.yaml": "8d45d9d748445d12488e8fc445ac05b6aaaa9c1213cc98677db183467b054508",
+    "manual/caption-overlays.schema.json": "b72f52b763811d137295e7fe31f4d5011dc5bac19d5eba802bd06f22d631d83d",
+    "manual/case-scenes.schema.json": "37ce8573ffef7ea4192b8bd2871d726eebca0edc04b24cfbae6fce2eb8f88c95",
+    "manual/course.schema.json": "73b6b821c6842dc0d7c762c074f16c3ba4e983469ee4d4493cf62f475a962885",
+    "manual/course.yaml": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a",
+    "manual/doctor-auto-probe.yaml": "3019af18e689926b7a75ff189747149a52d28b20d6034ae5dfd596aa1ff831f2",
+    "manual/doctor-bindings.schema.json": "6b5003c89a1714060b951c1f95cf064ad61e13482e0771b18265c59135018202",
+    "manual/doctor-scene.schema.json": "18c3d08438a3dd907985216afc83e8873b815ce148c64617238d061623779504",
+    "manual/doctor-scene.yaml": "86c2c7621acc985137710fa49ed24beb6ea2a489d9b99f5ef02e557f93fb7bd1",
+    "manual/features/cookbook.yaml": "5f5935095bd5ad13849bfede00671c213231ebc490ef3edacd6d2505e2091ba0",
+    "manual/features/first-sound-capture.yaml": "6e1baca237a328f2e14471e77c53aca6e72e6f71246ae22e11cfe9cfcfd628ea",
+    "manual/features/masks.yaml": "b1b5e01e17479e813d51e6931fd510424fe7f6d6f1a34a6c072b0c10a52f8052",
+    "manual/features/reference-channel.yaml": "f1959ad4521ab1df2703b6d73ee2d45ad33571ba60e2f3e24c68c7a7c1c098bd",
+    "manual/features/reference-developer.yaml": "9c09ef25a0116b3aa31146e1245f96d73c57fd6b86edc4c056dd68d4f7681796",
+    "manual/features/reference-learn.yaml": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+    "manual/features/reference-locks.yaml": "79e92135fb4a8ca5ce4ce8b5d33c9fe1bd03e68e660d8f0da1e6329f862d5404",
+    "manual/features/reference-musical.yaml": "b998d2666b7f7f207cc0da58bcaebbed8dfa31d96dff77bb1250751e0251b600",
+    "manual/features/reference-options.yaml": "bad51a3d8b0637651973b296500d9cd10843599847af3ef1e6848d5af1795134",
+    "manual/features/reference-pattern.yaml": "c783fd69809505e22070f4306450fa7e9a931123d9780f2c9c7b26050cf7b1da",
+    "manual/features/reference-scale.yaml": "5b7a7a5dffd350a3326c03881688496d62be43e6d8f64925148ed23f1385747e",
+    "manual/features/reference-song.yaml": "612fcf0de656c7ee07fbd536510d1078adacfb0be06c843a4d627cd7b95eb2cc",
+    "manual/features/reference-workflow.yaml": "ffc2fb674ab034d4608f301296fd6bb7cbe3ad1d22d3799ebc35db2525788055",
+    "manual/features/scenes-doctor-scenes.yaml": "4e0635a7bcf6ccee4841bd7fe2462f23a9528760038cc77f7bd875b66b2002ee",
+    "manual/features/scenes-player-routes.yaml": "4d091759c5e5eec9d7fe2a258686619e6674b46e57aa80457a62de7f24c94fba",
+    "manual/features/scenes-reference-closure-scenes.yaml": "fb5e550fcf80da49c3d2ce61424ca42aa893bba46c3aad570d0128b3cb00f954",
+    "manual/features/scenes-reference-course-scenes.yaml": "9f900e55a85181196c528244dff0af2ea536ce41416e8acb0ca49438fa5d9eda",
+    "manual/features/scenes-reference-devices-scenes.yaml": "ade0fd48f565705b66922ca734196947da0519e2aed7e9349b24fe86bb80fd89",
+    "manual/features/scenes-reference-extra-scenes.yaml": "5b8c15b0db80f77e404c529576d22449ac146badfbb68277605f649985397b1f",
+    "manual/features/scenes-reference-lead-panic-scenes.yaml": "f6a7c9a84ee93a533329085e39321113c993eabefbd161f99bf426e456aa636e",
+    "manual/features/scenes-reference-locks-scenes.yaml": "de05e50cfab86766d31ffafb18656b0218b15ec50a03e5879b717a8aad0ed7ed",
+    "manual/features/scenes-reference-merge-strategy-scenes.yaml": "64230b9af519eebd3edee2585bd9f40f07ba77db408f6ef39dd60def43f8bff7",
+    "manual/features/scenes-reference-modulation-macro-midi-modulation-scenes.yaml": "bc146b496bbed7bee592945b72346465c4c2fc733e2e2b1c96b2771af700f08c",
+    "manual/features/scenes-reference-musical-scenes.yaml": "cb1e082dc2b9a1ce41e6630748cc15cd10b6848dda8737515b07ae5124472c32",
+    "manual/features/scenes-reference-native-public-gaps-scenes.yaml": "0188decfd8350430c8ef718ac75703aea0ae577d410cbe5b81bb8f18624329fb",
+    "manual/features/scenes-reference-nested-scenes.yaml": "b5273d1906cd887fdafae6b098d488429b6e9cd2ccd2920dfc2f9927d082bc36",
+    "manual/features/scenes-reference-options-midi-modulation-scenes.yaml": "70c6163739aee6d751003c012bfd8f69bd82cbe0d5e6aa72055b4e3c63e2068e",
+    "manual/features/scenes-reference-options-scenes.yaml": "f9032faa6dceed963792e15077b55075633bc87157a0e7f8c3de283adf43af90",
+    "manual/features/scenes-reference-parameters-scenes.yaml": "160458894f85050db1873f8bf9ccc3cc2bdfef8c2d9ed7cc4bb0fcd635f88fcc",
+    "manual/features/scenes-reference-player-apply-manual-player-ui-scenes.yaml": "9efda2febd7aa8492dd003d882ccc3857503c5709ac62d1e5fb9d52743cad603",
+    "manual/features/scenes-reference-polymeter-scenes.yaml": "3913fa61ca62a015ea8a733089086ff1543c784dcd571d1c86730080d99e1402",
+    "manual/features/scenes-reference-readability-scenes.yaml": "14e83f697dded87e470b4592a292421ddc00dd3e46838dbb830a8fdf2f9c0e99",
+    "manual/features/scenes-reference-reason-swing-scenes.yaml": "ff1a92d3c930ba774ce6e6a7b8b2f06be3bec9c34bfd3115b584aba67975923b",
+    "manual/features/scenes-reference-remaining-scenes.yaml": "a24023322d82e3622490387a60c2d68e8d729b4e5a42a634b8acb8eb1aea06bf",
+    "manual/features/scenes-reference-save-dialog-scenes.yaml": "224be97ba362a57afaabb2143357e75f4480631b2eddbf43c123f1b64c163883",
+    "manual/features/scenes-reference-scenes.yaml": "55e88fa730bc3a057f9d8a754563c4373aee48b096ee544fc73cbe5c38b69e6e",
+    "manual/features/scenes-reference-vertical-list-scenes.yaml": "aff640ea9fec854f7e43919531bd4767b19123ff2c163aa47ec877e686416dbc",
+    "manual/features/scenes-reference-workflow-scenes.yaml": "b2ad6c95acc0fd44ae5da4e0645e46df9acbe3e0424b9a42d3407c56437deb4d",
+    "manual/features/tutorials.yaml": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8",
+    "manual/player-routes.yaml": "7af32e3fb6c9c2e612a111ad899aad8c91c456f5d79f712e2d0db3b967b0cde1",
+    "manual/recordings.schema.json": "e4b6e44f4924a9f608874b70e601ad686aba6eed740bacbd46239b80a968d665",
+    "manual/recordings.yaml": "d60e5962d3c96b90c46d45c581193660f635e7a395e1f7eb7bdc5b49c2a8d3fe",
+    "manual/scene-captions.yaml": "40c8d33cabc50a1f292083202c28ff1632790cdce24222d89b087f9c7e56f822",
+    "manual/scene-plans-closure.yaml": "7e809330e31c747b17475d9b5f5c3fa432f1fee1d912cc036b595d3e485ef396",
+    "manual/scene-plans-course.yaml": "5cf1f212b80690ca5a9bd5b338fc2872668109c33dd343d969fb54fb7a114d7a",
+    "manual/scene-plans-devices.yaml": "cc8cd91fadadd47434813dd1bc95acb229df14604d20940578620f6af7ff6fe4",
+    "manual/scene-plans-extra.yaml": "45b16f92fd210a8d050589e94b52b8fc7dd781b78d50ad1f604a1c1c3e8b23af",
+    "manual/scene-plans-lead-panic.yaml": "775946887ee24f80a984bb3cb86571c842fb0ac7a1a51cd1bcf63f727f93bd69",
+    "manual/scene-plans-locks.yaml": "8530b991590a307435f9644c7a982dbd355d5c425d425c507eea9b7897577f7e",
+    "manual/scene-plans-merge-strategy.yaml": "5e27d4bb47db5878b3e81fc0a05471316f9f1cebf6e0fac328926640c0733d7d",
+    "manual/scene-plans-modulation-macro.yaml": "38d65cb9c80c9e3ca497d62e0a73204d56bf86af45705174903a4a3a2d39d3da",
+    "manual/scene-plans-musical.yaml": "2c71837ab8fd3ac0f488695312ca3907b831895fcc98389b7bfd0d775e7e0c0c",
+    "manual/scene-plans-native-public-gaps.yaml": "a5533f37f9732633dae523b22717f53e34be3d9578dedee90f7ea42460dfd1c5",
+    "manual/scene-plans-nested.yaml": "a90e746d815291ba05c90878fe05e4c35ef852a2d0f7e565913ecf251fb7c999",
+    "manual/scene-plans-options.yaml": "3443477b6c8077671d97b94d0b9f1f2088de61fb0c246a51d18e9423a1a59f9e",
+    "manual/scene-plans-parameters.yaml": "d73887b591a3a27547d5082c0467e0ddcae6717262ff2b02f145100436e73613",
+    "manual/scene-plans-player-apply.yaml": "48f18e540e571f5e7e0bc381552eff71f724c2a306d8decc33b05b7c674bbf57",
+    "manual/scene-plans-polymeter.yaml": "c4fcf113c0b53335a71e39b12dbfc3ed511031e5605781b6b78bbf3c77cc1ef9",
+    "manual/scene-plans-readability.yaml": "da69a97e1b4f9fa83f6acca1555818b36c162524e2324ec5f4fb74fa985839a6",
+    "manual/scene-plans-reason-swing.yaml": "06049283494dd3c6772dc28881da6401603bd99879e3e244088d4b7d62eeb118",
+    "manual/scene-plans-remaining.yaml": "89b2be9b058479a238d9fc6f3942e50be2ac94c69260c3f92af690fda6f6927a",
+    "manual/scene-plans-save-dialog.yaml": "e1a7a6aafc5730805131177bf29e8b0d50b850fe7ca0926828e2512927af86ec",
+    "manual/scene-plans-vertical-list.yaml": "19bdc88cf4053a6709b2d50c4b71e9de3db8315590486362b3820addaed25d33",
+    "manual/scene-plans-workflow.yaml": "5e45b0b6426c8c4596e210320182eef02169590494374e4c98e2da7cedd2bdd7",
+    "manual/scene-plans.yaml": "b7737e5eb4d56ec27b695b9050fe34e85ebd0c08681ee9bf9e18a2f3336ebb9e",
+    "manual/scene-starting-states.yaml": "932f867400610f255ee7ffd0d18b61695dba2126bae94f798e6d66cb647bfbd2",
+    "manual/schema.json": "3862a55f728f42823fc869fd88eb3cc449aaa71d78ca9137c3059eadfee471c3",
+    "manual/screen-output.schema.json": "c9692b20a25f6d40ffeecb1ae50dc4d2a9b0b08f38c9200dc8dcb62c84367349",
+    "manual/teaching-binding.schema.json": "9479b0e42726853a62cfb62313b897fd898a1b411cc1d9a306a5ca5413332b4d"
+  },
+  "actual_index_canonical_inputs": {
+    "audio_scenes_json_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+    "book_json_sha256": "db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e",
+    "retained_midi_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a"
+  },
+  "candidate_index_canonical_inputs": {
+    "audio_scenes_json_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+    "book_json_sha256": "b67b58422e7b978a28a073ab4dd18cc9f9fddebd5aa40c5edc67ce32398196f4",
+    "retained_midi_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a"
+  },
+  "all_preflight_pinned_actual_inputs_unchanged": true,
+  "source_recheck": {
+    "manual/book.yaml": {
+      "status": "unchanged",
+      "preflight_sha256": "8d45d9d748445d12488e8fc445ac05b6aaaa9c1213cc98677db183467b054508",
+      "current_sha256": "8d45d9d748445d12488e8fc445ac05b6aaaa9c1213cc98677db183467b054508"
+    },
+    "manual/course.yaml": {
+      "status": "unchanged",
+      "preflight_sha256": "41ffc82cfaef102a738b69ac7a7a85a85b0f05f25b2b94247adb8ed25e9bd449",
+      "current_sha256": "41ffc82cfaef102a738b69ac7a7a85a85b0f05f25b2b94247adb8ed25e9bd449"
+    },
+    "manual/features/reference-channel.yaml": {
+      "status": "unchanged",
+      "preflight_sha256": "2d9ceadbe122f403a89194a08111badbf1b690ac7771e57cf4d85db7662197bf",
+      "current_sha256": "2d9ceadbe122f403a89194a08111badbf1b690ac7771e57cf4d85db7662197bf"
+    },
+    "manual/features/tutorials.yaml": {
+      "status": "unchanged",
+      "preflight_sha256": "613240583b1675ac86c71a3fa21a4385634923a9600d4a0386b11f69e4bb5ced",
+      "current_sha256": "613240583b1675ac86c71a3fa21a4385634923a9600d4a0386b11f69e4bb5ced"
+    },
+    "manual/features/reference-learn.yaml": {
+      "status": "unchanged",
+      "preflight_sha256": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+      "current_sha256": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead"
+    },
+    "manual/book.js": {
+      "status": "unchanged",
+      "preflight_sha256": "5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf",
+      "current_sha256": "5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf"
+    },
+    "manual/manual.js": {
+      "status": "unchanged",
+      "preflight_sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+      "current_sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4"
+    },
+    "manual/generated/book.json": {
+      "status": "unchanged",
+      "preflight_sha256": "db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e",
+      "current_sha256": "db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e"
+    },
+    "manual/generated/reader-index.json": {
+      "status": "unchanged",
+      "preflight_sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+      "current_sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52"
+    },
+    "manual/generated/audio-scenes.json": {
+      "status": "unchanged",
+      "preflight_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+      "current_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd"
+    },
+    "manual/scene-captions.yaml": {
+      "status": "unchanged",
+      "preflight_sha256": "40c8d33cabc50a1f292083202c28ff1632790cdce24222d89b087f9c7e56f822",
+      "current_sha256": "40c8d33cabc50a1f292083202c28ff1632790cdce24222d89b087f9c7e56f822"
+    },
+    "manual/scene-starting-states.yaml": {
+      "status": "unchanged",
+      "preflight_sha256": "932f867400610f255ee7ffd0d18b61695dba2126bae94f798e6d66cb647bfbd2",
+      "current_sha256": "932f867400610f255ee7ffd0d18b61695dba2126bae94f798e6d66cb647bfbd2"
+    }
+  },
+  "external_output_paths": {
+    "compiled_book": "scratch-v01/manual/generated/book.json",
+    "projected_index": "projection-v02/reader-index.json",
+    "projected_chunks": "projection-v02/reader-chunks/"
+  },
+  "renderer_bridge_source_hashes": {
+    "manual/book.js": "5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf",
+    "manual/manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "inline_rendering_api_present_in_copied_sources": true
+  }
+}

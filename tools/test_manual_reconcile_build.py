@@ -132,16 +132,18 @@ class CompletedBuildReviewTests(unittest.TestCase):
   (self.root/'cheat_sheet.html').write_text('invented control')
   with self.assertRaisesRegex(ValueError,'Quick reference'):self.invoke()
 
-# Stages added to the canonical plan by receipted installs of 2026-10-06 (root-install receipts under
-# /home/andy/mosaic-manual-build-operators: core-portable, player-publication, public-gap-build, modest-matrix-v10,
-# native-public-gaps-v03) on top of the earlier frozen 73-stage full plan. Each is asserted by name.
+# The six 2026-10-06 stages are covered by the receipts listed in test_manual_build.py.
+# Three later stages are source-derived from committed tree 9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0:
+# the full-only fresh-target producer plus real and controlled Save Dialog stages.
 BASELINE_FULL_STAGES=73
 STAGES_ADDED_20261006=("reference-real-scene-plans-modulation-macro-midi-modulation","reference-controlled-scene-plans-modulation-macro-midi-modulation",
  "reference-real-scene-plans-native-public-gaps-base-midi","reference-controlled-scene-plans-native-public-gaps-base-midi",
  "reference-controlled-scene-plans-player-apply-manual-player-ui","reader-projection")
+STAGES_ADDED_20261008=("fresh-target-midi-producer","reference-real-scene-plans-save-dialog-base-midi","reference-controlled-scene-plans-save-dialog-base-midi")
+STAGES_ADDED=STAGES_ADDED_20261006+STAGES_ADDED_20261008
 def assert_canonical_inventory(case,names):
- case.assertEqual(len(names),BASELINE_FULL_STAGES+len(STAGES_ADDED_20261006));case.assertEqual(len(set(names)),len(names))
- for name in STAGES_ADDED_20261006:case.assertEqual(names.count(name),1,name)
+ case.assertEqual(len(names),BASELINE_FULL_STAGES+len(STAGES_ADDED));case.assertEqual(len(set(names)),len(names))
+ for name in STAGES_ADDED:case.assertEqual(names.count(name),1,name)
 
 class ReviewedDesignGapTests(unittest.TestCase):
  def test_reserialized_immutable_yaml_requires_receipt(self):
@@ -274,12 +276,16 @@ class ActualControlledCanonicalPlanTests(unittest.TestCase):
  def test_local_canonical_sequence_uses_controlled_captures_and_asset_audio(self):
   plans=sorted(p.name for p in (tool.ROOT/'manual').glob('scene-plans*.yaml'));names=tool.canonical_stage_names(tool.ROOT,plans,True)
   self.assertIn('masks-controlled',names);self.assertIn('first-sound-controlled',names);self.assertIn('musical-audio-assets',names)
+  self.assertIn('reference-controlled-scene-plans-save-dialog-base-midi',names)
+  self.assertNotIn('reference-real-scene-plans-save-dialog-base-midi',names);self.assertNotIn('fresh-target-midi-producer',names)
   self.assertNotIn('masks-real',names);self.assertNotIn('first-sound-real',names);self.assertNotIn('musical-audio',names)
   self.assertFalse(any(n.startswith('reference-real-') or n.startswith('doctor-options-') for n in names))
   self.assertIn('doctor-manual-real',names);self.assertIn('doctor-auto-real',names);self.assertIn('doctor-publish',names)
   full=tool.canonical_stage_names(tool.ROOT,plans);assert_canonical_inventory(self,full)
-  for name in STAGES_ADDED_20261006:
-   if name.startswith('reference-real-'):self.assertNotIn(name,names)
+  self.assertLess(full.index('compile-book'),full.index('fresh-target-midi-producer'));self.assertLess(full.index('fresh-target-midi-producer'),full.index('reader-projection'))
+  self.assertLess(full.index('reference-real-scene-plans-save-dialog-base-midi'),full.index('reference-controlled-scene-plans-save-dialog-base-midi'))
+  for name in STAGES_ADDED:
+   if name.startswith('reference-real-') or name=='fresh-target-midi-producer':self.assertNotIn(name,names)
    else:self.assertIn(name,names)
   self.assertEqual(sum(n.startswith('reference-controlled-') for n in names),sum(n.startswith('reference-controlled-') for n in full));self.assertEqual(sum(n.startswith('browser-') for n in names),8)
 

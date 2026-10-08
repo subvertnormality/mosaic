@@ -55,14 +55,14 @@ def _sha(path):
 def _canonical(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
-def validate_panic_release_readout(scene, step_id, wanted, project_root):
+def validate_panic_release_readout(scene, step_id, wanted, project_root, resolve_evidence=Path):
     _need(scene.get("id") == "panic-stops-sounding-note" and step_id == "panic-released"
           and is_retained_panic_source(scene),
           "Panic sounding-note receipt is restricted to its pinned retained endpoint")
     _need(wanted == [{"port": 1, "bytes": [128, 60, 0]}],
           "Panic endpoint must require the actual MIDI 60 note-off")
     evidence = scene.get("evidence", {})
-    root = Path(evidence.get("path", "")).resolve()
+    root = Path(resolve_evidence(evidence.get("path", ""))).resolve()
     context = evidence.get("session_context")
     _need(root.is_dir() and isinstance(context, dict) and context.get("finished") is True
           and context.get("cleanup_verified") is True and context.get("held_inputs") == [],

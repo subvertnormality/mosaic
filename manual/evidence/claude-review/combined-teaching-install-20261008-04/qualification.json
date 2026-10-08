@@ -1,0 +1,125 @@
+{
+  "manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+  "candidate_files": {
+    "manual/features/cookbook.yaml": {
+      "before_sha256": "5f5935095bd5ad13849bfede00671c213231ebc490ef3edacd6d2505e2091ba0",
+      "after_sha256": "40e2bc5823c8f256c46ed66d039bbb496962e4285ff1832b30ac8c1a0d4cdc26"
+    },
+    "manual/features/masks.yaml": {
+      "before_sha256": "b1b5e01e17479e813d51e6931fd510424fe7f6d6f1a34a6c072b0c10a52f8052",
+      "after_sha256": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de"
+    },
+    "manual/features/reference-channel.yaml": {
+      "before_sha256": "f1959ad4521ab1df2703b6d73ee2d45ad33571ba60e2f3e24c68c7a7c1c098bd",
+      "after_sha256": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d"
+    },
+    "manual/features/reference-learn.yaml": {
+      "before_sha256": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+      "after_sha256": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7"
+    },
+    "manual/features/reference-locks.yaml": {
+      "before_sha256": "79e92135fb4a8ca5ce4ce8b5d33c9fe1bd03e68e660d8f0da1e6329f862d5404",
+      "after_sha256": "54dae03014a823c2c68965849b2a9c97d85927c86c2dc106e5a195f22fb22189"
+    },
+    "manual/features/reference-musical.yaml": {
+      "before_sha256": "b998d2666b7f7f207cc0da58bcaebbed8dfa31d96dff77bb1250751e0251b600",
+      "after_sha256": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7"
+    },
+    "manual/features/reference-options.yaml": {
+      "before_sha256": "bad51a3d8b0637651973b296500d9cd10843599847af3ef1e6848d5af1795134",
+      "after_sha256": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff"
+    },
+    "manual/features/reference-scale.yaml": {
+      "before_sha256": "5b7a7a5dffd350a3326c03881688496d62be43e6d8f64925148ed23f1385747e",
+      "after_sha256": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38"
+    },
+    "manual/features/reference-song.yaml": {
+      "before_sha256": "612fcf0de656c7ee07fbd536510d1078adacfb0be06c843a4d627cd7b95eb2cc",
+      "after_sha256": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9"
+    },
+    "manual/recordings.yaml": {
+      "before_sha256": "d60e5962d3c96b90c46d45c581193660f635e7a395e1f7eb7bdc5b49c2a8d3fe",
+      "after_sha256": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585"
+    },
+    "manual/scene-captions.yaml": {
+      "before_sha256": "40c8d33cabc50a1f292083202c28ff1632790cdce24222d89b087f9c7e56f822",
+      "after_sha256": "78400a80e122d38f85333bc1230ecc1320c2d6dfcaae25cc67bf8d0f9a475d8b"
+    }
+  },
+  "authored_leaf_changes": 58,
+  "preimage_authoring_identity": "80cc81d39ab276c32da0561588cafad4ac3f4123b065043573a78b1483312d46",
+  "staged_authoring_identity": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+  "scene_count": 146,
+  "scene_native_semantic_parity": true,
+  "projection_chunks": 167,
+  "full_validate_projection": true,
+  "retained_midi_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a",
+  "raw_catalogues_and_scene_plans_unchanged": true,
+  "root_audio_scenes_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+  "current_base_rebase_report": "current-base-rebase.json",
+  "save_outcome_derivative_proof": {
+    "source_path": "manual/features/reference-locks.yaml",
+    "source_leaf": [
+      "features",
+      7,
+      "teaching_bindings",
+      0,
+      "teaching_binding",
+      "human_outcome"
+    ],
+    "feature_id": "save-and-load",
+    "lesson_id": "save-named-arrangement",
+    "presentation_metadata_sha256": "7dc2a67b775b6f20c0ac189704b1a009d44dc5b7106a98537f3120552cfa686d",
+    "derived_paths": [
+      [
+        "features",
+        85,
+        "teaching_bindings",
+        0,
+        "human_outcome"
+      ],
+      [
+        "features",
+        85,
+        "teaching_bindings",
+        0,
+        "presentation_metadata",
+        "human_outcome"
+      ],
+      [
+        "features",
+        85,
+        "teaching_bindings",
+        0,
+        "presentation_metadata_sha256"
+      ],
+      [
+        "teaching_contracts",
+        "feature:save-and-load:save-named-arrangement",
+        "human_outcome"
+      ],
+      [
+        "teaching_contracts",
+        "feature:save-and-load:save-named-arrangement",
+        "presentation_metadata",
+        "human_outcome"
+      ],
+      [
+        "teaching_contracts",
+        "feature:save-and-load:save-named-arrangement",
+        "presentation_metadata_sha256"
+      ]
+    ]
+  },
+  "save_outcome_derived_leaf_count": 6,
+  "publication_audio_scenes_used": false,
+  "audio_scenes_copied": false,
+  "install_requested": true,
+  "installation": {
+    "installed": true,
+    "rollback_files_per_root": 181,
+    "publication_audio_scenes_used": false
+  },
+  "postinstall_identity_root": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+  "postinstall_identity_publication": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053"
+}

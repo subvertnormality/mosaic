@@ -6,16 +6,19 @@ from types import SimpleNamespace
 ROOT=Path(__file__).resolve().parents[2]
 spec=importlib.util.spec_from_file_location("manual_build",ROOT/"tools/manual_build.py")
 build=importlib.util.module_from_spec(spec);spec.loader.exec_module(build)
-# Stages added to build.plan by receipted installs of 2026-10-06 (root-install receipts under
-# /home/andy/mosaic-manual-build-operators: core-portable, player-publication, public-gap-build,
-# modest-matrix-v10, native-public-gaps-v03). Counts below are derived from this named list on top of the
-# earlier frozen baseline (73 full, 44 controlled-local) and each stage is asserted by name.
+# The 2026-10-06 root installs add six named stages to the frozen 73-full/44-local baseline.
+# Receipts: /home/andy/mosaic-manual-build-operators/{core-portable,player-publication,public-gap-build,
+# modest-matrix-v10,native-public-gaps-v03}.
+# Committed source 9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0 adds a full-only fresh-target producer and
+# the real/controlled Save Dialog pair; only the controlled Save Dialog stage is in controlled-local.
 BASELINE_FULL_STAGES,BASELINE_LOCAL_STAGES,BASELINE_LOCAL_REFERENCE_CONTROLLED=73,44,19
 STAGES_ADDED_20261006_FULL=(
  "reference-real-scene-plans-modulation-macro-midi-modulation","reference-controlled-scene-plans-modulation-macro-midi-modulation",
  "reference-real-scene-plans-native-public-gaps-base-midi","reference-controlled-scene-plans-native-public-gaps-base-midi",
  "reference-controlled-scene-plans-player-apply-manual-player-ui","reader-projection")
-STAGES_ADDED_20261006_LOCAL=tuple(name for name in STAGES_ADDED_20261006_FULL if not name.startswith("reference-real-"))
+STAGES_ADDED_20261008_FULL=("fresh-target-midi-producer","reference-real-scene-plans-save-dialog-base-midi","reference-controlled-scene-plans-save-dialog-base-midi")
+STAGES_ADDED_FULL=STAGES_ADDED_20261006_FULL+STAGES_ADDED_20261008_FULL
+STAGES_ADDED_LOCAL=tuple(name for name in STAGES_ADDED_FULL if not name.startswith("reference-real-") and name!="fresh-target-midi-producer")
 def reader_projection_record(**changes):
  """Terminal receipt shape written by run_build_stages for the reader-projection stage."""
  record=dict(name="reader-projection",passed=True,returncode=0,reader_projection=dict(passed=True))
@@ -38,20 +41,25 @@ class BuildPlan(unittest.TestCase):
   self.assertFalse(any(name.startswith("doctor-options-") for name in names))
   bind=next(stage for stage in stages if stage["name"]=="course-bind")
   self.assertTrue(bind["action"]["controlled_local"])
- def test_controlled_local_default_inventory_has_43_stages_while_full_plan_stays_72(self):
+ def test_current_plan_inventory_matches_named_full_and_controlled_stages(self):
   options=self.options();options.modulation_code_root="/mods";options.modulation_controlled_install="/native/mod-control.json";options.browser_tests=True
   plans=[path.name for path in sorted((ROOT/"manual").glob("scene-plans*.yaml"))]
   full=build.plan(options,plans,controlled_local=False);local=build.plan(options,plans,controlled_local=True)
-  self.assertEqual(len(full),BASELINE_FULL_STAGES+len(STAGES_ADDED_20261006_FULL));self.assertEqual(len(local),BASELINE_LOCAL_STAGES+len(STAGES_ADDED_20261006_LOCAL))
+  self.assertEqual(len(full),BASELINE_FULL_STAGES+len(STAGES_ADDED_FULL));self.assertEqual(len(local),BASELINE_LOCAL_STAGES+len(STAGES_ADDED_LOCAL))
   full_names=[row["name"] for row in full];local_names=[row["name"] for row in local]
   self.assertEqual(len(set(full_names)),len(full_names));self.assertEqual(len(set(local_names)),len(local_names))
-  for name in STAGES_ADDED_20261006_FULL:self.assertEqual(full_names.count(name),1,name)
-  for name in STAGES_ADDED_20261006_LOCAL:self.assertEqual(local_names.count(name),1,name)
-  for name in STAGES_ADDED_20261006_FULL:
-   if name.startswith("reference-real-"):self.assertNotIn(name,local_names)
+  for name in STAGES_ADDED_FULL:self.assertEqual(full_names.count(name),1,name)
+  for name in STAGES_ADDED_LOCAL:self.assertEqual(local_names.count(name),1,name)
+  for name in STAGES_ADDED_FULL:
+   if name.startswith("reference-real-") or name=="fresh-target-midi-producer":self.assertNotIn(name,local_names)
+  self.assertLess(full_names.index("compile-book"),full_names.index("fresh-target-midi-producer"));self.assertLess(full_names.index("fresh-target-midi-producer"),full_names.index("reader-projection"))
+  self.assertLess(full_names.index("reference-real-scene-plans-save-dialog-base-midi"),full_names.index("reference-controlled-scene-plans-save-dialog-base-midi"))
   self.assertLess(full_names.index("reader-projection"),full_names.index("quick-reference"));self.assertGreater(full_names.index("reader-projection"),full_names.index("compile-book"))
   controlled_refs=[row for row in local if row["name"].startswith("reference-controlled-")]
-  self.assertEqual(len(controlled_refs),BASELINE_LOCAL_REFERENCE_CONTROLLED+sum(n.startswith("reference-controlled-") for n in STAGES_ADDED_20261006_LOCAL))
+  self.assertEqual(len(controlled_refs),BASELINE_LOCAL_REFERENCE_CONTROLLED+sum(n.startswith("reference-controlled-") for n in STAGES_ADDED_LOCAL))
+  self.assertIn("reference-controlled-scene-plans-save-dialog-base-midi",local_names)
+  self.assertNotIn("reference-real-scene-plans-save-dialog-base-midi",local_names)
+  self.assertNotIn("fresh-target-midi-producer",local_names)
   self.assertFalse(any(row["name"].startswith("reference-real-") or row["name"].startswith("doctor-options-") for row in local))
  def test_launch_mode_requires_real_install_only_for_full_paired_generation(self):
   with self.assertRaisesRegex(ValueError,"explicit qualified real installation"):
@@ -498,14 +506,12 @@ class StageGates(unittest.TestCase):
   # Frozen original AST identities avoid importing a second fixture module.
   # plan re-frozen 2026-10-05 after the reviewed addition of the browser-manual-reader-text stage.
   # stage_command and run_stage re-frozen 2026-10-05 (owner-approved) to the values in every qualified prebuild source since 2026-10-04.
-  # plan re-frozen 2026-10-06 (75369f2c... -> 3eca11f3...): diff against the previous frozen plan is exactly the receipted
-  # installs: reader-projection stage, manual-player-ui profile + player-apply helper, public-gap and modulation-macro
-  # helper registrations, and audio arguments on masks-controlled (core-portable, player-publication, public-gap-build root installs).
-  # run_stage re-frozen 2026-10-06 (ffe632ac... -> dc7a4f58...): the only diff is the reader-projection terminal-report block
-  # (missing report or passed!=true raises; report recorded as record['reader_projection']), from the same receipted reader-projection install.
+  # Re-pinned 2026-10-08 against reviewed committed source HEAD 9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0.
+  # The commit adds the fresh-target MIDI producer and retained/fresh admission arguments; these function bodies were reviewed
+  # against that exact source before freezing the Py3.8 and Py3.11 AST identities.
   # ast.dump output differs between Python versions, so each pin is per version; both values are the same
   # source. CI and the build run Python 3.8 (Ubuntu 20.04); local tooling also uses 3.11. Other versions fail loudly.
-  expected={'plan': {(3,8): '78cf0c80605f258a57f37d0de86840c921ce592ea8c511e38080bfea39cf0d0c', (3,11): '3eca11f3a29b86888b1f150f430a404aece1bcb9a5b584f7e34b8b8976d10c41'}, 'stage_command': {(3,8): '28bacb6a33fbf54d6797e8da33b861a2b861dab4da3aa9a29d9c62e510f0d2c5', (3,11): '99ca3d67c7424e8b04306331cb2eb104e029252d6f307ea89f8cd6a57abc4905'}, 'run_stage': {(3,8): '5dbe92db0d436685e4a50c81e5e1de52b5330f153e55787a47a24f6c4df58f5f', (3,11): 'dc7a4f5885603d1087a67409e3cea34b5d9259520127d258323204b3619840eb'}}
+  expected={'plan': {(3,8): 'bb30ac13547f93247bc0f3e7a578c99405ddf5c11d0daf6423479f01ccb6f030', (3,11): '9eba758e7929c0a1a07d62d4696032ab07b219d2dea273bb8f5b8b8d3b6f3450'}, 'stage_command': {(3,8): '22493e17bf42d6d3f55b23e5dd811ae88b11e2c294d1d9157511f5113b405ca6', (3,11): '33bf4501400164ff560fcaeac4d116b7498ba94f6e35f36bcd439cc68738f5e0'}, 'run_stage': {(3,8): '1e9e336208e2984f2398337a64016ec12d3f3b78cee671a992905480c654bd4e', (3,11): '45e39ed119b3eafc264bf891046f380f6fcac75d7cfd015e2f9f641e32f7289c'}}
   candidate=ast.parse(MODULE.read_text())
   for name,value in expected.items():
    if isinstance(value,dict):
@@ -514,7 +520,7 @@ class StageGates(unittest.TestCase):
    self.assertEqual(hashlib.sha256(ast.dump(function,include_attributes=False).encode()).hexdigest(),value)
  def test_failed_child_in_main_never_requests_following_stage(self):
   root=self.root/"app";(root/"manual/generated").mkdir(parents=True)
-  options=SimpleNamespace(stage_gate_dir=None,resume_from=None,resume_manifest_sha256=None,artifacts=self.root/"runs",plans=["scene-plans.yaml"],plan_only=False,browser_tests=False,real_install="/native/qualified-real.json",adopt_audio_report=None,adopt_audio_report_sha256=None)
+  options=SimpleNamespace(stage_gate_dir=None,resume_from=None,resume_manifest_sha256=None,artifacts=self.root/"runs",plans=["scene-plans.yaml"],plan_only=False,browser_tests=False,real_install="/native/qualified-real.json",adopt_audio_report=None,adopt_audio_report_sha256=None,retained_midi_admissions=None,retained_midi_admissions_sha256=None)
   second=dict(self.stage,name="next-capture")
   def fail(stage,evidence,*args):
    (evidence/(stage["name"]+".json")).write_text(json.dumps(dict(stage,passed=False,returncode=1)))
@@ -528,7 +534,7 @@ class StageGates(unittest.TestCase):
  def test_default_off_main_runs_every_stage_in_order(self):
   root=self.root/"app";(root/"manual/generated").mkdir(parents=True)
   (root/"manual/generated/book.json").write_text('{}')
-  options=SimpleNamespace(stage_gate_dir=None,resume_from=None,resume_manifest_sha256=None,artifacts=self.root/"runs",plans=["scene-plans.yaml"],plan_only=False,browser_tests=False,real_install="/native/qualified-real.json",adopt_audio_report=None,adopt_audio_report_sha256=None)
+  options=SimpleNamespace(stage_gate_dir=None,resume_from=None,resume_manifest_sha256=None,artifacts=self.root/"runs",plans=["scene-plans.yaml"],plan_only=False,browser_tests=False,real_install="/native/qualified-real.json",adopt_audio_report=None,adopt_audio_report_sha256=None,retained_midi_admissions=None,retained_midi_admissions_sha256=None)
   stages=[dict(self.stage,name=f"capture-{index}") for index in range(72)]
   seen=[]
   def finish(stage,evidence,*args):

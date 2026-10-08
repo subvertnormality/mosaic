@@ -1,0 +1,15 @@
+{
+  "review_id":"home-introduction-astra-recheck-20261008-01",
+  "reader":"http://localhost:8785/manual/#home",
+  "status":"homepage_clarity_pass",
+  "blocking_findings":[],
+  "retained_cumulative_scores":{"readability":8,"comprehensibility":8,"flow":8,"understandability":8,"user_friendliness":8,"usefulness_of_interactive_examples":8,"cohesion":8},
+  "checks":{"product_description_distinct_from_tutorial":true,"tutorial_explicitly_labelled":true,"spacing_readable":true,"document_overflow":false,"meet_mosaic_keyboard_navigation":true},
+  "viewports":[[1440,900],[390,844]],
+  "observations":4,
+  "browser_errors":0,
+  "pins":{"book_js_independently_hashed":"6ca93f90d90196ac2c1ee6cbef31ae73bce2e9b065228016f65eae501c68ca18","reader_index_independently_hashed":"300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52","book_owner_supplied":"db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e"},
+  "scope":"homepage rendering and tutorial entry only; no fresh whole-manual review",
+  "source18_report_preserved":true,
+  "production_mutations":false,"build_or_test_suite_run":false,"native_audio_work":false,"owned_browsers_closed":true
+}

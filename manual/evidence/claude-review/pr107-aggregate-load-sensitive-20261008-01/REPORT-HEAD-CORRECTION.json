@@ -1,0 +1,17 @@
+{
+  "correction_id": "pr107-head-identity-correction-v01",
+  "reason": "The initial diagnosis report transposed two adjacent character groups in the textual PR head SHA.",
+  "incorrect_text_in_report_v1": "e05cf0d7c8e9be44259c3dad7a5c66dcd5dc5bb3",
+  "verified_pr_head": "e05cf0d7c8e9be44259c3dad5a7c66dcd5dc5bb3",
+  "verified_run_head": "e05cf0d7c8e9be44259c3dad5a7c66dcd5dc5bb3",
+  "verified_base": "5384d0babb01fd5004bdcd6a95eaa8609aa72915",
+  "verification": {
+    "pr_url": "https://github.com/subvertnormality/mosaic/pull/107",
+    "run_id": "37778845187",
+    "event": "pull_request",
+    "branch": "codex/main-pages-promotion-v03"
+  },
+  "preserved_report_v1_sha256": "9118ba31b5d90571bad5619d3c3ca671fa3e394ad187ba85906646bd8226c345",
+  "corrected_report": "REPORT-v02.md",
+  "no_ci_or_source_action": true
+}

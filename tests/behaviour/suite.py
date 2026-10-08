@@ -100,6 +100,9 @@ PYTHON_UNITTEST.add('test_mask_note_default_x')
 PYTHON_UNITTEST.add('test_parameter_recording_checkpoint_append')
 PYTHON_UNITTEST.add('test_trig_param_strum_persistence')
 PYTHON_UNITTEST.add('test_trig_parameter_controlled_playback')
+PYTHON_UNITTEST.update({'test_continue_spp_frame_oracle',
+    'test_manual_recording_review_fixes', 'test_manual_save_dialog_audit',
+    'test_manual_save_dialog_oracle'})
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.

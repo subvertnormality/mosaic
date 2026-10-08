@@ -406,7 +406,7 @@ class RawPublicationPipelineIntegrity(unittest.TestCase):
    manual=Path(directory);(manual/'generated').mkdir();book=dict(features={'feature':{}},scenes={'scene':{'id':'scene'}});(manual/'generated/book.json').write_text(json.dumps(book));raw_report=dict(passed=True,complete_regression_run=False,hardware_timing_verified=False,pilot={'frames':7})
    with patch.object(audit,'MANUAL',manual),patch.object(audit,'load',return_value={}),patch.object(audit,'compile_book',return_value=book),patch.object(audit,'audit_reader_projection',return_value=dict(passed=True,fixture=True)) as reader,patch.object(audit,'capture_catalogue',return_value={'scene':{'id':'raw'}}),patch.object(audit,'check_compiled_scene_contract') as contract,patch.object(audit,'audit_raw_publications',return_value=raw_report) as raw:
     report=audit.audit_publication()
-   contract.assert_called_once_with({'id':'raw'},{'id':'scene'});raw.assert_called_once_with();self.assertEqual(report,dict(raw_report,features=1,reader_projection=dict(passed=True,fixture=True)));reader.assert_called_once_with()
+   contract.assert_called_once_with({'id':'raw'},{'id':'scene'});raw.assert_called_once_with();self.assertEqual(report,dict(raw_report,features=1,reader_projection=dict(passed=True,fixture=True)));reader.assert_called_once_with(None,None,None,None)
  def test_cli_raw_only_dispatch_and_conflicting_modes(self):
   import io
   with patch.object(sys,'argv',['manual_publication_verify.py','--raw-only']),patch.object(audit,'audit_raw_publications',return_value=dict(passed=True)) as raw,patch.object(audit,'audit_publication',side_effect=AssertionError('Full audit selected')),patch('sys.stdout',new_callable=io.StringIO) as output:
@@ -424,7 +424,7 @@ class VerifiedCoursePublicationIntegrity(unittest.TestCase):
    verify=Mock(side_effect=ValueError('Missing durable course binding receipt'))
    with patch.object(audit,'MANUAL',manual),patch.object(audit,'load',return_value={}),patch.object(audit,'compile_book',return_value=book),patch.object(audit,'audit_reader_projection',return_value=dict(passed=True,fixture=True)) as reader,patch.object(audit,'capture_catalogue',return_value={}),patch.object(audit,'audit_raw_publications',return_value=dict(passed=True)),patch.dict(sys.modules,{'manual_course_bind':types.SimpleNamespace(verify_publication=verify)}):
     with self.assertRaisesRegex(ValueError,'Missing durable course'):audit.audit_publication()
-   verify.assert_called_once_with(root=audit.ROOT);reader.assert_called_once_with()
+   verify.assert_called_once_with(root=audit.ROOT);reader.assert_called_once_with(None,None,None,None)
  def test_valid_course_proof_is_reported_and_pending_course_needs_no_proof(self):
   import types
   from unittest.mock import Mock
@@ -433,7 +433,7 @@ class VerifiedCoursePublicationIntegrity(unittest.TestCase):
    with tempfile.TemporaryDirectory() as directory:
     manual=Path(directory);(manual/'generated').mkdir();(manual/'generated/book.json').write_text(json.dumps(book))
     with patch.object(audit,'MANUAL',manual),patch.object(audit,'load',return_value={}),patch.object(audit,'compile_book',return_value=book),patch.object(audit,'audit_reader_projection',return_value=dict(passed=True,fixture=True)) as reader,patch.object(audit,'capture_catalogue',return_value={}),patch.object(audit,'audit_raw_publications',return_value=dict(passed=True)),patch.dict(sys.modules,{'manual_course_bind':types.SimpleNamespace(verify_publication=verify)}):report=audit.audit_publication()
-   reader.assert_called_once_with();self.assertEqual(report['reader_projection'],dict(passed=True,fixture=True))
+   reader.assert_called_once_with(None,None,None,None);self.assertEqual(report['reader_projection'],dict(passed=True,fixture=True))
    if status=='verified':verify.assert_called_once_with(root=audit.ROOT);self.assertEqual(report['course'],proof)
    else:verify.assert_not_called();self.assertNotIn('course',report)
  def test_raw_audit_never_invokes_course_promotion_or_proof(self):

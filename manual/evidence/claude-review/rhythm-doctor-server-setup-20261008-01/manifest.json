@@ -1,0 +1,71 @@
+{
+  "candidate": "candidate/reference-pattern.yaml",
+  "feature_id": "rhythm-doctor",
+  "changed_fields": [
+    "features[id=\"rhythm-doctor\"].prose",
+    "features[id=\"rhythm-doctor\"].details[title=\"Analysis server (advanced)\"].text"
+  ],
+  "scope": "Authored prose only; no source, scene, capture, code, tests, generated outputs, server, native, or audio activity.",
+  "source_sha256": "c783fd69809505e22070f4306450fa7e9a931123d9780f2c9c7b26050cf7b1da",
+  "candidate_sha256": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+  "patch_sha256": "40acfa1db6532e72f7aa74b209389b48dbdd54ef2d4657712ae62534d18bd64f",
+  "source_evidence": {
+    "manual/features/reference-pattern.yaml": {
+      "sha256": "c783fd69809505e22070f4306450fa7e9a931123d9780f2c9c7b26050cf7b1da",
+      "bytes": 158324
+    },
+    "tools/rhythm_doctor_server/README.md": {
+      "sha256": "7421004bb9d341c86d1cb386b36e3cf5a4e04bf46a0a432e7e01c0317844928d",
+      "bytes": 8749
+    },
+    "tools/rhythm_doctor_server/server.py": {
+      "sha256": "01500ba495bf9b0ce932c04c5f88bc905e5e7865bc9094a8e5dce329d8cc662e",
+      "bytes": 9179
+    },
+    "tools/rhythm_doctor_server/requirements.txt": {
+      "sha256": "b7c7d26c6103c960b1d63700595e8f2d5ceed7fd0ee5e908c69d35bafcd1d408",
+      "bytes": 538
+    },
+    "tools/rhythm_doctor_server/models.py": {
+      "sha256": "0f74d103dfa20c10f3b0eb6bc298ce68d8fcc801ed55dbbf2027a595743d29cd",
+      "bytes": 7021
+    },
+    "tools/rhythm_doctor_server/lanes.py": {
+      "sha256": "1a1d6481ac171228cbeb932f509dd2c8cc61fd2c6989ce59019ce243bf53207b",
+      "bytes": 2837
+    },
+    "tools/rhythm_doctor_server/fetch_models.py": {
+      "sha256": "115bd43be31e5afcb4c49818f3b69bed9de2702712280428fa214f0f8a5e6003",
+      "bytes": 5651
+    },
+    "tools/rhythm_doctor_server/pyproject.toml": {
+      "sha256": "31fd5dbfa4a46cd71ac777ba7e6620c20070499229808322ccabcf7b3aeb2d9b",
+      "bytes": 872
+    },
+    "tools/rhythm_doctor_server/run.sh": {
+      "sha256": "8b84191cdab8256db32d7cd320a29cb22b3cb27e6af46314279aa916b637a7d0",
+      "bytes": 307
+    },
+    "lib/application_parameters.lua": {
+      "sha256": "19de1bd408a242305b20975629facee550b571d157315e12575a74114d4f6290",
+      "bytes": 5857
+    },
+    "lib/rhythm_doctor/analysis_worker_host.lua": {
+      "sha256": "e8d33aaa08fb2fb42542142fcde3b7b8ee5019b11747fcd84e40bb329a2af031",
+      "bytes": 7259
+    },
+    "lib/rhythm_doctor/analysis_transport.lua": {
+      "sha256": "02b850771a34f43756930caa075ec34d4ca3e97da4700f4eaf37a28e3c4d9d5c",
+      "bytes": 11008
+    }
+  },
+  "checks": {
+    "yaml_parse": "passed with PyYAML CSafeLoader",
+    "only_two_target_text_fields_changed": true,
+    "source_fact_assertions": "passed"
+  },
+  "affected_feature_ids": [
+    "rhythm-doctor"
+  ],
+  "review_required": "Root text-only compiler/projection and independent reader review; this package does not claim browser or native qualification."
+}

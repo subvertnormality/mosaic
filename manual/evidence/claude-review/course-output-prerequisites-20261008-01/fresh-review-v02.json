@@ -1,0 +1,339 @@
+{
+  "report_id": "six-unit-fresh-rendered-review-v02",
+  "reviewed_at": "2026-10-08",
+  "candidate": "course-output-prerequisites-20261008-01/projection-v02",
+  "runtime_reader_js_sha256": "ff5958093a44b274ab4e142d9e5d29f54ed0f53f8d82aee4f85027bbfc2d9091",
+  "browser": "http://127.0.0.1:8785/manual/ (existing preview; no restart)",
+  "method": "Load each route fresh, route candidate generated index/chunks from sealed projection-v02, inspect rendered screen/text, click visible Sound Sources link and click No Sound after opening the containing disclosure where present; wait for expected destination heading.",
+  "criteria": [
+    "canonical_home",
+    "coherence",
+    "flow",
+    "granularity",
+    "integration",
+    "naming",
+    "representation",
+    "understandability",
+    "usefulness",
+    "vocabulary"
+  ],
+  "threshold": 8,
+  "result": "all_six_units_meet_threshold",
+  "candidate_reader_index_sha256": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701",
+  "browser_observations_path": "evidence-v07/browser-observations.json",
+  "browser_observations_sha256": "654295a2f991c09a1251d6aa97a245d041872e5185fb59f27042186cbfb9ef92",
+  "units": [
+    {
+      "id": "course:getting-started-objects",
+      "route": "#getting-started/lesson/getting-started-objects",
+      "scores": {
+        "naming": 9,
+        "coherence": 9,
+        "vocabulary": 8,
+        "usefulness": 9,
+        "canonical_home": 9,
+        "integration": 9,
+        "granularity": 8,
+        "flow": 8,
+        "representation": 9,
+        "understandability": 9
+      },
+      "assessment": "The chapter gives a useful starting state, defines pattern/channel/song slot in sequence, and ends with one concrete Channel-page action.",
+      "raw_markdown_count": 0,
+      "clicked_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resulting_hash": "#norns-sound-sources-with-n-b",
+          "destination_heading": "Norns Sound Sources with n.b."
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound",
+          "resulting_hash": "#no-sound",
+          "destination_heading": "Troubleshooting No Sound"
+        }
+      ],
+      "visible_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        }
+      ],
+      "screenshots": [
+        "evidence-v07/course-getting-started-objects.png"
+      ]
+    },
+    {
+      "id": "course:getting-started-notation",
+      "route": "#getting-started/lesson/getting-started-notation",
+      "scores": {
+        "naming": 9,
+        "coherence": 9,
+        "vocabulary": 8,
+        "usefulness": 9,
+        "canonical_home": 9,
+        "integration": 9,
+        "granularity": 8,
+        "flow": 9,
+        "representation": 9,
+        "understandability": 9
+      },
+      "assessment": "The coordinate convention, main page buttons, and norns key/encoder labels are clearly ordered; the screen and grid show the Channel page result.",
+      "raw_markdown_count": 0,
+      "clicked_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resulting_hash": "#norns-sound-sources-with-n-b",
+          "destination_heading": "Norns Sound Sources with n.b."
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound",
+          "resulting_hash": "#no-sound",
+          "destination_heading": "Troubleshooting No Sound"
+        }
+      ],
+      "visible_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        }
+      ],
+      "screenshots": [
+        "evidence-v07/course-getting-started-notation.png"
+      ]
+    },
+    {
+      "id": "course:setup-route",
+      "route": "#setup/lesson/setup-route",
+      "scores": {
+        "naming": 9,
+        "coherence": 9,
+        "vocabulary": 8,
+        "usefulness": 9,
+        "canonical_home": 9,
+        "integration": 9,
+        "granularity": 8,
+        "flow": 9,
+        "representation": 8,
+        "understandability": 9
+      },
+      "assessment": "The lesson opens with a consistent stopped/new-project state, explains how to reach Device, and shows the expected current Pattern Trig Editor screen. The next-step sequence is clear.",
+      "raw_markdown_count": 0,
+      "clicked_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resulting_hash": "#norns-sound-sources-with-n-b",
+          "destination_heading": "Norns Sound Sources with n.b."
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound",
+          "resulting_hash": "#no-sound",
+          "destination_heading": "Troubleshooting No Sound"
+        }
+      ],
+      "visible_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        }
+      ],
+      "screenshots": [
+        "evidence-v07/course-setup-route.png"
+      ]
+    },
+    {
+      "id": "course:setup-apply",
+      "route": "#setup/lesson/setup-apply",
+      "scores": {
+        "naming": 9,
+        "coherence": 9,
+        "vocabulary": 8,
+        "usefulness": 9,
+        "canonical_home": 9,
+        "integration": 9,
+        "granularity": 8,
+        "flow": 9,
+        "representation": 9,
+        "understandability": 9
+      },
+      "assessment": "The instructions distinguish draft routing from applying it, explain the MIDI channel/port rows, and give a clear cancel path. The captured Device page matches the starting point.",
+      "raw_markdown_count": 0,
+      "clicked_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resulting_hash": "#norns-sound-sources-with-n-b",
+          "destination_heading": "Norns Sound Sources with n.b."
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound",
+          "resulting_hash": "#no-sound",
+          "destination_heading": "Troubleshooting No Sound"
+        }
+      ],
+      "visible_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound"
+        }
+      ],
+      "screenshots": [
+        "evidence-v07/course-setup-apply.png"
+      ]
+    },
+    {
+      "id": "course:setup-tempo",
+      "route": "#setup/lesson/setup-tempo",
+      "scores": {
+        "naming": 9,
+        "coherence": 9,
+        "vocabulary": 8,
+        "usefulness": 9,
+        "canonical_home": 9,
+        "integration": 9,
+        "granularity": 8,
+        "flow": 9,
+        "representation": 9,
+        "understandability": 9
+      },
+      "assessment": "The 90 BPM target is actionable, the encoder path is clear, and the text explains why a fresh norns may show a different current tempo. The captured scene shows the applied output state.",
+      "raw_markdown_count": 0,
+      "clicked_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resulting_hash": "#norns-sound-sources-with-n-b",
+          "destination_heading": "Norns Sound Sources with n.b."
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound",
+          "resulting_hash": "#no-sound",
+          "destination_heading": "Troubleshooting No Sound"
+        }
+      ],
+      "visible_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "label": "No Sound",
+          "href": "#no-sound"
+        },
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        }
+      ],
+      "screenshots": [
+        "evidence-v07/course-setup-tempo.png"
+      ]
+    },
+    {
+      "id": "lesson:mods-and-software-devices:play-polyperc-apply-confirm",
+      "route": "#mods-and-software-devices/lesson/play-polyperc-apply-confirm",
+      "scores": {
+        "naming": 8,
+        "coherence": 9,
+        "vocabulary": 8,
+        "usefulness": 8,
+        "canonical_home": 9,
+        "integration": 8,
+        "granularity": 9,
+        "flow": 8,
+        "representation": 8,
+        "understandability": 9
+      },
+      "assessment": "The dedicated Apply lesson has a clear purpose, short task, and matching pending Polyperc selection with the K3 confirmation prompt. Its captured scene and related navigation remain intact.",
+      "raw_markdown_count": 0,
+      "clicked_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resulting_hash": "#norns-sound-sources-with-n-b",
+          "destination_heading": "Norns Sound Sources with n.b."
+        }
+      ],
+      "visible_links": [
+        {
+          "label": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        }
+      ],
+      "screenshots": [
+        "evidence-v07/lesson-mods-and-software-devices-play-polyperc-apply-confirm.png"
+      ]
+    }
+  ],
+  "global_findings": [
+    "All six routes reached their expected canonical fragment and displayed the appropriate chapter or lesson title.",
+    "The five course pages now show a human-readable Sound Sources link in the authored workspace paragraph. The link was clicked in each and reached the Norns Sound Sources page.",
+    "The five course pages expose No Sound inside the “What to look and listen for” disclosure. After opening it, each visible link reached #no-sound and the “Troubleshooting No Sound” heading.",
+    "The standalone Polyperc Apply lesson shows its captured pending selection and K3 confirmation prompt; it links to Norns Sound Sources. No No Sound link is authored on this page.",
+    "All six pages have zero raw-Markdown matches in the inspected reader text. No JavaScript/page/console errors occurred.",
+    "The norns canvas remains 128x64 and the 128-pad grid is present in course scenes."
+  ],
+  "limitations": [
+    "Visual/editorial review only; no grid, MIDI, or norns input was sent.",
+    "Screenshots use 1440x1000 viewport and full-page capture."
+  ]
+}

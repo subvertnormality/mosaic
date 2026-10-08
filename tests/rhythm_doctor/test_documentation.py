@@ -53,8 +53,8 @@ class RhythmDoctorDocumentationTests(unittest.TestCase):
         cheat_sheet = (ROOT / "cheat_sheet.html").read_text(encoding="utf-8")
         self.assertIn("ANALYSIS_BACKEND_UNAVAILABLE", manual)
         self.assertIn("ANALYSIS_BACKEND_UNAVAILABLE", cheat_sheet)
-        self.assertIn("builds from source the", manual)
-        self.assertIn("no Python packages are", manual)
+        self.assertIn("Local analysis requires Python 3 and gcc (a C compiler) on norns", manual)
+        self.assertIn("No third-party Python packages or network download are required", manual)
         self.assertIn("Stereo records both inputs", cheat_sheet)
         for document in (manual, cheat_sheet):
             self.assertIn("Manual uses", document)

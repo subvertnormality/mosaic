@@ -58,9 +58,14 @@ class SaveDialogAuditTest(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'Unhashed or changed'):self.audit()
  def persistence(self,picker=True):
   f=json.loads((self.fixture/'DERIVATION.json').read_text());w=self.case/'save-dialog-evidence';w.mkdir()
-  for name,origin in zip(['Four notes.ptn','Four notes.pset'],f['origins']):(w/name).write_bytes(Path(origin['path']).read_bytes())
+  for name,origin in zip(['Four notes.ptn','Four notes.pset'],f['origins']):
+   source=Path(origin['path']);source=source if source.is_absolute() else self.fixture/source
+   (w/name).write_bytes(source.read_bytes())
   (self.case/'results.json').write_text(json.dumps([dict(kind='selected-menu-label',text='Four notes.ptn')] if picker else []))
-  self.step['output']['binding']['assertion']=dict(kind='manual-save-dialog-persistence',stage='saved',name='Four notes',files=dict(f['original_files']),original_files=f['original_files'],content=__import__('manual_save_project_canonical').prove(w/'Four notes.ptn',Path(f['origins'][0]['path']),self.fixture,ROOT/'tests/behaviour/persisted_digest.lua'),picker_confirmed=True,held_controls=[],outstanding_notes=False,fixture_sha256=digest(self.fixture/'DERIVATION.json'),citation='manual:save-and-load')
+  original=Path(f['origins'][0]['path'])
+  if not original.is_absolute():original=self.fixture/original
+  content=__import__('manual_save_project_canonical').prove(w/'Four notes.ptn',original,self.fixture,ROOT/'tests/behaviour/persisted_digest.lua')
+  self.step['output']['binding']['assertion']=dict(kind='manual-save-dialog-persistence',stage='saved',name='Four notes',files=dict(f['original_files']),original_files=f['original_files'],content=content,picker_confirmed=True,held_controls=[],outstanding_notes=False,fixture_sha256=digest(self.fixture/'DERIVATION.json'),citation='manual:save-and-load')
  def test_missing_public_picker_witness_rejected(self):
   self.persistence(False)
   with self.assertRaisesRegex(ValueError,'picker witness'):self.audit()
@@ -91,6 +96,48 @@ class SaveDialogAuditTest(unittest.TestCase):
   # Authentic source map alone cannot override the invoked runtime check.
   q=self.run/'start-source-identity.json';identity=json.loads(q.read_text());identity['fixture_sources'][str(p.relative_to(self.run/'fixture-source'))]=digest(p);q.write_text(json.dumps(identity))
   with self.assertRaisesRegex(ValueError,'runtime identity'):self.audit()
+ 
+ def _tamper_bundled_runtime(self, relative):
+  self.persistence();cached=self.run/'fixture-source/tests/behaviour/config/manual-save-dialog'/relative
+  cached.write_bytes(cached.read_bytes()+b'\0mutation')
+  q=self.run/'start-source-identity.json';identity=json.loads(q.read_text())
+  fixture_relative='tests/behaviour/config/manual-save-dialog/'+relative
+  identity['fixture_sources'][fixture_relative]=digest(cached);q.write_text(json.dumps(identity))
+  with self.assertRaisesRegex(ValueError,'runtime identity'):
+   self.audit()
+ def test_tampered_bundled_binary_rejected(self):
+  self._tamper_bundled_runtime('canonical-runtime/bin/lua5.3')
+ def test_tampered_bundled_loader_rejected(self):
+  self._tamper_bundled_runtime('canonical-runtime/lib64/ld-linux-x86-64.so.2')
+ def test_tampered_bundled_library_rejected(self):
+  self._tamper_bundled_runtime('canonical-runtime/lib/x86_64-linux-gnu/libreadline.so.8')
+ def test_bundled_loader_resolves_every_runtime_library(self):
+  import subprocess
+  from manual_save_project_canonical import runtime_command
+  fixture=self.fixture.resolve();runtime=json.loads((fixture/'CANONICAL-RUNTIME.json').read_text())
+  command=runtime_command(fixture,runtime)
+  loader=command[0];library_dir=command[3];binary=command[4]
+  output=subprocess.check_output([loader,'--inhibit-cache','--library-path',library_dir,'--list',binary],text=True)
+  resolved=[line.split('=>',1)[1].split('(',1)[0].strip() for line in output.splitlines() if '=>' in line]
+  self.assertTrue(resolved)
+  self.assertEqual(len(resolved),len(runtime['libraries'])+1)
+  expected={str((fixture/item['path']).resolve()) for item in runtime['libraries']}|{str((fixture/runtime['loader']['path']).resolve())}
+  self.assertEqual(set(resolved),expected)
+  self.assertIn(str((fixture/runtime['loader']['path']).resolve()),output)
+ def test_relocated_runtime_ignores_host_search_paths(self):
+  import os,shutil,subprocess
+  moved=Path(self.tmp.name)/'relocated-fixture';shutil.copytree(self.fixture,moved)
+  runtime=json.loads((moved/'CANONICAL-RUNTIME.json').read_text())
+  from manual_save_project_canonical import runtime_command
+  env=dict(os.environ,LD_LIBRARY_PATH='/not/a/host/library/path',PATH='/not/a/host/bin/path')
+  out=subprocess.check_output(runtime_command(moved,runtime,'-v'),env=env,text=True).strip()
+  self.assertEqual(out,'Lua 5.3.3  Copyright (C) 1994-2016 Lua.org, PUC-Rio')
+  q=self.run/'portable-runtime-smoke.ptn';q.write_text('return { { value=1 } }')
+  oracle=ROOT/'tests/behaviour/persisted_digest.lua'
+  from manual_save_project_canonical import canonical
+  portable=subprocess.check_output(runtime_command(moved,runtime,str(oracle),str(moved/'canonical-runtime'),str(q)),env=env)
+  self.assertEqual(portable,canonical(q,self.fixture,oracle))
+
  def test_every_musical_mutant_rejected_by_typed_audit(self):
   import subprocess
   self.persistence();w=self.case/'save-dialog-evidence';original=(w/'Four notes.ptn').read_bytes()
@@ -106,7 +153,8 @@ assert(found,'Mutant did not touch an actual decoded field');tab.save(data,arg[3
   for field in ['note_value','velocity_value','length','midi_channel','midi_device','transpose','repeats','start_trig','end_trig','global_pattern_length','selected_song_pattern','__extra']:
    with self.subTest(field=field):
     q=w/'Four notes.ptn';q.write_bytes(original)
-    subprocess.check_call([runtime['binary']['path'],str(tool),str(self.fixture/runtime['tabutil']['relative']),str(q),str(q),field])
+    from manual_save_project_canonical import runtime_command
+    subprocess.check_call(runtime_command(self.fixture,runtime,str(tool),str(self.fixture/runtime['tabutil']['relative']),str(q),str(q),field))
     self.step['output']['binding']['assertion']['files']['Four notes.ptn']=digest(q)
     with self.assertRaisesRegex(ValueError,'complete decoded'):self.audit()
 
