@@ -62,8 +62,8 @@ expression while keeping its source pattern.
 
 `manual/book.yaml` and its listed YAML sources are the manual authority. The
 HTML manual and quick reference are generated from them. See
-[build instructions](https://github.com/subvertnormality/mosaic/blob/main/manual/BUILD.md), [validation evidence](https://github.com/subvertnormality/mosaic/blob/main/manual/REPORT.md)
-and the [developer instructions](https://github.com/subvertnormality/mosaic/blob/main/AGENTS.md).
+[build instructions](https://github.com/subvertnormality/mosaic/blob/codex/1.4.0/manual/BUILD.md), [validation evidence](https://github.com/subvertnormality/mosaic/blob/codex/1.4.0/manual/REPORT.md)
+and the [developer instructions](https://github.com/subvertnormality/mosaic/blob/codex/1.4.0/AGENTS.md).
 
 Every feature change must update its affected behaviour tests and manual sections
 in the same change. New features need comprehensive behaviour coverage, including
@@ -77,7 +77,7 @@ does not update the published manual.
 
 For the 1.4.0 edition merged to `codex/1.4.0`, the trusted publisher on `main`
 can promote the exact validated artifact through the documented
-[1.4.0 publication procedure](https://github.com/subvertnormality/mosaic/blob/main/manual/BUILD.md#publish-the-merged-140-edition).
+[1.4.0 publication procedure](https://github.com/subvertnormality/mosaic/blob/codex/1.4.0/manual/BUILD.md#publish-the-merged-140-edition).
 It verifies the merged PR, current branch tip and artifact identity before
 publishing that edition.
 
@@ -85,5 +85,5 @@ Local generation and behaviour checks use controlled time. Real-time execution i
 reserved for recording assets when necessary; the exhaustive real-time behaviour
 campaign runs separately in CI.
 
-The [original 1.4.0 manual](https://github.com/subvertnormality/mosaic/blob/main/manual/legacy/README-1.4.0.md) is preserved unchanged
+The [original 1.4.0 manual](https://github.com/subvertnormality/mosaic/blob/codex/1.4.0/manual/legacy/README-1.4.0.md) is preserved unchanged
 so historical behaviour evidence retains its original source identity.
