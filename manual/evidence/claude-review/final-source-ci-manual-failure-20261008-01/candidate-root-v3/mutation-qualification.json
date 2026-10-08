@@ -1,0 +1,64 @@
+{
+  "kind": "locks-decay-recipe-semantic-mutation-qualification-v1",
+  "baseline_root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+  "candidate_test": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/final-source-ci-manual-failure-20261008-01/candidate-root-v3/test_manual_recording_review_fixes.py",
+  "cases": [
+    {
+      "case": "wrong-gesture-size",
+      "expected": "fail",
+      "actual": "fail",
+      "exit_code": 1,
+      "assertion_failure": true,
+      "summary": "1 failed, 3 deselected in 0.59s"
+    },
+    {
+      "case": "wrong-step-group",
+      "expected": "fail",
+      "actual": "fail",
+      "exit_code": 1,
+      "assertion_failure": true,
+      "summary": "1 failed, 3 deselected in 0.58s"
+    },
+    {
+      "case": "wrong-endpoint",
+      "expected": "fail",
+      "actual": "fail",
+      "exit_code": 1,
+      "assertion_failure": true,
+      "summary": "1 failed, 3 deselected in 0.62s"
+    },
+    {
+      "case": "copy-after-edit",
+      "expected": "fail",
+      "actual": "fail",
+      "exit_code": 1,
+      "assertion_failure": true,
+      "summary": "1 failed, 3 deselected in 0.63s"
+    },
+    {
+      "case": "wrong-restore-slot",
+      "expected": "fail",
+      "actual": "fail",
+      "exit_code": 1,
+      "assertion_failure": true,
+      "summary": "1 failed, 3 deselected in 0.61s"
+    },
+    {
+      "case": "false-captured-display-provenance",
+      "expected": "fail",
+      "actual": "fail",
+      "exit_code": 1,
+      "assertion_failure": true,
+      "summary": "1 failed, 3 deselected in 0.66s"
+    },
+    {
+      "case": "benign-prose-paraphrase",
+      "expected": "pass",
+      "actual": "pass",
+      "exit_code": 0,
+      "assertion_failure": false,
+      "summary": "1 passed, 3 deselected in 0.56s"
+    }
+  ],
+  "all_expectations_met": true
+}

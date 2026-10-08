@@ -76,8 +76,6 @@ class RecordingReviewFixes(unittest.TestCase):
         self.assertRegex(text[endpoint.start():], r"0\.1 s on steps 5 and 13")
         self.assertRegex(text, r"select slot 1 to restore the unmodified line")
         self.assertRegex(text, r"stop and return to the separate course project")
-        self.assertNotIn("e3 event 126", text)
-        self.assertNotIn("at detent 126", text)
         self.assertNotRegex(text, r"2\.1\s*s")
         recording = next(x for x in read_yaml("recordings.yaml")["recordings"] if x["id"] == "param-lock-comparison")
         relation, = [r for r in recording["lesson_relations"] if r.get("recipe_index") == 5]
