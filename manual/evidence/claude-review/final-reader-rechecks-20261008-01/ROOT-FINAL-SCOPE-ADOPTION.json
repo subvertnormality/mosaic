@@ -1,0 +1,297 @@
+{
+  "adopted": true,
+  "review_report_pins": {
+    "source15-scenes-review-20261008-01": [
+      "reports/source15-scenes-review.json",
+      "639b729b99fad1e9387adcff8b3353a7fde9c0c38c5ab0ce6e07c492bda0ee64"
+    ],
+    "source16-panic-summary-review-20261008-01": [
+      "reports/source16-panic-summary-review.json",
+      "2ee26bfe829f6f5e28cceac0255eacddaf1e858a4de55746a8c63c14b397923f"
+    ],
+    "source16-panic-lesson-review-20261008-01": [
+      "reports/source16-panic-lesson-review.json",
+      "4cbf0491374acb641148a5164400db0d5607802cdb03a6f068b0832e5692e07b"
+    ],
+    "source17-panic-lesson-review-20261008-01": [
+      "reports/source17-panic-lesson-review.json",
+      "dd6d76ebd5c00fd65d973e168afa1b75d8948d29cca6469c5c1d0a2e73c7e53d"
+    ],
+    "source15-astra-final-review-20261008-01": [
+      "review.json",
+      "0445950aa2a9f08a2e7fb7a23c38e68ad275d71af6e77254e886ac12113f3da6"
+    ],
+    "source16-astra-final-review-20261008-01": [
+      "review.json",
+      "8ed93386f41a799bf06a3d28d8fb9bae60e2bbf7f9b4488145c68e94e558c7d2"
+    ],
+    "source17-astra-scoped-review-20261008-01": [
+      "review.json",
+      "8bd2bc474735174ddce48609b583259c6c69ca5e2eecf7c072c7043bbd59e329"
+    ]
+  },
+  "files": [
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-scenes-review-20261008-01/evidence/keyboard-honour-degree-rotation.png",
+      "sha256": "05dd9146f426842cf61241e0f77572fb3e38823f6137207fbf52e758cf71282f",
+      "bytes": 368810
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-scenes-review-20261008-01/evidence/keyboard-honour-degree.png",
+      "sha256": "862db3ec6870db7ff55518e202f3221116d4c137ca8b4c347a1f23adeb751408",
+      "bytes": 364815
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-scenes-review-20261008-01/evidence/panic-from-song-channel.png",
+      "sha256": "5b1b3a0f84c7cf889517189ede32a33635dc4108d51b5a35afd08e1ccb5bc57e",
+      "bytes": 299144
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-scenes-review-20261008-01/evidence/panic-from-song-pattern.png",
+      "sha256": "4ad849aded712b184c08d1fb2d81532a7c9921c0208867d74ba6ca570b5623a6",
+      "bytes": 299200
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-scenes-review-20261008-01/evidence/source15-scenes-capture.json",
+      "sha256": "9b25ea0d0b2abc07abd21adc0dd3f4865e958eaa58b8f1b2513945a1b7d21ffa",
+      "bytes": 31567
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-scenes-review-20261008-01/reports/source15-scenes-review.json",
+      "sha256": "639b729b99fad1e9387adcff8b3353a7fde9c0c38c5ab0ce6e07c492bda0ee64",
+      "bytes": 25940
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-scenes-review-20261008-01/reports/source15-scenes-review.md",
+      "sha256": "a6e8dfc9c4db213ca1a10afe839ec8ac210cbdfed90e508f3b207c57b6ef9141",
+      "bytes": 9480
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+      "sha256": "419b77c37bac53edb3f1591ac47f1ee3515b997e8d04ddf68b59ffa3437c2be0",
+      "bytes": 271584
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png",
+      "sha256": "9c7f5d6b316e7390a0077e49f493fbc7d4c7484af452027bdcb9989719d8667f",
+      "bytes": 257217
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+      "sha256": "317ddf9d918cffb4748e42e470e65ef335fd5955909857b7ebc81fd59e9e6894",
+      "bytes": 9929
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-panic-summary-review-20261008-01/reports/source16-panic-summary-review.json",
+      "sha256": "2ee26bfe829f6f5e28cceac0255eacddaf1e858a4de55746a8c63c14b397923f",
+      "bytes": 13694
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-panic-summary-review-20261008-01/reports/source16-panic-summary-review.md",
+      "sha256": "bb6604be3f5df9ae3ea30269dc641ea0b9fe1a9fe6a50520ded47e37e5dd2a87",
+      "bytes": 5424
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-panic-lesson-review-20261008-01/reports/source16-panic-lesson-review.json",
+      "sha256": "4cbf0491374acb641148a5164400db0d5607802cdb03a6f068b0832e5692e07b",
+      "bytes": 19168
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-panic-lesson-review-20261008-01/reports/source16-panic-lesson-review.md",
+      "sha256": "06d61788661947abeb606ddd61771604a2781560a46de2ab10a7129eeab22172",
+      "bytes": 5946
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-panic-lesson-review-20261008-01/evidence/panic-from-song-channel.png",
+      "sha256": "8629f6834e97ea6c1134bd9a8d32b69ad0997e159e647d33b46b77b8f77860d5",
+      "bytes": 266189
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-panic-lesson-review-20261008-01/evidence/panic-from-song-pattern.png",
+      "sha256": "7bacaad9b9dbb18195f7bc0b2ca1fed2d8f830d2fc5d0f6a276746330253763b",
+      "bytes": 252349
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-panic-lesson-review-20261008-01/evidence/source16-panic-capture.json",
+      "sha256": "b89bb0869e6eb559b70ad84ec524785fcaf5a3804b92b5982f96b959e4129a4e",
+      "bytes": 9932
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-panic-lesson-review-20261008-01/reports/source17-panic-lesson-review.json",
+      "sha256": "dd6d76ebd5c00fd65d973e168afa1b75d8948d29cca6469c5c1d0a2e73c7e53d",
+      "bytes": 13276
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-panic-lesson-review-20261008-01/reports/source17-panic-lesson-review.md",
+      "sha256": "f092667aed2a47be5d02839292e84c0a1c32c0a6d60068f2b675d4f863d49dbd",
+      "bytes": 4942
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/1440-keyboard-honour-degree-rotation.png",
+      "sha256": "41ec98446fc175607385003b1f4f3a109c3b16238971911aeb4f66ae2e843710",
+      "bytes": 104334
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/1440-keyboard-honour-degree.png",
+      "sha256": "3ef35a0fb93996637611af71542eb9cd775987989d917e44e6a8048c6fa0b006",
+      "bytes": 107610
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/1440-panic-from-song-channel.png",
+      "sha256": "e9056757b44df678262a93538e848526c1dff7d439af2cc4a7269808c4dd6550",
+      "bytes": 82583
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/1440-panic-from-song-pattern.png",
+      "sha256": "2e7003f39a332853c991ed298134195151e00719b6a51a0169a4e7eb09ba0269",
+      "bytes": 82642
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/390-keyboard-honour-degree-rotation.png",
+      "sha256": "5429bde2bf9d6a08494db0cb5cafc697d643a2bfb67a36c14a9ab19f8318bef6",
+      "bytes": 49771
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/390-keyboard-honour-degree.png",
+      "sha256": "242d64ac46d03fcc7ef285244cc352902e14b2a13fbf7bb4ecda4c194fb9cbf2",
+      "bytes": 49011
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/390-panic-from-song-channel.png",
+      "sha256": "adf54b4ca8d59234e626354c31f7b9fc3ff69e5301c73e0bf3b853f1a2277fbe",
+      "bytes": 38408
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/390-panic-from-song-pattern.png",
+      "sha256": "6bf374750ca5526dc302ab9fd7ee555a861b37738173f900501c8ac357ae44a4",
+      "bytes": 38666
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/observations.json",
+      "sha256": "d873b1f8e969f51e5cbe0b90ad770f9bb8189246e2effecafd2e894a66ca634e",
+      "bytes": 21333
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/parity.json",
+      "sha256": "2173ebc7d2de8629c4909ae880d38c8162c0561f10fa1f8ef4311f99427fcdaa",
+      "bytes": 1726
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/review.json",
+      "sha256": "0445950aa2a9f08a2e7fb7a23c38e68ad275d71af6e77254e886ac12113f3da6",
+      "bytes": 2868
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source15-astra-final-review-20261008-01/review.md",
+      "sha256": "449e85d6206fdf4e802922db0026bbe70693730f5f7eba40f56c9f96b99c153b",
+      "bytes": 6687
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/1440-panic-from-song-channel.png",
+      "sha256": "3973f59a951112a64a7c298dd517c206c7a882742825042767b878d05697155a",
+      "bytes": 83723
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/1440-panic-from-song-pattern.png",
+      "sha256": "a6e186a2896e74f98ced92834a51050065b150d3f2a34d03f18ad95dc8554247",
+      "bytes": 83993
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/390-panic-from-song-channel.png",
+      "sha256": "f8aeec56714be59d85f2645e4c2e80b79dfc8b5c0a09a0deb22dc447e5d39687",
+      "bytes": 34533
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/390-panic-from-song-pattern.png",
+      "sha256": "98122f2b2213362435644a8a5a2476a424ec570190d73120d96c37251f1b9497",
+      "bytes": 34792
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/initial-observations.json",
+      "sha256": "0e229f6993fe99bbff0436a96b052f2e030ca4d5c6f38e72a3da965bf06ea4d0",
+      "bytes": 43311
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/quick-1440.png",
+      "sha256": "6af21084988c77d0011320481aa2395b44f8311293c85ab8df4e733199d8a5e0",
+      "bytes": 65449
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/quick-390.png",
+      "sha256": "d5c212ec955f81c9d9c6f7926c8d242a5228726281cdd3133971202980fc3458",
+      "bytes": 34223
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/quick-dark-rhythm-1440.png",
+      "sha256": "96e1c74e9f0ad06f277f580f0da28042d1215eae81e7726385851beba1a18aaa",
+      "bytes": 106061
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/quick-dark-rhythm-390.png",
+      "sha256": "90fb0c8f434a61f3bf9721533f9719ebb8fe8d99d89946edde84a6dd058fedbe",
+      "bytes": 39491
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/quick-masks-1440.png",
+      "sha256": "8ae92b2a996ba7b016f9c060308ef793bab556c1cdd272aba1e2a091052ebde2",
+      "bytes": 77351
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/quick-masks-390.png",
+      "sha256": "08169b17e6327a784153649eeb8c3d1e0f8db7a7cab39662bbe58734aa87b4df",
+      "bytes": 41373
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/quick-observations.json",
+      "sha256": "40c5fca7e29466f775e0d1ade517d11c7e397d59d2ff1827cfc153c8fb113695",
+      "bytes": 123283
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/review.json",
+      "sha256": "8ed93386f41a799bf06a3d28d8fb9bae60e2bbf7f9b4488145c68e94e558c7d2",
+      "bytes": 3414
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-astra-final-review-20261008-01/review.md",
+      "sha256": "7cc4b8e096552395eda7e4679ecbf02a31f099d333c6125db73a5adb7c4603a0",
+      "bytes": 11023
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-astra-scoped-review-20261008-01/1440-channel-result.png",
+      "sha256": "c0a8c8c5002600499b40c59544f7abdcaf3ac85f49580aae443923dddb78b53a",
+      "bytes": 111757
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-astra-scoped-review-20261008-01/1440-pattern-result.png",
+      "sha256": "b81d9ffca435ea05c6f8beffb4827596ab01c03ea06e8a593a2842b84e0a0288",
+      "bytes": 110377
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-astra-scoped-review-20261008-01/390-channel-result.png",
+      "sha256": "fda922aefbb4c3c9577503db42f6ce0b79a6f884571b32fc6d3f91eee864aadd",
+      "bytes": 47029
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-astra-scoped-review-20261008-01/390-pattern-result.png",
+      "sha256": "0ce185450200b64de22e4ee89ca5ddb7af5db223cdfb01da2e32814e5672cd1b",
+      "bytes": 46546
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-astra-scoped-review-20261008-01/observations.json",
+      "sha256": "5affe4998e2e6e99542ae6195e5ca15e993f6622e333189a83018dfa59c8b210",
+      "bytes": 42915
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-astra-scoped-review-20261008-01/review.json",
+      "sha256": "8bd2bc474735174ddce48609b583259c6c69ca5e2eecf7c072c7043bbd59e329",
+      "bytes": 2088
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source17-astra-scoped-review-20261008-01/review.md",
+      "sha256": "75e8c92c25b8c01bc53190c8d5dba1ce2f54985170790b09a5aeac33c2c955f3",
+      "bytes": 3537
+    }
+  ],
+  "scope": "verbatim scoped reader/example reviews including superseded failed reviews; no unconditional425qualification before browsergate",
+  "reader_modified": false
+}

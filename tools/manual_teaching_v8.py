@@ -239,7 +239,7 @@ def _zero_note_window_receipt(native, assertion, start, end, action, play, stop,
   "stop_led_cell":{"x":1,"y":8,"level":2}}
 
 def _export_native_receipts(native,binding):
- for key in ("mask_readout_receipts","parameter_readout_receipts","play_note_silence_receipts"):
+ for key in ("mask_readout_receipts","parameter_readout_receipts","play_note_silence_receipts","player_device_readout_receipts","panic_release_receipts"):
   value=native.get(key)
   if isinstance(value,list) and value:
    binding[key]=value
@@ -566,7 +566,7 @@ def _validate_actions(authored,native,target_id,req,mask_readouts=None,source_sc
  action_proofs.append({"action_id":actions[-1]["id"],"raw_inputs":[],
   "checkpoint_step_id":target_id,"proof":{"kind":"recorded-target","to_step_id":target_id}})
  return action_proofs
-def _validate_output(native,req,mask_fields_at_target=None):
+def _validate_output(native,req,mask_fields_at_target=None,device_configuration_at_target=None,panic_release_at_target=None):
  target=native["to_step"]; out=target.get("output",{}); a=_assertion(native); readout=req.get("public_readout_equals",{})
  if not isinstance(out,dict): raise Error("target lacks captured output")
  for k,want in readout.items():
@@ -574,6 +574,11 @@ def _validate_output(native,req,mask_fields_at_target=None):
    # This predicate is independently resolved against raw case rows and
    # native frame pixels in _derive_parameter_receipt below.
    continue
+  elif k=="device_configuration":
+   direct=a.get("device_configuration") if isinstance(a,dict) else None
+   got=direct if isinstance(direct,dict) else device_configuration_at_target
+   if isinstance(got,dict) and "device_configuration" in got: got=got["device_configuration"]
+   if got!=want: raise Error("Device public readout differs from its typed assertion or verified native field/frame evidence")
   elif k=="mask_fields":
    # A Mask readout is admitted only after the current source row, bound native
    # frame, and independent overview_masks pixel oracle produce this projection.
@@ -598,7 +603,7 @@ def _validate_output(native,req,mask_fields_at_target=None):
  if "project_files_at_target" in req:
   binding=out.get("binding",{})
   files=a.get("files") if isinstance(a,dict) else None
-  if (not isinstance(a,dict) or a.get("kind")!="manual-course-persistence"
+  if (not isinstance(a,dict) or a.get("kind") not in ("manual-course-persistence","manual-save-dialog-persistence")
       or not isinstance(a.get("name"),str) or not a["name"].strip()
       or not isinstance(files,dict) or set(files)!=set(req["project_files_at_target"])):
    raise Error("saved-project filenames differ from audited persistence assertion")
@@ -618,11 +623,13 @@ def _validate_output(native,req,mask_fields_at_target=None):
    pos+=1
  if "midi_events_at_target" in req:
   events=None
-  if isinstance(midi,dict) and midi.get("truncated") is False and isinstance(midi.get("events"),list): events=midi["events"]
-  elif midi is None and isinstance((target.get("expect") or {}).get("midi_phrase"),list):
-   # Masks pilot steps carry no raw MIDI log; their capture asserted exactly this phrase in a passed semantic row.
-   events=target["expect"]["midi_phrase"]
-  if events is None: raise Error("target MIDI missing or truncated")
+  if (isinstance(panic_release_at_target,dict)
+      and panic_release_at_target.get("kind")=="native-panic-sounding-note-readout-v1"
+      and panic_release_at_target.get("native") is True
+      and panic_release_at_target.get("events")==req["midi_events_at_target"]):
+   events=panic_release_at_target["events"]
+  elif isinstance(midi,dict) and midi.get("truncated") is False and isinstance(midi.get("events"),list): events=midi["events"]
+  if events is None: raise Error("target MIDI missing, truncated, or lacks its typed source receipt")
   pos=0
   for w in req["midi_events_at_target"]:
    while pos<len(events) and not (events[pos].get("port")==w["port"] and _midi_bytes(events[pos])==w["bytes"]): pos+=1
@@ -812,11 +819,32 @@ def _derive_mask_readout_receipts(native,source_scene,req,actions,project_root):
  by_action={receipt["action_id"]:receipt for receipt in receipts if "action_id" in receipt}
  return {"receipts":receipts,"by_step":by_step,"action_steps":action_steps,"by_action":by_action}
 
+def feature_presentation(feature_id, lesson):
+ """Source-fence authored musician prose separately from native transition identity."""
+ lesson_id=lesson.get("id")
+ if not isinstance(feature_id,str) or not _SAFE_SLUG.fullmatch(feature_id) or not isinstance(lesson_id,str) or not _SAFE_SLUG.fullmatch(lesson_id):
+  raise Error("feature presentation owner must be an exact safe contract route")
+ metadata={}
+ for key in ("title","goal","starting_point"):
+  if key in lesson:
+   value=lesson[key]
+   if not isinstance(value,str) or not value.strip(): raise Error("feature presentation must be nonempty authored prose: "+key)
+   metadata[key]=value
+ authored=lesson.get("teaching_binding",{})
+ for key in ("practice_prompt","human_outcome"):
+  if key in authored:
+   value=authored[key]
+   if not isinstance(value,str) or not value.strip(): raise Error("feature presentation must be nonempty authored prose: "+key)
+   metadata[key]=value
+ source={"feature_id":feature_id,"lesson_id":lesson_id}
+ identity=hashlib.sha256(json.dumps({"source":source,"metadata":metadata},sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()).hexdigest()
+ return source,metadata,identity
+
 def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_root=None):
  scenes,chapters,features=book.get("scenes"),book.get("learning_path",[]),book.get("features",[])
  if not isinstance(scenes,dict) or not isinstance(chapters,list) or not isinstance(features,list): raise Error("book scene/course/feature shape invalid")
  records=[]; ids=set()
- def add(cid,target,authored,allowed=None):
+ def add(cid,target,authored,allowed=None,presentation=None):
   if not isinstance(cid,str) or not cid or cid in ids: raise Error("teaching IDs must be unique and nonempty")
   if cid.startswith("feature:"):
    parts=cid.split(":")
@@ -835,7 +863,19 @@ def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_r
    scope=authored.get("transition_scope","adjacent"); native=_native(scenes[sid],fr,to,scope); prelude_summary=None
   req=authored.get("semantic_requires"); _validate_semantics(req)
   mask_data=_derive_mask_readout_receipts(native,scenes[sid],req,authored["actions"],project_root)
-  _validate_output(native,req,mask_data["by_step"].get(to))
+  device_data=None
+  if "device_configuration" in req.get("public_readout_equals",{}):
+   assertion=_assertion(native)
+   if not (isinstance(assertion,dict) and isinstance(assertion.get("device_configuration"),dict)):
+    from manual_player_device_readout import validate_player_device_readout
+    device_data=validate_player_device_readout(scenes[sid],to,req["public_readout_equals"]["device_configuration"],project_root)
+  panic_data=None
+  if sid=="panic-stops-sounding-note" and to=="panic-released" and "midi_events_at_target" in req:
+   from manual_panic_release_readout import is_retained_panic_source, validate_panic_release_readout
+   target_midi=native["to_step"].get("output",{}).get("midi",{})
+   if is_retained_panic_source(scenes[sid]) and isinstance(target_midi,dict) and target_midi.get("truncated") is True:
+    panic_data=validate_panic_release_readout(scenes[sid],to,req["midi_events_at_target"],project_root)
+  _validate_output(native,req,mask_data["by_step"].get(to),device_data,panic_data)
   v7_req={k:v for k,v in req.items() if not (k=="midi_phrase_contains" and not (native["to_step"].get("expect") or {}).get("midi_phrase"))}
   if not validate_semantics(native,v7_req): raise Error("v7 screen/MIDI/held semantics mismatch")
   held= replay_held_controls(native)
@@ -851,6 +891,8 @@ def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_r
   if parameter_receipt is not None:
    native["parameter_readout_receipts"]=[parameter_receipt]
   if mask_data["receipts"]: native["mask_readout_receipts"]=mask_data["receipts"]
+  if device_data is not None: native["player_device_readout_receipts"]=[device_data]
+  if panic_data is not None: native["panic_release_receipts"]=[panic_data]
   outcome=authored.get("human_outcome")
   if "project_files_at_target" in req:
    assertion=_assertion(native)
@@ -876,6 +918,10 @@ def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_r
    binding["from_step_id"]=fr
   if cid.startswith("feature:"):
    _,feature_id,lesson_id=cid.split(":",2); binding["feature_id"]=feature_id; binding["lesson_id"]=lesson_id
+   if presentation is None: raise Error("feature presentation source is missing")
+   source,metadata,identity=presentation
+   if source!={"feature_id":feature_id,"lesson_id":lesson_id}: raise Error("feature presentation owner differs from native contract route")
+   binding.update(presentation_source=source,presentation_metadata=metadata,presentation_metadata_sha256=identity)
   else: binding["course_stage_id"]=cid
   binding["preserve_holds_at_target"]=bool(held)
   if prompt is not None: binding["practice_prompt"]=prompt
@@ -897,7 +943,7 @@ def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_r
   lids=set()
   for lesson in lessons:
    if not isinstance(lesson,dict) or not isinstance(lesson.get("id"),str) or not _SAFE_SLUG.fullmatch(lesson["id"]) or lesson["id"] in lids: raise Error("feature lesson IDs must be unique safe route slugs")
-   lids.add(lesson["id"]); add("feature:{}:{}".format(fid,lesson["id"]),lesson.get("binding"),lesson.get("teaching_binding"),allowed)
+   lids.add(lesson["id"]); add("feature:{}:{}".format(fid,lesson["id"]),lesson.get("binding"),lesson.get("teaching_binding"),allowed,feature_presentation(fid,lesson))
  result={}; groups={}
  for cid,sid,native,b in records:
   group=("feature:"+cid.split(":",2)[1]) if cid.startswith("feature:") else "course"

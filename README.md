@@ -6,7 +6,7 @@ Mosaic is a grid-first rhythm and harmony sequencer for norns and a 128 grid.
 Build patterns, combine them on channels, then shape their output with masks,
 scales and parameter locks.
 
-**[Open the interactive manual](manual/index.html)** · [Quick reference](cheat_sheet.html) · [Configuration creator](config_creator.html)
+**[Open the interactive manual](https://subvertnormality.github.io/mosaic/manual/)** · [Quick reference](https://subvertnormality.github.io/mosaic/cheat_sheet.html) · [Configuration creator](https://subvertnormality.github.io/mosaic/config_creator.html)
 
 ## Install
 
@@ -28,7 +28,7 @@ an installed, enabled n.b. sound source. For a stock MIDI device, copy its
 configuration from `code/mosaic/lib/config` to `data/mosaic/config`. Assign the
 device to a channel and match its MIDI port and channel to the instrument.
 
-[Device setup](manual/index.html#devices) covers stock maps, custom configurations
+[Device setup](https://subvertnormality.github.io/mosaic/manual/#devices) covers stock maps, custom configurations
 and internal voices.
 
 <a id="getting-started"></a>
@@ -48,37 +48,36 @@ Start with a new project and leave Record off:
 5. Tap Play `(1,8)` to hear four equal attacks repeating. Tap again to stop.
    With Shift press stop enabled, hold K1 when stopping.
 
-The [First sound walkthrough](manual/index.html#first-sound) shows each control
+The [First sound walkthrough](https://subvertnormality.github.io/mosaic/manual/#first-sound) shows each control
 and its captured screen/grid feedback. If the loop is silent, follow
-[No sound](manual/index.html#no-sound). Then [build a phrase](manual/index.html#build-a-phrase)
-and [save your work](manual/index.html#keep-your-work).
+[No sound](https://subvertnormality.github.io/mosaic/manual/#no-sound). Then [build a phrase](https://subvertnormality.github.io/mosaic/manual/#build-a-phrase)
+and [save your work](https://subvertnormality.github.io/mosaic/manual/#keep-your-work).
 
 <a id="masks"></a>
 
-Try [Masks](manual/index.html#masks) to change one channel step's melody or
+Try [Masks](https://subvertnormality.github.io/mosaic/manual/#masks) to change one channel step's melody or
 expression while keeping its source pattern.
 
 ## Documentation and development
 
 `manual/book.yaml` and its listed YAML sources are the manual authority. The
 HTML manual and quick reference are generated from them. See
-[build instructions](manual/BUILD.md), [validation evidence](manual/REPORT.md)
-and the [developer instructions](AGENTS.md).
+[build instructions](https://github.com/subvertnormality/mosaic/blob/main/manual/BUILD.md), [validation evidence](https://github.com/subvertnormality/mosaic/blob/main/manual/REPORT.md)
+and the [developer instructions](https://github.com/subvertnormality/mosaic/blob/main/AGENTS.md).
 
 Every feature change must update its affected behaviour tests and manual sections
 in the same change. New features need comprehensive behaviour coverage, including
 boundaries, failures and interactions, plus full manual sections with practical
 workflows and interactive examples. Update the quick reference when controls change.
 
-Manual generation runs in a separate CI workflow on pull requests and on demand.
-PR runs provide downloadable preview artifacts. After merge to `main`, a separate
-deployment workflow publishes the validated artifact to GitHub Pages without a
-second build, after checking that its source tree matches the merged edition. If
-there is no matching artifact, an on-demand build is required.
+The published manual lives on [GitHub Pages](https://subvertnormality.github.io/mosaic/manual/).
+During development, [Build manual site](https://github.com/subvertnormality/mosaic/actions/workflows/manual-build.yml)
+creates a downloadable preview artifact for the exact pull-request run. A preview
+does not update the published manual.
 
 For the 1.4.0 edition merged to `codex/1.4.0`, the trusted publisher on `main`
 can promote the exact validated artifact through the documented
-[1.4.0 publication procedure](manual/BUILD.md#publish-the-merged-140-edition).
+[1.4.0 publication procedure](https://github.com/subvertnormality/mosaic/blob/main/manual/BUILD.md#publish-the-merged-140-edition).
 It verifies the merged PR, current branch tip and artifact identity before
 publishing that edition.
 
@@ -86,5 +85,5 @@ Local generation and behaviour checks use controlled time. Real-time execution i
 reserved for recording assets when necessary; the exhaustive real-time behaviour
 campaign runs separately in CI.
 
-The [original 1.4.0 manual](manual/legacy/README-1.4.0.md) is preserved unchanged
+The [original 1.4.0 manual](https://github.com/subvertnormality/mosaic/blob/main/manual/legacy/README-1.4.0.md) is preserved unchanged
 so historical behaviour evidence retains its original source identity.

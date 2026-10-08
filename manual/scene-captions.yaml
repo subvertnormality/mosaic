@@ -6,23 +6,22 @@ overlays:
     this is real time, so wait for the readout), then press K3. Doctor stops recording and analyses it:
     ANALYSING, Lanes BD SD CYM.'
   baseline_caption: Press K3 after enough audio has been recorded. Doctor analyses the recording.
-  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+  contract_sha256: fc481ce8c279e478e89a8fe5e86a8553308324dd7a276ed2defe907d2656da79
 - scene_id: doctor-local-auto-capture-and-paint
   step_id: paint
   caption: Press Paint at (16,8) again to commit. The tooltip reads Pattern painted and the flashing steps
     become solid trigs in pattern 1, on the same steps as the preview. The captured bank stays unchanged.
   baseline_caption: Tap Paint again. The attacks are stored in pattern 1.
-  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+  contract_sha256: fc481ce8c279e478e89a8fe5e86a8553308324dd7a276ed2defe907d2656da79
 - scene_id: doctor-local-auto-capture-and-paint
   step_id: play
-  caption: Press Channel (3,8), then Play at (1,8). Channel 1 sends MIDI note 60 on each painted step, with
-    velocities taken from the recording. In this captured three-second pass, the MIDI strip shows
-    velocities 114, 110 and 107, one hit per beat. The frame shows the Masks screen with the pattern
-    stopped; check the MIDI strip below for the notes sent. Press Play again after about three seconds
-    to stop.
+  caption: Press Channel (3,8), then Play at (1,8). Channel 1 sends MIDI note 60 on each painted step,
+    with velocities taken from the recording. In this captured three-second pass, the MIDI strip shows
+    velocities 114, 110 and 107, one hit per beat. The frame shows the Masks screen with the pattern stopped;
+    check the MIDI strip below for the notes sent. Press Play again after about three seconds to stop.
   baseline_caption: Tap Play. Channel 1 sends the painted attacks to its MIDI output. Tap Play again to
     stop.
-  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+  contract_sha256: fc481ce8c279e478e89a8fe5e86a8553308324dd7a276ed2defe907d2656da79
 - scene_id: doctor-local-auto-capture-and-paint
   step_id: preview
   caption: 'Select the BD lane (bass drum) at (3,2) and tap Paint at (16,8). The grid flashes the detected
@@ -31,7 +30,7 @@ overlays:
     first thump comes some way into it; a Manual-tempo take of the same loop shows it on step 11. This
     is only a preview: nothing is stored yet. The screen reads PAINT, Policy TOGGLE, Destination 1.'
   baseline_caption: Select BD and tap Paint to preview its detected attacks.
-  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+  contract_sha256: fc481ce8c279e478e89a8fe5e86a8553308324dd7a276ed2defe907d2656da79
 - scene_id: doctor-local-auto-capture-and-paint
   step_id: ready
   caption: Wait while the norns analyses the recording; a short take takes roughly half a minute, and
@@ -41,35 +40,36 @@ overlays:
     how painted hits meet trigs already in the pattern. The lane buttons BD (bass drum), SD (snare) and
     CYM (cymbal) light at (3,2) to (5,2).
   baseline_caption: When analysis finishes, Doctor displays the recording window.
-  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+  contract_sha256: fc481ce8c279e478e89a8fe5e86a8553308324dd7a276ed2defe907d2656da79
 - scene_id: doctor-local-auto-capture-and-paint
   step_id: record
   caption: Leave Tempo on AUTO and tap Record at (1,2). Doctor starts listening to the audio input and
     will estimate the tempo and phrase start itself. The screen reads CAPTURE, MORE AUDIO NEEDED, LISTENING.
   baseline_caption: Tap Record. Doctor starts listening to the audio input using Auto tempo.
-  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+  contract_sha256: fc481ce8c279e478e89a8fe5e86a8553308324dd7a276ed2defe907d2656da79
 - scene_id: doctor-local-auto-capture-and-paint
   step_id: setup
   caption: 'Starting point: channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps
     1-64) and playback is stopped. Play a steady loop into the norns audio input, with a short thump on
     every beat at 120 BPM; the example uses a 29-second loop, so use one at least that long. Press Pattern
     (5,8) and choose the Rhythm Doctor algorithm at (16,2). Rhythm Doctor opens on the norns: Record READY,
-    Tempo AUTO, Manual BPM 120, Input STEREO. The bank is EMPTY, so there are no detected hits to paint yet.'
+    Tempo AUTO, Manual BPM 120, Input STEREO. The bank is EMPTY, so there are no detected hits to paint
+    yet.'
   baseline_caption: Select Rhythm Doctor while the sequencer is stopped.
-  contract_sha256: 8f2e021bf96f7c8c374c1dc9605f7c9dfaa3f08bbf9073121c691c57eea8231d
+  contract_sha256: fc481ce8c279e478e89a8fe5e86a8553308324dd7a276ed2defe907d2656da79
 - scene_id: doctor-local-capture-and-paint
   step_id: analyse
   caption: 'Let the take run until the screen reads ENOUGH / REC OR K3 (about 25 seconds of the loop;
     this is real time, so wait for the readout), then press K3. Doctor stops recording and analyses it:
     ANALYSING, Lanes BD SD CYM.'
   baseline_caption: Press K3 after enough audio has been recorded. Doctor analyses the recording.
-  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+  contract_sha256: ffa2ca131e778021ed0451bda0a7d5177478681e7d70b1eb24abcd4f3889df42
 - scene_id: doctor-local-capture-and-paint
   step_id: paint
   caption: Press Paint at (16,8) again to commit. The tooltip reads Pattern painted and the flashing steps
     become solid trigs in pattern 1, on the same steps as the preview. The captured bank stays unchanged.
   baseline_caption: Tap Paint again. The attacks are stored in pattern 1.
-  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+  contract_sha256: ffa2ca131e778021ed0451bda0a7d5177478681e7d70b1eb24abcd4f3889df42
 - scene_id: doctor-local-capture-and-paint
   step_id: play
   caption: Press Channel (3,8), then Play at (1,8). Channel 1 sends MIDI note 60 on each painted step
@@ -78,7 +78,7 @@ overlays:
     notes sent. Press Play again after about three seconds to stop.
   baseline_caption: Tap Play. Channel 1 sends the painted attacks to its MIDI output. Tap Play again to
     stop.
-  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+  contract_sha256: ffa2ca131e778021ed0451bda0a7d5177478681e7d70b1eb24abcd4f3889df42
 - scene_id: doctor-local-capture-and-paint
   step_id: preview
   caption: 'Select the BD lane (bass drum) at (3,2) and tap Paint at (16,8). The grid flashes the detected
@@ -87,7 +87,7 @@ overlays:
     recording and the first thump comes some way into it. This is only a preview: nothing is stored yet.
     The screen reads PAINT, Policy TOGGLE, Destination 1.'
   baseline_caption: Select BD and tap Paint to preview its detected attacks.
-  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+  contract_sha256: ffa2ca131e778021ed0451bda0a7d5177478681e7d70b1eb24abcd4f3889df42
 - scene_id: doctor-local-capture-and-paint
   step_id: ready
   caption: Wait while the norns analyses the recording; a short take takes roughly half a minute, and
@@ -97,7 +97,7 @@ overlays:
     how painted hits meet trigs already in the pattern. The lane buttons BD (bass drum), SD (snare) and
     CYM (cymbal) light at (3,2) to (5,2).
   baseline_caption: When analysis finishes, Doctor displays the recording window.
-  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+  contract_sha256: ffa2ca131e778021ed0451bda0a7d5177478681e7d70b1eb24abcd4f3889df42
 - scene_id: doctor-local-capture-and-paint
   step_id: record
   caption: 'Turn E2 to Tempo and E3 to MANUAL, then press K3 to confirm: Manual BPM reads 120, so you
@@ -105,7 +105,7 @@ overlays:
     to the audio input; the screen reads CAPTURE, MORE AUDIO NEEDED, RECORDING.'
   baseline_caption: Select Manual tempo, press K3 to apply, then tap Record. Doctor starts listening to
     the audio input.
-  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+  contract_sha256: ffa2ca131e778021ed0451bda0a7d5177478681e7d70b1eb24abcd4f3889df42
 - scene_id: doctor-local-capture-and-paint
   step_id: setup
   caption: 'Starting point: channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps
@@ -114,7 +114,7 @@ overlays:
     (5,8) and choose the Rhythm Doctor algorithm at (16,2). Rhythm Doctor opens on the norns: Record READY,
     Tempo AUTO, Manual BPM 120, Input STEREO. The bank is EMPTY, so no lane buttons are lit yet.'
   baseline_caption: Select Rhythm Doctor while the sequencer is stopped.
-  contract_sha256: 3c32acba60d3d1596fe3418732527428ec5017cfdb21c502cf78b2c8671dc074
+  contract_sha256: ffa2ca131e778021ed0451bda0a7d5177478681e7d70b1eb24abcd4f3889df42
 - scene_id: first-sound-equal-note-loop
   step_id: assignment
   caption: 'Tap Channel (3,8), then tap pattern slot (1,2) to feed pattern 1 to channel 1. Next limit
@@ -123,7 +123,7 @@ overlays:
     four steps are brighter than the rest of row 4.'
   baseline_caption: Tap Channel and assign pattern 1. Hold step 1, tap step 4, then release step 1 to
     set a four-step range.
-  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+  contract_sha256: 606d8f8e0eaa2f5385dfdabd14cb0ef68d586447e5fd39fa90fe0f8a9645aedf
 - scene_id: first-sound-equal-note-loop
   step_id: device
   caption: 'Starting point: a new, empty project, stopped, with Record off. No channel has an output,
@@ -134,7 +134,7 @@ overlays:
     on screen.'
   baseline_caption: Tap Channel. Open Channel tasks, select Device, choose the first MIDI output and press
     K3.
-  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+  contract_sha256: 606d8f8e0eaa2f5385dfdabd14cb0ef68d586447e5fd39fa90fe0f8a9645aedf
 - scene_id: first-sound-equal-note-loop
   step_id: length-and-playback
   caption: Turn E2 one detent to select Len, then turn E3 until the screen reads 1/2, so each note lasts
@@ -143,38 +143,960 @@ overlays:
     strip below. Tap Play again to stop.
   baseline_caption: Select Len and set 1/2. Press Play to hear four equal MIDI 60 attacks. The replay
     checks two complete cycles and stops playback.
-  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+  contract_sha256: 606d8f8e0eaa2f5385dfdabd14cb0ef68d586447e5fd39fa90fe0f8a9645aedf
 - scene_id: first-sound-equal-note-loop
   step_id: note
   caption: Turn E1 to open Channel tasks, scroll up to Masks with E2 and press K3. Select Note with E2,
     then turn E3 right until the screen reads C3, which is MIDI 60. The Note row shows the name, so stop
     on the readout instead of counting. With no step held this sets the channel note for all steps.
   baseline_caption: Open Masks, select Note and set MIDI 60. The Masks screen displays C3.
-  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+  contract_sha256: 606d8f8e0eaa2f5385dfdabd14cb0ef68d586447e5fd39fa90fe0f8a9645aedf
 - scene_id: first-sound-equal-note-loop
   step_id: pattern
   caption: Tap Pattern (5,8) for the Trig view of pattern 1, then tap steps (1,4), (2,4), (3,4) and (4,4).
     Four steps light on row 4. Each lit step is a trig, a moment where a note will sound.
   baseline_caption: Tap Pattern and activate steps 1–4. The Pattern Trig page remains selected.
-  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+  contract_sha256: 606d8f8e0eaa2f5385dfdabd14cb0ef68d586447e5fd39fa90fe0f8a9645aedf
 - scene_id: first-sound-equal-note-loop
   step_id: velocity
   caption: Turn E2 one detent to select Vel, then turn E3 right until the screen reads 80. Every step
     now plays at velocity 80, a medium-loud level.
   baseline_caption: Select Vel and set 80. All steps use this channel velocity default.
-  contract_sha256: d3135b7ed951b8464f546dc8917108813221117938e8078d973745a7ae5e4a80
+  contract_sha256: 606d8f8e0eaa2f5385dfdabd14cb0ef68d586447e5fd39fa90fe0f8a9645aedf
 - scene_id: software-player-doubledecker
   step_id: select-player
-  caption: On channel 3's Device page, turn E3 until the Device row reads Doubledecker. The screen asks you to press K3 to confirm, so the selection is still a draft. Press K3 to apply it. The README describes Doubledecker as a two-layer synth; use it for a layered part after applying the selection.
-  baseline_caption: On channel 3's Device page, turn E3 until the Device row reads Doubledecker. The row shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
-  contract_sha256: 32eb1db06a30d8a6280248d6431c13006f2a15b53cdfcc85bbd49d1eded01eda
+  caption: This captured frame shows Doubledecker selected as a draft; the Device page still asks for
+    K3. Press K3 to apply it, then confirm Doubledecker in the Device row. The complete captured apply-and-reopen
+    sequence is in [Apply Doubledecker to the chord channel](#mods-and-software-devices/player-apply-doubledecker).
+    Once applied, its two layers can voice a chord part.
+  baseline_caption: On channel 3's Device page, turn E3 until the Device row reads Doubledecker. The row
+    shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
+  contract_sha256: 4e0d28119b21916618c7f5b0b3d6017eeb4f0afd943c1a5ae87162190e1d284e
 - scene_id: software-player-oilcan
   step_id: select-player
-  caption: On channel 1's Device page, turn E3 until the Device row reads Oilcan 1. The screen asks you to press K3 to confirm, so the selection is still a draft. Press K3 to apply it. The README describes Oilcan as percussion sync; use it for a percussion part after applying the selection.
-  baseline_caption: On channel 1's Device page, turn E3 until the Device row reads Oilcan 1. The row shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
-  contract_sha256: a1f1ad158a32b49a54a71ecd3a061b51e6562e557a948c9d9c0113dfa1432bff
+  caption: This captured frame shows Oilcan 1 selected as a draft; the Device page still asks for K3.
+    Press K3 to apply it, then confirm Oilcan 1 in the Device row. The complete captured apply-and-reopen
+    sequence is in [Apply Oilcan to the percussion channel](#mods-and-software-devices/player-apply-oilcan).
+    Once applied, it can voice a percussion part.
+  baseline_caption: On channel 1's Device page, turn E3 until the Device row reads Oilcan 1. The row shows
+    the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
+  contract_sha256: 684b94ad755fb588284285c234a1cbcd444af60cbce71a2316a2b03646f4c346
 - scene_id: software-player-polyperc
   step_id: select-player
-  caption: On channel 2's Device page, turn E3 until the Device row reads Polyperc 1. The screen asks you to press K3 to confirm, so the selection is still a draft. Press K3 to apply it. The README describes Polyperc as poly perc; use it for a percussive part after applying the selection.
-  baseline_caption: On channel 2's Device page, turn E3 until the Device row reads Polyperc 1. The row shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
-  contract_sha256: 50e7ee5e1d3e202080d3c4d506d9aee7eb1d0d020ac032452a6b458af880b811
+  caption: Channel 2's Device row reads Polyperc 1 and the prompt asks for K3. The selection is still a draft.
+    Continue with [Apply Polyperc 1](#mods-and-software-devices/lesson/play-polyperc-apply-confirm) to confirm it,
+    then check that the value remains after reopening Device.
+  baseline_caption: On channel 2's Device page, turn E3 until the Device row reads Polyperc 1. The row
+    shows the player name and the screen asks you to press K3 to confirm; nothing is applied yet.
+  contract_sha256: c152812b415725961e256db316e6714004176c42e7265330a8823a570aeb5d3d
+- scene_id: random-note-seeded-offsets
+  step_id: domain-0
+  caption: 'Press K3 to assign Twos Random Note to the second slot and K2 to return, then turn E2 to select
+    the first slot, Random Note. Both slots read 0. Tap Play (1,8), then tap it again to stop: the phrase
+    is unchanged, 60, 62, 64, 65.'
+  baseline_caption: 'Press K3 to assign Twos Random Note to the second slot and K2 to return, then press
+    E2 to select the first slot, Random Note. Both slots read 0. Tap Play (1,8), then tap it again to
+    stop: the phrase is unchanged, 60, 62, 64, 65.'
+  contract_sha256: 3728bb1ca644acf169c3a0a93c18a94b4e999174a07699305004582f93ccdca5
+- scene_id: random-twos-note-seeded-offsets
+  step_id: domain-0
+  caption: 'Press K3 to assign Twos Random Note to the second slot and K2 to return, then turn E2 to select
+    the first slot, Random Note. Both slots read 0. Tap Play (1,8), then tap it again to stop: the phrase
+    is unchanged, 60, 62, 64, 65.'
+  baseline_caption: 'Press K3 to assign Twos Random Note to the second slot and K2 to return, then press
+    E2 to select the first slot, Random Note. Both slots read 0. Tap Play (1,8), then tap it again to
+    stop: the phrase is unchanged, 60, 62, 64, 65.'
+  contract_sha256: 5f3da46efe826e881b867a8e5ebdd5a9ba2babc01b76e59e07b4090395620298
+- scene_id: trigless-locks-on
+  step_id: start
+  caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+    117, 107 and 97, in C major through the test MIDI device at 90 BPM with Rate /1 and channel range
+    steps 1-4. The sequencer is stopped and the Device page for CH01 is showing. Channel 2 is not set
+    up yet: you will route the same pattern to it as a timing reference. Trigless locks is at its default
+    On.'
+  baseline_caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities
+    127, 117, 107 and 97, in C major through the test MIDI device at 90 BPM with Rate /1 and channel range
+    steps 1-4. The sequencer is stopped and the Device page for CH01 is showing. Channel 2 is not set
+    up yet: you will make it a steady timing reference. Trigless locks is at its default On.'
+  contract_sha256: 508add5c99179199992512882ec5c8fdc9b9f69e3edd7deef89d47f4ca1a53a6
+- scene_id: trigless-locks-on
+  step_id: assign-cc
+  caption: 'Tap K1 and open PARAMS > MOSAIC. Trigless locks reads On, its default, so locks on steps without
+    a trig will still be sent. Press K2, then K1 to leave the menu. Set up channel 2 as the timing reference:
+    tap (2,1), open Channel tasks > Device, point it at the second MIDI port, give it pattern 1 at (1,2)
+    and range steps 1-4 (hold (1,4), tap (4,4)). Both channels use pattern 1, so pattern-trig edits affect
+    both. Probability and CC locks on channel 1 do not change channel 2. Then tap channel 1 (1,1), open
+    Channel tasks > Trig params and assign CC 1 to the first slot.'
+  baseline_caption: 'Tap K1 and open PARAMS > MOSAIC. Trigless locks reads On, its default, so locks on
+    steps without a trig will still be sent. Press K2, then K1 to leave the menu. Set up channel 2 as
+    the timing reference: tap (2,1), open Channel tasks > Device, point it at the second MIDI port, give
+    it pattern 1 at (1,2) and range steps 1-4 (hold (1,4), tap (4,4)). It will play C D E F on MIDI channel
+    2 on every loop whatever you do to channel 1. Then tap channel 1 (1,1), open Channel tasks > Trig
+    params and assign CC 1 to the first slot.'
+  contract_sha256: 508add5c99179199992512882ec5c8fdc9b9f69e3edd7deef89d47f4ca1a53a6
+- scene_id: trigless-locks-on
+  step_id: rest
+  caption: 'Open the Pattern editor (5,8), tap step 3 to remove its trig, and return to the Channel editor
+    (3,8). Play. With Trigless locks On, a lock on a step with no trig is still sent: the MIDI strip shows
+    CC 1 still sending 72 at step 3, so automation keeps moving through rests, for example a filter sweep
+    under a sparse rhythm. Pattern 1 is shared: channel 2 also loses its E note on step 3 and now plays
+    C, D, F; its timing continues through that rest.'
+  baseline_caption: 'Open the Pattern editor (5,8), tap step 3 to remove its trig, and return to the Channel
+    editor (3,8). Play. With Trigless locks On, a lock on a step with no trig is still sent: the MIDI
+    strip shows CC 1 still sending 72 at step 3, so automation keeps moving through rests, for example
+    a filter sweep under a sparse rhythm.'
+  contract_sha256: 508add5c99179199992512882ec5c8fdc9b9f69e3edd7deef89d47f4ca1a53a6
+- scene_id: trigless-locks-off
+  step_id: start
+  caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+    117, 107 and 97, in C major through the test MIDI device at 90 BPM with Rate /1 and channel range
+    steps 1-4. The sequencer is stopped and the Device page for CH01 is showing. Channel 2 is not set
+    up yet: you will route the same pattern to it as a timing reference. Trigless locks is at its default
+    On.'
+  baseline_caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities
+    127, 117, 107 and 97, in C major through the test MIDI device at 90 BPM with Rate /1 and channel range
+    steps 1-4. The sequencer is stopped and the Device page for CH01 is showing. Channel 2 is not set
+    up yet: you will make it a steady timing reference. Trigless locks is at its default On.'
+  contract_sha256: a20f377139712bb13387bf22238713372b122aa4734162fb685276cb49453b0f
+- scene_id: trigless-locks-off
+  step_id: assign-cc
+  caption: 'Press K2, then K1 to leave the menu. Set up channel 2 as the timing reference: tap (2,1),
+    open Channel tasks > Device, point it at the second MIDI port, give it pattern 1 at (1,2) and range
+    steps 1-4 (hold (1,4), tap (4,4)). Both channels use pattern 1, so pattern-trig edits affect both.
+    Probability and CC locks on channel 1 do not change channel 2. Then tap channel 1 (1,1), open Channel
+    tasks > Trig params and assign CC 1 to the first slot.'
+  baseline_caption: 'Press K2, then K1 to leave the menu. Set up channel 2 as the timing reference: tap
+    (2,1), open Channel tasks > Device, point it at the second MIDI port, give it pattern 1 at (1,2) and
+    range steps 1-4 (hold (1,4), tap (4,4)). It will play C D E F on MIDI channel 2 on every loop whatever
+    you do to channel 1. Then tap channel 1 (1,1), open Channel tasks > Trig params and assign CC 1 to
+    the first slot.'
+  contract_sha256: a20f377139712bb13387bf22238713372b122aa4734162fb685276cb49453b0f
+- scene_id: trigless-locks-off
+  step_id: rest
+  caption: 'Open the Pattern editor (5,8), tap step 3 to remove its trig, and return to the Channel editor
+    (3,8). Play. With Trigless locks Off, a lock on a step with no trig is skipped: the MIDI strip shows
+    CC 1 sending 24, 48 and 96 but not 72, the value on step 3. Pattern 1 is shared: channel 2 also loses
+    its E note on step 3 and now plays C, D, F; its timing continues through that rest.'
+  baseline_caption: 'Open the Pattern editor (5,8), tap step 3 to remove its trig, and return to the Channel
+    editor (3,8). Play. With Trigless locks Off, a lock on a step with no trig is skipped: the MIDI strip
+    shows CC 1 sending 24, 48 and 96 but not 72, the value on step 3.'
+  contract_sha256: a20f377139712bb13387bf22238713372b122aa4734162fb685276cb49453b0f
+- scene_id: full-quantisation-precedence
+  step_id: start
+  caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities 127,
+    117, 107, 97), in a scale with Degree II and Rotation 1; both are already set in the scale editor.
+    In PARAMS > MOSAIC, Snap note masks to scale is On, while Quantise note masks (the global full-quantisation
+    option) and Lock merged to pent. are Off. With Snap alone the masks play as written, 60, 64, 69, 71
+    in the MIDI strip, because Degree and Rotation affect masks only under full quantisation. On enables
+    full scale mapping; Off disables it. An absent step lock uses the channel, and channel X uses the
+    global option. An explicitly stored step X skips the channel and uses the global option directly;
+    clearing it with K2 restores channel inheritance. In the state lists, X without a stored step lock
+    means no exception; explicit step X is named separately. Each step below lists the state as global
+    / channel / step 1 / step 2. Now: Off / X / X / X.'
+  baseline_caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities
+    127, 117, 107, 97), in a scale with Degree II and Rotation 1; both are already set in the scale editor.
+    In PARAMS > MOSAIC, Snap note masks to scale is On, while Quantise note masks (the global full-quantisation
+    option) and Lock merged to pent. are Off. With Snap alone the masks play as written, 60, 64, 69, 71
+    in the MIDI strip, because Degree and Rotation affect masks only under full quantisation. Quantise
+    Note Mask works on three levels, strongest first: a step lock, then the channel value, then the global
+    option. On follows the scale, Off keeps the written pitch, and X means inherit from the next level
+    down. Each step below lists the state as global / channel / step 1 / step 2. Now: Off / X / X / X.'
+  contract_sha256: 57bc20cb2e9fbf33d96161bf0ba8edd8353fa987aba5ef1d04ff452c2abcb5a9
+- scene_id: full-quantisation-inherit-and-step-off
+  step_id: start
+  caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities 127,
+    117, 107, 97), in a scale with Degree II and Rotation 1. On enables full scale mapping; Off disables
+    it. An absent step lock uses the channel, and channel X uses the global option. An explicitly stored
+    step X skips the channel and uses the global option directly; clearing it with K2 restores channel
+    inheritance. In the state lists, X without a stored step lock means no exception; explicit step X
+    is named separately. The state is listed as global / channel / step 1 / step 2. Now: On / Off / X
+    / On. The channel Off beats the global On and step 2 has its own On lock, so the strip reads 60, 65,
+    69, 71.'
+  baseline_caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities
+    127, 117, 107, 97), in a scale with Degree II and Rotation 1. Quantise Note Mask works on three levels,
+    strongest first: a step lock, then the channel value, then the global option. On follows the scale,
+    Off keeps the written pitch, and X means inherit from the next level down. The state is listed as
+    global / channel / step 1 / step 2. Now: On / Off / X / On. The channel Off beats the global On and
+    step 2 has its own On lock, so the strip reads 60, 65, 69, 71.'
+  contract_sha256: fb3c1d630bf8717628192815c8b7cd3c007609fac1e8b5dead7372033cc41042
+- scene_id: full-quantisation-channel-beats-global
+  step_id: start
+  caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities 127,
+    117, 107, 97), in a scale with Degree II and Rotation 1. On enables full scale mapping; Off disables
+    it. An absent step lock uses the channel, and channel X uses the global option. An explicitly stored
+    step X skips the channel and uses the global option directly; clearing it with K2 restores channel
+    inheritance. In the state lists, X without a stored step lock means no exception; explicit step X
+    is named separately. The state is listed as global / channel / step 1 / step 2. Now: Off / X / Off
+    / On. The global Off is inherited by the channel, step 1 is Off and step 2 is On, so the strip reads
+    60, 65, 69, 71.'
+  baseline_caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities
+    127, 117, 107, 97), in a scale with Degree II and Rotation 1. Quantise Note Mask works on three levels,
+    strongest first: a step lock, then the channel value, then the global option. On follows the scale,
+    Off keeps the written pitch, and X means inherit from the next level down. The state is listed as
+    global / channel / step 1 / step 2. Now: Off / X / Off / On. The global Off is inherited by the channel,
+    step 1 is Off and step 2 is On, so the strip reads 60, 65, 69, 71.'
+  contract_sha256: fd5663ad255f20e23978e018fe39455c41972cd69b8060f626c03a484132391b
+- scene_id: structure-anchor-chord-and-delete
+  step_id: foundation-on
+  caption: Open Channel tasks > Merge modes. Select Strategy with E2 and turn E3 to FOUNDATION. This accepted
+    strategy applies immediately while stopped, without K3. On Merge modes, Strategy and Active read FOUNDATION,
+    so the four anchors on steps 1 to 4 plus the additions on steps 5 and 7 now play.
+  baseline_caption: 'Open Channel tasks > Merge Shape, set Mode to Foundation and press K3 to apply. Open
+    Merge modes: Strategy and Active read FOUNDATION, so the four anchors on steps 1 to 4 plus the additions
+    on steps 5 and 7 now play.'
+  contract_sha256: 4eb10bd04f6029d536f315d33595b7c6aa7201702007ee3a3f54ac63332ec5fd
+- scene_id: structure-every-4-markers
+  step_id: start
+  caption: 'Channel 1 loops eight steps: pattern 1 plays C, D, E, F (MIDI 60, 62, 64, 65) on steps 1 to
+    4, and pattern 2 adds trigs on steps 5 and 7: step 5 is D (MIDI 62), and step 7 is C (60). Merge Shape
+    has Foundation on with pattern 1 as the anchor, and Harmony Ensemble has an enabled group holding
+    C, E and G. The Structure screen is open with Markers on Anchors, so each anchor note is a marker.
+    Playback is stopped.'
+  baseline_caption: 'Channel 1 loops eight steps: pattern 1 plays C, D, E, F (MIDI 60, 62, 64, 65) on
+    steps 1 to 4, and pattern 2 adds trigs on steps 5 and 7. Merge Shape has Foundation on with pattern
+    1 as the anchor, and Harmony Ensemble has an enabled group holding C, E and G. The Structure screen
+    is open with Markers on Anchors, so each anchor note is a marker. Playback is stopped.'
+  contract_sha256: e7c9e16b1b995c07170406811a1c9d6b679cb95efb298eaa2f401eb2092ca3bf
+- scene_id: scale-edit-versus-apply
+  step_id: global-off
+  caption: 'Press and hold slot 3 again. A long press on the slot already selected for editing turns the
+    global scale off: no slot button is lit and the editing selection clears. A short press on the applied
+    slot also turns global scale off, but keeps that slot selected for editing. These gestures differ
+    in their editing selection.'
+  baseline_caption: 'Press and hold slot 3 again. A long press on the slot already selected for editing
+    turns the global scale off: no slot button is lit and the editing selection clears. A short press
+    on the applied slot does the same.'
+  contract_sha256: 44923c0b575dc76087368288edb66a7e763e703525a1daef27171177274c1a43
+- scene_id: local-parameter-slide
+  step_id: start
+  caption: Channel 1 plays the four-step phrase (C, D, E, F = MIDI 60, 62, 64, 65; velocities 127, 117,
+    107, 97) through a device with MIDI CCs, at 90 BPM with Rate /1, so one step lasts a sixth of a second.
+    PARAMS is open on the device's CC 1 control at its stored value, 63, set in PARAMS > MOSAIC. CC 1
+    is not assigned to a Trig params slot yet, and parameter slides are off. This independent example
+    enables the slide on step 1 only. Compare the whole-parameter glide separately at Param Slides; neither
+    example requires the other’s project.
+  baseline_caption: Channel 1 plays the four-step phrase (C, D, E, F = MIDI 60, 62, 64, 65; velocities
+    127, 117, 107, 97) through a device with MIDI CCs, at 90 BPM with Rate /1, so one step lasts a sixth
+    of a second. PARAMS is open on the device's CC 1 control at its stored value, 63, set in PARAMS >
+    MOSAIC. CC 1 is not assigned to a Trig params slot yet, and parameter slides are off. The previous
+    scene turned slides on for the whole parameter; this one turns them on for a single step.
+  contract_sha256: 1e313fc87790901941632eb2a089d86dad5d1485f367b4042815b905e7360d81
+- scene_id: song-change-reset-policies
+  step_id: start
+  caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+    117, 107 and 97, through the test MIDI device at 90 BPM with a source pattern containing steps 1–4.
+    The sequencer is stopped. Channel 1 has been made slow: its range is steps 1-3 and Clock Mod is /9,
+    so one step lasts 1.5 seconds and the phrase 60, 62, 64 cycles every 4.5 seconds. Song mode is On
+    and the song has two 64-step slots, 10.7 seconds each. Slot 2 is a copy of slot 1 with the channel
+    octave raised by one, so it sounds an octave higher: C4 D4 E4 are 72, 74, 76. Slot 1 is selected,
+    so on the Song editor (grid (6,8)) its LED (1,1) is bright and (2,1) dim. Both reset options are Off.'
+  baseline_caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities
+    127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps
+    1-4. The sequencer is stopped. Channel 1 has been made slow: its range is steps 1-3 and Clock Mod
+    is /9, so one step lasts 1.5 seconds and the phrase 60, 62, 64 cycles every 4.5 seconds. Song mode
+    is On and the song has two 64-step slots, 10.7 seconds each. Slot 2 is a copy of slot 1 with the channel
+    octave raised by one, so it sounds an octave higher: C4 D4 E4 are 72, 74, 76. Slot 1 is selected,
+    so on the Song editor (grid (6,8)) its LED (1,1) is bright and (2,1) dim. Both reset options are Off.'
+  contract_sha256: bf0a319afd9df53c043afb1847c25a5bf68cf4c80f73246bffe656ed28935403
+- scene_id: named-project-roundtrip
+  step_id: edit
+  caption: 'Press Pattern (5,8) twice: the first press shows the trig page and the second the note page.
+    Press (4,3) to raise step 4 from F to G. Tap Channel (3,8) to return to the Channel editor and press
+    Play (1,8): the melody is now C, D, E, G, MIDI 60, 62, 64, 67. Press Play again to stop before the
+    idle autosave wait.'
+  baseline_caption: 'Press Pattern (5,8) twice: the first press shows the trig page and the second the
+    note page. Press (4,3) to raise step 4 from F to G. Tap Channel (3,8) to return to the Channel editor
+    and press Play (1,8): the melody is now C, D, E, G, MIDI 60, 62, 64, 67.'
+  contract_sha256: ee7e1a0df03cb0a12c4a14cef7c6ef75b096f319a73c8d2788e64f8063c71f6c
+- scene_id: elektron-child-enable-and-announce
+  step_id: start
+  caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4 with
+    notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) and velocities 127, 117, 107 and 97. The channel range
+    is steps 1 to 4, tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second
+    each) and every Mosaic option is at its default. The sequencer is stopped. The Digitakt device configuration
+    is installed next to the example MIDI device and Elektron program changes is Off. The norns shows
+    channel 1''s Device screen.'
+  baseline_caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps
+    1 to 4 with notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) and velocities 127, 117, 107 and 97. The
+    channel range is steps 1 to 4, tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one
+    sixth of a second each) and every Mosaic option is at its default. The sequencer is stopped. The Digitakt
+    device configuration is installed next to the test device and Elektron program changes is Off. The
+    norns shows channel 1''s Device screen.'
+  contract_sha256: 7c3cbb2fa31338232081918e492c584fb45067cfba6b0770a10625b85fcb6ec1
+- scene_id: range-reject-and-recover
+  step_id: start
+  caption: 'Channel 1 sends to the example MIDI device and plays pattern 1: four notes C, D, E and F (MIDI
+    60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 in C major. The channel range is steps
+    1 to 4, playback is stopped and the norns shows the Device page for channel 1.'
+  baseline_caption: 'Channel 1 sends to the test device and plays pattern 1: four notes C, D, E and F
+    (MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 in C major. The channel range
+    is steps 1 to 4, playback is stopped and the norns shows the Device page for channel 1.'
+  contract_sha256: a81f19e32b87e0f95dc8e053d31074eda8e10a5eae9a75b297a67ab894c960e1
+- scene_id: mute-live-resume
+  step_id: start
+  caption: 'Channel 1 sends to the example MIDI device and plays pattern 1: four notes C, D, E and F (MIDI
+    60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 in C major. No channel is muted, playback
+    is stopped and the norns shows the Device page for channel 1.'
+  baseline_caption: 'Channel 1 sends to the test device and plays pattern 1: four notes C, D, E and F
+    (MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 in C major. No channel is muted,
+    playback is stopped and the norns shows the Device page for channel 1.'
+  contract_sha256: 873760590a53c06eb314a06b99c9722c35e9d594fdb4f989787f9c3d5559de7b
+- scene_id: strum-division-bounds
+  step_id: start
+  caption: 'Channel 1 sends to the example MIDI device and plays pattern 1: four notes C, D, E and F (MIDI
+    60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 in C major. Nothing is assigned to Trig
+    params yet, playback is stopped and the norns shows the Device page for channel 1.'
+  baseline_caption: 'Channel 1 sends to the test device and plays pattern 1: four notes C, D, E and F
+    (MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 in C major. Nothing is assigned
+    to Trig params yet, playback is stopped and the norns shows the Device page for channel 1.'
+  contract_sha256: 94f38aeed7256d3e210fe96fd63b78bbab6953e25353e577ab31618235225ff8
+- scene_id: parameter-slot-endpoints
+  step_id: start
+  caption: 'Channel 1 plays a four-step melody on the test device: trigs on steps 1 to 4 on pattern degrees
+    1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65 at velocities 127, 117, 107, 97. No Trig
+    params slot is assigned yet, playback is stopped and the norns shows the Device page. Assign slots
+    in two batches; after each Show result, check the last visible CC before continuing.'
+  baseline_caption: 'Channel 1 plays a four-step melody on the test device: trigs on steps 1 to 4 on pattern
+    degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65 at velocities 127, 117, 107, 97.
+    No Trig params slot is assigned yet, playback is stopped and the norns shows the Device page.'
+  contract_sha256: f40ae47810a7e3c167d4092610eb0c691adc3fbe92ffba2c932d217ca8ab22c1
+- scene_id: transpose-next-onset
+  step_id: start
+  caption: 'Channel 1 plays a four-step melody on the example MIDI device: trigs on steps 1 to 4 on pattern
+    degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65. Global transposition is 0, playback
+    is stopped and the norns shows the Device page.'
+  baseline_caption: 'Channel 1 plays a four-step melody on the test device: trigs on steps 1 to 4 on pattern
+    degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65. Global transposition is 0, playback
+    is stopped and the norns shows the Device page.'
+  contract_sha256: d1ab149436b178347bd5cf3034593cfd7cb4efba3cce98e555ece8875abac617
+- scene_id: keyboard-white-key-options
+  step_id: start
+  caption: 'Channel 1 plays pattern 1 on the example MIDI device: four notes C, D, E and F (MIDI 60, 62,
+    64, 65; velocities 127, 117, 107, 97) on steps 1 to 4. The scale is C major, a MIDI keyboard is connected
+    on port 1 and Map scale to white keys is off, its default. The sequencer is stopped, so the keyboard
+    plays the channel''s output directly. The norns shows the Device page.'
+  baseline_caption: 'Channel 1 plays pattern 1 on the test device: four notes C, D, E and F (MIDI 60,
+    62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4. The scale is C major, a MIDI keyboard is
+    connected on port 1 and Map scale to white keys is off, its default. The sequencer is stopped, so
+    the keyboard plays the channel''s output directly. The norns shows the Device page.'
+  contract_sha256: 91c817a5dd6427fbedb4451ede44bb046b87ade1f6ecc62d8a0d143a4572a9f7
+- scene_id: song-mode-groups-and-selection
+  step_id: start
+  caption: 'A fresh session with Song mode On, its default. Channel 1 plays its default phrase through
+    the example MIDI device and the norns shows the Device page; nothing is playing. You build the song
+    in the next step: a two-note motif (MIDI 60, 62) copied into slots 1, 2, 4 and 5, with slots 3 and
+    6 left empty.'
+  baseline_caption: 'A fresh session with Song mode On, its default. Channel 1 plays its default phrase
+    through the test device and the norns shows the Device page; nothing is playing. You build the song
+    in the next step: a two-note motif (MIDI 60, 62) copied into slots 1, 2, 4 and 5, with slots 3 and
+    6 left empty.'
+  contract_sha256: 0b2a5c583b8d88a27ed69a516f77e7342704fe880f24a797714c69372e5afd98
+- scene_id: merge-shape-owns-trigs
+  step_id: start
+  caption: Channel 1 loops 8 steps at 90 BPM on the example MIDI device and is set to Foundation. Pattern
+    1 (C, D, E, F on steps 1 to 4, velocities 127, 117, 107, 97) is the Anchor; pattern 2 (a C at velocity
+    100 on steps 5 and 7) offers additions. Both patterns are assigned, Add amount is 100 and Add accent
+    is 70. The norns shows the Rhythm page and the grid lights steps 1 to 5 and 7.
+  baseline_caption: Channel 1 loops 8 steps at 90 BPM on the test device and is set to Foundation. Pattern
+    1 (C, D, E, F on steps 1 to 4, velocities 127, 117, 107, 97) is the Anchor; pattern 2 (a C at velocity
+    100 on steps 5 and 7) offers additions. Both patterns are assigned, Add amount is 100 and Add accent
+    is 70. The norns shows the Rhythm page and the grid lights steps 1 to 5 and 7.
+  contract_sha256: 528d3a98eb5351f5353d35f090a28425f9a7fb0c23eb8e2118cf131d23eafc25
+- scene_id: merge-shape-skip-shared-step
+  step_id: start
+  caption: Channel 1 loops 8 steps at 90 BPM on the example MIDI device and is set to Foundation. Pattern
+    1 (C, D, E, F on steps 1 to 4, velocities 127, 117, 107, 97) is the Anchor; pattern 2 (a C at velocity
+    100) has trigs on steps 3 and 7, so step 3 is a step both patterns trig. Both patterns are assigned.
+    The norns shows the Rhythm page and the grid lights steps 1 to 4 and 7.
+  baseline_caption: Channel 1 loops 8 steps at 90 BPM on the test device and is set to Foundation. Pattern
+    1 (C, D, E, F on steps 1 to 4, velocities 127, 117, 107, 97) is the Anchor; pattern 2 (a C at velocity
+    100) has trigs on steps 3 and 7, so step 3 is a step both patterns trig. Both patterns are assigned.
+    The norns shows the Rhythm page and the grid lights steps 1 to 4 and 7.
+  contract_sha256: 707fe7e430a3eef6928d3dcf008cd2edc42b3283bc6ec369005c0b919660d4c1
+- scene_id: harmony-range-failure-and-fallback
+  step_id: result-open
+  caption: Turn E1 to go back to the Harmony list, select Result with E2 and press K3.
+  baseline_caption: Press E1 to go back to the Harmony list, select Result with E2 and press K3.
+  contract_sha256: 8a016a559e1cf15d388b9f0028a6f1d24ee0ac23c3323dc49a0723f28421cbb4
+- scene_id: transpose-song-slot-copy
+  step_id: start
+  caption: 'Channel 1 plays a four-step melody on the example MIDI device: trigs on steps 1 to 4 on pattern
+    degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65. Global transposition is 0, the
+    Song editor holds only slot 1, playback is stopped and the norns shows the Device page.'
+  baseline_caption: 'Channel 1 plays a four-step melody on the test device: trigs on steps 1 to 4 on pattern
+    degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65. Global transposition is 0, the
+    Song editor holds only slot 1, playback is stopped and the norns shows the Device page.'
+  contract_sha256: 7b4f9a0879cf70b24c5526e6b0fafaecef7a1b7fb4bdf4badf70e93b4ac485f9
+- scene_id: random-pentatonic-on
+  step_id: phrase
+  caption: 'Select the Random Note slot, turn E3 right to 4 and press Play (1,8). Random Note 4 offsets
+    each note by -2, -1, 0, +1 or +2 scale degrees chosen at random; with Lock random to pent. On each
+    result with a nonzero combined random offset snaps to the five-note selection C D E G A. Listen to
+    several loops and press Stop. The recorded run begins 60, 64, 64, 64, 60, 64, 67, 64: step 4, a plain
+    F (65), now sounds as E (64). Random notes change on every run, so your notes will differ. A step
+    whose random offset is 0 keeps its own note, so a plain pattern note outside the selection, such as
+    F, can still sound.'
+  baseline_caption: 'Select the Random Note slot, turn E3 right to 4 and press Play (1,8). Random Note
+    4 offsets each note by -2, -1, 0, +1 or +2 scale degrees chosen at random; with Lock random to pent.
+    On every result snaps to the five-note selection C D E G A. Listen to several loops and press Stop.
+    The recorded run begins 60, 64, 64, 64, 60, 64, 67, 64: step 4, a plain F (65), now sounds as E (64).
+    Random notes change on every run, so your notes will differ. A step whose random offset is 0 keeps
+    its own note, so a plain pattern note outside the selection, such as F, can still sound.'
+  contract_sha256: b6cd53985eed33ac004fd3cb8ecba1a1b9652781b91dda4a579561ae22577787
+- scene_id: configured-device-value-boundaries
+  step_id: start
+  caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+    C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, in C major. The sequencer
+    is stopped. Channel 1''s output is a example MIDI device whose parameter Control 1 sends MIDI CC 1
+    from 0 to 127 and has an Off position shown as X. No value is stored for Control 1 yet. The norns
+    shows channel 1''s Device screen.'
+  baseline_caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with
+    the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, in C major. The
+    sequencer is stopped. Channel 1''s output is a test device whose parameter Control 1 sends MIDI CC
+    1 from 0 to 127 and has an Off position shown as X. No value is stored for Control 1 yet. The norns
+    shows channel 1''s Device screen.'
+  contract_sha256: 24d6869e948374fa4be71c5592014c58169cb7c0f50754e0cd1161fe3173dc28
+- scene_id: configured-device-value-boundaries
+  step_id: select-control-1
+  caption: 'Choose the example MIDI device on channel 1''s Device screen. Tap K1 to open the norns PARAMS
+    menu, go to MOSAIC, open channel 1''s device parameters and turn E2 to Control 1. It reads X: Off,
+    so no CC is sent.'
+  baseline_caption: 'Choose the test device on channel 1''s Device screen. Tap K1 to open the norns PARAMS
+    menu, go to MOSAIC, open channel 1''s device parameters and turn E2 to Control 1. It reads X: Off,
+    so no CC is sent.'
+  contract_sha256: 24d6869e948374fa4be71c5592014c58169cb7c0f50754e0cd1161fe3173dc28
+- scene_id: device-sparse-control-domain
+  step_id: start
+  caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+    C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, in C major. The sequencer
+    is stopped. Channel 1''s output is a example MIDI device with a control named SparseLow that only
+    accepts values 100 to 127; it is unset (X). A device definition can limit a control to part of the
+    CC range like this, and Mosaic then offers only the valid values. The norns shows channel 1''s Device
+    screen.'
+  baseline_caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with
+    the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, in C major. The
+    sequencer is stopped. Channel 1''s output is a test device with a control named SparseLow that only
+    accepts values 100 to 127; it is unset (X). A device definition can limit a control to part of the
+    CC range like this, and Mosaic then offers only the valid values. The norns shows channel 1''s Device
+    screen.'
+  contract_sha256: e91ccf3a1fe791c803b1f1f3e3343d7fc27430fb65b5dedb35f1ba726bcab32c
+- scene_id: device-sparse-control-domain
+  step_id: select-sparselow
+  caption: 'Choose the example MIDI device on channel 1''s Device screen. Press K1 to open the norns PARAMS
+    menu, go to MOSAIC, open channel 1''s device parameters and turn E2 to SparseLow. It reads X: nothing
+    is sent. SparseLow only accepts 100 to 127, and X means no CC is sent.'
+  baseline_caption: 'Choose the test device on channel 1''s Device screen. Press K1 to open the norns
+    PARAMS menu, go to MOSAIC, open channel 1''s device parameters and turn E2 to SparseLow. It reads
+    X: nothing is sent. SparseLow only accepts 100 to 127, and X means no CC is sent.'
+  contract_sha256: e91ccf3a1fe791c803b1f1f3e3343d7fc27430fb65b5dedb35f1ba726bcab32c
+- scene_id: device-stored-value-and-step-lock
+  step_id: start
+  caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+    C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, in C major. The sequencer
+    is stopped. The example MIDI device has a CC 1 control; no value is stored for it yet. The norns shows
+    channel 1''s Device screen.'
+  baseline_caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with
+    the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, in C major. The
+    sequencer is stopped. The test device has a CC 1 control; no value is stored for it yet. The norns
+    shows channel 1''s Device screen.'
+  contract_sha256: 7f47cacc56bd1a4e58904add3b6de1c8b36d4fecfd2e65d255c3eb2b82d3b113
+- scene_id: device-stored-value-and-step-lock
+  step_id: stored-63
+  caption: 'Choose the example MIDI device on channel 1''s Device screen. Press K1 to open the norns PARAMS
+    menu, go to MOSAIC > channel 1''s device parameters, select CC 1 and turn E3 right until it reads
+    63. This is the stored value: the level CC 1 holds whenever no step overrides it.'
+  baseline_caption: 'Choose the test device on channel 1''s Device screen. Press K1 to open the norns
+    PARAMS menu, go to MOSAIC > channel 1''s device parameters, select CC 1 and turn E3 right until it
+    reads 63. This is the stored value: the level CC 1 holds whenever no step overrides it.'
+  contract_sha256: 7f47cacc56bd1a4e58904add3b6de1c8b36d4fecfd2e65d255c3eb2b82d3b113
+- scene_id: scale-lock-replacement
+  step_id: start
+  caption: 'Channel 1 plays the four-step melody through a MIDI device with the scale locks prepared for
+    this independent example: slot 3 (E major) locked on channel step 1, slot 4 (G major) locked globally
+    on scale-track step 2, and Scales lock until ptn end Off. Step 2 is a rest, so the strip reads MIDI
+    64, 71 and 72 with a gap where step 2 was.'
+  baseline_caption: 'Channel 1 plays the four-step melody through a MIDI device with the scale locks from
+    the last scenes: slot 3 (E major) locked on channel step 1, slot 4 (G major) locked globally on scale-track
+    step 2, and Scales lock until ptn end Off. Step 2 is a rest, so the strip reads MIDI 64, 71 and 72
+    with a gap where step 2 was.'
+  contract_sha256: e0e9cebbe38bf2369d84f35a73a716e5e40cb5a9a78ccb4d7567eeb05c06cb48
+- scene_id: foundation-protected-and-added
+  step_id: start
+  caption: 'Channel 1 loops 8 steps on the example MIDI device with Merge Shape set to Foundation. Pattern
+    1 (C, D, E, F, MIDI 60, 62, 64, 65, velocities 127, 117, 107, 97, on steps 1 to 4) is saved as the
+    protected Anchor: its steps always play as written. Pattern 2 (a C at velocity 100 on steps 5 and
+    7) offers additions. Add amount is how many additions are admitted and Add accent scales their velocity.
+    The norns shows the Rhythm page and the grid lights steps 1 to 5 and 7.'
+  baseline_caption: 'Channel 1 loops 8 steps on the test device with Merge Shape set to Foundation. Pattern
+    1 (C, D, E, F, MIDI 60, 62, 64, 65, velocities 127, 117, 107, 97, on steps 1 to 4) is saved as the
+    protected Anchor: its steps always play as written. Pattern 2 (a C at velocity 100 on steps 5 and
+    7) offers additions. Add amount is how many additions are admitted and Add accent scales their velocity.
+    The norns shows the Rhythm page and the grid lights steps 1 to 5 and 7.'
+  contract_sha256: e7435ce6cfaff1e6f4f62fce0873af391e8c9bb691b9ed92f79d9b416e93d45c
+- scene_id: foundation-two-cycle-build
+  step_id: start
+  caption: Channel 1 loops 8 steps on the example MIDI device with Merge Shape set to Foundation. Pattern
+    1 (C, D, E, F, MIDI 60, 62, 64, 65, on steps 1 to 4) is the protected Anchor and pattern 2 (trigs
+    on steps 5 and 7) offers additions; both are assigned. Add amount is 100 and Add accent 70, so all
+    candidate additions are allowed and sound at 70 percent of their velocity. The Phrase settings are
+    still at their defaults, the norns shows the Rhythm page and the grid lights steps 1 to 5 and 7.
+  baseline_caption: Channel 1 loops 8 steps on the test device with Merge Shape set to Foundation. Pattern
+    1 (C, D, E, F, MIDI 60, 62, 64, 65, on steps 1 to 4) is the protected Anchor and pattern 2 (trigs
+    on steps 5 and 7) offers additions; both are assigned. Add amount is 100 and Add accent 70, so all
+    candidate additions are allowed and sound at 70 percent of their velocity. The Phrase settings are
+    still at their defaults, the norns shows the Rhythm page and the grid lights steps 1 to 5 and 7.
+  contract_sha256: 309e753b560ef7d425d8268560a29c1948dda6504d0fd246b2986812b6f4339c
+- scene_id: foundation-two-cycle-build
+  step_id: cycles-two
+  caption: Turn E1 once to the Phrase screen, turn E2 to Phrase and press K3. A cycle is one pass of the
+    eight-step loop. Turn E3 once to set Cycles to 2.
+  baseline_caption: Press E1 once to the Phrase screen, turn E2 to Phrase and press K3. A cycle is one
+    pass of the eight-step loop. Turn E3 once to set Cycles to 2.
+  contract_sha256: 309e753b560ef7d425d8268560a29c1948dda6504d0fd246b2986812b6f4339c
+- scene_id: fragments-seed-source-choice
+  step_id: start
+  caption: 'Channel 1 plays through the example MIDI device on an 8-step loop at 90 BPM, rate /1. Pattern
+    1 holds C, D, E, F (MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 and pattern
+    2 holds a C at velocity 100 on steps 3 and 6. Both patterns are assigned to channel 1 and Strategy
+    is still SKIP. Merge modes is open for channel 1. In this scene a Seed makes a repeatable draw of
+    which pattern each fragment comes from: the same seed always gives the same choice.'
+  baseline_caption: 'Channel 1 plays through the test device on an 8-step loop at 90 BPM, rate /1. Pattern
+    1 holds C, D, E, F (MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 and pattern
+    2 holds a C at velocity 100 on steps 3 and 6. Both patterns are assigned to channel 1 and Strategy
+    is still SKIP. Merge modes is open for channel 1. In this scene a Seed makes a repeatable draw of
+    which pattern each fragment comes from: the same seed always gives the same choice.'
+  contract_sha256: a9d80f271dab036ce90e3891e62288c5a37700cd4d7db3d203eefd78878addb6
+- scene_id: interlock-leader-window
+  step_id: start
+  caption: Two 8-step channels play at 90 BPM through the example MIDI device. Channel 1 (MIDI channel
+    1) has pattern 1 (C, D, E, F on steps 1 to 4) as its Foundation anchor and pattern 2 (steps 5 and
+    7) as additions. Channel 2 (MIDI channel 2) has pattern 3, a single trig on step 5, as its Foundation
+    anchor. Channel 1 has no Interlock leader yet. The norns shows channel 1's Rhythm page and the grid
+    lights steps 1 to 5 and 7.
+  baseline_caption: Two 8-step channels play at 90 BPM through the test device. Channel 1 (MIDI channel
+    1) has pattern 1 (C, D, E, F on steps 1 to 4) as its Foundation anchor and pattern 2 (steps 5 and
+    7) as additions. Channel 2 (MIDI channel 2) has pattern 3, a single trig on step 5, as its Foundation
+    anchor. Channel 1 has no Interlock leader yet. The norns shows channel 1's Rhythm page and the grid
+    lights steps 1 to 5 and 7.
+  contract_sha256: 902e366c800bc1b461123f9adb9018743cb47ae33863075b798563cb01d023d0
+- scene_id: structure-anchor-chord-and-delete
+  step_id: start
+  caption: Channel 1 plays pattern 1 on the example MIDI device, the four-note melody C, D, E, F (MIDI
+    60, 62, 64, 65) on steps 1 to 4. The additions of the Foundation phrase on steps 5 and 7 do not exist
+    yet; you add them in the next step. No Harmony Ensemble group exists and Structure markers are off,
+    so every note plays as written. The norns shows the Device page and the grid lights steps 1 to 4.
+  baseline_caption: Channel 1 plays pattern 1 on the test device, the four-note melody C, D, E, F (MIDI
+    60, 62, 64, 65) on steps 1 to 4. The additions of the Foundation phrase on steps 5 and 7 do not exist
+    yet; you add them in the next step. No Harmony Ensemble group exists and Structure markers are off,
+    so every note plays as written. The norns shows the Device page and the grid lights steps 1 to 4.
+  contract_sha256: 4eb10bd04f6029d536f315d33595b7c6aa7201702007ee3a3f54ac63332ec5fd
+- scene_id: harmony-revoice-two-voices
+  step_id: start
+  caption: 'Channel 1 plays a four-step phrase on steps 1 to 4 (MIDI 60, 62, 64, 65 at velocities 127,
+    117, 107, 97) through the example MIDI device on OUT 1, in C major at 90 BPM with sixteenth-note steps
+    (rate /1). Each step is a single voice: no chord notes are set and Harmony is Off. Playback is stopped
+    and the norns shows the Device page.'
+  baseline_caption: 'Channel 1 plays a four-step phrase on steps 1 to 4 (MIDI 60, 62, 64, 65 at velocities
+    127, 117, 107, 97) through the test device on OUT 1, in C major at 90 BPM with sixteenth-note steps
+    (rate /1). Each step is a single voice: no chord notes are set and Harmony is Off. Playback is stopped
+    and the norns shows the Device page.'
+  contract_sha256: b9aea644948ef10d81ff644bcfaae2c60274bf468fb888239e311893e9ea40e4
+- scene_id: harmony-ensemble-and-local-bypass
+  step_id: start
+  caption: 'Four channels play through the example MIDI device, each on its own MIDI channel (1 to 4)
+    with its own sparse rhythm: channel 1 plays the four-step phrase, channel 2 steps 1 and 3, channel
+    3 steps 2 and 4 and channel 4 step 4. Scale slot 1 (C major) is applied, Harmony is Off on every channel
+    and no scale or octave locks are set, so each channel plays its own written pitches. A Harmony Ensemble
+    group lets several channels share one chord: each member gets a role (Bass, Inner or Top), keeps its
+    own rhythm, and takes its pitch from the group''s shared voicing. The norns shows the Device page
+    of channel 4.'
+  baseline_caption: 'Four channels play through the test device, each on its own MIDI channel (1 to 4)
+    with its own sparse rhythm: channel 1 plays the four-step phrase, channel 2 steps 1 and 3, channel
+    3 steps 2 and 4 and channel 4 step 4. Scale slot 1 (C major) is applied, Harmony is Off on every channel
+    and no scale or octave locks are set, so each channel plays its own written pitches. A Harmony Ensemble
+    group lets several channels share one chord: each member gets a role (Bass, Inner or Top), keeps its
+    own rhythm, and takes its pitch from the group''s shared voicing. The norns shows the Device page
+    of channel 4.'
+  contract_sha256: 6cb5016bc00336c89ab0c3b6cb98e64b77b0890e334f7110f5e590b3452c7b44
+- scene_id: harmony-ensemble-and-local-bypass
+  step_id: members-assigned
+  caption: 'Assign channels 1 to 4 as the members, in order, with E2 and E3, and press K3 to save: the
+    group is complete but still off. Turn E1 back to the Harmony list, set Mode to ENSEMBLE with E3, choose
+    group 1 and press K3 to join channel 1. Then select channel 2 (2,1): its Voice leading page opens.'
+  baseline_caption: 'Assign channels 1 to 4 as the members, in order, with E2 and E3, and press K3 to
+    save: the group is complete but still off. Press E1 back to the Harmony list, set Mode to ENSEMBLE
+    with E3, choose group 1 and press K3 to join channel 1. Then select channel 2 (2,1): its Voice leading
+    page opens.'
+  contract_sha256: 6cb5016bc00336c89ab0c3b6cb98e64b77b0890e334f7110f5e590b3452c7b44
+- scene_id: shared-merge-strategy-workflow
+  step_id: draft-edit
+  caption: 'Turn E2 to Rhythm, select Add amount and turn E3 left: it reads an unapplied 99.'
+  baseline_caption: 'Press E2 to Rhythm, select Add amount and turn E3 left: it reads an unapplied 99.'
+  contract_sha256: 53188b365d64324f44f74c337be402deef1e38dc90c6535cedd49e8635b127c9
+- scene_id: song-copy-and-compare
+  step_id: start
+  caption: A fresh session with Song mode On, its default. Channel 1 plays its default phrase through
+    the example MIDI device and the norns shows the Device page for channel 1; nothing is playing. The
+    song has one slot, Song 01.
+  baseline_caption: A fresh session with Song mode On, its default. Channel 1 plays its default phrase
+    through the test device and the norns shows the Device page for channel 1; nothing is playing. The
+    song has one slot, Song 01.
+  contract_sha256: 0ff2ca9d118948ae706aad743482950bff7684edd4d73542319340f4eedb8920
+- scene_id: song-build-two-groups
+  step_id: start
+  caption: A fresh session with Song mode On, its default. Channel 1 plays its default phrase through
+    the example MIDI device and the norns shows the Device page for channel 1; nothing is playing. You
+    will build a two-note motif (MIDI 60, 62) copied into slots 1, 2, 4 and 5, with slots 3 and 6 left
+    empty.
+  baseline_caption: A fresh session with Song mode On, its default. Channel 1 plays its default phrase
+    through the test device and the norns shows the Device page for channel 1; nothing is playing. You
+    will build a two-note motif (MIDI 60, 62) copied into slots 1, 2, 4 and 5, with slots 3 and 6 left
+    empty.
+  contract_sha256: aa8a1766189118b1707f366a815c3b0411a2bad1e5d358e82870fe02a61263ee
+- scene_id: ui-motion-public-frames
+  step_id: off-frames
+  caption: 'With UI motion Off, the header picture stays in its resting pose while the clock continues.
+    Compare the waiting frames: readable values stay in place.'
+  baseline_caption: With UI motion Off, all 19 native-frame samples match the exact C04 source default
+    raster (pose 0); the source atlas has eight phase slots and five distinct pixel rasters.
+  contract_sha256: 6a6bbe256dee2488a1997f0f468a2846e3bbec93f4da648117f0b45e239380c4
+- scene_id: ui-motion-public-frames
+  step_id: on-frames
+  caption: With UI motion On, the header picture changes pose as the musical clock advances. The waiting
+    frames show this decoration moving; it does not start playback.
+  baseline_caption: With UI motion On, the 19 native-frame samples follow the eight source-clock phase
+    slots across more than one two-beat loop and match all five distinct C04 pixel rasters exactly.
+  contract_sha256: 6a6bbe256dee2488a1997f0f468a2846e3bbec93f4da648117f0b45e239380c4
+- scene_id: ui-motion-public-frames
+  step_id: off-same-music
+  caption: With motion Off, playback sends C, D, E, F twice, then a final C before Stop. The first eight
+    notes have their usual sixteenth-note lengths; Stop releases the final note early.
+  baseline_caption: Motion Off produces the exact four-note phrase twice plus the first note, with eight
+    natural sixteenth-note gates; Driver.playback deliberately stops the ninth note at the extra-onset
+    boundary.
+  contract_sha256: 6a6bbe256dee2488a1997f0f468a2846e3bbec93f4da648117f0b45e239380c4
+- scene_id: ui-motion-public-frames
+  step_id: on-same-music
+  caption: With motion On, playback sends the same C, D, E, F phrase twice, then a final C before Stop.
+    The first eight notes retain their usual lengths; Stop releases the final note early, just as with
+    motion Off.
+  baseline_caption: Motion Off produces the exact four-note phrase twice plus the first note, with eight
+    natural sixteenth-note gates; Driver.playback deliberately stops the ninth note at the extra-onset
+    boundary.
+  contract_sha256: 6a6bbe256dee2488a1997f0f468a2846e3bbec93f4da648117f0b45e239380c4
+- scene_id: ui-motion-public-frames
+  step_id: off-on-same-music
+  caption: 'Compare Off and On: the same notes, velocities and note lengths play at the same musical times.
+    Only the screen decoration changes.'
+  baseline_caption: UI motion leaves every note-on, complete channel event, eight natural gates, stop-truncated
+    ninth gate, and controlled tick unchanged between Off and On.
+  contract_sha256: 6a6bbe256dee2488a1997f0f468a2846e3bbec93f4da648117f0b45e239380c4
+- scene_id: matrix-macro-route-clear
+  step_id: clear
+  caption: With macro 1 selected in the Fixed Note source list, press K3 to clear that route. Its depth
+    returns to a dash. The macro no longer overrides the phrase’s written pitches.
+  baseline_caption: 'Select the depth and clear it: the depth field shows a dash again and the route is
+    removed.'
+  contract_sha256: 6705206c8783a561fc4d1c3b81e3ea55f640dc2809143617f9f29c06ea853765
+- scene_id: pattern-copy-groups
+  step_id: four-notes
+  caption: 'Keep K1 held and tap (2,6), (3,5) and (4,4): degrees 1, 2 and 3, which are D, E and F. All
+    four notes are lit. Release K1 after entering the values, before browsing the pages.'
+  baseline_caption: 'Keep K1 held and tap (2,6), (3,5) and (4,4): degrees 1, 2 and 3, which are D, E and
+    F. All four notes are lit.'
+  contract_sha256: 083adb2c462367d059b4a2f2ee2fb6d7a66de403ee404d297d1c07293493a706
+- scene_id: pattern-copy-groups
+  step_id: shift-copies-velocities-to-four-groups
+  caption: 'Press Pattern (5,8) again to open Pattern Velocity. Hold K1 and tap (1,2), (2,2), (3,2) and
+    (4,2): the second level, velocity 117, on steps 1-4. Press the first page button (9,8): the four cells
+    are lit on page 1. Release K1 after entering the values, before browsing the pages.'
+  baseline_caption: 'Press Pattern (5,8) again to open Pattern Velocity. Hold K1 and tap (1,2), (2,2),
+    (3,2) and (4,2): the second level, velocity 117, on steps 1-4. Press the first page button (9,8):
+    the four cells are lit on page 1.'
+  contract_sha256: 083adb2c462367d059b4a2f2ee2fb6d7a66de403ee404d297d1c07293493a706
+- scene_id: repeat-reset-first-boundary-public
+  step_id: off-row
+  caption: 'Independent starting point: channel 1 loops C, D, E over steps 1–3 at Rate /9 and 90 BPM,
+    so a channel step lasts 1.5 seconds. Song mode is On; the slot lasts 64 global sixteenth-note steps.
+    Reset on song seq change is Off. The selected Reset on pattern repeat row reads Off: the slow line
+    keeps its place when this slot repeats.'
+  baseline_caption: With Song mode On and Reset on song seq change Off, the selected Reset on pattern
+    repeat row reads Off.
+  contract_sha256: dbbd0bca588f514772c3537d570c082e77ac8585b6b45666beb33174e9be554a
+- scene_id: repeat-reset-first-boundary-public
+  step_id: off-through-boundary
+  caption: Play through the first slot repeat. With repeat reset Off, D3 sounds at 10.5 seconds, and the
+    channel continues its own three-note cycle. There is no new C3 at the slot boundary, 10.667 seconds.
+  baseline_caption: With repeat reset Off, D3 sounds at 10.5 seconds; the normal three-note cycle has
+    no new C3 at 10.667 seconds.
+  contract_sha256: dbbd0bca588f514772c3537d570c082e77ac8585b6b45666beb33174e9be554a
+- scene_id: repeat-reset-first-boundary-public
+  step_id: on-through-boundary
+  caption: Play the same comparison with repeat reset On. D3 still sounds at 10.5 seconds; at the 10.667-second
+    slot boundary the channel restarts on C3. The extra C marks the reset, rather than a change to the
+    channel’s /9 rate.
+  baseline_caption: With repeat reset On, the normal D3 still sounds at 10.5 seconds; the song boundary
+    then restarts the channel with C3 at 10.667 seconds.
+  contract_sha256: dbbd0bca588f514772c3537d570c082e77ac8585b6b45666beb33174e9be554a
+- scene_id: chord-spread-separate-gap
+  step_id: start
+  caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 127, with Chd1 to Chd4
+    set to 64, 67, 69 and 72; the output is polyphonic. Trig params is open on its parameter list, showing
+    Chord Note Strum. Nothing is assigned yet. This is a slow comparison at 90 BPM and Rate /9: each channel
+    step lasts 1.5 seconds. The long note lets all five voices finish before Stop.'
+  baseline_caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, with Chd1
+    to Chd4 set to 64, 67, 69 and 72; the output is polyphonic. Trig params is open on its parameter list,
+    showing Chord Note Strum. Nothing is assigned yet.'
+  contract_sha256: 3c658dc1cc2ba98335c4b465d9b877efd2d78ffd66b3d3bcc0028a8e20474829
+- scene_id: chord-spread-separate-gap
+  step_id: constant
+  caption: Press K3 to assign Chord Spread and K2 to return, then turn E3 up to 1/4. Chord Accel Mod is
+    not assigned, so every gap stays the same. Each gap is now 3/4 step (1/2 + 1/4) instead of 1/2. Tap
+    Play (1,8), then tap it again to stop. The MIDI strip lists the root C3 (60) and then E3 (64), G3
+    (67), A3 (69), C4 (72), evenly spaced 3/4 step apart. Here 3/4 of a channel step is 1.125 seconds,
+    so the five onsets are evenly separated; every voice retains velocity 127.
+  baseline_caption: Press K3 to assign Chord Spread and K2 to return, then turn E3 up to 1/4. Chord Accel
+    Mod is not assigned, so every gap stays the same. Each gap is now 3/4 step (1/2 + 1/4) instead of
+    1/2. Tap Play (1,8), then tap it again to stop. The MIDI strip lists the root C3 (60) and then E3
+    (64), G3 (67), A3 (69), C4 (72), evenly spaced 3/4 step apart.
+  contract_sha256: 3c658dc1cc2ba98335c4b465d9b877efd2d78ffd66b3d3bcc0028a8e20474829
+- scene_id: song-repeats-advance
+  step_id: slot-2-pass-1
+  caption: Let playback reach slot 2. Its LED becomes bright and Playback reads Pass 1 / 2. This output
+    window begins with the remaining C, D, E, F of slot 1; the octave-higher C, D, E, F (MIDI 72, 74,
+    76, 77) then marks the change into slot 2. Slot 1 lasts eight global steps, even though its four-step
+    channel motif repeats twice.
+  baseline_caption: After eight steps the song moves on by itself. Slot 2 is bright and slot 1 mid-bright;
+    the phrase sounds an octave higher (MIDI 72, 74, 76, 77) and Song Playback reads Pass 1 / 2.
+  contract_sha256: 1d9e3930a07fbbdb136d6e827209c6ff6e9e274a5ee29cb5bcc806e5b67874cf
+- scene_id: song-repeats-advance
+  step_id: wrapped
+  caption: 'Let slot 2 finish its second eight-step pass. Empty slot 3 returns the song to slot 1: its
+    LED is bright and Playback reads Pass 1 / 1. This output window begins with the end of slot 2, then
+    drops to C, D, E, F (MIDI 60, 62, 64, 65) on slot 1. Press Stop at (1,8).'
+  baseline_caption: 'Slot 3 is empty, so after slot 2 the song returns to slot 1: it is bright again,
+    the notes drop back to C, D, E, F (MIDI 60, 62, 64, 65) and Song Playback reads Pass 1 / 1. Press
+    Stop at (1,8).'
+  contract_sha256: 1d9e3930a07fbbdb136d6e827209c6ff6e9e274a5ee29cb5bcc806e5b67874cf
+- scene_id: swing-interlock-pulse-times
+  step_id: swing-setting
+  caption: Turn E1 to Channel tasks, select Clock with E2 and press K3. Select the local feel Mode with
+    E2, set Swing with E3 and press K3. Feel source now reports CHANNEL; this row is read-only. Select
+    Swing with E2, turn E3 to 25 and press K3 to apply. Every second step plays a quarter of a step late,
+    while Interlock still removes the addition on step 5.
+  baseline_caption: Turn E1 to Channel tasks, turn E2 to Clock and press K3. Set Feel source to CHANNEL
+    (E3, then K3) so this channel uses its own feel instead of the Song page's. Then select Swing and
+    turn E3 up to 25. Swing runs from -50 to 50 and at 25 every second step is played a quarter of a step
+    late.
+  contract_sha256: c1badd6d1b6037f8935d0a910816b2bb2dc9caee303e82f24d5c18c3d295dba9
+- scene_id: keyboard-honour-all
+  step_id: start
+  caption: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117,
+    107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer
+    is stopped and a MIDI keyboard is connected as Mosaic's input. This independent example begins with
+    Degree and Rotation already enabled; it does not continue a previous project. Map scale to white keys
+    is On and the scale is C natural minor, with degree II, rotation 2 and global transpose +2 set in
+    the Scale Editor. Honour scale degree and Honour scale rotations are On and Honour scale transpose
+    is Off, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 58, 60, 74.
+  baseline_caption: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities
+    127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps
+    1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. This lesson continues
+    from the degree and rotation lessons. Map scale to white keys is On and the scale is C natural minor,
+    with degree II, rotation 2 and global transpose +2 set in the Scale Editor. Honour scale degree and
+    Honour scale rotations are On and Honour scale transpose is Off, so the white keys C3 to C4 play 62,
+    63, 65, 67, 68, 58, 60, 74.
+  contract_sha256: 1e4b9ceeaf1d446fd9bd42acd781662dac07a3bc2f511b76899604470c292d3f
+- scene_id: shuffle-smooth-amount-boundaries
+  step_id: start
+  caption: 'Channel 1 sends to a MIDI device and plays pattern 1: four trigs on steps 1-4 (C, D, E, F
+    = MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97) in the default C major scale, with Rate /1.
+    Its Clock page is set to Shuffle with Feel Smooth, Basis 9 and Amount 1. Timing is counted in pulses:
+    each step is 24 pulses, so at Amount 1 the notes sit almost exactly on the straight grid, at 0, 24,
+    48 and 72. First compare Amount 0, 50 and 100 with Smooth Feel and Basis 9 unchanged. The last three
+    checkpoints are an optional stronger-groove extension using Basis 6.'
+  baseline_caption: 'Channel 1 sends to a MIDI device and plays pattern 1: four trigs on steps 1-4 (C,
+    D, E, F = MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97) in the default C major scale, with
+    Rate /1. Its Clock page is set to Shuffle with Feel Smooth, Basis 9 and Amount 1. Timing is counted
+    in pulses: each step is 24 pulses, so at Amount 1 the notes sit almost exactly on the straight grid,
+    at 0, 24, 48 and 72. Feel and Basis stay the same through this lesson; only Amount changes.'
+  contract_sha256: db0bbdf6f5aa2d49fe5acc45b94b33cde4e151ab174c212b839ffd641ea695a6
+- scene_id: record-parameter-lock
+  step_id: armed
+  caption: 'Start with channel 1 routed to the generic CC Device, pattern 1 playing four trigs on steps
+    1–4, and CC 1 assigned to Trig params slot 1 at channel value 63. The example uses 90 BPM and Rate
+    /24, giving four seconds per channel step so there is time to edit while recording. Tap Record (2,8):
+    its grid cell blinks and slot 1 still reads 63. Start playback and turn E3 to 64; the new value records
+    on following eligible steps. Disarm Record and stop before inspecting step 2.'
+  baseline_caption: With CC 1 assigned and its channel value at 63, tap Record (2,8). Its grid cell blinks
+    while recording is armed. The Trig Params screen still shows the channel value 63. Start playback
+    and turn E3 to 64; Mosaic records that value on the next eligible steps.
+  contract_sha256: 7c070bc849ae3c59cdd680d2332a02d636696afa48d95e63b28725bbecab0b3a
+- scene_id: length-merge-numeric-output
+  step_id: higher
+  baseline_caption: 'Tap Play. 3 + 2 = 5 steps (0.83 s), longer than either source: overlapping, legato
+    notes. Use Longer for pads that run into each other.'
+  caption: 'Tap Play. Longer combines the mean and the difference of the two source lengths: 3 + 2 = 5
+    steps, about 0.83 seconds. The note sustains longer than either source, then releases before the next
+    trig, which arrives eight steps after the first. This example has separated longer gates. With a denser
+    rhythm, a five-step gate could overlap the following note; use that separate comparison when you want
+    a connected pad.'
+  contract_sha256: 3e280d2da2fb6e51064d87b791af4d9ecb5bd0f9ccc297ba2bd44b436c2d0c61
+- scene_id: workflow-second-channel
+  step_id: start
+  caption: 'Channel 1 has patterns 1 and 2 merged in All mode (both patterns contribute their notes, with
+    pattern 1 supplying velocity) in D major. Check the four-step result on port 1/channel 1: MIDI 66,
+    64, 69, 67 at velocities 127, 117, 107, 97. Channel 2 has not been set up yet.'
+  baseline_caption: 'Channel 1 has patterns 1 and 2 merged in All mode with pattern 1''s velocities, in
+    D major. All four steps play: MIDI 66, 64, 69, 67 at velocities 127, 117, 107, 97. Channel 2 is not
+    set up yet.'
+  contract_sha256: 7aaf73d07de2cc309648f2872d040a2ec6e1b8137a41c8475075e8713e0de09a
+  step_title: Checkpoint 1 — hear the existing phrase
+  baseline_step_title: Starting point
+  scene_title: Add one keyboard note and check both channel outputs
+  baseline_scene_title: Add a second channel with its own output
+- scene_id: workflow-second-channel
+  step_id: channel-2
+  caption: Tap channel 2 at (2,1), open Channel tasks > Device with E1/E2 and K3. Check the screen header
+    reads DEVICE CH02. A channel is the numbered MIDI route on an output.
+  baseline_caption: Tap channel 2 at (2,1), turn E1 to Channel tasks, turn E2 to Device and press K3.
+    The Device page now reads CH02.
+  contract_sha256: 7aaf73d07de2cc309648f2872d040a2ec6e1b8137a41c8475075e8713e0de09a
+  step_title: Checkpoint 2 — select channel 2
+  baseline_step_title: Select channel 2
+- scene_id: workflow-second-channel
+  step_id: channel-2-routed
+  caption: On Device, choose the same device on port 2 and MIDI channel 2, then press K3 to apply. A port
+    is a MIDI output; the channel number is the route the receiver listens to. Assign pattern 2 at (2,2),
+    set its range to steps 1–4 by holding step 1 and tapping step 4, then check Merge modes shows CH02
+    and Patterns 02 and slot (2,2) remains lit.
+  baseline_caption: On the Device page choose the same device on MIDI port 2 and MIDI channel 2 (turn
+    E3 or E2 to each setting) and press K3 to apply. Tap pattern slot (2,2) for pattern 2, then hold step
+    1 and tap step 4 to give channel 2 the range steps 1-4. Assigning the pattern brings up Merge modes
+    for CH02 with Patterns 02, and the pattern slot (2,2) stays lit.
+  contract_sha256: 7aaf73d07de2cc309648f2872d040a2ec6e1b8137a41c8475075e8713e0de09a
+  step_title: Checkpoint 3 — assign a separate output
+  baseline_step_title: Route channel 2
+- scene_id: workflow-second-channel
+  step_id: channel-2-masks
+  caption: Open Channel tasks > Masks and press K3. Check the screen reads Note Masks for CH02; this is
+    where the channel's note values and held-step masks are edited.
+  baseline_caption: Turn E1 to Channel tasks, turn E2 to Masks and press K3. The screen reads Note Masks
+    for CH02.
+  contract_sha256: 7aaf73d07de2cc309648f2872d040a2ec6e1b8137a41c8475075e8713e0de09a
+  step_title: Checkpoint 4 — open channel 2 Masks
+  baseline_step_title: Open its Masks
+- scene_id: workflow-second-channel
+  step_id: two-channels
+  caption: 'On Masks, hold step 3 and play MIDI note 76 at velocity 90; a mask is an override stored on
+    the held step. Release the key and step. Select channel 1 at (1,1), press Play (1,8), then Stop. Check
+    the MIDI strip: port 1/channel 1 keeps MIDI 66, 64, 69, 67 at velocities 127, 117, 107, 97; port 2/channel
+    2 plays MIDI 69 (A) on step 1 and MIDI 76 on step 3. The complete route for this scene is [MIDI Keyboard
+    Input](#midi-keyboard-input/workflow-second-channel).'
+  baseline_caption: 'On Masks, hold step 3 and play MIDI note 76 at velocity 90 on a MIDI keyboard or
+    controller to lock it to that step. Tap channel 1 at (1,1) and press Play, then Stop. Both channels
+    sound, each on its own port, in the MIDI strip: channel 1 plays 66, 64, 69, 67 as before, and channel
+    2 plays pattern 2, MIDI 69 (A) on step 1 and your 76 on step 3.'
+  contract_sha256: 7aaf73d07de2cc309648f2872d040a2ec6e1b8137a41c8475075e8713e0de09a
+  step_title: Checkpoint 5 — add one note and verify both routes
+  baseline_step_title: Add a keyboard note to channel 2
+- scene_id: parameter-slot-endpoints
+  step_id: first-slot
+  caption: 'Open Trig params, press K2 to enter the slot list and turn E3 to CC 1, press K3, then K2.
+    Check the visible list: slot 1 holds CC 1.'
+  baseline_caption: Open Trig params, press K2 to enter the slot list and turn E3 to CC 1, press K3, then
+    K2. Slot 1 now holds CC 1.
+  contract_sha256: f40ae47810a7e3c167d4092610eb0c691adc3fbe92ffba2c932d217ca8ab22c1
+  step_title: Batch 1 — assign CC 1 to slot 1
+  baseline_step_title: Assign CC 1 to slot 1
+- scene_id: parameter-slot-endpoints
+  step_id: slot-two
+  caption: 'Turn E2 one slot right, press K2, turn E3 to CC 2 and press K3, then K2. Check the visible
+    list: slot 1 holds CC 1 and slot 2 holds CC 2.'
+  baseline_caption: Turn E2 one slot right, press K2, turn E3 to CC 2 and press K3, then K2. Slot 2 now
+    holds CC 2 and slot 1 still holds CC 1.
+  contract_sha256: f40ae47810a7e3c167d4092610eb0c691adc3fbe92ffba2c932d217ca8ab22c1
+  step_title: Batch 1 — assign CC 2 to slot 2
+  baseline_step_title: Assign CC 2 to slot 2
+- scene_id: parameter-slot-endpoints
+  step_id: slot-five
+  caption: Repeat for slots 3, 4 and 5 (E2 to the next slot, K2, E3 to the next controller, K3, K2). Check
+    the list shows CC 1 through CC 5 in order; slot 5 holds CC 5.
+  baseline_caption: Repeat for slots 3, 4 and 5 (E2 to the next slot, K2, E3 to the next controller, K3,
+    K2). Slot 5 now holds CC 5.
+  contract_sha256: f40ae47810a7e3c167d4092610eb0c691adc3fbe92ffba2c932d217ca8ab22c1
+  step_title: Finish batch 1 — slots 3 to 5
+  baseline_step_title: Carry on to slot 5
+- scene_id: parameter-slot-endpoints
+  step_id: assigned-ten
+  caption: Repeat for CC 6 up to CC 10 on slot 10. Check the list shows CC 1 through CC 10 in order; the
+    final slot holds CC 10.
+  baseline_caption: 'Repeat for CC 6 up to CC 10 on slot 10. All ten slots are now assigned: the list
+    holds CC 1 to CC 10, the most a channel can hold.'
+  contract_sha256: f40ae47810a7e3c167d4092610eb0c691adc3fbe92ffba2c932d217ca8ab22c1
+  step_title: Finish batch 2 — slots 6 to 10
+  baseline_step_title: Fill slots 6 to 10
+- scene_id: parameter-slot-endpoints
+  step_id: clamped-slots
+  caption: 'Select slot 10 and keep turning E2 right: it stops at slot 10. Hold step 1 (1,4) and turn
+    E3 to set the value to 0. Turn E2 left well past slot 1: it stops at slot 1. Hold step 2 (2,4) and
+    set the value to 1. Tap Play (1,8). Check the strip below: before its note, step 1 sends CC 10 and
+    step 2 sends CC 1. Tap Play again to stop.'
+  baseline_caption: 'Select slot 10 and keep turning E2 right: it stops at slot 10. Hold step 1 (1,4)
+    and turn E3 to set the value to 0. Turn E2 left well past slot 1: it stops at slot 1. Hold step 2
+    (2,4) and set the value to 1. Tap Play (1,8). Before its note, step 1 sends CC 10 and step 2 sends
+    CC 1: look for the two controller changes in the strip below. Tap Play again to stop.'
+  contract_sha256: f40ae47810a7e3c167d4092610eb0c691adc3fbe92ffba2c932d217ca8ab22c1
+  step_title: Check both ends
+  baseline_step_title: The first and last slots hold their ends
+- scene_id: panic-stops-sounding-note
+  step_id: panic-released
+  caption: While C sounds, hold Channel (3,8), a page you are not on. Keep holding until Panic cuts the
+    note, then release the key. Allow about two seconds for the hold. Here the note is cut off 1.26 seconds
+    after it starts, before its natural four-second end. That interval starts at note onset, not at the
+    start of the hold. Song playback continues, so C sounds again when the loop comes round. Press Stop
+    at (1,8) to stop the sequence.
+  baseline_caption: 'While the note sounds, hold Channel (3,8), a page you are not on, for about two seconds
+    and release it. The note is cut off about a second and a quarter after it started, well before its
+    four seconds are up: the MIDI strip shows the 6,144 note-offs of the panic sweep, 128 notes on each
+    of the 16 MIDI channels of the three ports. The screen stays on Song and playback carries on, so C
+    starts again when the loop comes round. Press Stop at (1,8).'
+  contract_sha256: a4a21357d2a7fb533b5cc9de2aeba31666a46bfae58408e792dca1336028166f
+- scene_id: workflow-compose-two-channels
+  step_id: start
+  caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+    C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Nothing else exists yet: no
+    second pattern, no scale change, no second channel and one song slot. Trig merge modes decide what
+    happens when two patterns on one channel both have a trig on a step: Skip (the default) drops those
+    steps, Only keeps only those steps, and All keeps every step.'
+  baseline_caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with
+    the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Nothing else exists
+    yet: no second pattern, no scale change, no second channel and one song slot. Trig merge modes decide
+    what happens when two patterns on one channel both have a trig on a step: Skip (the default) drops
+    those steps, Only keeps only those steps, and All keeps every step.'
+  contract_sha256: e108361a74e8daf89f74c8c3eaa0ecac0dcb099ae92237d03a292aa622f5a448
+  scene_title: 'Build two channels: merge patterns, route a second part and chain slots'
+  baseline_scene_title: Compose two channels and chain song slots
+- scene_id: panic-from-song-channel
+  step_id: hold-and-release
+  caption: From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends
+    Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you
+    hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of
+    the page you are already on does nothing.
+  baseline_caption: Hold the Channel button (3,8), a page you are not on, for about two seconds, then
+    release it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of
+    the three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen
+    stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are
+    already on does nothing. Playback is not stopped by a panic.
+  contract_sha256: a96702b29055e1eb3abe10fd6aec247056749a2c985d718eb44780d8b5dd3a86
+- scene_id: panic-from-song-pattern
+  step_id: hold-and-release
+  caption: From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends
+    Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you
+    hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of
+    the page you are already on does nothing.
+  baseline_caption: Hold the Pattern button (5,8), a page you are not on, for about two seconds, then
+    release it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of
+    the three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen
+    stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are
+    already on does nothing. Playback is not stopped by a panic.
+  contract_sha256: 9c72777103838ca27715b1976d88f29a531577da616556c520d03353e87b8b8a

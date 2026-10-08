@@ -1,4 +1,4 @@
-"""Generate the quick reference from the field guide's same YAML feature model."""
+"""Generate the public control sheet from the Mosaic manual."""
 import argparse,html,importlib.util,os,re
 from pathlib import Path
 from html.parser import HTMLParser
@@ -32,9 +32,16 @@ def legacy_rows(path):
             if row["selected"] and not row["nested"] and text:self.rows.append(dict(line=row["line"],text=text))
     parser=Rows();parser.feed(Path(path).read_text());return parser.rows
 
-def render(data,manual_prefix="manual/",legacy_prefix="manual/legacy/"):
+def public_features(data):
+    return [feature for feature in data["features"] if feature.get("audience") != "developer" and feature.get("category") != "developer"]
+
+def relative_logo_src(output):
+    output=Path(output).resolve()
+    return os.path.relpath(ROOT/"images/logo.svg",output.parent).replace(os.sep,"/")
+
+def render(data,manual_prefix="manual/",logo_src="images/logo.svg"):
     pieces=[]
-    for feature in data["features"]:
+    for feature in public_features(data):
         fid=feature["id"]
         if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*",fid):raise ValueError("Invalid feature ID: "+fid)
         title=escape(feature["title"]);summary=escape(feature.get("summary",""))
@@ -47,14 +54,14 @@ def render(data,manual_prefix="manual/",legacy_prefix="manual/legacy/"):
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mosaic · quick reference</title><style>@@STYLE@@</style></head><body>
 <a class="skip" href="#reference">Skip to controls</a><header>
-<div class="mast"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h1>MOSAIC</h1></div>
+<div class="mast"><img class="brand-logo" src="@@LOGO@@" alt="" width="68" height="55"><h1>MOSAIC</h1></div>
 <p class="eyebrow">@@EDITION@@ / quick reference</p>
-<nav aria-label="Reference links"><a href="@@MANUAL@@">Interactive manual</a><a href="@@LEGACY@@cheat-sheet-1.4.0.html">Original quick reference</a><button id="theme" type="button">Switch light / dark</button></nav>
-<p>Find a gesture, then follow its heading for the full explanation. These tables use the same authoring as the manual.</p></header>
-<main id="reference" tabindex="-1"><div class="search"><label for="find">Find a control</label><input id="find" type="search" placeholder="Try masks, hold or velocity" autocomplete="off"><button id="clear" type="button">Clear</button><span id="count" role="status" aria-live="polite"></span></div><div class="catalogue">@@CARDS@@</div><footer>Keyboard: / focuses search. Escape clears search. Tab follows links and buttons. The original quick reference is preserved with its historical wording.</footer></main><script>@@SCRIPT@@</script></body></html>
+<nav aria-label="Reference links"><a href="@@MANUAL@@">Interactive manual</a><button id="theme" type="button">Switch light / dark</button></nav>
+<p>Find a control here, then follow its heading for setup and full steps.</p></header>
+<main id="reference" tabindex="-1"><div class="search"><label for="find">Find a control</label><input id="find" type="search" placeholder="Try masks, hold or velocity" autocomplete="off"><button id="clear" type="button">Clear</button><span id="count" role="status" aria-live="polite"></span></div><div class="catalogue">@@CARDS@@</div><footer>Keyboard: / focuses search. Escape clears search. Tab follows links and buttons.</footer></main><script>@@SCRIPT@@</script></body></html>
 """
     substitutions={"@@STYLE@@":STYLE,"@@EDITION@@":escape(data.get("edition","")),
-        "@@MANUAL@@":escape(manual_prefix,quote=True),"@@LEGACY@@":escape(legacy_prefix,quote=True),
+        "@@MANUAL@@":escape(manual_prefix,quote=True),"@@LOGO@@":escape(logo_src,quote=True),
         "@@CARDS@@":"".join(pieces),"@@SCRIPT@@":SCRIPT}
     for token,value in substitutions.items():template=template.replace(token,value)
     return template
@@ -66,8 +73,8 @@ def main():
     args=parser.parse_args()
     output=args.output.resolve()
     manual_prefix=os.path.relpath(ROOT/"manual",output.parent).replace(os.sep,"/")+"/"
-    legacy_prefix=manual_prefix+"legacy/"
-    text=render(book.load(),manual_prefix,legacy_prefix)
+    logo_src=relative_logo_src(output)
+    text=render(book.load(),manual_prefix,logo_src)
     if args.check:
         if not output.is_file() or output.read_text()!=text:raise SystemExit("Quick reference stale; regenerate")
         print("quick reference current");return

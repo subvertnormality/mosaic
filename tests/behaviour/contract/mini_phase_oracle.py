@@ -44,11 +44,12 @@ def phase_interval(low,high,spec,max_pose_widths,precision_beats=1e-9):
  first=math.floor(max(0,low-precision_beats)*count/loop);last=math.floor((high+precision_beats)*count/loop)
  return sorted({index%count for index in range(first,last+1)})
 def check_stopped_phase(sample,observations,native_events,spec,enabled,tempo,clock_mode):
- require(type(enabled)is bool and tempo in (40,90,240),'Unsupported authored stopped mini tempo/source')
+ require(type(enabled)is bool and (tempo is None or (finite(tempo) and tempo>0)),'Invalid stopped mini tempo/source')
  image,state,event=native_frame(sample,observations,native_events);phases=observed_phases(state,spec)
  before_index,before,low=clock_receipt(sample,'before',observations);after_index,after,high=clock_receipt(sample,'after',observations);image_index=sample['observation_index']
  require(before_index<image_index<=after_index and before['state']['clock']['mode']==state['clock']['mode']==after['state']['clock']['mode']==clock_mode,'Native clock/frame observation order or mode differs')
- require(low['clock_epoch']==high['clock_epoch'] and low['tempo']==high['tempo']==tempo,'Native clock epoch/tempo changed across frame')
+ valid_tempos=finite(low['tempo']) and low['tempo']>0 and finite(high['tempo']) and high['tempo']>0
+ require(low['clock_epoch']==high['clock_epoch'] and valid_tempos and (tempo is None or low['tempo']==high['tempo']==tempo),'Native clock epoch/tempo changed across frame')
  require(low['beats']<=high['beats'] and low['monotonic_ns']<=high['monotonic_ns'],'Native selected clock moved backwards')
  diag=state.get('diagnostics',{});require(sample.get('native_clock')=={key:diag.get(key) for key in ('beats','tempo','monotonic_ns','clock_epoch')},'Changed selected-frame native clock receipt')
  require(state['midi_capture']['outstanding']==[] and before['state']['midi_count']==state['midi_count']==after['state']['midi_count'] and before['state']['grid']==state['grid']==after['state']['grid'],'Stopped native phase emitted music or changed grid')

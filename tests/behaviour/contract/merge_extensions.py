@@ -160,7 +160,10 @@ def fragments_short_loop_workflow(c):
     c.ui.expect_header("merge_fragments", channel=1)
     c.ui.expect_selected_field("detail", "Size", "8")
     c.ui.press_key(3)
-    c.ui.expect_footer_text("APPLIED")
+    # Characterisation outside README: M15 K3 commits this draft in place;
+    # owner.status is not rendered on this route, so assert its stable controls.
+    # The resulting fragments are checked by the grid and MIDI oracles.
+    c.ui.expect_footer_text("E3 SET  K3 APPLY  K2 BACK")
     c.ui.expect_steps({step: "selected" if step in (3, 6) else "off" if step <= 6 else "dark"
                        for step in range(1, 17)})
     play_loops(c, [(3, 1, 60, 100), (6, 1, 60, 100)], loop=6,
@@ -172,7 +175,10 @@ def fragments_short_loop_workflow(c):
     c.ui.turn(3, 1)
     c.ui.expect_selected_field("detail", "Anchor", "1")
     c.ui.press_key(3)
-    c.ui.expect_footer_text("APPLIED")
+    # Characterisation outside README: M15 K3 commits this draft in place;
+    # owner.status is not rendered on this route, so assert its stable controls.
+    # The resulting fragments are checked by the grid and MIDI oracles.
+    c.ui.expect_footer_text("E3 SET  K3 APPLY  K2 BACK")
     expected = [(1, 1, 60, 127), (2, 1, 62, 117), (3, 1, 60, 100),
                 (4, 1, 65, 97), (6, 1, 60, 100)]
     c.ui.expect_steps({step: "selected" if step in (1, 2, 3, 4, 6) else "off" if step <= 6 else "dark"

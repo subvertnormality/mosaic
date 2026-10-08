@@ -27,8 +27,8 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # 37503722733 failed there with "MONOME_EMULATOR is required").
     PRODUCER_TOOLING_POLICY_VERSION: {
         ".github/workflows/manual-build.yml": "a70fc1d76e359a4b086ad365a4c79a4bf16fd86ce2a4f336cad3aaa9a06f93e0",
-        ".github/scripts/manual-build.sh": "599cb6ca83dbc4e2a08859cda90d389b7b33ac0a210d2bd89bd3ad4df344b63f",
-        ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
+        ".github/scripts/manual-build.sh": "b7d646e9de859612cf732e9a7fbf7ca061bb9828daabc5b5eb5b839d6b5e6d6e",
+        ".github/scripts/manual_artifact.py": "7b9bc0bdb0f1e4a143370af2cd220a0db1f4cb65a640c72247408332ec1aaab6",
     },
 }
 
@@ -151,6 +151,36 @@ def _check_safe_destination(destination):
         if parent.exists():
             need(not parent.is_symlink() and parent.is_dir(),
                  "extraction path has a symlink or non-directory ancestor")
+
+def canonical_site_tree(site_root):
+    root = Path(site_root).resolve(strict=True)
+    need(root.is_dir() and not root.is_symlink(), "verified site root is invalid")
+    rows = {}
+    for path in sorted(root.rglob("*")):
+        if path.is_symlink():
+            raise Reject("verified site contains a symlink")
+        if path.is_file():
+            relative = path.relative_to(root).as_posix()
+            need(safe_member_name("manual-site/" + relative)[0] == "manual-site/" + relative,
+                 "verified site contains an unsafe path")
+            rows[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+    need("index.html" in rows, "verified site entry point missing")
+    return rows
+
+def site_tree_sha256(rows):
+    encoded = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+def verify_api_zip_digest(api_digest, archive):
+    need(isinstance(api_digest, str) and re.fullmatch(r"sha256:[0-9a-f]{64}", api_digest) is not None,
+         "GitHub artifact API digest is missing or malformed")
+    digest = hashlib.sha256()
+    with Path(archive).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    actual = digest.hexdigest()
+    need(api_digest == "sha256:" + actual, "downloaded ZIP differs from GitHub artifact API digest")
+    return actual
 
 def validate_and_extract_zip(archive, destination):
     archive = Path(archive)
@@ -390,6 +420,36 @@ def json_sha256(value):
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
 
+def validate_required_ci(gh, source_sha):
+    requirements = {
+        ".github/workflows/main.yml": {"Run tests on Ubuntu"},
+        ".github/workflows/behaviour.yml": {"Complete behaviour coverage"},
+    }
+    for workflow, required_jobs in requirements.items():
+        encoded_workflow = workflow.split("/")[-1]
+        runs = gh.json(f"/repos/{REPOSITORY}/actions/workflows/{encoded_workflow}/runs?head_sha={source_sha}&status=completed&per_page=100")
+        candidates = [run for run in runs.get("workflow_runs", [])
+                      if run.get("head_sha") == source_sha and run.get("path") == workflow
+                      and run.get("status") == "completed" and run.get("conclusion") == "success"]
+        passed = False
+        for run in candidates:
+            jobs = gh.json(f"/repos/{REPOSITORY}/actions/runs/{run['id']}/jobs?per_page=100")
+            names = {job.get("name") for job in jobs.get("jobs", [])
+                     if job.get("status") == "completed" and job.get("conclusion") == "success"}
+            if required_jobs.issubset(names):
+                passed = True
+                break
+        need(passed, "required source-bound CI is missing or failed: " + workflow)
+
+def verify_staged_site(site_root, receipt_path):
+    receipt = json.loads(Path(receipt_path).read_text(encoding="utf-8"))
+    expected = receipt.get("artifact", {}).get("site_tree_sha256")
+    need(isinstance(expected, str) and SHA256.fullmatch(expected) is not None,
+         "publication receipt has no canonical site tree digest")
+    actual = site_tree_sha256(canonical_site_tree(site_root))
+    need(actual == expected, "transferred Pages tree differs from the verified producer artifact")
+    return actual
+
 def prepare(args):
     event = json.loads(Path(args.event_path).read_text(encoding="utf-8"))
     inputs = event.get("inputs") or {}
@@ -458,20 +518,30 @@ def prepare(args):
     need(len(found) == 1, "exact producer artifact is missing or ambiguous")
     artifact = found[0]
     need(not artifact.get("expired"), "producer artifact has expired")
+    api_digest = artifact.get("digest")
+    need(isinstance(api_digest, str) and re.fullmatch(r"sha256:[0-9a-f]{64}", api_digest) is not None,
+         "GitHub artifact API digest is missing or malformed")
     artifact_id = artifact.get("id")
     need(isinstance(artifact_id, int) and not isinstance(artifact_id, bool) and artifact_id > 0,
          "producer artifact has invalid API ID")
     with tempfile.TemporaryDirectory(prefix="manual-publish-") as temp:
         archive = Path(temp) / "artifact.zip"
         gh.download(f"/repos/{REPOSITORY}/actions/artifacts/{artifact_id}/zip", archive)
-        archive_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
+        archive_sha = verify_api_zip_digest(api_digest, archive)
         manifest = validate_and_extract_zip(archive, args.output_dir)
+        site_rows = canonical_site_tree(Path(args.output_dir) / "manual-site")
+        site_digest = site_tree_sha256(site_rows)
+        expected_rows = {name[len("manual-site/"):]: digest
+                         for name, digest in manifest["files"].items()
+                         if name.startswith("manual-site/")}
+        need(site_rows == expected_rows, "extracted site differs from producer file map")
     tested_commit = manifest["tested_commit_sha"]
     source_commit = gh.json(f"/repos/{REPOSITORY}/commits/{tested_commit}")
     need(source_commit.get("sha") == tested_commit, "GitHub returned a different tested commit")
     source_tree = ((source_commit.get("commit") or {}).get("tree") or {}).get("sha")
     need(source_tree == manifest["tested_tree_sha"],
          "tested commit tree differs from the artifact source identity")
+    validate_required_ci(gh, tested_commit)
     target_tree = source_tree
     if policy == "codex-1.4.0-promotion":
         target_sha = (promotion or {}).get("source_commit_sha")
@@ -507,10 +577,15 @@ def prepare(args):
         "artifact": {"manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
                      "file_map_sha256": json_sha256(manifest["files"]),
                      "finalized_build_manifest_sha256": manifest["finalized_build_manifest_sha256"],
-                     "files": manifest["files"]},
+                     "files": manifest["files"], "site_tree_sha256": site_digest},
     }
     receipt_path = Path(args.output_dir) / "promotion-receipt.json"
     receipt_path.write_text(json.dumps(receipt, sort_keys=True, indent=2) + chr(10), encoding="utf-8")
+    receipt_sha = hashlib.sha256(receipt_path.read_bytes()).hexdigest()
+    output = os.environ.get("GITHUB_OUTPUT")
+    if output:
+        with open(output, "a", encoding="utf-8") as stream:
+            stream.write(f"receipt_sha256={receipt_sha}\\n")
     return True
 
 def main():
@@ -518,7 +593,15 @@ def main():
     parser.add_argument("--event-path", default=os.environ.get("GITHUB_EVENT_PATH"))
     parser.add_argument("--event-name", default=os.environ.get("GITHUB_EVENT_NAME"))
     parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--verify-staged-site", action="store_true")
+    parser.add_argument("--site-root")
+    parser.add_argument("--receipt")
     args = parser.parse_args()
+    if args.verify_staged_site:
+        need(args.site_root and args.receipt, "staged-site verification needs site root and receipt")
+        verify_staged_site(args.site_root, args.receipt)
+        print("verified staged Pages tree")
+        return 0
     try:
         need(args.event_path and args.event_name, "GitHub event context is missing")
         ok = prepare(args)

@@ -43,3 +43,53 @@
 @media(max-width:600px){.grid-overview-columns,#grid-overview>div{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:2px;width:100%;min-width:0}.grid-overview-columns span{text-align:center;font-size:8px;color:var(--muted)}#grid-overview{display:flex;flex-direction:column;gap:2px;width:100%;min-width:0}#grid-overview .grid-overview-cell{min-width:0;aspect-ratio:1}.grid-wrap{overflow-x:auto}.grid-columns{width:max-content;min-width:0;grid-template-columns:repeat(16,44px);column-gap:5px;padding:0 11px 4px}#grid{width:max-content;min-width:0;grid-template-columns:repeat(16,44px)}#grid button{width:44px;height:44px;min-width:44px;min-height:44px;aspect-ratio:auto}}
 
 .feature-lessons{margin:20px 0;padding:16px 20px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}.feature-lessons h2{font-size:20px;margin:0 0 10px}.feature-lessons ul{margin:0;padding-left:20px}.feature-lessons li{margin:8px 0}.feature-lessons a[aria-current=step]{font-weight:600;color:var(--ink)}
+
+/* One canonical lesson workspace, sharing the verified player. */
+.lesson-workspace{padding:1.25rem 0}.workspace-stages{display:flex;gap:.5rem;overflow-x:auto;padding:.5rem 0;max-width:100%}.workspace-stages a{white-space:nowrap;border:1px solid var(--line);padding:.5rem .75rem;border-radius:.4rem}.workspace-stages a[aria-current]{font-weight:700;background:var(--panel)}.workspace-checkpoints,.workspace-onward{display:flex;flex-wrap:wrap;gap:1rem;margin:1rem 0}.workspace-checkpoints button{padding:.65rem 1.2rem}.workspace-result{border-left:3px solid var(--accent);padding-left:1rem}.lesson-mode #explore>.section-heading,.lesson-mode #scene,.lesson-mode .player-top,.lesson-mode #step-strip{display:none}.lesson-mode .instruments{position:relative}.lesson-mode #listen{margin:1rem 0;padding:1rem;border-top:1px solid var(--line)}.lesson-mode #listen .eyebrow{display:none}.full-lesson-instructions{margin:1rem 0}.lesson-mode .page-outline{display:none}@media(max-width:700px){.workspace-stages{max-width:calc(100vw - 3rem)}.lesson-workspace{padding:.5rem 0}.lesson-mode .caption{padding:1rem}.lesson-mode #listen{padding:.5rem}.workspace-checkpoints button{min-height:44px}}
+
+.lesson-mode .next-action,.lesson-mode .transport,.lesson-mode .device-caption span{display:none}.lesson-mode #teaching-actions{margin:0 0 1rem}.lesson-mode #example-state{font-size:.85rem}.lesson-mode #page-orientation>.chapter-pager,.lesson-mode #course-mobile-nav{display:none}.lesson-mode .caption{margin-top:1rem}.workspace-onward{border-top:1px solid var(--line);padding-top:1rem}.lesson-mode #masks>.lead{max-width:52ch}.lesson-mode .workspace-expected{margin:1rem 0}.midi-history pre{max-height:16rem;overflow:auto;white-space:pre-wrap;word-break:break-word}.lesson-mode .instruments{gap:1rem}@media(max-width:700px){.lesson-mode .norns-wrap{max-width:100%}.lesson-mode .grid-overview-wrap{max-width:100%}}
+
+.lesson-mode #explore{display:grid;grid-template-columns:minmax(0, .8fr) minmax(0,1.2fr);gap:1.5rem;align-items:start}.lesson-mode #lesson-workspace{grid-column:1;grid-row:1;min-width:0;padding-top:0}.lesson-mode #explore>.player{grid-column:2;grid-row:1;min-width:0}.lesson-mode #lesson-continuation{grid-column:1/-1}.lesson-mode .workspace-stages{flex-direction:row;margin-bottom:.7rem}.lesson-mode .instruments{grid-template-columns:1fr;padding:1rem}.lesson-mode .norns-wrap{width:220px;margin:auto}.lesson-mode .grid-overview-wrap{width:100%}.lesson-mode #page-orientation>.course-position,.lesson-mode #page-orientation>div:first-of-type,.lesson-mode .tags{display:none}.lesson-mode .hero h1{font-size:clamp(32px,4vw,54px)}.lesson-mode .hero .lead{font-size:19px}.lesson-mode .breadcrumbs{margin-bottom:1rem}.lesson-mode .hero{margin-bottom:1.2rem}.lesson-mode .caption{padding:1rem;gap:.6rem}.lesson-mode #listen h2{font-size:24px}.lesson-mode .player-help{display:none}.lesson-mode #teaching-actions{padding:.5rem 1rem}.lesson-mode .workspace-stages a{font-size:12px;padding:.35rem .5rem}.lesson-mode #example-state{margin:.75rem 0 1rem}@media(max-width:1000px){.lesson-mode #explore{grid-template-columns:minmax(0,1fr)}.lesson-mode #explore>.player{grid-column:1;grid-row:2}.lesson-mode #lesson-continuation{grid-column:1}.lesson-mode #lesson-workspace{grid-row:1}.lesson-mode .workspace-stages{max-width:100%}}
+
+.lesson-mode .workspace-stages{flex-wrap:wrap;overflow:visible;gap:.35rem;max-width:100%}.lesson-mode .workspace-stages a{white-space:normal;line-height:1.35;flex:1 1 145px}.lesson-mode .workspace-stages a[aria-current]{border-color:var(--accent);background:var(--panel2)}@media(max-width:600px){.lesson-mode .workspace-stages a{flex-basis:140px}}
+
+#lesson-evidence{padding:1rem}#lesson-evidence pre{max-height:18rem;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:11px}
+
+#enlarged-grid-controls{grid-column:1/-1;min-width:0}#enlarged-grid-controls>summary{margin-bottom:.5rem;font-size:13px}.lesson-mode #enlarged-grid-controls .grid-wrap{display:block}
+
+/* Keep each workspace's devices aligned with its action block when focused. */
+.lesson-mode #explore>.player{align-self:start}.lesson-mode .instruments{align-items:start}.lesson-mode .norns-wrap{align-self:start}.lesson-mode #lesson-workspace{scroll-margin-top:calc(var(--masthead-height) + 16px)}
+
+.lesson-mode #explore{display:block}.lesson-mode #lesson-workspace{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:1.5rem;align-items:start;padding:0}.lesson-mode #lesson-instructions{grid-column:1;grid-row:1;min-width:0}.lesson-mode #lesson-workspace>.player{grid-column:2;grid-row:1;min-width:0;align-self:start}@media(max-width:1000px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(0,1fr)}.lesson-mode #lesson-workspace>.player{grid-column:1;grid-row:2}}
+
+@media(max-width:600px){.lesson-mode #lesson-instructions{font-size:14px;line-height:1.45}.lesson-mode #lesson-instructions h2{font-size:24px;margin:8px 0 10px}.lesson-mode #lesson-instructions p{margin-bottom:10px}.lesson-mode #example-state{font-size:12px;line-height:1.4;padding:10px;margin:0 0 10px}.lesson-mode .workspace-purpose ol{padding-left:20px;margin:10px 0}.lesson-mode .workspace-purpose li{margin:6px 0}.lesson-mode .workspace-stages{gap:3px;margin:0 0 8px;padding:0}.lesson-mode .workspace-stages a{font-size:11px;padding:6px;min-height:44px}.lesson-mode .workspace-checkpoints{margin:8px 0}.lesson-mode .workspace-expected{margin:8px 0}.lesson-mode #lesson-workspace{gap:10px}.lesson-mode .instruments{padding:12px}.lesson-mode #teaching-actions{padding:8px 12px}.lesson-mode .norns-wrap{width:200px}}
+
+@media(min-width:601px){.workspace-navigation>summary{display:none}}@media(max-width:600px){.workspace-navigation{margin-bottom:12px}.workspace-navigation>summary{min-height:44px;padding:10px 0;font-size:14px}.lesson-mode .workspace-stages a{font-size:12px}}
+
+/* Keep long musical recording titles inside the available reader column. */
+#listen{min-width:0}#audio-choice{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+
+/* One authentic interactive grid; enlargement preserves the same public controls. */
+.grid-overview-wrap{display:none}
+.instruments>.grid-wrap{grid-column:1/-1;width:100%;min-width:0;overflow-x:auto}
+.instruments:not(.grid-enlarged) .grid-columns{width:100%;min-width:0;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;padding:0 6px 4px}
+.instruments:not(.grid-enlarged) #grid{width:100%;min-width:0;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;padding:6px;box-sizing:border-box}
+.instruments:not(.grid-enlarged) #grid button{width:100%;height:auto;min-width:0;min-height:0;aspect-ratio:1}
+.instruments:not(.grid-enlarged) .grid-legend{min-width:0;flex-wrap:wrap}
+.grid-enlarged #grid{width:max-content;min-width:0;grid-template-columns:repeat(16,44px)}
+.grid-enlarged #grid button{width:44px;height:44px;min-width:44px;min-height:44px;aspect-ratio:auto}
+#enlarged-grid-controls{margin-top:0;font-size:12px}
+#enlarged-grid-controls p{margin:.4rem 0}
+
+.lesson-mode #lesson-workspace{scroll-margin-top:0}
+.workspace-onward>.workspace-navigation{flex-basis:100%;margin-bottom:.5rem}
+@media(max-width:600px){.lesson-mode .grid-wrap>.device-caption span{display:none}.lesson-mode .grid-legend{font-size:8px;margin-top:6px}.lesson-mode .instruments{gap:10px}}
+
+/* Canonical recording context shares one page with its original audio. */
+#recording-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.5rem;max-width:100%}#recording-workspace .recording-heading,#recording-workspace .recording-complete{grid-column:1/-1}#recording-workspace>div{min-width:0}#recording-workspace #listen{margin:0;padding-top:0}#recording-workspace audio,#recipe-workspace audio{width:100%;max-width:100%}#recording-workspace li{margin-bottom:.75rem}@media(max-width:700px){#recording-workspace{grid-template-columns:minmax(0,1fr)}#recording-workspace .recording-listening{grid-row:2}#recording-workspace .recording-heading,#recording-workspace .recording-complete{grid-column:auto}}
+
+/* Wrap long recipe instructions on narrow screens without clipping their text. */
+#recipes .recipe-body li{overflow-wrap:anywhere}
+.quick-essentials{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.quick-essentials a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;text-decoration:none}
+#masks #intro>ol>li code{overflow-wrap:anywhere}

@@ -139,6 +139,11 @@ def load_extra_cases(paths,base,root=ROOT):
   modules.append(module)
  for module in modules:sys.modules[module.__name__]=module
  return registry,blobs
+def case_source_paths(root,plans):
+ paths=[v for v in (root/"tests/behaviour").rglob("*.py") if not v.name.startswith("test_") and v.name not in ("suite.py","run.py")]
+ # Stock Lua canonical oracle is selected only for the supplementary save case.
+ if any(v["behaviour_case"]=="M-MANUAL-SAVE-DIALOG-001" for v in plans):paths.append(root/"tests/behaviour/persisted_digest.lua")
+ return paths
 def persist_start_sources(run,blobs,metadata=None):
  # Reserve the receipt before writing any source, preventing a failed retry from
  # replacing a run's original identity. Every map is derived from these bytes.
@@ -287,7 +292,7 @@ def main():
  p=argparse.ArgumentParser()
  p.add_argument("--extra-cases",action="append",default=[]);p.add_argument("--plans",action="append");p.add_argument("--clock-mode",default="controlled-experimental");p.add_argument("--experimental-install")
  p.add_argument("--scene",action="append");p.add_argument("--profile",action="append");p.add_argument("--mod-code-root");p.add_argument("--mod-patches",action="store_true")
- p.add_argument("--publish",action="store_true");p.add_argument("--controlled-local",action="store_true",help="Mark controlled captures as manual-generation evidence pending REAL qualification in CI");p.add_argument("--output",default="reference-scenes.json");a=p.parse_args()
+ p.add_argument("--publish",action="store_true");p.add_argument("--controlled-local",action="store_true",help="Mark controlled captures as manual-generation evidence pending REAL qualification in CI");p.add_argument("--output",default="reference-scenes.json");p.add_argument("--output-root",type=Path,default=Path("/home/andy/mosaic-manual-runs"));a=p.parse_args()
  if Path(a.output).name!=a.output or not a.output.endswith(".json"):raise ValueError("Output must be a local JSON filename")
  plan_paths=[Path(v).resolve() for v in a.plans] if a.plans else sorted((ROOT/"manual").glob("scene-plans*.yaml"))
  plan_blobs={str(v.relative_to(ROOT)):v.read_bytes() for v in plan_paths}
@@ -307,12 +312,12 @@ def main():
  a.case_registry,extra_blobs=load_extra_cases(a.extra_cases,cases.CASES)
  a.extra_case_files=[str(ROOT/relative) for relative in extra_blobs]
  if any(plan["behaviour_case"] not in a.case_registry for plan in plans):raise ValueError("Unknown selected case")
- source_paths=[v for v in (ROOT/"tests/behaviour").rglob("*.py") if not v.name.startswith("test_") and v.name not in ("suite.py","run.py")]
+ source_paths=case_source_paths(ROOT,plans)
  case_blobs={str(v.relative_to(ROOT)):v.read_bytes() for v in source_paths}
  fixture_blobs={str(v.relative_to(ROOT)):v.read_bytes() for v in (ROOT/"tests/behaviour/config").rglob("*") if v.is_file()}
  helper_blobs={str(v.relative_to(ROOT)):v.read_bytes() for v in [ROOT/"tools/manual_capture.py",ROOT/"tools/manual_model.py",ROOT/"tools/manual_screen_codec.py",ROOT/"manual/case-scenes.schema.json",ROOT/"manual/screen-output.schema.json",Path(__file__).resolve()]}
  helper_blobs.update(extra_blobs)
- run=Path("/home/andy/mosaic-manual-runs")/uuid.uuid4().hex;run.mkdir();a.app_root=run/"application"
+ output_root=a.output_root.resolve();output_root.mkdir(parents=True,exist_ok=True);run=output_root/uuid.uuid4().hex;run.mkdir();a.app_root=run/"application"
  start=persist_start_sources(run,dict(plan_files=plan_blobs,case_sources=case_blobs,fixture_sources=fixture_blobs,capture_sources=helper_blobs),dict(schema_version=1,plans_sha256=plan_sha,adapter_sha256=hashlib.sha256(helper_blobs["tools/manual_case_capture.py"]).hexdigest(),clock_mode=a.clock_mode,selected_scene_ids=[v["id"] for v in plans],extra_case_files=list(extra_blobs)))
  source_hashes=start["case_sources"];fixture_sources=start["fixture_sources"];helper_sources=start["capture_sources"]
  source={key:start[key] for key in ("plans_sha256","plan_files","adapter_sha256","case_sources","capture_sources","fixture_sources")}

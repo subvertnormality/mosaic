@@ -261,7 +261,7 @@
     "fixture_sources": {
       "tests/behaviour/config/emu-midi.json": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442"
     },
-    "start_source_identity_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/start-source-identity.json",
+    "start_source_identity_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/start-source-identity.json",
     "start_source_identity_sha256": "89cc570da8873e7afc5eb986f37c331a098f17976c80299ad7d33eb87994f244",
     "extra_case_files": []
   },
@@ -50218,15 +50218,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-LIVEUI-TASKS-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-LIVEUI-TASKS-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "3bc088b5fa874426bec3e22fd355c94e",
+          "session_id": "d5c769c1ffd54e55a229da4fb01b6ac2",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -50234,24 +50234,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "97e602692bdfcfa8f1fa59e44bc2ff1dffdceeeb1e198c4c062abcf90f44ecaa",
-        "identity_sha256": "7bb16a57616412f7d8ea5f17e8008b70a825abc47f42beca2a98fc873a1d5943",
+        "identity_sha256": "2461b4035e44993b7fd20386bd63eae91c103460fae373db117899d1f932191c",
         "recipe_sha256": "97166efc2b98b558d57c023dfae3548be7cf77a6f2eda7c9e2a6ad9ec2334a4e",
-        "native_events_sha256": "0c9097e9583794296c489bb3a5940bec4ade7aa97f5aac8d6e276f47346c2f61",
+        "native_events_sha256": "e8a18d6ebb1f9681e44ed63b14edbfb4b5c33c74741d36a77e032506dd9779f9",
         "capture_trace_sha256": "ff0f92ee8de8376f4788c8b06d0ee8471a5734c0d08f05c84866f01fcc2006f8",
-        "session_context_sha256": "ca59f75cb00241c93bf12e60a967090c28d6896f7652a036dfa3217a82e62fac",
-        "native_config_sha256": "b2de089a04295af1b277ac9db240b574ef588ab532d823f7bd309d6c58e9c33b",
-        "cleanup_sha256": "74d97d94a5bd927414d45189d58481cd1b35a2a12254a042c00f29012ab6ad3a",
+        "session_context_sha256": "4053e60a279caa317e5169e633e35d49a29d7f2f22c17b85d43d9e2a12764167",
+        "native_config_sha256": "feca96c70ec7b83d2c21e69e69f6dac873cc69e5d275222a46e6a94a1f619fd5",
+        "cleanup_sha256": "6ef6faf98b18d320c147d401dceadfc07b845e31c1166c6462722dc8dce9e32c",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-LIVEUI-TASKS-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-LIVEUI-TASKS-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "3bc088b5fa874426bec3e22fd355c94e",
+              "session_id": "d5c769c1ffd54e55a229da4fb01b6ac2",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -50259,17 +50259,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "97e602692bdfcfa8f1fa59e44bc2ff1dffdceeeb1e198c4c062abcf90f44ecaa",
-            "identity_sha256": "7bb16a57616412f7d8ea5f17e8008b70a825abc47f42beca2a98fc873a1d5943",
+            "identity_sha256": "2461b4035e44993b7fd20386bd63eae91c103460fae373db117899d1f932191c",
             "recipe_sha256": "97166efc2b98b558d57c023dfae3548be7cf77a6f2eda7c9e2a6ad9ec2334a4e",
-            "native_events_sha256": "0c9097e9583794296c489bb3a5940bec4ade7aa97f5aac8d6e276f47346c2f61",
+            "native_events_sha256": "e8a18d6ebb1f9681e44ed63b14edbfb4b5c33c74741d36a77e032506dd9779f9",
             "capture_trace_sha256": "ff0f92ee8de8376f4788c8b06d0ee8471a5734c0d08f05c84866f01fcc2006f8",
-            "session_context_sha256": "ca59f75cb00241c93bf12e60a967090c28d6896f7652a036dfa3217a82e62fac",
-            "native_config_sha256": "b2de089a04295af1b277ac9db240b574ef588ab532d823f7bd309d6c58e9c33b",
-            "cleanup_sha256": "74d97d94a5bd927414d45189d58481cd1b35a2a12254a042c00f29012ab6ad3a"
+            "session_context_sha256": "4053e60a279caa317e5169e633e35d49a29d7f2f22c17b85d43d9e2a12764167",
+            "native_config_sha256": "feca96c70ec7b83d2c21e69e69f6dac873cc69e5d275222a46e6a94a1f619fd5",
+            "cleanup_sha256": "6ef6faf98b18d320c147d401dceadfc07b845e31c1166c6462722dc8dce9e32c"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-LIVEUI-TASKS-001-base-midi/case-participants.json",
-        "case_participants_sha256": "7d765184c0211e7e74e33a08a6dabb89bb867a419bb3255de0fe491ba6250ba9"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-LIVEUI-TASKS-001-base-midi/case-participants.json",
+        "case_participants_sha256": "0b9bd4f9f1834d80a0e6d029e66d53e3276bb53a0346d3212ca795037c16d0c0"
       }
     },
     {
@@ -91708,15 +91708,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-LIVEUI-FOLLOW-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-LIVEUI-FOLLOW-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "df26eceef8624deca5080d2d55c7eefe",
+          "session_id": "cfd6df4f57f647a6a0e9a302ec907809",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -91724,24 +91724,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "4e8d9a34dae9bd3519e0e1bf60c3ca0f9692813f2e74a6f092768ba4f7026541",
-        "identity_sha256": "a85d3af8e753440f36bdfa9694a6098812890f202842530f2ebd87cf895666e4",
+        "identity_sha256": "03b27e4a4c53635de98ade718da90dad46a5444beb47b18c1ae3387d61de7f0c",
         "recipe_sha256": "f841a2f64054df37b9adbf488cee8ae4ab070385550808aa1db7b317da08ac5e",
-        "native_events_sha256": "0911898add57c81d9d84c36f31b4c23d00805e674a2f7b6142f38ef1ce0cec0f",
+        "native_events_sha256": "15a76e63b678845c41757df18964506960474c93442ec88148a50bbf6c266635",
         "capture_trace_sha256": "9b512953ffb50ceb3ca034f2bdccab7728a47c06fcb5fc7af5ad777f71cf356e",
-        "session_context_sha256": "6313cbe5120d908281a047e786cad3286fdc1a4274425971026c14bd9566b9d7",
-        "native_config_sha256": "1ba2fbdbb3fdbbe8047e04511bf7212dd81f3d5043618dc0ae19451e6ed5d614",
-        "cleanup_sha256": "8b08715f2eef001237059ceb00096498c6b5d5655e54805bb7c81fca25a7a4b3",
+        "session_context_sha256": "f41ea1429f7ea910c3b0d636c8c6f9b38d40e72e4aa0768f3ca7f3bcedbe0be2",
+        "native_config_sha256": "2a418f64b048b85fe06bea14ebf7086e96c3226f643f73f92d13dd37b4728b9b",
+        "cleanup_sha256": "a1c86da414ffcec6f3ad544c1f0596050ef371796a9698f025259a4b46b35156",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-LIVEUI-FOLLOW-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-LIVEUI-FOLLOW-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "df26eceef8624deca5080d2d55c7eefe",
+              "session_id": "cfd6df4f57f647a6a0e9a302ec907809",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -91749,17 +91749,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "4e8d9a34dae9bd3519e0e1bf60c3ca0f9692813f2e74a6f092768ba4f7026541",
-            "identity_sha256": "a85d3af8e753440f36bdfa9694a6098812890f202842530f2ebd87cf895666e4",
+            "identity_sha256": "03b27e4a4c53635de98ade718da90dad46a5444beb47b18c1ae3387d61de7f0c",
             "recipe_sha256": "f841a2f64054df37b9adbf488cee8ae4ab070385550808aa1db7b317da08ac5e",
-            "native_events_sha256": "0911898add57c81d9d84c36f31b4c23d00805e674a2f7b6142f38ef1ce0cec0f",
+            "native_events_sha256": "15a76e63b678845c41757df18964506960474c93442ec88148a50bbf6c266635",
             "capture_trace_sha256": "9b512953ffb50ceb3ca034f2bdccab7728a47c06fcb5fc7af5ad777f71cf356e",
-            "session_context_sha256": "6313cbe5120d908281a047e786cad3286fdc1a4274425971026c14bd9566b9d7",
-            "native_config_sha256": "1ba2fbdbb3fdbbe8047e04511bf7212dd81f3d5043618dc0ae19451e6ed5d614",
-            "cleanup_sha256": "8b08715f2eef001237059ceb00096498c6b5d5655e54805bb7c81fca25a7a4b3"
+            "session_context_sha256": "f41ea1429f7ea910c3b0d636c8c6f9b38d40e72e4aa0768f3ca7f3bcedbe0be2",
+            "native_config_sha256": "2a418f64b048b85fe06bea14ebf7086e96c3226f643f73f92d13dd37b4728b9b",
+            "cleanup_sha256": "a1c86da414ffcec6f3ad544c1f0596050ef371796a9698f025259a4b46b35156"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-LIVEUI-FOLLOW-001-base-midi/case-participants.json",
-        "case_participants_sha256": "15185433d6498fd64df8ea93c27034be219f688e0c771ee65625d3d876227d30"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-LIVEUI-FOLLOW-001-base-midi/case-participants.json",
+        "case_participants_sha256": "e12e45af8ef97fcfb9bb684ae133e6e72defc92d6dff9af1ff70cd8d9edfbf1d"
       }
     },
     {
@@ -142396,15 +142396,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-STOP-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-STOP-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "c8df93dde33d48398ddb2b477dfc9ec9",
+          "session_id": "8bb83cb5e70a45d9878c3eb35cc3a14f",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -142412,24 +142412,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "109001b697f424b9f0a45a9a1594b29a45cd6bd8fb50005ede50afa43ebaa8df",
-        "identity_sha256": "d7e3e144d5bc49e6fc1bc117f1c0f0002ec701ad667de53545a3a5ecd6af7cca",
+        "identity_sha256": "8d665cd0f8ddb97887c7ad15a859e0d4d8e8cc5d20e0801c29215a063a8b5a0a",
         "recipe_sha256": "d2dbcc3081eb4332038ccab88c5a25dbeae7caf61754c24760eae5cb897dcc08",
-        "native_events_sha256": "ae3e4e6f57758f0db414cf94abd8cd76f3b7d4d4999f3026ab3db73cc11af18b",
+        "native_events_sha256": "da3264f7e19d897708211972232a0512f1028da4e07c628d4db222d711a7371e",
         "capture_trace_sha256": "03e4abcc5f16e4f39abc373fe29eaaeb98ea8dccb555be6ad72b6f63cadf407b",
-        "session_context_sha256": "4099428912541f2e6826cdd6676077b1c0e3ceaf7a4ef592275cbcf07a31ab1a",
-        "native_config_sha256": "7519c70867f0b4ebaa442a5c10d501426ce0c1ff7dee2f4e13a0571692fa0c57",
-        "cleanup_sha256": "b52c28c150263b7c8e133877e0b83105cd0fface98bee06f3dd4016f721077a2",
+        "session_context_sha256": "5286ff8a495299db346fc7b78182fad4ad0338cfe6d9d98177a92a04d236ba0b",
+        "native_config_sha256": "d305d03a7894e73c690ed2c5620060a9d9efdbe500475e7a53eba28aad800da7",
+        "cleanup_sha256": "10cb415f17497b4041126ea616769f50564508e744848d2283978607e9badf60",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-STOP-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-STOP-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "c8df93dde33d48398ddb2b477dfc9ec9",
+              "session_id": "8bb83cb5e70a45d9878c3eb35cc3a14f",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -142437,17 +142437,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "109001b697f424b9f0a45a9a1594b29a45cd6bd8fb50005ede50afa43ebaa8df",
-            "identity_sha256": "d7e3e144d5bc49e6fc1bc117f1c0f0002ec701ad667de53545a3a5ecd6af7cca",
+            "identity_sha256": "8d665cd0f8ddb97887c7ad15a859e0d4d8e8cc5d20e0801c29215a063a8b5a0a",
             "recipe_sha256": "d2dbcc3081eb4332038ccab88c5a25dbeae7caf61754c24760eae5cb897dcc08",
-            "native_events_sha256": "ae3e4e6f57758f0db414cf94abd8cd76f3b7d4d4999f3026ab3db73cc11af18b",
+            "native_events_sha256": "da3264f7e19d897708211972232a0512f1028da4e07c628d4db222d711a7371e",
             "capture_trace_sha256": "03e4abcc5f16e4f39abc373fe29eaaeb98ea8dccb555be6ad72b6f63cadf407b",
-            "session_context_sha256": "4099428912541f2e6826cdd6676077b1c0e3ceaf7a4ef592275cbcf07a31ab1a",
-            "native_config_sha256": "7519c70867f0b4ebaa442a5c10d501426ce0c1ff7dee2f4e13a0571692fa0c57",
-            "cleanup_sha256": "b52c28c150263b7c8e133877e0b83105cd0fface98bee06f3dd4016f721077a2"
+            "session_context_sha256": "5286ff8a495299db346fc7b78182fad4ad0338cfe6d9d98177a92a04d236ba0b",
+            "native_config_sha256": "d305d03a7894e73c690ed2c5620060a9d9efdbe500475e7a53eba28aad800da7",
+            "cleanup_sha256": "10cb415f17497b4041126ea616769f50564508e744848d2283978607e9badf60"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-STOP-001-base-midi/case-participants.json",
-        "case_participants_sha256": "4033608a870ab20f82f5bf68f98808a1c9cf861331984e7a75b9abfb976800e8"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-STOP-001-base-midi/case-participants.json",
+        "case_participants_sha256": "b45cc7fe702d0dbcee38b614ab6401d6cb94a0a7f3fa5a89d36613e538f5584f"
       }
     },
     {
@@ -203681,15 +203681,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-SAVE-NAMED-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-SAVE-NAMED-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "3e98ced25fc44d41a3ed4c1cac440928",
+          "session_id": "aa181ceee8644352a7b7ae8198664292",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -203697,24 +203697,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "6f4464654d65b1a443bbf96bdfa154158f9b408b3a06b6aa62d711370e406bf8",
-        "identity_sha256": "dc848767fd8a902c170c29412d230291d783e738ca98d607bd0b2aa9a8216bb6",
+        "identity_sha256": "67f65c483492fb90964c3204d5c77779f6cc2758a01803cd5ce0603dab62db4a",
         "recipe_sha256": "7b405766e72f02479c0e15ca31032348f48c5b7c9b211ac3aaa2b1f81aba2ce8",
-        "native_events_sha256": "0c7f574192426d95739f9c872724c2765a35d9bc413c2f5bd32fd4dc3d9cd2e3",
+        "native_events_sha256": "b8fc4576fdf3b346540bc0095f150dade471370eab1034a765646896edc827b7",
         "capture_trace_sha256": "c96c15f71daee8ea6ef87d391951cb3fc5b6b0987c054b84080996c4f2f18709",
-        "session_context_sha256": "2cf0a1c3d4ebca147efccbbb19ed73b2ec06c2f8daea152b5a605a1daca19427",
-        "native_config_sha256": "d6ebe2fef037008703651fe2da4c86ca6ee94c5cdee45c92c8c7485304b084aa",
-        "cleanup_sha256": "22c49a1aeb10f524b61c47efda391c1f77af43223279e1e168019525520db366",
+        "session_context_sha256": "b44835f47178d06eacb859ad93d5b757c4ace1032eeffab1ccabbbfb3848a904",
+        "native_config_sha256": "0ac018e86902ed93fcf746e8f5f483be821a1848913e1ea2ef73473d2bce8810",
+        "cleanup_sha256": "d21485a568cef49a0932ab0a596784d244de641d3850f0e7c43ea8cd8436607b",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-SAVE-NAMED-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-SAVE-NAMED-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "3e98ced25fc44d41a3ed4c1cac440928",
+              "session_id": "aa181ceee8644352a7b7ae8198664292",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -203722,17 +203722,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "6f4464654d65b1a443bbf96bdfa154158f9b408b3a06b6aa62d711370e406bf8",
-            "identity_sha256": "dc848767fd8a902c170c29412d230291d783e738ca98d607bd0b2aa9a8216bb6",
+            "identity_sha256": "67f65c483492fb90964c3204d5c77779f6cc2758a01803cd5ce0603dab62db4a",
             "recipe_sha256": "7b405766e72f02479c0e15ca31032348f48c5b7c9b211ac3aaa2b1f81aba2ce8",
-            "native_events_sha256": "0c7f574192426d95739f9c872724c2765a35d9bc413c2f5bd32fd4dc3d9cd2e3",
+            "native_events_sha256": "b8fc4576fdf3b346540bc0095f150dade471370eab1034a765646896edc827b7",
             "capture_trace_sha256": "c96c15f71daee8ea6ef87d391951cb3fc5b6b0987c054b84080996c4f2f18709",
-            "session_context_sha256": "2cf0a1c3d4ebca147efccbbb19ed73b2ec06c2f8daea152b5a605a1daca19427",
-            "native_config_sha256": "d6ebe2fef037008703651fe2da4c86ca6ee94c5cdee45c92c8c7485304b084aa",
-            "cleanup_sha256": "22c49a1aeb10f524b61c47efda391c1f77af43223279e1e168019525520db366"
+            "session_context_sha256": "b44835f47178d06eacb859ad93d5b757c4ace1032eeffab1ccabbbfb3848a904",
+            "native_config_sha256": "0ac018e86902ed93fcf746e8f5f483be821a1848913e1ea2ef73473d2bce8810",
+            "cleanup_sha256": "d21485a568cef49a0932ab0a596784d244de641d3850f0e7c43ea8cd8436607b"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-SAVE-NAMED-001-base-midi/case-participants.json",
-        "case_participants_sha256": "44b65d1022a6ee6b5044bdaee427d21eee79a12f3451ec2b29c703f663ee3b1a"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-SAVE-NAMED-001-base-midi/case-participants.json",
+        "case_participants_sha256": "d5e6b857a27adcbaff7d6f1f9f41fc3708e67d0b5dca4e9ed31164842490a086"
       }
     },
     {
@@ -312744,15 +312744,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-PENT-ALL-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-PENT-ALL-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "b3405bd2c89346929275999c3c0756c1",
+          "session_id": "c773294b3f5e4ab9a83aa01dd0d8ab88",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -312760,24 +312760,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "dc3d21febd54ef9a07093fdde98475779536d706fbf825cc229debe8052947de",
-        "identity_sha256": "5b960ab0929cacd68d76ffd15b88aa609e5b2574f0fc93affbe57b4ab00ee88b",
+        "identity_sha256": "a89013eec7d26730863b3897364d4473ac92da8a8de4109cb0472829f11276bd",
         "recipe_sha256": "873d09673106af6c26b27b1466b205bc22d40292bfa12f9fb1edbce1837d9a0e",
-        "native_events_sha256": "0c8a277f121fa977e51a59c18430845d1af62b50a8920384507fb0f3af374636",
+        "native_events_sha256": "6fa6e43c9b36003d5bdd4d7d704b7e6e530c58a4b1eb3cb8bf0d834be4a5792c",
         "capture_trace_sha256": "34d365756edb305f3b820a917e55b73e550c0e4ba83ac2606c5e58a37be7341a",
-        "session_context_sha256": "993aefd6e64139404155eb4d7b3028488a2545b1ff42327743b3de59df680f69",
-        "native_config_sha256": "a414f875b0e62fca9b5fbf92f95f589a42d3ea73537a6c566b62ea5abe92cc45",
-        "cleanup_sha256": "6ee456462bff6489f7f96a9866f8850f698eaf6dbf013f525cc84d7a03ed6195",
+        "session_context_sha256": "7c7de36c1fb726c82d80ca923c9a39308c02ef61add770745b75b02441c171f7",
+        "native_config_sha256": "3b6cc875eb70d53d9cabd01c698f00d39f6c1616863bd9d4c3f22561528f4cf5",
+        "cleanup_sha256": "a06bc4e260d877fcef9d3ad9fbacbeee9b20e1763632924138f7a4cda9f12e25",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-PENT-ALL-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-PENT-ALL-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "b3405bd2c89346929275999c3c0756c1",
+              "session_id": "c773294b3f5e4ab9a83aa01dd0d8ab88",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -312785,17 +312785,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "dc3d21febd54ef9a07093fdde98475779536d706fbf825cc229debe8052947de",
-            "identity_sha256": "5b960ab0929cacd68d76ffd15b88aa609e5b2574f0fc93affbe57b4ab00ee88b",
+            "identity_sha256": "a89013eec7d26730863b3897364d4473ac92da8a8de4109cb0472829f11276bd",
             "recipe_sha256": "873d09673106af6c26b27b1466b205bc22d40292bfa12f9fb1edbce1837d9a0e",
-            "native_events_sha256": "0c8a277f121fa977e51a59c18430845d1af62b50a8920384507fb0f3af374636",
+            "native_events_sha256": "6fa6e43c9b36003d5bdd4d7d704b7e6e530c58a4b1eb3cb8bf0d834be4a5792c",
             "capture_trace_sha256": "34d365756edb305f3b820a917e55b73e550c0e4ba83ac2606c5e58a37be7341a",
-            "session_context_sha256": "993aefd6e64139404155eb4d7b3028488a2545b1ff42327743b3de59df680f69",
-            "native_config_sha256": "a414f875b0e62fca9b5fbf92f95f589a42d3ea73537a6c566b62ea5abe92cc45",
-            "cleanup_sha256": "6ee456462bff6489f7f96a9866f8850f698eaf6dbf013f525cc84d7a03ed6195"
+            "session_context_sha256": "7c7de36c1fb726c82d80ca923c9a39308c02ef61add770745b75b02441c171f7",
+            "native_config_sha256": "3b6cc875eb70d53d9cabd01c698f00d39f6c1616863bd9d4c3f22561528f4cf5",
+            "cleanup_sha256": "a06bc4e260d877fcef9d3ad9fbacbeee9b20e1763632924138f7a4cda9f12e25"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-PENT-ALL-001-base-midi/case-participants.json",
-        "case_participants_sha256": "8ee2b51a5d0202406799967bebe83d31765e8159fa715172d7fd4accca91bfd1"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-PENT-ALL-001-base-midi/case-participants.json",
+        "case_participants_sha256": "419d29f2a8c27921ed126fd14e2b25e21f8acf1c0f1b0beb2b907434e44e6dff"
       }
     },
     {
@@ -371987,15 +371987,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "ef048234ea2f4fee9a1d804191d72ffa",
+          "session_id": "dbc9ee6866704039bf91ab18b3c3e115",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -372003,24 +372003,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "b6209ee6e04335a421705c1ba9a585348fd83de55d9cb1ff21ef15875055d948",
-        "identity_sha256": "e8a7da263a8a5652333eca285110bcce670cd1b80972626de9cd1aab6fe5941b",
+        "identity_sha256": "6865245a0bdcd745d7b93f18214f9f7b4f21a92bcd461bef327d46d334f06730",
         "recipe_sha256": "866b58b4e8657ac6f2b31e6342426a03d57bbb40c97b320fde1909232fe93c09",
-        "native_events_sha256": "9a0c84ad54ca59387e9ce233423871a0c7df138779eb0496c60f1eaa63a5c658",
+        "native_events_sha256": "23247a5c00b856fb15893b4f5e61022e5958ff645dbcb7e38114910b18939ab3",
         "capture_trace_sha256": "8802b65ec993941b742363b05dfde52d8362b3831bd1d6db50aa5d34abf3c993",
-        "session_context_sha256": "b388493e9230f6dfe3fcc5253145d59d47dee911675ed1e0a4413f8f43c5b979",
-        "native_config_sha256": "a82efd804b465df420baada75179d5e1151ffc31c4e267681a3f9510cec0c0bf",
-        "cleanup_sha256": "9e2f46b1ad2eb7a02eb9d866f42e51e424cf0ab66161b87e856ce3d81d83f444",
+        "session_context_sha256": "b5328dbdd45035d61e916c8542172fa1afbe103dc8e25a42f42e3285742483a2",
+        "native_config_sha256": "9b15a2b26b876728245272f5f69c20d92ba391ad542d9cfa4cb09c1cd0930a35",
+        "cleanup_sha256": "a560decc04bc11c3fee36e4fe015daedfc542481c3f6f3a08e82c41311afc444",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "ef048234ea2f4fee9a1d804191d72ffa",
+              "session_id": "dbc9ee6866704039bf91ab18b3c3e115",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -372028,17 +372028,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "b6209ee6e04335a421705c1ba9a585348fd83de55d9cb1ff21ef15875055d948",
-            "identity_sha256": "e8a7da263a8a5652333eca285110bcce670cd1b80972626de9cd1aab6fe5941b",
+            "identity_sha256": "6865245a0bdcd745d7b93f18214f9f7b4f21a92bcd461bef327d46d334f06730",
             "recipe_sha256": "866b58b4e8657ac6f2b31e6342426a03d57bbb40c97b320fde1909232fe93c09",
-            "native_events_sha256": "9a0c84ad54ca59387e9ce233423871a0c7df138779eb0496c60f1eaa63a5c658",
+            "native_events_sha256": "23247a5c00b856fb15893b4f5e61022e5958ff645dbcb7e38114910b18939ab3",
             "capture_trace_sha256": "8802b65ec993941b742363b05dfde52d8362b3831bd1d6db50aa5d34abf3c993",
-            "session_context_sha256": "b388493e9230f6dfe3fcc5253145d59d47dee911675ed1e0a4413f8f43c5b979",
-            "native_config_sha256": "a82efd804b465df420baada75179d5e1151ffc31c4e267681a3f9510cec0c0bf",
-            "cleanup_sha256": "9e2f46b1ad2eb7a02eb9d866f42e51e424cf0ab66161b87e856ce3d81d83f444"
+            "session_context_sha256": "b5328dbdd45035d61e916c8542172fa1afbe103dc8e25a42f42e3285742483a2",
+            "native_config_sha256": "9b15a2b26b876728245272f5f69c20d92ba391ad542d9cfa4cb09c1cd0930a35",
+            "cleanup_sha256": "a560decc04bc11c3fee36e4fe015daedfc542481c3f6f3a08e82c41311afc444"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi/case-participants.json",
-        "case_participants_sha256": "ea634dd00bf686cf22cd81a0b1d46637c1e660f020cbe9c9479a1c4401fd5fb9"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi/case-participants.json",
+        "case_participants_sha256": "4e6e9d2cbdae4c0a06afbe7c55b9421896539c8f2bc99922126068a48b444f75"
       }
     },
     {
@@ -401818,15 +401818,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "ef048234ea2f4fee9a1d804191d72ffa",
+          "session_id": "dbc9ee6866704039bf91ab18b3c3e115",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -401834,24 +401834,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "b6209ee6e04335a421705c1ba9a585348fd83de55d9cb1ff21ef15875055d948",
-        "identity_sha256": "e8a7da263a8a5652333eca285110bcce670cd1b80972626de9cd1aab6fe5941b",
+        "identity_sha256": "6865245a0bdcd745d7b93f18214f9f7b4f21a92bcd461bef327d46d334f06730",
         "recipe_sha256": "866b58b4e8657ac6f2b31e6342426a03d57bbb40c97b320fde1909232fe93c09",
-        "native_events_sha256": "9a0c84ad54ca59387e9ce233423871a0c7df138779eb0496c60f1eaa63a5c658",
+        "native_events_sha256": "23247a5c00b856fb15893b4f5e61022e5958ff645dbcb7e38114910b18939ab3",
         "capture_trace_sha256": "8802b65ec993941b742363b05dfde52d8362b3831bd1d6db50aa5d34abf3c993",
-        "session_context_sha256": "b388493e9230f6dfe3fcc5253145d59d47dee911675ed1e0a4413f8f43c5b979",
-        "native_config_sha256": "a82efd804b465df420baada75179d5e1151ffc31c4e267681a3f9510cec0c0bf",
-        "cleanup_sha256": "9e2f46b1ad2eb7a02eb9d866f42e51e424cf0ab66161b87e856ce3d81d83f444",
+        "session_context_sha256": "b5328dbdd45035d61e916c8542172fa1afbe103dc8e25a42f42e3285742483a2",
+        "native_config_sha256": "9b15a2b26b876728245272f5f69c20d92ba391ad542d9cfa4cb09c1cd0930a35",
+        "cleanup_sha256": "a560decc04bc11c3fee36e4fe015daedfc542481c3f6f3a08e82c41311afc444",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "ef048234ea2f4fee9a1d804191d72ffa",
+              "session_id": "dbc9ee6866704039bf91ab18b3c3e115",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -401859,17 +401859,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "b6209ee6e04335a421705c1ba9a585348fd83de55d9cb1ff21ef15875055d948",
-            "identity_sha256": "e8a7da263a8a5652333eca285110bcce670cd1b80972626de9cd1aab6fe5941b",
+            "identity_sha256": "6865245a0bdcd745d7b93f18214f9f7b4f21a92bcd461bef327d46d334f06730",
             "recipe_sha256": "866b58b4e8657ac6f2b31e6342426a03d57bbb40c97b320fde1909232fe93c09",
-            "native_events_sha256": "9a0c84ad54ca59387e9ce233423871a0c7df138779eb0496c60f1eaa63a5c658",
+            "native_events_sha256": "23247a5c00b856fb15893b4f5e61022e5958ff645dbcb7e38114910b18939ab3",
             "capture_trace_sha256": "8802b65ec993941b742363b05dfde52d8362b3831bd1d6db50aa5d34abf3c993",
-            "session_context_sha256": "b388493e9230f6dfe3fcc5253145d59d47dee911675ed1e0a4413f8f43c5b979",
-            "native_config_sha256": "a82efd804b465df420baada75179d5e1151ffc31c4e267681a3f9510cec0c0bf",
-            "cleanup_sha256": "9e2f46b1ad2eb7a02eb9d866f42e51e424cf0ab66161b87e856ce3d81d83f444"
+            "session_context_sha256": "b5328dbdd45035d61e916c8542172fa1afbe103dc8e25a42f42e3285742483a2",
+            "native_config_sha256": "9b15a2b26b876728245272f5f69c20d92ba391ad542d9cfa4cb09c1cd0930a35",
+            "cleanup_sha256": "a560decc04bc11c3fee36e4fe015daedfc542481c3f6f3a08e82c41311afc444"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi/case-participants.json",
-        "case_participants_sha256": "ea634dd00bf686cf22cd81a0b1d46637c1e660f020cbe9c9479a1c4401fd5fb9"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi/case-participants.json",
+        "case_participants_sha256": "4e6e9d2cbdae4c0a06afbe7c55b9421896539c8f2bc99922126068a48b444f75"
       }
     },
     {
@@ -432537,15 +432537,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "ef048234ea2f4fee9a1d804191d72ffa",
+          "session_id": "dbc9ee6866704039bf91ab18b3c3e115",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -432553,24 +432553,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "b6209ee6e04335a421705c1ba9a585348fd83de55d9cb1ff21ef15875055d948",
-        "identity_sha256": "e8a7da263a8a5652333eca285110bcce670cd1b80972626de9cd1aab6fe5941b",
+        "identity_sha256": "6865245a0bdcd745d7b93f18214f9f7b4f21a92bcd461bef327d46d334f06730",
         "recipe_sha256": "866b58b4e8657ac6f2b31e6342426a03d57bbb40c97b320fde1909232fe93c09",
-        "native_events_sha256": "9a0c84ad54ca59387e9ce233423871a0c7df138779eb0496c60f1eaa63a5c658",
+        "native_events_sha256": "23247a5c00b856fb15893b4f5e61022e5958ff645dbcb7e38114910b18939ab3",
         "capture_trace_sha256": "8802b65ec993941b742363b05dfde52d8362b3831bd1d6db50aa5d34abf3c993",
-        "session_context_sha256": "b388493e9230f6dfe3fcc5253145d59d47dee911675ed1e0a4413f8f43c5b979",
-        "native_config_sha256": "a82efd804b465df420baada75179d5e1151ffc31c4e267681a3f9510cec0c0bf",
-        "cleanup_sha256": "9e2f46b1ad2eb7a02eb9d866f42e51e424cf0ab66161b87e856ce3d81d83f444",
+        "session_context_sha256": "b5328dbdd45035d61e916c8542172fa1afbe103dc8e25a42f42e3285742483a2",
+        "native_config_sha256": "9b15a2b26b876728245272f5f69c20d92ba391ad542d9cfa4cb09c1cd0930a35",
+        "cleanup_sha256": "a560decc04bc11c3fee36e4fe015daedfc542481c3f6f3a08e82c41311afc444",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "ef048234ea2f4fee9a1d804191d72ffa",
+              "session_id": "dbc9ee6866704039bf91ab18b3c3e115",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -432578,17 +432578,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "b6209ee6e04335a421705c1ba9a585348fd83de55d9cb1ff21ef15875055d948",
-            "identity_sha256": "e8a7da263a8a5652333eca285110bcce670cd1b80972626de9cd1aab6fe5941b",
+            "identity_sha256": "6865245a0bdcd745d7b93f18214f9f7b4f21a92bcd461bef327d46d334f06730",
             "recipe_sha256": "866b58b4e8657ac6f2b31e6342426a03d57bbb40c97b320fde1909232fe93c09",
-            "native_events_sha256": "9a0c84ad54ca59387e9ce233423871a0c7df138779eb0496c60f1eaa63a5c658",
+            "native_events_sha256": "23247a5c00b856fb15893b4f5e61022e5958ff645dbcb7e38114910b18939ab3",
             "capture_trace_sha256": "8802b65ec993941b742363b05dfde52d8362b3831bd1d6db50aa5d34abf3c993",
-            "session_context_sha256": "b388493e9230f6dfe3fcc5253145d59d47dee911675ed1e0a4413f8f43c5b979",
-            "native_config_sha256": "a82efd804b465df420baada75179d5e1151ffc31c4e267681a3f9510cec0c0bf",
-            "cleanup_sha256": "9e2f46b1ad2eb7a02eb9d866f42e51e424cf0ab66161b87e856ce3d81d83f444"
+            "session_context_sha256": "b5328dbdd45035d61e916c8542172fa1afbe103dc8e25a42f42e3285742483a2",
+            "native_config_sha256": "9b15a2b26b876728245272f5f69c20d92ba391ad542d9cfa4cb09c1cd0930a35",
+            "cleanup_sha256": "a560decc04bc11c3fee36e4fe015daedfc542481c3f6f3a08e82c41311afc444"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-OPT-KEYS-001-base-midi/case-participants.json",
-        "case_participants_sha256": "ea634dd00bf686cf22cd81a0b1d46637c1e660f020cbe9c9479a1c4401fd5fb9"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-OPT-KEYS-001-base-midi/case-participants.json",
+        "case_participants_sha256": "4e6e9d2cbdae4c0a06afbe7c55b9421896539c8f2bc99922126068a48b444f75"
       }
     },
     {
@@ -498232,15 +498232,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-MAP-002-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-MAP-002-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "4ab85f0ac49d475ea3908ed8611cec96",
+          "session_id": "7d340a181c33428eb2f0bd5ef3f05488",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -498248,24 +498248,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "1488e2104874ab4b740d53874124299dba19d279726d0fcd9bd9629631ee04fa",
-        "identity_sha256": "e3e569489836f0d6085856592d4da24969f7220646637cbc825eb850202cd7df",
+        "identity_sha256": "09dc7e551c2f26e6c081ae25d0e0134a3a2614a2efe17dc8168f837ca05a9976",
         "recipe_sha256": "ac002c42384cac4715d5c95d14f66f63490d6782c24c6e1e7c680c76951071dd",
-        "native_events_sha256": "533ff2269c5a26ca8106469159de0d86d883ad982504ef1457374f54ae1c21e2",
+        "native_events_sha256": "5a6a4a7152485074a47bacea30f9865adc54f4c709536f1228ece594fdcd40e9",
         "capture_trace_sha256": "d76cbad9171f8cf7969960f58a4b7658172126b73543eb158253125e416aaf2c",
-        "session_context_sha256": "a2d0f2dd3a7b04c6cb43a5c02f1bb1d2a2d62ccef68b60717ca9d5663e19cd8a",
-        "native_config_sha256": "00ad6af54071079192bfba2acedcf0778a75d17360c364e488d18c6415d1ca2a",
-        "cleanup_sha256": "ee189d32e4f9f42197277c53b3e77b25c114c0264716694d8df972464bf653d1",
+        "session_context_sha256": "a8bb18c14bdc8ce0e031c239df4f4382f96b9ddf149f4b59e795c67af7ec017f",
+        "native_config_sha256": "9e2c7d177384730a0f70c75d90137dad5c1a23faacd82e6de6c3649bbc28c7a7",
+        "cleanup_sha256": "c216e47263f78ff3a1cda2bd7292cd2552341af2fe487efc40276b955d6105af",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-MAP-002-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-MAP-002-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "4ab85f0ac49d475ea3908ed8611cec96",
+              "session_id": "7d340a181c33428eb2f0bd5ef3f05488",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -498273,17 +498273,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "1488e2104874ab4b740d53874124299dba19d279726d0fcd9bd9629631ee04fa",
-            "identity_sha256": "e3e569489836f0d6085856592d4da24969f7220646637cbc825eb850202cd7df",
+            "identity_sha256": "09dc7e551c2f26e6c081ae25d0e0134a3a2614a2efe17dc8168f837ca05a9976",
             "recipe_sha256": "ac002c42384cac4715d5c95d14f66f63490d6782c24c6e1e7c680c76951071dd",
-            "native_events_sha256": "533ff2269c5a26ca8106469159de0d86d883ad982504ef1457374f54ae1c21e2",
+            "native_events_sha256": "5a6a4a7152485074a47bacea30f9865adc54f4c709536f1228ece594fdcd40e9",
             "capture_trace_sha256": "d76cbad9171f8cf7969960f58a4b7658172126b73543eb158253125e416aaf2c",
-            "session_context_sha256": "a2d0f2dd3a7b04c6cb43a5c02f1bb1d2a2d62ccef68b60717ca9d5663e19cd8a",
-            "native_config_sha256": "00ad6af54071079192bfba2acedcf0778a75d17360c364e488d18c6415d1ca2a",
-            "cleanup_sha256": "ee189d32e4f9f42197277c53b3e77b25c114c0264716694d8df972464bf653d1"
+            "session_context_sha256": "a8bb18c14bdc8ce0e031c239df4f4382f96b9ddf149f4b59e795c67af7ec017f",
+            "native_config_sha256": "9e2c7d177384730a0f70c75d90137dad5c1a23faacd82e6de6c3649bbc28c7a7",
+            "cleanup_sha256": "c216e47263f78ff3a1cda2bd7292cd2552341af2fe487efc40276b955d6105af"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-MAP-002-base-midi/case-participants.json",
-        "case_participants_sha256": "3b55aea8ef857ca5133dff1498eb36026e4a1900a98aa9106d600fb8dbe20219"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-MAP-002-base-midi/case-participants.json",
+        "case_participants_sha256": "5609e8664bbf29acfe84cd556c08d9bad26615fe6319c00b74da882d04714899"
       }
     },
     {
@@ -565357,15 +565357,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-SLIDE-STEP-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-SLIDE-STEP-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "60325adc98394085ae0662403ea036dd",
+          "session_id": "ff12b55f3a6b4109a66d3655fc6c6d53",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -565373,24 +565373,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "df8b433aa6b392b96bcfdbe11626f68979e30a037c0428ed0cd51b67c0f85d6c",
-        "identity_sha256": "f213667b9769ea5dc485262f18328d19a1e34658fd8373f11cde0eb902ad3898",
+        "identity_sha256": "2686a16e905e61f5a1ce659d3487734a46b235793855ac143321f950ed7c8c71",
         "recipe_sha256": "c47b9a36dedb7b48fb973bfc46ad2c256240ef844ea194d6943e52beaf3364fb",
-        "native_events_sha256": "ccecb36180756bfb896a9c924c1560203c246b96fac9411531856ef203c377c5",
+        "native_events_sha256": "6df2175564868658a4622eb839b94d594a7983b0dac49f138156ba2c743deaf3",
         "capture_trace_sha256": "e65bf389894fcd08bd30e8de9b1597bbfc0b6df6d6111b700ac7095b0b3df5d3",
-        "session_context_sha256": "6ab481132ef58e15206b7ca61b4c0d32bb2bb7ea5d8dfc87c8a22fa2797195b0",
-        "native_config_sha256": "e22127588ca866811f756079fe785b6e4a3d4f3b653546dbdd0be2d48c67282d",
-        "cleanup_sha256": "c781358b7b8adcf35400ca579ed52be4d92c46a5c64f9b795b1770d1824e37aa",
+        "session_context_sha256": "1781305b85a25b0f5c52d729c2b10fb66dbbee0c84fb763fc70cd0036e0612d0",
+        "native_config_sha256": "cca5535f2aa13ec033baa778980fc3cf6715c89d72522a3261e601c1ed19f5b2",
+        "cleanup_sha256": "c1be8c9475c5387d4c419d46dd9e70d296b696d289e3be365fe067bf90d9dd57",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-SLIDE-STEP-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-SLIDE-STEP-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "60325adc98394085ae0662403ea036dd",
+              "session_id": "ff12b55f3a6b4109a66d3655fc6c6d53",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -565398,17 +565398,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "df8b433aa6b392b96bcfdbe11626f68979e30a037c0428ed0cd51b67c0f85d6c",
-            "identity_sha256": "f213667b9769ea5dc485262f18328d19a1e34658fd8373f11cde0eb902ad3898",
+            "identity_sha256": "2686a16e905e61f5a1ce659d3487734a46b235793855ac143321f950ed7c8c71",
             "recipe_sha256": "c47b9a36dedb7b48fb973bfc46ad2c256240ef844ea194d6943e52beaf3364fb",
-            "native_events_sha256": "ccecb36180756bfb896a9c924c1560203c246b96fac9411531856ef203c377c5",
+            "native_events_sha256": "6df2175564868658a4622eb839b94d594a7983b0dac49f138156ba2c743deaf3",
             "capture_trace_sha256": "e65bf389894fcd08bd30e8de9b1597bbfc0b6df6d6111b700ac7095b0b3df5d3",
-            "session_context_sha256": "6ab481132ef58e15206b7ca61b4c0d32bb2bb7ea5d8dfc87c8a22fa2797195b0",
-            "native_config_sha256": "e22127588ca866811f756079fe785b6e4a3d4f3b653546dbdd0be2d48c67282d",
-            "cleanup_sha256": "c781358b7b8adcf35400ca579ed52be4d92c46a5c64f9b795b1770d1824e37aa"
+            "session_context_sha256": "1781305b85a25b0f5c52d729c2b10fb66dbbee0c84fb763fc70cd0036e0612d0",
+            "native_config_sha256": "cca5535f2aa13ec033baa778980fc3cf6715c89d72522a3261e601c1ed19f5b2",
+            "cleanup_sha256": "c1be8c9475c5387d4c419d46dd9e70d296b696d289e3be365fe067bf90d9dd57"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-SLIDE-STEP-001-base-midi/case-participants.json",
-        "case_participants_sha256": "e22a5582d5c4676bacc1142db40b454714037bb1bfef725d20a800d5b3894b10"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-SLIDE-STEP-001-base-midi/case-participants.json",
+        "case_participants_sha256": "2aedc29d54164a075088730a755f59b5f2379bc6e92dcaf068342d16c7d21c9f"
       }
     },
     {
@@ -612923,15 +612923,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-PARAM-022-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-PARAM-022-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "f6bcd5a9aaec4caabaf17c32851fbe27",
+          "session_id": "c1ef3d3bba7043b4a63c899c5f7b6b91",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -612939,24 +612939,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "0c6a5173e0c4108de385d8a6f272e4971258b8863a16f097d3ed502a2ef20ccb",
-        "identity_sha256": "4d7325bc4dc444cd28584ec5dcb8df8575918ff1bfe30e7e8f5c489869f5a6c0",
+        "identity_sha256": "030eab2193df6797099ad7dbe014540d821c2c4575887c894d89e8264376ae3b",
         "recipe_sha256": "be9c3db48f7141ede90b7f1cff9a2b6a6bee482f6b8d3ed2d02a1a0b4734c874",
-        "native_events_sha256": "e677dc412c6cd0bb0d89859c28fa333515d652893dab5a541fe7ec1919cd0708",
+        "native_events_sha256": "7a352ef97a67bfdcd40080d50c27bf127cd520142abd478171957ee4a7766c09",
         "capture_trace_sha256": "2757ba6d35d04e554626c2fdc8ca482e410810606aedef7a88464864623dc53c",
-        "session_context_sha256": "2c8725ba63489be85078c23ec3211762635f84b488c3c123b48bed368d6d6512",
-        "native_config_sha256": "e4c7fc8cb11a9f7d65915e273a3ec6084035705500a0cd2540a16cbbcc22bcfd",
-        "cleanup_sha256": "0f9ed9c873b063a57cda693b04b237417b229fa980d522310defe2e9590d3499",
+        "session_context_sha256": "66d2c046d9d11d61b2d8dd08693e5dd052edc3e89016a0440e8bc75cb940d906",
+        "native_config_sha256": "2d8df5d4ae87feb505df60e6d1c61836701ca2ff4006e22cfb9780046f7596fc",
+        "cleanup_sha256": "6fb68aa646fc04e377cf813a049efb3ed5c49a910528f82ad0f9b88a9e023233",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-PARAM-022-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-PARAM-022-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "f6bcd5a9aaec4caabaf17c32851fbe27",
+              "session_id": "c1ef3d3bba7043b4a63c899c5f7b6b91",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -612964,17 +612964,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "0c6a5173e0c4108de385d8a6f272e4971258b8863a16f097d3ed502a2ef20ccb",
-            "identity_sha256": "4d7325bc4dc444cd28584ec5dcb8df8575918ff1bfe30e7e8f5c489869f5a6c0",
+            "identity_sha256": "030eab2193df6797099ad7dbe014540d821c2c4575887c894d89e8264376ae3b",
             "recipe_sha256": "be9c3db48f7141ede90b7f1cff9a2b6a6bee482f6b8d3ed2d02a1a0b4734c874",
-            "native_events_sha256": "e677dc412c6cd0bb0d89859c28fa333515d652893dab5a541fe7ec1919cd0708",
+            "native_events_sha256": "7a352ef97a67bfdcd40080d50c27bf127cd520142abd478171957ee4a7766c09",
             "capture_trace_sha256": "2757ba6d35d04e554626c2fdc8ca482e410810606aedef7a88464864623dc53c",
-            "session_context_sha256": "2c8725ba63489be85078c23ec3211762635f84b488c3c123b48bed368d6d6512",
-            "native_config_sha256": "e4c7fc8cb11a9f7d65915e273a3ec6084035705500a0cd2540a16cbbcc22bcfd",
-            "cleanup_sha256": "0f9ed9c873b063a57cda693b04b237417b229fa980d522310defe2e9590d3499"
+            "session_context_sha256": "66d2c046d9d11d61b2d8dd08693e5dd052edc3e89016a0440e8bc75cb940d906",
+            "native_config_sha256": "2d8df5d4ae87feb505df60e6d1c61836701ca2ff4006e22cfb9780046f7596fc",
+            "cleanup_sha256": "6fb68aa646fc04e377cf813a049efb3ed5c49a910528f82ad0f9b88a9e023233"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-PARAM-022-base-midi/case-participants.json",
-        "case_participants_sha256": "e64e16f46b2190ab89c8e5a069f9d1f7a8fe120243d0d34c5f6474a841cf683e"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-PARAM-022-base-midi/case-participants.json",
+        "case_participants_sha256": "38069b72edf7e505bf9d047867c626f2016f27506e2cdb393214fab645e088cf"
       }
     },
     {
@@ -665348,15 +665348,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-PARAM-023-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-PARAM-023-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "4e920309762d408c8cb18afc0cfd1553",
+          "session_id": "d337ed40ea854fd381e000479f8a0015",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -665364,24 +665364,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "5078b7e02db0be1664c9b25874df64f8bada112ff3a65737c525a2b5487e063f",
-        "identity_sha256": "fd24aa490a1ec2eee2e97ae8b3fc1ed8604cee69960d93bf820091d63cda4937",
+        "identity_sha256": "f946cbf033e5d674ca9a1ef2999131b127f625aee73bf6381bf868e82b555f56",
         "recipe_sha256": "004710be74271e818a5d4fa3bd0547688e1d4757cc4e365c90c8d9ed8857de44",
-        "native_events_sha256": "ebb03540acc50bc3e15b39cc25ae18016e7783f11041932b61d70825cbab9af4",
+        "native_events_sha256": "405931f70dc6aca860bfdd1c6520af99f89a326f3a22a78cbf9cb1694d33841f",
         "capture_trace_sha256": "a551d9a31b64438cd2b78c608b918a6c68a6f5de56d2702cb52c0b4961af46ab",
-        "session_context_sha256": "03fb109920ea3c507222254a33fb9b7c587159ff37f18c6159907f6f51034f58",
-        "native_config_sha256": "ac4aa6318b9084ba9af54ccf81fe2ad8a1e4090063d09cad01299c40804d9c73",
-        "cleanup_sha256": "d06e8f3e36134839e378d03d42f4c8b2e8872755997336e2b3e1d6bc8fb216ca",
+        "session_context_sha256": "c7ed89e835e7545ffbd23d8bfd1683d89ab9cf340f3328a4e107331fbe869152",
+        "native_config_sha256": "66f39e5dce669be25c412731b90ee810ead1bfffd206641f87c7c00fef38e00a",
+        "cleanup_sha256": "48b82f01694b8a9d17ab4174f65fbbec0db31dcf4a73e89fb54675660aa43563",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-PARAM-023-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-PARAM-023-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "4e920309762d408c8cb18afc0cfd1553",
+              "session_id": "d337ed40ea854fd381e000479f8a0015",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -665389,17 +665389,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "5078b7e02db0be1664c9b25874df64f8bada112ff3a65737c525a2b5487e063f",
-            "identity_sha256": "fd24aa490a1ec2eee2e97ae8b3fc1ed8604cee69960d93bf820091d63cda4937",
+            "identity_sha256": "f946cbf033e5d674ca9a1ef2999131b127f625aee73bf6381bf868e82b555f56",
             "recipe_sha256": "004710be74271e818a5d4fa3bd0547688e1d4757cc4e365c90c8d9ed8857de44",
-            "native_events_sha256": "ebb03540acc50bc3e15b39cc25ae18016e7783f11041932b61d70825cbab9af4",
+            "native_events_sha256": "405931f70dc6aca860bfdd1c6520af99f89a326f3a22a78cbf9cb1694d33841f",
             "capture_trace_sha256": "a551d9a31b64438cd2b78c608b918a6c68a6f5de56d2702cb52c0b4961af46ab",
-            "session_context_sha256": "03fb109920ea3c507222254a33fb9b7c587159ff37f18c6159907f6f51034f58",
-            "native_config_sha256": "ac4aa6318b9084ba9af54ccf81fe2ad8a1e4090063d09cad01299c40804d9c73",
-            "cleanup_sha256": "d06e8f3e36134839e378d03d42f4c8b2e8872755997336e2b3e1d6bc8fb216ca"
+            "session_context_sha256": "c7ed89e835e7545ffbd23d8bfd1683d89ab9cf340f3328a4e107331fbe869152",
+            "native_config_sha256": "66f39e5dce669be25c412731b90ee810ead1bfffd206641f87c7c00fef38e00a",
+            "cleanup_sha256": "48b82f01694b8a9d17ab4174f65fbbec0db31dcf4a73e89fb54675660aa43563"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-PARAM-023-base-midi/case-participants.json",
-        "case_participants_sha256": "f7b842e65fbf66ffc35ac1f85b4ce91d7354ce3207052ef2248079cd544f8fb0"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-PARAM-023-base-midi/case-participants.json",
+        "case_participants_sha256": "ae4b8ba792a49925533e6010dd7d30f48a79efe54c2e3260d9871c1b1745064c"
       }
     },
     {
@@ -726349,15 +726349,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIME-003-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIME-003-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "8e231f44746d482c8f16822038650873",
+          "session_id": "71bdbe8839cb4b6b8035f080fbc41786",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -726365,24 +726365,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "1ed5e028d977799a8b094db0f9380dd37138b4609bb8e8d493c20c2ab0993c85",
-        "identity_sha256": "2e5c748634806b97a26f8e80928a15c88a8ac31a34a789f32b8cd1df9a5259d7",
+        "identity_sha256": "47c56dabc4c38a5cd8b95644c2593b99aa56c643ea08cfd4d64efcaa8230dee0",
         "recipe_sha256": "346c173615df200e7c1c010b1641fd54e791cc20d4ae513df294fa5c309637dc",
-        "native_events_sha256": "fc8db1efcc672ce0583d5a8779eacd9c31b89f1e694a6e8c176c5b0ca7292375",
+        "native_events_sha256": "9e0b83ada0e64793a31b546e316b85a194ae33216e74adb00cb8d30b0a575dd8",
         "capture_trace_sha256": "3ba058f2737e4512f8fcf579bdb2799dba6eee8efa6dff14ae328c9da989f5b0",
-        "session_context_sha256": "75045f17301929d5fc8678c63c061696d5596bcbce9ec97d2f3ab8344150ca7c",
-        "native_config_sha256": "3ee4053cc6c863acfe194ba0aaa0d9a993d156f36c75763b93a89564cf57c108",
-        "cleanup_sha256": "809ba4c3f57db57a01f59dd416e0ff27b00638c7ed8d0f97fc55cd981ce82b36",
+        "session_context_sha256": "006335e35f1e840a96ec223d9c96b45315c2a16a398f42f71254ce1b18b4efc3",
+        "native_config_sha256": "5695bacef9d3268eff0d923d479283ffeca646538a0cb4aab09b7e686ba1cdf5",
+        "cleanup_sha256": "6c579f74630886f85be981417f787d856ea985a099d86426316b184321814b07",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIME-003-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIME-003-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "8e231f44746d482c8f16822038650873",
+              "session_id": "71bdbe8839cb4b6b8035f080fbc41786",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -726390,17 +726390,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "1ed5e028d977799a8b094db0f9380dd37138b4609bb8e8d493c20c2ab0993c85",
-            "identity_sha256": "2e5c748634806b97a26f8e80928a15c88a8ac31a34a789f32b8cd1df9a5259d7",
+            "identity_sha256": "47c56dabc4c38a5cd8b95644c2593b99aa56c643ea08cfd4d64efcaa8230dee0",
             "recipe_sha256": "346c173615df200e7c1c010b1641fd54e791cc20d4ae513df294fa5c309637dc",
-            "native_events_sha256": "fc8db1efcc672ce0583d5a8779eacd9c31b89f1e694a6e8c176c5b0ca7292375",
+            "native_events_sha256": "9e0b83ada0e64793a31b546e316b85a194ae33216e74adb00cb8d30b0a575dd8",
             "capture_trace_sha256": "3ba058f2737e4512f8fcf579bdb2799dba6eee8efa6dff14ae328c9da989f5b0",
-            "session_context_sha256": "75045f17301929d5fc8678c63c061696d5596bcbce9ec97d2f3ab8344150ca7c",
-            "native_config_sha256": "3ee4053cc6c863acfe194ba0aaa0d9a993d156f36c75763b93a89564cf57c108",
-            "cleanup_sha256": "809ba4c3f57db57a01f59dd416e0ff27b00638c7ed8d0f97fc55cd981ce82b36"
+            "session_context_sha256": "006335e35f1e840a96ec223d9c96b45315c2a16a398f42f71254ce1b18b4efc3",
+            "native_config_sha256": "5695bacef9d3268eff0d923d479283ffeca646538a0cb4aab09b7e686ba1cdf5",
+            "cleanup_sha256": "6c579f74630886f85be981417f787d856ea985a099d86426316b184321814b07"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIME-003-base-midi/case-participants.json",
-        "case_participants_sha256": "439612b9686de4257c29c3d0889b76dce3bfdf29b6c3266aa16bc7232962591d"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIME-003-base-midi/case-participants.json",
+        "case_participants_sha256": "defc000eb3aaef716b707ced062a05490f9a160ca1dfcb179b386c86bf150ae6"
       }
     },
     {
@@ -753953,15 +753953,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIME-005-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIME-005-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "89a81f20b1114d67b917406f5313fd99",
+          "session_id": "dc94335142714781958dc5e7e3b0fba1",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -753969,24 +753969,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "2fb2f7c73c05863bbbf0dcf952110061d1869ffd9a096ca9ba23e61f4a5b66ec",
-        "identity_sha256": "4d4766bd8a316a474574aa87a7f8fff7bb8ec914b5d21393de9b30df4eac7cce",
+        "identity_sha256": "0484d1686df5c6c4e81ff252c6117615758082e432488943d7ea52628162121d",
         "recipe_sha256": "482a235987349d6c5b758bcaace0cd2684267b6b355841ef9526f262dc30d732",
-        "native_events_sha256": "aa7a879927eadf000ae32879520ffce2c98942674d60e360cf23f1e9ad4b2ca1",
+        "native_events_sha256": "71d79be60fcf9cb8b789b9d8929e1802a6e460b3acc48deb60a21f457c50ff2c",
         "capture_trace_sha256": "d06f0456b7ade76576f24d431bc36cd76ba292cc72e64bd1c4f3014208788b3b",
-        "session_context_sha256": "281b07747cf41518ca79c80999d614645d82804f46c9cb3fb148a6c32db6f3e6",
-        "native_config_sha256": "7dd4d21e0927a34f43bf9793ecdc2e55a84a8e71d94e6ca374a88f3fb904f35e",
-        "cleanup_sha256": "be38da193cfda8e0ef8e1e311c91e3b376ce3d19994d59784715a5bf6e9ce675",
+        "session_context_sha256": "8922712784fd029863ac8811f685a7de1f0f3b653c3bc4e1eeb499ba0258b8ec",
+        "native_config_sha256": "61d590008422c659dbd7dfe5551d5fff43953df852f9113980e988dbac0d2477",
+        "cleanup_sha256": "dd4eb4df2821b6b057235c1ea42d8c63419ff1162912815a641038d2ba3cfdea",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIME-005-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIME-005-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "89a81f20b1114d67b917406f5313fd99",
+              "session_id": "dc94335142714781958dc5e7e3b0fba1",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -753994,17 +753994,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "2fb2f7c73c05863bbbf0dcf952110061d1869ffd9a096ca9ba23e61f4a5b66ec",
-            "identity_sha256": "4d4766bd8a316a474574aa87a7f8fff7bb8ec914b5d21393de9b30df4eac7cce",
+            "identity_sha256": "0484d1686df5c6c4e81ff252c6117615758082e432488943d7ea52628162121d",
             "recipe_sha256": "482a235987349d6c5b758bcaace0cd2684267b6b355841ef9526f262dc30d732",
-            "native_events_sha256": "aa7a879927eadf000ae32879520ffce2c98942674d60e360cf23f1e9ad4b2ca1",
+            "native_events_sha256": "71d79be60fcf9cb8b789b9d8929e1802a6e460b3acc48deb60a21f457c50ff2c",
             "capture_trace_sha256": "d06f0456b7ade76576f24d431bc36cd76ba292cc72e64bd1c4f3014208788b3b",
-            "session_context_sha256": "281b07747cf41518ca79c80999d614645d82804f46c9cb3fb148a6c32db6f3e6",
-            "native_config_sha256": "7dd4d21e0927a34f43bf9793ecdc2e55a84a8e71d94e6ca374a88f3fb904f35e",
-            "cleanup_sha256": "be38da193cfda8e0ef8e1e311c91e3b376ce3d19994d59784715a5bf6e9ce675"
+            "session_context_sha256": "8922712784fd029863ac8811f685a7de1f0f3b653c3bc4e1eeb499ba0258b8ec",
+            "native_config_sha256": "61d590008422c659dbd7dfe5551d5fff43953df852f9113980e988dbac0d2477",
+            "cleanup_sha256": "dd4eb4df2821b6b057235c1ea42d8c63419ff1162912815a641038d2ba3cfdea"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIME-005-base-midi/case-participants.json",
-        "case_participants_sha256": "a90da82ad074f912e26aea44b07f36180a27af919b0b1fec75c0b3978631a408"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIME-005-base-midi/case-participants.json",
+        "case_participants_sha256": "b64708f7a8a6da80c34f8d15b0590e6c270e95396c0f110b83e62d70a7515475"
       }
     },
     {
@@ -777413,15 +777413,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIM-003-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIM-003-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "ada7767416954a6b9f7276eda42651fe",
+          "session_id": "755ab2d3e4904234b1db4ae7bbf73cf2",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -777429,24 +777429,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "e7eb757c98f976112b6b2a073fdd8cab6a4e1538f7a1346621eef413fb695271",
-        "identity_sha256": "a2bc2492f29ae53f6f83391ee78c5eb0a6776432e727eb768a5841c69bff3498",
+        "identity_sha256": "1a78a11df04578f673d25e797af4770475d2250706f5018cf23286657e408a08",
         "recipe_sha256": "bc2ec300fd66fc8a4f2d64064792b40538fd2b9ec1cfe2e64d32950a085abd57",
-        "native_events_sha256": "fb9ef5f132daee9ed043c93aeda577e30c40bf245ca3d4f2e79184f74e1b9e48",
+        "native_events_sha256": "953b58418480046373f664d3672f13b9a17e7dbb68fb7cd3ce97a8791bc57f9a",
         "capture_trace_sha256": "f3ae11dfb7eb91b9d6f31c9bc6384a29bfbbcacc4c5d8e85ba60a51a0d3f1c7c",
-        "session_context_sha256": "2bf685a8ee5a2f723677c180a6e05c3e8f66f48d87b9f3119653016e572a493f",
-        "native_config_sha256": "52c83d440f83235e1aa35b4b4d0500a09868111fad87b48302a0e2ce75b4c366",
-        "cleanup_sha256": "3eda05115d123feafd2cf9a9c01c10ff06641b117463bc277a635bbc3ab4f5fc",
+        "session_context_sha256": "e0f10ae14ec30e22da98aa0d49bbbf669f1034b4cfe919fdc2a912938b361f2c",
+        "native_config_sha256": "6ceca6339ab02715a88ce0203033f78250b1aedd4a098adc53fcc0ffff93d048",
+        "cleanup_sha256": "700bce161aa701e0ca7638ce1686a6c2a09bbbfb69813fb1c3b001dec6a2a023",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIM-003-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIM-003-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "ada7767416954a6b9f7276eda42651fe",
+              "session_id": "755ab2d3e4904234b1db4ae7bbf73cf2",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -777454,17 +777454,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "e7eb757c98f976112b6b2a073fdd8cab6a4e1538f7a1346621eef413fb695271",
-            "identity_sha256": "a2bc2492f29ae53f6f83391ee78c5eb0a6776432e727eb768a5841c69bff3498",
+            "identity_sha256": "1a78a11df04578f673d25e797af4770475d2250706f5018cf23286657e408a08",
             "recipe_sha256": "bc2ec300fd66fc8a4f2d64064792b40538fd2b9ec1cfe2e64d32950a085abd57",
-            "native_events_sha256": "fb9ef5f132daee9ed043c93aeda577e30c40bf245ca3d4f2e79184f74e1b9e48",
+            "native_events_sha256": "953b58418480046373f664d3672f13b9a17e7dbb68fb7cd3ce97a8791bc57f9a",
             "capture_trace_sha256": "f3ae11dfb7eb91b9d6f31c9bc6384a29bfbbcacc4c5d8e85ba60a51a0d3f1c7c",
-            "session_context_sha256": "2bf685a8ee5a2f723677c180a6e05c3e8f66f48d87b9f3119653016e572a493f",
-            "native_config_sha256": "52c83d440f83235e1aa35b4b4d0500a09868111fad87b48302a0e2ce75b4c366",
-            "cleanup_sha256": "3eda05115d123feafd2cf9a9c01c10ff06641b117463bc277a635bbc3ab4f5fc"
+            "session_context_sha256": "e0f10ae14ec30e22da98aa0d49bbbf669f1034b4cfe919fdc2a912938b361f2c",
+            "native_config_sha256": "6ceca6339ab02715a88ce0203033f78250b1aedd4a098adc53fcc0ffff93d048",
+            "cleanup_sha256": "700bce161aa701e0ca7638ce1686a6c2a09bbbfb69813fb1c3b001dec6a2a023"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-TIM-003-base-midi/case-participants.json",
-        "case_participants_sha256": "977b8655709a02b95b7ed26753f3a154b23e39392559c1c57be00920a7535925"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-TIM-003-base-midi/case-participants.json",
+        "case_participants_sha256": "3745d80499a60fa5485b639c4273eef637ce7e8c99881c00a5673dbe89707aa8"
       }
     },
     {
@@ -799857,15 +799857,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-REC-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-REC-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "811144ac815f42afa16ee7e870ac904d",
+          "session_id": "19d80c1828d641868c630c9e1d0381b2",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -799873,24 +799873,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "817860b22cc9109418b6b65a65d4b0cd16625d9d84b18a874db64fda3cdb3225",
-        "identity_sha256": "7907d7669cde9eb943a3ebeedf226c23f3b14cd089ac7509dddbb1a2f57e9531",
+        "identity_sha256": "89d592c91bae572604310fed6b5b4d71d26dabd0bf53387a84f98ddb3ce8f9cd",
         "recipe_sha256": "59d5a19ca1c6f554b1b724fbcbd648bafa6ee5b092e36bf8d4823f3706c294bf",
-        "native_events_sha256": "3adba3dfb89f7ee6570dedeae99ece360e96b226b700c90e5b87846b005d426b",
+        "native_events_sha256": "b545e8c2aade71b837f3cfbdd64c8dfe29294171f03c8f0b5ab9b7b9d808b945",
         "capture_trace_sha256": "4967303b6cd5832d8927e5fb987b8dc1cc8d4fa3e3f5be52b4f90863ac5991aa",
-        "session_context_sha256": "930dac468bb824f1f966b4435930860a52b6fb683f41772c8a7336c1712aeca8",
-        "native_config_sha256": "4c46636bab91a0025f913d50eb31dcea3247c89034b2e1ca5d83177d6e164c5b",
-        "cleanup_sha256": "fbd7fdce196b2f83f5d99cf327fb453f6dbef8782f2247b5e2f709b2da477831",
+        "session_context_sha256": "8e38cce4ca61b7547abd45068e2904d906c5d728c9fc90ea6df3fea17af686c4",
+        "native_config_sha256": "de03b7b72fefc7c6d7ff1ddc98cb60156127a8e32ed0c6c9db5f3a937c431a92",
+        "cleanup_sha256": "9dff8cd77a5800b265555bd1f99e8fbb3fa7386434ef9820ac52edc8f96fd6ec",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-REC-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-REC-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "811144ac815f42afa16ee7e870ac904d",
+              "session_id": "19d80c1828d641868c630c9e1d0381b2",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -799898,17 +799898,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "817860b22cc9109418b6b65a65d4b0cd16625d9d84b18a874db64fda3cdb3225",
-            "identity_sha256": "7907d7669cde9eb943a3ebeedf226c23f3b14cd089ac7509dddbb1a2f57e9531",
+            "identity_sha256": "89d592c91bae572604310fed6b5b4d71d26dabd0bf53387a84f98ddb3ce8f9cd",
             "recipe_sha256": "59d5a19ca1c6f554b1b724fbcbd648bafa6ee5b092e36bf8d4823f3706c294bf",
-            "native_events_sha256": "3adba3dfb89f7ee6570dedeae99ece360e96b226b700c90e5b87846b005d426b",
+            "native_events_sha256": "b545e8c2aade71b837f3cfbdd64c8dfe29294171f03c8f0b5ab9b7b9d808b945",
             "capture_trace_sha256": "4967303b6cd5832d8927e5fb987b8dc1cc8d4fa3e3f5be52b4f90863ac5991aa",
-            "session_context_sha256": "930dac468bb824f1f966b4435930860a52b6fb683f41772c8a7336c1712aeca8",
-            "native_config_sha256": "4c46636bab91a0025f913d50eb31dcea3247c89034b2e1ca5d83177d6e164c5b",
-            "cleanup_sha256": "fbd7fdce196b2f83f5d99cf327fb453f6dbef8782f2247b5e2f709b2da477831"
+            "session_context_sha256": "8e38cce4ca61b7547abd45068e2904d906c5d728c9fc90ea6df3fea17af686c4",
+            "native_config_sha256": "de03b7b72fefc7c6d7ff1ddc98cb60156127a8e32ed0c6c9db5f3a937c431a92",
+            "cleanup_sha256": "9dff8cd77a5800b265555bd1f99e8fbb3fa7386434ef9820ac52edc8f96fd6ec"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-REC-001-base-midi/case-participants.json",
-        "case_participants_sha256": "b7d31aba86f362e7845308cd4302cf3b2b6b05f6ca24e36f4d92538ecec2b106"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-REC-001-base-midi/case-participants.json",
+        "case_participants_sha256": "97d225823a78a6ee2dde9bca170f496d9b8233bc2fef8bcfa12ea59329ec40d8"
       }
     },
     {
@@ -821580,15 +821580,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-REC-PARAM-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-REC-PARAM-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+          "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "d1bff13818eb4a929ebbe6e3b07d12dd",
+          "session_id": "66913092864e400fb8577b71ee41f3ab",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -821596,24 +821596,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "b3574a02f4da80de58a16568c9f8a87e60ff59f8d69a32cb7697bce355189195",
-        "identity_sha256": "bb82b4f41faf9fb2b63eea3bbd8f3cd02ba46739fbd1ea3b8d1f52dcf75bacfb",
+        "identity_sha256": "c4e445493e656908b68e8333d90bea5e0c84762dabf30e3bc5f9d640dca222f1",
         "recipe_sha256": "6a674acf1073ca3fdb5ebabec60191b08d99b67a59bf23d9bd8ad0f6c417f119",
-        "native_events_sha256": "0ac7d87b28498fc0c9591fafbdcb107b16c20ddbad3660a8cc050367320b03a3",
+        "native_events_sha256": "c810d31c3d4107bf03ae448b03467860c3f98fdb7f6104d0d63df19a9d941659",
         "capture_trace_sha256": "ac1941a58fde7a3983d128ea610d3067a9bb3c84bc79fb757ad192e8c347de35",
-        "session_context_sha256": "83339cd8193e27944dd766fc910499aaa49e46e921e17f190b33dcb32d4f450d",
-        "native_config_sha256": "f269ea3394eacd05ac784fd58ccbaef1bfe0551101e5dc8634908c04768b5327",
-        "cleanup_sha256": "de5ced0a90ada0938d056d7be471ae26eceab5f6fcf2e760e9d51133341e48a2",
+        "session_context_sha256": "9af52a41bbb52d745a379acf0c6ed312d3695f34c2d24ec87cabcd93be28701f",
+        "native_config_sha256": "cf4b9e552bf235a088c7374acd7072f0932189e7383ef419fd2fd3370309aec5",
+        "cleanup_sha256": "1cb09a5af9d336c805b4815452fbf068b861fda46e402dc2f4679c0d97d41964",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-REC-PARAM-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-REC-PARAM-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/application",
+              "app_root": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "d1bff13818eb4a929ebbe6e3b07d12dd",
+              "session_id": "66913092864e400fb8577b71ee41f3ab",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -821621,21 +821621,21 @@
               "cleanup_verified": true
             },
             "results_sha256": "b3574a02f4da80de58a16568c9f8a87e60ff59f8d69a32cb7697bce355189195",
-            "identity_sha256": "bb82b4f41faf9fb2b63eea3bbd8f3cd02ba46739fbd1ea3b8d1f52dcf75bacfb",
+            "identity_sha256": "c4e445493e656908b68e8333d90bea5e0c84762dabf30e3bc5f9d640dca222f1",
             "recipe_sha256": "6a674acf1073ca3fdb5ebabec60191b08d99b67a59bf23d9bd8ad0f6c417f119",
-            "native_events_sha256": "0ac7d87b28498fc0c9591fafbdcb107b16c20ddbad3660a8cc050367320b03a3",
+            "native_events_sha256": "c810d31c3d4107bf03ae448b03467860c3f98fdb7f6104d0d63df19a9d941659",
             "capture_trace_sha256": "ac1941a58fde7a3983d128ea610d3067a9bb3c84bc79fb757ad192e8c347de35",
-            "session_context_sha256": "83339cd8193e27944dd766fc910499aaa49e46e921e17f190b33dcb32d4f450d",
-            "native_config_sha256": "f269ea3394eacd05ac784fd58ccbaef1bfe0551101e5dc8634908c04768b5327",
-            "cleanup_sha256": "de5ced0a90ada0938d056d7be471ae26eceab5f6fcf2e760e9d51133341e48a2"
+            "session_context_sha256": "9af52a41bbb52d745a379acf0c6ed312d3695f34c2d24ec87cabcd93be28701f",
+            "native_config_sha256": "cf4b9e552bf235a088c7374acd7072f0932189e7383ef419fd2fd3370309aec5",
+            "cleanup_sha256": "1cb09a5af9d336c805b4815452fbf068b861fda46e402dc2f4679c0d97d41964"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80/M-REC-PARAM-001-base-midi/case-participants.json",
-        "case_participants_sha256": "be39e6e927e5f6399e87d7d3ca81c5026c499940686e40d2f2f0daf7a140615d"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2/M-REC-PARAM-001-base-midi/case-participants.json",
+        "case_participants_sha256": "e52687c14cd341e154cb880b842fd851973f4511b5a1f05b0ad5d1c0c8b9182d"
       }
     }
   ],
-  "evidence": "/home/andy/mosaic-manual-runs/7e009e46659f4036801d3ec3e2efda80",
+  "evidence": "/home/andy/mosaic-manual-runs/374f0bbbbbf047d38863584e270362d2",
   "complete_regression_run": false,
   "selected_scene_ids": [
     "channel-task-navigation",

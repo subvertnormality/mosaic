@@ -261,7 +261,7 @@
     "fixture_sources": {
       "tests/behaviour/config/emu-midi.json": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442"
     },
-    "start_source_identity_path": "/home/andy/mosaic-manual-runs/6b37bf5ab79241cd95f3526bf2be25a9/start-source-identity.json",
+    "start_source_identity_path": "/home/andy/mosaic-manual-runs/46265f4cf66b4ad486469c10fa329c95/start-source-identity.json",
     "start_source_identity_sha256": "e3b7636e5c3199c6fc220c3579a9830b88f2a04f936ceddb29c8e15a7394bbd4",
     "extra_case_files": []
   },
@@ -11794,14 +11794,14 @@
                   "grid_sha256": "ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb",
                   "midi_count": 10,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128542745165331,
+                  "monotonic_ns": 144966638244435,
                   "logical_ns": 16330000000,
                   "recipe_index": 466
                 },
                 "strategy": "FOUNDATION",
                 "active": "FOUNDATION"
               },
-              "assertion_sha256": "eee25affa5f3b1890836c527aa0ec7c1fbc9151e2f3f47a719b1f8ea8cb4ddb6",
+              "assertion_sha256": "ef713e29d895f881fe5c7ad325cdc47f0c7fdf83d6c101d9f24db9c09e652a05",
               "trace_sha256": "7653abd600fc09570cffe18633869146fce4b227842150bf6e7c47ed1da182df",
               "session_ordinal": 0
             },
@@ -18238,7 +18238,7 @@
                   "grid_sha256": "ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb",
                   "midi_count": 10,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128542755369926,
+                  "monotonic_ns": 144966648456270,
                   "logical_ns": 16330000000,
                   "recipe_index": 466
                 },
@@ -18248,7 +18248,7 @@
                   "grid_sha256": "ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb",
                   "midi_count": 110,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128544347344797,
+                  "monotonic_ns": 144968657881757,
                   "logical_ns": 19060000000,
                   "recipe_index": 733
                 }
@@ -36664,7 +36664,7 @@
                   "grid_sha256": "9259759536631099d82d4005bff5c393767618f536c2bc63752f74e579b3ce0d",
                   "midi_count": 110,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128546050034716,
+                  "monotonic_ns": 144970914045919,
                   "logical_ns": 33020000000,
                   "recipe_index": 1177
                 },
@@ -36676,7 +36676,7 @@
                   "AVERAGE"
                 ]
               },
-              "assertion_sha256": "f584fad57f439e1824403d6570fc52c4fbd936812c507d593ee0c1d3324cf5b3",
+              "assertion_sha256": "737a24df5632660ee58605b84cd9437a7fbd9fce23206cbfa2781f93a8571e47",
               "trace_sha256": "bb35d64e9db9aeb77966d80e52fa56ebdd76c031ec4e5ff7554c3c2d26044556",
               "session_ordinal": 0
             },
@@ -43649,7 +43649,7 @@
                   "grid_sha256": "9259759536631099d82d4005bff5c393767618f536c2bc63752f74e579b3ce0d",
                   "midi_count": 110,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128546063185690,
+                  "monotonic_ns": 144970933171417,
                   "logical_ns": 33020000000,
                   "recipe_index": 1177
                 },
@@ -43659,7 +43659,7 @@
                   "grid_sha256": "9259759536631099d82d4005bff5c393767618f536c2bc63752f74e579b3ce0d",
                   "midi_count": 210,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128548251269953,
+                  "monotonic_ns": 144973634361090,
                   "logical_ns": 36420000000,
                   "recipe_index": 1511
                 }
@@ -54074,7 +54074,7 @@
                   "grid_sha256": "1fd9a41482d6a8bf5413112f621a25bb496287cb8a9276bf62760d710eeaa3c8",
                   "midi_count": 210,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128549516768213,
+                  "monotonic_ns": 144975083098028,
                   "logical_ns": 46080000000,
                   "recipe_index": 1818
                 },
@@ -54085,7 +54085,7 @@
                   "AVERAGE"
                 ]
               },
-              "assertion_sha256": "3d953fc8bf342fd6aa2827be8a8e7f1874bd268a7b58720c7d07aacad48869ae",
+              "assertion_sha256": "65aa79916edc0c5836525a150ab59a69789694f39cce53225f66a2815e37de5e",
               "trace_sha256": "b8e5050520c10028f93c0b1087188ff40486a01dc8a923961b6af301e813574e",
               "session_ordinal": 0
             },
@@ -58404,7 +58404,7 @@
                     "grid_sha256": "a09b634252fa4a4074b3f4c7b1d290f8a3a9e5e78bd5b4b60648dc5ad1318e3f",
                     "midi_count": 210,
                     "midi_outstanding": [],
-                    "monotonic_ns": 128549579341335,
+                    "monotonic_ns": 144975180689329,
                     "logical_ns": 46140000000,
                     "recipe_index": 1821
                   },
@@ -58414,7 +58414,7 @@
                     "grid_sha256": "a09b634252fa4a4074b3f4c7b1d290f8a3a9e5e78bd5b4b60648dc5ad1318e3f",
                     "midi_count": 284,
                     "midi_outstanding": [],
-                    "monotonic_ns": 128549711348595,
+                    "monotonic_ns": 144975339839698,
                     "logical_ns": 48926666667,
                     "recipe_index": 1828
                   }
@@ -58425,7 +58425,7 @@
                 "actual": [],
                 "passed": true
               },
-              "assertion_sha256": "2c03d653fab5634d87ea7f4e37b5fddf17e42c920e1f17b8824cb1ed1ff36f71",
+              "assertion_sha256": "9801291d64b838965595a0ce9752887d25042399f0cfbaac239f061334dc2f61",
               "trace_sha256": "ea1808a01dec3e02b29a2dbccca6960b9185845b9d1d6beecf22391ae0e6f727",
               "session_ordinal": 0
             },
@@ -64231,7 +64231,7 @@
                   "grid_sha256": "091db1bb39d14105b678c4adb9fe4ecf1449eb509c4530bffeafb6f9229a0d51",
                   "midi_count": 284,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128549786565662,
+                  "monotonic_ns": 144975426048561,
                   "logical_ns": 48986666667,
                   "recipe_index": 1831
                 },
@@ -64241,7 +64241,7 @@
                   "grid_sha256": "091db1bb39d14105b678c4adb9fe4ecf1449eb509c4530bffeafb6f9229a0d51",
                   "midi_count": 384,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128551955628955,
+                  "monotonic_ns": 144978024765657,
                   "logical_ns": 51716666667,
                   "recipe_index": 2098
                 }
@@ -81289,7 +81289,7 @@
                   "grid_sha256": "3259899636c49f833b2f0765f2aa5917a4946ca8b698f7736820f25bdef1835c",
                   "midi_count": 384,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128553719217464,
+                  "monotonic_ns": 144980017784980,
                   "logical_ns": 64836666667,
                   "recipe_index": 2512
                 },
@@ -81298,7 +81298,7 @@
                 "pending": "NONE",
                 "request": "NEEDS ANCHOR"
               },
-              "assertion_sha256": "d8fe9699ae6fc9a06630771053d4ac9f1c1a5bd73db71ffc9eb4ea01619ef991",
+              "assertion_sha256": "9de233d68638a0598fb55bb60c9a942644d8b03e866e6567d833b3aa43ca27d4",
               "trace_sha256": "8565468d15ef5d342d06c4c30dd66d449c73a136a8ad362787f01720772a8c41",
               "session_ordinal": 0
             },
@@ -107038,7 +107038,7 @@
                   "grid_sha256": "b1d6e23980eca6639e77130774dd747658c0b5fba5962036dc4d977a84c0365b",
                   "midi_count": 384,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128556079637202,
+                  "monotonic_ns": 144982875201652,
                   "logical_ns": 81346666667,
                   "recipe_index": 3044
                 },
@@ -107047,7 +107047,7 @@
                 "pending": "NONE",
                 "request": "NEEDS ANCHOR"
               },
-              "assertion_sha256": "f52132f3e351eb8bc4e7d54a8a3a2da46228c570ede630d8d4cc1dbb4906a578",
+              "assertion_sha256": "61383a2bac95cae62d3f268a0d023e32859bd9d8d3f1db1e8a4607880cc57a92",
               "trace_sha256": "8565468d15ef5d342d06c4c30dd66d449c73a136a8ad362787f01720772a8c41",
               "session_ordinal": 0
             },
@@ -123030,7 +123030,7 @@
                       "count": 1
                     }
                   ],
-                  "monotonic_ns": 128557544419806,
+                  "monotonic_ns": 144984942855744,
                   "logical_ns": 89626666667,
                   "recipe_index": 3268
                 },
@@ -123038,7 +123038,7 @@
                 "pending": "FOUNDATION",
                 "boundary": "NEXT CYCLE"
               },
-              "assertion_sha256": "2d70d3d330aba00e2a5b2e3d14f0eef1705abebe8080a7874519a654dcc6732b",
+              "assertion_sha256": "3df7a53f909c5cefd1ad02e2fed0d288cf3661aadcce99879651357e5cd55da4",
               "trace_sha256": "19507c5ae8d6e6200b50ce621677dca59a81f8e7012e3fa361786706f79b250d",
               "session_ordinal": 0
             },
@@ -129808,7 +129808,7 @@
                     "grid_sha256": "091db1bb39d14105b678c4adb9fe4ecf1449eb509c4530bffeafb6f9229a0d51",
                     "midi_count": 384,
                     "midi_outstanding": [],
-                    "monotonic_ns": 128557390917781,
+                    "monotonic_ns": 144984753600504,
                     "logical_ns": 88966666667,
                     "recipe_index": 3250
                   },
@@ -129818,7 +129818,7 @@
                     "grid_sha256": "ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb",
                     "midi_count": 484,
                     "midi_outstanding": [],
-                    "monotonic_ns": 128559812955671,
+                    "monotonic_ns": 144987940106494,
                     "logical_ns": 94946666667,
                     "recipe_index": 3582
                   }
@@ -130014,7 +130014,7 @@
                 "tolerance_seconds": 2e-09,
                 "passed": true
               },
-              "assertion_sha256": "e6aca65c9fc2be9f9f1c26b71e91c9ce5697952c88a7610ca0fe55bc0b38f800",
+              "assertion_sha256": "f5c331a2a9a8bb855f799592d4073ae13a33deb6e88c87b7e6cbb9fe45162c03",
               "trace_sha256": "134d3f46dacc26e2b9b433fd2fe61cd0ce89db9dd515ea008cb5f3436d6fcac3",
               "session_ordinal": 0
             },
@@ -135491,13 +135491,13 @@
                   "grid_sha256": "ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb",
                   "midi_count": 484,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128560200296902,
+                  "monotonic_ns": 144988432335556,
                   "logical_ns": 97856666667,
                   "recipe_index": 3674
                 },
                 "strategy": "FOUNDATION"
               },
-              "assertion_sha256": "0ff6c4bd4e4eed17582d32936d78de4e62e0322c6d1e7a1e72240209bafbf1fd",
+              "assertion_sha256": "1d4be3ff75919a8512cc8dd9f22c9d0c5d1c2da7b49ed6f72402692b4b1e8a29",
               "trace_sha256": "7448f86a12789d5523b8553e0250f9b16f87c859bcc660e696ca49f0f684ea61",
               "session_ordinal": 0
             },
@@ -144694,14 +144694,14 @@
                   "grid_sha256": "ebf7b41571aef908a98d25733779edfe8f5cf7707015169b10499c17476856cb",
                   "midi_count": 484,
                   "midi_outstanding": [],
-                  "monotonic_ns": 128561108552000,
+                  "monotonic_ns": 144989674320779,
                   "logical_ns": 104956666667,
                   "recipe_index": 3911
                 },
                 "label": "Add amount",
                 "value": "100"
               },
-              "assertion_sha256": "1ef7bc6d03413c1ad700bfe5f5acbbde25b6a81e687a0c813b2c5f1bcab3d7ec",
+              "assertion_sha256": "55430f62c0543d7b6cedc13bb5978f0d13fbe3c0e51dfa58dc3ad5d8b8706c39",
               "trace_sha256": "1d1e6d32f364817086be7905b5f8b1fb0885231339532e9311f656cdea78b7d8",
               "session_ordinal": 0
             },
@@ -144714,62 +144714,62 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/6b37bf5ab79241cd95f3526bf2be25a9/M-MERGE-STRATEGY-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/46265f4cf66b4ad486469c10fa329c95/M-MERGE-STRATEGY-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/6b37bf5ab79241cd95f3526bf2be25a9/application",
+          "app_root": "/home/andy/mosaic-manual-runs/46265f4cf66b4ad486469c10fa329c95/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "b2a2e1c7e43e493fb96334d1676e9ae9",
+          "session_id": "fa44d204b8e94169b9cadf1fba632508",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
           "held_inputs": [],
           "cleanup_verified": true
         },
-        "results_sha256": "11f5826d603eca17e24f6396272b599d2813aa63cbe23da25ffe26034cba0cd8",
-        "identity_sha256": "3f0699b902cc5cd1fd69b1fc46cdc0c12bc1da8f5a9d74080a69f4901ce70e08",
+        "results_sha256": "bb15523bb5d77a0cee736124bdb8e3d8258a38f420144815b3bf130879cddabd",
+        "identity_sha256": "f971881fa7e045c16b533a88dbedfe3aa7b4288e5be1b4c81f343acd8ae8d4ee",
         "recipe_sha256": "087526d63df1ed6fdf5769f158183ad47c734714f315c0c56462a2d307953aaf",
-        "native_events_sha256": "2e8a50c8f68047f8972061ffdea3e6662f38f3fb78a7580b14300919ef8352f6",
+        "native_events_sha256": "11320b7fe93ad3daf64c8a7cad13c010c0983043268924f0a4dadb9e3b75bb30",
         "capture_trace_sha256": "7609c20b3e849be2b93fdbd6a554307c582cd68951f9a84d0aff616a66ac64a9",
-        "session_context_sha256": "273b748cbf758953b7cf393d25dccfcba23ffc6d86a358951bcd3623517940ac",
-        "native_config_sha256": "a5e04df3a0d76c5224abff2285b7da58a36e647b2b734ae52f7fef22dcd1b74e",
-        "cleanup_sha256": "341652ddbfe8eb44b98987779e604dfa822f95c2440944b498dcf562342e35d4",
+        "session_context_sha256": "91af938333a2d9871aab26dfc154995366bf6c97cec6c22efbb3dd9d28ab9b34",
+        "native_config_sha256": "805ea31a36ccb5e06da4f90dff4399b5f59cdb86cd08df210151a501ba081276",
+        "cleanup_sha256": "60c74e504461f6f9e20e3fc1716dc717357990dc38baf63be01520dd1c370847",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/6b37bf5ab79241cd95f3526bf2be25a9/M-MERGE-STRATEGY-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/46265f4cf66b4ad486469c10fa329c95/M-MERGE-STRATEGY-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/6b37bf5ab79241cd95f3526bf2be25a9/application",
+              "app_root": "/home/andy/mosaic-manual-runs/46265f4cf66b4ad486469c10fa329c95/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "b2a2e1c7e43e493fb96334d1676e9ae9",
+              "session_id": "fa44d204b8e94169b9cadf1fba632508",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
               "held_inputs": [],
               "cleanup_verified": true
             },
-            "results_sha256": "11f5826d603eca17e24f6396272b599d2813aa63cbe23da25ffe26034cba0cd8",
-            "identity_sha256": "3f0699b902cc5cd1fd69b1fc46cdc0c12bc1da8f5a9d74080a69f4901ce70e08",
+            "results_sha256": "bb15523bb5d77a0cee736124bdb8e3d8258a38f420144815b3bf130879cddabd",
+            "identity_sha256": "f971881fa7e045c16b533a88dbedfe3aa7b4288e5be1b4c81f343acd8ae8d4ee",
             "recipe_sha256": "087526d63df1ed6fdf5769f158183ad47c734714f315c0c56462a2d307953aaf",
-            "native_events_sha256": "2e8a50c8f68047f8972061ffdea3e6662f38f3fb78a7580b14300919ef8352f6",
+            "native_events_sha256": "11320b7fe93ad3daf64c8a7cad13c010c0983043268924f0a4dadb9e3b75bb30",
             "capture_trace_sha256": "7609c20b3e849be2b93fdbd6a554307c582cd68951f9a84d0aff616a66ac64a9",
-            "session_context_sha256": "273b748cbf758953b7cf393d25dccfcba23ffc6d86a358951bcd3623517940ac",
-            "native_config_sha256": "a5e04df3a0d76c5224abff2285b7da58a36e647b2b734ae52f7fef22dcd1b74e",
-            "cleanup_sha256": "341652ddbfe8eb44b98987779e604dfa822f95c2440944b498dcf562342e35d4"
+            "session_context_sha256": "91af938333a2d9871aab26dfc154995366bf6c97cec6c22efbb3dd9d28ab9b34",
+            "native_config_sha256": "805ea31a36ccb5e06da4f90dff4399b5f59cdb86cd08df210151a501ba081276",
+            "cleanup_sha256": "60c74e504461f6f9e20e3fc1716dc717357990dc38baf63be01520dd1c370847"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/6b37bf5ab79241cd95f3526bf2be25a9/M-MERGE-STRATEGY-001-base-midi/case-participants.json",
-        "case_participants_sha256": "91ef968f3db82c47d252a2f51a6fd52778fddcd7e04502e43a0187188ccacf27"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/46265f4cf66b4ad486469c10fa329c95/M-MERGE-STRATEGY-001-base-midi/case-participants.json",
+        "case_participants_sha256": "a5ab84e5b26d00e15ff30fbffedf049e0bce3962839866b179eb2b4972ea2e7a"
       }
     }
   ],
-  "evidence": "/home/andy/mosaic-manual-runs/6b37bf5ab79241cd95f3526bf2be25a9",
+  "evidence": "/home/andy/mosaic-manual-runs/46265f4cf66b4ad486469c10fa329c95",
   "complete_regression_run": false,
   "selected_scene_ids": [
     "shared-merge-strategy-workflow"

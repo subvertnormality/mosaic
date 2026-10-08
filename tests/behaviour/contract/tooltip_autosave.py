@@ -6,9 +6,9 @@ clear like any other tooltip, and a later tooltip must still clear.
 """
 import time
 
-# Live footer (frame_oracle.footer): the tooltip at (1,63) level 9 while it
-# lasts; cleared means the footer shows exactly the screen's own hints again.
-HINTS = {'scale': ('< Root', 'Degree >'), 'masks': 'E2 MASK  E3 SET'}
+# Characterisation outside the manual: after a tooltip clears, the live footer
+# shows that screen's own hints again. The tooltip itself uses (1,63), level 9.
+HINTS = {'scale': 'E3 SET K3 APPLY K2 CANCEL', 'masks': 'E2 MASK  E3 SET'}
 
 
 def tooltip_autosave(c):

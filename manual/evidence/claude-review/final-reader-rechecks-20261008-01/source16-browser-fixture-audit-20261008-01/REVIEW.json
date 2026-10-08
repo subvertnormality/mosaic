@@ -1,0 +1,167 @@
+{
+  "audit": "independent static review of source16 browser fixture update subset",
+  "date": "2026-10-08",
+  "scope": "Only manual_*browser.cjs, remediation/*.cjs, and remediation/fixtures/recordings-context-v1.json; contract/*.py and stale sync changes excluded.",
+  "manifest": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/source16-candidate-test-manifest.json",
+    "sha256": "9612753800c347563f2b2b32375ad304d9da9683a85b6bf4fd9454b0bee2d7ac"
+  },
+  "patch": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/source16-candidate-tests-v1.patch",
+    "sha256_expected": "ad0442987a4913722ff8085ebc751d31dde5acf15e2986257072c38c841c9512",
+    "sha256_actual": "ad0442987a4913722ff8085ebc751d31dde5acf15e2986257072c38c841c9512"
+  },
+  "changed_files": [
+    {
+      "path": "tests/behaviour/manual_book_browser.cjs",
+      "baseline_sha256": "bed9fec55369bc0b912cf44b0fa95fd23c27b5470c6be95bb7cabad116fd0e46",
+      "candidate_sha256": "82cd8bc637a7351ff07140170fed860d2bf8396e122e524f18c18b5b7dab36b9",
+      "bytes": 34529
+    },
+    {
+      "path": "tests/behaviour/manual_browser.cjs",
+      "baseline_sha256": "cff82bd64861bf4228017555eff4e3074ef890a98770bf5b33ac2e0b9f512859",
+      "candidate_sha256": "d95291ce447b91beb1ee80e077cf58337a66184bbeb27bf8e6e1a9dd06cc686e",
+      "bytes": 17972
+    },
+    {
+      "path": "tests/behaviour/manual_controls_browser.cjs",
+      "baseline_sha256": "8ac721e8936a550014266200e153ad3735f13e19cde17ebc15aaf1013ca6efe5",
+      "candidate_sha256": "affaba0f5ca69723ba7ea44cfeab6bd6659ea55d9f86cc85bee84181536e3ca1",
+      "bytes": 11436
+    },
+    {
+      "path": "tests/behaviour/manual_course_browser.cjs",
+      "baseline_sha256": "022649d11d469319e19314c34acfada1c2d44ae8f32a64d57343d79274423bf9",
+      "candidate_sha256": "7f0e5ba8dd505d25b8623100cdcecfb3cd564bc58dd5c112a5858c8eae226350",
+      "bytes": 16551
+    },
+    {
+      "path": "tests/behaviour/manual_reader_text_browser.cjs",
+      "baseline_sha256": "59c648a1968c9c696114ee039c8b0e34cc067b6e9d934216478e93bcaa49fda2",
+      "candidate_sha256": "1c5af1d520b872015493465bf3212b7542da74cf2020dc1b119db1169410f18c",
+      "bytes": 12388
+    },
+    {
+      "path": "tests/behaviour/remediation/canonical_recipe.cjs",
+      "baseline_sha256": "65e2c1a280235dcead8545b2904267e54af759b0eec0c105e1de70724ddc5401",
+      "candidate_sha256": "8d6af65989d83fac6e11c009896f0f4c34ced6662eded75db3723beda3f00e3f",
+      "bytes": 5415
+    },
+    {
+      "path": "tests/behaviour/remediation/device_existing_course.cjs",
+      "baseline_sha256": "7efd7900d29906fd39bb5ccb6a5b2759aca9366ef0ae02b32411ad65393839cb",
+      "candidate_sha256": "cabda15a5164fa20d4cf75da6bee28079468d98bd7f6cb12f8d723ae589a50e0",
+      "bytes": 3664
+    },
+    {
+      "path": "tests/behaviour/remediation/explicit_mobile.cjs",
+      "baseline_sha256": "cdf80cba87a2f84512cee568ad666a94d4df934387f3b93029a9f7d25155c71a",
+      "candidate_sha256": "e3a35c4fc72fc88cd256bf9b6389371b04a3f782425f162ca39991a6c5087edd",
+      "bytes": 4416
+    },
+    {
+      "path": "tests/behaviour/remediation/fixtures/recordings-context-v1.json",
+      "baseline_sha256": "dab623b11760c1f4a67d21e27b543480bb562aa88591ce9cbd12246aca3965c4",
+      "candidate_sha256": "de9b8a3c926b1e03d8bdcd4303e0c2c0807fe51fcb62901355728613732edfb1",
+      "bytes": 40543
+    },
+    {
+      "path": "tests/behaviour/remediation/grid.cjs",
+      "baseline_sha256": "4950f7b86ac773e2563357570f586f16fbfad202bb51a98c697ec4964a8879b7",
+      "candidate_sha256": "3b8f0fb69e689604a8e2ac460b837eca157fb6124f875737160d92f58c99c5c9",
+      "bytes": 4164
+    },
+    {
+      "path": "tests/behaviour/remediation/key_tap.cjs",
+      "baseline_sha256": "83508ed00af3660536557720ac9b8efee3f8eea7d260ca5d7038a7bc577d964b",
+      "candidate_sha256": "ca7fa0d61728789c1d3bcc5aab2686f89be00afab968142d3b183c323a1333f5",
+      "bytes": 2667
+    },
+    {
+      "path": "tests/behaviour/remediation/metadata.cjs",
+      "baseline_sha256": "98188166e674f4c1900c5d656cb62233c8a536f80e4455a4cd354cf76947e9b1",
+      "candidate_sha256": "76f31466bb7e9ed494e10f9801d35af03cc559b0b6da951509905f5611b26ae7",
+      "bytes": 4757
+    },
+    {
+      "path": "tests/behaviour/remediation/midi_ending.cjs",
+      "baseline_sha256": "4b5a2508ef43ba9ce81bfe94fac3c1bafcde802fd5dbf62a5726cd3e8ee4f4c9",
+      "candidate_sha256": "50088218b269e1ef8714e00fc1742617889314f3e6bd0fbcd3427f0b8efe85c2",
+      "bytes": 2454
+    },
+    {
+      "path": "tests/behaviour/remediation/output_view.cjs",
+      "baseline_sha256": "053010e3c2ef4c35adfe7b4f1cbe48a6c402a31be7f69b9423cdb9f083c08b6c",
+      "candidate_sha256": "0e76878c664197fec29f4a459c7bf5d774a72e6d0897f102bc9bd7ff87c82e52",
+      "bytes": 3993
+    },
+    {
+      "path": "tests/behaviour/remediation/persistence.cjs",
+      "baseline_sha256": "cf02b417c921caa0252146d07785c1a3bf72290da365fb41f1128fd466661079",
+      "candidate_sha256": "ecead5b2e19c87dd4ae6fd2aece42ef529ddcff4c02bd9cc2507ba0ab1fc979f",
+      "bytes": 3905
+    },
+    {
+      "path": "tests/behaviour/remediation/probability.cjs",
+      "baseline_sha256": "3206e4cd0bc2668e47d5675e644a8cddf1ac63e270b2ed5696df8683179a24b6",
+      "candidate_sha256": "bf4b46bafd96102c7464bd5fbde3f3ce200a7b3669dc46f4a9b4ace6d05b9df2",
+      "bytes": 2733
+    },
+    {
+      "path": "tests/behaviour/remediation/program_display.cjs",
+      "baseline_sha256": "5fa946f4bb65cbf1741bce077a7d689759ea765d4c1adf857f301f4a66084510",
+      "candidate_sha256": "ab9a83b0bb2257333b427c3d074a0f5da270fca85c416643457d71d60c976367",
+      "bytes": 1824
+    },
+    {
+      "path": "tests/behaviour/remediation/receipts.cjs",
+      "baseline_sha256": "b9377ace4e97738e68d9f29df5ec6f111c52ad873b5f365d1119bd82d5f995f0",
+      "candidate_sha256": "2629468f7192574dc293454e457a4668b36ee3a1ed165f831b6dddf2b0dbff7f",
+      "bytes": 6151
+    },
+    {
+      "path": "tests/behaviour/remediation/recordings.cjs",
+      "baseline_sha256": "22479edcb74689a233b440caf7b96a55764ac6b1aaf0f439b67317c6707bbe33",
+      "candidate_sha256": "0823859f0ebef9fa7f21e2e48f9388702a6b8614e8ba38fb1c0d05e2da64b40a",
+      "bytes": 4842
+    },
+    {
+      "path": "tests/behaviour/remediation/recordings_navigation.cjs",
+      "baseline_sha256": "69953490857f3cdec044ace1b5b82c7d0f1f78527a27ae0ce8f67f76a10d6b41",
+      "candidate_sha256": "b1513b28c5252921a7c5c1180cd90a80be0f6f9a0b5ae40fd120cb5591cf9a3d",
+      "bytes": 5569
+    },
+    {
+      "path": "tests/behaviour/remediation/retained_output.cjs",
+      "baseline_sha256": "73eecc93e20a3faf2387c346d9abc67f579f5550b34ac8bee17c753a46eb3120",
+      "candidate_sha256": "a170057cc990b506c07b5b101a26ca11bb65003a6623713d75d8fdd0a0b4aba2",
+      "bytes": 3922
+    },
+    {
+      "path": "tests/behaviour/remediation/save_dialog.cjs",
+      "baseline_sha256": "cd5bea300a94bc7a3c6399a16999de256bb06e22986f3802961f8b81f7cfc99b",
+      "candidate_sha256": "5ac5d6599e65f625325c802652f387aec1503ba96d0737b0fd1a5c21d113c30f",
+      "bytes": 6247
+    },
+    {
+      "path": "tests/behaviour/remediation/sweeps.cjs",
+      "baseline_sha256": "ff23c40b51d1d50b4e1bf020b978eae940cee9cf266d07bc9ed5954312c6226f",
+      "candidate_sha256": "50c10231a4c70d071854dee23d4d21e25b8f0c0249d04a22624be1492abec8d2",
+      "bytes": 3378
+    }
+  ],
+  "findings": {
+    "native_output_identity": "originalScene still checks exact ordered step IDs and SHA-256 of each native step output and inputs; qualified source-chunk SHA checks remain.",
+    "frame_and_grid": "Candidate preserves baseline exact decoded 128x64 screen-pixel intensity comparison and deep equality of captured grid levels; assertions are unchanged from baseline. Frame helper compares canvas red/intensity plane (8192 samples), not independent RGBA channels; no claim of independent RGB/alpha checking.",
+    "midi": "No changed musical timing/gate tolerance was found. Full event payloads remain pinned by native source/output hashes; candidate retains exact source-derived event/tuple assertions for full keyboard and panic cases and exact visible semantic excerpts. Raw-event history DOM equality was removed where reader hides developer-only raw evidence, with source SHA/event assertions retained.",
+    "removed_metadata": "Raw caption/evidence-status/MIDI-history UI assertions were replaced with checks that technical evidence chrome is absent and authored human-facing captions, recovery messages, and summaries remain visible; captions/source data stay source-pinned.",
+    "developer_filter": "manual_book_browser pins exactly the three developer-only IDs and requires both audience=developer and category=developer; public scan excludes those records only.",
+    "aliases_milestones": "Candidate asserts retained old placements resolve to genuine scenes, visible alias pointers route to a scene included in its canonical owner refs, owner milestone partition precedence, and explicit shadowing. Full-source logic compares public feature plus course-only scene union to native baseline scene IDs.",
+    "inventory": "Pinned baseline native inventory contains 146 unique scene IDs and 280 placement records. Existing report has 130 public features and 3 exact developer exclusions.",
+    "recordings_fixture": "All 22 recording IDs/order are retained. Changed fields are narrative presentation fields only; source SHA tracks manual/recordings.yaml. No output/frame/MIDI event payload is present as a changed fixture field.",
+    "qualification": "Static review only; no tests or browser/native/audio runs were performed. Source16 manifest focused-run claim for manual_course_browser (9 checks pass) conflicts with colocated manual_course_browser.cjs.log and report.json, which show an 8-check failed run. The manual_book_browser receipt is the known milestone RED, subsequently addressed in source18 production JS per parent context; final suite remains pending. Do not treat this audit as suite qualification."
+  },
+  "decision": "No assertion/tolerance weakening found in the audited patch's musical or native-identity contracts. One evidence-receipt inconsistency is recorded above; reconcile before treating focused course-browser qualification as proven.",
+  "reviewer": "Codex independent static audit"
+}

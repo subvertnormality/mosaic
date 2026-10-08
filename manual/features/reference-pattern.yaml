@@ -3,21 +3,17 @@ features:
   title: Dig Deeper
   audience: all
   summary: Reference sections for pattern editing, channel processing and song arrangement.
-  prose: 'Use the following reference sections to edit patterns, process channels and arrange song sequences.
-    Work in this order:
+  prose: 'Use the following reference sections to edit patterns, process channels and arrange song sequences. Work in this order:
 
 
-    1. Pattern Editor: create source patterns. Adding Trigs sets when a pattern plays, Adding Notes which
-    scale degree, Adding Velocity how hard.
+    1. Pattern Editor: create source patterns. Adding Trigs sets when a pattern plays, Adding Notes which scale degree, Adding Velocity how hard.
 
-    2. Channel Editor: assign a device and patterns to each channel, then shape the result with masks,
-    merge modes, clocks and trig params.
+    2. Channel Editor: assign a device and patterns to each channel, then shape the result with masks, merge modes, clocks and trig params.
 
     3. Scale Editor: choose the scales and degrees the notes are read against.
 
     4. Song Editor: copy finished sequences into Song slots and arrange them.'
-  musical_use: Edit the source pattern first. Apply channel processing, then arrange song patterns. Check
-    playback after each change.
+  musical_use: Edit the source pattern first. Apply channel processing, then arrange song patterns. Check playback after each change.
   related: []
   sources:
     readme: manual/legacy/README-1.4.0.md#dig-deeper
@@ -36,8 +32,7 @@ features:
     cases:
     - M-HARMONY-REVOICE-001
     - M-MERGE-FOUNDATION-001
-    note: Source and case definitions reviewed. Published native assertions and their scope are listed
-      separately; pending gaps are not acceptance evidence.
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed separately; pending gaps are not acceptance evidence.
     source_status: code-and-case-reviewed
     native_evidence:
     - scene: pattern-note-range
@@ -61,8 +56,7 @@ features:
         kind: workflow-check
         name: center-restores-root-page
         passed: true
-      scope: Overview examples cover Pattern Note and Velocity editing; other advanced features have their
-        own reference.
+      scope: Overview examples cover Pattern Note and Velocity editing; other advanced features have their own reference.
       run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
       data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
     - scene: pattern-velocity-range
@@ -86,8 +80,7 @@ features:
         kind: workflow-check
         name: hold-to-highest-velocity-range
         passed: true
-      scope: Overview examples cover Pattern Note and Velocity editing; other advanced features have their
-        own reference.
+      scope: Overview examples cover Pattern Note and Velocity editing; other advanced features have their own reference.
       run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
       data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
     - scene: foundation-protected-and-added
@@ -143,11 +136,11 @@ features:
         kind: tap-grid
         x: 1
         y: 8
-        label: Play the captured phrase and listen for 60, 62, 64, 71.
+        label: Press Play to compare this phrase on your instrument
       - id: preview
         kind: preview-recorded-result
         target_step_id: initial-note-range
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -170,8 +163,11 @@ features:
           - 144
           - 71
           - 97
-      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
-        MIDI 64 at velocity 107, MIDI 71 at velocity 97.
+      human_outcome: Step 4 plays degree 6 (MIDI 71); steps 1–3 remain unchanged.
+      practice_prompt: '1. Press Pattern (5,8) twice to open Pattern Note for pattern 1. The seven rows are scale degrees, with the root on the bottom row. Tap (4,1), the top row of step 4''s column. Press Play at (1,8), then Stop: step 4 now plays degree 6, MIDI 71, while steps 1-3 stay 60, 62, 64.'
+    title: Shape notes across the grid range
+    goal: Open Pattern Note and place step 4 on scale degree 6.
+    starting_point: Channel 1 plays a four-step phrase on steps 1-4 (MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97) through a MIDI device on OUT 1, in C major at 90 BPM with sixteenth-note steps (Rate /1). The Channel editor is open and the Pattern editor has not been opened. On Pattern Note the range buttons on row 8 are range-up (14,8), centre (15,8) and range-down (16,8). A press moves the window one degree up or down, a long press jumps to the top or bottom, and the centre button returns to the root page. Pattern Velocity has only two range buttons, (15,8) toward the top page and (16,8) toward the lower page, as the next lesson shows.
   - id: play-pattern-velocity-range-velocity-127
     binding:
       status: verified
@@ -185,11 +181,11 @@ features:
         kind: tap-grid
         x: 1
         y: 8
-        label: Play the captured phrase and listen for 60, 62, 64, 65.
+        label: Press Play to compare this phrase on your instrument
       - id: preview
         kind: preview-recorded-result
         target_step_id: velocity-127
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -212,8 +208,11 @@ features:
           - 144
           - 65
           - 127
-      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
-        MIDI 64 at velocity 107, MIDI 65 at velocity 127.
+      human_outcome: Step 4 plays at full velocity 127; the other steps retain their velocities.
+      practice_prompt: '1. Press Pattern (5,8) three times to open Pattern Velocity. Each row of a step''s column is a velocity level, 127 at the top. Tap (4,1). Press Play at (1,8), then Stop: step 4 plays at velocity 127 while steps 1-3 keep 127, 117, 107.'
+    title: Shape accents and rests
+    goal: Open Pattern Velocity and set step 4 to the top velocity row.
+    starting_point: 'Channel 1 plays a four-step phrase on steps 1-4 (MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97) through a MIDI device on OUT 1, in C major at 90 BPM with sixteenth-note steps (Rate /1). The Channel editor is open and the Pattern editor has not been opened. On Pattern Velocity the range buttons on row 8 differ from Pattern Note, which has three: here there are two, range-up at (15,8), toward the 127-68 page, and range-down at (16,8), toward the 58-0 page.'
   - id: play-foundation-protected-and-added-accented-phrase
     binding:
       status: verified
@@ -227,11 +226,11 @@ features:
         kind: tap-grid
         x: 1
         y: 8
-        label: Play the captured phrase and listen for 60, 62, 64, 65.
+        label: Press Play to compare this phrase on your instrument
       - id: preview
         kind: preview-recorded-result
         target_step_id: accented-phrase
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -254,8 +253,11 @@ features:
           - 144
           - 65
           - 97
-      human_outcome: The captured MIDI notes include MIDI 60 at velocity 127, MIDI 62 at velocity 117,
-        MIDI 64 at velocity 107, MIDI 65 at velocity 97.
+      human_outcome: Foundation preserves the four anchors and adds two quieter notes at velocity 70.
+      practice_prompt: 1. Tap Play (1,8), let two eight-step loops sound, then tap Stop. Each loop plays the four anchors, MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97, then two additions as MIDI 60 at velocity 70, shown in the strip below. Anchor velocities are untouched; only the added notes use Add accent.
+    title: Keep anchors and accent the additions
+    goal: Hear added trigs at the Add accent level while the original anchors keep their velocities.
+    starting_point: 'Turn E2 to Add amount, which reads 100: every candidate addition is admitted. Turn E2 two detents on to Add accent, which reads 70 and scales the velocity of the added trigs to 70 percent. Both settings are already at these values; you only read them here. The grid shows the anchors on steps 1 to 4 and the additions on steps 5 and 7.'
   - id: play-harmony-revoice-two-voices-two-voice-placement
     binding:
       status: verified
@@ -269,11 +271,11 @@ features:
         kind: tap-grid
         x: 1
         y: 8
-        label: Play the captured phrase and listen for 48, 50, 50, 52.
+        label: Press Play to compare this phrase on your instrument
       - id: preview
         kind: preview-recorded-result
         target_step_id: two-voice-placement
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -296,29 +298,31 @@ features:
           - 144
           - 52
           - 117
-      human_outcome: The captured MIDI notes include MIDI 48 at velocity 127, MIDI 50 at velocity 127,
-        MIDI 50 at velocity 117, MIDI 52 at velocity 117.
+      human_outcome: Revoice keeps each pair’s pitch classes and moves both voices down an octave.
+      practice_prompt: '1. Set Mode to REVOICE and press K3 (Preset SMOOTH). Tap Play for two loops. Revoice keeps each pair''s two pitch classes but chooses their octaves for the smoothest movement: both notes drop an octave to 48+50, 50+52, 52+53 and 53+55, at velocities 127, 117, 107, 97 in the strip below. Tap Stop.'
+    title: Place two voices smoothly
+    goal: Use REVOICE with the SMOOTH preset to keep the two voices close as the chord changes.
+    starting_point: Open Channel tasks > Harmony; the header reads VOICE LEADING CH01.
+
+  scene_context_links:
+  - scene_id: foundation-protected-and-added
+    canonical_route: merge-shape/foundation-protected-and-added
+    route_behavior: redirect
+    label: "Open the complete Merge Shape Foundation walkthrough"
+    reason: "The complete lesson shows the protected Foundation anchors and admitted additions, with the original captured scene retained as an alias."
+  
 - id: pattern-editor
   title: Pattern Editor
   audience: all
-  summary: Edit source-pattern trigs, scale-relative notes and velocities, then assign the patterns to
-    channels.
-  prose: 'Patterns are the building blocks of your harmony and rhythm sections. Create source patterns
-    in the pattern editors, assign them to channels, then use channel merging to combine or remix their
-    trig, note and velocity data.
+  summary: Edit source-pattern trigs, scale-relative notes and velocities, then assign the patterns to channels.
+  prose: 'Patterns are the building blocks of your harmony and rhythm sections. Create source patterns in the pattern editors, assign them to channels, then use channel merging to combine or remix their trig, note and velocity data.
 
 
-    Press Pattern, grid (5,8), the third button of the global menu cluster, to open the Pattern Editor.
-    Press it again to move through its three pages: Pattern Trig (which steps play), Pattern Note (which
-    scale degree each step plays) and Pattern Velocity (how hard). The top row, (1,1) to (16,1), selects
-    which of the 16 patterns you edit. Each pattern has 64 steps. Pattern Trig shows all 64 on grid rows
-    4 to 7, 16 per row. Pattern Note and Pattern Velocity show 16 steps at a time and the buttons at (9,8)
-    to (12,8) choose steps 1–16, 17–32, 33–48 or 49–64.
+    Press Pattern, grid (5,8), the third button of the global menu cluster, to open the Pattern Editor. Press it again to move through its three pages: Pattern Trig (which steps play), Pattern Note (which scale degree each step plays) and Pattern Velocity (how hard). The top row, (1,1) to (16,1), selects which of the 16 patterns you edit. Each pattern has 64 steps. Pattern Trig shows all 64 on grid rows 4 to 7, 16 per row. Pattern Note and Pattern Velocity show 16 steps at a time and the buttons at (9,8) to (12,8) choose steps 1–16, 17–32, 33–48 or 49–64.
 
 
     Watch: [Pattern editor demo](https://youtu.be/J1ckUZvhFJ0?t=660)'
-  musical_use: Create several source patterns. Assign them to channels and set masks or merge modes separately
-    for each channel.
+  musical_use: Create several source patterns. Assign them to channels and set masks or merge modes separately for each channel.
   related:
   - dig-deeper
   sources:
@@ -347,8 +351,7 @@ features:
     status: verified
     cases:
     - M-WORKFLOW-001
-    note: Source and case definitions reviewed. Published native assertions and their scope are listed
-      separately; pending gaps are not acceptance evidence.
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed separately; pending gaps are not acceptance evidence.
     source_status: code-and-case-reviewed
     native_evidence:
     - scene: algorithm-choose-and-preview
@@ -374,8 +377,7 @@ features:
       - &id012
         kind: prime-uses-selected-algorithm
         passed: true
-      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child
-        reference.
+      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child reference.
       run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
       data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
     - scene: pattern-note-range
@@ -387,8 +389,7 @@ features:
       - *id002
       - *id003
       - *id004
-      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child
-        reference.
+      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child reference.
       run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
       data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
     - scene: pattern-velocity-range
@@ -400,8 +401,7 @@ features:
       - *id006
       - *id007
       - *id008
-      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child
-        reference.
+      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child reference.
       run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
       data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
     - scene: workflow-compose-two-channels
@@ -437,9 +437,7 @@ features:
   prose: 'Trigs are added in the pattern editor. Using the top row, pick one of the 16 available patterns.
 
 
-    Press a sequencer step to enter a trig. Active trigs glow brightly. Hold a trig and select its end
-    step to set its length. Dimmer steps show the note’s duration. Another trig in the same pattern ends
-    that duration.
+    Press a sequencer step to enter a trig. Active trigs glow brightly. Hold a trig and select its end step to set its length. Dimmer steps show the note’s duration. Another trig in the same pattern ends that duration.
 
 
     Select a built-in rhythm algorithm using the five algorithm buttons. From left to right:
@@ -447,33 +445,22 @@ features:
 
     * Button 1: The drum algorithm, using banks of classic drum patterns.
 
-    * Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo
-    multiplier can be set on the Norns screen for more variations.
+    * Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the Norns screen for more variations.
 
     * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
 
     * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
 
-    * Button 5: Rhythm Doctor, a capture and paint workflow described below. Recording needs the sequencer
-    stopped; an analysed bank can be used while it plays.
+    * Button 5: Rhythm Doctor, a capture and paint workflow described below. Recording needs the sequencer stopped; an analysed bank can be used while it plays.
 
 
-    Pressing an algorithm button shows the Trig Algorithm screen on the norns, with the algorithm in use
-    marked SELECTED. You can also choose there: E2 moves through the five algorithms and K3 selects one,
-    exactly as its grid button does. Choosing Rhythm Doctor opens the Doctor. Algorithm, in the pattern
-    task list, opens the same screen.
+    Pressing an algorithm button shows the Trig Algorithm screen on the norns, with the algorithm in use marked SELECTED. You can also choose there: E2 moves through the five algorithms and K3 selects one, exactly as its grid button does. Choosing Rhythm Doctor opens the Doctor. Algorithm, in the pattern task list, opens the same screen.
 
 
-    Use the row-3 bank fader starting at column 12 to choose a bank: five choices for Drum and Tresillo,
-    four for Numeric Repetitor. Euclidean and Rhythm Doctor do not use this selector.
+    Use the row-3 bank fader starting at column 12 to choose a bank: five choices for Drum and Tresillo, four for Numeric Repetitor. Euclidean and Rhythm Doctor do not use this selector.
 
 
-    Use the left fader in row 2 for the first algorithm parameter and the left fader in row 3 for the
-    second. The two end buttons are brightly lit and change the value by one: the far-left button steps
-    down and the far-right button steps up. The dimmer buttons between them choose broader proportional
-    values, with the centre selecting the middle value. The second fader is disabled for Drum, and both
-    are disabled for Rhythm Doctor. Changing an enabled parameter refreshes the prepared pattern; use
-    Paint to commit it.
+    Use the left fader in row 2 for the first algorithm parameter and the left fader in row 3 for the second. The two end buttons are brightly lit and change the value by one: the far-left button steps down and the far-right button steps up. The dimmer buttons between them choose broader proportional values, with the centre selecting the middle value. The second fader is disabled for Drum, and both are disabled for Rhythm Doctor. Changing an enabled parameter refreshes the prepared pattern; use Paint to commit it.
 
 
     Press a grid control to display its function on the norns.
@@ -482,43 +469,26 @@ features:
     ### Previewing and painting
 
 
-    Press Prime to preview the selected algorithm’s pattern. Potential new steps are shown as flashing
-    bright steps on the sequencer. While these steps flash, they are not painted yet. Any step that would
-    be painted over an existing active step blinks dimly. By painting the new pattern, you deactivate
-    the faintly blinking steps. You can modify algorithm parameters while the pattern is primed.
+    Press Prime to preview the selected algorithm’s pattern. Potential new steps are shown as flashing bright steps on the sequencer. While these steps flash, they are not painted yet. Any step that would be painted over an existing active step blinks dimly. By painting the new pattern, you deactivate the faintly blinking steps. You can modify algorithm parameters while the pattern is primed.
 
 
-    If you have not painted the new pattern, the prime button continues to blink. Pressing it again paints
-    your edits. Pressing the prime button again without tweaking the algorithm or its parameters acts
-    as an undo for the last action.
+    If you have not painted the new pattern, the prime button continues to blink. Pressing it again paints your edits. Pressing the prime button again without tweaking the algorithm or its parameters acts as an undo for the last action.
 
 
     Press Cancel to discard a prepared pattern.
 
 
-    While previewing a new pattern, use the move controls to shift its position. The first button shifts
-    it left, the third shifts it right and the centre button resets it. Press Paint to commit the changes.
-    Pressing prime, cancel or a move button shows the Paint Preview screen on the norns: whether a preview
-    is showing, the algorithm it comes from, the shift, and how many steps it triggers. In Rhythm Doctor
-    these same three buttons browse the recording instead (see Rhythm Doctor).
+    While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third shifts it right and the centre button resets it. Press the same rightmost control at (16,8) again to commit the changes. This manual calls its preview-start action Prime and its commit action Paint; both use the same grid key. Pressing prime, cancel or a move button shows the Paint Preview screen on the norns: whether a preview is showing, the algorithm it comes from, the shift, and how many steps it triggers. In Rhythm Doctor these same three buttons browse the recording instead (see Rhythm Doctor).
 
 
-    On the norns screen, Pattern Trig shows the pattern you are editing brightly over the viewed channel’s
-    steps, which stay dim as context; the viewed channel is the merged version of the channel. The title
-    row names both (`PAT02 CH01`). Channel view, in the Pattern tasks list, shows the viewed channel on
-    its own. Use E3 to view another channel; it does not change the selected channel. Choose Options from
-    Pattern tasks (E1) to edit the tresillo multiplier in use; a new multiplier takes effect the next
-    time you prime the tresillo algorithm. Change the multiplier and prime Tresillo again to compare the
-    generated rhythm.
+    On the norns screen, Pattern Trig shows the pattern you are editing brightly over the viewed channel’s steps, which stay dim as context; the viewed channel is the merged version of the channel. The title row names both (`PAT02 CH01`). Channel view, in the Pattern tasks list, shows the viewed channel on its own. Use E3 to view another channel; it does not change the selected channel. Choose Options from Pattern tasks (E1) to edit the tresillo multiplier in use; a new multiplier takes effect the next time you prime the tresillo algorithm. Change the multiplier and prime Tresillo again to compare the generated rhythm.
 
 
-    Pattern tasks, opened with E1, lists Pattern, Options, Algorithm, Channel view and, while the Rhythm
-    Doctor algorithm is chosen, Rhythm Doctor.
+    Pattern tasks, opened with E1, lists Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor.
 
 
     Watch: [Pattern editor trig page demo](https://youtu.be/J1ckUZvhFJ0?t=668)'
-  musical_use: Select a drum bank or Euclidean rhythm. Press Paint to preview its steps against the existing
-    pattern. Press Paint again to commit, or press Cancel to discard the preview.
+  musical_use: Press Prime at (16,8) to preview the selected rhythm. While the preview is active, press the same key again to paint it into the pattern, or press Cancel at (14,8) to discard it.
   related:
   - pattern-editor
   sources:
@@ -596,8 +566,7 @@ features:
   - gesture: Tap a sequencer step in grid rows 4–7
     result: Toggle a trig; active trigs glow brightly.
   - gesture: Hold a trig and choose its end step
-    result: Set the note’s length; dimmer steps show its duration, cut short by another trig in the same
-      pattern.
+    result: Set the note’s length; dimmer steps show its duration, cut short by another trig in the same pattern.
   - gesture: Tap algorithm button, columns 12–16 of row 2
     result: Select Drum, Tresillo, Euclidean, Numeric Repetitor or Rhythm Doctor.
   - gesture: Tap Paint at grid (16,8), then tap it again
@@ -611,40 +580,36 @@ features:
   - gesture: Grid row 3, columns 12–15, with Numeric Repetitor selected
     result: Select one of four banks. Euclidean and Rhythm Doctor do not use this bank fader.
   - gesture: Grid row 2, columns 1–10
-    result: Set the algorithm’s first parameter. The outer buttons decrement/increment; inner buttons
-      choose broader values.
+    result: Set the algorithm’s first parameter. The outer buttons decrement/increment; inner buttons choose broader values.
   - gesture: Grid row 3, columns 1–10
-    result: Set the second algorithm parameter for Tresillo, Euclidean or Numeric Repetitor. This fader
-      is disabled for Drum and Rhythm Doctor.
+    result: Set the second algorithm parameter for Tresillo, Euclidean or Numeric Repetitor. This fader is disabled for Drum and Rhythm Doctor.
   details:
   - title: Algorithm faders
-    text: 'Use the left faders to edit the generated pattern before painting. The first fader occupies
-      columns 1–10 of row 2; the second occupies the same columns of row 3. Each end button, lit more
-      brightly than the rest, changes its value by one (left steps down, right steps up). The dimmer inner
-      buttons select proportional values, with the centre selecting the middle value. The enabled parameters
-      depend on the algorithm: Drum uses Pattern 1 (1–128); Tresillo uses Pattern 1 and Pattern 2 (each
-      1–128); Euclidean uses Fill and Length (each 1–32); Numeric Repetitor uses Pattern 1 (1–32) and
-      Pattern 2 (1–16). Rhythm Doctor disables these faders and uses its capture controls.'
+    text: 'Use the left faders to edit the generated pattern before painting. The first fader occupies columns 1–10 of row 2; the second occupies the same columns of row 3. Each end button, lit more brightly than the rest, changes its value by one (left steps down, right steps up). The dimmer inner buttons select proportional values, with the centre selecting the middle value. The enabled parameters depend on the algorithm: Drum uses Pattern 1 (1–128); Tresillo uses Pattern 1 and Pattern 2 (each 1–128); Euclidean uses Fill and Length (each 1–32); Numeric Repetitor uses Pattern 1 (1–32) and Pattern 2 (1–16). Rhythm Doctor disables these faders and uses its capture controls.'
   - title: Bank selection
-    text: Select banks with the row-3 fader starting at column 12. Drum and Tresillo have five bank choices;
-      Numeric Repetitor has four. Euclidean and Rhythm Doctor do not use bank selection. Changing an enabled
-      parameter or bank refreshes the prepared algorithm pattern.
+    text: Select banks with the row-3 fader starting at column 12. Drum and Tresillo have five bank choices; Numeric Repetitor has four. Euclidean and Rhythm Doctor do not use bank selection. Changing an enabled parameter or bank refreshes the prepared algorithm pattern.
   - title: Trig options
-    text: Use E1 to open Pattern tasks, select Options with E2, and press K3. E3 saves the Tresillo amount
-      immediately; K3 has no apply action on this page. Change the amount, then prime Tresillo again on
-      the grid to regenerate its preview. Painting the preview commits it to the selected pattern.
+    text: Use E1 to open Pattern tasks, select Options with E2, and press K3. E3 saves the Tresillo amount immediately; K3 has no apply action on this page. Change the amount, then prime Tresillo again on the grid to regenerate its preview. Painting the preview commits it to the selected pattern.
   recipes:
   - title: Preview a shifted Numeric pattern, cancel it, then commit a fresh preview
-    text: '1. Choose Numeric and press Prime to preview its step pattern.
+    text: 'Starting point: use a new empty project with playback stopped and Record Off. Select Pattern 1 on channel 1. The [Move a rhythm before committing](#adding-trigs/paint-shift-and-cancel) capture starts with 8 flashing trigs at Shift 0 (steps 5, 13, 21, 29 and onward). Its controls are Prime (16,8), Move right (12,8) and Cancel (14,8). The captured result is replayed by the manual; on hardware, the preview uses the selected Numeric settings.
 
-      2. Move the preview right once and check the flashing steps shift together.
 
-      3. Press Cancel; verify Preview OFF and no trigs were written.
+      1. Select Numeric Repetitor at (15,2) and press Prime (16,8). Check the Preview readout: Algorithm Numeric, Shift 0 and 8 trigs.
 
-      4. Prime again, shift right and press Prime to commit the shifted pattern.
 
-      Outcome: Cancel discards the preview. A newly primed and shifted preview can be committed, with
-      only the committed pattern written to the project.'
+      2. Tap Move right (12,8) once. The flashing steps shift one step to the right, starting at step 6; the readout is Shift +1.
+
+
+      3. Tap Cancel (14,8). Check Preview OFF and Trigs NONE; the pattern has not been painted.
+
+
+      4. Press Prime (16,8) again, tap Move right (12,8) once and press Prime again to commit. The new pattern stays one step to the right; only this committed preview is painted.
+
+
+      Outcome: Cancel discards the preview without writing trigs. A fresh shifted preview can be committed; the captured result shows the preview state, while the project changes only after the final Prime.
+
+      '
   scene_refs:
   - algorithm-choose-and-preview
   - paint-shift-and-cancel
@@ -653,8 +618,7 @@ features:
     cases:
     - M-LIVEUI-ALGO-001
     - M-LIVEUI-PAINT-001
-    note: Source and case definitions reviewed. Published native assertions and their scope are listed
-      separately; pending gaps are not acceptance evidence.
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed separately; pending gaps are not acceptance evidence.
     source_status: code-and-case-reviewed
     native_evidence:
     - scene: algorithm-choose-and-preview
@@ -715,21 +679,32 @@ features:
       transition_scope: adjacent
       actions:
       - id: value
-        kind: select-value
-        control: E2
-        field_label: Drum
-        value: SELECTED
-        label: Set Drum to SELECTED with E2 clockwise.
-        direction: clockwise
+        kind: tap-key
+        n: 3
+        label: Turn E1 to Pattern tasks, use E2 to highlight Algorithm, then press K3. Drum remains SELECTED.
       - id: preview
         kind: preview-recorded-result
         target_step_id: reopen-algorithm
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         public_readout_equals:
           selected_field.label: Drum
           selected_field.value: SELECTED
-      human_outcome: The selected Drum field reads SELECTED at the captured checkpoint.
+      human_outcome: The algorithm list opens with Drum still SELECTED. The cancelled preview stays cancelled; you have not chosen or painted a different rhythm.
+      practice_prompt: 'Starting point: the empty Drum paint preview has been cancelled; Drum is still the chosen algorithm.
+
+
+        1. Turn E1 to open Pattern tasks.
+
+        2. Turn E2 anticlockwise to the top of the task list, then clockwise until Algorithm is highlighted.
+
+        3. Press K3. The algorithm list opens with Drum still marked SELECTED.
+
+
+        Reopening the list does not repaint the pattern or choose another algorithm. E2 browses the algorithms; K3 applies the one you highlight. Use this when you want to compare another generator without losing track of the current choice.'
+    title: Choose a trig algorithm
+    goal: Reopen the trig algorithm controls after cancelling its preview.
+    starting_point: Tap Cancel (14,8). The preview closes and nothing was painted.
   - id: paint-shift-and-cancel
     binding:
       status: controlled-verified
@@ -771,7 +746,7 @@ features:
         y: 8
       - id: preview-result
         kind: preview-recorded-result
-        label: Review the captured result
+        label: Show result
         target_step_id: commit
       semantic_requires:
         grid_cells:
@@ -781,20 +756,41 @@ features:
         - x: 14
           y: 4
           level: 15
-      human_outcome: Cancel clears the first Numeric preview without painting it. A fresh preview shifted
-        right is committed as eight trigs on steps 6, 14, 22, 30, 38, 46, 54 and 62; the shifted steps
-        are lit on the pattern grid.
-      practice_prompt: Prime Numeric, shift right, cancel and confirm the preview disappears. Prime again,
-        shift right and press Prime to commit the shifted rhythm.
+      human_outcome: The first preview is discarded; the second shifted preview is committed.
+      practice_prompt: '1. Tap Prime at (16,8). Tap Move right at (12,8), then Cancel at (14,8): the shifted preview closes without painting.
+
+        2. Tap Prime at (16,8) again for a fresh preview, then Move right at (12,8). Shift reads +1.
+
+        3. Tap Prime at (16,8) while the preview flashes. Preview reads OFF and the footer reports Pattern painted; the shifted steps remain lit.'
+    title: Move a rhythm before committing
+    goal: Shift a Numeric rhythm right and commit the previewed pattern.
+    starting_point: In a new empty project with playback stopped and Record off, tap Pattern (5,8), then tap the fourth algorithm button (15,2) for Numeric. The Trig Algorithm screen marks Numeric as SELECTED. Numeric gives a sparse pattern, which makes shifts easy to see. The controls you will use on grid row 8 are Prime (16,8), Move left (10,8), Reset (11,8), Move right (12,8) and Cancel (14,8).
+  scene_milestones:
+  - scene_id: algorithm-choose-and-preview
+    groups:
+    - id: algorithm-choose-and-preview-checkpoint-1
+      label: Browse and apply Drum
+      step_ids:
+      - euclidean
+      - focus-drum
+      - apply-drum
+    - id: algorithm-choose-and-preview-checkpoint-2
+      label: Compare Drum, Euclidean and Tresillo previews
+      step_ids:
+      - prime-drum
+      - cancel-drum
+      - reopen-algorithm
+      - browse-euclidean
+      - apply-euclidean
+      - preview-differs
+      - prime-tresillo
 - id: rhythm-doctor
   title: Rhythm Doctor
   audience: all
-  summary: Select the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm
-    lanes.
+  summary: Select the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.
   prose: 'Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
 
-    Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it.
-    The contextual footer names confirmation actions; painting still uses the grid Paint control.
+    Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control.
 
     Each project retains one captured bank. Select a lane, preview a 64-step
 
@@ -804,28 +800,20 @@ features:
     ### Record and paint a phrase
 
 
-    Use Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into
-    a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel
-    you will paint into, and have the source ready to play. In the example captured below the source is
-    a steady 120 BPM test loop with one thump on every beat.
+    Use Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.
 
 
-    1. Press Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR
-    with Record READY, Tempo AUTO, Manual BPM and Input STEREO.
+    1. Press Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.
 
-    2. Optional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo
-    on AUTO to let Doctor estimate it.
+    2. Optional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.
 
-    3. Tap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH
-    / REC OR K3.
+    3. Tap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.
 
     4. Press K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.
 
     5. When the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).
 
-    6. Select the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the
-    grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8)
-    discards the preview.
+    6. Select the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.
 
     7. Press Channel (3,8) and Play (1,8) to hear the painted rhythm.
 
@@ -886,15 +874,10 @@ features:
     cancels and K3 applies the draft.
 
 
-    Before recording, use E2/E3 to open and edit the setup draft for Auto or Manual tempo, manual BPM
-    (40–240), and Stereo/L/R input. Press K3 to confirm the settings for the take, or K2 to discard the
-    draft. Record uses the confirmed settings.
+    Before recording, use E2/E3 to open and edit the setup draft for Auto or Manual tempo, manual BPM (40–240), and Stereo/L/R input. Press K3 to confirm the settings for the take, or K2 to discard the draft. Record uses the confirmed settings.
 
 
-    Stereo records left and right separately. L records the left input into both recorded channels; R
-    records the right input into both. Auto estimates tempo and phrase start from the recording. Manual
-    uses the selected integer BPM and starts the phrase at the beginning of recording. Applying an explicit
-    Alignment draft later replaces that capture timing.
+    Stereo records left and right separately. L records the left input into both recorded channels; R records the right input into both. Auto estimates tempo and phrase start from the recording. Manual uses the selected integer BPM and starts the phrase at the beginning of recording. Applying an explicit Alignment draft later replaces that capture timing.
 
 
     To paint a ready lane, select the destination pattern with the top row, press
@@ -908,14 +891,11 @@ features:
     alter the captured bank.
 
 
-    Prime, Cancel and the preview-shift buttons work the same way in every algorithm; see Adding Trigs.
-    In Rhythm Doctor the buttons at (10,8), (11,8) and (12,8) browse the recording instead (see Finding
-    the phrase below).
+    Prime, Cancel and the preview-shift buttons work the same way in every algorithm; see Adding Trigs. In Rhythm Doctor the buttons at (10,8), (11,8) and (12,8) browse the recording instead (see Finding the phrase below).
 
 
     Watch: [Pattern editor trig page demo](https://youtu.be/J1ckUZvhFJ0?t=668)'
-  musical_use: Record a percussion phrase into an empty bank. Select a lane and an unused destination
-    pattern. Adjust sensitivity and paint policy, preview the result, then paint it.
+  musical_use: Record a percussion phrase into an empty bank. Select a lane and an unused destination pattern. Adjust sensitivity and paint policy, preview the result, then paint it.
   related:
   - adding-trigs
   sources:
@@ -937,36 +917,27 @@ features:
     - tools/doctor-qualification-inventory.json
   controls:
   - gesture: With the sequencer stopped, choose Rhythm Doctor at grid (16,2).
-    result: Open capture and paint. Recording, capture setup and Alignment require stopped transport;
-      a finished bank can be browsed and painted while playing.
+    result: Open capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.
   - gesture: 'Empty bank: grid (1,2)'
     result: Start Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.
   - gesture: Record before enough audio, or Record on an occupied bank
-    result: Open an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already
-      painted patterns.
+    result: Open an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.
   - gesture: 'Before capture: E2/E3 edit setup → K3 confirm; K2 cancels.'
-    result: Record uses the confirmed setup. Stereo records both inputs separately; L duplicates the left
-      input and R duplicates the right input into both recorded channels. Manual uses the selected integer
-      BPM from recording start; Auto estimates tempo and phrase start.
+    result: Record uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.
   - gesture: 'Ready bank: select a lane, then E2 field → E3'
     result: Browse Window bar/step, sensitivity or paint policy.
   - gesture: In a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).
-    result: Select BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector
-      produces these three lanes; the remote server can declare additional lanes.
+    result: Select BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.
   - gesture: 'Ready bank: select Alignment → K3'
-    result: Open the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses
-      the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular
-      confirmed-tempo beats; Auto uses detected beats.
+    result: Open the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.
   - gesture: Grid (10,8) / (12,8); hold for a phrase
     result: Move the recording window one step backward / forward, or a whole four-bar phrase.
   - gesture: Grid (11,8)
     result: Return the window to its calculated phrase start.
   - gesture: Select destination pattern in row 1 → grid (16,8) twice
     result: Preview the selected lane, then paint it; grid (14,8) cancels the preview.
-  - gesture: If local analysis cannot compile its detector, check the local C compiler before another
-      capture.
-    result: ANALYSIS_BACKEND_UNAVAILABLE is shown and no bank is produced. The default worker builds the
-      detector from shipped source; it needs python3 and a C compiler, with no third-party Python packages.
+  - gesture: If local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.
+    result: No bank is created. See If local analysis fails for the norns setup needed to retry.
   details:
   - title: Lanes
     text: 'The lanes occupy a block of five columns on each of two rows, starting at
@@ -1023,9 +994,7 @@ features:
 
       said.'
   - title: Finding the phrase and Alignment
-    text: '**Finding the phrase.** Auto estimates where the four-bar phrase begins and aligns gates to
-      it. Manual starts the phrase at the beginning of recording; Alignment can move it afterward. In
-      this mode columns 10, 11 and 12 of row 8 browse the recording, and
+    text: '**Finding the phrase.** Auto estimates where the four-bar phrase begins and aligns gates to it. Manual starts the phrase at the beginning of recording; Alignment can move it afterward. In this mode columns 10, 11 and 12 of row 8 browse the recording, and
 
       they do it with the same gestures that shift a previewed pattern everywhere
 
@@ -1059,26 +1028,16 @@ features:
       gates under the part of the recording you are looking at.
 
 
-      In Auto, use the estimated phrase start as an initial position. A crash on the first beat or a fill
-      before the bar provides evidence for the boundary. Identical bars can make it undecidable; check
-      the reported confidence.
+      In Auto, use the estimated phrase start as an initial position. A crash on the first beat or a fill before the bar provides evidence for the boundary. Identical bars can make it undecidable; check the reported confidence.
 
 
-      Open Alignment to change Start beat. Auto browses the detected beat grid. Manual browses a regular
-      beat grid spaced by the confirmed BPM from the confirmed phrase origin. The Manual grid covers the
-      retained recording, including earlier beats before a later chosen phrase origin; choices stay inside
-      the recording.
+      Open Alignment to change Start beat. Auto browses the detected beat grid. Manual browses a regular beat grid spaced by the confirmed BPM from the confirmed phrase origin. The Manual grid covers the retained recording, including earlier beats before a later chosen phrase origin; choices stay inside the recording.
 
 
-      Turn E2 to select Start beat and E3 to choose another beat. Press K3 to apply: Mosaic reanalyses
-      the same retained recording using that phrase origin. No new recording is needed. Confirming without
-      changing the beat preserves its position. Changing Exact BPM and applying rebuilds the regular beat
-      spacing at the confirmed tempo. K2 cancels the draft and leaves the bank unchanged.
+      Turn E2 to select Start beat and E3 to choose another beat. Press K3 to apply: Mosaic reanalyses the same retained recording using that phrase origin. No new recording is needed. Confirming without changing the beat preserves its position. Changing Exact BPM and applying rebuilds the regular beat spacing at the confirmed tempo. K2 cancels the draft and leaves the bank unchanged.
 
 
-      A reloaded bank can still be browsed and painted, but alignment correction needs the retained capture
-      audio. If that audio is unavailable, K3 refuses with CAPTURE AUDIO UNAVAILABLE instead of changing
-      the bank.'
+      A reloaded bank can still be browsed and painted, but alignment correction needs the retained capture audio. If that audio is unavailable, K3 refuses with CAPTURE AUDIO UNAVAILABLE instead of changing the bank.'
   - title: Analysis server (advanced)
     text: '**Analysis server (advanced).** Analysis runs on the norns by default and
 
@@ -1132,60 +1091,29 @@ features:
 
       rather than an error message.'
   - title: Local analysis and availability
-    text: '**Availability:** Mosaic starts a local capture helper when this mode opens,
+    text: '**Availability:** Rhythm Doctor analyses captures on norns by default. The first
 
-      and analyses captures with a model-free detector it builds from source the
+      capture may take about half a minute while local analysis starts; a 45-second
 
-      first time this mode is used. Nothing is downloaded, no Python packages are
+      capture also takes about half a minute to analyse. If local analysis fails,
 
-      needed. The local worker uses python3 to launch the analysis and gcc to compile the shipped C source.
-      No analysis server configuration is required. The build takes about half a
+      Mosaic reports `ANALYSIS_BACKEND_UNAVAILABLE` and does not create a bank. See
 
-      minute on a Norns and is then reused. Analysis of a 45-second capture takes
-
-      roughly half a minute on the device.
-
-
-      If no C compiler is available, or the build fails, analysis fails closed with
-
-      `ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery profile can
-
-      still point the analysis worker at its own executable that accepts the worker
-
-      request/result protocol and returns the lanes it declares, in which case that
-
-      one is used instead. No detector quality, transcription accuracy, or timing
-
-      performance is claimed here.'
+      **If local analysis fails** for the norns setup needed to retry.'
   - title: Recording and playback
-    text: Stop the transport before recording. After analysis produces a ready bank, browse, adjust and
-      paint it while playback runs.
+    text: Stop the transport before recording. After analysis produces a ready bank, browse, adjust and paint it while playback runs.
   - title: Capture and analysis results
-    text: Capture, analysis and painting are separate stages. A backend failure shows an explicit error
-      and does not produce a ready bank. The ten broad instrument lanes of the optional analysis server
-      are experimental; no detection accuracy is specified.
+    text: Capture, analysis and painting are separate stages. A backend failure shows an explicit error and does not produce a ready bank. The ten broad instrument lanes of the optional analysis server are experimental; no detection accuracy is specified.
   - title: Paint destination
-    text: Select the destination pattern and song slot before previewing. Changing either invalidates
-      the prepared Doctor paint preview. Preview again before committing.
-  - title: Local worker requirements
-    text: The default path uses python3 to launch the worker and gcc to compile the shipped model-free
-      C detector. It does not require third-party Python packages.
+    text: Select the destination pattern and song slot before previewing. Changing either invalidates the prepared Doctor paint preview. Preview again before committing.
+  - title: If local analysis fails
+    text: Local analysis requires Python 3 and gcc (a C compiler) on norns. If either is missing or the analysis build fails, install or restore the dependency and try again. Mosaic reports `ANALYSIS_BACKEND_UNAVAILABLE` and does not create a bank until analysis succeeds. No third-party Python packages or network download are required.
   - title: Vertical list controls
-    text: 'Rhythm Doctor’s setup, capture, analysis, window, alignment and paint screens show labelled
-      vertical rows. Select an editable row with E2 and change it with E3. Read the contextual footer
-      before confirming an action: the grid Paint button remains the painting control, and K3 does not
-      substitute for it. This display change does not change capture, lane selection or paint scope.'
+    text: 'Rhythm Doctor’s setup, capture, analysis, window, alignment and paint screens show labelled vertical rows. Select an editable row with E2 and change it with E3. Read the contextual footer before confirming an action: the grid Paint button remains the painting control, and K3 does not substitute for it. This display change does not change capture, lane selection or paint scope.'
   - title: Confirmed capture setup
-    text: Confirm the setup with K3 before Record. Stereo preserves separate left/right channels; L or
-      R duplicates that chosen input into both channels. Manual uses 40–240 integer BPM from recording
-      start; Auto estimates tempo and phrase start. A later explicitly confirmed Alignment draft takes
-      precedence.
+    text: Confirm the setup with K3 before Record. Stereo preserves separate left/right channels; L or R duplicates that chosen input into both channels. Manual uses 40–240 integer BPM from recording start; Auto estimates tempo and phrase start. A later explicitly confirmed Alignment draft takes precedence.
   - title: Start beat and retained recording
-    text: 'Manual Start beat follows a regular grid at the confirmed BPM and phrase origin, including
-      earlier beats when they are inside the recording. Auto uses detected beats. Apply reanalyses the
-      retained recording; Exact BPM correction rebuilds regular beat spacing. After reload, a usable bank
-      may lack original audio: K3 reports CAPTURE AUDIO UNAVAILABLE and leaves it unchanged. K2 cancels
-      without changing the bank.'
+    text: 'Manual Start beat follows a regular grid at the confirmed BPM and phrase origin, including earlier beats when they are inside the recording. Auto uses detected beats. Apply reanalyses the retained recording; Exact BPM correction rebuilds regular beat spacing. After reload, a usable bank may lack original audio: K3 reports CAPTURE AUDIO UNAVAILABLE and leaves it unchanged. K2 cancels without changing the bank.'
   recipes: []
   scene_refs:
   - doctor-local-capture-and-paint
@@ -1195,14 +1123,12 @@ features:
     cases:
     - M-LIVEUI-ALGO-001
     - MA-DOCTOR-AUDIO-001
-    note: Current raw publications independently audited; exact current-build timing-lane receipts are
-      retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware
-      acceptance remain separate.
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
     source_status: code-and-case-reviewed
     native_evidence:
     - scene: doctor-local-capture-and-paint
       data: doctor-scenes.json
-      data_sha256: dd1c781c5febf5adacb9d0de74c0c7f73c820eac1971aa520c2d98e0e0af027d
+      data_sha256: 5c860693d0b172d8cf985ed014bc146dc553e9acdf3184b4c2c22e02359ed546
       clock_mode: real-time
       case: MA-DOCTOR-AUDIO-001
       assertions:
@@ -1276,68 +1202,68 @@ features:
             device_id: 0
             port: 1
             port_name: Emulator MIDI
-            monotonic_ns: 504098815300623
+            monotonic_ns: 231529682947733
             bytes:
             - 144
             - 60
-            - 123
+            - 121
             decoded:
             - type: note_on
               channel: 1
               data:
               - 60
-              - 123
+              - 121
           - index: 76
             device_id: 0
             port: 1
             port_name: Emulator MIDI
-            monotonic_ns: 504099481522433
+            monotonic_ns: 231530349298346
             bytes:
             - 144
             - 60
-            - 123
+            - 119
             decoded:
             - type: note_on
               channel: 1
               data:
               - 60
-              - 123
+              - 119
           - index: 94
             device_id: 0
             port: 1
             port_name: Emulator MIDI
-            monotonic_ns: 504100148523176
+            monotonic_ns: 231531015857671
             bytes:
             - 144
             - 60
-            - 122
+            - 116
             decoded:
             - type: note_on
               channel: 1
               data:
               - 60
-              - 122
+              - 116
       scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
       build_lane_proofs:
       - stage: doctor-auto-real
-        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.json
-        stage_sha256: 844f5b500ed487160e43dc30c7ba923cd4b205c7b49c688f054de630ec129aaa
-        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.log
-        log_sha256: 9ff539529ddbc346084372ef35cefd4f012d1e7705c6c6d5cbe336fc6c1c7ab2
-        report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-auto/8c1a61dac7354dc99b77831ba31432c9/report.json
-        report_sha256: 6a0d77a5461b158cddb655193c5cb09e61e5ab663b21cf880f48ded42e0c0083
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-auto-real.json
+        stage_sha256: cf1caab3787c814082bf0b0d27415b4fade9e6a49086098245b7185eca7fda58
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-auto-real.log
+        log_sha256: 6141350755312876db486a079767c44c3be5f89a53bafbfd4f0655fa13ff9ce5
+        report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-auto/f9a631d0a6c9463486c565ff600e4b2a/report.json
+        report_sha256: 4d85680fe64bb9938ba499a41f087915701f998f304d370c06a2322d7438873c
         clock_mode: real-time
       - stage: doctor-manual-real
-        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.json
-        stage_sha256: 63c7b4e52198a693fb8f64839abfafdcec82a6fd44c1fac804ec9dbec9df26e2
-        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.log
-        log_sha256: 21a7f3c8c39cafe458e1800a48b3b2744d037f0ac2955ba756ce2f7134a6898b
-        report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-manual/8f41c975e9a647678d7b5e457b9c4e43/report.json
-        report_sha256: 848e392f2a7ed023ad07990d0550f53f1684f87411b0f2f17750e3cb058f1b16
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-manual-real.json
+        stage_sha256: 3b2decc026a37a47f8b52db58e2d7f840ab6c6e31b0f52bb7d4d794a2c7fd2d2
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-manual-real.log
+        log_sha256: af31a199bdf6657307552fc4a86c09c3e1dbd5cb7660f83b6f9cf0a6e0266619
+        report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-manual/11670792fb394a00af672b7cb34de52a/report.json
+        report_sha256: 48507636281df582d0367556bb946a525b2bb4935ad51331e0de023e0ee48b73
         clock_mode: real-time
     - scene: doctor-local-auto-capture-and-paint
       data: doctor-scenes.json
-      data_sha256: dd1c781c5febf5adacb9d0de74c0c7f73c820eac1971aa520c2d98e0e0af027d
+      data_sha256: 5c860693d0b172d8cf985ed014bc146dc553e9acdf3184b4c2c22e02359ed546
       clock_mode: real-time
       case: MA-DOCTOR-AUDIO-001
       assertions:
@@ -1411,64 +1337,64 @@ features:
             device_id: 0
             port: 1
             port_name: Emulator MIDI
-            monotonic_ns: 504144618118286
+            monotonic_ns: 231574741975763
             bytes:
             - 144
             - 60
-            - 126
+            - 116
             decoded:
             - type: note_on
               channel: 1
               data:
               - 60
-              - 126
+              - 116
           - index: 72
             device_id: 0
             port: 1
             port_name: Emulator MIDI
-            monotonic_ns: 504145284322035
+            monotonic_ns: 231575407557501
             bytes:
             - 144
             - 60
-            - 123
+            - 117
             decoded:
             - type: note_on
               channel: 1
               data:
               - 60
-              - 123
+              - 117
           - index: 90
             device_id: 0
             port: 1
             port_name: Emulator MIDI
-            monotonic_ns: 504145951366668
+            monotonic_ns: 231576074355627
             bytes:
             - 144
             - 60
-            - 125
+            - 111
             decoded:
             - type: note_on
               channel: 1
               data:
               - 60
-              - 125
+              - 111
       scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
       build_lane_proofs:
       - stage: doctor-auto-real
-        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.json
-        stage_sha256: 844f5b500ed487160e43dc30c7ba923cd4b205c7b49c688f054de630ec129aaa
-        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.log
-        log_sha256: 9ff539529ddbc346084372ef35cefd4f012d1e7705c6c6d5cbe336fc6c1c7ab2
-        report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-auto/8c1a61dac7354dc99b77831ba31432c9/report.json
-        report_sha256: 6a0d77a5461b158cddb655193c5cb09e61e5ab663b21cf880f48ded42e0c0083
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-auto-real.json
+        stage_sha256: cf1caab3787c814082bf0b0d27415b4fade9e6a49086098245b7185eca7fda58
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-auto-real.log
+        log_sha256: 6141350755312876db486a079767c44c3be5f89a53bafbfd4f0655fa13ff9ce5
+        report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-auto/f9a631d0a6c9463486c565ff600e4b2a/report.json
+        report_sha256: 4d85680fe64bb9938ba499a41f087915701f998f304d370c06a2322d7438873c
         clock_mode: real-time
       - stage: doctor-manual-real
-        stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.json
-        stage_sha256: 63c7b4e52198a693fb8f64839abfafdcec82a6fd44c1fac804ec9dbec9df26e2
-        log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.log
-        log_sha256: 21a7f3c8c39cafe458e1800a48b3b2744d037f0ac2955ba756ce2f7134a6898b
-        report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-manual/8f41c975e9a647678d7b5e457b9c4e43/report.json
-        report_sha256: 848e392f2a7ed023ad07990d0550f53f1684f87411b0f2f17750e3cb058f1b16
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-manual-real.json
+        stage_sha256: 3b2decc026a37a47f8b52db58e2d7f840ab6c6e31b0f52bb7d4d794a2c7fd2d2
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-manual-real.log
+        log_sha256: af31a199bdf6657307552fc4a86c09c3e1dbd5cb7660f83b6f9cf0a6e0266619
+        report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/doctor-manual/11670792fb394a00af672b7cb34de52a/report.json
+        report_sha256: 48507636281df582d0367556bb946a525b2bb4935ad51331e0de023e0ee48b73
         clock_mode: real-time
     applicability: native-ui
     native_gap: null
@@ -1478,8 +1404,7 @@ features:
     - id: MA-DOCTOR-MANUAL-START-BEAT-001
       citation: manual:rhythm-doctor
       registration: tools/doctor-qualification-inventory.json
-      scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only
-        witness is separate and does not establish backend regression.
+      scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
       status: registered-awaiting-current-native-publication
       global_inventory_member: false
     historical_native_evidence:
@@ -1487,10 +1412,7 @@ features:
         status: pending
         cases:
         - M-LIVEUI-ALGO-001
-        note: Manual Start beat regular-grid and retained-recording instructions match the candidate intended
-          contract. Native red/green qualification for the new correction remains pending; historical
-          entry-only captures are unchanged. No new canonical behaviour case ID has been registered for
-          this subprocedure.
+        note: Manual Start beat regular-grid and retained-recording instructions match the candidate intended contract. Native red/green qualification for the new correction remains pending; historical entry-only captures are unchanged. No new canonical behaviour case ID has been registered for this subprocedure.
         source_status: code-and-case-reviewed
         native_evidence:
         - scene: rhythm-doctor-open
@@ -1502,37 +1424,1802 @@ features:
           assertions:
           - kind: k3-rhythm-doctor-opens-r01
             passed: true
-          scope: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing
-            and painting are not acceptance claims.
+          scope: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing and painting are not acceptance claims.
         applicability: native-ui
-        native_gap: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank
-          browsing and painting are not acceptance claims.
+        native_gap: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing and painting are not acceptance claims.
         controlled_baselines:
         - run: /home/andy/mosaic-manual-runs/cd93ee88b1c04883ae47a9be2738d464
           data_sha256: c4f8b619f19666138374af1984d2102a6129359cb15a396b929083e4fac5f729
           scene: rhythm-doctor-open
           clock_mode: controlled-experimental
-        rationale: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing
-          and painting are not acceptance claims.
+        rationale: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing and painting are not acceptance claims.
         specialized_qualifications:
         - id: MA-DOCTOR-MANUAL-START-BEAT-001
           citation: manual:rhythm-doctor
           registration: tools/doctor-qualification-inventory.json
-          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready
-            draft-only witness is separate and does not establish backend regression.
+          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
           status: registered-awaiting-current-native-publication
           global_inventory_member: false
       scene_refs:
       - rhythm-doctor-open
+    - review:
+        status: controlled-verified
+        cases:
+        - M-LIVEUI-ALGO-001
+        - MA-DOCTOR-AUDIO-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: doctor-local-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: dd1c781c5febf5adacb9d0de74c0c7f73c820eac1971aa520c2d98e0e0af027d
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 58
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 504098815300623
+                bytes:
+                - 144
+                - 60
+                - 123
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 123
+              - index: 76
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 504099481522433
+                bytes:
+                - 144
+                - 60
+                - 123
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 123
+              - index: 94
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 504100148523176
+                bytes:
+                - 144
+                - 60
+                - 122
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 122
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.json
+            stage_sha256: 844f5b500ed487160e43dc30c7ba923cd4b205c7b49c688f054de630ec129aaa
+            log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.log
+            log_sha256: 9ff539529ddbc346084372ef35cefd4f012d1e7705c6c6d5cbe336fc6c1c7ab2
+            report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-auto/8c1a61dac7354dc99b77831ba31432c9/report.json
+            report_sha256: 6a0d77a5461b158cddb655193c5cb09e61e5ab663b21cf880f48ded42e0c0083
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.json
+            stage_sha256: 63c7b4e52198a693fb8f64839abfafdcec82a6fd44c1fac804ec9dbec9df26e2
+            log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.log
+            log_sha256: 21a7f3c8c39cafe458e1800a48b3b2744d037f0ac2955ba756ce2f7134a6898b
+            report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-manual/8f41c975e9a647678d7b5e457b9c4e43/report.json
+            report_sha256: 848e392f2a7ed023ad07990d0550f53f1684f87411b0f2f17750e3cb058f1b16
+            clock_mode: real-time
+        - scene: doctor-local-auto-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: dd1c781c5febf5adacb9d0de74c0c7f73c820eac1971aa520c2d98e0e0af027d
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 54
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 504144618118286
+                bytes:
+                - 144
+                - 60
+                - 126
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 126
+              - index: 72
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 504145284322035
+                bytes:
+                - 144
+                - 60
+                - 123
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 123
+              - index: 90
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 504145951366668
+                bytes:
+                - 144
+                - 60
+                - 125
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 125
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.json
+            stage_sha256: 844f5b500ed487160e43dc30c7ba923cd4b205c7b49c688f054de630ec129aaa
+            log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-auto-real.log
+            log_sha256: 9ff539529ddbc346084372ef35cefd4f012d1e7705c6c6d5cbe336fc6c1c7ab2
+            report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-auto/8c1a61dac7354dc99b77831ba31432c9/report.json
+            report_sha256: 6a0d77a5461b158cddb655193c5cb09e61e5ab663b21cf880f48ded42e0c0083
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.json
+            stage_sha256: 63c7b4e52198a693fb8f64839abfafdcec82a6fd44c1fac804ec9dbec9df26e2
+            log: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/doctor-manual-real.log
+            log_sha256: 21a7f3c8c39cafe458e1800a48b3b2744d037f0ac2955ba756ce2f7134a6898b
+            report: /home/andy/mosaic-manual-build-runs/controlled-local-43-phase-6170ac48-0c3a6e1284db4b96bc9c20c798e5c580/077b663aca97430b8938bc4e9916976b/doctor-manual/8f41c975e9a647678d7b5e457b9c4e43/report.json
+            report_sha256: 848e392f2a7ed023ad07990d0550f53f1684f87411b0f2f17750e3cb058f1b16
+            clock_mode: real-time
+        applicability: native-ui
+        native_gap: null
+        controlled_baselines: []
+        rationale: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        specialized_qualifications:
+        - id: MA-DOCTOR-MANUAL-START-BEAT-001
+          citation: manual:rhythm-doctor
+          registration: tools/doctor-qualification-inventory.json
+          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
+          status: registered-awaiting-current-native-publication
+          global_inventory_member: false
+        scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_time:
+          applicable: false
+          reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator rejects audio capture in controlled-time sessions.
+      scene_refs:
+      - doctor-local-capture-and-paint
+      - doctor-local-auto-capture-and-paint
+    - review:
+        status: controlled-verified
+        cases:
+        - M-LIVEUI-ALGO-001
+        - MA-DOCTOR-AUDIO-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: doctor-local-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: e61764d2d9f270130e03d32aac87a60f36ec5ac0655c32f84f2c47d1b51d1b6b
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 12
+              - 16
+              - 20
+              - 24
+              - 28
+              - 32
+              - 36
+              - 40
+              - 44
+              - 48
+              - 52
+              - 56
+              - 60
+              - 64
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 12
+              - 16
+              - 20
+              - 24
+              - 28
+              - 32
+              - 36
+              - 40
+              - 44
+              - 48
+              - 52
+              - 56
+              - 60
+              - 64
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 96
+              notes:
+              - index: 62
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182834881839181
+                bytes:
+                - 144
+                - 60
+                - 125
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 125
+              - index: 80
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182835547524484
+                bytes:
+                - 144
+                - 60
+                - 125
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 125
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto-real.json
+            stage_sha256: 8f56e2c4fbc5a96d8ab5d00852cff35b2ef7b7af557ab813acf38947207b8f73
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto-real.log
+            log_sha256: ee3a4e41fd6bb56a49fe25e73d75d0953e3d6467dd7f4db1cf02fdf878bf6a16
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto/50d315ea562e4d30a49f882f1d620e22/report.json
+            report_sha256: 94c453179005002ce599b1373a4cd640d4e46676c23ba6572c18bdea6e77343c
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual-real.json
+            stage_sha256: 3ec2cd917323251af486ebe051a2ea4677722d8865191b13e19ad5cee65858c0
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual-real.log
+            log_sha256: d44cc4a29203b1b4a66d6ca63cb1d4dfa533390cd276cad3929f97fe34b787ac
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual/156521e3455843d29f838fb428ac763d/report.json
+            report_sha256: 64aae0bef7efdf4575c0014b8e53e858a5c990ff7f8ecb05abf26a6592ffb948
+            clock_mode: real-time
+        - scene: doctor-local-auto-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: e61764d2d9f270130e03d32aac87a60f36ec5ac0655c32f84f2c47d1b51d1b6b
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 54
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182881649111160
+                bytes:
+                - 144
+                - 60
+                - 125
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 125
+              - index: 72
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182882315524298
+                bytes:
+                - 144
+                - 60
+                - 123
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 123
+              - index: 90
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182882981947499
+                bytes:
+                - 144
+                - 60
+                - 123
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 123
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto-real.json
+            stage_sha256: 8f56e2c4fbc5a96d8ab5d00852cff35b2ef7b7af557ab813acf38947207b8f73
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto-real.log
+            log_sha256: ee3a4e41fd6bb56a49fe25e73d75d0953e3d6467dd7f4db1cf02fdf878bf6a16
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto/50d315ea562e4d30a49f882f1d620e22/report.json
+            report_sha256: 94c453179005002ce599b1373a4cd640d4e46676c23ba6572c18bdea6e77343c
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual-real.json
+            stage_sha256: 3ec2cd917323251af486ebe051a2ea4677722d8865191b13e19ad5cee65858c0
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual-real.log
+            log_sha256: d44cc4a29203b1b4a66d6ca63cb1d4dfa533390cd276cad3929f97fe34b787ac
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual/156521e3455843d29f838fb428ac763d/report.json
+            report_sha256: 64aae0bef7efdf4575c0014b8e53e858a5c990ff7f8ecb05abf26a6592ffb948
+            clock_mode: real-time
+        applicability: native-ui
+        native_gap: null
+        controlled_baselines: []
+        rationale: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        specialized_qualifications:
+        - id: MA-DOCTOR-MANUAL-START-BEAT-001
+          citation: manual:rhythm-doctor
+          registration: tools/doctor-qualification-inventory.json
+          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
+          status: registered-awaiting-current-native-publication
+          global_inventory_member: false
+        scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_time:
+          applicable: false
+          reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator rejects audio capture in controlled-time sessions.
+      scene_refs:
+      - doctor-local-capture-and-paint
+      - doctor-local-auto-capture-and-paint
+    - review:
+        status: controlled-verified
+        cases:
+        - M-LIVEUI-ALGO-001
+        - MA-DOCTOR-AUDIO-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: doctor-local-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: e61764d2d9f270130e03d32aac87a60f36ec5ac0655c32f84f2c47d1b51d1b6b
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 12
+              - 16
+              - 20
+              - 24
+              - 28
+              - 32
+              - 36
+              - 40
+              - 44
+              - 48
+              - 52
+              - 56
+              - 60
+              - 64
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 12
+              - 16
+              - 20
+              - 24
+              - 28
+              - 32
+              - 36
+              - 40
+              - 44
+              - 48
+              - 52
+              - 56
+              - 60
+              - 64
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 96
+              notes:
+              - index: 62
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182834881839181
+                bytes:
+                - 144
+                - 60
+                - 125
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 125
+              - index: 80
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182835547524484
+                bytes:
+                - 144
+                - 60
+                - 125
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 125
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-auto-real.json
+            stage_sha256: a7be51747fd5d36dc5248217ad7993f5c690168384cf90fa65c09dd20b7b220e
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-auto-real.log
+            log_sha256: 130a30902d2b373af41392d95b114357b290a522149c1fd7daf05290e7b5355d
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto/50d315ea562e4d30a49f882f1d620e22/report.json
+            report_sha256: 94c453179005002ce599b1373a4cd640d4e46676c23ba6572c18bdea6e77343c
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-manual-real.json
+            stage_sha256: cb2582c39d38aecee9558d9d678f3f1049fbdebc94937ca119098b7396746fad
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-manual-real.log
+            log_sha256: a6a6b2528903e9461ee43b5b8d95f74a2ba4b9e38168660e60c8528ea7f72b5d
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual/156521e3455843d29f838fb428ac763d/report.json
+            report_sha256: 64aae0bef7efdf4575c0014b8e53e858a5c990ff7f8ecb05abf26a6592ffb948
+            clock_mode: real-time
+        - scene: doctor-local-auto-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: e61764d2d9f270130e03d32aac87a60f36ec5ac0655c32f84f2c47d1b51d1b6b
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 54
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182881649111160
+                bytes:
+                - 144
+                - 60
+                - 125
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 125
+              - index: 72
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182882315524298
+                bytes:
+                - 144
+                - 60
+                - 123
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 123
+              - index: 90
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 182882981947499
+                bytes:
+                - 144
+                - 60
+                - 123
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 123
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-auto-real.json
+            stage_sha256: a7be51747fd5d36dc5248217ad7993f5c690168384cf90fa65c09dd20b7b220e
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-auto-real.log
+            log_sha256: 130a30902d2b373af41392d95b114357b290a522149c1fd7daf05290e7b5355d
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-auto/50d315ea562e4d30a49f882f1d620e22/report.json
+            report_sha256: 94c453179005002ce599b1373a4cd640d4e46676c23ba6572c18bdea6e77343c
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-manual-real.json
+            stage_sha256: cb2582c39d38aecee9558d9d678f3f1049fbdebc94937ca119098b7396746fad
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/doctor-manual-real.log
+            log_sha256: a6a6b2528903e9461ee43b5b8d95f74a2ba4b9e38168660e60c8528ea7f72b5d
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/doctor-manual/156521e3455843d29f838fb428ac763d/report.json
+            report_sha256: 64aae0bef7efdf4575c0014b8e53e858a5c990ff7f8ecb05abf26a6592ffb948
+            clock_mode: real-time
+        applicability: native-ui
+        native_gap: null
+        controlled_baselines: []
+        rationale: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        specialized_qualifications:
+        - id: MA-DOCTOR-MANUAL-START-BEAT-001
+          citation: manual:rhythm-doctor
+          registration: tools/doctor-qualification-inventory.json
+          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
+          status: registered-awaiting-current-native-publication
+          global_inventory_member: false
+        scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_time:
+          applicable: false
+          reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator rejects audio capture in controlled-time sessions.
+      scene_refs:
+      - doctor-local-capture-and-paint
+      - doctor-local-auto-capture-and-paint
+    - review:
+        status: controlled-verified
+        cases:
+        - M-LIVEUI-ALGO-001
+        - MA-DOCTOR-AUDIO-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: doctor-local-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: eb226ac09df12c8f6d9365c824a192b3d107418c4f1c66f6425ee6be80b33c27
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 58
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 205398690441777
+                bytes:
+                - 144
+                - 60
+                - 120
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 120
+              - index: 76
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 205399356935925
+                bytes:
+                - 144
+                - 60
+                - 116
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 116
+              - index: 94
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 205400023644720
+                bytes:
+                - 144
+                - 60
+                - 114
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 114
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-auto-real.json
+            stage_sha256: fda1c2e1947c6fcd6fac910c5acb9509517b0e402c8c3399aca3af7ddfa52480
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-auto-real.log
+            log_sha256: 93ffe6506ec2c8690ff429ac292498731c28b4e75a30fd9dc9436679ca68dc4c
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-auto/d92e0d141091468189490da7445b0394/report.json
+            report_sha256: 69865811aa6001ae99b31112e980048d56d5c9b32e3847ed9e546e01f854e9c6
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-manual-real.json
+            stage_sha256: f19688abb518262e2402e740de09641d04b45fcb223198edba02d9bf11d9d014
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-manual-real.log
+            log_sha256: 11a5133631a1ac7381affd7444292dd4c60e08c3119bc16924b37be2296420c8
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-manual/071b195c30bc40dd9d1bc12ef0458129/report.json
+            report_sha256: c6f7a182dc141489c5ac62effe84f165b5f85ec0638fb9478237f7de943b86fc
+            clock_mode: real-time
+        - scene: doctor-local-auto-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: eb226ac09df12c8f6d9365c824a192b3d107418c4f1c66f6425ee6be80b33c27
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 54
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 205445503996715
+                bytes:
+                - 144
+                - 60
+                - 116
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 116
+              - index: 72
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 205446170336010
+                bytes:
+                - 144
+                - 60
+                - 110
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 110
+              - index: 90
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 205446837352983
+                bytes:
+                - 144
+                - 60
+                - 108
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 108
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-auto-real.json
+            stage_sha256: fda1c2e1947c6fcd6fac910c5acb9509517b0e402c8c3399aca3af7ddfa52480
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-auto-real.log
+            log_sha256: 93ffe6506ec2c8690ff429ac292498731c28b4e75a30fd9dc9436679ca68dc4c
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-auto/d92e0d141091468189490da7445b0394/report.json
+            report_sha256: 69865811aa6001ae99b31112e980048d56d5c9b32e3847ed9e546e01f854e9c6
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-manual-real.json
+            stage_sha256: f19688abb518262e2402e740de09641d04b45fcb223198edba02d9bf11d9d014
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-manual-real.log
+            log_sha256: 11a5133631a1ac7381affd7444292dd4c60e08c3119bc16924b37be2296420c8
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/doctor-manual/071b195c30bc40dd9d1bc12ef0458129/report.json
+            report_sha256: c6f7a182dc141489c5ac62effe84f165b5f85ec0638fb9478237f7de943b86fc
+            clock_mode: real-time
+        applicability: native-ui
+        native_gap: null
+        controlled_baselines: []
+        rationale: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        specialized_qualifications:
+        - id: MA-DOCTOR-MANUAL-START-BEAT-001
+          citation: manual:rhythm-doctor
+          registration: tools/doctor-qualification-inventory.json
+          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
+          status: registered-awaiting-current-native-publication
+          global_inventory_member: false
+        scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_time:
+          applicable: false
+          reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator rejects audio capture in controlled-time sessions.
+      scene_refs:
+      - doctor-local-capture-and-paint
+      - doctor-local-auto-capture-and-paint
+    - review:
+        status: controlled-verified
+        cases:
+        - M-LIVEUI-ALGO-001
+        - MA-DOCTOR-AUDIO-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: doctor-local-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: a5ddf36b7263569c75ad7c80fa510edaaf7e199df80d6dbccbddfed9ebd731aa
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 58
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219330499618573
+                bytes:
+                - 144
+                - 60
+                - 116
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 116
+              - index: 76
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219331165784228
+                bytes:
+                - 144
+                - 60
+                - 109
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 109
+              - index: 94
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219331832263629
+                bytes:
+                - 144
+                - 60
+                - 107
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 107
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto-real.json
+            stage_sha256: ff04cc2f4ab94853387145495baf7aa9a3904fa70cc458fefeb9181c3eb41911
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto-real.log
+            log_sha256: 5ce9558d60ec2281e89343eedcb1eae577bcc4291c6c396c0c15d048b9193a86
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto/a4777b3de4c5415a89fa32c9f180c670/report.json
+            report_sha256: 8c4e6e473c885fdcf1adba604477503c38280bd7fc5ab3543acc96e721034577
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual-real.json
+            stage_sha256: f6675ba6c33b847681b418910a8f5808c0d1f6f7f0632a4f3f1d12bea06a0bff
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual-real.log
+            log_sha256: c0914897e5ad712d399118f0db2e5b7bf6bb954231cb7c233cc5fd6a208829bb
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual/ca7e92f60e994398b468342d59e5a7e2/report.json
+            report_sha256: a5871124a99da1576c57276ca37ad97a5dc872a100e258e6df9a0d63c5ebf00b
+            clock_mode: real-time
+        - scene: doctor-local-auto-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: a5ddf36b7263569c75ad7c80fa510edaaf7e199df80d6dbccbddfed9ebd731aa
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 54
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219375838387729
+                bytes:
+                - 144
+                - 60
+                - 113
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 113
+              - index: 72
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219376503971164
+                bytes:
+                - 144
+                - 60
+                - 107
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 107
+              - index: 90
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219377171092105
+                bytes:
+                - 144
+                - 60
+                - 111
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 111
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto-real.json
+            stage_sha256: ff04cc2f4ab94853387145495baf7aa9a3904fa70cc458fefeb9181c3eb41911
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto-real.log
+            log_sha256: 5ce9558d60ec2281e89343eedcb1eae577bcc4291c6c396c0c15d048b9193a86
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto/a4777b3de4c5415a89fa32c9f180c670/report.json
+            report_sha256: 8c4e6e473c885fdcf1adba604477503c38280bd7fc5ab3543acc96e721034577
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual-real.json
+            stage_sha256: f6675ba6c33b847681b418910a8f5808c0d1f6f7f0632a4f3f1d12bea06a0bff
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual-real.log
+            log_sha256: c0914897e5ad712d399118f0db2e5b7bf6bb954231cb7c233cc5fd6a208829bb
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual/ca7e92f60e994398b468342d59e5a7e2/report.json
+            report_sha256: a5871124a99da1576c57276ca37ad97a5dc872a100e258e6df9a0d63c5ebf00b
+            clock_mode: real-time
+        applicability: native-ui
+        native_gap: null
+        controlled_baselines: []
+        rationale: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        specialized_qualifications:
+        - id: MA-DOCTOR-MANUAL-START-BEAT-001
+          citation: manual:rhythm-doctor
+          registration: tools/doctor-qualification-inventory.json
+          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
+          status: registered-awaiting-current-native-publication
+          global_inventory_member: false
+        scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_time:
+          applicable: false
+          reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator rejects audio capture in controlled-time sessions.
+      scene_refs:
+      - doctor-local-capture-and-paint
+      - doctor-local-auto-capture-and-paint
+    - review:
+        status: controlled-verified
+        cases:
+        - M-LIVEUI-ALGO-001
+        - MA-DOCTOR-AUDIO-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: doctor-local-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: a5ddf36b7263569c75ad7c80fa510edaaf7e199df80d6dbccbddfed9ebd731aa
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 11
+              - 15
+              - 19
+              - 23
+              - 27
+              - 31
+              - 35
+              - 39
+              - 43
+              - 47
+              - 51
+              - 55
+              - 59
+              - 63
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 58
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219330499618573
+                bytes:
+                - 144
+                - 60
+                - 116
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 116
+              - index: 76
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219331165784228
+                bytes:
+                - 144
+                - 60
+                - 109
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 109
+              - index: 94
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219331832263629
+                bytes:
+                - 144
+                - 60
+                - 107
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 107
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-auto-real.json
+            stage_sha256: 0b92e24170d59b71af40f9146cecf533829a4fd4c68f8f8bafb5a5cfe69e343b
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-auto-real.log
+            log_sha256: c699a9dfa4fd51ab34ba5d43d7eab5461a3fe7c3d3510c7763ea5d61849d5eb5
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto/a4777b3de4c5415a89fa32c9f180c670/report.json
+            report_sha256: 8c4e6e473c885fdcf1adba604477503c38280bd7fc5ab3543acc96e721034577
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-manual-real.json
+            stage_sha256: 3af59b4ebbc403b426a2dcd6b7f6f711075a1af79b8ac849fdafacdac2d02856
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-manual-real.log
+            log_sha256: 55c8b39011d68dc671980e0de8b4f9c10fe3849f14487f7d00e3d28e4f65ba04
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual/ca7e92f60e994398b468342d59e5a7e2/report.json
+            report_sha256: a5871124a99da1576c57276ca37ad97a5dc872a100e258e6df9a0d63c5ebf00b
+            clock_mode: real-time
+        - scene: doctor-local-auto-capture-and-paint
+          data: doctor-scenes.json
+          data_sha256: a5ddf36b7263569c75ad7c80fa510edaaf7e199df80d6dbccbddfed9ebd731aa
+          clock_mode: real-time
+          case: MA-DOCTOR-AUDIO-001
+          assertions:
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R01
+              empty_grid: true
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R02
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R04
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R05
+              timeout: 180
+          - kind: audited-doctor-semantic-contract
+            expected:
+              route: R08
+              grid: preview
+              levels:
+              - 12
+              - 15
+              minimum_trigs: 2
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              tooltip: Pattern painted
+              grid: commit
+              level: 15
+              matches: preview
+              grid_steps:
+              - 10
+              - 14
+              - 18
+              - 22
+              - 26
+              - 30
+              - 34
+              - 38
+              - 42
+              - 46
+              - 50
+              - 54
+              - 58
+              - 62
+          - kind: audited-doctor-semantic-contract
+            expected:
+              midi_minimum_attacks: 2
+              port: 1
+              outstanding_notes: []
+              midi_start_index: 10
+              midi_end_index: 98
+              notes:
+              - index: 54
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219375838387729
+                bytes:
+                - 144
+                - 60
+                - 113
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 113
+              - index: 72
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219376503971164
+                bytes:
+                - 144
+                - 60
+                - 107
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 107
+              - index: 90
+                device_id: 0
+                port: 1
+                port_name: Emulator MIDI
+                monotonic_ns: 219377171092105
+                bytes:
+                - 144
+                - 60
+                - 111
+                decoded:
+                - type: note_on
+                  channel: 1
+                  data:
+                  - 60
+                  - 111
+          scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+          build_lane_proofs:
+          - stage: doctor-auto-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-auto-real.json
+            stage_sha256: 0b92e24170d59b71af40f9146cecf533829a4fd4c68f8f8bafb5a5cfe69e343b
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-auto-real.log
+            log_sha256: c699a9dfa4fd51ab34ba5d43d7eab5461a3fe7c3d3510c7763ea5d61849d5eb5
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-auto/a4777b3de4c5415a89fa32c9f180c670/report.json
+            report_sha256: 8c4e6e473c885fdcf1adba604477503c38280bd7fc5ab3543acc96e721034577
+            clock_mode: real-time
+          - stage: doctor-manual-real
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-manual-real.json
+            stage_sha256: 3af59b4ebbc403b426a2dcd6b7f6f711075a1af79b8ac849fdafacdac2d02856
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/doctor-manual-real.log
+            log_sha256: 55c8b39011d68dc671980e0de8b4f9c10fe3849f14487f7d00e3d28e4f65ba04
+            report: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/doctor-manual/ca7e92f60e994398b468342d59e5a7e2/report.json
+            report_sha256: a5871124a99da1576c57276ca37ad97a5dc872a100e258e6df9a0d63c5ebf00b
+            clock_mode: real-time
+        applicability: native-ui
+        native_gap: null
+        controlled_baselines: []
+        rationale: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        specialized_qualifications:
+        - id: MA-DOCTOR-MANUAL-START-BEAT-001
+          citation: manual:rhythm-doctor
+          registration: tools/doctor-qualification-inventory.json
+          scope: Real-time actual ADC Manual Start Beat selection and same-recording reanalysis; Ready draft-only witness is separate and does not establish backend regression.
+          status: registered-awaiting-current-native-publication
+          global_inventory_member: false
+        scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_time:
+          applicable: false
+          reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator rejects audio capture in controlled-time sessions.
+      scene_refs:
+      - doctor-local-capture-and-paint
+      - doctor-local-auto-capture-and-paint
     scope: Manual and Auto real-audio capture, analysis, ready bank, preview and committed painting.
-    binding_receipt: /home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/feature-bind/manifest.json
+    binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/feature-bind/manifest.json
     complete_regression_run: false
     validation_scope: controlled-manual-generation
     realtime_qualification: pending-ci
     controlled_time:
       applicable: false
-      reason: The public audio input helper and native softcut/DSP analysis require real audio time. The
-        emulator rejects audio capture in controlled-time sessions.
+      reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator rejects audio capture in controlled-time sessions.
   category: pattern
   parent: adding-trigs
   level: 5
@@ -1540,47 +3227,34 @@ features:
   title: Adding Notes
   audience: all
   summary: Set source-pattern notes as scale degrees relative to the channel’s active root.
-  prose: 'Pattern notes are positions relative to the active scale root, not fixed pitches. In C major,
-    position 0 is C, one step above is D and one step below is B. Changing the channel scale to E minor
-    makes the same positions E, F sharp and D.
+  prose: 'Pattern notes are positions relative to the active scale root, not fixed pitches. In C major, position 0 is C, one step above is D and one step below is B. Changing the channel scale to E minor makes the same positions E, F sharp and D.
 
 
-    Sequenced scale and degree changes described in [Harmony Design](#harmony-design) affect pattern output.
-    Use pattern notes for harmony and rhythm parts. Patterns can also provide melodies, but changing a
-    scale progression changes their tonality. Use [Masks](#masks) to enter a deliberate melody independently.
+    Sequenced scale and degree changes described in [Harmony Design](#harmony-design) affect pattern output. Use pattern notes for harmony and rhythm parts. Patterns can also provide melodies, but changing a scale progression changes their tonality. Use [Masks](#masks) to enter a deliberate melody independently.
 
 
     From Pattern Trig, press the third global-menu button again to open Pattern Note.
 
 
-    The grid displays 16 steps at a time. Active trigs show dim vertical bars; a dim horizontal line marks
-    the root. Selected note values glow brightly. Press a cell in a step’s column to set its note. Hold
-    K1 while entering a note to copy it to the corresponding position across all four step pages.
+    The grid displays 16 steps at a time. Active trigs show dim vertical bars; a dim horizontal line marks the root. Selected note values glow brightly. Press a cell in a step’s column to set its note. Hold K1 while entering a note to copy it to the corresponding position across all four step pages.
 
 
-    The channel supplies the scale; the pattern does not own it. The same source pattern can therefore
-    play different notes on different channels. Think of patterns as disconnected from channels: this
-    is why Mosaic is an intentioned generative sequencer, so expect happy accidents. Use the norns channel
-    grid viewer to inspect channel output.
+    The channel supplies the scale; the pattern does not own it. The same source pattern can therefore play different notes on different channels. Think of patterns as disconnected from channels: this is why Mosaic is an intentioned generative sequencer, so expect happy accidents. Use the norns channel grid viewer to inspect channel output.
 
 
     Use the step-page buttons to select one of four groups of 16 steps.
 
 
-    Use the outer note-range buttons to move the displayed range up or down one step. Hold an outer button
-    to reach its extreme. Press the middle button to return to the page with the root note on the bottom
-    row.
+    Use the outer note-range buttons to move the displayed range up or down one step. Hold an outer button to reach its extreme. Press the middle button to return to the page with the root note on the bottom row.
 
 
     A step without a trig can still store note data for use by another merge mode.
 
 
-    The top row flickers to indicate the selected pattern. Hold a top-row button, or hold K1 and press
-    it, to select another pattern.
+    The top row flickers to indicate the selected pattern. Hold a top-row button, or hold K1 and press it, to select another pattern.
 
 
-    The norns Pattern Note screen shows the viewed channel’s steps as 64 cells. Turn E3 to view another
-    channel.
+    The norns Pattern Note screen shows the viewed channel’s steps as 64 cells. Turn E3 to view another channel.
 
 
     ### Enter a rising line
@@ -1590,11 +3264,9 @@ features:
 
     2. Press Pattern (5,8) to open Pattern Note.
 
-    3. Tap (1,7), (2,6), (3,5) and (4,4). Row 7 is the root and each row above it is one scale degree
-    higher, so these are degrees 0, 1, 2 and 3.
+    3. Tap (1,7), (2,6), (3,5) and (4,4). Row 7 is the root and each row above it is one scale degree higher, so these are degrees 0, 1, 2 and 3.
 
-    4. With the pattern assigned to a channel in C major, press Play (1,8). The line is C, D, E, F: MIDI
-    60, 62, 64, 65.
+    4. With the pattern assigned to a channel in C major, press Play (1,8). The line is C, D, E, F: MIDI 60, 62, 64, 65.
 
 
     Hold K1 while you tap to write the same note on all four step pages.
@@ -1603,16 +3275,11 @@ features:
     ### Reach other octaves
 
 
-    The seven rows are one window onto the scale. In C major with the root page showing, (4,7) is MIDI
-    60 and (4,1) is MIDI 71. Tap range-up at (14,8) to move the window up one scale degree: (4,1) becomes
-    72. Tap range-down at (16,8) to move it down one degree. Hold range-up to jump to the highest window,
-    where (4,1) is MIDI 83, or hold range-down to jump to the lowest window, where (4,7) is MIDI 48. Tap
-    the centre button at (15,8) to return to the root page.
+    The seven rows are one window onto the scale. In C major with the root page showing, (4,7) is MIDI 60 and (4,1) is MIDI 71. Tap range-up at (14,8) to move the window up one scale degree: (4,1) becomes 72. Tap range-down at (16,8) to move it down one degree. Hold range-up to jump to the highest window, where (4,1) is MIDI 83, or hold range-down to jump to the lowest window, where (4,7) is MIDI 48. Tap the centre button at (15,8) to return to the root page.
 
 
     Watch: [Pattern editor note page demo](https://youtu.be/J1ckUZvhFJ0?t=1121)'
-  musical_use: Enter a repeating scale-degree pattern. Assign it to two channels with different scales.
-    Set note masks where a channel needs specific pitches.
+  musical_use: Enter a repeating scale-degree pattern. Assign it to two channels with different scales. Set note masks where a channel needs specific pitches.
   related:
   - harmony-design
   - masks
@@ -1654,17 +3321,14 @@ features:
   - gesture: Grid (9,8)–(12,8)
     result: Choose steps 1–16, 17–32, 33–48 or 49–64.
   - gesture: Grid (14,8), (15,8), (16,8)
-    result: Move the note range up one scale degree, return to the page with the root on the bottom row,
-      or move it down one scale degree. Hold (14,8) or (16,8) to reach the highest or lowest range.
+    result: Move the note range up one scale degree, return to the page with the root on the bottom row, or move it down one scale degree. Hold (14,8) or (16,8) to reach the highest or lowest range.
   - gesture: Hold a row-1 pattern button, or K1 + tap it
     result: Select another source pattern while on the note page.
   - gesture: E3 on Pattern Note screen
     result: View another channel’s resolved steps without changing the selected channel.
   details:
   - title: Source notes and channel pitch
-    text: The pattern stores distance from a scale root. Each channel applies its active scale and subsequent
-      processing. An edit affects every channel using that source pattern. A step without a source trig
-      can supply note data when a different pattern supplies the merged rhythm.
+    text: The pattern stores distance from a scale root. Each channel applies its active scale and subsequent processing. An edit affects every channel using that source pattern. A step without a source trig can supply note data when a different pattern supplies the merged rhythm.
   recipes: []
   scene_refs:
   - pattern-note-range
@@ -1674,8 +3338,7 @@ features:
     cases:
     - M-EDIT-001
     - M-EDIT-003
-    note: Source and case definitions reviewed. Published native assertions and their scope are listed
-      separately; pending gaps are not acceptance evidence.
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed separately; pending gaps are not acceptance evidence.
     source_status: code-and-case-reviewed
     native_evidence:
     - scene: pattern-note-range
@@ -1738,7 +3401,7 @@ features:
       - id: preview
         kind: preview-recorded-result
         target_step_id: initial-note-range
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -1762,6 +3425,10 @@ features:
           - 71
           - 97
       human_outcome: Step 4 plays MIDI note 71 after the first three notes 60, 62 and 64.
+      practice_prompt: '1. Press Pattern (5,8) twice to open Pattern Note for pattern 1. The seven rows are scale degrees, with the root on the bottom row. Tap (4,1), the top row of step 4''s column. Press Play at (1,8), then Stop: step 4 now plays degree 6, MIDI 71, while steps 1-3 stay 60, 62, 64.'
+    title: Shape notes across the grid range
+    goal: Set step 4 to scale degree 6 and hear MIDI note 71.
+    starting_point: Channel 1 plays a four-step phrase on steps 1-4 (MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97) through a MIDI device on OUT 1, in C major at 90 BPM with sixteenth-note steps (Rate /1). The Channel editor is open and the Pattern editor has not been opened. On Pattern Note the range buttons on row 8 are range-up (14,8), centre (15,8) and range-down (16,8). A press moves the window one degree up or down, a long press jumps to the top or bottom, and the centre button returns to the root page. Pattern Velocity has only two range buttons, (15,8) toward the top page and (16,8) toward the lower page, as the next lesson shows.
   - id: step-4-restored-root-page
     binding:
       status: verified
@@ -1789,7 +3456,7 @@ features:
       - id: preview
         kind: preview-recorded-result
         target_step_id: center-restores-root-page
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -1813,6 +3480,10 @@ features:
           - 65
           - 97
       human_outcome: The captured phrase is C, D, E and F, with step 4 at MIDI note 65.
+      practice_prompt: '1. Tap the centre button at (15,8): the window returns to the root page, with the root on the bottom row. Tap (4,4), degree 3: step 4 plays MIDI 65 and the original phrase 60, 62, 64, 65 is back.'
+    title: Shape notes across the grid range
+    goal: Return the note window to its root page and restore step 4 to degree 3.
+    starting_point: 'Hold range-down (16,8) for about a second: the window jumps to its lowest position. Tap (4,7), the bottom row: step 4 plays MIDI 48. Tap range-down again: the window cannot go lower, so (4,7) still plays MIDI 48.'
   - id: play-pattern-copy-groups-play-step-group-1
     binding:
       status: verified
@@ -1826,11 +3497,11 @@ features:
         kind: tap-grid
         x: 1
         y: 8
-        label: Play the captured phrase and listen for 60, 62, 64, 65.
+        label: Press Play to compare this phrase on your instrument
       - id: preview
         kind: preview-recorded-result
         target_step_id: play-step-group-1
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -1853,8 +3524,11 @@ features:
           - 144
           - 65
           - 117
-      human_outcome: The captured MIDI notes include MIDI 60 at velocity 117, MIDI 62 at velocity 117,
-        MIDI 64 at velocity 117, MIDI 65 at velocity 117.
+      human_outcome: The copied four-note phrase plays at velocity 117 on each step.
+      practice_prompt: '1. Press Channel (3,8). Hold step 1 and tap step 4 to set the channel range to steps 1-4. Press Play at (1,8), then Stop: C, D, E, F (MIDI 60, 62, 64, 65), each at velocity 117.'
+    title: Copy notes and dynamics across the four step pages
+    goal: Return from the pattern pages to the channel and hear the four-step phrase.
+    starting_point: 'Press the page buttons (10,8), (11,8) and (12,8) in turn: the same four cells are lit on every page.'
 - id: adding-velocity
   title: Adding Velocity
   audience: all
@@ -1862,13 +3536,10 @@ features:
   prose: 'From Pattern Note, press the third global-menu button again to open Pattern Velocity.
 
 
-    The velocity editor operates like the note editor. Its two extreme vertical pages show velocities
-    127–68 and 58–0. Press a velocity-range button to move the displayed range by one value level. Hold
-    it to reach an extreme.
+    The velocity editor operates like the note editor. Its two extreme vertical pages show velocities 127–68 and 58–0. Press a velocity-range button to move the displayed range by one value level. Hold it to reach an extreme.
 
 
-    The norns Pattern Velocity screen shows the viewed channel’s steps as 64 cells. Turn E3 to view another
-    channel.
+    The norns Pattern Velocity screen shows the viewed channel’s steps as 64 cells. Turn E3 to view another channel.
 
 
     ### Set an accent and a rest
@@ -1876,23 +3547,18 @@ features:
 
     1. Press Pattern (5,8) until Pattern Velocity opens.
 
-    2. Each step’s column is a seven-level fader. On the first page, from the top row down, (x,1) is 127,
-    (x,2) is 117, (x,3) is 107, (x,4) is 97, (x,5) is 87, (x,6) is 78 and (x,7) is 68. Tap (4,1) for an
-    accent on step 4, or (4,7) for a soft hit.
+    2. Each step’s column is a seven-level fader. On the first page, from the top row down, (x,1) is 127, (x,2) is 117, (x,3) is 107, (x,4) is 97, (x,5) is 87, (x,6) is 78 and (x,7) is 68. Tap (4,1) for an accent on step 4, or (4,7) for a soft hit.
 
-    3. To silence a step, hold (16,8). The window jumps to the lower page, 58 at the top down to 0 at
-    the bottom. Tap (4,7) to set velocity 0.
+    3. To silence a step, hold (16,8). The window jumps to the lower page, 58 at the top down to 0 at the bottom. Tap (4,7) to set velocity 0.
 
     4. Hold (15,8) to return to the upper page.
 
 
-    A step at velocity 0 sends no note: it is a rest. Hold K1 while you tap to write the same level on
-    all four step pages.
+    A step at velocity 0 sends no note: it is a rest. Hold K1 while you tap to write the same level on all four step pages.
 
 
     Watch: [Pattern editor velocity page demo](https://youtu.be/J1ckUZvhFJ0?t=1229)'
-  musical_use: Set higher velocities on the main hits and lower velocities on intervening hits. Use velocity
-    masks for channel-specific overrides.
+  musical_use: Set higher velocities on the main hits and lower velocities on intervening hits. Use velocity masks for channel-specific overrides.
   related:
   - pattern-editor
   sources:
@@ -1928,10 +3594,7 @@ features:
     result: View another channel’s resolved steps without changing the selected channel.
   details:
   - title: Grid levels are discrete
-    text: Fourteen source levels span MIDI 127 to 0. The initial seven levels are 127, 117, 107, 97, 87,
-      78 and 68; the lower extreme shows 58, 48, 39, 29, 19, 9 and 0. A short range-button press moves
-      the seven-row window by one level rather than adjusting MIDI velocity by one. The window stops at
-      both extremes.
+    text: Fourteen source levels span MIDI 127 to 0. The initial seven levels are 127, 117, 107, 97, 87, 78 and 68; the lower extreme shows 58, 48, 39, 29, 19, 9 and 0. A short range-button press moves the seven-row window by one level rather than adjusting MIDI velocity by one. The window stops at both extremes.
   recipes: []
   scene_refs:
   - pattern-velocity-range
@@ -1941,8 +3604,7 @@ features:
     cases:
     - M-EDIT-002
     - M-EDIT-003
-    note: Source and case definitions reviewed. Published native assertions and their scope are listed
-      separately; pending gaps are not acceptance evidence.
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed separately; pending gaps are not acceptance evidence.
     source_status: code-and-case-reviewed
     native_evidence:
     - scene: pattern-velocity-range
@@ -1996,7 +3658,7 @@ features:
       - id: preview
         kind: preview-recorded-result
         target_step_id: velocity-127
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -2020,6 +3682,10 @@ features:
           - 65
           - 127
       human_outcome: Step 4’s C4 note uses velocity 127; the captured sequence retains the preceding notes.
+      practice_prompt: '1. Press Pattern (5,8) three times to open Pattern Velocity. Each row of a step''s column is a velocity level, 127 at the top. Tap (4,1). Press Play at (1,8), then Stop: step 4 plays at velocity 127 while steps 1-3 keep 127, 117, 107.'
+    title: Give Step 4 a full-velocity accent
+    goal: Set Step 4 to velocity 127, the top level, then hear its accent; Steps 1–3 retain their levels.
+    starting_point: 'Channel 1 plays a four-step phrase on steps 1-4 (MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97) through a MIDI device on OUT 1, in C major at 90 BPM with sixteenth-note steps (Rate /1). The Channel editor is open and the Pattern editor has not been opened. On Pattern Velocity the range buttons on row 8 differ from Pattern Note, which has three: here there are two, range-up at (15,8), toward the 127-68 page, and range-down at (16,8), toward the 58-0 page.'
   - id: step-4-velocity-68
     binding:
       status: verified
@@ -2033,7 +3699,7 @@ features:
         kind: tap-grid
         x: 4
         y: 7
-        label: Set step 4 to the middle velocity row
+        label: Set step 4 to velocity 68 (the bottom row)
       - id: action-2
         kind: tap-grid
         x: 1
@@ -2042,7 +3708,7 @@ features:
       - id: preview
         kind: preview-recorded-result
         target_step_id: velocity-68
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -2064,8 +3730,12 @@ features:
           bytes:
           - 144
           - 65
-          - 117
-      human_outcome: Step 4 sends C4 at velocity 117 in the captured phrase.
+          - 68
+      human_outcome: Step 4 plays at velocity 68, matching the bottom velocity row; the other three steps keep their velocities.
+      practice_prompt: From the top velocity row, tap (4,7), then play and stop. Step 4 plays at velocity 68; steps 1-3 keep their existing velocities.
+    title: Set step 4 to velocity 68
+    goal: Set step 4 to velocity 68 and compare it with the full-velocity starting point.
+    starting_point: 'Press Pattern (5,8) three times to open Pattern Velocity. Each row of a step''s column is a velocity level, 127 at the top. Tap (4,1). Press Play at (1,8), then Stop: step 4 plays at velocity 127 while steps 1-3 keep 127, 117, 107.'
   - id: step-4-velocity-9
     binding:
       status: verified
@@ -2079,7 +3749,7 @@ features:
         kind: tap-grid
         x: 4
         y: 6
-        label: Set step 4 to a quiet velocity
+        label: Set step 4 to velocity 9
       - id: action-2
         kind: tap-grid
         x: 1
@@ -2088,7 +3758,7 @@ features:
       - id: preview
         kind: preview-recorded-result
         target_step_id: velocity-9
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -2110,8 +3780,12 @@ features:
           bytes:
           - 144
           - 65
-          - 19
-      human_outcome: Step 4 sends C4 at velocity 19 in the captured phrase.
+          - 9
+      human_outcome: Step 4 sends F3 at velocity 9 in the captured phrase.
+      practice_prompt: From velocity 29, tap (4,6), then play and stop. Step 4 plays at velocity 9; all four notes appear in the MIDI strip.
+    title: Set step 4 to velocity 9
+    goal: Set step 4 to velocity 9 and confirm the captured note still sounds.
+    starting_point: 'Tap down the column of step 4 to (4,4), playing after each tap: (4,2) is 48, (4,3) 39 and (4,4) 29. At (4,4) step 4 plays at velocity 29.'
   - id: play-pattern-copy-groups-play-step-group-1
     binding:
       status: verified
@@ -2125,11 +3799,11 @@ features:
         kind: tap-grid
         x: 1
         y: 8
-        label: Play the captured phrase and listen for 60, 62, 64, 65.
+        label: Press Play to compare this phrase on your instrument
       - id: preview
         kind: preview-recorded-result
         target_step_id: play-step-group-1
-        label: Preview the captured result
+        label: Show result
       semantic_requires:
         midi_events_at_target:
         - port: 1
@@ -2152,5 +3826,8 @@ features:
           - 144
           - 65
           - 117
-      human_outcome: The captured MIDI notes include MIDI 60 at velocity 117, MIDI 62 at velocity 117,
-        MIDI 64 at velocity 117, MIDI 65 at velocity 117.
+      human_outcome: The already-copied four-note phrase plays at velocity 117 on each step.
+      practice_prompt: '1. Press Channel (3,8). Hold step 1 and tap step 4 to set the channel range to steps 1-4. Press Play at (1,8), then Stop: C, D, E, F (MIDI 60, 62, 64, 65), each at velocity 117.'
+    title: Hear the copied phrase at velocity 117
+    goal: After the four-step cells have been copied across pages 10–12, return to Channel, set range 1–4, and confirm all four notes play at velocity 117. This checkpoint verifies the copy; the copy action is in the preceding step.
+    starting_point: 'Press the page buttons (10,8), (11,8) and (12,8) in turn: the same four cells are lit on every page.'

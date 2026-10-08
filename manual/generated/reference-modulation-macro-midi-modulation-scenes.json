@@ -262,7 +262,7 @@
     "fixture_sources": {
       "tests/behaviour/config/emu-midi.json": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442"
     },
-    "start_source_identity_path": "/home/andy/mosaic-manual-runs/04033a84e70c438daa20cbaca6ca2ea2/start-source-identity.json",
+    "start_source_identity_path": "/home/andy/mosaic-manual-runs/adab979242f64ee28546dcfb503c29b7/start-source-identity.json",
     "start_source_identity_sha256": "48915874c711fb6bcd590e1e34abfd4a7602331d87c0d3d50177858ca12039c8",
     "extra_case_files": [
       "tools/manual_extra_matrix_macro_modest.py"
@@ -13561,15 +13561,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/04033a84e70c438daa20cbaca6ca2ea2/M-MANUAL-MODULATION-001-midi-modulation",
+        "path": "/home/andy/mosaic-manual-runs/adab979242f64ee28546dcfb503c29b7/M-MANUAL-MODULATION-001-midi-modulation",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "midi-modulation",
-          "app_root": "/home/andy/mosaic-manual-runs/04033a84e70c438daa20cbaca6ca2ea2/application",
+          "app_root": "/home/andy/mosaic-manual-runs/adab979242f64ee28546dcfb503c29b7/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "5f206f79510c4cf38e9330c1540c396b",
+          "session_id": "988b9cb401c641e89c6333f419b1ab15",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -13577,24 +13577,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "3aab16b07cb8e99790ab4bfa3b8a397cc7b8cdbe466fabf73207b4c46bc4d0db",
-        "identity_sha256": "0d8617e369297bec4a1730ec064e492e55141f484231c082b646c48672e7ae25",
+        "identity_sha256": "323e205653c94dcb1a26a315d4e06ff273968f60f503599e2e8b53e147085674",
         "recipe_sha256": "6b60fac063fee07932774e69b08915977103eadb9240e68995fe39195039245a",
-        "native_events_sha256": "d5451678de378f9c169e48fe0d7c5c7564dfd7bf0504574f185b03b0112b367b",
+        "native_events_sha256": "7ab6425f74a3577f829773f1542e55c84eb9df39deb8a7b9dbf8b3eb4322c221",
         "capture_trace_sha256": "c1f4817a123b84baab540c0cc43e1408334ea0235de65735ac13c74a60021163",
-        "session_context_sha256": "3bb5293d32a06dd43c286cc8d50137e4a21777dd9bb7b52f1d6c00d099464ff7",
-        "native_config_sha256": "7910ef1c42992dce8a1675157fc0bf810f85578144afbded83b1a6774120b87e",
-        "cleanup_sha256": "ea36ee9edc8cc45656cb11393b07e6cd135b66a00db9589f2ccbc0afc4aca4cd",
+        "session_context_sha256": "880e5b29f87357b5b4d315cc63a4867677842816029df916925ba310df9fd766",
+        "native_config_sha256": "4d246b8c1e558557fdde91eec3815d51042f388713526352eb2af0332bc125d0",
+        "cleanup_sha256": "6ce6ddc3972f67af9a070a59fd11d6117048202c1f460cd08bfa4733bde9c00b",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/04033a84e70c438daa20cbaca6ca2ea2/M-MANUAL-MODULATION-001-midi-modulation",
+            "path": "/home/andy/mosaic-manual-runs/adab979242f64ee28546dcfb503c29b7/M-MANUAL-MODULATION-001-midi-modulation",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "midi-modulation",
-              "app_root": "/home/andy/mosaic-manual-runs/04033a84e70c438daa20cbaca6ca2ea2/application",
+              "app_root": "/home/andy/mosaic-manual-runs/adab979242f64ee28546dcfb503c29b7/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "5f206f79510c4cf38e9330c1540c396b",
+              "session_id": "988b9cb401c641e89c6333f419b1ab15",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -13602,21 +13602,21 @@
               "cleanup_verified": true
             },
             "results_sha256": "3aab16b07cb8e99790ab4bfa3b8a397cc7b8cdbe466fabf73207b4c46bc4d0db",
-            "identity_sha256": "0d8617e369297bec4a1730ec064e492e55141f484231c082b646c48672e7ae25",
+            "identity_sha256": "323e205653c94dcb1a26a315d4e06ff273968f60f503599e2e8b53e147085674",
             "recipe_sha256": "6b60fac063fee07932774e69b08915977103eadb9240e68995fe39195039245a",
-            "native_events_sha256": "d5451678de378f9c169e48fe0d7c5c7564dfd7bf0504574f185b03b0112b367b",
+            "native_events_sha256": "7ab6425f74a3577f829773f1542e55c84eb9df39deb8a7b9dbf8b3eb4322c221",
             "capture_trace_sha256": "c1f4817a123b84baab540c0cc43e1408334ea0235de65735ac13c74a60021163",
-            "session_context_sha256": "3bb5293d32a06dd43c286cc8d50137e4a21777dd9bb7b52f1d6c00d099464ff7",
-            "native_config_sha256": "7910ef1c42992dce8a1675157fc0bf810f85578144afbded83b1a6774120b87e",
-            "cleanup_sha256": "ea36ee9edc8cc45656cb11393b07e6cd135b66a00db9589f2ccbc0afc4aca4cd"
+            "session_context_sha256": "880e5b29f87357b5b4d315cc63a4867677842816029df916925ba310df9fd766",
+            "native_config_sha256": "4d246b8c1e558557fdde91eec3815d51042f388713526352eb2af0332bc125d0",
+            "cleanup_sha256": "6ce6ddc3972f67af9a070a59fd11d6117048202c1f460cd08bfa4733bde9c00b"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/04033a84e70c438daa20cbaca6ca2ea2/M-MANUAL-MODULATION-001-midi-modulation/case-participants.json",
-        "case_participants_sha256": "33efc3201db97a7661c3b30c558396bab570447e6dedbe899e50eb56bda353c7"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/adab979242f64ee28546dcfb503c29b7/M-MANUAL-MODULATION-001-midi-modulation/case-participants.json",
+        "case_participants_sha256": "42b5ddb88f5d6f4c505f29aab55422c5fc68620ece7251227766154bd349df23"
       }
     }
   ],
-  "evidence": "/home/andy/mosaic-manual-runs/04033a84e70c438daa20cbaca6ca2ea2",
+  "evidence": "/home/andy/mosaic-manual-runs/adab979242f64ee28546dcfb503c29b7",
   "complete_regression_run": false,
   "selected_scene_ids": [
     "matrix-macro-modest-cc"

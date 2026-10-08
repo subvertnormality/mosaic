@@ -48,6 +48,9 @@ finalize() {
     preflight_evidence="$(awk '$1 == "Evidence" { path = $2 } END { print path }' "$PROVISIONING_LOG")"
   fi
   if [[ -n "$preflight_evidence" && -d "$preflight_evidence" ]]; then args+=(--extra-reference "$preflight_evidence"); fi
+  for reference in "$ROOT/manual/generated/book.json" "$ROOT/manual/generated/audio-scenes.json" "$ROOT/manual/inventory.json"; do
+    [[ ! -f "$reference" ]] || args+=(--extra-reference "$reference")
+  done
   python3 "$ROOT/.github/scripts/manual_artifact.py" "${args[@]}" || echo "Evidence bundle indexing reported a failure" >&2
   exit "$status"
 }

@@ -57,7 +57,8 @@ def producer_artifact_zip(temp, *, pr_number=42, pr_head_sha="a" * 40,
         "manual/book.js": "/* compiled book */\n",
         "manual/inventory.json": "{}\n",
         "manual/generated/book.json": "{}\n",
-        "manual/generated/pilot.json": "{}\n",
+        "manual/generated/reader-index.json": json.dumps({"features": [], "navigation": [], "aliases": {}, "scenes": {}, "scene_chunks": {}, "audio_chunks": {}, "audio_examples": [], "learning_path": [], "teaching_contracts": {}, "prelude_receipts": {}}) + "\n",
+        "manual/generated/pilot.json": json.dumps({"feature": {}, "audio": {}, "scenes": []}) + "\n",
         "manual/generated/audio-scenes.json": "{}\n",
         "images/logo.svg": '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n',
     }
@@ -120,12 +121,22 @@ class FakeGitHub:
 
     def json(self, path):
         self.calls.append(path)
+        if "main.yml" in path or "behaviour.yml" in path:
+            workflow = ".github/workflows/main.yml" if "main.yml" in path else ".github/workflows/behaviour.yml"
+            requested_sha = path.split("head_sha=", 1)[1].split("&", 1)[0]
+            return {"workflow_runs": [{"id": 700 if "main.yml" in workflow else 701,
+                "head_sha": requested_sha, "path": workflow,
+                "status": "completed", "conclusion": "success"}]}
+        if path.endswith("/actions/runs/700/jobs?per_page=100"):
+            return {"jobs": [{"name": "Run tests on Ubuntu", "status": "completed", "conclusion": "success"}]}
+        if path.endswith("/actions/runs/701/jobs?per_page=100"):
+            return {"jobs": [{"name": "Complete behaviour coverage", "status": "completed", "conclusion": "success"}]}
         if path.endswith("/actions/runs/123"):
             return self.run
         if path.endswith("/actions/runs/123/artifacts"):
             return {"artifacts": [{"id": 91,
                 "name": self.artifact_name,
-                "expired": False}]}
+                "expired": False, "digest": "sha256:" + hashlib.sha256(self.artifact_zip.read_bytes()).hexdigest()}]}
         if "/actions/workflows/manual-build.yml/runs?" in path:
             return self.runs
         if path.endswith("/pulls/42"):
@@ -539,13 +550,10 @@ class CodexPromotionContractTests(unittest.TestCase):
 
     def execute_promotion(self, temp, **fixture_options):
         archive, run, pull, fake, args = self.promotion_fixture(temp, **fixture_options)
-        with (
-            patch.object(publisher, "GitHub", return_value=fake),
-            patch.object(publisher.subprocess, "check_output", side_effect=["f" * 40 + chr(10), self.MAIN_TREE + chr(10)]),
-            patch.dict("os.environ", {"GITHUB_TOKEN": "x",
-                                      "GITHUB_REPOSITORY": publisher.REPOSITORY,
-                                      "GITHUB_REF": "refs/heads/main"}),
-        ):
+        with patch.object(publisher, "GitHub", return_value=fake), \
+             patch.object(publisher.subprocess, "check_output", side_effect=["f" * 40 + chr(10), self.MAIN_TREE + chr(10)]), \
+             patch.dict("os.environ", {"GITHUB_TOKEN": "x", "GITHUB_REPOSITORY": publisher.REPOSITORY,
+                                       "GITHUB_REF": "refs/heads/main"}):
             result = publisher.prepare(args)
         return result, archive, run, pull, fake, args
 
@@ -608,13 +616,10 @@ class CodexPromotionContractTests(unittest.TestCase):
         for options, message in cases:
             with self.subTest(options=options), tempfile.TemporaryDirectory() as temp:
                 archive, run, pull, fake, args = self.promotion_fixture(temp, **options)
-                with (
-                    patch.object(publisher, "GitHub", return_value=fake),
-                    patch.object(publisher.subprocess, "check_output", side_effect=["f" * 40 + chr(10), self.MAIN_TREE + chr(10)]),
-                    patch.dict("os.environ", {"GITHUB_TOKEN": "x",
-                                              "GITHUB_REPOSITORY": publisher.REPOSITORY,
-                                              "GITHUB_REF": "refs/heads/main"}),
-                ):
+                with patch.object(publisher, "GitHub", return_value=fake), \
+                     patch.object(publisher.subprocess, "check_output", side_effect=["f" * 40 + chr(10), self.MAIN_TREE + chr(10)]), \
+                     patch.dict("os.environ", {"GITHUB_TOKEN": "x", "GITHUB_REPOSITORY": publisher.REPOSITORY,
+                                               "GITHUB_REF": "refs/heads/main"}):
                     with self.assertRaisesRegex(publisher.Reject, message):
                         publisher.prepare(args)
 
@@ -695,14 +700,11 @@ class CodexPromotionContractTests(unittest.TestCase):
             with self.subTest(options=options), tempfile.TemporaryDirectory() as temp:
                 archive, run, pull, fake, args = self.promotion_fixture(
                     temp, artifact_kind="merged-pr", **options)
-                with (
-                    patch.object(publisher, "GitHub", return_value=fake),
-                    patch.object(publisher.subprocess, "check_output",
-                                 side_effect=["f" * 40 + chr(10), self.MAIN_TREE + chr(10)]),
-                    patch.dict("os.environ", {"GITHUB_TOKEN": "x",
-                                              "GITHUB_REPOSITORY": publisher.REPOSITORY,
-                                              "GITHUB_REF": "refs/heads/main"}),
-                ):
+                with patch.object(publisher, "GitHub", return_value=fake), \
+                     patch.object(publisher.subprocess, "check_output",
+                                  side_effect=["f" * 40 + chr(10), self.MAIN_TREE + chr(10)]), \
+                     patch.dict("os.environ", {"GITHUB_TOKEN": "x", "GITHUB_REPOSITORY": publisher.REPOSITORY,
+                                               "GITHUB_REF": "refs/heads/main"}):
                     with self.assertRaisesRegex(publisher.Reject, message):
                         publisher.prepare(args)
 
@@ -737,10 +739,13 @@ class CodexPromotionContractTests(unittest.TestCase):
         checkout = next(s for s in verify["steps"] if s.get("uses", "").startswith("actions/checkout"))
         self.assertEqual(checkout["with"]["ref"], "main")
         self.assertEqual(checkout["with"]["persist-credentials"], "false")
-        self.assertNotIn("checkout", [s.get("uses", "").split("@")[0]
-                                      for s in publish["steps"]])
+        trusted_checkout = next(s for s in publish["steps"] if s.get("uses", "").startswith("actions/checkout"))
+        self.assertEqual(trusted_checkout["with"]["ref"], "main")
+        self.assertEqual(trusted_checkout["with"]["persist-credentials"], "false")
+        self.assertTrue(any("Verify receipt bytes and exact transferred site tree" == s.get("name")
+                            for s in publish["steps"]))
         downloads = [s for s in publish["steps"] if s.get("uses", "").startswith("actions/download-artifact")]
-        self.assertEqual([s["with"]["name"] for s in downloads], ["verified-manual-site"])
+        self.assertEqual([s["with"]["name"] for s in downloads], ["verified-manual-site", "manual-publication-receipt"])
         uploads = [s for s in verify["steps"] if s.get("uses", "").startswith("actions/upload-artifact")]
         self.assertTrue(any(s.get("with", {}).get("name") == "manual-publication-receipt"
                             for s in uploads))
@@ -748,6 +753,56 @@ class CodexPromotionContractTests(unittest.TestCase):
         self.assertTrue(any(s.get("with", {}).get("name") == "verified-manual-site"
                             and s.get("with", {}).get("path") == pages_path
                             for s in uploads))
+
+    def test_staged_tree_digest_rejects_changed_added_and_missing_files(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            site = root / "site"
+            site.mkdir()
+            (site / "index.html").write_text("manual")
+            (site / "manual.js").write_text("reader")
+            rows = publisher.canonical_site_tree(site)
+            receipt = root / "receipt.json"
+            receipt.write_text(json.dumps({"artifact": {"site_tree_sha256": publisher.site_tree_sha256(rows)}}))
+            self.assertEqual(publisher.verify_staged_site(site, receipt), publisher.site_tree_sha256(rows))
+            for mutation in ("changed", "added", "missing"):
+                with self.subTest(mutation=mutation):
+                    if mutation == "changed":
+                        (site / "manual.js").write_text("tampered")
+                    elif mutation == "added":
+                        (site / "extra.txt").write_text("extra")
+                    else:
+                        (site / "manual.js").unlink()
+                    with self.assertRaisesRegex(publisher.Reject, "transferred Pages tree"):
+                        publisher.verify_staged_site(site, receipt)
+                    if mutation == "changed":
+                        (site / "manual.js").write_text("reader")
+                    elif mutation == "added":
+                        (site / "extra.txt").unlink()
+                    else:
+                        (site / "manual.js").write_text("reader")
+
+    def test_api_digest_is_compared_with_downloaded_archive(self):
+        with tempfile.TemporaryDirectory() as temp:
+            archive = Path(temp) / "producer.zip"
+            archive.write_bytes(b"exact artifact bytes")
+            expected = "sha256:" + hashlib.sha256(archive.read_bytes()).hexdigest()
+            self.assertEqual(publisher.verify_api_zip_digest(expected, archive), expected[7:])
+            with self.assertRaisesRegex(publisher.Reject, "API digest"):
+                publisher.verify_api_zip_digest("sha256:" + "0" * 64, archive)
+            with self.assertRaisesRegex(publisher.Reject, "missing or malformed"):
+                publisher.verify_api_zip_digest(None, archive)
+
+    def test_required_ci_fails_closed_for_a_missing_aggregate_job(self):
+        class CI:
+            def json(self, path):
+                if "/workflows/" in path:
+                    workflow = ".github/workflows/behaviour.yml" if "behaviour.yml" in path else ".github/workflows/main.yml"
+                    return {"workflow_runs": [{"id": 9, "head_sha": "a" * 40, "path": workflow,
+                                               "status": "completed", "conclusion": "success"}]}
+                return {"jobs": [{"name": "partial shard", "status": "completed", "conclusion": "success"}]}
+        with self.assertRaisesRegex(publisher.Reject, "required source-bound CI"):
+            publisher.validate_required_ci(CI(), "a" * 40)
 
 
 if __name__ == "__main__":

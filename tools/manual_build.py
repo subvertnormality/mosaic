@@ -8,6 +8,7 @@ from pathlib import Path
 import yaml
 from resume_adoption import prepare_resume, finalize_resume_source_start
 from audio_report_adoption import prepare_audio_report_adoption
+from manual_retained_midi_caller import retained_call, projection_arguments, required_producer_inventory
 ROOT=Path(__file__).resolve().parents[1]
 LOCK=Path("/tmp/mosaic-manual-native.lock")
 DOCTOR_OPTION_STAGES={
@@ -41,12 +42,19 @@ def validate_launch_mode(controlled_local,real_install):
     if not controlled_local and not real_install:raise ValueError("Full paired generation requires an explicit qualified real installation")
 
 def plan(options,plans,controlled_local=False):
+    retained=retained_call(ROOT,getattr(options,'retained_midi_admissions',None),getattr(options,'retained_midi_admissions_sha256',None),mode='retained-resume' if getattr(options,'resume_from',None) and (getattr(options,'retained_midi_admissions',None) or getattr(options,'retained_midi_admissions_sha256',None)) else 'fresh')
+    if retained and not controlled_local:raise ValueError('Retained checkpoint projection is controlled-local only')
+    retained_args=projection_arguments(ROOT,retained)
+    fresh_args=[]
     def stage(name,command,emulator=None,lock=False,action=None):
         return dict(name=name,command=[str(v) for v in command],emulator=emulator,
                     exclusive_lock=lock,action=action)
     real_install=getattr(options,"real_install",None)
     if not real_install and not controlled_local:raise ValueError("Generic real captures require an explicit qualified real installation")
     py=getattr(options,"python",sys.executable)
+    if not controlled_local:
+        fresh_args=["--fresh-target-midi-manifest","{evidence}/fresh-target-midi-manifest.json",
+            "--fresh-target-midi-sha256","{fresh-midi-sha256}","--fresh-build-root","{evidence}"]
     capture=[py,str(ROOT/"tools/manual_capture.py")]
     audio_args=["--mod-code-root",options.mod_code_root,"--audio-emulator",options.audio_emulator,
                 "--audio-install",options.audio_install,"--ffmpeg",options.ffmpeg]
@@ -69,7 +77,7 @@ def plan(options,plans,controlled_local=False):
                 raise ValueError("Unsupported case plan profile: "+profile)
             outfile=output_name(name,profile);outputs.append(outfile)
             args=[py,str(ROOT/"tools/manual_case_capture.py"),"--plans",str(path),
-                  "--profile",profile,"--output",outfile]
+                  "--profile",profile,"--output",outfile,"--output-root","{evidence}/scene-captures"]
             case_ids={s["behaviour_case"] for s in data["scenes"] if s.get("profile","base-midi")==profile}
             local_helpers=set()
             for case in case_ids:
@@ -141,14 +149,18 @@ def plan(options,plans,controlled_local=False):
         stages.append(stage("course-bind",[],action={"course_bind":True,"python":py}))
     stages.append(stage("feature-bind",[py,str(ROOT/"tools/manual_feature_bind.py"),"--build-evidence","{evidence}","--evidence","{evidence}/feature-bind"],options.audio_emulator))
     stages.append(stage("compile-book",[py,str(ROOT/"tools/manual_book.py")]))
+    if not controlled_local:
+        stages.append(stage("fresh-target-midi-producer",[py,str(ROOT/"tools/manual_fresh_target_midi.py"),
+            "--book",str(ROOT/"manual/generated/book.json"),"--project-root",str(ROOT),
+            "--build-root","{evidence}","--output","{evidence}/fresh-target-midi-manifest.json"]))
     stages.append(stage("reader-projection",[py,str(ROOT/"tools/manual_reader_projection.py"),
         "--book",str(ROOT/"manual/generated/book.json"),
         "--audio",str(ROOT/"manual/generated/audio-scenes.json"),
-        "--output-dir",str(ROOT/"manual/generated"),"--project-root",str(ROOT)]))
+        "--output-dir",str(ROOT/"manual/generated"),"--project-root",str(ROOT)]+retained_args+fresh_args))
     stages.append(stage("quick-reference",[py,str(ROOT/"tools/manual_quick_reference.py"),"--output",
         str(ROOT/getattr(options,"quick_output","manual/generated/quick-reference.html"))]))
     stages.append(stage("inventory",[py,str(ROOT/"tools/manual_inventory.py")],options.emulator))
-    stages.append(stage("publication-audit",[py,str(ROOT/"tools/manual_publication_verify.py")]))
+    stages.append(stage("publication-audit",[py,str(ROOT/"tools/manual_publication_verify.py")]+retained_args+fresh_args))
     if options.browser_tests:
         node=getattr(options,"node","node")
         for name in ("manual_inline.cjs","manual_browser.cjs","manual_book_browser.cjs","manual_audio_race.cjs","manual_narrative_browser.cjs","manual_course_browser.cjs","manual_controls_browser.cjs","manual_reader_text_browser.cjs"):
@@ -244,7 +256,7 @@ def course_bind_command(evidence,python,controlled_local=False):
             from resume_adoption import verify_adopted_reference_stage
             report=verify_adopted_reference_stage(evidence,name,record,ROOT)
             checked=dict(path=report,sha256=digest(report))
-        else:checked=case_capture_result(evidence/(name+".log"))
+        else:checked=case_capture_result(evidence/(name+".log"),evidence/"scene-captures")
         if record.get("passed") is not True or record.get("native_report")!=checked:
             raise ValueError("Course capture receipt changed: "+lane)
         arguments.extend(["--"+flag+"-report",checked["path"]])
@@ -345,7 +357,14 @@ def stage_command(stage,evidence):
     if action.get("course_bind"):return course_bind_command(evidence,action["python"],action.get("controlled_local",False))
     if action.get("doctor_publish"):return doctor_publish_command(evidence,action["python"])
     if action.get("doctor_options_audit"):return doctor_options_audit_command(evidence,action["python"],action.get("controlled_local",False))
-    command=[value.replace("{evidence}",str(evidence)) for value in stage["command"]]
+    command=[]
+    for value in stage["command"]:
+        value=value.replace("{evidence}",str(evidence))
+        if "{fresh-midi-sha256}" in value:
+            receipt=evidence/"fresh-target-midi-manifest.json"
+            if not receipt.is_file():raise ValueError("Fresh target MIDI manifest is missing before projection/audit")
+            value=value.replace("{fresh-midi-sha256}",digest(receipt))
+        command.append(value)
     if action.get("doctor_ready"):command+=doctor_ready_arguments(evidence)
     return command
 
@@ -424,6 +443,13 @@ def run_stage(stage,evidence,options,browser_url):
                 finally:process.stdout.close()
                 record["returncode"]=code
                 if code:raise subprocess.CalledProcessError(code,command)
+            if stage["name"]=="fresh-target-midi-producer":
+                receipt=evidence/"fresh-target-midi-manifest.json"
+                if not receipt.is_file():raise ValueError("Fresh target MIDI manifest was not produced")
+                data=json.loads(receipt.read_text())
+                if data.get("kind")!="fresh-native-target-midi-v1":raise ValueError("Fresh target MIDI producer emitted the wrong receipt")
+                record["fresh_target_midi_manifest"]={"path":str(receipt.resolve()),"sha256":digest(receipt),"qualification":data.get("qualification")}
+                record["fresh_target_midi_producer_sha256"]=digest(ROOT/"tools/manual_fresh_target_midi.py")
             if stage["name"]=="reader-projection":
                 lines=log.read_text().splitlines()
                 if not lines:raise ValueError("Reader projection report is missing")
@@ -431,7 +457,7 @@ def run_stage(stage,evidence,options,browser_url):
                 if projection_report.get("passed") is not True:raise ValueError("Reader projection did not pass")
                 record["reader_projection"]=projection_report
             if stage["name"].startswith("reference-real-") or stage["name"].startswith("reference-controlled-"):
-                record["native_report"]=case_capture_result(log,validation_scope="controlled-manual-generation" if getattr(options,"controlled_local",False) and stage["name"].startswith("reference-controlled-") else None)
+                record["native_report"]=case_capture_result(log,evidence/"scene-captures",validation_scope="controlled-manual-generation" if getattr(options,"controlled_local",False) and stage["name"].startswith("reference-controlled-") else None)
             if stage.get("doctor_capture"):
                 record["native_report"]=doctor_capture_result(log,evidence/("doctor-"+stage["doctor_capture"]))
             if stage.get("doctor_options"):
@@ -547,6 +573,8 @@ def main():
     parser.add_argument("--resume-manifest-sha256",help="Required immutable parent manifest SHA256 pin")
     parser.add_argument("--adopt-audio-report",type=Path,help="Explicit complete controlled-local standalone audio report to adopt")
     parser.add_argument("--adopt-audio-report-sha256",help="Required SHA256 pin for --adopt-audio-report")
+    parser.add_argument("--retained-midi-admissions",type=Path,help="Explicit tracked receipt for retained resume projection only")
+    parser.add_argument("--retained-midi-admissions-sha256",help="Literal reviewed receipt SHA256")
     parser.add_argument("--plan-only",action="store_true")
     options=parser.parse_args()
     if bool(options.resume_from) != bool(options.resume_manifest_sha256):parser.error("--resume-from and --resume-manifest-sha256 must be supplied together")
@@ -555,6 +583,7 @@ def main():
     if options.adopt_audio_report and not options.controlled_local:parser.error("Audio report adoption is controlled-local only")
     try:validate_launch_mode(getattr(options,"controlled_local",False),getattr(options,"real_install",None))
     except ValueError as error:parser.error(str(error))
+    retained=retained_call(ROOT,options.retained_midi_admissions,options.retained_midi_admissions_sha256,mode='retained-resume' if options.resume_from and (options.retained_midi_admissions or options.retained_midi_admissions_sha256) else 'fresh')
     all_plans=[p.name for p in sorted((ROOT/"manual").glob("scene-plans*.yaml"))]
     plans=options.plans or all_plans
     stages=plan(options,plans,controlled_local=getattr(options,"controlled_local",False))
@@ -587,13 +616,14 @@ def main():
                 "sha256":audio_record["audio_adoption_proof"]["sha256"]}
         if options.resume_from:
             from manual_publication_verify import audit_reference, audit_doctor
-            checkpoint_adopted,_=prepare_resume(options.resume_from,ROOT,stages,
+            checkpoint_adopted,resume_details=prepare_resume(options.resume_from,ROOT,stages,
                 expected_parent_manifest_sha256=options.resume_manifest_sha256,
                 current_builder_sha=digest(Path(__file__)),
-                producer_hashes={**{str(path.relative_to(ROOT)):digest(path) for path in sorted((ROOT/"tools").glob("manual_*.py"))},
-                    "tools/resume_adoption.py":digest(ROOT/"tools/resume_adoption.py"),
-                    "tools/manual_reconcile_build.py":digest(ROOT/"tools/manual_reconcile_build.py")},
+                producer_hashes={name:digest(ROOT/name) for name in required_producer_inventory(ROOT,retained)},
+                retained_midi_admission=retained,
                 audit_native=audit_reference,audit_doctor=audit_doctor,proof_path=resume_proof)
+            if resume_details.get('retained_midi_admission'):
+                manifest['retained_midi_admission']=resume_details['retained_midi_admission']
             adopted=merge_stage_adoptions(adopted,checkpoint_adopted)
             finalize_resume_source_start(resume_proof,evidence)
             manifest["resume_lineage"]={"path":"resume-adoption.json","sha256":digest(resume_proof)}

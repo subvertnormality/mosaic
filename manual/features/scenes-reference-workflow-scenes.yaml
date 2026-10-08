@@ -1309,7 +1309,7 @@ scenes:
         passed: true
 - id: workflow-compose-two-channels
   feature_id: build-a-phrase
-  title: Compose two channels and chain song slots
+  title: "Build two channels: merge patterns, route a second part and chain slots"
   behaviour_case: M-WORKFLOW-001
   requirements: *id001
   profile: base-midi
@@ -4508,8 +4508,8 @@ scenes:
         stage: default-skip
         passed: true
 - id: workflow-second-channel
-  feature_id: build-a-phrase
-  title: Add a second channel with its own output
+  feature_id: "midi-keyboard-input"
+  title: "Add one keyboard note and check both channel outputs"
   behaviour_case: M-WORKFLOW-001
   requirements: *id001
   profile: base-midi
@@ -4520,10 +4520,8 @@ scenes:
     input_units: native; encoder units are twice the detents
   steps:
   - id: start
-    title: Starting point
-    caption: 'Channel 1 has patterns 1 and 2 merged in All mode with pattern 1''s
-      velocities, in D major. All four steps play: MIDI 66, 64, 69, 67 at velocities
-      127, 117, 107, 97. Channel 2 is not set up yet.'
+    title: "Checkpoint 1 — hear the existing phrase"
+    caption: "Channel 1 has patterns 1 and 2 merged in All mode (both patterns contribute their notes, with pattern 1 supplying velocity) in D major. Check the four-step result on port 1/channel 1: MIDI 66, 64, 69, 67 at velocities 127, 117, 107, 97. Channel 2 has not been set up yet."
     citation: README.md#typical-workflow
     inputs:
     - *id002
@@ -5033,9 +5031,8 @@ scenes:
         stage: merge-all-average
         passed: true
   - id: channel-2
-    title: Select channel 2
-    caption: Tap channel 2 at (2,1), turn E1 to Channel tasks, turn E2 to Device and
-      press K3. The Device page now reads CH02.
+    title: "Checkpoint 2 — select channel 2"
+    caption: "Tap channel 2 at (2,1), open Channel tasks > Device with E1/E2 and K3. Check the screen header reads DEVICE CH02. A channel is the numbered MIDI route on an output."
     citation: README.md#typical-workflow
     inputs:
     - *id503
@@ -5091,12 +5088,8 @@ scenes:
         expected: DEVICE CH02
         matched: true
   - id: channel-2-routed
-    title: Route channel 2
-    caption: On the Device page choose the same device on MIDI port 2 and MIDI channel
-      2 (turn E3 or E2 to each setting) and press K3 to apply. Tap pattern slot (2,2)
-      for pattern 2, then hold step 1 and tap step 4 to give channel 2 the range steps
-      1-4. Assigning the pattern brings up Merge modes for CH02 with Patterns 02,
-      and the pattern slot (2,2) stays lit.
+    title: "Checkpoint 3 — assign a separate output"
+    caption: "On Device, choose the same device on port 2 and MIDI channel 2, then press K3 to apply. A port is a MIDI output; the channel number is the route the receiver listens to. Assign pattern 2 at (2,2), set its range to steps 1–4 by holding step 1 and tapping step 4, then check Merge modes shows CH02 and Patterns 02 and slot (2,2) remains lit."
     citation: README.md#typical-workflow
     inputs:
     - *id550
@@ -5134,9 +5127,8 @@ scenes:
         stage: channel-2-routed
         passed: true
   - id: channel-2-masks
-    title: Open its Masks
-    caption: Turn E1 to Channel tasks, turn E2 to Masks and press K3. The screen reads
-      Note Masks for CH02.
+    title: "Checkpoint 4 — open channel 2 Masks"
+    caption: "Open Channel tasks > Masks and press K3. Check the screen reads Note Masks for CH02; this is where the channel's note values and held-step masks are edited."
     citation: README.md#typical-workflow
     inputs:
     - *id579
@@ -5174,12 +5166,8 @@ scenes:
         expected: NOTE MASKS CH02
         matched: true
   - id: two-channels
-    title: Add a keyboard note to channel 2
-    caption: 'On Masks, hold step 3 and play MIDI note 76 at velocity 90 on a MIDI
-      keyboard or controller to lock it to that step. Tap channel 1 at (1,1) and press
-      Play, then Stop. Both channels sound, each on its own port, in the MIDI strip:
-      channel 1 plays 66, 64, 69, 67 as before, and channel 2 plays pattern 2, MIDI
-      69 (A) on step 1 and your 76 on step 3.'
+    title: "Checkpoint 5 — add one note and verify both routes"
+    caption: "On Masks, hold step 3 and play MIDI note 76 at velocity 90; a mask is an override stored on the held step. Release the key and step. Select channel 1 at (1,1), press Play (1,8), then Stop. Check the MIDI strip: port 1/channel 1 keeps MIDI 66, 64, 69, 67 at velocities 127, 117, 107, 97; port 2/channel 2 plays MIDI 69 (A) on step 1 and MIDI 76 on step 3. The complete route for this scene is [MIDI Keyboard Input](#midi-keyboard-input/workflow-second-channel)."
     citation: README.md#typical-workflow
     inputs:
     - *id608

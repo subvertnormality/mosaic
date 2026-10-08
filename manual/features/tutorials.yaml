@@ -2,86 +2,14 @@ features:
 - id: first-sound
   title: Creating a First Loop
   audience: beginner
-  summary: Hear a repeating four-note loop.
-  prose: 'Before starting: Start a new project with Record off. No output, patterns or masks have been
-    entered yet. The walkthrough below begins by choosing an output for channel 1, so you can follow it
-    from an empty project. [Configuring an Output](#setup) explains the choices.
+  summary: Make four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.
+  prose: '[Make four equal notes](#first-sound/course) is the complete continuing lesson.
 
 
-    ### Choose the output
+    Start here: Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.
 
 
-    1. Tap Channel (3,8). The header reads CH01.
-
-    2. Turn E1 to open Channel tasks, select Device with E2 and press K3.
-
-    3. Select a working output with E3: the basic MIDI device (CC Device), your own configuration, or
-    Polyperc 1 for internal sound. Press K3 to apply.
-
-
-    Device shows the output you chose. A selection that has not been applied with K3 is only a draft.
-
-
-    ### Enter four attacks
-
-
-    1. Tap Pattern (5,8) to Trig. The header names pattern 1.
-
-    2. Tap (1,4), (2,4), (3,4), (4,4).
-
-
-    Four active attacks light on row 4. Each lit step is a trig, a point where a note can sound. If you
-    are editing another pattern, select pattern 1 on the top row first.
-
-
-    ### Assign and shorten
-
-
-    1. Tap Channel (3,8).
-
-    2. Tap pattern slot (1,2).
-
-    3. Hold step (1,4), tap (4,4), release (1,4). To set a range, hold its first step, tap its last step,
-    then release the first.
-
-
-    Pattern 1 feeds channel 1 across a four-step range, so the channel loops steps 1 to 4.
-
-
-    ### Give the attacks a pitch and level
-
-
-    1. Open Channel tasks → Masks.
-
-    2. With no step held, select Note with E2 and set MIDI 60 with E3 (C3). The Masks screen labels MIDI
-    60 as C3.
-
-    3. Select Vel and set 80.
-
-    4. Select Len and set 1/2.
-
-
-    These are channel masks: all four attacks share one pitch, velocity and length. A step could override
-    them later.
-
-
-    ### Play and stop
-
-
-    1. Tap Play (1,8).
-
-    2. Listen for four equal C notes repeating, with a playhead moving along the grid. At 90 BPM and the
-    default Rate /1 each step lasts one sixth of a second, so the loop repeats about every two thirds
-    of a second.
-
-    3. Tap Play again to stop; hold K1 too if Shift press stop is enabled.
-
-
-    Four equal C notes repeat. Playback stops with notes released.
-
-
-    Resulting project: Pattern 1 attacks 1–4; CH01 assigned P1; range 1–4; Note 60/Vel 80/Len1/2; no step
-    exceptions; stopped.'
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
   musical_use: ''
   related:
   - no-sound
@@ -103,19 +31,86 @@ features:
     - tests/behaviour/ui_map.py
   controls: []
   details:
+  - title: Complete lesson
+    text: Open [Make four equal notes](#first-sound/course) for the ordered actions, their results and the matching listening example. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.
   - title: Coordinates and pitches
-    text: 'The first channel steps run across row 4. Coordinates count from the grid’s top-left corner.
-      Octave labels vary between screens: this tutorial uses the Masks field, where MIDI 60 is C3. Numeric
-      MIDI is the reliable reference when moving between instruments or controls.'
+    text: 'The first channel steps run across row 4. Coordinates count from the grid’s top-left corner. Octave labels vary between screens: this tutorial uses the Masks field, where MIDI 60 is C3. Numeric MIDI is the reliable reference when moving between instruments or controls.'
   - title: Walkthrough Result
-    text: The walkthrough above shows each setting on screen and plays two cycles of four equal MIDI notes
-      (MIDI 60, velocity 80), then stops playback. It does not include a live audio recording of the first
-      loop.
+    text: The walkthrough above shows each setting on screen and plays two cycles of four equal MIDI notes (MIDI 60, velocity 80), then stops playback. It does not include a live audio recording of the first loop.
   - title: Recovery
     text: If silent, follow No Sound in transport → assignment → range → masks → output order.
   - title: Course continuity
-    text: Continue the same project through Make a piece. The separate reference demonstrations below
-      start from their stated starting projects; they do not load a replacement into your project.
+    text: Continue at [Make four equal notes](#first-sound/course). The independent examples have separate starting states; use another project after saving your course piece.
+  - title: Independent controls example
+    text: 'Before starting: Start a new project with Record off. No output, patterns or masks have been entered yet. The walkthrough below begins by choosing an output for channel 1, so you can follow it from an empty project. [Configuring an Output](#setup) explains the choices.
+
+
+      ### Choose the output
+
+
+      1. Tap Channel (3,8). The header reads CH01.
+
+      2. Turn E1 to open Channel tasks, select Device with E2 and press K3.
+
+      3. Select a working output with E3: the basic MIDI device (CC Device), your own configuration, or Polyperc 1 for internal sound. Press K3 to apply.
+
+
+      Device shows the output you chose. A selection that has not been applied with K3 is only a draft.
+
+
+      ### Enter four attacks
+
+
+      1. Tap Pattern (5,8) to Trig. The header names pattern 1.
+
+      2. Tap (1,4), (2,4), (3,4), (4,4).
+
+
+      Four active attacks light on row 4. Each lit step is a trig, a point where a note can sound. If you are editing another pattern, select pattern 1 on the top row first.
+
+
+      ### Assign and shorten
+
+
+      1. Tap Channel (3,8).
+
+      2. Tap pattern slot (1,2).
+
+      3. Hold step (1,4), tap (4,4), release (1,4). To set a range, hold its first step, tap its last step, then release the first.
+
+
+      Pattern 1 feeds channel 1 across a four-step range, so the channel loops steps 1 to 4.
+
+
+      ### Give the attacks a pitch and level
+
+
+      1. Open Channel tasks → Masks.
+
+      2. With no step held, select Note with E2 and set MIDI 60 with E3 (C3). The Masks screen labels MIDI 60 as C3.
+
+      3. Select Vel and set 80.
+
+      4. Select Len and set 1/2.
+
+
+      These are channel masks: all four attacks share one pitch, velocity and length. A step could override them later.
+
+
+      ### Play and stop
+
+
+      1. Tap Play (1,8).
+
+      2. Listen for four equal C notes repeating, with a playhead moving along the grid. At 90 BPM and the default Rate /1 each step lasts one sixth of a second, so the loop repeats about every two thirds of a second.
+
+      3. Tap Play again to stop; hold K1 too if Shift press stop is enabled.
+
+
+      Four equal C notes repeat. Playback stops with notes released.
+
+
+      Resulting project: Pattern 1 attacks 1–4; CH01 assigned P1; range 1–4; Note 60/Vel 80/Len1/2; no step exceptions; stopped.'
   recipes: []
   scene_refs:
   - first-sound-equal-note-loop
@@ -125,9 +120,7 @@ features:
     - M-PAT-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: The exact empty-project route, equal-note loop and stopping are captured in both lanes.
-      Named Save/Load is demonstrated by its separate real-time project-roundtrip scene. Physical sound
-      output is separate.
+    native_gap: The exact empty-project route, equal-note loop and stopping are captured in both lanes. Named Save/Load is demonstrated by its separate real-time project-roundtrip scene. Physical sound output is separate.
     native_evidence:
       real-time:
         run_id: 9bc49fb0f9df44b1a3eb726ed4f0727e
@@ -142,11 +135,30 @@ features:
         scene: first-sound-equal-note-loop
         complete_regression_run: false
     course_status: awaiting-continuous-native-capture
-    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
-      chapter sequence needs its own continuous capture.
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
   category: learn
   parent: getting-started
   level: 3
+
+  scene_milestones:
+  - scene_id: first-sound-equal-note-loop
+    groups:
+    - id: first-loop-checkpoint-1
+      label: Choose the output and enter four attacks
+      step_ids:
+      - device
+      - pattern
+    - id: first-loop-checkpoint-2
+      label: Assign the range and set the sound
+      step_ids:
+      - assignment
+      - note
+      - velocity
+    - id: first-loop-checkpoint-3
+      label: Play the loop and check its MIDI result
+      step_ids:
+      - length-and-playback
+
 - id: no-sound
   title: Troubleshooting No Sound
   audience: beginner
@@ -154,35 +166,21 @@ features:
   prose: 'Use the loop in [Creating a First Loop](#first-sound). Check the following in order.
 
 
-    1. Check that the grid playhead moves. If it does not, press Play. For an external clock source, check
-    that the source is running and sending clock. Use the internal clock for a standalone check.
+    1. Check that the grid playhead moves. If it does not, press Play. For an external clock source, check that the source is running and sending clock. Use the internal clock for a standalone check.
 
-    2. Select the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An
-    unassigned source pattern does not play through the channel.
+    2. Select the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An unassigned source pattern does not play through the channel.
 
-    3. Check that active attacks are inside the channel range. If several patterns are assigned, check whether
-    Skip removes their overlaps. Compare one assigned pattern or All trig merge.
+    3. Check that active attacks are inside the channel range. If several patterns are assigned, check whether Skip removes their overlaps. Compare one assigned pattern or All trig merge.
 
-    4. Open Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value
-    overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.
+    4. Open Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.
 
-    5. Open Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match
-    output port and receive channel. For n.b., check that the player is installed, enabled and supported.
-    Check norns audio level and the listening path.
+    5. Open Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match output port and receive channel. For n.b., check that the player is installed, enabled and supported. Check norns audio level and the listening path.
 
 
-    For hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic
-    sends Note Off messages but does not stop playback. A running sequence can sound new notes after the
-    sweep.
+    For hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic sends Note Off messages but does not stop playback. A running sequence can sound new notes after the sweep.
 
 
-    The examples on this page each show one of these checks. Keep each channel independent shows that Device
-    belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when
-    a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before
-    its start is refused, the previous valid range stays, and only the attacks inside that range sound.
-    Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length
-    masks shows that velocity 0 is silent and that X lets the pattern''s own velocity through (check 4).
-    Create a four-step loop from an empty project is the working loop to compare against.'
+    The examples on this page each show one of these checks. Keep each channel independent shows that Device belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before its start is refused, the previous valid range stays, and only the attacks inside that range sound. Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length masks shows that velocity 0 is silent and that X lets the pattern''s own velocity through (check 4). Create a four-step loop from an empty project is the working loop to compare against.'
   musical_use: ''
   related:
   - first-sound
@@ -224,72 +222,29 @@ features:
     - M-RANGE-REJECT-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Native scoped scenes cover basic playback, device scope, mutes, ranges, mask silence and
-      merge choices. Physical cabling/audio setup is external. Panic is documented in its separate guide
-      and awaits its own scene.
+    native_gap: Native scoped scenes cover basic playback, device scope, mutes, ranges, mask silence and merge choices. Physical cabling/audio setup is external. Panic is documented in its separate guide and awaits its own scene.
   category: learn
   parent: getting-started
   level: 3
+
+  scene_context_links:
+  - scene_id: first-sound-equal-note-loop
+    canonical_route: first-sound/first-sound-equal-note-loop
+    route_behavior: redirect
+    label: "Create a first loop"
+    reason: "Use the complete first-loop workspace to configure an output and hear four equal attacks before troubleshooting further."
+  
 - id: build-a-phrase
   title: Creating a Phrase and Arrangement
   audience: beginner
-  summary: Turn four fast attacks into four evenly spaced beats.
-  prose: 'Before starting: Use channel 1 with pattern 1 assigned, active attacks at steps 1–4 and range
-    1–4. Set channel Masks Note to MIDI 60, Vel to 80 and Len to 1/2; clear existing step exceptions. Stop
-    playback. [Creating a First Loop](#first-sound) gives the complete preparation route.
+  summary: Spread the rhythm across a bar. Start with the four-note loop from chapter 3. Keep its pitch and move the attacks onto the beats.
+  prose: '[Spread the rhythm across a bar](#build-a-phrase/course) is the complete continuing lesson.
 
 
-    ### Extend the range
+    Start here: Start with the four-note loop from chapter 3. Keep its pitch and move the attacks onto the beats.
 
 
-    1. Tap Channel (3,8).
-
-    2. Hold (1,4), tap (16,4), release.
-
-    3. Turn E1 to Channel tasks; select Clock with E2 and press K3.
-
-    4. Select Rate with E2; set /1 with E3 (sixteenth notes, the default).
-
-    5. Press K3 to apply while stopped.
-
-
-    The channel traverses16 steps before repeating.
-
-
-    ### Move the attacks
-
-
-    1. Open Pattern Trig, pattern 1.
-
-    2. Remove steps 2,3,4.
-
-    3. Add steps 5,9,13; keep step 1.
-
-
-    Four attacks now sit on the four beats. The old attacks have been removed explicitly.
-
-
-    ### Hear the longer phrase
-
-
-    1. Play two bars.
-
-    2. Stop.
-
-
-    C–C–C–C remains the pitch sequence; the space between attacks has increased.
-
-
-    Resulting project: P1 attacks 1/5/9/13; CH01 range 1–16; sixteenth-note rate; Note 60/Vel 80/Len1/2
-    unchanged.
-
-
-    The examples below extend this phrase. Set channel and step note masks shows how a step''s own note
-    beats the channel default. Save D major, then apply it shows how a scale slot can be edited and saved
-    without changing what plays until you apply it. The last three examples walk through the whole workflow
-    in order: Add a second pattern in D major merges two patterns on channel 1, Add a second channel with
-    its own output gives channel 2 its own MIDI port, and Chain song slots an octave apart plays two song
-    slots.'
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
   musical_use: ''
   related:
   - rhythm-section-design
@@ -313,22 +268,65 @@ features:
     - tests/behaviour/ui_map.py
   controls: []
   details:
+  - title: Complete lesson
+    text: Open [Spread the rhythm across a bar](#build-a-phrase/course) for the ordered actions, their results and the matching listening example. Start with the four-note loop from chapter 3. Keep its pitch and move the attacks onto the beats.
   - title: Restore Pattern Note Inheritance
-    text: >-
-      The first loop leaves CH01 Note C3 (MIDI 60), Vel 80 and Len 1/2 channel masks. These still override
-      matching pattern values. Before editing relative pattern notes, stop playback. Tap Channel (3,8),
-      turn E1 to Channel tasks, select Masks with E2 and press K3. With no step held, select Note with E2
-      and turn E3 until the field reads X. X is unset, not zero; on steps without a step-specific note mask,
-      the merged pattern note now plays. Keep Vel and Len at 80 and 1/2, or set them to X if pattern values
-      should control them too.
+    text: 'The first loop leaves CH01 Note C3 (MIDI 60), Vel 80 and Len 1/2 channel masks. These still override matching pattern values. Before editing relative pattern notes, stop playback. Tap Channel (3,8), turn E1 to Channel tasks, select Masks with E2 and press K3. With no step held, select Note with E2 and turn E3 until the field reads X. X is unset, not zero; on steps without a step-specific note mask, the merged pattern note now plays. Keep Vel and Len at 80 and 1/2, or set them to X if pattern values should control them too.
 
-      K1+K2 with no step held clears channel step overrides but preserves defaults; it does not clear Note
-      C3. To clear all masks on one step, hold that step and press K2. See Masks: Unset values and precedence.
+      K1+K2 with no step held clears channel step overrides but preserves defaults; it does not clear Note C3. To clear all masks on one step, hold that step and press K2. See Masks: Unset values and precedence.'
   - title: Recovery
     text: Remove an accidental attack by tapping it again in Pattern Trig.
   - title: Course continuity
-    text: Continue the same project through Make a piece. The separate reference demonstrations below
-      start from their stated starting projects; they do not load a replacement into your project.
+    text: Continue at [Spread the rhythm across a bar](#build-a-phrase/course). The independent examples have separate starting states; use another project after saving your course piece.
+  - title: Independent controls example
+    text: 'Before starting: Use channel 1 with pattern 1 assigned, active attacks at steps 1–4 and range 1–4. Set channel Masks Note to MIDI 60, Vel to 80 and Len to 1/2; clear existing step exceptions. Stop playback. [Creating a First Loop](#first-sound) gives the complete preparation route.
+
+
+      ### Extend the range
+
+
+      1. Tap Channel (3,8).
+
+      2. Hold (1,4), tap (16,4), release.
+
+      3. Turn E1 to Channel tasks; select Clock with E2 and press K3.
+
+      4. Select Rate with E2; set /1 with E3 (sixteenth notes, the default).
+
+      5. Press K3 to apply while stopped.
+
+
+      The channel traverses16 steps before repeating.
+
+
+      ### Move the attacks
+
+
+      1. Open Pattern Trig, pattern 1.
+
+      2. Remove steps 2,3,4.
+
+      3. Add steps 5,9,13; keep step 1.
+
+
+      Four attacks now sit on the four beats. The old attacks have been removed explicitly.
+
+
+      ### Hear the longer phrase
+
+
+      1. Play two bars.
+
+      2. Stop.
+
+
+      C–C–C–C remains the pitch sequence; the space between attacks has increased.
+
+
+      Resulting project: P1 attacks 1/5/9/13; CH01 range 1–16; sixteenth-note rate; Note 60/Vel 80/Len1/2 unchanged.
+
+
+      The examples below extend this phrase. Set channel and step note masks shows how a step''s own note beats the channel default. Save D major, then apply it shows how a scale slot can be edited and saved without changing what plays until you apply it. The last three examples walk through the whole workflow in order: Add a second pattern in D major merges two patterns on channel 1, Add a second channel with its own output gives channel 2 its own MIDI port, and Chain song slots an octave apart plays two song slots.'
   recipes: []
   scene_refs:
   - scale-save-d-and-apply
@@ -338,7 +336,7 @@ features:
   - workflow-song-chain
   - first-sound-equal-note-loop
   review:
-    status: verified
+    status: controlled-verified
     cases:
     - M-SCALE-001
     - M-MASK-007
@@ -347,72 +345,1902 @@ features:
     - M-MERGE-PHRASE-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: The full native composition case checks two channels, harmony, merge modes, MIDI melody,
-      slot arrangement, autosave and isolated restart. It starts from its own configured phrase. The explicit
-      first-loop handoff (clear channel Note/Vel/Len defaults and remove attacks 2–4) is source-reviewed
-      but awaits a continuous native lesson capture. Suggested variants and physical sound sources are
-      separate.
+    native_gap: null
     audio_refs:
     - three-voice-conversation
     audio_cases:
     - MA-AUDIO-three-voice-conversation
     course_status: awaiting-continuous-native-capture
-    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
-      chapter sequence needs its own continuous capture.
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
+    native_evidence:
+    - scene: workflow-patterns-and-scale
+      data: reference-workflow-scenes.json
+      data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+      clock_mode: controlled-experimental
+      case: M-WORKFLOW-001
+      assertions:
+      - kind: screen-header
+        expected: DEVICE CH01
+        matched: true
+      - kind: composition-step
+        stage: pattern-2-trigs
+        passed: true
+      - kind: composition-step
+        stage: pattern-2-notes
+        passed: true
+      - kind: composition-step
+        stage: scale-slot-2-d-major
+        passed: true
+      - kind: composition-step
+        stage: pattern-2-assigned
+        passed: true
+      - kind: composition-workflow
+        stage: default-skip
+        expected:
+        - - 1
+          - 144
+          - 64
+          - 117
+          - 1
+        - - 1
+          - 144
+          - 67
+          - 97
+          - 3
+        cycles: 2
+        passed: true
+      scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+      build_lane_proofs:
+      - &id016
+        stage: reference-controlled-scene-plans-workflow-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-workflow-base-midi.json
+        stage_sha256: 12c73c92f6b7f7dc224dec405bacc145f69626e664af875502afd82c49ec2501
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-workflow-base-midi.log
+        log_sha256: 72a89736be4f233b362c87b2e661eafaa629a9b66a1392813c8e5b1c6ba19b0f
+        report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+        report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+          application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+    - scene: workflow-second-channel
+      data: reference-workflow-scenes.json
+      data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+      clock_mode: controlled-experimental
+      case: M-WORKFLOW-001
+      assertions:
+      - kind: composition-workflow
+        stage: merge-all-average
+        expected:
+        - - 1
+          - 144
+          - 66
+          - 127
+          - 0
+        - - 1
+          - 144
+          - 64
+          - 117
+          - 1
+        - - 1
+          - 144
+          - 69
+          - 107
+          - 2
+        - - 1
+          - 144
+          - 67
+          - 97
+          - 3
+        cycles: 2
+        passed: true
+      - kind: screen-header
+        expected: DEVICE CH02
+        matched: true
+      - kind: composition-step
+        stage: channel-2-routed
+        passed: true
+      - kind: screen-header
+        expected: NOTE MASKS CH02
+        matched: true
+      - kind: composition-workflow
+        stage: two-channels-with-melody
+        expected:
+        - - 1
+          - 144
+          - 66
+          - 127
+          - 0
+        - - 2
+          - 145
+          - 69
+          - 100
+          - 0
+        - - 1
+          - 144
+          - 64
+          - 117
+          - 1
+        - - 1
+          - 144
+          - 69
+          - 107
+          - 2
+        - - 2
+          - 145
+          - 76
+          - 90
+          - 2
+        - - 1
+          - 144
+          - 67
+          - 97
+          - 3
+        cycles: 2
+        passed: true
+      scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+      build_lane_proofs:
+      - &id017
+        stage: reference-controlled-scene-plans-workflow-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-workflow-base-midi.json
+        stage_sha256: 12c73c92f6b7f7dc224dec405bacc145f69626e664af875502afd82c49ec2501
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-workflow-base-midi.log
+        log_sha256: 72a89736be4f233b362c87b2e661eafaa629a9b66a1392813c8e5b1c6ba19b0f
+        report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+        report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+          application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+    - scene: workflow-song-chain
+      data: reference-workflow-scenes.json
+      data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+      clock_mode: controlled-experimental
+      case: M-WORKFLOW-001
+      assertions:
+      - kind: composition-workflow
+        stage: two-channels-with-melody
+        expected:
+        - - 1
+          - 144
+          - 66
+          - 127
+          - 0
+        - - 2
+          - 145
+          - 69
+          - 100
+          - 0
+        - - 1
+          - 144
+          - 64
+          - 117
+          - 1
+        - - 1
+          - 144
+          - 69
+          - 107
+          - 2
+        - - 2
+          - 145
+          - 76
+          - 90
+          - 2
+        - - 1
+          - 144
+          - 67
+          - 97
+          - 3
+        cycles: 2
+        passed: true
+      - kind: composition-step
+        stage: song-length-4
+        passed: true
+      - kind: composition-step
+        stage: slot-2-copied
+        passed: true
+      - kind: composition-step
+        stage: channel-1-octave-plus-1
+        passed: true
+      - kind: composition-workflow
+        stage: chained-song
+        expected:
+        - - 1
+          - 144
+          - 66
+          - 127
+          - 0
+        - - 2
+          - 145
+          - 69
+          - 100
+          - 0
+        - - 1
+          - 144
+          - 64
+          - 117
+          - 1
+        - - 1
+          - 144
+          - 69
+          - 107
+          - 2
+        - - 2
+          - 145
+          - 76
+          - 90
+          - 2
+        - - 1
+          - 144
+          - 67
+          - 97
+          - 3
+        - - 1
+          - 144
+          - 78
+          - 127
+          - 4
+        - - 2
+          - 145
+          - 69
+          - 100
+          - 4
+        - - 1
+          - 144
+          - 76
+          - 117
+          - 5
+        - - 1
+          - 144
+          - 81
+          - 107
+          - 6
+        - - 2
+          - 145
+          - 76
+          - 90
+          - 6
+        - - 1
+          - 144
+          - 79
+          - 97
+          - 7
+        cycles: 2
+        passed: true
+      scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+      build_lane_proofs:
+      - &id018
+        stage: reference-controlled-scene-plans-workflow-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-workflow-base-midi.json
+        stage_sha256: 12c73c92f6b7f7dc224dec405bacc145f69626e664af875502afd82c49ec2501
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-workflow-base-midi.log
+        log_sha256: 72a89736be4f233b362c87b2e661eafaa629a9b66a1392813c8e5b1c6ba19b0f
+        report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+        report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+          application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+    historical_native_evidence:
+    - review:
+        status: verified
+        cases:
+        - M-SCALE-001
+        - M-MASK-007
+        - M-WORKFLOW-001
+        - M-PAT-001
+        - M-MERGE-PHRASE-001
+        source_status: code-and-case-reviewed
+        applicability: native-ui
+        native_gap: The full native composition case checks two channels, harmony, merge modes, MIDI melody, slot arrangement, autosave and isolated restart. It starts from its own configured phrase. The explicit first-loop handoff (clear channel Note/Vel/Len defaults and remove attacks 2–4) is source-reviewed but awaits a continuous native lesson capture. Suggested variants and physical sound sources are separate.
+        audio_refs:
+        - three-voice-conversation
+        audio_cases:
+        - MA-AUDIO-three-voice-conversation
+        course_status: awaiting-continuous-native-capture
+        course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
+      scene_refs:
+      - scale-save-d-and-apply
+      - mask-precedence
+      - workflow-patterns-and-scale
+      - workflow-second-channel
+      - workflow-song-chain
+      - first-sound-equal-note-loop
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        - M-MASK-007
+        - M-WORKFLOW-001
+        - M-PAT-001
+        - M-MERGE-PHRASE-001
+        source_status: code-and-case-reviewed
+        applicability: native-ui
+        native_gap: null
+        audio_refs:
+        - three-voice-conversation
+        audio_cases:
+        - MA-AUDIO-three-voice-conversation
+        course_status: awaiting-continuous-native-capture
+        course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
+        native_evidence:
+        - scene: workflow-patterns-and-scale
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: composition-step
+            stage: pattern-2-trigs
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-notes
+            passed: true
+          - kind: composition-step
+            stage: scale-slot-2-d-major
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-assigned
+            passed: true
+          - kind: composition-workflow
+            stage: default-skip
+            expected:
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id001
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: 839d7792086cf2cbc67463814aecda53de7da7a803d6ba02235225606bb7dee4
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: c622900ef0342dd63bbd51417b3b12298215b729381a285ec073fb5e4873fba9
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-second-channel
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: merge-all-average
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: screen-header
+            expected: DEVICE CH02
+            matched: true
+          - kind: composition-step
+            stage: channel-2-routed
+            passed: true
+          - kind: screen-header
+            expected: NOTE MASKS CH02
+            matched: true
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id002
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: 839d7792086cf2cbc67463814aecda53de7da7a803d6ba02235225606bb7dee4
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: c622900ef0342dd63bbd51417b3b12298215b729381a285ec073fb5e4873fba9
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-song-chain
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: composition-step
+            stage: song-length-4
+            passed: true
+          - kind: composition-step
+            stage: slot-2-copied
+            passed: true
+          - kind: composition-step
+            stage: channel-1-octave-plus-1
+            passed: true
+          - kind: composition-workflow
+            stage: chained-song
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            - - 1
+              - 144
+              - 78
+              - 127
+              - 4
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 4
+            - - 1
+              - 144
+              - 76
+              - 117
+              - 5
+            - - 1
+              - 144
+              - 81
+              - 107
+              - 6
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 6
+            - - 1
+              - 144
+              - 79
+              - 97
+              - 7
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id003
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: 839d7792086cf2cbc67463814aecda53de7da7a803d6ba02235225606bb7dee4
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: c622900ef0342dd63bbd51417b3b12298215b729381a285ec073fb5e4873fba9
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        rationale: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/feature-bind/manifest.json
+        complete_regression_run: false
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id001
+        - *id002
+        - *id003
+      scene_refs:
+      - scale-save-d-and-apply
+      - mask-precedence
+      - workflow-patterns-and-scale
+      - workflow-second-channel
+      - workflow-song-chain
+      - first-sound-equal-note-loop
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        - M-MASK-007
+        - M-WORKFLOW-001
+        - M-PAT-001
+        - M-MERGE-PHRASE-001
+        source_status: code-and-case-reviewed
+        applicability: native-ui
+        native_gap: null
+        audio_refs:
+        - three-voice-conversation
+        audio_cases:
+        - MA-AUDIO-three-voice-conversation
+        course_status: awaiting-continuous-native-capture
+        course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
+        native_evidence:
+        - scene: workflow-patterns-and-scale
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: composition-step
+            stage: pattern-2-trigs
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-notes
+            passed: true
+          - kind: composition-step
+            stage: scale-slot-2-d-major
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-assigned
+            passed: true
+          - kind: composition-workflow
+            stage: default-skip
+            expected:
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id004
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: 741e3cb56ee24e57d189195a4cd62ae315242d9e4de5917bf5d14ac4a75f047b
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 5efbd920088163a6ac000a28e485e24e5af3846ad734653668b304d055ac004c
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-second-channel
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: merge-all-average
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: screen-header
+            expected: DEVICE CH02
+            matched: true
+          - kind: composition-step
+            stage: channel-2-routed
+            passed: true
+          - kind: screen-header
+            expected: NOTE MASKS CH02
+            matched: true
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id005
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: 741e3cb56ee24e57d189195a4cd62ae315242d9e4de5917bf5d14ac4a75f047b
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 5efbd920088163a6ac000a28e485e24e5af3846ad734653668b304d055ac004c
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-song-chain
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: composition-step
+            stage: song-length-4
+            passed: true
+          - kind: composition-step
+            stage: slot-2-copied
+            passed: true
+          - kind: composition-step
+            stage: channel-1-octave-plus-1
+            passed: true
+          - kind: composition-workflow
+            stage: chained-song
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            - - 1
+              - 144
+              - 78
+              - 127
+              - 4
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 4
+            - - 1
+              - 144
+              - 76
+              - 117
+              - 5
+            - - 1
+              - 144
+              - 81
+              - 107
+              - 6
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 6
+            - - 1
+              - 144
+              - 79
+              - 97
+              - 7
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id006
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: 741e3cb56ee24e57d189195a4cd62ae315242d9e4de5917bf5d14ac4a75f047b
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 5efbd920088163a6ac000a28e485e24e5af3846ad734653668b304d055ac004c
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        rationale: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/feature-bind/manifest.json
+        complete_regression_run: false
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id004
+        - *id005
+        - *id006
+      scene_refs:
+      - scale-save-d-and-apply
+      - mask-precedence
+      - workflow-patterns-and-scale
+      - workflow-second-channel
+      - workflow-song-chain
+      - first-sound-equal-note-loop
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        - M-MASK-007
+        - M-WORKFLOW-001
+        - M-PAT-001
+        - M-MERGE-PHRASE-001
+        source_status: code-and-case-reviewed
+        applicability: native-ui
+        native_gap: null
+        audio_refs:
+        - three-voice-conversation
+        audio_cases:
+        - MA-AUDIO-three-voice-conversation
+        course_status: awaiting-continuous-native-capture
+        course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
+        native_evidence:
+        - scene: workflow-patterns-and-scale
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: composition-step
+            stage: pattern-2-trigs
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-notes
+            passed: true
+          - kind: composition-step
+            stage: scale-slot-2-d-major
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-assigned
+            passed: true
+          - kind: composition-workflow
+            stage: default-skip
+            expected:
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id007
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: c07754ab2d365741dcd40b7c2497ce44ea727c7d56e81361e0701749e519d124
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 188612a29eccc8eafb1f861ca2ebb42c0de71d1d2f4e41cd99b89cfd6ef65464
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-second-channel
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: merge-all-average
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: screen-header
+            expected: DEVICE CH02
+            matched: true
+          - kind: composition-step
+            stage: channel-2-routed
+            passed: true
+          - kind: screen-header
+            expected: NOTE MASKS CH02
+            matched: true
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id008
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: c07754ab2d365741dcd40b7c2497ce44ea727c7d56e81361e0701749e519d124
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 188612a29eccc8eafb1f861ca2ebb42c0de71d1d2f4e41cd99b89cfd6ef65464
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-song-chain
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: composition-step
+            stage: song-length-4
+            passed: true
+          - kind: composition-step
+            stage: slot-2-copied
+            passed: true
+          - kind: composition-step
+            stage: channel-1-octave-plus-1
+            passed: true
+          - kind: composition-workflow
+            stage: chained-song
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            - - 1
+              - 144
+              - 78
+              - 127
+              - 4
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 4
+            - - 1
+              - 144
+              - 76
+              - 117
+              - 5
+            - - 1
+              - 144
+              - 81
+              - 107
+              - 6
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 6
+            - - 1
+              - 144
+              - 79
+              - 97
+              - 7
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id009
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: c07754ab2d365741dcd40b7c2497ce44ea727c7d56e81361e0701749e519d124
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 188612a29eccc8eafb1f861ca2ebb42c0de71d1d2f4e41cd99b89cfd6ef65464
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        rationale: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/feature-bind/manifest.json
+        complete_regression_run: false
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id007
+        - *id008
+        - *id009
+      scene_refs:
+      - scale-save-d-and-apply
+      - mask-precedence
+      - workflow-patterns-and-scale
+      - workflow-second-channel
+      - workflow-song-chain
+      - first-sound-equal-note-loop
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        - M-MASK-007
+        - M-WORKFLOW-001
+        - M-PAT-001
+        - M-MERGE-PHRASE-001
+        source_status: code-and-case-reviewed
+        applicability: native-ui
+        native_gap: null
+        audio_refs:
+        - three-voice-conversation
+        audio_cases:
+        - MA-AUDIO-three-voice-conversation
+        course_status: awaiting-continuous-native-capture
+        course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
+        native_evidence:
+        - scene: workflow-patterns-and-scale
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: composition-step
+            stage: pattern-2-trigs
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-notes
+            passed: true
+          - kind: composition-step
+            stage: scale-slot-2-d-major
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-assigned
+            passed: true
+          - kind: composition-workflow
+            stage: default-skip
+            expected:
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id010
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: c07754ab2d365741dcd40b7c2497ce44ea727c7d56e81361e0701749e519d124
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 188612a29eccc8eafb1f861ca2ebb42c0de71d1d2f4e41cd99b89cfd6ef65464
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-second-channel
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: merge-all-average
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: screen-header
+            expected: DEVICE CH02
+            matched: true
+          - kind: composition-step
+            stage: channel-2-routed
+            passed: true
+          - kind: screen-header
+            expected: NOTE MASKS CH02
+            matched: true
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id011
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: c07754ab2d365741dcd40b7c2497ce44ea727c7d56e81361e0701749e519d124
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 188612a29eccc8eafb1f861ca2ebb42c0de71d1d2f4e41cd99b89cfd6ef65464
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-song-chain
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: composition-step
+            stage: song-length-4
+            passed: true
+          - kind: composition-step
+            stage: slot-2-copied
+            passed: true
+          - kind: composition-step
+            stage: channel-1-octave-plus-1
+            passed: true
+          - kind: composition-workflow
+            stage: chained-song
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            - - 1
+              - 144
+              - 78
+              - 127
+              - 4
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 4
+            - - 1
+              - 144
+              - 76
+              - 117
+              - 5
+            - - 1
+              - 144
+              - 81
+              - 107
+              - 6
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 6
+            - - 1
+              - 144
+              - 79
+              - 97
+              - 7
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id012
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: c07754ab2d365741dcd40b7c2497ce44ea727c7d56e81361e0701749e519d124
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 188612a29eccc8eafb1f861ca2ebb42c0de71d1d2f4e41cd99b89cfd6ef65464
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        rationale: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/feature-bind/manifest.json
+        complete_regression_run: false
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id010
+        - *id011
+        - *id012
+      scene_refs:
+      - scale-save-d-and-apply
+      - mask-precedence
+      - workflow-patterns-and-scale
+      - workflow-second-channel
+      - workflow-song-chain
+      - first-sound-equal-note-loop
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        - M-MASK-007
+        - M-WORKFLOW-001
+        - M-PAT-001
+        - M-MERGE-PHRASE-001
+        source_status: code-and-case-reviewed
+        applicability: native-ui
+        native_gap: null
+        audio_refs:
+        - three-voice-conversation
+        audio_cases:
+        - MA-AUDIO-three-voice-conversation
+        course_status: awaiting-continuous-native-capture
+        course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
+        native_evidence:
+        - scene: workflow-patterns-and-scale
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: composition-step
+            stage: pattern-2-trigs
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-notes
+            passed: true
+          - kind: composition-step
+            stage: scale-slot-2-d-major
+            passed: true
+          - kind: composition-step
+            stage: pattern-2-assigned
+            passed: true
+          - kind: composition-workflow
+            stage: default-skip
+            expected:
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id013
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: a2952670209be84ed6c6480091d78d86f841119a0f8d901e67f998f20b471f11
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 673669cd4b30272593a56c4744cc2a24bbd336d2a174f9dde6ba2e2c87d592d9
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-second-channel
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: merge-all-average
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: screen-header
+            expected: DEVICE CH02
+            matched: true
+          - kind: composition-step
+            stage: channel-2-routed
+            passed: true
+          - kind: screen-header
+            expected: NOTE MASKS CH02
+            matched: true
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id014
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: a2952670209be84ed6c6480091d78d86f841119a0f8d901e67f998f20b471f11
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 673669cd4b30272593a56c4744cc2a24bbd336d2a174f9dde6ba2e2c87d592d9
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: workflow-song-chain
+          data: reference-workflow-scenes.json
+          data_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+          clock_mode: controlled-experimental
+          case: M-WORKFLOW-001
+          assertions:
+          - kind: composition-workflow
+            stage: two-channels-with-melody
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            cycles: 2
+            passed: true
+          - kind: composition-step
+            stage: song-length-4
+            passed: true
+          - kind: composition-step
+            stage: slot-2-copied
+            passed: true
+          - kind: composition-step
+            stage: channel-1-octave-plus-1
+            passed: true
+          - kind: composition-workflow
+            stage: chained-song
+            expected:
+            - - 1
+              - 144
+              - 66
+              - 127
+              - 0
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 0
+            - - 1
+              - 144
+              - 64
+              - 117
+              - 1
+            - - 1
+              - 144
+              - 69
+              - 107
+              - 2
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 2
+            - - 1
+              - 144
+              - 67
+              - 97
+              - 3
+            - - 1
+              - 144
+              - 78
+              - 127
+              - 4
+            - - 2
+              - 145
+              - 69
+              - 100
+              - 4
+            - - 1
+              - 144
+              - 76
+              - 117
+              - 5
+            - - 1
+              - 144
+              - 81
+              - 107
+              - 6
+            - - 2
+              - 145
+              - 76
+              - 90
+              - 6
+            - - 1
+              - 144
+              - 79
+              - 97
+              - 7
+            cycles: 2
+            passed: true
+          scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+          build_lane_proofs:
+          - &id015
+            stage: reference-controlled-scene-plans-workflow-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-workflow-base-midi.json
+            stage_sha256: a2952670209be84ed6c6480091d78d86f841119a0f8d901e67f998f20b471f11
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-workflow-base-midi.log
+            log_sha256: 673669cd4b30272593a56c4744cc2a24bbd336d2a174f9dde6ba2e2c87d592d9
+            report: /home/andy/mosaic-manual-runs/3ee3285664af4f3785a95f92b6e23616/reference-scenes.json
+            report_sha256: dde5f6d3b886813c470344c62890038c5f469c4125603933babae94a54b3e814
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 30eae860da560a079252622acc79619b2f9551e81491cf5bc18bc4b4144c34db
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        rationale: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/feature-bind/manifest.json
+        complete_regression_run: false
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id013
+        - *id014
+        - *id015
+      scene_refs:
+      - scale-save-d-and-apply
+      - mask-precedence
+      - workflow-patterns-and-scale
+      - workflow-second-channel
+      - workflow-song-chain
+      - first-sound-equal-note-loop
+    rationale: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+    scope: 'Three current public-input composing workflows: pattern and scale, a second channel and a song chain.'
+    binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/feature-bind/manifest.json
+    complete_regression_run: false
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+    validation_scope: controlled-manual-generation
+    realtime_qualification: pending-ci
+    controlled_baselines:
+    - *id016
+    - *id017
+    - *id018
   category: learn
   parent: getting-started
   level: 3
+  scene_milestones:
+  - scene_id: first-sound-equal-note-loop
+    groups:
+    - id: first-sound-equal-note-loop-checkpoint-1
+      label: Route output, add four trigs and set the range
+      step_ids:
+      - device
+      - pattern
+      - assignment
+    - id: first-sound-equal-note-loop-checkpoint-2
+      label: Set C3, velocity 80 and half-step length; check the loop
+      step_ids:
+      - note
+      - velocity
+      - length-and-playback
+  - scene_id: workflow-patterns-and-scale
+    groups:
+    - id: workflow-patterns-and-scale-checkpoint-1
+      label: Build pattern 2, apply D major and assign it
+      step_ids:
+      - start
+      - pattern-2-trigs
+      - pattern-2-notes
+      - scale-slot-2-d-major
+      - pattern-2-assigned
+    - id: workflow-patterns-and-scale-checkpoint-2
+      label: Hear Skip drop the overlapping steps
+      step_ids:
+      - default-skip
+  - scene_id: workflow-second-channel
+    groups:
+    - id: workflow-second-channel-checkpoint-1
+      label: Route channel 2 and open its Masks
+      step_ids:
+      - start
+      - channel-2
+      - channel-2-routed
+      - channel-2-masks
+    - id: workflow-second-channel-checkpoint-2
+      label: Add a keyboard note and check both outputs
+      step_ids:
+      - two-channels
+
+  scene_context_links:
+  - scene_id: first-sound-equal-note-loop
+    canonical_route: first-sound/first-sound-equal-note-loop
+    route_behavior: redirect
+    label: "Create a first loop"
+    reason: "Open the complete first-loop workspace before continuing into phrase building."
+  
 - id: keep-your-work
   title: Saving and Loading a Project
   audience: beginner
-  summary: Restore the arrangement from a named project.
-  prose: 'Before starting: Use any stopped project containing a named arrangement. The worked reload check
-    uses slot 1 with channel 1 muted and another channel audible. For another project, make a reversible
-    visible change before loading and confirm the saved state returns.
+  summary: Save, reload and perform. Start with the two-section arrangement from chapter 9, stopped with slot 1 selected. Save it, make a temporary change, and reload the saved version.
+  prose: '[Save, reload and perform](#keep-your-work/course) is the complete continuing lesson.
 
 
-    ### Save the arrangement
+    Start here: Start with the two-section arrangement from chapter 9, stopped with slot 1 selected. Save it, make a temporary change, and reload the saved version.
 
 
-    1. Tap K1 briefly to enter the norns system menu.
-
-    2. Open PARAMS → MOSAIC → Save project.
-
-    3. Enter Four notes and confirm.
-
-
-    The named project stores the two-section arrangement.
-
-
-    ### Prove the saved version
-
-
-    1. Return to Mosaic, select Song slot 1, then open Channel.
-
-    2. Hold K1, tap channel 1 at (1,1), release K1 to unmute it temporarily.
-
-    3. With playback stopped, open PARAMS → MOSAIC → Load project.
-
-    4. Select Four notes and confirm.
-
-
-    Slot 1 returns to bass alone; the temporary change is removed.
-
-
-    ### Replay the restored sections
-
-
-    1. Select slot 1.
-
-    2. Play four section passes and stop.
-
-
-    The saved bass-only/full-phrase alternation is restored. Continue with merge, recording or modulation
-    task guides without replacing this saved version.
-
-
-    Resulting project: Named project Four notes contains both sections and restores their exact playback.
-    Transport stopped with no held notes.'
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
   musical_use: ''
   related:
   - save-and-load
@@ -434,12 +2262,56 @@ features:
   - gesture: PARAMS → MOSAIC → Load project
     result: Choose a saved project; K2 cancels the dialog.
   details:
+  - title: Complete lesson
+    text: Open [Save, reload and perform](#keep-your-work/course) for the ordered actions, their results and the matching listening example. Start with the two-section arrangement from chapter 9, stopped with slot 1 selected. Save it, make a temporary change, and reload the saved version.
   - title: Recovery
-    text: K2 cancels Load without replacing the current project. Keep the saved name before trying optional
-      variations.
+    text: K2 cancels Load without replacing the current project. Keep the saved name before trying optional variations.
   - title: Course continuity
-    text: Continue the same project through Make a piece. The separate reference demonstrations below
-      start from their stated starting projects; they do not load a replacement into your project.
+    text: Continue at [Save, reload and perform](#keep-your-work/course). The independent examples have separate starting states; use another project after saving your course piece.
+  - title: Independent controls example
+    text: 'Before starting: Use any stopped project containing a named arrangement. The worked reload check uses slot 1 with channel 1 muted and another channel audible. For another project, make a reversible visible change before loading and confirm the saved state returns.
+
+
+      ### Save the arrangement
+
+
+      1. Tap K1 briefly to enter the norns system menu.
+
+      2. Open PARAMS → MOSAIC → Save project.
+
+      3. Press K3 to open text entry. Turn E2 left to DEL and press K3 three times to remove new. Turn E3 left to the character row; use E2 to select each character of Four notes and K3 to enter it, including the space. Turn E3 right to the bottom row, turn E2 right to OK, and press and release K3. K2 cancels text entry.
+
+
+      The named project stores the two-section arrangement.
+
+
+      ### Prove the saved version
+
+
+      1. Return to Mosaic, select Song slot 1, then open Channel.
+
+      2. Hold K1, tap channel 1 at (1,1), release K1 to unmute it temporarily.
+
+      3. With playback stopped, open PARAMS → MOSAIC → Load project.
+
+      4. Select Four notes and confirm.
+
+
+      Slot 1 returns to bass alone; the temporary change is removed.
+
+
+      ### Replay the restored sections
+
+
+      1. Select slot 1.
+
+      2. Play four section passes and stop.
+
+
+      The saved bass-only/full-phrase alternation is restored. Continue with merge, recording or modulation task guides without replacing this saved version.
+
+
+      Resulting project: Named project Four notes contains both sections and restores their exact playback. Transport stopped with no held notes.'
   recipes: []
   scene_refs: []
   review:
@@ -448,12 +2320,8 @@ features:
     - M-SAVE-NAMED-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Native default and typed project naming, overwrite, idle autosave, cancelled Load and
-      both named reloads with exact persistence and playback checks. Rejected-file and failure recovery
-      are separately scoped source cases.
-    rationale: Native default and typed project naming, overwrite, idle autosave, cancelled Load and both
-      named reloads with exact persistence and playback checks. Rejected-file and failure recovery are
-      separately scoped source cases.
+    native_gap: Native default and typed project naming, overwrite, idle autosave, cancelled Load and both named reloads with exact persistence and playback checks. Rejected-file and failure recovery are separately scoped source cases.
+    rationale: Native default and typed project naming, overwrite, idle autosave, cancelled Load and both named reloads with exact persistence and playback checks. Rejected-file and failure recovery are separately scoped source cases.
     controlled_baselines: []
     native_evidence:
     - scene: named-project-roundtrip
@@ -512,13 +2380,10 @@ features:
         case_participants_sha256: 6605cb81b9d719534143512e0df31b0f0978deb7efd12d79300e066f430b46e1
       independent_audit: manual/evidence/options-complete-start-recovery-real-independent-audit.json
       independent_audit_sha256: 15ec2a6d85de9c24d12b8c7709c6fb737c2e3665c0642938ec8f31ebf8b4c320
-      scope: Native default and typed project naming, overwrite, idle autosave, cancelled Load and both
-        named reloads with exact persistence and playback checks. Rejected-file and failure recovery are
-        separately scoped source cases.
+      scope: Native default and typed project naming, overwrite, idle autosave, cancelled Load and both named reloads with exact persistence and playback checks. Rejected-file and failure recovery are separately scoped source cases.
       complete_regression_run: false
     course_status: awaiting-continuous-native-capture
-    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
-      chapter sequence needs its own continuous capture.
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
   category: learn
   parent: getting-started
   level: 3

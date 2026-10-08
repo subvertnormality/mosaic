@@ -9,7 +9,8 @@ import manual_book
 
 class CaptionOverlayTests(unittest.TestCase):
     def setUp(self):
-        self.scene={"id":"slide","title":"Slide", "data_path":"generated/native.json",
+        self.scene={"id":"slide","title":"Slide", "feature_id":"captured-owner",
+                    "data_path":"generated/native.json",
                     "evidence":{"results_sha256":"abc"},"steps":[
                     {"id":"a","caption":"Technical caption", "title":"Press K3",
                      "inputs":[{"key":3}],"expect":{"cc":96},
@@ -76,4 +77,70 @@ class CaptionOverlayTests(unittest.TestCase):
     def test_duplicate_and_extra_fields_reject(self):
         with self.assertRaisesRegex(ValueError,"Duplicate"):self.apply([self.entry,self.entry])
         with self.assertRaisesRegex(ValueError,"fields"):self.apply([dict(self.entry,output={})])
+    def test_scene_and_step_titles_apply_with_per_field_receipts(self):
+        entry=dict(self.entry,scene_title="Edited scene",baseline_scene_title="Slide",
+                   step_title="Select Channel",baseline_step_title="Press K3")
+        original=copy.deepcopy(self.scene);result=self.apply([entry])["slide"]
+        self.assertEqual(self.scene,original)
+        self.assertEqual(result["title"],"Edited scene")
+        self.assertEqual(result["steps"][0]["title"],"Select Channel")
+        self.assertEqual(result["feature_id"],"captured-owner")
+        self.assertEqual(result["scene_title_overlay"],{
+            "original_title_sha256":text_sha256("Slide"),
+            "title_sha256":text_sha256("Edited scene"),
+            "contract_sha256":entry["contract_sha256"]})
+        self.assertEqual(result["steps"][0]["step_title_overlay"],{
+            "original_title_sha256":text_sha256("Press K3"),
+            "title_sha256":text_sha256("Select Channel"),
+            "contract_sha256":entry["contract_sha256"]})
+    def test_title_pairs_are_required_and_titles_remain_contract_bound(self):
+        with self.assertRaisesRegex(ValueError,"fields"):
+            self.apply([dict(self.entry,step_title="Select Channel")])
+        title_only={"scene_id":"slide","step_id":"a","scene_title":"Edited scene",
+                    "baseline_scene_title":"Slide","contract_sha256":self.entry["contract_sha256"]}
+        with self.assertRaisesRegex(ValueError,"fields"):
+            self.apply([title_only])
+        changed=copy.deepcopy(self.scene);changed["steps"][0]["title"]="Changed natively"
+        with self.assertRaisesRegex(ValueError,"Step title baseline"):
+            self.apply([dict(self.entry,step_title="Select Channel",baseline_step_title="Press K3")],scene=changed)
+        changed=copy.deepcopy(self.scene);changed["steps"][0]["inputs"]=[{"key":4}]
+        with self.assertRaisesRegex(ValueError,"contract"):
+            self.apply([dict(self.entry,step_title="Select Channel",baseline_step_title="Press K3")],scene=changed)
+    def test_contradictory_scene_title_edits_reject_before_applying(self):
+        first=dict(self.entry,scene_title="Edited scene",baseline_scene_title="Slide")
+        second=dict(self.entry,step_id="b",caption="Second caption.",
+                    baseline_caption="Second technical caption",
+                    scene_title="A different title",baseline_scene_title="Slide")
+        original=copy.deepcopy(self.scene)
+        with self.assertRaisesRegex(ValueError,"Contradictory scene title"):
+            self.apply([first,second])
+        self.assertEqual(self.scene,original)
+    def test_title_fields_are_not_skipped_when_caption_is_already_desired(self):
+        scene=copy.deepcopy(self.scene);scene["steps"][0]["caption"]=self.entry["caption"]
+        scene["steps"][0]["title"]="Unexpected title"
+        entry=dict(self.entry,step_title="Select Channel",baseline_step_title="Press K3")
+        with self.assertRaisesRegex(ValueError,"Step title baseline"):
+            self.apply([entry],scene=scene)
+    def test_fully_regenerated_desired_titles_and_caption_are_idempotent(self):
+        entry=dict(self.entry,scene_title="Edited scene",baseline_scene_title="Slide",
+                   step_title="Select Channel",baseline_step_title="Press K3")
+        scene=copy.deepcopy(self.scene);scene["title"]=entry["scene_title"]
+        scene["steps"][0]["title"]=entry["step_title"]
+        scene["steps"][0]["caption"]=entry["caption"]
+        scene["evidence"]["results_sha256"]="new-native-capture"
+        result=self.apply([entry],scene=scene)["slide"]
+        self.assertEqual(result,scene)
+    def test_mixed_fresh_scene_title_and_caption_changes_use_original_contract(self):
+        desired_title="Edited scene"
+        first=dict(self.entry,caption=self.entry["caption"],scene_title=desired_title,
+                   baseline_scene_title="Slide")
+        second=dict(self.entry,step_id="b",caption="Updated second caption.",
+                    baseline_caption="Second technical caption",scene_title=desired_title,
+                    baseline_scene_title="Slide")
+        scene=copy.deepcopy(self.scene);scene["title"]=desired_title
+        scene["steps"][0]["caption"]=first["caption"]
+        result=self.apply([first,second],scene=scene)["slide"]
+        self.assertEqual(result["title"],desired_title)
+        self.assertEqual(result["steps"][1]["caption"],second["caption"])
+        self.assertEqual(result["steps"][1]["caption_overlay"]["contract_sha256"],second["contract_sha256"])
 if __name__=="__main__":unittest.main()

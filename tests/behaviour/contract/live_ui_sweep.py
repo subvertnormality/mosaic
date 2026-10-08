@@ -441,20 +441,17 @@ def merge_screens(c, sw):
     sw.screen("M05", field=("Reason", OPEN))
     c.key(2)
     sw.screen("M02", field=("Result", OPEN))
-    # The read-only effective Strategy links to the single C09 selector.
-    # Fragments is selected through its shared five-choice input contract.
-    e2(c, 1); c.key(3)
-    sw.screen("C09", field=("Patterns", "01"))
-    e2(c, 1)
-    for _ in range(5): c.enc(3, -1)
-    for _ in range(4): c.enc(3, 1)
+    # Characterisation outside README: use the current shared Strategy route.
+    # The old M02 -> K3 path to C09 MERGE MODES no longer reaches that screen.
+    from merge_strategy_routes import select_strategy
+    select_strategy(c, "FRAGMENTS", channel=1)
     sw.screen("C09", field=("Strategy", "FRAGMENTS"))
     c.key(2)
-    e2(c, -4)
-    sw.screen("M02", field=("Strategy", "FRAGMENTS"))
-    # README Merge Shape Fragments: the fourth row is Result, not a Pitch detour.
-    expect_detail_row(c, 3, "Result", OPEN)
-    e2(c, 1); c.key(3)
+    c.ui.channel_page("merge_shape", channel=1)
+    c.ui.select_row("strategy_selector", 4)
+    sw.screen("M02", field=("Strategy selector", OPEN))
+    c.ui.select_row("rhythm", 1)
+    c.ui.press_key(3)
     walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", BOOLEAN_FALSE), ("Seed", "0")], top=True)
     e2(c, -1); c.enc(3, 1)
     walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", "ON"), ("Anchor", "NONE"), ("Seed", "0")], top=True)

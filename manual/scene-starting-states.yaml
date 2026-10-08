@@ -49,3 +49,7 @@ starting_states:
   text: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page
     is open and its player list is ready to browse. This channel carries the bass in the audio
     example Rhythm, bass and a changing chord.
+- scene_id: repeat-reset-first-boundary-public
+  text: Channel 1 loops C, D, E on pattern 1, steps 1–3, through a MIDI device at 90 BPM and Rate /9.
+    Song mode is On and the selected slot lasts 64 global steps. Reset on song seq change and Reset on
+    pattern repeat are Off. Playback is stopped, and PARAMS is open on the repeat-reset option.

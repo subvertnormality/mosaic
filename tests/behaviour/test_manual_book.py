@@ -2,28 +2,52 @@
 import copy, importlib.util, unittest
 from unittest.mock import patch
 from pathlib import Path
+import manual_authority
 ROOT=Path(__file__).resolve().parents[2]
 spec=importlib.util.spec_from_file_location("manual_book",ROOT/"tools/manual_book.py")
 book=importlib.util.module_from_spec(spec);spec.loader.exec_module(book)
 class ManualBook(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.authored_data=book.load()
     def setUp(self):
-        self.data=book.load()
+        self.data=copy.deepcopy(self.authored_data)
         refs={scene for feature in self.data["features"] for scene in feature.get("scene_refs",[])}
         course=self.data.get("course",{})
         refs.update(stage["binding"]["scene"] for chapter in course.get("learning_path",[])
                     for stage in chapter.get("stages",[]) if stage.get("binding",{}).get("scene"))
+        milestones=[(feature,item) for feature in self.data["features"]
+                    for item in feature.get("scene_milestones",[])]
+        refs.update(item["scene_id"] for _,item in milestones)
         starting_states=book.MANUAL/"scene-starting-states.yaml"
         if starting_states.is_file():
             refs.update(entry["scene_id"] for entry in book.read(starting_states).get("starting_states",[]))
         self.catalogue={scene:{"id":scene,"steps":[]} for scene in refs}
+        # Synthetic scene steps mirror each complete ordered authored milestone
+        # partition, including milestones introduced in current source data.
+        milestone_steps={}
+        for _,milestone in milestones:
+            scene_id=milestone["scene_id"]
+            step_ids=[step_id for group in milestone["groups"] for step_id in group["step_ids"]]
+            previous=milestone_steps.get(scene_id)
+            if previous is not None and previous != step_ids:
+                raise AssertionError("Conflicting milestone fixture partitions: "+scene_id)
+            milestone_steps[scene_id]=step_ids
+        for scene_id,step_ids in milestone_steps.items():
+            self.catalogue[scene_id]["steps"]=[{"id":step_id} for step_id in step_ids]
         proof={"passed":True,"semantic_assertions":["Fixture binding evidence"],"sha256":"fixture-screen","grid_sha256":"fixture-grid"}
         for chapter in course.get("learning_path",[]):
             for stage in chapter.get("stages",[]):
                 binding=stage.get("binding",{})
                 scene_id,step_id=binding.get("scene"),binding.get("step")
                 if scene_id and step_id:
-                    self.catalogue[scene_id]["steps"].append(
-                        {"id":step_id,"output":{"binding":proof} if binding.get("status")=="controlled-verified" else {}})
+                    steps=self.catalogue[scene_id]["steps"]
+                    match=next((step for step in steps if step["id"]==step_id),None)
+                    if match is None:
+                        match={"id":step_id};steps.append(match)
+                    if binding.get("status")=="controlled-verified":
+                        match["output"]={"binding":proof}
         for name,value in (("capture_catalogue",self.catalogue),("authoring_identity",{"scope":"isolated-book-test"})):
             patcher=patch.object(book,name,return_value=value);patcher.start();self.addCleanup(patcher.stop)
         overlay=patch.object(book,"apply_overlays",side_effect=lambda scenes,overlay:scenes);overlay.start();self.addCleanup(overlay.stop)
@@ -42,7 +66,7 @@ class ManualBook(unittest.TestCase):
         bad=copy.deepcopy(self.data);bad["features"][0]["sources"]["code"]=["../private.lua"]
         with self.assertRaisesRegex(ValueError,"Unsafe|Missing"):book.validate(bad)
     def test_captured_scene_cannot_be_invented(self):
-        bad=copy.deepcopy(self.data);bad["features"][0]["scene_refs"]=["imaginary-scene"]
+        bad=copy.deepcopy(self.data);bad["features"][0]["scene_refs"].append("imaginary-scene")
         with self.assertRaisesRegex(ValueError,"Unknown scene"):book.validate(bad)
     def test_build_preserves_unverified_status_and_original_hash(self):
         self.data["features"][0]["review"]["status"]="pending"
@@ -56,10 +80,16 @@ class ManualBook(unittest.TestCase):
                     project=dict(name="Phrase",output="MIDI",incoming_state="Empty project",capture_status="pending"),
                     learning_path=[dict(id="masks",title="Shape the phrase",goal="Hear a quieter note",prerequisite="A four-note loop",outgoing_state="One quiet note",recovery="Clear its velocity mask",stages=[dict(id="quiet-note",title="Quiet note",goal="Create contrast",action="Hold step 13 and set Vel to 50.",result="The fourth note is quieter.",binding=dict(status="pending",scene=None,step=None))])])
     def with_course(self):
-        data=copy.deepcopy(self.data);data.update(course_source="course.yaml",course=self.course())
+        data=copy.deepcopy(self.data)
+        data.pop("recordings_context",None);data.pop("recordings_source",None)
+        data.update(course_source="course.yaml",course=self.course())
         return data
+
     def test_pending_course_is_compiled_and_blocks_completeness(self):
         data=self.with_course()
+        book.validate(data)
+        self.assertNotIn("recordings_context",data)
+        self.assertNotIn("recordings_source",data)
         for feature in data["features"]:feature["review"]["status"]="verified"
         with patch.object(book,"apply_overlays",side_effect=lambda scenes,overlay:scenes):result=book.compile_book(data)
         self.assertEqual(result["learning_path"],data["course"]["learning_path"])
@@ -103,9 +133,38 @@ class ManualBook(unittest.TestCase):
         self.assertTrue(result["complete_manual"])
         self.assertIn("lesson",result["scenes"])
 
+    def test_milestone_fixture_covers_current_source_partitions_in_order(self):
+        milestones=[item for feature in self.data["features"] for item in feature.get("scene_milestones",[])]
+        self.assertTrue(milestones)
+        for milestone in milestones:
+            expected=[step_id for group in milestone["groups"] for step_id in group["step_ids"]]
+            actual=[step["id"] for step in self.catalogue[milestone["scene_id"]]["steps"]]
+            self.assertEqual(actual,expected,milestone["scene_id"])
+            self.assertEqual(len(actual),len(set(actual)),milestone["scene_id"])
+
+    def test_recordings_context_round_trips_with_source_identity(self):
+        self.assertIn("recordings_source",self.data)
+        self.assertIn("recordings_context",self.data)
+        source=self.data["recordings_source"]
+        source_path=book.MANUAL/source
+        identity=manual_authority.authoring_identity(book.ROOT)
+        identity_path=(Path("manual")/source).as_posix()
+        self.assertEqual(identity["files"][identity_path],book.digest(source_path))
+        with patch.object(book,"authoring_identity",side_effect=manual_authority.authoring_identity):
+            result=book.compile_book(self.data)
+        compiled=result["recordings_context"]
+        self.assertEqual(compiled["source"]["path"],identity_path)
+        self.assertEqual(compiled["source"]["sha256"],identity["files"][identity_path])
+        expected={row["id"] for row in self.data["recordings_context"]["recordings"]}
+        self.assertEqual(set(compiled["recordings"]),expected)
+        for recording in compiled["recordings"].values():
+            for relation in recording["lesson_relations"]:
+                self.assertTrue(relation["canonical_route"])
+
     def test_controlled_verified_content_can_complete_without_realtime_qualification_claim(self):
         data=copy.deepcopy(self.data)
         data.pop("course",None);data.pop("course_source",None)
+        data.pop("recordings_context",None);data.pop("recordings_source",None)
         for feature in data["features"]:
             feature["review"]["status"]="controlled-verified"
             feature["review"]["validation_scope"]="controlled-manual-generation"

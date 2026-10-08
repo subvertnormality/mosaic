@@ -40,11 +40,45 @@
             "type": "string",
             "minLength": 1
           },
+          "scene_title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "baseline_scene_title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "step_title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "baseline_step_title": {
+            "type": "string",
+            "minLength": 1
+          },
           "contract_sha256": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$"
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {"required": ["scene_title"]},
+            "then": {"required": ["baseline_scene_title"]}
+          },
+          {
+            "if": {"required": ["baseline_scene_title"]},
+            "then": {"required": ["scene_title"]}
+          },
+          {
+            "if": {"required": ["step_title"]},
+            "then": {"required": ["baseline_step_title"]}
+          },
+          {
+            "if": {"required": ["baseline_step_title"]},
+            "then": {"required": ["step_title"]}
+          }
+        ]
       }
     }
   }

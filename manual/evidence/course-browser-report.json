@@ -2,9 +2,10 @@
   "passed": true,
   "checks": [
     "Current served course chapters each render their primary stages once without unrelated recordings",
+    "Course chapters show only their own course audio (stage or chapter id), choose between several, hide unrelated reference audio; the reference page hides course clips",
     "Single primary lesson; independent prose, recipes and audio separated",
-    "verified binding: link loads captured pixels; deep link, reload and scene selection retain course context",
-    "controlled-verified binding: link loads captured pixels; deep link, reload and scene selection retain course context",
+    "verified binding: link loads captured pixels; deep link, reload and public bound result selection retain course context",
+    "controlled-verified binding: link loads captured pixels; deep link, reload and public bound result selection retain course context",
     "pending binding: no result link or captured scene",
     "failed binding: no result link or captured scene",
     "Historical Masks citation resolves to archived 1.4.0 source",
@@ -27,58 +28,58 @@
     },
     {
       "id": "first-sound",
-      "stages": 4,
-      "captured_links": 4,
+      "stages": 5,
+      "captured_links": 5,
       "captured_scenes": 1
     },
     {
       "id": "build-a-phrase",
-      "stages": 3,
-      "captured_links": 3,
+      "stages": 5,
+      "captured_links": 5,
       "captured_scenes": 1
     },
     {
       "id": "masks",
-      "stages": 9,
-      "captured_links": 9,
+      "stages": 10,
+      "captured_links": 10,
       "captured_scenes": 1
     },
     {
       "id": "sequence-composition",
-      "stages": 4,
-      "captured_links": 4,
+      "stages": 8,
+      "captured_links": 8,
       "captured_scenes": 1
     },
     {
       "id": "harmony-design",
-      "stages": 4,
-      "captured_links": 4,
+      "stages": 6,
+      "captured_links": 6,
       "captured_scenes": 1
     },
     {
       "id": "modulation-movement-and-interest",
-      "stages": 2,
-      "captured_links": 2,
+      "stages": 3,
+      "captured_links": 3,
       "captured_scenes": 1
     },
     {
       "id": "song-composition",
-      "stages": 4,
-      "captured_links": 4,
+      "stages": 7,
+      "captured_links": 7,
       "captured_scenes": 1
     },
     {
       "id": "keep-your-work",
-      "stages": 3,
-      "captured_links": 3,
+      "stages": 6,
+      "captured_links": 6,
       "captured_scenes": 1
     }
   ],
-  "authored_course_sha256": "f231ea8f123c5bf5f80dd0e3349e0392ed4b8c5eb93258e97b937bc106634dd9",
+  "authored_course_sha256": "13678de82bc79aad6c8c9ae1aa8205fb2ce692d29ba37ac7014515f0c6bbed21",
   "served_sources": {
-    "index.html": "9de48761a64f887a8213e26e4fdc85a253e76727fda8965534f10dcae7d7a7b8",
-    "book.js": "691196d4d89c6e5f8c93c1dd3197c632536d9a1f542b8de5d79ea24802763a2e",
-    "manual.js": "f0585fa388af6d9765031b8b1476b5fced7ff7dcd270ac76fce5101af5073c01",
-    "manual.css": "21c291c96e9a1e225dcbbac551614fc1e4283516dd5d5fde3f9b2054a3175e19"
+    "index.html": "79f46f91404089cd4a8df5adfe0ed7cccb5f55a3ec01453c5cc92cfa25956367",
+    "book.js": "f1a50186c02586705abe46f98970dd2fc369d7ceb2f0984d70672e4984813582",
+    "manual.js": "a1b9d5dd5f46b5627ec2f504353756246f42348383b3cc92e838ede742af849b",
+    "manual.css": "40bd00017cfbae6ead278d659a534d8c37e5805e44a6a6a367809fcce559088c"
   }
 }

@@ -9,11 +9,11 @@
   },
   "parent_publication": {
     "path": "manual/generated/audio-scenes.json",
-    "sha256": "22d4fe42d42e100d219f14f935234ab81e66cfd7551caad89a7a42e041003a7e",
+    "sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
     "example_id": "three-voice-conversation",
     "acceptance_case": "MA-AUDIO-three-voice-conversation",
-    "immutable_path": "/home/andy/mosaic-manual-audio-runs/07960107becc4f43a230493a65a82f07/audio-scenes.json",
-    "immutable_sha256": "22d4fe42d42e100d219f14f935234ab81e66cfd7551caad89a7a42e041003a7e"
+    "immutable_path": "/home/andy/mosaic-manual-audio-runs/b0e3fb65e8df41be94c83aacc6ff191c/audio-scenes.json",
+    "immutable_sha256": "3a90ec4dc5c824d98f70f8e955844d2c98615e3e5dc6331746f52a572eae6b81"
   },
   "scenes": [
     {
@@ -515,7 +515,7 @@
               ],
               [
                 0,
-                3
+                4
               ],
               [
                 15,
@@ -523,7 +523,7 @@
               ],
               [
                 0,
-                10
+                9
               ],
               [
                 15,
@@ -599,7 +599,15 @@
               ],
               [
                 11,
-                3
+                1
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                11,
+                2
               ],
               [
                 15,
@@ -607,7 +615,7 @@
               ],
               [
                 0,
-                10
+                9
               ],
               [
                 15,
@@ -691,7 +699,15 @@
               ],
               [
                 11,
-                3
+                1
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                11,
+                2
               ],
               [
                 15,
@@ -699,7 +715,7 @@
               ],
               [
                 0,
-                10
+                9
               ],
               [
                 15,
@@ -782,12 +798,16 @@
                 3
               ],
               [
+                7,
+                1
+              ],
+              [
                 15,
                 1
               ],
               [
                 7,
-                2
+                1
               ],
               [
                 0,
@@ -5023,13 +5043,13 @@
             "binding": {
               "kind": "external-native-frame-projection",
               "name": "manual/MA-AUDIO-three-voice-conversation/software-player-oilcan",
-              "sha256": "133a4d9fe8a55229461f4a7806a57408555f08cbbfd1f9dda2a54aa245c014b5",
+              "sha256": "fa6e0def3afc439786d083efdb0e2026817e22d3281ba38d44771d89df4092af",
               "stable_rows": 55,
-              "stable_sha256": "f252067ccc7ff5c988baccac888025dd0e21a7051a884f0229c1fd570f27d733",
+              "stable_sha256": "787b147b459f47b8774d75a408a9b4b752b91ea958d8cfea7652cbcaaa2f01b8",
               "grid_sha256": "d733008980088ba249a2e315f1bf4d67efdf7bfe62ab58d9f49193265a63419a",
               "passed": true,
               "observation_index": 54,
-              "observation_monotonic_ns": 29044318087280,
+              "observation_monotonic_ns": 148684609358145,
               "assertion_index": 10,
               "assertion": {
                 "kind": "device-picker-frame",
@@ -5052,8 +5072,8 @@
                 {
                   "request": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "da56fde036174391a658cb9240bfcdd2",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "df128394227645639b7d731b8a79791c",
                     "sequence": 708,
                     "action": {
                       "type": "key",
@@ -5063,22 +5083,22 @@
                   },
                   "ack": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "da56fde036174391a658cb9240bfcdd2",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "df128394227645639b7d731b8a79791c",
                     "sequence": 708,
                     "status": "applied",
-                    "monotonic_ns": 29044322670993,
+                    "monotonic_ns": 148684613857146,
                     "native": {
                       "sequence": 766,
-                      "monotonic_ns": 29044322377725
+                      "monotonic_ns": 148684613556794
                     }
                   }
                 },
                 {
                   "request": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "b217aa9a83f749f98f4fd3b78e806b83",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "6e9957075cb94ce0922f362f6b7c0af0",
                     "sequence": 709,
                     "action": {
                       "type": "key",
@@ -5088,14 +5108,14 @@
                   },
                   "ack": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "b217aa9a83f749f98f4fd3b78e806b83",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "6e9957075cb94ce0922f362f6b7c0af0",
                     "sequence": 709,
                     "status": "applied",
-                    "monotonic_ns": 29044325520933,
+                    "monotonic_ns": 148684616291518,
                     "native": {
                       "sequence": 767,
-                      "monotonic_ns": 29044325247476
+                      "monotonic_ns": 148684615981515
                     }
                   }
                 }
@@ -5106,16 +5126,16 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-audio-runs/07960107becc4f43a230493a65a82f07/three-voice-conversation-mix",
-        "results_sha256": "d6cf6e2e3f1c0b74f055485f0103d578ccfbb6e5d94c7c2ed74e61c4a49a8c35",
-        "observations_sha256": "6dd22f242d4deafabb08602dba4760d467e2ad02e54c389543e1e06eebd3a641",
-        "actions_sha256": "c3215c7f32485872d3467ab1778466696425f86210465f9732983a943b82f387",
+        "path": "/home/andy/mosaic-manual-audio-runs/b0e3fb65e8df41be94c83aacc6ff191c/three-voice-conversation-mix",
+        "results_sha256": "90a7aee66c04e9372196ffdafaa1ccc50260f85bcf8ca4f8cccdc4dd66076485",
+        "observations_sha256": "a2e6706b85a52c65944a52ba96ab28e62b2dde54ff25e4a4f6a9318c0c49d362",
+        "actions_sha256": "7cb10d3259fcda8195c503e38a13bb455749479c8bbc62ed4bba563158f4851b",
         "recipe_sha256": "c4c7615121b2a91ff02d4fc5ec5f8bbab4a7038d09316142ac2e49be67ed6f8d",
-        "identity_sha256": "637a89266fdec21dfc119e73d9b181633e51b9b43bf1f39abec855907cee986a",
-        "cleanup_sha256": "57d3473ad3072a205c814711ba9efe15f598ad77db0a262781efeae8c13464ed",
-        "source_yaml_sha256": "c902240cc800186d9bd4dc235d6a0fb805bc2231966d52d8e549720672625963",
-        "capture_tool_sha256": "f166e83375f500dc797de3449be74debc17218b3803c7f2c27f3fa43862b8a56",
-        "session_id": "474f41b92c824eb38742a24c8cd21b0d"
+        "identity_sha256": "d4fa943b28d4f9b744d319df13fc510a30fe8964776c75bd1b22738dbb99fca8",
+        "cleanup_sha256": "4a2c976556b887c13a0ad70f6ba02d96183e21465d058f44090dfa6fb93a0f81",
+        "source_yaml_sha256": "ae599085b1e45e616da601c7cf0a579103f7e94ff6af885267eea7a99e0ebdea",
+        "capture_tool_sha256": "4aedd43b52bddefc44cd6f1d2a5e231d69fccc4928dbc289dbdf83ecaadf1957",
+        "session_id": "811a7f04d25b4c8c9ed761311b24a766"
       }
     },
     {
@@ -5632,7 +5652,7 @@
               ],
               [
                 0,
-                3
+                4
               ],
               [
                 15,
@@ -5640,7 +5660,7 @@
               ],
               [
                 0,
-                10
+                9
               ],
               [
                 15,
@@ -5716,15 +5736,27 @@
               ],
               [
                 11,
-                3
-              ],
-              [
-                15,
-                2
+                1
               ],
               [
                 0,
-                10
+                1
+              ],
+              [
+                11,
+                2
+              ],
+              [
+                15,
+                1
+              ],
+              [
+                11,
+                1
+              ],
+              [
+                0,
+                9
               ],
               [
                 15,
@@ -5808,15 +5840,27 @@
               ],
               [
                 11,
-                3
-              ],
-              [
-                15,
-                2
+                1
               ],
               [
                 0,
-                10
+                1
+              ],
+              [
+                11,
+                2
+              ],
+              [
+                15,
+                1
+              ],
+              [
+                11,
+                1
+              ],
+              [
+                0,
+                9
               ],
               [
                 15,
@@ -5899,12 +5943,16 @@
                 3
               ],
               [
+                7,
+                1
+              ],
+              [
                 15,
                 1
               ],
               [
                 7,
-                2
+                1
               ],
               [
                 0,
@@ -10260,13 +10308,13 @@
             "binding": {
               "kind": "external-native-frame-projection",
               "name": "manual/MA-AUDIO-three-voice-conversation/software-player-polyperc",
-              "sha256": "61624223fb3ed4bdd356dbe8ea8909f4b50bc464024b2fd5d0400e99d72e947a",
+              "sha256": "e8a5c5afb535ae923997e9ed27ef6f564039fd30c663258d2df0e69b5cb5aa7d",
               "stable_rows": 55,
-              "stable_sha256": "a1049de92fed7b98507af944730a4ea999da8f9a070536bef7cac270a0554914",
+              "stable_sha256": "9745cb01ec08f298211bdd859a6686fa3906fb018117504ef969360cd99bbabf",
               "grid_sha256": "396f4ab1a9e4bde887793f2f0c273b05d08fb14b7fd2b889025b59954a6f4526",
               "passed": true,
               "observation_index": 68,
-              "observation_monotonic_ns": 29117463581120,
+              "observation_monotonic_ns": 148756800649133,
               "assertion_index": 16,
               "assertion": {
                 "kind": "device-picker-frame",
@@ -10289,8 +10337,8 @@
                 {
                   "request": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "5c3cb1758346438d84d7fa5d15a14a6b",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "d4a86a8fb7404d9e9c6af71b8598e160",
                     "sequence": 1730,
                     "action": {
                       "type": "key",
@@ -10300,22 +10348,22 @@
                   },
                   "ack": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "5c3cb1758346438d84d7fa5d15a14a6b",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "d4a86a8fb7404d9e9c6af71b8598e160",
                     "sequence": 1730,
                     "status": "applied",
-                    "monotonic_ns": 29117467841918,
+                    "monotonic_ns": 148756805056045,
                     "native": {
-                      "sequence": 1805,
-                      "monotonic_ns": 29117467555351
+                      "sequence": 1804,
+                      "monotonic_ns": 148756804793172
                     }
                   }
                 },
                 {
                   "request": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "f2451aa403f540eaa8762472323353a1",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "41b6ccfd86fe432da5b4877d152e806e",
                     "sequence": 1731,
                     "action": {
                       "type": "key",
@@ -10325,14 +10373,14 @@
                   },
                   "ack": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "f2451aa403f540eaa8762472323353a1",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "41b6ccfd86fe432da5b4877d152e806e",
                     "sequence": 1731,
                     "status": "applied",
-                    "monotonic_ns": 29117471014828,
+                    "monotonic_ns": 148756807904690,
                     "native": {
-                      "sequence": 1806,
-                      "monotonic_ns": 29117470784840
+                      "sequence": 1805,
+                      "monotonic_ns": 148756807431566
                     }
                   }
                 }
@@ -10343,16 +10391,16 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-audio-runs/07960107becc4f43a230493a65a82f07/three-voice-conversation-mix",
-        "results_sha256": "d6cf6e2e3f1c0b74f055485f0103d578ccfbb6e5d94c7c2ed74e61c4a49a8c35",
-        "observations_sha256": "6dd22f242d4deafabb08602dba4760d467e2ad02e54c389543e1e06eebd3a641",
-        "actions_sha256": "c3215c7f32485872d3467ab1778466696425f86210465f9732983a943b82f387",
+        "path": "/home/andy/mosaic-manual-audio-runs/b0e3fb65e8df41be94c83aacc6ff191c/three-voice-conversation-mix",
+        "results_sha256": "90a7aee66c04e9372196ffdafaa1ccc50260f85bcf8ca4f8cccdc4dd66076485",
+        "observations_sha256": "a2e6706b85a52c65944a52ba96ab28e62b2dde54ff25e4a4f6a9318c0c49d362",
+        "actions_sha256": "7cb10d3259fcda8195c503e38a13bb455749479c8bbc62ed4bba563158f4851b",
         "recipe_sha256": "c4c7615121b2a91ff02d4fc5ec5f8bbab4a7038d09316142ac2e49be67ed6f8d",
-        "identity_sha256": "637a89266fdec21dfc119e73d9b181633e51b9b43bf1f39abec855907cee986a",
-        "cleanup_sha256": "57d3473ad3072a205c814711ba9efe15f598ad77db0a262781efeae8c13464ed",
-        "source_yaml_sha256": "c902240cc800186d9bd4dc235d6a0fb805bc2231966d52d8e549720672625963",
-        "capture_tool_sha256": "f166e83375f500dc797de3449be74debc17218b3803c7f2c27f3fa43862b8a56",
-        "session_id": "474f41b92c824eb38742a24c8cd21b0d"
+        "identity_sha256": "d4fa943b28d4f9b744d319df13fc510a30fe8964776c75bd1b22738dbb99fca8",
+        "cleanup_sha256": "4a2c976556b887c13a0ad70f6ba02d96183e21465d058f44090dfa6fb93a0f81",
+        "source_yaml_sha256": "ae599085b1e45e616da601c7cf0a579103f7e94ff6af885267eea7a99e0ebdea",
+        "capture_tool_sha256": "4aedd43b52bddefc44cd6f1d2a5e231d69fccc4928dbc289dbdf83ecaadf1957",
+        "session_id": "811a7f04d25b4c8c9ed761311b24a766"
       }
     },
     {
@@ -10928,15 +10976,7 @@
               ],
               [
                 11,
-                1
-              ],
-              [
-                15,
-                1
-              ],
-              [
-                11,
-                1
+                3
               ],
               [
                 15,
@@ -15624,13 +15664,13 @@
             "binding": {
               "kind": "external-native-frame-projection",
               "name": "manual/MA-AUDIO-three-voice-conversation/software-player-doubledecker",
-              "sha256": "c423eea5be291405dfb0dfd633c223d7e827eb25bd8c2bde90aee3b6f6009384",
+              "sha256": "bb15d57a7b62f80908b21b25776679415b454d4a1ae02415b05997315fc31e42",
               "stable_rows": 55,
-              "stable_sha256": "d14db35d54b7d807c64c236761d2ced6f679f25c6b180179699ab9f04fd7d1ee",
+              "stable_sha256": "4d436fda7f492d577ed054be7f80261ab66a2586e12839161fc92af2cb8f5dc8",
               "grid_sha256": "54de53aaf6d2f4d0c56236d07a06a87ac5b05faae3d78c254d260e966be2cb73",
               "passed": true,
               "observation_index": 77,
-              "observation_monotonic_ns": 29172514761259,
+              "observation_monotonic_ns": 148811105189674,
               "assertion_index": 22,
               "assertion": {
                 "kind": "device-picker-frame",
@@ -15653,8 +15693,8 @@
                 {
                   "request": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "a37c25dbcc24478c90bdb6b5f572ddfc",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "cc198b8ff1354d688ae68d5a2bfd59b0",
                     "sequence": 2519,
                     "action": {
                       "type": "key",
@@ -15664,22 +15704,22 @@
                   },
                   "ack": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "a37c25dbcc24478c90bdb6b5f572ddfc",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "cc198b8ff1354d688ae68d5a2bfd59b0",
                     "sequence": 2519,
                     "status": "applied",
-                    "monotonic_ns": 29172519909078,
+                    "monotonic_ns": 148811109218483,
                     "native": {
                       "sequence": 2605,
-                      "monotonic_ns": 29172519582352
+                      "monotonic_ns": 148811108962800
                     }
                   }
                 },
                 {
                   "request": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "11a74f957e634f639f1017455d2e3354",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "c323916ccaea4e8b852cb05600cc5267",
                     "sequence": 2520,
                     "action": {
                       "type": "key",
@@ -15689,14 +15729,14 @@
                   },
                   "ack": {
                     "schema_version": 1,
-                    "session_id": "474f41b92c824eb38742a24c8cd21b0d",
-                    "action_id": "11a74f957e634f639f1017455d2e3354",
+                    "session_id": "811a7f04d25b4c8c9ed761311b24a766",
+                    "action_id": "c323916ccaea4e8b852cb05600cc5267",
                     "sequence": 2520,
                     "status": "applied",
-                    "monotonic_ns": 29172522701690,
+                    "monotonic_ns": 148811111782644,
                     "native": {
                       "sequence": 2606,
-                      "monotonic_ns": 29172522423473
+                      "monotonic_ns": 148811111510283
                     }
                   }
                 }
@@ -15707,16 +15747,16 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-audio-runs/07960107becc4f43a230493a65a82f07/three-voice-conversation-mix",
-        "results_sha256": "d6cf6e2e3f1c0b74f055485f0103d578ccfbb6e5d94c7c2ed74e61c4a49a8c35",
-        "observations_sha256": "6dd22f242d4deafabb08602dba4760d467e2ad02e54c389543e1e06eebd3a641",
-        "actions_sha256": "c3215c7f32485872d3467ab1778466696425f86210465f9732983a943b82f387",
+        "path": "/home/andy/mosaic-manual-audio-runs/b0e3fb65e8df41be94c83aacc6ff191c/three-voice-conversation-mix",
+        "results_sha256": "90a7aee66c04e9372196ffdafaa1ccc50260f85bcf8ca4f8cccdc4dd66076485",
+        "observations_sha256": "a2e6706b85a52c65944a52ba96ab28e62b2dde54ff25e4a4f6a9318c0c49d362",
+        "actions_sha256": "7cb10d3259fcda8195c503e38a13bb455749479c8bbc62ed4bba563158f4851b",
         "recipe_sha256": "c4c7615121b2a91ff02d4fc5ec5f8bbab4a7038d09316142ac2e49be67ed6f8d",
-        "identity_sha256": "637a89266fdec21dfc119e73d9b181633e51b9b43bf1f39abec855907cee986a",
-        "cleanup_sha256": "57d3473ad3072a205c814711ba9efe15f598ad77db0a262781efeae8c13464ed",
-        "source_yaml_sha256": "c902240cc800186d9bd4dc235d6a0fb805bc2231966d52d8e549720672625963",
-        "capture_tool_sha256": "f166e83375f500dc797de3449be74debc17218b3803c7f2c27f3fa43862b8a56",
-        "session_id": "474f41b92c824eb38742a24c8cd21b0d"
+        "identity_sha256": "d4fa943b28d4f9b744d319df13fc510a30fe8964776c75bd1b22738dbb99fca8",
+        "cleanup_sha256": "4a2c976556b887c13a0ad70f6ba02d96183e21465d058f44090dfa6fb93a0f81",
+        "source_yaml_sha256": "ae599085b1e45e616da601c7cf0a579103f7e94ff6af885267eea7a99e0ebdea",
+        "capture_tool_sha256": "4aedd43b52bddefc44cd6f1d2a5e231d69fccc4928dbc289dbdf83ecaadf1957",
+        "session_id": "811a7f04d25b4c8c9ed761311b24a766"
       }
     }
   ],

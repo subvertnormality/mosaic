@@ -1,0 +1,75 @@
+{
+  "review_id": "source18-keyboard-scene-recheck-20261008-01",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reviewed_at_utc": "2026-10-08T09:55:59Z",
+  "reader": {
+    "url": "http://localhost:8928/manual/",
+    "book_sha256": "db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e",
+    "reader_index_sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+    "book_js_sha256": "11f6a0c42082d6f0f79da17d49f88ffee0813247f7e5d9fea878518127a830a4",
+    "manual_js_sha256": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+    "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309"
+  },
+  "scope": "Fresh final rendered review of the two assigned keyboard scenes, entering through the MIDI Controller Options interaction picker and advancing each captured step. This does not replace or alter the earlier Source15 review.",
+  "criteria": ["coherence", "usefulness", "understandability", "representation", "granularity", "flow", "integration", "vocabulary", "naming", "canonical_home"],
+  "units": [
+    {
+      "id": "scene:keyboard-honour-degree",
+      "route": "http://localhost:8928/manual/#midi-controller-options/keyboard-honour-degree",
+      "picker_label": "Start from the chosen scale degree",
+      "lesson_id": "field-keyboard-honour-degree-pick-natural-minor",
+      "binding_id": "field-keyboard-honour-degree-pick-natural-minor",
+      "scene_chunk_sha256": "da67d2e4d9e3c511f36f62cecbe3f7eb5fc03122d65060553b84429fa0eb7f5d",
+      "presentation_metadata_sha256": "a0bb31c39db85887fb4499baff253e89db3e36204563a98a3bd42de205cbf1c5",
+      "score": 9,
+      "ratings": {
+        "coherence": {"score": 9, "rationale": "The 11-step scene builds from default mapping through scale, degree, rotation, transpose, and the single enabled Honour switch; its final result explicitly distinguishes applied degree from unapplied rotation and transpose."},
+        "usefulness": {"score": 9, "rationale": "It gives a reproducible path to begin a keyboard phrase on degree II and states the resulting eight-note sequence, including the concrete MIDI numbers."},
+        "understandability": {"score": 9, "rationale": "Each visible step has a short action heading and next action; the intermediate 'Nothing applies yet' step explains why setting parameters alone has not changed the keyboard."},
+        "representation": {"score": 9, "rationale": "The rendered scene presents the norns screen, grid, step-specific MIDI strip, and final note sequence together; the final screenshot confirms the target card and controls are visible."},
+        "granularity": {"score": 8, "rationale": "Eleven checkpoints make the setup long, but the changes are separated into observable decisions and the final comparison remains easy to locate."},
+        "flow": {"score": 9, "rationale": "The picker reaches the intended route and Next advanced through all 11 distinct numbered frames in order, ending at 'Start from the chosen scale degree'."},
+        "integration": {"score": 9, "rationale": "The instructions connect PARAMS MIDI-control switches, Scale Editor choices, and keyboard output without implying that rotation or transpose was enabled."},
+        "vocabulary": {"score": 8, "rationale": "Terms such as degree II, natural minor, and Honour scale degree are used consistently with the visible control labels; the scene explains the functional role of degree in plain language."},
+        "naming": {"score": 9, "rationale": "The picker label and final step title both say 'Start from the chosen scale degree', accurately describing the demonstrated action and result."},
+        "canonical_home": {"score": 9, "rationale": "The scene is discoverable from the MIDI Controller Options chapter's interaction picker and keeps the detailed MIDI-option workflow in its owning feature."}
+      },
+      "rendered_evidence": {
+        "steps_seen_in_order": 11,
+        "final_text_assertions": ["62, 63, 65, 67, 68, 70, 72, 74", "Rotation and transpose stay unapplied"],
+        "assertions_passed": true,
+        "screenshot": "../evidence/keyboard-honour-degree-final.png"
+      }
+    },
+    {
+      "id": "scene:keyboard-honour-degree-rotation",
+      "route": "http://localhost:8928/manual/#midi-controller-options/keyboard-honour-degree-rotation",
+      "picker_label": "Rotate the keyboard voicing",
+      "lesson_id": "keyboard-honour-degree-rotation",
+      "binding_id": "keyboard-honour-degree-rotation",
+      "scene_chunk_sha256": "e8db3ed73e909eb4a3c08784021b02bed4498007af783c794cc4fc6594b018e4",
+      "presentation_metadata_sha256": "63099345d6952fa62a334fb88ae9549ee6af349ad2957e6428464ae83d6d45d0",
+      "score": 9,
+      "ratings": {
+        "coherence": {"score": 9, "rationale": "The baseline already has degree II active and rotation/transpose configured; the sole toggle isolates Honour scale rotations and the final frame compares the changed top keys."},
+        "usefulness": {"score": 9, "rationale": "The lesson explains a practical inverted/bass voicing use and gives the changed notes, their octave displacement, and unchanged lower keys."},
+        "understandability": {"score": 9, "rationale": "The three-frame sequence keeps the setup, switch change, and audible-by-instrument outcome separate; the numerical example makes the transformation concrete."},
+        "representation": {"score": 9, "rationale": "The final rendered frame includes the screen, grid, and MIDI output strip alongside the stated 62, 63, 65, 67, 68, 58, 60, 74 result."},
+        "granularity": {"score": 9, "rationale": "Three frames are enough for the narrow comparison: established starting state, one switch action, and result."},
+        "flow": {"score": 9, "rationale": "The picker reached the rotation scene and Next moved through all three numbered frames, ending on 'Rotate the keyboard voicing'."},
+        "integration": {"score": 9, "rationale": "It accurately relates the rotation switch to the preconfigured scale degree while keeping transpose Off, and states which notes change versus remain stable."},
+        "vocabulary": {"score": 8, "rationale": "The control name 'Honour scale rotations' matches the interaction; octave, rotation, and voicing are grounded by explicit note values."},
+        "naming": {"score": 9, "rationale": "Both the picker and final frame use 'Rotate the keyboard voicing', a concise name for the demonstrated outcome."},
+        "canonical_home": {"score": 9, "rationale": "The scene is reached through the MIDI Controller Options interaction picker and appears under the feature that owns the keyboard mapping controls."}
+      },
+      "rendered_evidence": {
+        "steps_seen_in_order": 3,
+        "final_text_assertions": ["62, 63, 65, 67, 68, 58, 60, 74", "first five keys do not change"],
+        "assertions_passed": true,
+        "screenshot": "../evidence/keyboard-honour-degree-rotation-final.png"
+      }
+    }
+  ],
+  "limitations": ["Review is of the rendered reader and its captured explanatory evidence; no native instrument was run and no audio was played or listened to.", "A browser request for the masks-small-hours audio asset was aborted during route navigation; it was unrelated to these keyboard scenes and no missing keyboard-scene asset or persistent reader error was observed."],
+  "evidence_file": "../evidence/source18-keyboard-captures.json"
+}

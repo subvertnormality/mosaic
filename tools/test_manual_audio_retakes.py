@@ -27,12 +27,15 @@ class Retakes(unittest.TestCase):
             calls.append(out)
             outcome = outcomes[len(calls) - 1]
             if isinstance(outcome, Exception):
+                if isinstance(outcome, AssertionError) and outcome.args and isinstance(outcome.args[0], tuple) and len(outcome.args[0]) == 3:
+                    kind, packet, row = outcome.args[0]
+                    (out/"lesson-failure.json").write_text(__import__("json").dumps(dict(category="timing",clock_mode="real-time",kind=kind,packet=packet,row=row)))
                 raise outcome
             return outcome
         with tempfile.TemporaryDirectory() as directory:
             run = Path(directory)
             try:
-                result, retakes = manual_audio.take_with_retakes(run, "swing-solo-2", take)
+                result, retakes = manual_audio.take_with_retakes(run, "swing-solo-2", take, "real-time")
             finally:
                 folders = sorted(p.name for p in run.iterdir())
         return result, retakes, calls, folders

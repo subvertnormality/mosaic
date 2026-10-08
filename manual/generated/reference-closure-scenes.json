@@ -262,7 +262,7 @@
     "fixture_sources": {
       "tests/behaviour/config/emu-midi.json": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442"
     },
-    "start_source_identity_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/start-source-identity.json",
+    "start_source_identity_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/start-source-identity.json",
     "start_source_identity_sha256": "1f158490e1a52f60389f5c16bed7eb6ebf33523a2f5c3d3b7aa3c73f598580f6",
     "extra_case_files": [
       "tools/manual_closure_cases.py"
@@ -37514,15 +37514,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-PARAM-039-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-PARAM-039-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "1e9c24a5256d4bf586083909ceda8e11",
+          "session_id": "7207e86eb6f14acc892216cbce88e210",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -37530,24 +37530,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "775bed61223f5213449ea80173b87a3fd1e1a2c47a450f4006be400eb2af7c19",
-        "identity_sha256": "1a9db0a22213c4ad4b2baad816f7790691e382b6b34e8d402d722bd4d0a96741",
+        "identity_sha256": "a7f6d2f4df6633dc16c1d1d69d911ffa21a4e6cc9a84e8ca03883c825d304715",
         "recipe_sha256": "e889017fbba3d1b900b83b4e4dcfda4610527e7826437831ab244226f9c020ff",
-        "native_events_sha256": "1f47356db4633dcf78e6886291d31ffc075f7f1f6b0dab6b8eb4705461349055",
+        "native_events_sha256": "bfef75b56d9908a634d405343fa965ffd12f7679713a818501483056dbcf8803",
         "capture_trace_sha256": "57901060577703bf879449b371cdb757927b9438753dc8ee27c48317dcc86a11",
-        "session_context_sha256": "fc3573eed9df6dd38e44d2b13e591aa44d73edf5d19384d923cbb41ff0126c31",
-        "native_config_sha256": "4431387974b318945147d316dfecfe57c6e7064ace831260a2ef455e88d8f3e6",
-        "cleanup_sha256": "7f8296660b3326583cc76b60531acf2d47d02b6cd85c3e90d98ebc33435cfb04",
+        "session_context_sha256": "1a0782976413306114f2db390e39a640b6d7869fcbca592942a75a1637c9cf1d",
+        "native_config_sha256": "c321a9cf8a7b25c6f6b7230969f65fd35b28a48f67f17a970ef285650cb6725b",
+        "cleanup_sha256": "f4bfc084b7b864ba9bb44d18664a045537a03a4bdbbcc89b926a46b5f829b25b",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-PARAM-039-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-PARAM-039-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "1e9c24a5256d4bf586083909ceda8e11",
+              "session_id": "7207e86eb6f14acc892216cbce88e210",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -37555,17 +37555,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "775bed61223f5213449ea80173b87a3fd1e1a2c47a450f4006be400eb2af7c19",
-            "identity_sha256": "1a9db0a22213c4ad4b2baad816f7790691e382b6b34e8d402d722bd4d0a96741",
+            "identity_sha256": "a7f6d2f4df6633dc16c1d1d69d911ffa21a4e6cc9a84e8ca03883c825d304715",
             "recipe_sha256": "e889017fbba3d1b900b83b4e4dcfda4610527e7826437831ab244226f9c020ff",
-            "native_events_sha256": "1f47356db4633dcf78e6886291d31ffc075f7f1f6b0dab6b8eb4705461349055",
+            "native_events_sha256": "bfef75b56d9908a634d405343fa965ffd12f7679713a818501483056dbcf8803",
             "capture_trace_sha256": "57901060577703bf879449b371cdb757927b9438753dc8ee27c48317dcc86a11",
-            "session_context_sha256": "fc3573eed9df6dd38e44d2b13e591aa44d73edf5d19384d923cbb41ff0126c31",
-            "native_config_sha256": "4431387974b318945147d316dfecfe57c6e7064ace831260a2ef455e88d8f3e6",
-            "cleanup_sha256": "7f8296660b3326583cc76b60531acf2d47d02b6cd85c3e90d98ebc33435cfb04"
+            "session_context_sha256": "1a0782976413306114f2db390e39a640b6d7869fcbca592942a75a1637c9cf1d",
+            "native_config_sha256": "c321a9cf8a7b25c6f6b7230969f65fd35b28a48f67f17a970ef285650cb6725b",
+            "cleanup_sha256": "f4bfc084b7b864ba9bb44d18664a045537a03a4bdbbcc89b926a46b5f829b25b"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-PARAM-039-base-midi/case-participants.json",
-        "case_participants_sha256": "f1b5c434143fb2bf6a3b4fa162d08ffdef991ed9492d9784c29b523276d73d05"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-PARAM-039-base-midi/case-participants.json",
+        "case_participants_sha256": "796e78fe60aefd4ef436c670fc45b15716df82343c35a869958501bcba0f898f"
       }
     },
     {
@@ -93507,15 +93507,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-PARAM-037-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-PARAM-037-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "271a57e30523481b92b8e98c48eda9b7",
+          "session_id": "5d743b64222447a7ad0a90a9d86a7ee4",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -93523,24 +93523,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "0981655177a27a6a5087d972b9a6266792801860b074739422c9ff794a99e222",
-        "identity_sha256": "bc089bbcdedfb01b53ad1e0a7ce0222b83d8472963bdaffe4ad6883be39b710a",
+        "identity_sha256": "4e1462061c51a923a9a4ddbc96643431787b312f2274f71318b6eb9671921b9d",
         "recipe_sha256": "d1465c68a2b47498a2ff4c127197a6aecc366ba3f9bdb81a732c4d382cb38fd2",
-        "native_events_sha256": "0252e3ea014027a8f3fd2f577a8a30fc926e70ca90040251c282d8559fdd067d",
+        "native_events_sha256": "1a9d907333e8ea5abe04a3e390e071002854dfef1548defa8469ec44baaa8089",
         "capture_trace_sha256": "71131f390a5d1983b01fd1486491f2a87a9e3a838dd054e7007ad1f011d0cdae",
-        "session_context_sha256": "d4132f44528b2249b2ab70db9b804db5f59ba3d25cbe75e0aeb63fd36a0bea62",
-        "native_config_sha256": "941e1934cddb69e8ad5c3d81fffd1dd8d9d417c26ca9541b2d8c221f1065f63a",
-        "cleanup_sha256": "01950ab594de4d2e59163ee448bbf7cfdaaf4a69bd1102f5f3246155c717f47c",
+        "session_context_sha256": "d8f0df64424d7e8ebcd928eaa90179794479a4b460f5fb2eee332004767f049c",
+        "native_config_sha256": "94c1e5f466e53f6c2ec2d0b0728ab1bb054d007a0d9d65694b8b2382070b87d4",
+        "cleanup_sha256": "4aa703b31b8c5790165335876c594969e34fb5fb826eaa76c764517c1c0c3317",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-PARAM-037-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-PARAM-037-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "271a57e30523481b92b8e98c48eda9b7",
+              "session_id": "5d743b64222447a7ad0a90a9d86a7ee4",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -93548,17 +93548,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "0981655177a27a6a5087d972b9a6266792801860b074739422c9ff794a99e222",
-            "identity_sha256": "bc089bbcdedfb01b53ad1e0a7ce0222b83d8472963bdaffe4ad6883be39b710a",
+            "identity_sha256": "4e1462061c51a923a9a4ddbc96643431787b312f2274f71318b6eb9671921b9d",
             "recipe_sha256": "d1465c68a2b47498a2ff4c127197a6aecc366ba3f9bdb81a732c4d382cb38fd2",
-            "native_events_sha256": "0252e3ea014027a8f3fd2f577a8a30fc926e70ca90040251c282d8559fdd067d",
+            "native_events_sha256": "1a9d907333e8ea5abe04a3e390e071002854dfef1548defa8469ec44baaa8089",
             "capture_trace_sha256": "71131f390a5d1983b01fd1486491f2a87a9e3a838dd054e7007ad1f011d0cdae",
-            "session_context_sha256": "d4132f44528b2249b2ab70db9b804db5f59ba3d25cbe75e0aeb63fd36a0bea62",
-            "native_config_sha256": "941e1934cddb69e8ad5c3d81fffd1dd8d9d417c26ca9541b2d8c221f1065f63a",
-            "cleanup_sha256": "01950ab594de4d2e59163ee448bbf7cfdaaf4a69bd1102f5f3246155c717f47c"
+            "session_context_sha256": "d8f0df64424d7e8ebcd928eaa90179794479a4b460f5fb2eee332004767f049c",
+            "native_config_sha256": "94c1e5f466e53f6c2ec2d0b0728ab1bb054d007a0d9d65694b8b2382070b87d4",
+            "cleanup_sha256": "4aa703b31b8c5790165335876c594969e34fb5fb826eaa76c764517c1c0c3317"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-PARAM-037-base-midi/case-participants.json",
-        "case_participants_sha256": "5b97d0b2dfc492427a25c15b88129e4d99367f20cf9162ddf07269feca82e559"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-PARAM-037-base-midi/case-participants.json",
+        "case_participants_sha256": "3b9528a66c09c43bea20b0c6533da05ea952c9a625b2c02212e12c7fba77f8e1"
       }
     },
     {
@@ -131065,15 +131065,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MERGE-011-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MERGE-011-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "7bda36460b16476f82d32aca4900df33",
+          "session_id": "b32ef24bc4ea47fea51b5356a5ae5e00",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -131081,24 +131081,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "2d2e71d9de33bde239a94cd261744fe9ba786f746c52b5dbc14f40593eb568c3",
-        "identity_sha256": "fcbc7cececfe7836e424074963f85d801efdd54403a1baf5d42f197221b5b706",
+        "identity_sha256": "5b2ba789667f26bbb8f230562297b5b0587b20dade197dc878903406d61b2a39",
         "recipe_sha256": "5a4fd40fa640dbcb03f4695a6041acc927a20399dcb0df5f2ad86255b5e05504",
-        "native_events_sha256": "7d3b5dd3081f866a4b345529a357da37d47e4636ffb341fb65d8c8ad65132823",
+        "native_events_sha256": "f0b440f9bb66c877119605c76cb3ed873921977a600a45f6557003b4bf69af57",
         "capture_trace_sha256": "f820e1004c3e49c2e106e4393b4e08c0ecc58bc1bc32c58f30dd434196c0b8ff",
-        "session_context_sha256": "fb673f4b0e87962f5b5002e1aef3a5384ad99e3c30bfbca7d7d540e5b9291991",
-        "native_config_sha256": "5fe01e4c2390a55d62a5057596d76b5655b3def177cf7423c7b38f7175061c3d",
-        "cleanup_sha256": "f3d02b981d0b3334c99db9f5fc00f439932e18eb2a1eed43b6af649dd7d98a21",
+        "session_context_sha256": "ced46fd71f2149acf2e360ca0d04187f4a14e604505a763af6f36c05abed736f",
+        "native_config_sha256": "fcefd54c4eda32bd3ef1a81b969234e8c94ac91ef6859ed3f2d80dc86f7790e9",
+        "cleanup_sha256": "bc486fcc3ad658d5f5a8a5e4c63d91522a3bc684fb6a08d1e815ab85109c9d04",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MERGE-011-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MERGE-011-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "7bda36460b16476f82d32aca4900df33",
+              "session_id": "b32ef24bc4ea47fea51b5356a5ae5e00",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -131106,17 +131106,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "2d2e71d9de33bde239a94cd261744fe9ba786f746c52b5dbc14f40593eb568c3",
-            "identity_sha256": "fcbc7cececfe7836e424074963f85d801efdd54403a1baf5d42f197221b5b706",
+            "identity_sha256": "5b2ba789667f26bbb8f230562297b5b0587b20dade197dc878903406d61b2a39",
             "recipe_sha256": "5a4fd40fa640dbcb03f4695a6041acc927a20399dcb0df5f2ad86255b5e05504",
-            "native_events_sha256": "7d3b5dd3081f866a4b345529a357da37d47e4636ffb341fb65d8c8ad65132823",
+            "native_events_sha256": "f0b440f9bb66c877119605c76cb3ed873921977a600a45f6557003b4bf69af57",
             "capture_trace_sha256": "f820e1004c3e49c2e106e4393b4e08c0ecc58bc1bc32c58f30dd434196c0b8ff",
-            "session_context_sha256": "fb673f4b0e87962f5b5002e1aef3a5384ad99e3c30bfbca7d7d540e5b9291991",
-            "native_config_sha256": "5fe01e4c2390a55d62a5057596d76b5655b3def177cf7423c7b38f7175061c3d",
-            "cleanup_sha256": "f3d02b981d0b3334c99db9f5fc00f439932e18eb2a1eed43b6af649dd7d98a21"
+            "session_context_sha256": "ced46fd71f2149acf2e360ca0d04187f4a14e604505a763af6f36c05abed736f",
+            "native_config_sha256": "fcefd54c4eda32bd3ef1a81b969234e8c94ac91ef6859ed3f2d80dc86f7790e9",
+            "cleanup_sha256": "bc486fcc3ad658d5f5a8a5e4c63d91522a3bc684fb6a08d1e815ab85109c9d04"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MERGE-011-base-midi/case-participants.json",
-        "case_participants_sha256": "f7979eb9b25e0c26682b51e1a4d7b46a6668aa0c111107d747535db3f2649f87"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MERGE-011-base-midi/case-participants.json",
+        "case_participants_sha256": "bb9c1d88d24fc4d6b2e22f90fcda688930e3e2636e1cec4446d57a9dd9ebc2cb"
       }
     },
     {
@@ -168645,15 +168645,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MERGE-010-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MERGE-010-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "7fcf26505f814efa911946ab72541182",
+          "session_id": "6bcd49f00ac0439f9e75574ceeccb215",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -168661,24 +168661,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "debcb97d3e5362b28b154151f0aeae523bff5634a6c7828d99b55a913c80ef33",
-        "identity_sha256": "1169e123a82cb420b58ff4e6d553abcc7b2de5863a42e717f3884e572b179c37",
+        "identity_sha256": "f7f3eaf54765d1cff29735de53395cdbf407eceb682de7929cbe49698f3026d1",
         "recipe_sha256": "931d66aae81ff26ce846d82d6a3ad7b59bad1a0d990e315e4e7532b0ee21d16d",
-        "native_events_sha256": "6530b2dd7849244c9e4edbdc46484fa409d36d55752c491297ea551225e98303",
+        "native_events_sha256": "ef79eff6aa4c97685dc28ed1795aadd3522b0984c2d2d2d5fd3cc3711d71dd1b",
         "capture_trace_sha256": "7d2946d920e0c044b08a4882cde0244d7287e7e0d245fb39f917d7f35530d69c",
-        "session_context_sha256": "c0fa5a6d4632d648f3dd6459916e8b76546f69e7aba1b485900664171c31b5e3",
-        "native_config_sha256": "11117378c0ef994b015f695e4e302b63b620817b67cf1ffa459e328e1b93b54a",
-        "cleanup_sha256": "b7a62976abb9d675c88f5f7b61a734bf38b5177dd5a50e3c6d237d27b988984f",
+        "session_context_sha256": "66a6040ceee126c0562693c15922950ba9ad7e342dc5e3e683f4ca4004d44d10",
+        "native_config_sha256": "fce6f3d42905aa6fb6d83e1caf6d14d06c2f8e4f4dbe0d5391ce9b5ce191eb9f",
+        "cleanup_sha256": "5ca35ae9b051de20ec0ba62eab8b39af132be5d7e659f19d073cc0c1b5f831cb",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MERGE-010-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MERGE-010-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "7fcf26505f814efa911946ab72541182",
+              "session_id": "6bcd49f00ac0439f9e75574ceeccb215",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -168686,17 +168686,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "debcb97d3e5362b28b154151f0aeae523bff5634a6c7828d99b55a913c80ef33",
-            "identity_sha256": "1169e123a82cb420b58ff4e6d553abcc7b2de5863a42e717f3884e572b179c37",
+            "identity_sha256": "f7f3eaf54765d1cff29735de53395cdbf407eceb682de7929cbe49698f3026d1",
             "recipe_sha256": "931d66aae81ff26ce846d82d6a3ad7b59bad1a0d990e315e4e7532b0ee21d16d",
-            "native_events_sha256": "6530b2dd7849244c9e4edbdc46484fa409d36d55752c491297ea551225e98303",
+            "native_events_sha256": "ef79eff6aa4c97685dc28ed1795aadd3522b0984c2d2d2d5fd3cc3711d71dd1b",
             "capture_trace_sha256": "7d2946d920e0c044b08a4882cde0244d7287e7e0d245fb39f917d7f35530d69c",
-            "session_context_sha256": "c0fa5a6d4632d648f3dd6459916e8b76546f69e7aba1b485900664171c31b5e3",
-            "native_config_sha256": "11117378c0ef994b015f695e4e302b63b620817b67cf1ffa459e328e1b93b54a",
-            "cleanup_sha256": "b7a62976abb9d675c88f5f7b61a734bf38b5177dd5a50e3c6d237d27b988984f"
+            "session_context_sha256": "66a6040ceee126c0562693c15922950ba9ad7e342dc5e3e683f4ca4004d44d10",
+            "native_config_sha256": "fce6f3d42905aa6fb6d83e1caf6d14d06c2f8e4f4dbe0d5391ce9b5ce191eb9f",
+            "cleanup_sha256": "5ca35ae9b051de20ec0ba62eab8b39af132be5d7e659f19d073cc0c1b5f831cb"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MERGE-010-base-midi/case-participants.json",
-        "case_participants_sha256": "cc62cb5df4648ec7a0f639a76e02a4f73519798d536ceef2f605a8e656127679"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MERGE-010-base-midi/case-participants.json",
+        "case_participants_sha256": "cd029c9a08b7066ca15f00a56dbe7da40b2bd8f2bb2f8a32c9bfa2c0fe631eda"
       }
     },
     {
@@ -213897,15 +213897,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-SONG-SETTINGS-002-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-SONG-SETTINGS-002-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "239bf81ae5b34e3baf181f6e6fd8c132",
+          "session_id": "d4e8cad908464dcfa61d5ac96f3aacae",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -213913,24 +213913,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "f2739bd0c0f84b5227ebf6a810a7209695b3f03a61ef6785d6545c0fdc8f909a",
-        "identity_sha256": "7bafd3dab6d3bdba5b117214b9b38dbfe62da0f2da866c46a21af751f36df4c6",
+        "identity_sha256": "e26a0a33cbfdef6513c11055f3431b95c882289b3440f94a4ac5d6e8b96d5b17",
         "recipe_sha256": "907821f29a74aa66f1924839d1ed64cf387a20d51dd6fb199c6e734323dbf64c",
-        "native_events_sha256": "255e0ee025eae0efeeef9b74e07c7b7a28ec0bf799b8e46c28a8b4c6665dd336",
+        "native_events_sha256": "c677d258c47e1515a736c4f6e6c3eafdf75491e780fce1b613f8a6ffe40952eb",
         "capture_trace_sha256": "c4fa835ab131a5b23ea5244084b9ba104decf16bb5c788422054b185b8ffc867",
-        "session_context_sha256": "aa8a0cd6f24f41370d9f4765420ad6ef05b968580717b1ad7972efe8f11c2257",
-        "native_config_sha256": "3110a825db70b911a73cfd87ddd19f5d992d4c5fa796e950b1a3cce93851b5b3",
-        "cleanup_sha256": "385b0062a9b676c6c0dcd71a9aa91669babe92db6a06baf9cd93b43378451968",
+        "session_context_sha256": "e5f87fd46799f1847a3730d94a7bbd5e83c287064bfcf48bbc49e7086a4ed61f",
+        "native_config_sha256": "bc9d584ff9ae6c75b45fc45a30f466634fcc3226f64d6dff6c903b1d47f65ace",
+        "cleanup_sha256": "8d4fc7780348545ec2980743a67eeb3169e1b9e4ff53f0648fa7e0f3208c6a29",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-SONG-SETTINGS-002-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-SONG-SETTINGS-002-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "239bf81ae5b34e3baf181f6e6fd8c132",
+              "session_id": "d4e8cad908464dcfa61d5ac96f3aacae",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -213938,17 +213938,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "f2739bd0c0f84b5227ebf6a810a7209695b3f03a61ef6785d6545c0fdc8f909a",
-            "identity_sha256": "7bafd3dab6d3bdba5b117214b9b38dbfe62da0f2da866c46a21af751f36df4c6",
+            "identity_sha256": "e26a0a33cbfdef6513c11055f3431b95c882289b3440f94a4ac5d6e8b96d5b17",
             "recipe_sha256": "907821f29a74aa66f1924839d1ed64cf387a20d51dd6fb199c6e734323dbf64c",
-            "native_events_sha256": "255e0ee025eae0efeeef9b74e07c7b7a28ec0bf799b8e46c28a8b4c6665dd336",
+            "native_events_sha256": "c677d258c47e1515a736c4f6e6c3eafdf75491e780fce1b613f8a6ffe40952eb",
             "capture_trace_sha256": "c4fa835ab131a5b23ea5244084b9ba104decf16bb5c788422054b185b8ffc867",
-            "session_context_sha256": "aa8a0cd6f24f41370d9f4765420ad6ef05b968580717b1ad7972efe8f11c2257",
-            "native_config_sha256": "3110a825db70b911a73cfd87ddd19f5d992d4c5fa796e950b1a3cce93851b5b3",
-            "cleanup_sha256": "385b0062a9b676c6c0dcd71a9aa91669babe92db6a06baf9cd93b43378451968"
+            "session_context_sha256": "e5f87fd46799f1847a3730d94a7bbd5e83c287064bfcf48bbc49e7086a4ed61f",
+            "native_config_sha256": "bc9d584ff9ae6c75b45fc45a30f466634fcc3226f64d6dff6c903b1d47f65ace",
+            "cleanup_sha256": "8d4fc7780348545ec2980743a67eeb3169e1b9e4ff53f0648fa7e0f3208c6a29"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-SONG-SETTINGS-002-base-midi/case-participants.json",
-        "case_participants_sha256": "ad7c8fe2e6e4991e86d558c6840a03cb03000671a56cc7d602d23d9320235ab4"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-SONG-SETTINGS-002-base-midi/case-participants.json",
+        "case_participants_sha256": "be4410281297ad97dc8c38427c99b1921424b88bf143d4b76e4cf8037bf2c6db"
       }
     },
     {
@@ -237568,7 +237568,7 @@
                     "frame_sha256": "811ae8e2f6a545467da6ae5ab857048397b37cd0a33270c48be742297e2ddce2",
                     "grid_sha256": "7a0e37eb2b8aeb56f4b12790e94df77063ae1c734ecc88d4b681459453200284",
                     "grid_revision": 86,
-                    "monotonic_ns": 127900874772916,
+                    "monotonic_ns": 169936813270313,
                     "logical_ns": 22660000000,
                     "levels": [
                       1,
@@ -237581,7 +237581,7 @@
                     "frame_sha256": "0d442d624847882ae5aa1e52b1785ce7cfc2cfd550a7a9cb9315337c39f52180",
                     "grid_sha256": "4ebc3d6bf54ee20b7e282cdcbdc04c105d631c95330660e20c710c46904cc90c",
                     "grid_revision": 87,
-                    "monotonic_ns": 127900888600259,
+                    "monotonic_ns": 169936827608687,
                     "logical_ns": 23060000000,
                     "levels": [
                       7,
@@ -237594,7 +237594,7 @@
                     "frame_sha256": "a8e2cb3ef1d3bbb4b1a0edce1d2c8aba6ccf247982a5a802405d7dde7ba0dae1",
                     "grid_sha256": "7a0e37eb2b8aeb56f4b12790e94df77063ae1c734ecc88d4b681459453200284",
                     "grid_revision": 88,
-                    "monotonic_ns": 127900900970279,
+                    "monotonic_ns": 169936840699722,
                     "logical_ns": 23460000000,
                     "levels": [
                       1,
@@ -237607,7 +237607,7 @@
                     "frame_sha256": "7d8fd2eae674bdaf34d458ecdb6a51cb9d9dfca607ad34be761876398f4a5188",
                     "grid_sha256": "4ebc3d6bf54ee20b7e282cdcbdc04c105d631c95330660e20c710c46904cc90c",
                     "grid_revision": 89,
-                    "monotonic_ns": 127900913193882,
+                    "monotonic_ns": 169936853230006,
                     "logical_ns": 23860000000,
                     "levels": [
                       7,
@@ -237620,7 +237620,7 @@
                     "frame_sha256": "24409af4992cda16401606a738084e1b0b55b6e4c8e5a0b2c3fce0b8cd2c7c31",
                     "grid_sha256": "7a0e37eb2b8aeb56f4b12790e94df77063ae1c734ecc88d4b681459453200284",
                     "grid_revision": 90,
-                    "monotonic_ns": 127900926346216,
+                    "monotonic_ns": 169936866566807,
                     "logical_ns": 24260000000,
                     "levels": [
                       1,
@@ -237633,7 +237633,7 @@
                     "frame_sha256": "a8e2cb3ef1d3bbb4b1a0edce1d2c8aba6ccf247982a5a802405d7dde7ba0dae1",
                     "grid_sha256": "4ebc3d6bf54ee20b7e282cdcbdc04c105d631c95330660e20c710c46904cc90c",
                     "grid_revision": 91,
-                    "monotonic_ns": 127900940082620,
+                    "monotonic_ns": 169936880805551,
                     "logical_ns": 24660000000,
                     "levels": [
                       7,
@@ -237646,7 +237646,7 @@
                     "frame_sha256": "9a3c1497289fc83eb6dfbe8bb85c7a5d310f35bfa46aad28fdba96c9e58e9872",
                     "grid_sha256": "7a0e37eb2b8aeb56f4b12790e94df77063ae1c734ecc88d4b681459453200284",
                     "grid_revision": 92,
-                    "monotonic_ns": 127900953516814,
+                    "monotonic_ns": 169936895313157,
                     "logical_ns": 25060000000,
                     "levels": [
                       1,
@@ -237660,7 +237660,7 @@
                 "input_sequence": 753,
                 "native": {
                   "sequence": 881,
-                  "monotonic_ns": 127900856921912
+                  "monotonic_ns": 169936795157007
                 },
                 "queued_slot": 1,
                 "playing_slot": 2,
@@ -237671,7 +237671,7 @@
                 "characterisation": "Characterisation outside README: populated queued slot alternates exact LED levels1/7 on the source0.4s blink clock; controlled samples are exactly0.4s apart. Real native visual dwell bounds derive from the20Hz grid flush plus the existing10ms clock allowance; fast observations do not assume the global blink phase.",
                 "passed": true
               },
-              "assertion_sha256": "d3c4a7ea5c66b45aa705adaa091a1238c27fdd963291a0b04db5f28f74ded17e",
+              "assertion_sha256": "db35b200e0a833f5a22b6f0575bbe1e16b6c521e26cb2ab52060abc02c467dd6",
               "trace_sha256": "122b01adb4494a03b5b26c9462b8973da7b6cae6a8b4f744f2b4a5697bdf55fa",
               "session_ordinal": 0
             },
@@ -249024,58 +249024,58 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "7a6688a9c4a441528e7c6013506680ad",
+          "session_id": "4a109c31e5cc4783ba32ec570ba55fff",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
           "held_inputs": [],
           "cleanup_verified": true
         },
-        "results_sha256": "61a855ccd38a0c070cf3b2a01f80ead5eec31e2885f2ce3c2b3ec58dfbe5155a",
-        "identity_sha256": "5e4506153ba6724a99c15290f45b1396c438ce7cc340db41f89f4379549f9179",
+        "results_sha256": "8cc899af4726d679c9af8042c3e06ac1a7553ef811db974c1d0e3cfdfb8ad7d2",
+        "identity_sha256": "a88ef52a64324c1f2825defc4e57af4a54a49c022fbcd846a5436279a0cbd81e",
         "recipe_sha256": "fd814743fa3505b09329d6d6c0e62c9c401940984662b0b4c6dafd71d10e9b38",
-        "native_events_sha256": "d05c7550bd5cc93669171d32d9fbca104fa1fe366746e792aa6bc9be9637cc8c",
+        "native_events_sha256": "a509793fcc976148704f12cc1fece92ac96cc17d4521ca131fec3d13b273631c",
         "capture_trace_sha256": "80911b04774a47002945ee10ef6c90ea088e7874a5781dafc3a5973b97abba1f",
-        "session_context_sha256": "66032a782c17cbc0b2621355b4abc18f5ffe58db2160dcb86efd0c3a6df97a3e",
-        "native_config_sha256": "6ce591fbdef3b873bc5bf0980e7fbfc1eba0bebdf6c68532de8ff42188d7176b",
-        "cleanup_sha256": "94bf8d8120f1d737351d09a74014551035950b9842d5d052e9491390e56463e2",
+        "session_context_sha256": "58ae2415f3dcf801135387778eba1131345bac96b62591a4a988df729847f961",
+        "native_config_sha256": "b2db3e86c037afbde45659966fa98835a4495d9d6412fcd6966db66511e8f107",
+        "cleanup_sha256": "77d961dfb1e16e7026b3aa383c932ead54d1844f0a8e0b11fdbffff22f8dd10b",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "7a6688a9c4a441528e7c6013506680ad",
+              "session_id": "4a109c31e5cc4783ba32ec570ba55fff",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
               "held_inputs": [],
               "cleanup_verified": true
             },
-            "results_sha256": "61a855ccd38a0c070cf3b2a01f80ead5eec31e2885f2ce3c2b3ec58dfbe5155a",
-            "identity_sha256": "5e4506153ba6724a99c15290f45b1396c438ce7cc340db41f89f4379549f9179",
+            "results_sha256": "8cc899af4726d679c9af8042c3e06ac1a7553ef811db974c1d0e3cfdfb8ad7d2",
+            "identity_sha256": "a88ef52a64324c1f2825defc4e57af4a54a49c022fbcd846a5436279a0cbd81e",
             "recipe_sha256": "fd814743fa3505b09329d6d6c0e62c9c401940984662b0b4c6dafd71d10e9b38",
-            "native_events_sha256": "d05c7550bd5cc93669171d32d9fbca104fa1fe366746e792aa6bc9be9637cc8c",
+            "native_events_sha256": "a509793fcc976148704f12cc1fece92ac96cc17d4521ca131fec3d13b273631c",
             "capture_trace_sha256": "80911b04774a47002945ee10ef6c90ea088e7874a5781dafc3a5973b97abba1f",
-            "session_context_sha256": "66032a782c17cbc0b2621355b4abc18f5ffe58db2160dcb86efd0c3a6df97a3e",
-            "native_config_sha256": "6ce591fbdef3b873bc5bf0980e7fbfc1eba0bebdf6c68532de8ff42188d7176b",
-            "cleanup_sha256": "94bf8d8120f1d737351d09a74014551035950b9842d5d052e9491390e56463e2"
+            "session_context_sha256": "58ae2415f3dcf801135387778eba1131345bac96b62591a4a988df729847f961",
+            "native_config_sha256": "b2db3e86c037afbde45659966fa98835a4495d9d6412fcd6966db66511e8f107",
+            "cleanup_sha256": "77d961dfb1e16e7026b3aa383c932ead54d1844f0a8e0b11fdbffff22f8dd10b"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-001-base-midi/case-participants.json",
-        "case_participants_sha256": "a41f0310358252e225798bd9c9a2ff4801c96ff0a0da37b84a7b2575afbf3dd6"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-001-base-midi/case-participants.json",
+        "case_participants_sha256": "d8a1d90dabff1b3233c1cb78e3622bf5306ff2c8baefbd4f24d14a20bab82031"
       }
     },
     {
@@ -262081,58 +262081,58 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "7a6688a9c4a441528e7c6013506680ad",
+          "session_id": "4a109c31e5cc4783ba32ec570ba55fff",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
           "held_inputs": [],
           "cleanup_verified": true
         },
-        "results_sha256": "61a855ccd38a0c070cf3b2a01f80ead5eec31e2885f2ce3c2b3ec58dfbe5155a",
-        "identity_sha256": "5e4506153ba6724a99c15290f45b1396c438ce7cc340db41f89f4379549f9179",
+        "results_sha256": "8cc899af4726d679c9af8042c3e06ac1a7553ef811db974c1d0e3cfdfb8ad7d2",
+        "identity_sha256": "a88ef52a64324c1f2825defc4e57af4a54a49c022fbcd846a5436279a0cbd81e",
         "recipe_sha256": "fd814743fa3505b09329d6d6c0e62c9c401940984662b0b4c6dafd71d10e9b38",
-        "native_events_sha256": "d05c7550bd5cc93669171d32d9fbca104fa1fe366746e792aa6bc9be9637cc8c",
+        "native_events_sha256": "a509793fcc976148704f12cc1fece92ac96cc17d4521ca131fec3d13b273631c",
         "capture_trace_sha256": "80911b04774a47002945ee10ef6c90ea088e7874a5781dafc3a5973b97abba1f",
-        "session_context_sha256": "66032a782c17cbc0b2621355b4abc18f5ffe58db2160dcb86efd0c3a6df97a3e",
-        "native_config_sha256": "6ce591fbdef3b873bc5bf0980e7fbfc1eba0bebdf6c68532de8ff42188d7176b",
-        "cleanup_sha256": "94bf8d8120f1d737351d09a74014551035950b9842d5d052e9491390e56463e2",
+        "session_context_sha256": "58ae2415f3dcf801135387778eba1131345bac96b62591a4a988df729847f961",
+        "native_config_sha256": "b2db3e86c037afbde45659966fa98835a4495d9d6412fcd6966db66511e8f107",
+        "cleanup_sha256": "77d961dfb1e16e7026b3aa383c932ead54d1844f0a8e0b11fdbffff22f8dd10b",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "7a6688a9c4a441528e7c6013506680ad",
+              "session_id": "4a109c31e5cc4783ba32ec570ba55fff",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
               "held_inputs": [],
               "cleanup_verified": true
             },
-            "results_sha256": "61a855ccd38a0c070cf3b2a01f80ead5eec31e2885f2ce3c2b3ec58dfbe5155a",
-            "identity_sha256": "5e4506153ba6724a99c15290f45b1396c438ce7cc340db41f89f4379549f9179",
+            "results_sha256": "8cc899af4726d679c9af8042c3e06ac1a7553ef811db974c1d0e3cfdfb8ad7d2",
+            "identity_sha256": "a88ef52a64324c1f2825defc4e57af4a54a49c022fbcd846a5436279a0cbd81e",
             "recipe_sha256": "fd814743fa3505b09329d6d6c0e62c9c401940984662b0b4c6dafd71d10e9b38",
-            "native_events_sha256": "d05c7550bd5cc93669171d32d9fbca104fa1fe366746e792aa6bc9be9637cc8c",
+            "native_events_sha256": "a509793fcc976148704f12cc1fece92ac96cc17d4521ca131fec3d13b273631c",
             "capture_trace_sha256": "80911b04774a47002945ee10ef6c90ea088e7874a5781dafc3a5973b97abba1f",
-            "session_context_sha256": "66032a782c17cbc0b2621355b4abc18f5ffe58db2160dcb86efd0c3a6df97a3e",
-            "native_config_sha256": "6ce591fbdef3b873bc5bf0980e7fbfc1eba0bebdf6c68532de8ff42188d7176b",
-            "cleanup_sha256": "94bf8d8120f1d737351d09a74014551035950b9842d5d052e9491390e56463e2"
+            "session_context_sha256": "58ae2415f3dcf801135387778eba1131345bac96b62591a4a988df729847f961",
+            "native_config_sha256": "b2db3e86c037afbde45659966fa98835a4495d9d6412fcd6966db66511e8f107",
+            "cleanup_sha256": "77d961dfb1e16e7026b3aa383c932ead54d1844f0a8e0b11fdbffff22f8dd10b"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-001-base-midi/case-participants.json",
-        "case_participants_sha256": "a41f0310358252e225798bd9c9a2ff4801c96ff0a0da37b84a7b2575afbf3dd6"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-001-base-midi/case-participants.json",
+        "case_participants_sha256": "d8a1d90dabff1b3233c1cb78e3622bf5306ff2c8baefbd4f24d14a20bab82031"
       }
     },
     {
@@ -282585,26 +282585,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 491,
-                    "monotonic_ns": 127914535500983,
+                    "frame_revision": 486,
+                    "monotonic_ns": 169950529233417,
                     "clock_before_observation_index": 78,
                     "clock_after_observation_index": 79,
                     "clock_before": {
                       "beats": 44.265,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914527886976,
+                      "monotonic_ns": 169950523632224,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 44.4525,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914535104834,
+                      "monotonic_ns": 169950528922060,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 44.4525,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914535104834,
+                      "monotonic_ns": 169950528922060,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -282618,7 +282618,7 @@
                       "allowed_phases": [
                         0
                       ],
-                      "frame_revision": 491
+                      "frame_revision": 486
                     },
                     "grid_sha256": "747ea163f318fa1eabd07425429666c7294775d4d6f913a01bed50183b4dd533",
                     "logical_ns": 29635000000,
@@ -282631,26 +282631,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 491,
-                    "monotonic_ns": 127914574042921,
+                    "frame_revision": 486,
+                    "monotonic_ns": 169950566324245,
                     "clock_before_observation_index": 80,
                     "clock_after_observation_index": 81,
                     "clock_before": {
                       "beats": 44.4525,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914567163516,
+                      "monotonic_ns": 169950560534571,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 44.64,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914573726912,
+                      "monotonic_ns": 169950565972700,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 44.64,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914573726912,
+                      "monotonic_ns": 169950565972700,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -282664,7 +282664,7 @@
                       "allowed_phases": [
                         0
                       ],
-                      "frame_revision": 491
+                      "frame_revision": 486
                     },
                     "grid_sha256": "747ea163f318fa1eabd07425429666c7294775d4d6f913a01bed50183b4dd533",
                     "logical_ns": 29760000000,
@@ -282677,26 +282677,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 491,
-                    "monotonic_ns": 127914608444839,
+                    "frame_revision": 486,
+                    "monotonic_ns": 169950599134804,
                     "clock_before_observation_index": 82,
                     "clock_after_observation_index": 83,
                     "clock_before": {
                       "beats": 44.64,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914602322825,
+                      "monotonic_ns": 169950593226195,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 44.8275,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914607889927,
+                      "monotonic_ns": 169950598760856,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 44.8275,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914607889927,
+                      "monotonic_ns": 169950598760856,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -282710,7 +282710,7 @@
                       "allowed_phases": [
                         0
                       ],
-                      "frame_revision": 491
+                      "frame_revision": 486
                     },
                     "grid_sha256": "747ea163f318fa1eabd07425429666c7294775d4d6f913a01bed50183b4dd533",
                     "logical_ns": 29885000000,
@@ -282723,26 +282723,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 492,
-                    "monotonic_ns": 127914642675527,
+                    "frame_revision": 487,
+                    "monotonic_ns": 169950635273753,
                     "clock_before_observation_index": 84,
                     "clock_after_observation_index": 85,
                     "clock_before": {
                       "beats": 44.8275,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914635779568,
+                      "monotonic_ns": 169950628480835,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 45.015,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914642361776,
+                      "monotonic_ns": 169950634959657,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 45.015,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914642361776,
+                      "monotonic_ns": 169950634959657,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -282756,7 +282756,7 @@
                       "allowed_phases": [
                         0
                       ],
-                      "frame_revision": 492
+                      "frame_revision": 487
                     },
                     "grid_sha256": "747ea163f318fa1eabd07425429666c7294775d4d6f913a01bed50183b4dd533",
                     "logical_ns": 30010000000,
@@ -282769,26 +282769,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 492,
-                    "monotonic_ns": 127914674852688,
+                    "frame_revision": 487,
+                    "monotonic_ns": 169950668203343,
                     "clock_before_observation_index": 86,
                     "clock_after_observation_index": 87,
                     "clock_before": {
                       "beats": 45.015,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914669048893,
+                      "monotonic_ns": 169950662222452,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 45.2025,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914674535409,
+                      "monotonic_ns": 169950667818245,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 45.2025,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914674535409,
+                      "monotonic_ns": 169950667818245,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -282802,7 +282802,7 @@
                       "allowed_phases": [
                         0
                       ],
-                      "frame_revision": 492
+                      "frame_revision": 487
                     },
                     "grid_sha256": "747ea163f318fa1eabd07425429666c7294775d4d6f913a01bed50183b4dd533",
                     "logical_ns": 30135000000,
@@ -282815,26 +282815,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 492,
-                    "monotonic_ns": 127914707566702,
+                    "frame_revision": 487,
+                    "monotonic_ns": 169950701003319,
                     "clock_before_observation_index": 88,
                     "clock_after_observation_index": 89,
                     "clock_before": {
                       "beats": 45.2025,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914701716686,
+                      "monotonic_ns": 169950695235953,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 45.39,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914707252432,
+                      "monotonic_ns": 169950700660952,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 45.39,
                       "tempo": 90.0,
-                      "monotonic_ns": 127914707252432,
+                      "monotonic_ns": 169950700660952,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -282848,7 +282848,7 @@
                       "allowed_phases": [
                         0
                       ],
-                      "frame_revision": 492
+                      "frame_revision": 487
                     },
                     "grid_sha256": "747ea163f318fa1eabd07425429666c7294775d4d6f913a01bed50183b4dd533",
                     "logical_ns": 30260000000,
@@ -282872,26 +282872,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 491,
-                      "monotonic_ns": 127914535500983,
+                      "frame_revision": 486,
+                      "monotonic_ns": 169950529233417,
                       "clock_before_observation_index": 78,
                       "clock_after_observation_index": 79,
                       "clock_before": {
                         "beats": 44.265,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914527886976,
+                        "monotonic_ns": 169950523632224,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 44.4525,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914535104834,
+                        "monotonic_ns": 169950528922060,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 44.4525,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914535104834,
+                        "monotonic_ns": 169950528922060,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -282905,7 +282905,7 @@
                         "allowed_phases": [
                           0
                         ],
-                        "frame_revision": 491
+                        "frame_revision": 486
                       }
                     },
                     {
@@ -282915,26 +282915,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 491,
-                      "monotonic_ns": 127914574042921,
+                      "frame_revision": 486,
+                      "monotonic_ns": 169950566324245,
                       "clock_before_observation_index": 80,
                       "clock_after_observation_index": 81,
                       "clock_before": {
                         "beats": 44.4525,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914567163516,
+                        "monotonic_ns": 169950560534571,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 44.64,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914573726912,
+                        "monotonic_ns": 169950565972700,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 44.64,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914573726912,
+                        "monotonic_ns": 169950565972700,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -282948,7 +282948,7 @@
                         "allowed_phases": [
                           0
                         ],
-                        "frame_revision": 491
+                        "frame_revision": 486
                       }
                     },
                     {
@@ -282958,26 +282958,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 491,
-                      "monotonic_ns": 127914608444839,
+                      "frame_revision": 486,
+                      "monotonic_ns": 169950599134804,
                       "clock_before_observation_index": 82,
                       "clock_after_observation_index": 83,
                       "clock_before": {
                         "beats": 44.64,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914602322825,
+                        "monotonic_ns": 169950593226195,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 44.8275,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914607889927,
+                        "monotonic_ns": 169950598760856,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 44.8275,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914607889927,
+                        "monotonic_ns": 169950598760856,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -282991,7 +282991,7 @@
                         "allowed_phases": [
                           0
                         ],
-                        "frame_revision": 491
+                        "frame_revision": 486
                       }
                     },
                     {
@@ -283001,26 +283001,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 492,
-                      "monotonic_ns": 127914642675527,
+                      "frame_revision": 487,
+                      "monotonic_ns": 169950635273753,
                       "clock_before_observation_index": 84,
                       "clock_after_observation_index": 85,
                       "clock_before": {
                         "beats": 44.8275,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914635779568,
+                        "monotonic_ns": 169950628480835,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 45.015,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914642361776,
+                        "monotonic_ns": 169950634959657,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 45.015,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914642361776,
+                        "monotonic_ns": 169950634959657,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -283034,7 +283034,7 @@
                         "allowed_phases": [
                           0
                         ],
-                        "frame_revision": 492
+                        "frame_revision": 487
                       }
                     },
                     {
@@ -283044,26 +283044,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 492,
-                      "monotonic_ns": 127914674852688,
+                      "frame_revision": 487,
+                      "monotonic_ns": 169950668203343,
                       "clock_before_observation_index": 86,
                       "clock_after_observation_index": 87,
                       "clock_before": {
                         "beats": 45.015,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914669048893,
+                        "monotonic_ns": 169950662222452,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 45.2025,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914674535409,
+                        "monotonic_ns": 169950667818245,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 45.2025,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914674535409,
+                        "monotonic_ns": 169950667818245,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -283077,7 +283077,7 @@
                         "allowed_phases": [
                           0
                         ],
-                        "frame_revision": 492
+                        "frame_revision": 487
                       }
                     },
                     {
@@ -283087,26 +283087,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 492,
-                      "monotonic_ns": 127914707566702,
+                      "frame_revision": 487,
+                      "monotonic_ns": 169950701003319,
                       "clock_before_observation_index": 88,
                       "clock_after_observation_index": 89,
                       "clock_before": {
                         "beats": 45.2025,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914701716686,
+                        "monotonic_ns": 169950695235953,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 45.39,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914707252432,
+                        "monotonic_ns": 169950700660952,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 45.39,
                         "tempo": 90.0,
-                        "monotonic_ns": 127914707252432,
+                        "monotonic_ns": 169950700660952,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -283120,7 +283120,7 @@
                         "allowed_phases": [
                           0
                         ],
-                        "frame_revision": 492
+                        "frame_revision": 487
                       }
                     }
                   ],
@@ -283144,7 +283144,7 @@
                     "input_sequence": 732,
                     "native": {
                       "sequence": 808,
-                      "monotonic_ns": 127912932309784
+                      "monotonic_ns": 169948919078332
                     }
                   },
                   {
@@ -283156,7 +283156,7 @@
                     "input_sequence": 1046,
                     "native": {
                       "sequence": 1445,
-                      "monotonic_ns": 127914768201055
+                      "monotonic_ns": 169950758472804
                     }
                   }
                 ],
@@ -283166,7 +283166,7 @@
                 "citation": "README.md#ui-motion",
                 "passed": true
               },
-              "assertion_sha256": "936a7b0241e3d53c916f7237d4fff7b0f1799a0b3662c6c91033ff867f5bb0aa",
+              "assertion_sha256": "6c9de7b25103c5aefb28d2449ca18739d41262373e6abd798d3e71d7cd47bb79",
               "trace_sha256": "29cd90a3828a225d8197066564c3feb91107b3684f5f27ed8997f220e47827b9",
               "session_ordinal": 0
             },
@@ -303510,26 +303510,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 763,
-                    "monotonic_ns": 127918878843813,
+                    "frame_revision": 758,
+                    "monotonic_ns": 169954974571759,
                     "clock_before_observation_index": 156,
                     "clock_after_observation_index": 157,
                     "clock_before": {
                       "beats": 78.855,
                       "tempo": 90.0,
-                      "monotonic_ns": 127918869902440,
+                      "monotonic_ns": 169954966368059,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 79.0425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127918878429293,
+                      "monotonic_ns": 169954974238241,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 79.0425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127918878429293,
+                      "monotonic_ns": 169954974238241,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303552,8 +303552,8 @@
                         0,
                         4
                       ],
-                      "frame_revision": 763,
-                      "native_draw_ns": 127918875116414,
+                      "frame_revision": 758,
+                      "native_draw_ns": 169954970656343,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303569,26 +303569,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 766,
-                    "monotonic_ns": 127918979169058,
+                    "frame_revision": 761,
+                    "monotonic_ns": 169955067034328,
                     "clock_before_observation_index": 158,
                     "clock_after_observation_index": 159,
                     "clock_before": {
                       "beats": 79.0425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127918968965433,
+                      "monotonic_ns": 169955057829206,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 79.23,
                       "tempo": 90.0,
-                      "monotonic_ns": 127918978788107,
+                      "monotonic_ns": 169955066730551,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 79.23,
                       "tempo": 90.0,
-                      "monotonic_ns": 127918978788107,
+                      "monotonic_ns": 169955066730551,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303610,8 +303610,8 @@
                         0,
                         4
                       ],
-                      "frame_revision": 766,
-                      "native_draw_ns": 127918974713597,
+                      "frame_revision": 761,
+                      "native_draw_ns": 169955063844330,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303627,26 +303627,26 @@
                       5,
                       7
                     ],
-                    "frame_revision": 767,
-                    "monotonic_ns": 127919073595227,
+                    "frame_revision": 762,
+                    "monotonic_ns": 169955166224406,
                     "clock_before_observation_index": 160,
                     "clock_after_observation_index": 161,
                     "clock_before": {
                       "beats": 79.23,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919066332960,
+                      "monotonic_ns": 169955158362653,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 79.4175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919073278766,
+                      "monotonic_ns": 169955165913888,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 79.4175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919073278766,
+                      "monotonic_ns": 169955165913888,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303669,8 +303669,8 @@
                         5,
                         7
                       ],
-                      "frame_revision": 767,
-                      "native_draw_ns": 127919070216470,
+                      "frame_revision": 762,
+                      "native_draw_ns": 169955162245168,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303685,26 +303685,26 @@
                     "matching_poses": [
                       6
                     ],
-                    "frame_revision": 770,
-                    "monotonic_ns": 127919170030652,
+                    "frame_revision": 765,
+                    "monotonic_ns": 169955266373682,
                     "clock_before_observation_index": 162,
                     "clock_after_observation_index": 163,
                     "clock_before": {
                       "beats": 79.4175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919160868128,
+                      "monotonic_ns": 169955256177809,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 79.605,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919169726842,
+                      "monotonic_ns": 169955266059736,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 79.605,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919169726842,
+                      "monotonic_ns": 169955266059736,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303726,8 +303726,8 @@
                       "matching_phases": [
                         6
                       ],
-                      "frame_revision": 770,
-                      "native_draw_ns": 127919166559235,
+                      "frame_revision": 765,
+                      "native_draw_ns": 169955261862285,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303742,26 +303742,26 @@
                     "matching_poses": [
                       6
                     ],
-                    "frame_revision": 771,
-                    "monotonic_ns": 127919266803829,
+                    "frame_revision": 766,
+                    "monotonic_ns": 169955361202184,
                     "clock_before_observation_index": 164,
                     "clock_after_observation_index": 165,
                     "clock_before": {
                       "beats": 79.605,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919258285883,
+                      "monotonic_ns": 169955353529696,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 79.7925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919266440824,
+                      "monotonic_ns": 169955360862952,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 79.7925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919266440824,
+                      "monotonic_ns": 169955360862952,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303783,8 +303783,8 @@
                       "matching_phases": [
                         6
                       ],
-                      "frame_revision": 771,
-                      "native_draw_ns": 127919262747799,
+                      "frame_revision": 766,
+                      "native_draw_ns": 169955357397242,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303800,26 +303800,26 @@
                       5,
                       7
                     ],
-                    "frame_revision": 773,
-                    "monotonic_ns": 127919362322903,
+                    "frame_revision": 768,
+                    "monotonic_ns": 169955455877004,
                     "clock_before_observation_index": 166,
                     "clock_after_observation_index": 167,
                     "clock_before": {
                       "beats": 79.7925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919353529828,
+                      "monotonic_ns": 169955446695901,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 79.98,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919361985837,
+                      "monotonic_ns": 169955455492253,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 79.98,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919361985837,
+                      "monotonic_ns": 169955455492253,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303841,8 +303841,8 @@
                         5,
                         7
                       ],
-                      "frame_revision": 773,
-                      "native_draw_ns": 127919358707904,
+                      "frame_revision": 768,
+                      "native_draw_ns": 169955451584980,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303858,26 +303858,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 774,
-                    "monotonic_ns": 127919457247305,
+                    "frame_revision": 769,
+                    "monotonic_ns": 169955553201599,
                     "clock_before_observation_index": 168,
                     "clock_after_observation_index": 169,
                     "clock_before": {
                       "beats": 79.98,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919449342802,
+                      "monotonic_ns": 169955544216651,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 80.1675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919456913763,
+                      "monotonic_ns": 169955552871150,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 80.1675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919456913763,
+                      "monotonic_ns": 169955552871150,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303900,8 +303900,8 @@
                         0,
                         4
                       ],
-                      "frame_revision": 774,
-                      "native_draw_ns": 127919453760986,
+                      "frame_revision": 769,
+                      "native_draw_ns": 169955548073547,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303917,26 +303917,26 @@
                       1,
                       3
                     ],
-                    "frame_revision": 776,
-                    "monotonic_ns": 127919550277129,
+                    "frame_revision": 771,
+                    "monotonic_ns": 169955645884192,
                     "clock_before_observation_index": 170,
                     "clock_after_observation_index": 171,
                     "clock_before": {
                       "beats": 80.1675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919541103647,
+                      "monotonic_ns": 169955637025818,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 80.355,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919549961888,
+                      "monotonic_ns": 169955645572465,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 80.355,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919549961888,
+                      "monotonic_ns": 169955645572465,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -303959,8 +303959,8 @@
                         1,
                         3
                       ],
-                      "frame_revision": 776,
-                      "native_draw_ns": 127919545931280,
+                      "frame_revision": 771,
+                      "native_draw_ns": 169955641803554,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -303976,26 +303976,26 @@
                       1,
                       3
                     ],
-                    "frame_revision": 777,
-                    "monotonic_ns": 127919640846022,
+                    "frame_revision": 772,
+                    "monotonic_ns": 169955737614277,
                     "clock_before_observation_index": 172,
                     "clock_after_observation_index": 173,
                     "clock_before": {
                       "beats": 80.355,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919633730172,
+                      "monotonic_ns": 169955729446777,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 80.5425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919640530199,
+                      "monotonic_ns": 169955737261588,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 80.5425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919640530199,
+                      "monotonic_ns": 169955737261588,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304018,8 +304018,8 @@
                         1,
                         3
                       ],
-                      "frame_revision": 777,
-                      "native_draw_ns": 127919637738924,
+                      "frame_revision": 772,
+                      "native_draw_ns": 169955733330062,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304034,26 +304034,26 @@
                     "matching_poses": [
                       2
                     ],
-                    "frame_revision": 779,
-                    "monotonic_ns": 127919730564299,
+                    "frame_revision": 774,
+                    "monotonic_ns": 169955831740073,
                     "clock_before_observation_index": 174,
                     "clock_after_observation_index": 175,
                     "clock_before": {
                       "beats": 80.5425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919722100008,
+                      "monotonic_ns": 169955822128522,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 80.73,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919730218589,
+                      "monotonic_ns": 169955831283911,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 80.73,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919730218589,
+                      "monotonic_ns": 169955831283911,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304074,8 +304074,8 @@
                       "matching_phases": [
                         2
                       ],
-                      "frame_revision": 779,
-                      "native_draw_ns": 127919726854751,
+                      "frame_revision": 774,
+                      "native_draw_ns": 169955827426007,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304091,26 +304091,26 @@
                       1,
                       3
                     ],
-                    "frame_revision": 780,
-                    "monotonic_ns": 127919820800610,
+                    "frame_revision": 775,
+                    "monotonic_ns": 169955922890323,
                     "clock_before_observation_index": 176,
                     "clock_after_observation_index": 177,
                     "clock_before": {
                       "beats": 80.73,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919813337950,
+                      "monotonic_ns": 169955914118862,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 80.9175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919820490888,
+                      "monotonic_ns": 169955922585705,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 80.9175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919820490888,
+                      "monotonic_ns": 169955922585705,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304133,8 +304133,8 @@
                         1,
                         3
                       ],
-                      "frame_revision": 780,
-                      "native_draw_ns": 127919817367622,
+                      "frame_revision": 775,
+                      "native_draw_ns": 169955918035217,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304150,26 +304150,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 783,
-                    "monotonic_ns": 127919917947628,
+                    "frame_revision": 778,
+                    "monotonic_ns": 169956013982094,
                     "clock_before_observation_index": 178,
                     "clock_after_observation_index": 179,
                     "clock_before": {
                       "beats": 80.9175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919908345591,
+                      "monotonic_ns": 169956004370313,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 81.105,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919917630506,
+                      "monotonic_ns": 169956013666126,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 81.105,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919917630506,
+                      "monotonic_ns": 169956013666126,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304192,8 +304192,8 @@
                         0,
                         4
                       ],
-                      "frame_revision": 783,
-                      "native_draw_ns": 127919914262859,
+                      "frame_revision": 778,
+                      "native_draw_ns": 169956010077720,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304209,26 +304209,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 784,
-                    "monotonic_ns": 127920004131336,
+                    "frame_revision": 779,
+                    "monotonic_ns": 169956103313636,
                     "clock_before_observation_index": 180,
                     "clock_after_observation_index": 181,
                     "clock_before": {
                       "beats": 81.105,
                       "tempo": 90.0,
-                      "monotonic_ns": 127919997064157,
+                      "monotonic_ns": 169956095976734,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 81.2925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920003781054,
+                      "monotonic_ns": 169956102993887,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 81.2925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920003781054,
+                      "monotonic_ns": 169956102993887,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304251,8 +304251,8 @@
                         0,
                         4
                       ],
-                      "frame_revision": 784,
-                      "native_draw_ns": 127920000855268,
+                      "frame_revision": 779,
+                      "native_draw_ns": 169956099960933,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304268,26 +304268,26 @@
                       5,
                       7
                     ],
-                    "frame_revision": 786,
-                    "monotonic_ns": 127920089226914,
+                    "frame_revision": 781,
+                    "monotonic_ns": 169956193621258,
                     "clock_before_observation_index": 182,
                     "clock_after_observation_index": 183,
                     "clock_before": {
                       "beats": 81.2925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920080862401,
+                      "monotonic_ns": 169956184290052,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 81.48,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920088853927,
+                      "monotonic_ns": 169956193293049,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 81.48,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920088853927,
+                      "monotonic_ns": 169956193293049,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304309,8 +304309,8 @@
                         5,
                         7
                       ],
-                      "frame_revision": 786,
-                      "native_draw_ns": 127920085525405,
+                      "frame_revision": 781,
+                      "native_draw_ns": 169956189402246,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304325,26 +304325,26 @@
                     "matching_poses": [
                       6
                     ],
-                    "frame_revision": 787,
-                    "monotonic_ns": 127920181538197,
+                    "frame_revision": 782,
+                    "monotonic_ns": 169956282271074,
                     "clock_before_observation_index": 184,
                     "clock_after_observation_index": 185,
                     "clock_before": {
                       "beats": 81.48,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920172738826,
+                      "monotonic_ns": 169956274041963,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 81.6675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920181169398,
+                      "monotonic_ns": 169956281961506,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 81.6675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920181169398,
+                      "monotonic_ns": 169956281961506,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304366,8 +304366,8 @@
                       "matching_phases": [
                         6
                       ],
-                      "frame_revision": 787,
-                      "native_draw_ns": 127920177065468,
+                      "frame_revision": 782,
+                      "native_draw_ns": 169956277961588,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304383,26 +304383,26 @@
                       5,
                       7
                     ],
-                    "frame_revision": 789,
-                    "monotonic_ns": 127920277127911,
+                    "frame_revision": 784,
+                    "monotonic_ns": 169956368687063,
                     "clock_before_observation_index": 186,
                     "clock_after_observation_index": 187,
                     "clock_before": {
                       "beats": 81.6675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920268161540,
+                      "monotonic_ns": 169956359568722,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 81.855,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920276761352,
+                      "monotonic_ns": 169956368352304,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 81.855,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920276761352,
+                      "monotonic_ns": 169956368352304,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304425,8 +304425,8 @@
                         5,
                         7
                       ],
-                      "frame_revision": 789,
-                      "native_draw_ns": 127920272838512,
+                      "frame_revision": 784,
+                      "native_draw_ns": 169956364472421,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304442,26 +304442,26 @@
                       5,
                       7
                     ],
-                    "frame_revision": 790,
-                    "monotonic_ns": 127920362181179,
+                    "frame_revision": 785,
+                    "monotonic_ns": 169956454190840,
                     "clock_before_observation_index": 188,
                     "clock_after_observation_index": 189,
                     "clock_before": {
                       "beats": 81.855,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920354776309,
+                      "monotonic_ns": 169956446777676,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 82.0425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920361826218,
+                      "monotonic_ns": 169956453669867,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 82.0425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920361826218,
+                      "monotonic_ns": 169956453669867,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304484,8 +304484,8 @@
                         5,
                         7
                       ],
-                      "frame_revision": 790,
-                      "native_draw_ns": 127920358672319,
+                      "frame_revision": 785,
+                      "native_draw_ns": 169956450711104,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304501,26 +304501,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 792,
-                    "monotonic_ns": 127920448293056,
+                    "frame_revision": 787,
+                    "monotonic_ns": 169956540660887,
                     "clock_before_observation_index": 190,
                     "clock_after_observation_index": 191,
                     "clock_before": {
                       "beats": 82.0425,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920439858036,
+                      "monotonic_ns": 169956531637479,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 82.23,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920447898077,
+                      "monotonic_ns": 169956540306705,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 82.23,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920447898077,
+                      "monotonic_ns": 169956540306705,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304542,8 +304542,8 @@
                         0,
                         4
                       ],
-                      "frame_revision": 792,
-                      "native_draw_ns": 127920444548168,
+                      "frame_revision": 787,
+                      "native_draw_ns": 169956536412335,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304559,26 +304559,26 @@
                       1,
                       3
                     ],
-                    "frame_revision": 793,
-                    "monotonic_ns": 127920531311869,
+                    "frame_revision": 788,
+                    "monotonic_ns": 169956629993993,
                     "clock_before_observation_index": 192,
                     "clock_after_observation_index": 193,
                     "clock_before": {
                       "beats": 82.23,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920523977540,
+                      "monotonic_ns": 169956620250898,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 82.4175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920530983689,
+                      "monotonic_ns": 169956629620889,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 82.4175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920530983689,
+                      "monotonic_ns": 169956629620889,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304601,8 +304601,8 @@
                         1,
                         3
                       ],
-                      "frame_revision": 793,
-                      "native_draw_ns": 127920527901591,
+                      "frame_revision": 788,
+                      "native_draw_ns": 169956625363089,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304617,26 +304617,26 @@
                     "matching_poses": [
                       2
                     ],
-                    "frame_revision": 796,
-                    "monotonic_ns": 127920614829751,
+                    "frame_revision": 791,
+                    "monotonic_ns": 169956718733807,
                     "clock_before_observation_index": 194,
                     "clock_after_observation_index": 195,
                     "clock_before": {
                       "beats": 82.4175,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920605895049,
+                      "monotonic_ns": 169956708082114,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 82.605,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920614518091,
+                      "monotonic_ns": 169956718390460,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 82.605,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920614518091,
+                      "monotonic_ns": 169956718390460,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304658,8 +304658,8 @@
                       "matching_phases": [
                         2
                       ],
-                      "frame_revision": 796,
-                      "native_draw_ns": 127920611547912,
+                      "frame_revision": 791,
+                      "native_draw_ns": 169956714229609,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304674,26 +304674,26 @@
                     "matching_poses": [
                       2
                     ],
-                    "frame_revision": 797,
-                    "monotonic_ns": 127920696280818,
+                    "frame_revision": 792,
+                    "monotonic_ns": 169956810222916,
                     "clock_before_observation_index": 196,
                     "clock_after_observation_index": 197,
                     "clock_before": {
                       "beats": 82.605,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920689239131,
+                      "monotonic_ns": 169956801530411,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 82.7925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920695894839,
+                      "monotonic_ns": 169956809814837,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 82.7925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920695894839,
+                      "monotonic_ns": 169956809814837,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304715,8 +304715,8 @@
                       "matching_phases": [
                         2
                       ],
-                      "frame_revision": 797,
-                      "native_draw_ns": 127920693015971,
+                      "frame_revision": 792,
+                      "native_draw_ns": 169956806000645,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304732,26 +304732,26 @@
                       1,
                       3
                     ],
-                    "frame_revision": 799,
-                    "monotonic_ns": 127920777975685,
+                    "frame_revision": 794,
+                    "monotonic_ns": 169956905207852,
                     "clock_before_observation_index": 198,
                     "clock_after_observation_index": 199,
                     "clock_before": {
                       "beats": 82.7925,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920769156503,
+                      "monotonic_ns": 169956895373855,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 82.98,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920777660996,
+                      "monotonic_ns": 169956904843948,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 82.98,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920777660996,
+                      "monotonic_ns": 169956904843948,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304773,8 +304773,8 @@
                         1,
                         3
                       ],
-                      "frame_revision": 799,
-                      "native_draw_ns": 127920774288947,
+                      "frame_revision": 794,
+                      "native_draw_ns": 169956900606319,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304790,26 +304790,26 @@
                       0,
                       4
                     ],
-                    "frame_revision": 800,
-                    "monotonic_ns": 127920857757039,
+                    "frame_revision": 795,
+                    "monotonic_ns": 169956988274104,
                     "clock_before_observation_index": 200,
                     "clock_after_observation_index": 201,
                     "clock_before": {
                       "beats": 82.98,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920850458261,
+                      "monotonic_ns": 169956979865531,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 83.1675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920857444969,
+                      "monotonic_ns": 169956987917482,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 83.1675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920857444969,
+                      "monotonic_ns": 169956987917482,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304832,8 +304832,8 @@
                         0,
                         4
                       ],
-                      "frame_revision": 800,
-                      "native_draw_ns": 127920854357721,
+                      "frame_revision": 795,
+                      "native_draw_ns": 169956983917690,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304849,26 +304849,26 @@
                       5,
                       7
                     ],
-                    "frame_revision": 802,
-                    "monotonic_ns": 127920936841880,
+                    "frame_revision": 797,
+                    "monotonic_ns": 169957070678586,
                     "clock_before_observation_index": 202,
                     "clock_after_observation_index": 203,
                     "clock_before": {
                       "beats": 83.1675,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920928672470,
+                      "monotonic_ns": 169957061906183,
                       "clock_epoch": 0
                     },
                     "clock_after": {
                       "beats": 83.355,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920936508491,
+                      "monotonic_ns": 169957070363528,
                       "clock_epoch": 0
                     },
                     "native_clock": {
                       "beats": 83.355,
                       "tempo": 90.0,
-                      "monotonic_ns": 127920936508491,
+                      "monotonic_ns": 169957070363528,
                       "clock_epoch": 0
                     },
                     "phase_check": {
@@ -304891,8 +304891,8 @@
                         5,
                         7
                       ],
-                      "frame_revision": 802,
-                      "native_draw_ns": 127920933492811,
+                      "frame_revision": 797,
+                      "native_draw_ns": 169957066553286,
                       "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                       "skipped_display_poses_allowed": false,
                       "hardware_timing_equivalent": false
@@ -304919,26 +304919,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 763,
-                      "monotonic_ns": 127918878843813,
+                      "frame_revision": 758,
+                      "monotonic_ns": 169954974571759,
                       "clock_before_observation_index": 156,
                       "clock_after_observation_index": 157,
                       "clock_before": {
                         "beats": 78.855,
                         "tempo": 90.0,
-                        "monotonic_ns": 127918869902440,
+                        "monotonic_ns": 169954966368059,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 79.0425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127918878429293,
+                        "monotonic_ns": 169954974238241,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 79.0425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127918878429293,
+                        "monotonic_ns": 169954974238241,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -304961,8 +304961,8 @@
                           0,
                           4
                         ],
-                        "frame_revision": 763,
-                        "native_draw_ns": 127918875116414,
+                        "frame_revision": 758,
+                        "native_draw_ns": 169954970656343,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -304975,26 +304975,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 766,
-                      "monotonic_ns": 127918979169058,
+                      "frame_revision": 761,
+                      "monotonic_ns": 169955067034328,
                       "clock_before_observation_index": 158,
                       "clock_after_observation_index": 159,
                       "clock_before": {
                         "beats": 79.0425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127918968965433,
+                        "monotonic_ns": 169955057829206,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 79.23,
                         "tempo": 90.0,
-                        "monotonic_ns": 127918978788107,
+                        "monotonic_ns": 169955066730551,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 79.23,
                         "tempo": 90.0,
-                        "monotonic_ns": 127918978788107,
+                        "monotonic_ns": 169955066730551,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305016,8 +305016,8 @@
                           0,
                           4
                         ],
-                        "frame_revision": 766,
-                        "native_draw_ns": 127918974713597,
+                        "frame_revision": 761,
+                        "native_draw_ns": 169955063844330,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305030,26 +305030,26 @@
                         5,
                         7
                       ],
-                      "frame_revision": 767,
-                      "monotonic_ns": 127919073595227,
+                      "frame_revision": 762,
+                      "monotonic_ns": 169955166224406,
                       "clock_before_observation_index": 160,
                       "clock_after_observation_index": 161,
                       "clock_before": {
                         "beats": 79.23,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919066332960,
+                        "monotonic_ns": 169955158362653,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 79.4175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919073278766,
+                        "monotonic_ns": 169955165913888,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 79.4175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919073278766,
+                        "monotonic_ns": 169955165913888,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305072,8 +305072,8 @@
                           5,
                           7
                         ],
-                        "frame_revision": 767,
-                        "native_draw_ns": 127919070216470,
+                        "frame_revision": 762,
+                        "native_draw_ns": 169955162245168,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305085,26 +305085,26 @@
                       "matching_poses": [
                         6
                       ],
-                      "frame_revision": 770,
-                      "monotonic_ns": 127919170030652,
+                      "frame_revision": 765,
+                      "monotonic_ns": 169955266373682,
                       "clock_before_observation_index": 162,
                       "clock_after_observation_index": 163,
                       "clock_before": {
                         "beats": 79.4175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919160868128,
+                        "monotonic_ns": 169955256177809,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 79.605,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919169726842,
+                        "monotonic_ns": 169955266059736,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 79.605,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919169726842,
+                        "monotonic_ns": 169955266059736,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305126,8 +305126,8 @@
                         "matching_phases": [
                           6
                         ],
-                        "frame_revision": 770,
-                        "native_draw_ns": 127919166559235,
+                        "frame_revision": 765,
+                        "native_draw_ns": 169955261862285,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305139,26 +305139,26 @@
                       "matching_poses": [
                         6
                       ],
-                      "frame_revision": 771,
-                      "monotonic_ns": 127919266803829,
+                      "frame_revision": 766,
+                      "monotonic_ns": 169955361202184,
                       "clock_before_observation_index": 164,
                       "clock_after_observation_index": 165,
                       "clock_before": {
                         "beats": 79.605,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919258285883,
+                        "monotonic_ns": 169955353529696,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 79.7925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919266440824,
+                        "monotonic_ns": 169955360862952,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 79.7925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919266440824,
+                        "monotonic_ns": 169955360862952,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305180,8 +305180,8 @@
                         "matching_phases": [
                           6
                         ],
-                        "frame_revision": 771,
-                        "native_draw_ns": 127919262747799,
+                        "frame_revision": 766,
+                        "native_draw_ns": 169955357397242,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305194,26 +305194,26 @@
                         5,
                         7
                       ],
-                      "frame_revision": 773,
-                      "monotonic_ns": 127919362322903,
+                      "frame_revision": 768,
+                      "monotonic_ns": 169955455877004,
                       "clock_before_observation_index": 166,
                       "clock_after_observation_index": 167,
                       "clock_before": {
                         "beats": 79.7925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919353529828,
+                        "monotonic_ns": 169955446695901,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 79.98,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919361985837,
+                        "monotonic_ns": 169955455492253,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 79.98,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919361985837,
+                        "monotonic_ns": 169955455492253,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305235,8 +305235,8 @@
                           5,
                           7
                         ],
-                        "frame_revision": 773,
-                        "native_draw_ns": 127919358707904,
+                        "frame_revision": 768,
+                        "native_draw_ns": 169955451584980,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305249,26 +305249,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 774,
-                      "monotonic_ns": 127919457247305,
+                      "frame_revision": 769,
+                      "monotonic_ns": 169955553201599,
                       "clock_before_observation_index": 168,
                       "clock_after_observation_index": 169,
                       "clock_before": {
                         "beats": 79.98,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919449342802,
+                        "monotonic_ns": 169955544216651,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 80.1675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919456913763,
+                        "monotonic_ns": 169955552871150,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 80.1675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919456913763,
+                        "monotonic_ns": 169955552871150,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305291,8 +305291,8 @@
                           0,
                           4
                         ],
-                        "frame_revision": 774,
-                        "native_draw_ns": 127919453760986,
+                        "frame_revision": 769,
+                        "native_draw_ns": 169955548073547,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305305,26 +305305,26 @@
                         1,
                         3
                       ],
-                      "frame_revision": 776,
-                      "monotonic_ns": 127919550277129,
+                      "frame_revision": 771,
+                      "monotonic_ns": 169955645884192,
                       "clock_before_observation_index": 170,
                       "clock_after_observation_index": 171,
                       "clock_before": {
                         "beats": 80.1675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919541103647,
+                        "monotonic_ns": 169955637025818,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 80.355,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919549961888,
+                        "monotonic_ns": 169955645572465,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 80.355,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919549961888,
+                        "monotonic_ns": 169955645572465,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305347,8 +305347,8 @@
                           1,
                           3
                         ],
-                        "frame_revision": 776,
-                        "native_draw_ns": 127919545931280,
+                        "frame_revision": 771,
+                        "native_draw_ns": 169955641803554,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305361,26 +305361,26 @@
                         1,
                         3
                       ],
-                      "frame_revision": 777,
-                      "monotonic_ns": 127919640846022,
+                      "frame_revision": 772,
+                      "monotonic_ns": 169955737614277,
                       "clock_before_observation_index": 172,
                       "clock_after_observation_index": 173,
                       "clock_before": {
                         "beats": 80.355,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919633730172,
+                        "monotonic_ns": 169955729446777,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 80.5425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919640530199,
+                        "monotonic_ns": 169955737261588,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 80.5425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919640530199,
+                        "monotonic_ns": 169955737261588,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305403,8 +305403,8 @@
                           1,
                           3
                         ],
-                        "frame_revision": 777,
-                        "native_draw_ns": 127919637738924,
+                        "frame_revision": 772,
+                        "native_draw_ns": 169955733330062,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305416,26 +305416,26 @@
                       "matching_poses": [
                         2
                       ],
-                      "frame_revision": 779,
-                      "monotonic_ns": 127919730564299,
+                      "frame_revision": 774,
+                      "monotonic_ns": 169955831740073,
                       "clock_before_observation_index": 174,
                       "clock_after_observation_index": 175,
                       "clock_before": {
                         "beats": 80.5425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919722100008,
+                        "monotonic_ns": 169955822128522,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 80.73,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919730218589,
+                        "monotonic_ns": 169955831283911,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 80.73,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919730218589,
+                        "monotonic_ns": 169955831283911,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305456,8 +305456,8 @@
                         "matching_phases": [
                           2
                         ],
-                        "frame_revision": 779,
-                        "native_draw_ns": 127919726854751,
+                        "frame_revision": 774,
+                        "native_draw_ns": 169955827426007,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305470,26 +305470,26 @@
                         1,
                         3
                       ],
-                      "frame_revision": 780,
-                      "monotonic_ns": 127919820800610,
+                      "frame_revision": 775,
+                      "monotonic_ns": 169955922890323,
                       "clock_before_observation_index": 176,
                       "clock_after_observation_index": 177,
                       "clock_before": {
                         "beats": 80.73,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919813337950,
+                        "monotonic_ns": 169955914118862,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 80.9175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919820490888,
+                        "monotonic_ns": 169955922585705,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 80.9175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919820490888,
+                        "monotonic_ns": 169955922585705,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305512,8 +305512,8 @@
                           1,
                           3
                         ],
-                        "frame_revision": 780,
-                        "native_draw_ns": 127919817367622,
+                        "frame_revision": 775,
+                        "native_draw_ns": 169955918035217,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305526,26 +305526,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 783,
-                      "monotonic_ns": 127919917947628,
+                      "frame_revision": 778,
+                      "monotonic_ns": 169956013982094,
                       "clock_before_observation_index": 178,
                       "clock_after_observation_index": 179,
                       "clock_before": {
                         "beats": 80.9175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919908345591,
+                        "monotonic_ns": 169956004370313,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 81.105,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919917630506,
+                        "monotonic_ns": 169956013666126,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 81.105,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919917630506,
+                        "monotonic_ns": 169956013666126,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305568,8 +305568,8 @@
                           0,
                           4
                         ],
-                        "frame_revision": 783,
-                        "native_draw_ns": 127919914262859,
+                        "frame_revision": 778,
+                        "native_draw_ns": 169956010077720,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305582,26 +305582,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 784,
-                      "monotonic_ns": 127920004131336,
+                      "frame_revision": 779,
+                      "monotonic_ns": 169956103313636,
                       "clock_before_observation_index": 180,
                       "clock_after_observation_index": 181,
                       "clock_before": {
                         "beats": 81.105,
                         "tempo": 90.0,
-                        "monotonic_ns": 127919997064157,
+                        "monotonic_ns": 169956095976734,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 81.2925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920003781054,
+                        "monotonic_ns": 169956102993887,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 81.2925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920003781054,
+                        "monotonic_ns": 169956102993887,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305624,8 +305624,8 @@
                           0,
                           4
                         ],
-                        "frame_revision": 784,
-                        "native_draw_ns": 127920000855268,
+                        "frame_revision": 779,
+                        "native_draw_ns": 169956099960933,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305638,26 +305638,26 @@
                         5,
                         7
                       ],
-                      "frame_revision": 786,
-                      "monotonic_ns": 127920089226914,
+                      "frame_revision": 781,
+                      "monotonic_ns": 169956193621258,
                       "clock_before_observation_index": 182,
                       "clock_after_observation_index": 183,
                       "clock_before": {
                         "beats": 81.2925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920080862401,
+                        "monotonic_ns": 169956184290052,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 81.48,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920088853927,
+                        "monotonic_ns": 169956193293049,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 81.48,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920088853927,
+                        "monotonic_ns": 169956193293049,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305679,8 +305679,8 @@
                           5,
                           7
                         ],
-                        "frame_revision": 786,
-                        "native_draw_ns": 127920085525405,
+                        "frame_revision": 781,
+                        "native_draw_ns": 169956189402246,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305692,26 +305692,26 @@
                       "matching_poses": [
                         6
                       ],
-                      "frame_revision": 787,
-                      "monotonic_ns": 127920181538197,
+                      "frame_revision": 782,
+                      "monotonic_ns": 169956282271074,
                       "clock_before_observation_index": 184,
                       "clock_after_observation_index": 185,
                       "clock_before": {
                         "beats": 81.48,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920172738826,
+                        "monotonic_ns": 169956274041963,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 81.6675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920181169398,
+                        "monotonic_ns": 169956281961506,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 81.6675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920181169398,
+                        "monotonic_ns": 169956281961506,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305733,8 +305733,8 @@
                         "matching_phases": [
                           6
                         ],
-                        "frame_revision": 787,
-                        "native_draw_ns": 127920177065468,
+                        "frame_revision": 782,
+                        "native_draw_ns": 169956277961588,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305747,26 +305747,26 @@
                         5,
                         7
                       ],
-                      "frame_revision": 789,
-                      "monotonic_ns": 127920277127911,
+                      "frame_revision": 784,
+                      "monotonic_ns": 169956368687063,
                       "clock_before_observation_index": 186,
                       "clock_after_observation_index": 187,
                       "clock_before": {
                         "beats": 81.6675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920268161540,
+                        "monotonic_ns": 169956359568722,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 81.855,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920276761352,
+                        "monotonic_ns": 169956368352304,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 81.855,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920276761352,
+                        "monotonic_ns": 169956368352304,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305789,8 +305789,8 @@
                           5,
                           7
                         ],
-                        "frame_revision": 789,
-                        "native_draw_ns": 127920272838512,
+                        "frame_revision": 784,
+                        "native_draw_ns": 169956364472421,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305803,26 +305803,26 @@
                         5,
                         7
                       ],
-                      "frame_revision": 790,
-                      "monotonic_ns": 127920362181179,
+                      "frame_revision": 785,
+                      "monotonic_ns": 169956454190840,
                       "clock_before_observation_index": 188,
                       "clock_after_observation_index": 189,
                       "clock_before": {
                         "beats": 81.855,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920354776309,
+                        "monotonic_ns": 169956446777676,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 82.0425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920361826218,
+                        "monotonic_ns": 169956453669867,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 82.0425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920361826218,
+                        "monotonic_ns": 169956453669867,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305845,8 +305845,8 @@
                           5,
                           7
                         ],
-                        "frame_revision": 790,
-                        "native_draw_ns": 127920358672319,
+                        "frame_revision": 785,
+                        "native_draw_ns": 169956450711104,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305859,26 +305859,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 792,
-                      "monotonic_ns": 127920448293056,
+                      "frame_revision": 787,
+                      "monotonic_ns": 169956540660887,
                       "clock_before_observation_index": 190,
                       "clock_after_observation_index": 191,
                       "clock_before": {
                         "beats": 82.0425,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920439858036,
+                        "monotonic_ns": 169956531637479,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 82.23,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920447898077,
+                        "monotonic_ns": 169956540306705,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 82.23,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920447898077,
+                        "monotonic_ns": 169956540306705,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305900,8 +305900,8 @@
                           0,
                           4
                         ],
-                        "frame_revision": 792,
-                        "native_draw_ns": 127920444548168,
+                        "frame_revision": 787,
+                        "native_draw_ns": 169956536412335,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305914,26 +305914,26 @@
                         1,
                         3
                       ],
-                      "frame_revision": 793,
-                      "monotonic_ns": 127920531311869,
+                      "frame_revision": 788,
+                      "monotonic_ns": 169956629993993,
                       "clock_before_observation_index": 192,
                       "clock_after_observation_index": 193,
                       "clock_before": {
                         "beats": 82.23,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920523977540,
+                        "monotonic_ns": 169956620250898,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 82.4175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920530983689,
+                        "monotonic_ns": 169956629620889,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 82.4175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920530983689,
+                        "monotonic_ns": 169956629620889,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -305956,8 +305956,8 @@
                           1,
                           3
                         ],
-                        "frame_revision": 793,
-                        "native_draw_ns": 127920527901591,
+                        "frame_revision": 788,
+                        "native_draw_ns": 169956625363089,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -305969,26 +305969,26 @@
                       "matching_poses": [
                         2
                       ],
-                      "frame_revision": 796,
-                      "monotonic_ns": 127920614829751,
+                      "frame_revision": 791,
+                      "monotonic_ns": 169956718733807,
                       "clock_before_observation_index": 194,
                       "clock_after_observation_index": 195,
                       "clock_before": {
                         "beats": 82.4175,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920605895049,
+                        "monotonic_ns": 169956708082114,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 82.605,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920614518091,
+                        "monotonic_ns": 169956718390460,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 82.605,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920614518091,
+                        "monotonic_ns": 169956718390460,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -306010,8 +306010,8 @@
                         "matching_phases": [
                           2
                         ],
-                        "frame_revision": 796,
-                        "native_draw_ns": 127920611547912,
+                        "frame_revision": 791,
+                        "native_draw_ns": 169956714229609,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -306023,26 +306023,26 @@
                       "matching_poses": [
                         2
                       ],
-                      "frame_revision": 797,
-                      "monotonic_ns": 127920696280818,
+                      "frame_revision": 792,
+                      "monotonic_ns": 169956810222916,
                       "clock_before_observation_index": 196,
                       "clock_after_observation_index": 197,
                       "clock_before": {
                         "beats": 82.605,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920689239131,
+                        "monotonic_ns": 169956801530411,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 82.7925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920695894839,
+                        "monotonic_ns": 169956809814837,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 82.7925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920695894839,
+                        "monotonic_ns": 169956809814837,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -306064,8 +306064,8 @@
                         "matching_phases": [
                           2
                         ],
-                        "frame_revision": 797,
-                        "native_draw_ns": 127920693015971,
+                        "frame_revision": 792,
+                        "native_draw_ns": 169956806000645,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -306078,26 +306078,26 @@
                         1,
                         3
                       ],
-                      "frame_revision": 799,
-                      "monotonic_ns": 127920777975685,
+                      "frame_revision": 794,
+                      "monotonic_ns": 169956905207852,
                       "clock_before_observation_index": 198,
                       "clock_after_observation_index": 199,
                       "clock_before": {
                         "beats": 82.7925,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920769156503,
+                        "monotonic_ns": 169956895373855,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 82.98,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920777660996,
+                        "monotonic_ns": 169956904843948,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 82.98,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920777660996,
+                        "monotonic_ns": 169956904843948,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -306119,8 +306119,8 @@
                           1,
                           3
                         ],
-                        "frame_revision": 799,
-                        "native_draw_ns": 127920774288947,
+                        "frame_revision": 794,
+                        "native_draw_ns": 169956900606319,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -306133,26 +306133,26 @@
                         0,
                         4
                       ],
-                      "frame_revision": 800,
-                      "monotonic_ns": 127920857757039,
+                      "frame_revision": 795,
+                      "monotonic_ns": 169956988274104,
                       "clock_before_observation_index": 200,
                       "clock_after_observation_index": 201,
                       "clock_before": {
                         "beats": 82.98,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920850458261,
+                        "monotonic_ns": 169956979865531,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 83.1675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920857444969,
+                        "monotonic_ns": 169956987917482,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 83.1675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920857444969,
+                        "monotonic_ns": 169956987917482,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -306175,8 +306175,8 @@
                           0,
                           4
                         ],
-                        "frame_revision": 800,
-                        "native_draw_ns": 127920854357721,
+                        "frame_revision": 795,
+                        "native_draw_ns": 169956983917690,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -306189,26 +306189,26 @@
                         5,
                         7
                       ],
-                      "frame_revision": 802,
-                      "monotonic_ns": 127920936841880,
+                      "frame_revision": 797,
+                      "monotonic_ns": 169957070678586,
                       "clock_before_observation_index": 202,
                       "clock_after_observation_index": 203,
                       "clock_before": {
                         "beats": 83.1675,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920928672470,
+                        "monotonic_ns": 169957061906183,
                         "clock_epoch": 0
                       },
                       "clock_after": {
                         "beats": 83.355,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920936508491,
+                        "monotonic_ns": 169957070363528,
                         "clock_epoch": 0
                       },
                       "native_clock": {
                         "beats": 83.355,
                         "tempo": 90.0,
-                        "monotonic_ns": 127920936508491,
+                        "monotonic_ns": 169957070363528,
                         "clock_epoch": 0
                       },
                       "phase_check": {
@@ -306231,8 +306231,8 @@
                           5,
                           7
                         ],
-                        "frame_revision": 802,
-                        "native_draw_ns": 127920933492811,
+                        "frame_revision": 797,
+                        "native_draw_ns": 169957066553286,
                         "precision": "bounded native beat interval; identical bitmap phases remain ambiguous",
                         "skipped_display_poses_allowed": false,
                         "hardware_timing_equivalent": false
@@ -306265,7 +306265,7 @@
                     "input_sequence": 1663,
                     "native": {
                       "sequence": 2246,
-                      "monotonic_ns": 127917066521789
+                      "monotonic_ns": 169953142342638
                     }
                   },
                   {
@@ -306277,7 +306277,7 @@
                     "input_sequence": 1999,
                     "native": {
                       "sequence": 2947,
-                      "monotonic_ns": 127921136197327
+                      "monotonic_ns": 169957258719242
                     }
                   }
                 ],
@@ -306287,7 +306287,7 @@
                 "citation": "README.md#ui-motion",
                 "passed": true
               },
-              "assertion_sha256": "9ccf017348b2ceb6aee8ea4fa3f4aa31ee4043b0b9211db19c153d56bc930451",
+              "assertion_sha256": "6932b2d33409c2f2873f8ec54e615096a3514d8b613c213ea22d3ab9003bb3dd",
               "trace_sha256": "8739a4c9c0a6c2f9b47ce00720a3a53bb6064ac593c930df75f2ccb33c7d4b4f",
               "session_ordinal": 0
             },
@@ -310794,58 +310794,58 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-MOTION-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-MOTION-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "2909e975c19f450690bc623d9707947b",
+          "session_id": "d9ee00be3d184f209458d5b1eebd36b5",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
           "held_inputs": [],
           "cleanup_verified": true
         },
-        "results_sha256": "bab58702dd29e56becf6c7c8de37e330d136bf548fdcddd3a85a129cee3800e4",
-        "identity_sha256": "86e8701aee8db54b2abe0150954f29e76a2b369ec39adf839da668527208f0c7",
+        "results_sha256": "1416eb23f3c44de86b6426e536f7b0da321be0d4d1f1409ac9e6d52e1b01e695",
+        "identity_sha256": "6635e9da1e046e41956c44afdc959c52bbbbdd57550cfb62a7fc949db2e8bd4d",
         "recipe_sha256": "f36dc98bcaadecbbd47d2a3690dabe182617936dcd594ab08365f019fa49b3d7",
-        "native_events_sha256": "28e560cba94b8e831a270d364995f16cea6e2622ad77f3d380e691605a1b581e",
+        "native_events_sha256": "91f424a479e0e12de48e9e8aeaf3f312158a9a56e77779a4414918f72a20292f",
         "capture_trace_sha256": "b5b18a4ffa7571c173ebfcda0ea2571aae73073dc015a0fef8782dd583fa25b4",
-        "session_context_sha256": "5516bdf2855a073dee2302e2846b4fdd90eca30f6228635ce167d7a781cedccf",
-        "native_config_sha256": "19433c27bcd8480fcfe34d054404dc46f74abb45bc4d282dcf388e730e6b6237",
-        "cleanup_sha256": "c17200203cb5b2471906f513ed8ddcc9c1e0ce19493239f2e2e364210ffdc333",
+        "session_context_sha256": "c56d639946d20a6b00e149d9efa2a3aeecb618ae392bf5891a10475897438876",
+        "native_config_sha256": "c44372fdbcad376ede4fe96571597d0ed3d2937c76f226a6173ee44913397f42",
+        "cleanup_sha256": "ae981c5f744e006fb18d9b8f318b6c28060d3685790adcc1e025dcc60c0ae72e",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-MOTION-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-MOTION-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "2909e975c19f450690bc623d9707947b",
+              "session_id": "d9ee00be3d184f209458d5b1eebd36b5",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
               "held_inputs": [],
               "cleanup_verified": true
             },
-            "results_sha256": "bab58702dd29e56becf6c7c8de37e330d136bf548fdcddd3a85a129cee3800e4",
-            "identity_sha256": "86e8701aee8db54b2abe0150954f29e76a2b369ec39adf839da668527208f0c7",
+            "results_sha256": "1416eb23f3c44de86b6426e536f7b0da321be0d4d1f1409ac9e6d52e1b01e695",
+            "identity_sha256": "6635e9da1e046e41956c44afdc959c52bbbbdd57550cfb62a7fc949db2e8bd4d",
             "recipe_sha256": "f36dc98bcaadecbbd47d2a3690dabe182617936dcd594ab08365f019fa49b3d7",
-            "native_events_sha256": "28e560cba94b8e831a270d364995f16cea6e2622ad77f3d380e691605a1b581e",
+            "native_events_sha256": "91f424a479e0e12de48e9e8aeaf3f312158a9a56e77779a4414918f72a20292f",
             "capture_trace_sha256": "b5b18a4ffa7571c173ebfcda0ea2571aae73073dc015a0fef8782dd583fa25b4",
-            "session_context_sha256": "5516bdf2855a073dee2302e2846b4fdd90eca30f6228635ce167d7a781cedccf",
-            "native_config_sha256": "19433c27bcd8480fcfe34d054404dc46f74abb45bc4d282dcf388e730e6b6237",
-            "cleanup_sha256": "c17200203cb5b2471906f513ed8ddcc9c1e0ce19493239f2e2e364210ffdc333"
+            "session_context_sha256": "c56d639946d20a6b00e149d9efa2a3aeecb618ae392bf5891a10475897438876",
+            "native_config_sha256": "c44372fdbcad376ede4fe96571597d0ed3d2937c76f226a6173ee44913397f42",
+            "cleanup_sha256": "ae981c5f744e006fb18d9b8f318b6c28060d3685790adcc1e025dcc60c0ae72e"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-MOTION-001-base-midi/case-participants.json",
-        "case_participants_sha256": "d44f052ddd815f7fcdb601d966737bbdc28d5aaf34a2ecbfd0f0d81e2a836fba"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-MOTION-001-base-midi/case-participants.json",
+        "case_participants_sha256": "51dd7f3ea3e78bb7929093e88612b93c5e40ebd7d3c293d60242f38af5a5ebdb"
       }
     },
     {
@@ -345197,15 +345197,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-002-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-002-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "c76b1cfc99cd4ffca4d2d96195e674b0",
+          "session_id": "e7ecc127924549e18b04e89ab38cff90",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -345213,24 +345213,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "4c757d48fa1009251b450a94106c49b80b8301cba2b1c70276687892729e104a",
-        "identity_sha256": "35e7c6ce1037f781a80c81174d7dddd1461008bf88d31f2aba397cde768c5348",
+        "identity_sha256": "488a086c402a246785ce80f63fbeb31140dccec2245f3dc41db61363b64a0874",
         "recipe_sha256": "916a91244b6a07615035185ebde8b071eb3531e4bf7f83965e30a743047b76c9",
-        "native_events_sha256": "fbe310a008590d731312311e2397add5514d18555dfa0b6f9a003d0ef1eee6b4",
+        "native_events_sha256": "0babf4a37cc17a25273d8ebd6dad29721e35e8c062e3fbcfbc3589223b217e9e",
         "capture_trace_sha256": "0c2dd0050315df7955ad835c5350840636125a769165b85f31455175c22c99fa",
-        "session_context_sha256": "b108be190f211fccf919ea74b3a3f0edc9a8428c913e499ece584086af29c611",
-        "native_config_sha256": "b05bb65b65f06cff58a45caf2390b014ba6b026797ee0dced137a11a4e66b18a",
-        "cleanup_sha256": "31ecf60725a35a57b0fdb4aed581327b3bed4cf057f2ee93268b5f2fb88b0c7b",
+        "session_context_sha256": "362add488b7d52d5fec81bc64cc3f133029ec2fb757f55876a9dc82927b91bcb",
+        "native_config_sha256": "0856a45468bdb3cf4f037d79f672b4d2b30d65a0900dacc29f3b021d5708f093",
+        "cleanup_sha256": "4e321e48cb5c4c7b103c27b9ab758d93ec3c39d622f62f273439eaa4cf51e87e",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-002-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-002-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "c76b1cfc99cd4ffca4d2d96195e674b0",
+              "session_id": "e7ecc127924549e18b04e89ab38cff90",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -345238,17 +345238,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "4c757d48fa1009251b450a94106c49b80b8301cba2b1c70276687892729e104a",
-            "identity_sha256": "35e7c6ce1037f781a80c81174d7dddd1461008bf88d31f2aba397cde768c5348",
+            "identity_sha256": "488a086c402a246785ce80f63fbeb31140dccec2245f3dc41db61363b64a0874",
             "recipe_sha256": "916a91244b6a07615035185ebde8b071eb3531e4bf7f83965e30a743047b76c9",
-            "native_events_sha256": "fbe310a008590d731312311e2397add5514d18555dfa0b6f9a003d0ef1eee6b4",
+            "native_events_sha256": "0babf4a37cc17a25273d8ebd6dad29721e35e8c062e3fbcfbc3589223b217e9e",
             "capture_trace_sha256": "0c2dd0050315df7955ad835c5350840636125a769165b85f31455175c22c99fa",
-            "session_context_sha256": "b108be190f211fccf919ea74b3a3f0edc9a8428c913e499ece584086af29c611",
-            "native_config_sha256": "b05bb65b65f06cff58a45caf2390b014ba6b026797ee0dced137a11a4e66b18a",
-            "cleanup_sha256": "31ecf60725a35a57b0fdb4aed581327b3bed4cf057f2ee93268b5f2fb88b0c7b"
+            "session_context_sha256": "362add488b7d52d5fec81bc64cc3f133029ec2fb757f55876a9dc82927b91bcb",
+            "native_config_sha256": "0856a45468bdb3cf4f037d79f672b4d2b30d65a0900dacc29f3b021d5708f093",
+            "cleanup_sha256": "4e321e48cb5c4c7b103c27b9ab758d93ec3c39d622f62f273439eaa4cf51e87e"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-SONG-002-base-midi/case-participants.json",
-        "case_participants_sha256": "3d87f86ea3f4d04293c57566801e5a47a2e820723a49878005ee381a22cc29bc"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-SONG-002-base-midi/case-participants.json",
+        "case_participants_sha256": "b29474b3e5f93c4d5a20f1a37b83776a1b63f580b073f4b51c26438b4f976a89"
       }
     },
     {
@@ -365150,15 +365150,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-PANIC-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-PANIC-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "ad300543bb0c45ccb6c167a7b6893084",
+          "session_id": "29ffbe64c7fd4976a38412676016b334",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -365166,24 +365166,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "20d7c1e34a00165d53e3d519e36c4f79b915757b5a9631b55e756a7503d737af",
-        "identity_sha256": "3e2ce77ac645666fcc09d45eaa372690b2cbba35c5a9b6568eacb76ecfcb5f5a",
+        "identity_sha256": "0ccb089683847d4aaa166b4cf2c00b0bf2538667370b9963c56f186ecd0d5734",
         "recipe_sha256": "f358c2b57a982994ded6eb1ad2a3f486e9c6aeaa312282c0f0f7624d03585701",
-        "native_events_sha256": "9c2e917f5cc7a72c9fd3e26db39c78862cadeaf4f34b3c2866881bdf9930742f",
+        "native_events_sha256": "6d43e3ae66c2c053f543feb67bd0c5523f1191bd63eb2b8f7e54761c311a9f12",
         "capture_trace_sha256": "afec65454720ef0a675101dcbdde721788d3e20105065f15bbf60a7a6c0b7061",
-        "session_context_sha256": "5686c26bc096e2f56b432690827e465ac424a74037843ad29e5c22bd9c3d698a",
-        "native_config_sha256": "9aaf2b4275c317c48c842f8b2f8155eec99f0742f6509e1aa6864647b8f22897",
-        "cleanup_sha256": "43411f4ea92afd8f7a3d2d38a5b33ef1cfb8475c823dc996b8b8bbde20105883",
+        "session_context_sha256": "48216583ce7a432cd4a6fd8042aed4d6c8fb45f234cbefd38a15630bbbf0b99c",
+        "native_config_sha256": "500700858c1c9ced8c1f1cced70b909cf40b9debde468cf84183db72905070e0",
+        "cleanup_sha256": "68e8a908c8aa66b6ac3c3fec0e4e4893c4d442bea9f552a1a68edf9afbaa459a",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-PANIC-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-PANIC-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "ad300543bb0c45ccb6c167a7b6893084",
+              "session_id": "29ffbe64c7fd4976a38412676016b334",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -365191,17 +365191,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "20d7c1e34a00165d53e3d519e36c4f79b915757b5a9631b55e756a7503d737af",
-            "identity_sha256": "3e2ce77ac645666fcc09d45eaa372690b2cbba35c5a9b6568eacb76ecfcb5f5a",
+            "identity_sha256": "0ccb089683847d4aaa166b4cf2c00b0bf2538667370b9963c56f186ecd0d5734",
             "recipe_sha256": "f358c2b57a982994ded6eb1ad2a3f486e9c6aeaa312282c0f0f7624d03585701",
-            "native_events_sha256": "9c2e917f5cc7a72c9fd3e26db39c78862cadeaf4f34b3c2866881bdf9930742f",
+            "native_events_sha256": "6d43e3ae66c2c053f543feb67bd0c5523f1191bd63eb2b8f7e54761c311a9f12",
             "capture_trace_sha256": "afec65454720ef0a675101dcbdde721788d3e20105065f15bbf60a7a6c0b7061",
-            "session_context_sha256": "5686c26bc096e2f56b432690827e465ac424a74037843ad29e5c22bd9c3d698a",
-            "native_config_sha256": "9aaf2b4275c317c48c842f8b2f8155eec99f0742f6509e1aa6864647b8f22897",
-            "cleanup_sha256": "43411f4ea92afd8f7a3d2d38a5b33ef1cfb8475c823dc996b8b8bbde20105883"
+            "session_context_sha256": "48216583ce7a432cd4a6fd8042aed4d6c8fb45f234cbefd38a15630bbbf0b99c",
+            "native_config_sha256": "500700858c1c9ced8c1f1cced70b909cf40b9debde468cf84183db72905070e0",
+            "cleanup_sha256": "68e8a908c8aa66b6ac3c3fec0e4e4893c4d442bea9f552a1a68edf9afbaa459a"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-PANIC-001-base-midi/case-participants.json",
-        "case_participants_sha256": "b1ecbc32e988e22fc34ad10b5f7ef03b44870453198e167cf0c8b02cb0410825"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-PANIC-001-base-midi/case-participants.json",
+        "case_participants_sha256": "7a4f64f59e6e9968bf16bc8898e5a09888d7b26685410d8b1d2679362e5159d3"
       }
     },
     {
@@ -382491,15 +382491,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-GHOST-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-GHOST-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "95a7578bee9f42ef911ba8bbc6e3f16b",
+          "session_id": "f29ea1463c634f43b50b3f11ec0b00d3",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -382507,24 +382507,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "b459d625f94defbfb145ab0f8c7ed14d8f6a0c90095ea84e7ba29cfb5eef6c2f",
-        "identity_sha256": "fcf193c7f7ac3c33404e66e0aeb4e3efc8a066a691b58fc7324c71c52fd402a3",
+        "identity_sha256": "97a7fdc492c7fe82a45c84c926ccb84fc6c1749de1fb742a39b68098250c12ea",
         "recipe_sha256": "f36b221151910dbb57d9d28a5d4b724f758386cd4d786c22899e50a1a6aa2327",
-        "native_events_sha256": "c0b6910f8eb04266b17dfde91371aedf7a6b67bf655f2869b424efb4c7d4846d",
+        "native_events_sha256": "e1463b01e2b632f82493128ac842a6102b3bfc0770350282bc099ca0881b60e2",
         "capture_trace_sha256": "20607f3a769d625653d0da39d53884f74b3650e95b41f76fa0f47f7b0513ede0",
-        "session_context_sha256": "e055f1fb4c85215e3d90d145a1de9c8a589fec4212ee12ab987e2f67cff13c5e",
-        "native_config_sha256": "c4e8640038921ea24435e68d188046c6627d7655456924921f68a8b92ae4ecc2",
-        "cleanup_sha256": "91bdf7067f58b56282afb3d1f7d7d54df7c2bfd7e13bd7dbcc6e3f83634695ad",
+        "session_context_sha256": "e34ca017cdcb19aa296520be4d855d8d18aff028a2504f6b5a01ce478fcb75b5",
+        "native_config_sha256": "9de232e4f18f18bb9bc21b07499138115c979e787ac42ff78bbbb841bc252931",
+        "cleanup_sha256": "90f0f9e30beebce57c59ae3a0e51740bdc03dc26741b89c661062fd004cedbee",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-GHOST-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-GHOST-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "95a7578bee9f42ef911ba8bbc6e3f16b",
+              "session_id": "f29ea1463c634f43b50b3f11ec0b00d3",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -382532,17 +382532,17 @@
               "cleanup_verified": true
             },
             "results_sha256": "b459d625f94defbfb145ab0f8c7ed14d8f6a0c90095ea84e7ba29cfb5eef6c2f",
-            "identity_sha256": "fcf193c7f7ac3c33404e66e0aeb4e3efc8a066a691b58fc7324c71c52fd402a3",
+            "identity_sha256": "97a7fdc492c7fe82a45c84c926ccb84fc6c1749de1fb742a39b68098250c12ea",
             "recipe_sha256": "f36b221151910dbb57d9d28a5d4b724f758386cd4d786c22899e50a1a6aa2327",
-            "native_events_sha256": "c0b6910f8eb04266b17dfde91371aedf7a6b67bf655f2869b424efb4c7d4846d",
+            "native_events_sha256": "e1463b01e2b632f82493128ac842a6102b3bfc0770350282bc099ca0881b60e2",
             "capture_trace_sha256": "20607f3a769d625653d0da39d53884f74b3650e95b41f76fa0f47f7b0513ede0",
-            "session_context_sha256": "e055f1fb4c85215e3d90d145a1de9c8a589fec4212ee12ab987e2f67cff13c5e",
-            "native_config_sha256": "c4e8640038921ea24435e68d188046c6627d7655456924921f68a8b92ae4ecc2",
-            "cleanup_sha256": "91bdf7067f58b56282afb3d1f7d7d54df7c2bfd7e13bd7dbcc6e3f83634695ad"
+            "session_context_sha256": "e34ca017cdcb19aa296520be4d855d8d18aff028a2504f6b5a01ce478fcb75b5",
+            "native_config_sha256": "9de232e4f18f18bb9bc21b07499138115c979e787ac42ff78bbbb841bc252931",
+            "cleanup_sha256": "90f0f9e30beebce57c59ae3a0e51740bdc03dc26741b89c661062fd004cedbee"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-GHOST-001-base-midi/case-participants.json",
-        "case_participants_sha256": "ea7dc43cb1467aaf07c678dcf14f79328cf1b520c2f9f421c27000c5c9b0890e"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-GHOST-001-base-midi/case-participants.json",
+        "case_participants_sha256": "a474713d1f9d1120ac8093ebd16066729d643ef6363976e6be8491c975be2808"
       }
     },
     {
@@ -419509,15 +419509,15 @@
         }
       ],
       "evidence": {
-        "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-RESET-001-base-midi",
+        "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-RESET-001-base-midi",
         "session_context": {
           "session_ordinal": 0,
           "clock_mode": "controlled-experimental",
           "profile": "base-midi",
-          "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+          "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
           "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
           "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-          "session_id": "bfc0ad3c4aae444aa2a65420ef51fd9e",
+          "session_id": "55e1dd9f035941b695e1de0a671d8f23",
           "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
           "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
           "finished": true,
@@ -419525,24 +419525,24 @@
           "cleanup_verified": true
         },
         "results_sha256": "e09e15b96f5ed87fd9f2adee5569f316ee039ae3847d700904119b900a2eae77",
-        "identity_sha256": "dfadeea4b9b839e5c5344b7816ae17f1e011f5b7704642ae9154bbff83f80afd",
+        "identity_sha256": "4b8afeca3ce22c7dd781ec71dc6fcef1958dca5c53b8ad9d899fcea226bdadfb",
         "recipe_sha256": "0cb4079cb9be959952295abf150d62b53f1f14319ace7ca33cc10ea6df112ddb",
-        "native_events_sha256": "d609d5162e2e36842777f85862b0cd0269cd8b1abdf39e1bc2e7d411f7858688",
+        "native_events_sha256": "7cc11bf3006983b70b1d3a93ef4b9b05d378b7597c18d6ce039813eab83e49ad",
         "capture_trace_sha256": "08a595e3df99004f2211f1d8bb142dc3e6a30e11d5746bd7924bd6e1dc864046",
-        "session_context_sha256": "3b525d2042b218f74598ad2317c28fd4001b2ff87ef283d3e59d0eda20dbb48e",
-        "native_config_sha256": "0a3020fddd26ca116ffca31db79c0e7e720a5cb82b948153eac800aeba4253b1",
-        "cleanup_sha256": "37c681148f8a507e448cc61cbc3f12dfcf631152066303db712fdd6166e3d529",
+        "session_context_sha256": "21499fe02ed371e469e54640c0f2e8d868762f6f0329f9c4816177b71241d05a",
+        "native_config_sha256": "b957a46a42f0c141d89c92a39e4c0c7c2ec922a47bd1e09f9f4e8883ba0ee169",
+        "cleanup_sha256": "c8ae78ef9299964721e54cac2e5060503df24f5deb5cf77a39f43c45aa536c95",
         "case_participants": [
           {
-            "path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-RESET-001-base-midi",
+            "path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-RESET-001-base-midi",
             "session_context": {
               "session_ordinal": 0,
               "clock_mode": "controlled-experimental",
               "profile": "base-midi",
-              "app_root": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/application",
+              "app_root": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/application",
               "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
               "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
-              "session_id": "bfc0ad3c4aae444aa2a65420ef51fd9e",
+              "session_id": "55e1dd9f035941b695e1de0a671d8f23",
               "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
               "application_identity_sha256": "ab6ff6429c9d1bae6ebef6be70bdda0e9f5b3b6dec0659236898d9476281022a",
               "finished": true,
@@ -419550,21 +419550,21 @@
               "cleanup_verified": true
             },
             "results_sha256": "e09e15b96f5ed87fd9f2adee5569f316ee039ae3847d700904119b900a2eae77",
-            "identity_sha256": "dfadeea4b9b839e5c5344b7816ae17f1e011f5b7704642ae9154bbff83f80afd",
+            "identity_sha256": "4b8afeca3ce22c7dd781ec71dc6fcef1958dca5c53b8ad9d899fcea226bdadfb",
             "recipe_sha256": "0cb4079cb9be959952295abf150d62b53f1f14319ace7ca33cc10ea6df112ddb",
-            "native_events_sha256": "d609d5162e2e36842777f85862b0cd0269cd8b1abdf39e1bc2e7d411f7858688",
+            "native_events_sha256": "7cc11bf3006983b70b1d3a93ef4b9b05d378b7597c18d6ce039813eab83e49ad",
             "capture_trace_sha256": "08a595e3df99004f2211f1d8bb142dc3e6a30e11d5746bd7924bd6e1dc864046",
-            "session_context_sha256": "3b525d2042b218f74598ad2317c28fd4001b2ff87ef283d3e59d0eda20dbb48e",
-            "native_config_sha256": "0a3020fddd26ca116ffca31db79c0e7e720a5cb82b948153eac800aeba4253b1",
-            "cleanup_sha256": "37c681148f8a507e448cc61cbc3f12dfcf631152066303db712fdd6166e3d529"
+            "session_context_sha256": "21499fe02ed371e469e54640c0f2e8d868762f6f0329f9c4816177b71241d05a",
+            "native_config_sha256": "b957a46a42f0c141d89c92a39e4c0c7c2ec922a47bd1e09f9f4e8883ba0ee169",
+            "cleanup_sha256": "c8ae78ef9299964721e54cac2e5060503df24f5deb5cf77a39f43c45aa536c95"
           }
         ],
-        "case_participants_path": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4/M-MANUAL-CLOSURE-RESET-001-base-midi/case-participants.json",
-        "case_participants_sha256": "7b1683e70df282e1472089442628daa1110dffabc3881fa93f46433477691cb1"
+        "case_participants_path": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab/M-MANUAL-CLOSURE-RESET-001-base-midi/case-participants.json",
+        "case_participants_sha256": "20c01f3f3ffcea9d5537cc78b5c54d2149dfe56d1d4fce40e87a93f8fd430a16"
       }
     }
   ],
-  "evidence": "/home/andy/mosaic-manual-runs/1cb27738b8b64c928ae1df0596dc88b4",
+  "evidence": "/home/andy/mosaic-manual-runs/d2199e5374224ea6b9a6c672f17e0eab",
   "complete_regression_run": false,
   "selected_scene_ids": [
     "random-pentatonic-on",

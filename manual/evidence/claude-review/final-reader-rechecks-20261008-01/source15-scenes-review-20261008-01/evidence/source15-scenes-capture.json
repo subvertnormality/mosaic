@@ -1,0 +1,251 @@
+{
+  "capturedAt": "2026-10-08T09:14:05.635Z",
+  "reader_url": "http://localhost:8925/manual/",
+  "assets": [
+    {
+      "url": "http://localhost:8925/manual/generated/reader-index.json",
+      "status": 200,
+      "sha256": "1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654",
+      "bytes": 13896246
+    },
+    {
+      "url": "http://localhost:8925/manual/book.js",
+      "status": 200,
+      "sha256": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+      "bytes": 74737
+    },
+    {
+      "url": "http://localhost:8925/manual/manual.js",
+      "status": 200,
+      "sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+      "bytes": 97763
+    },
+    {
+      "url": "http://localhost:8925/manual/manual.css",
+      "status": 200,
+      "sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+      "bytes": 31222
+    }
+  ],
+  "records": [
+    {
+      "url": "http://localhost:8925/manual/#midi-panic/panic-from-song-channel",
+      "title": "MIDI Panic · Mosaic",
+      "routeReady": "1",
+      "selectedInteraction": "Panic by holding Channel while on Song",
+      "examplePosition": "Example\n03 / 03",
+      "selectedFrameLabels": [],
+      "headings": [
+        "MIDI Panic",
+        "Try this feature",
+        "Before you explore Masks",
+        "A place to start",
+        "Interactive examples",
+        "Hold Channel for two seconds",
+        "Controls",
+        "Musical examples",
+        "Silence connected MIDI notes from Song view with the Channel panic gesture",
+        "Silence connected MIDI notes from Song view with the Pattern panic gesture",
+        "Small hours · four bars in C major",
+        "Related features"
+      ],
+      "currentExcerpt": "Example\nTry this feature\nPanic silences a note that is still sounding\nPanic by holding Channel while on Song\nPanic by holding Pattern while on Song\n← External MIDI Transport\nQuick Control Reference →\nCaptured examples\nControls\nMusical examples\n\nUse Panic when a MIDI device holds a note that will not stop.\n\nIf new notes must not follow, stop playback with Play/Stop (1,8). This is optional; Panic does not stop the sequencer.\nHold the navigation button of a page you are not on for about a second. For example, with Song showing, hold Channel (3,8).\nRelease the button after the Note Off sweep. The selected page does not change.\n\nPanic sends Note Off for every note on every MIDI channel and connected device. Holding the selected page button does not trigger Panic.\n\nPanic does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled voices continue, so new notes can sound during or after the sweep. Use Play/Stop to stop playback.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nPanic by holding Channel while on Song\nPanic by holding Pattern while on Song\nPanic silences a note that is still sounding\n\nIndependent example. Its captured starting state is shown below; changes from another example do not carry across.\n\nExample\n03 / 03\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n44px pads; swipe horizontally; column numbers stay aligned\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n03\nAfter\nHold Channel for two seconds\n\nFrom Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.\n\nNotice the screen and grid result of the action above.\n\nCaptured panic sweep: 6144 note-offs across 3 ports, 16 channels and 128 pitches (MIDI 0–127). Each port/channel/pitch combination occurs once. No note-ons were captured. The complete event history is retained with the development records.\n\nNEXT ACTION\n\nThis example is complete. Go back to compare the results.\n\n← Back\nAuto-play\nView next result →\n01\n02\n03\n\nUse Before and Show result to compare the recorded states, or follow the example on your instrument.\n\nMUSICAL USE\n\n03 / QUICK REFERENCE\nControls\nDense view\nYOUR GESTURE\tWHAT HAPPENS\nHold a non-selected page key (stopping first is optional)\tSweep Note Off across connected MIDI channels; holding the selected page key does not panic.\nEvidence: release coverage\n04 / MUSICAL EXAMPLES\nMusical examples\nRECIPE 01\nSilence connected MIDI notes from Song view with the Channel panic gesture\n\nUse this on a connected MIDI instrument when a note is stuck. The panic gesture sends note-release messages to connected MIDI outputs, but it does not stop the sequencer. The manual’s captured Output strip replays a recorded result; it does not send messages to your instrument.\n\nOpen Song at (6,8), so Channel is an inactive page button.\nHold Channel at (3,8) until the panic gesture fires, then release. The page remains Song.\nA stuck MIDI note should stop; inspect the release messages in Output. The sequencer keeps running, so new notes may still play. Press Stop separately if you want silence to continue.\n\nUse Silence a sounding note for the long-note comparison. The other examples show the gesture from a silent project.\n\nRECIPE 02\nSilence connected MIDI notes from Song view with the Pattern panic gesture\n\nUse this on a connected MIDI instrument when a note is stuck. The panic gesture sends note-release messages to connected MIDI outputs, but it does not stop the sequencer. The manual’s captured Output strip replays a recorded result; it does not send messages to your instrument.\n\nOpen Song at (6,8), so Pattern is an inactive page button.\nHold Pattern at (5,8) until the panic gesture fires, then release. The page remains Song.\nA stuck MIDI note should stop; inspect the release messages in Output. The sequencer keeps running, so new notes may still play. Press Stop separately if you want silence to continue.\n\nUse Silence a sounding note for the long-note comparison. The other examples show the gesture from a silent project.\n\nRelated features\nStarting and Stopping Playback\nTroubleshooting No Sound\n\nFollow these links for related controls and musical tasks.",
+      "visibleLinks": [
+        {
+          "text": "Panic silences a note that is still sounding",
+          "href": "#midi-panic/lesson/play-panic-stops-sounding-note-note-sounding"
+        },
+        {
+          "text": "Panic by holding Channel while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-channel"
+        },
+        {
+          "text": "Panic by holding Pattern while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-pattern"
+        }
+      ],
+      "stepCount": 3,
+      "hasNext": true,
+      "id": "panic-from-song-channel",
+      "stepLabels": [
+        "Step 1: Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Pattern 1 is assigned to channel 1 over steps 1 to 4. The sequencer is stopped, so no note is sounding, and three MIDI ports are connected. The norns shows channel 1's Device screen; the next step opens Song.",
+        "Step 2: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button. Panic only works from the button of a page you are not on, so every other page button, including Channel (3,8), is a panic button from here.",
+        "Step 3: From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing."
+      ],
+      "errors": {
+        "page": [],
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (File not found)"
+        ],
+        "failed": [
+          {
+            "url": "http://localhost:8925/manual/audio/masks-small-hours.ogg",
+            "failure": "net::ERR_ABORTED"
+          }
+        ],
+        "http": []
+      },
+      "screenshot": "evidence/panic-from-song-channel.png"
+    },
+    {
+      "url": "http://localhost:8925/manual/#midi-panic/panic-from-song-pattern",
+      "title": "MIDI Panic · Mosaic",
+      "routeReady": "1",
+      "selectedInteraction": "Panic by holding Pattern while on Song",
+      "examplePosition": "Example\n03 / 03",
+      "selectedFrameLabels": [],
+      "headings": [
+        "MIDI Panic",
+        "Try this feature",
+        "Before you explore Masks",
+        "A place to start",
+        "Interactive examples",
+        "Hold Pattern for two seconds",
+        "Controls",
+        "Musical examples",
+        "Silence connected MIDI notes from Song view with the Channel panic gesture",
+        "Silence connected MIDI notes from Song view with the Pattern panic gesture",
+        "Small hours · four bars in C major",
+        "Related features"
+      ],
+      "currentExcerpt": "Example\nTry this feature\nPanic silences a note that is still sounding\nPanic by holding Channel while on Song\nPanic by holding Pattern while on Song\n← External MIDI Transport\nQuick Control Reference →\nCaptured examples\nControls\nMusical examples\n\nUse Panic when a MIDI device holds a note that will not stop.\n\nIf new notes must not follow, stop playback with Play/Stop (1,8). This is optional; Panic does not stop the sequencer.\nHold the navigation button of a page you are not on for about a second. For example, with Song showing, hold Channel (3,8).\nRelease the button after the Note Off sweep. The selected page does not change.\n\nPanic sends Note Off for every note on every MIDI channel and connected device. Holding the selected page button does not trigger Panic.\n\nPanic does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled voices continue, so new notes can sound during or after the sweep. Use Play/Stop to stop playback.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nPanic by holding Channel while on Song\nPanic by holding Pattern while on Song\nPanic silences a note that is still sounding\n\nIndependent example. Its captured starting state is shown below; changes from another example do not carry across.\n\nExample\n03 / 03\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n44px pads; swipe horizontally; column numbers stay aligned\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n03\nAfter\nHold Pattern for two seconds\n\nFrom Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.\n\nNotice the screen and grid result of the action above.\n\nCaptured panic sweep: 6144 note-offs across 3 ports, 16 channels and 128 pitches (MIDI 0–127). Each port/channel/pitch combination occurs once. No note-ons were captured. The complete event history is retained with the development records.\n\nNEXT ACTION\n\nThis example is complete. Go back to compare the results.\n\n← Back\nAuto-play\nView next result →\n01\n02\n03\n\nUse Before and Show result to compare the recorded states, or follow the example on your instrument.\n\nMUSICAL USE\n\n03 / QUICK REFERENCE\nControls\nDense view\nYOUR GESTURE\tWHAT HAPPENS\nHold a non-selected page key (stopping first is optional)\tSweep Note Off across connected MIDI channels; holding the selected page key does not panic.\nEvidence: release coverage\n04 / MUSICAL EXAMPLES\nMusical examples\nRECIPE 01\nSilence connected MIDI notes from Song view with the Channel panic gesture\n\nUse this on a connected MIDI instrument when a note is stuck. The panic gesture sends note-release messages to connected MIDI outputs, but it does not stop the sequencer. The manual’s captured Output strip replays a recorded result; it does not send messages to your instrument.\n\nOpen Song at (6,8), so Channel is an inactive page button.\nHold Channel at (3,8) until the panic gesture fires, then release. The page remains Song.\nA stuck MIDI note should stop; inspect the release messages in Output. The sequencer keeps running, so new notes may still play. Press Stop separately if you want silence to continue.\n\nUse Silence a sounding note for the long-note comparison. The other examples show the gesture from a silent project.\n\nRECIPE 02\nSilence connected MIDI notes from Song view with the Pattern panic gesture\n\nUse this on a connected MIDI instrument when a note is stuck. The panic gesture sends note-release messages to connected MIDI outputs, but it does not stop the sequencer. The manual’s captured Output strip replays a recorded result; it does not send messages to your instrument.\n\nOpen Song at (6,8), so Pattern is an inactive page button.\nHold Pattern at (5,8) until the panic gesture fires, then release. The page remains Song.\nA stuck MIDI note should stop; inspect the release messages in Output. The sequencer keeps running, so new notes may still play. Press Stop separately if you want silence to continue.\n\nUse Silence a sounding note for the long-note comparison. The other examples show the gesture from a silent project.\n\nRelated features\nStarting and Stopping Playback\nTroubleshooting No Sound\n\nFollow these links for related controls and musical tasks.",
+      "visibleLinks": [
+        {
+          "text": "Panic silences a note that is still sounding",
+          "href": "#midi-panic/lesson/play-panic-stops-sounding-note-note-sounding"
+        },
+        {
+          "text": "Panic by holding Channel while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-channel"
+        },
+        {
+          "text": "Panic by holding Pattern while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-pattern"
+        }
+      ],
+      "stepCount": 3,
+      "hasNext": true,
+      "id": "panic-from-song-pattern",
+      "stepLabels": [
+        "Step 1: Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Pattern 1 is assigned to channel 1 over steps 1 to 4. The sequencer is stopped, so no note is sounding, and three MIDI ports are connected. The norns shows channel 1's Device screen; the next step opens Song.",
+        "Step 2: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button. Panic only works from the button of a page you are not on, so every other page button, including Pattern (5,8), is a panic button from here.",
+        "Step 3: From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing."
+      ],
+      "errors": {
+        "page": [],
+        "console": [],
+        "failed": [],
+        "http": []
+      },
+      "screenshot": "evidence/panic-from-song-pattern.png"
+    },
+    {
+      "url": "http://localhost:8925/manual/#midi-controller-options/keyboard-honour-degree",
+      "title": "MIDI Controller Options · Mosaic",
+      "routeReady": "1",
+      "selectedInteraction": "Start from the chosen scale degree",
+      "examplePosition": "Example\n11 / 11",
+      "selectedFrameLabels": [],
+      "headings": [
+        "MIDI Controller Options",
+        "Try this feature",
+        "In this chapter",
+        "Before you explore Masks",
+        "A place to start",
+        "Interactive examples",
+        "Start from the chosen scale degree",
+        "Controls",
+        "Open the MIDI Controller Mapping lesson",
+        "Musical examples",
+        "Map an external keyboard through the scale’s rotated degrees",
+        "Apply scale rotation and global transpose to every keyboard key",
+        "Small hours · four bars in C major",
+        "Related features"
+      ],
+      "currentExcerpt": "Example\nTry this feature\nBaseline: hear both outputs before moving mapped controls\nMIDI Controller Options: Select natural minor\nMIDI Controller Options: Rotate the keyboard voicing\nCheck mapped keyboard pitches with all Honour switches On\n← Lock Merged to Pentatonic\nMap Scale to White Keys →\nCaptured examples\nControls\nMusical examples\n\nOpen PARAMS > MOSAIC > Midi control. It holds Map scale to white keys and the three Honour switches (degree, rotations, transpose). They change what a MIDI keyboard plays and records on the selected channel: with mapping Off the keyboard plays its own notes, and with mapping On the white keys play the selected scale, optionally shaped by the Scale Editor's degree, rotation and transposition.\n\nIn this chapter\nMap Scale to White Keys\nMap the selected scale onto MIDI keyboard white keys, starting at C. Default: Off.\nHonor Scale Rotations\nApply scale rotation to mapped MIDI keyboard input. Default: Off.\nHonor Scale Degree\nApply scale degree to mapped MIDI keyboard input. Default: Off.\nHonour Scale Transpose\nApply scale transposition to mapped MIDI keyboard input. Default: Off.\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nA loaded map follows the selected or fixed channel\nStart from the chosen scale degree\nRotate the keyboard voicing\nApply the scale transpose to live input\n\nIndependent example. Its captured starting state is shown below; changes from another example do not carry across.\n\nExample\n11 / 11\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n44px pads; swipe horizontally; column numbers stay aligned\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n11\nAfter\nStart from the chosen scale degree\n\nClose the menu and play C3 to C4 again. Key C now plays the scale's second note: 62, 63, 65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied, so you can start a phrase from degree II without changing the scale.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · A#3 vel 90 (ch 1) @0 ms · Note off A#3 (ch 1) @0 ms · A#3 vel 90 (ch 1) @0 ms · Note off A#3 (ch 1) @0 ms · C4 vel 90 (ch 1) @0 ms · Note off C4 (ch 1) @0 ms · C4 vel 90 (ch 1) @0 ms · Note off C4 (ch 1) @0 ms · D4 vel 90 (ch 1) @0 ms · Note off D4 (ch 1) @0 ms.\n\nNEXT ACTION\n\nThis example is complete. Go back to compare the results.\n\n← Back\nAuto-play\nView next result →\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n\nUse Before and Show result to compare the recorded states, or follow the example on your instrument.\n\nMUSICAL USE\n\nPlay or record the selected scale on the white keys, and choose whether the Scale Editor's degree, rotation and transpose also apply.\n\n03 / QUICK REFERENCE\nControls\nDense view\nYOUR GESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC > Midi control\tChoose white-key mapping and which scale transformations keyboard input honours.\nEvidence: keyboard output scope\nOpen the MIDI Controller Mapping lesson\n\nThis selected/fixed-channel map walkthrough applies to MIDI Controller Mapping; Options links here as related context.\n\nOpen full lesson: Open the MIDI Controller Mapping lesson\n04 / MUSICAL EXAMPLES\nMusical examples\nRECIPE 01\nMap an external keyboard through the scale’s rotated degrees\n\nGoal: compare the same incoming MIDI keys with Honour scale rotations Off and On. Map scale to white keys places the selected scale on the keyboard’s white keys; the Honour switches control whether the Scale Editor’s degree, rotation and transpose settings affect that mapping.\n\nBaseline: in PARAMS > MOSAIC > Midi control, set Map scale to white keys On. In the Scale Editor select C natural minor, set degree II, rotation 2 and global transpose +2. Set Honour scale degree On, Honour scale rotations Off and Honour scale transpose Off. Play MIDI keys 60 through 72 chromatically at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 70, 70, 72, 72, 74.\nRotation comparison: turn Honour scale rotations On and replay MIDI keys 60 through 72 at velocity 90. Output: 62, 63, 63, 65, 65, 67, 6",
+      "visibleLinks": [
+        {
+          "text": "Honor Scale Rotations\nApply scale rotation to mapped MIDI keyboard input. Default: Off.",
+          "href": "#honor-scale-rotations"
+        },
+        {
+          "text": "Honor Scale Degree\nApply scale degree to mapped MIDI keyboard input. Default: Off.",
+          "href": "#honor-scale-degree"
+        }
+      ],
+      "stepCount": 11,
+      "hasNext": true,
+      "id": "keyboard-honour-degree",
+      "stepLabels": [
+        "Step 1: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale Editor is on C major.",
+        "Step 2: Play some keys on the keyboard: each sounds the note you pressed, because nothing is mapped yet. Tap K1 and open PARAMS > MOSAIC > Midi control. Select Map scale to white keys and turn E3 right to On. The row reads On.",
+        "Step 3: Close the menu and play the white keys from C3 up to C4 on the keyboard. In C major they sound as written: 60, 62, 64, 65, 67, 69, 71, 72. The MIDI strip lists the notes Mosaic sent.",
+        "Step 4: Open the Scale Editor (grid (4,8)), turn E3 two detents and press K3. The Scale row reads Minor, natural minor.",
+        "Step 5: Return to the Channel editor (3,8) and play the white keys again: they now follow C natural minor, 60, 62, 63, 65, 67, 68, 70, 72 (C D E-flat F G A-flat B-flat C).",
+        "Step 6: Open the Scale Editor (4,8) again, turn E2 one click to Degree, turn E3 one detent and press K3. Degree reads ii°. Degree picks which scale note the keyboard's C starts on.",
+        "Step 7: Turn E2 to the Rotation row, turn E3 two detents and press K3. Rotation reads r2. Rotation moves the top keys down an octave.",
+        "Step 8: Tap the global transpose fader on the grid at its lowest value, then tap its increment button fourteen times, and return to the Channel editor (3,8). The Scale overview lists Transpose +2, which shifts everything.",
+        "Step 9: The three Honour switches are still Off, so none of this is applied yet: the white keys still play 60, 62, 63, 65, 67, 68, 70, 72.",
+        "Step 10: Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale degree and turn E3 right to On. The row reads On.",
+        "Step 11: Close the menu and play C3 to C4 again. Key C now plays the scale's second note: 62, 63, 65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied, so you can start a phrase from degree II without changing the scale."
+      ],
+      "errors": {
+        "page": [],
+        "console": [],
+        "failed": [],
+        "http": []
+      },
+      "screenshot": "evidence/keyboard-honour-degree.png"
+    },
+    {
+      "url": "http://localhost:8925/manual/#midi-controller-options/keyboard-honour-degree-rotation",
+      "title": "MIDI Controller Options · Mosaic",
+      "routeReady": "1",
+      "selectedInteraction": "Rotate the keyboard voicing",
+      "examplePosition": "Example\n03 / 03",
+      "selectedFrameLabels": [],
+      "headings": [
+        "MIDI Controller Options",
+        "Try this feature",
+        "In this chapter",
+        "Before you explore Masks",
+        "A place to start",
+        "Interactive examples",
+        "Rotate the keyboard voicing",
+        "Controls",
+        "Open the MIDI Controller Mapping lesson",
+        "Musical examples",
+        "Map an external keyboard through the scale’s rotated degrees",
+        "Apply scale rotation and global transpose to every keyboard key",
+        "Small hours · four bars in C major",
+        "Related features"
+      ],
+      "currentExcerpt": "Example\nTry this feature\nBaseline: hear both outputs before moving mapped controls\nMIDI Controller Options: Select natural minor\nMIDI Controller Options: Rotate the keyboard voicing\nCheck mapped keyboard pitches with all Honour switches On\n← Lock Merged to Pentatonic\nMap Scale to White Keys →\nCaptured examples\nControls\nMusical examples\n\nOpen PARAMS > MOSAIC > Midi control. It holds Map scale to white keys and the three Honour switches (degree, rotations, transpose). They change what a MIDI keyboard plays and records on the selected channel: with mapping Off the keyboard plays its own notes, and with mapping On the white keys play the selected scale, optionally shaped by the Scale Editor's degree, rotation and transposition.\n\nIn this chapter\nMap Scale to White Keys\nMap the selected scale onto MIDI keyboard white keys, starting at C. Default: Off.\nHonor Scale Rotations\nApply scale rotation to mapped MIDI keyboard input. Default: Off.\nHonor Scale Degree\nApply scale degree to mapped MIDI keyboard input. Default: Off.\nHonour Scale Transpose\nApply scale transposition to mapped MIDI keyboard input. Default: Off.\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nA loaded map follows the selected or fixed channel\nStart from the chosen scale degree\nRotate the keyboard voicing\nApply the scale transpose to live input\n\nIndependent example. Its captured starting state is shown below; changes from another example do not carry across.\n\nExample\n03 / 03\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n44px pads; swipe horizontally; column numbers stay aligned\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n03\nAfter\nRotate the keyboard voicing\n\nClose the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down: the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to play a bass note or an inverted voicing of the same scale shape from the keys you already know.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · A#2 vel 90 (ch 1) @0 ms · Note off A#2 (ch 1) @0 ms · A#2 vel 90 (ch 1) @0 ms · Note off A#2 (ch 1) @0 ms · C3 vel 90 (ch 1) @0 ms · Note off C3 (ch 1) @0 ms · C3 vel 90 (ch 1) @0 ms · Note off C3 (ch 1) @0 ms · D4 vel 90 (ch 1) @0 ms · Note off D4 (ch 1) @0 ms.\n\nNEXT ACTION\n\nThis example is complete. Go back to compare the results.\n\n← Back\nAuto-play\nView next result →\n01\n02\n03\n\nUse Before and Show result to compare the recorded states, or follow the example on your instrument.\n\nMUSICAL USE\n\nPlay or record the selected scale on the white keys, and choose whether the Scale Editor's degree, rotation and transpose also apply.\n\n03 / QUICK REFERENCE\nControls\nDense view\nYOUR GESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC > Midi control\tChoose white-key mapping and which scale transformations keyboard input honours.\nEvidence: keyboard output scope\nOpen the MIDI Controller Mapping lesson\n\nThis selected/fixed-channel map walkthrough applies to MIDI Controller Mapping; Options links here as related context.\n\nOpen full lesson: Open the MIDI Controller Mapping lesson\n04 / MUSICAL EXAMPLES\nMusical examples\nRECIPE 01\nMap an external keyboard through the scale’s rotated degrees\n\nGoal: compare the same incoming MIDI keys with Honour scale rotations Off and On. Map scale to white keys places the selected scale on the keyboard’s white keys; the Honour switches control whether the Scale Editor’s degree, rotation and transpose settings affect that mapping.\n\nBaseline: in PARAMS > MOSAIC > Midi control, set Map scale to white keys On. In the Scale Editor select C natural minor, set degree II, rotation 2 and global transpose +2. Set Honour scale degree On, Honour scale rotations Off and Honour scale transpose Off. Play MIDI keys 60 through 72 chromatically at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 70, 70, 72, 72, 74.\nRotation comparison: turn Honour s",
+      "visibleLinks": [
+        {
+          "text": "Honor Scale Rotations\nApply scale rotation to mapped MIDI keyboard input. Default: Off.",
+          "href": "#honor-scale-rotations"
+        },
+        {
+          "text": "Honor Scale Degree\nApply scale degree to mapped MIDI keyboard input. Default: Off.",
+          "href": "#honor-scale-degree"
+        }
+      ],
+      "stepCount": 3,
+      "hasNext": true,
+      "id": "keyboard-honour-degree-rotation",
+      "stepLabels": [
+        "Step 1: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 70, 72, 74. Honour scale rotations and Honour scale transpose are Off.",
+        "Step 2: Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale rotations and turn E3 right to On. The row reads On.",
+        "Step 3: Close the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down: the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to play a bass note or an inverted voicing of the same scale shape from the keys you already know."
+      ],
+      "errors": {
+        "page": [],
+        "console": [],
+        "failed": [],
+        "http": []
+      },
+      "screenshot": "evidence/keyboard-honour-degree-rotation.png"
+    }
+  ]
+}

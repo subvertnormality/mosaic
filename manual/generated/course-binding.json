@@ -2,19 +2,19 @@
   "schema_version": 1,
   "passed": true,
   "verify_only": false,
-  "course_before_sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
-  "course_after_sha256": "be26b54d14a729398cd7b41dd313afe92ae701a2654b814cbc306cca39d4a45c",
-  "plan_sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+  "course_before_sha256": "13678de82bc79aad6c8c9ae1aa8205fb2ce692d29ba37ac7014515f0c6bbed21",
+  "course_after_sha256": "13678de82bc79aad6c8c9ae1aa8205fb2ce692d29ba37ac7014515f0c6bbed21",
+  "plan_sha256": "5cf1f212b80690ca5a9bd5b338fc2872668109c33dd343d969fb54fb7a114d7a",
   "lanes": [
     {
       "clock_mode": "controlled-experimental",
-      "session_id": "2f7d17f70f4d49d28c3dad61186c9725",
-      "participant": "/home/andy/mosaic-manual-runs/b9d888bb79024be4bc27512f3523b4c9/M-MANUAL-COURSE-001-base-midi",
+      "session_id": "24bc0109f1d347cfaead3f460440171a",
+      "participant": "/home/andy/mosaic-manual-runs/2cf8c1dd4d7a49e3b93af84407452b72/M-MANUAL-COURSE-001-base-midi",
       "scenes": 10,
-      "checkpoints": 50,
-      "report": "/home/andy/mosaic-manual-runs/b9d888bb79024be4bc27512f3523b4c9/reference-scenes.json",
-      "report_sha256": "4c3e99731d07b56909d99147d0dfe84b677cfc32ca0e361ea530e3a3274df58a",
-      "independent_audit_frames": 50,
+      "checkpoints": 105,
+      "report": "/home/andy/mosaic-manual-runs/2cf8c1dd4d7a49e3b93af84407452b72/reference-scenes.json",
+      "report_sha256": "fc516f34e81342b70d00c88cbd2857941e93dfe4d93f155bb9b5d5ca1e1acc8c",
+      "independent_audit_frames": 105,
       "validation_scope": "controlled-manual-generation",
       "realtime_qualification": "pending-ci"
     }
@@ -56,6 +56,11 @@
       "step": "first-sound-assign"
     },
     {
+      "stage": "first-sound-masks-open",
+      "scene": "course-first-sound",
+      "step": "first-sound-masks-open"
+    },
+    {
       "stage": "first-sound-defaults",
       "scene": "course-first-sound",
       "step": "first-sound-defaults"
@@ -71,9 +76,19 @@
       "step": "build-a-phrase-range"
     },
     {
+      "stage": "build-a-phrase-rate",
+      "scene": "course-build-a-phrase",
+      "step": "build-a-phrase-rate"
+    },
+    {
       "stage": "build-a-phrase-rhythm",
       "scene": "course-build-a-phrase",
       "step": "build-a-phrase-rhythm"
+    },
+    {
+      "stage": "build-a-phrase-open-masks",
+      "scene": "course-build-a-phrase",
+      "step": "build-a-phrase-open-masks"
     },
     {
       "stage": "build-a-phrase-compare",
@@ -116,6 +131,11 @@
       "step": "masks-default"
     },
     {
+      "stage": "masks-default-restore",
+      "scene": "course-masks",
+      "step": "masks-default-restore"
+    },
+    {
       "stage": "masks-clear",
       "scene": "course-masks",
       "step": "masks-clear"
@@ -131,6 +151,11 @@
       "step": "sequence-composition-bass-pattern"
     },
     {
+      "stage": "sequence-composition-bass-open-device",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-bass-open-device"
+    },
+    {
       "stage": "sequence-composition-bass-route",
       "scene": "course-sequence-composition",
       "step": "sequence-composition-bass-route"
@@ -139,6 +164,21 @@
       "stage": "sequence-composition-both",
       "scene": "course-sequence-composition",
       "step": "sequence-composition-both"
+    },
+    {
+      "stage": "sequence-composition-merge-skip",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-merge-skip"
+    },
+    {
+      "stage": "sequence-composition-merge-only",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-merge-only"
+    },
+    {
+      "stage": "sequence-composition-merge-all",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-merge-all"
     },
     {
       "stage": "sequence-composition-merge",
@@ -156,6 +196,11 @@
       "step": "harmony-design-relative"
     },
     {
+      "stage": "harmony-design-draft-before",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-draft-before"
+    },
+    {
       "stage": "harmony-design-draft",
       "scene": "course-harmony-design",
       "step": "harmony-design-draft"
@@ -166,9 +211,19 @@
       "step": "harmony-design-apply"
     },
     {
+      "stage": "harmony-design-restore-c",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-restore-c"
+    },
+    {
       "stage": "modulation-movement-and-interest-pickup",
       "scene": "course-modulation-movement-and-interest",
       "step": "modulation-movement-and-interest-pickup"
+    },
+    {
+      "stage": "modulation-movement-and-interest-open-masks",
+      "scene": "course-modulation-movement-and-interest",
+      "step": "modulation-movement-and-interest-open-masks"
     },
     {
       "stage": "modulation-movement-and-interest-level",
@@ -181,9 +236,24 @@
       "step": "song-composition-copy"
     },
     {
+      "stage": "song-composition-sparse-muted",
+      "scene": "course-song-composition",
+      "step": "song-composition-sparse-muted"
+    },
+    {
       "stage": "song-composition-sparse",
       "scene": "course-song-composition",
       "step": "song-composition-sparse"
+    },
+    {
+      "stage": "song-composition-global-length-slot1",
+      "scene": "course-song-composition",
+      "step": "song-composition-global-length-slot1"
+    },
+    {
+      "stage": "song-composition-global-length-slot2",
+      "scene": "course-song-composition",
+      "step": "song-composition-global-length-slot2"
     },
     {
       "stage": "song-composition-length",
@@ -196,9 +266,24 @@
       "step": "song-composition-transition"
     },
     {
+      "stage": "keep-your-work-menu",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-menu"
+    },
+    {
       "stage": "keep-your-work-save",
       "scene": "course-keep-your-work",
       "step": "keep-your-work-save"
+    },
+    {
+      "stage": "keep-your-work-temporary-edit",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-temporary-edit"
+    },
+    {
+      "stage": "keep-your-work-load-menu",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-load-menu"
     },
     {
       "stage": "keep-your-work-reload",
@@ -216,6 +301,6 @@
   "course_written": true,
   "validation_scope": "controlled-manual-generation",
   "realtime_qualification": "pending-ci",
-  "immutable_receipt": "/home/andy/mosaic-manual-build-runs/controlled-local-43-resume8-077b-ada7c165d7284606a9c65e14a345e797/d4e5a27970ca44a9be100843ed971d0a/course-bind/binding-receipt.json",
-  "immutable_receipt_sha256": "1390b12902c0bb7de27a867a856f0e7008483b7f8c6ad2881b6c234d66f7c10d"
+  "immutable_receipt": "/home/andy/mosaic-manual-build-operators/round4-course-remediation-20261007-01/course-bind-02/binding-receipt.json",
+  "immutable_receipt_sha256": "980a1faa1bc0c3d50641951fed647641bd662120ad4b9cdd661ea9d6f97f5019"
 }

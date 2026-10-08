@@ -506,47 +506,47 @@ scenes:
         device_id: 0
         port: 1
         port_name: Emulator MIDI
-        monotonic_ns: 130599966326515
+        monotonic_ns: 231529682947733
         bytes:
         - 144
         - 60
-        - 120
+        - 121
         decoded:
         - type: note_on
           channel: 1
           data:
           - 60
-          - 120
+          - 121
       - index: 76
         device_id: 0
         port: 1
         port_name: Emulator MIDI
-        monotonic_ns: 130600632452336
+        monotonic_ns: 231530349298346
         bytes:
         - 144
         - 60
-        - 117
+        - 119
         decoded:
         - type: note_on
           channel: 1
           data:
           - 60
-          - 117
+          - 119
       - index: 94
         device_id: 0
         port: 1
         port_name: Emulator MIDI
-        monotonic_ns: 130601299645540
+        monotonic_ns: 231531015857671
         bytes:
         - 144
         - 60
-        - 114
+        - 116
         decoded:
         - type: note_on
           channel: 1
           data:
           - 60
-          - 114
+          - 116
     citation: manual/legacy/README-1.4.0.md#rhythm-doctor
     inputs:
     - type: grid
@@ -956,20 +956,20 @@ scenes:
       - 15
       minimum_trigs: 2
       grid_steps:
-      - 11
-      - 15
-      - 19
-      - 23
-      - 27
-      - 31
-      - 35
-      - 39
-      - 43
-      - 47
-      - 51
-      - 55
-      - 59
-      - 63
+      - 10
+      - 14
+      - 18
+      - 22
+      - 26
+      - 30
+      - 34
+      - 38
+      - 42
+      - 46
+      - 50
+      - 54
+      - 58
+      - 62
     citation: manual/legacy/README-1.4.0.md#rhythm-doctor
     inputs:
     - type: grid
@@ -1005,20 +1005,20 @@ scenes:
       level: 15
       matches: preview
       grid_steps:
-      - 11
-      - 15
-      - 19
-      - 23
-      - 27
-      - 31
-      - 35
-      - 39
-      - 43
-      - 47
-      - 51
-      - 55
-      - 59
-      - 63
+      - 10
+      - 14
+      - 18
+      - 22
+      - 26
+      - 30
+      - 34
+      - 38
+      - 42
+      - 46
+      - 50
+      - 54
+      - 58
+      - 62
     citation: manual/legacy/README-1.4.0.md#rhythm-doctor
     inputs:
     - type: grid
@@ -1044,11 +1044,41 @@ scenes:
       midi_start_index: 10
       midi_end_index: 98
       notes:
-      - index: 58
+      - index: 54
         device_id: 0
         port: 1
         port_name: Emulator MIDI
-        monotonic_ns: 130646241637615
+        monotonic_ns: 231574741975763
+        bytes:
+        - 144
+        - 60
+        - 116
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 116
+      - index: 72
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 231575407557501
+        bytes:
+        - 144
+        - 60
+        - 117
+        decoded:
+        - type: note_on
+          channel: 1
+          data:
+          - 60
+          - 117
+      - index: 90
+        device_id: 0
+        port: 1
+        port_name: Emulator MIDI
+        monotonic_ns: 231576074355627
         bytes:
         - 144
         - 60
@@ -1059,36 +1089,6 @@ scenes:
           data:
           - 60
           - 111
-      - index: 76
-        device_id: 0
-        port: 1
-        port_name: Emulator MIDI
-        monotonic_ns: 130646908664386
-        bytes:
-        - 144
-        - 60
-        - 114
-        decoded:
-        - type: note_on
-          channel: 1
-          data:
-          - 60
-          - 114
-      - index: 94
-        device_id: 0
-        port: 1
-        port_name: Emulator MIDI
-        monotonic_ns: 130647574794238
-        bytes:
-        - 144
-        - 60
-        - 115
-        decoded:
-        - type: note_on
-          channel: 1
-          data:
-          - 60
-          - 115
     citation: manual/legacy/README-1.4.0.md#rhythm-doctor
     inputs:
     - type: grid

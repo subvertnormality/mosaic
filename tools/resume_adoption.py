@@ -209,7 +209,7 @@ def verify_adopted_reference_stage(evidence,name,record,current_root):
     verify_current_native_inputs(report,record,current_root)
     return str(report_path)
 
-def prepare_resume(parent, root, planned_stages, *, expected_parent_manifest_sha256, current_builder_sha, producer_hashes, audit_native, proof_path, audit_doctor=None):
+def prepare_resume(parent, root, planned_stages, *, expected_parent_manifest_sha256, current_builder_sha, producer_hashes, audit_native, proof_path, audit_doctor=None, retained_midi_admission=None):
     """Validate current reusable stages. Caller reruns all absent/rejected stages."""
     parent, root = Path(parent).resolve(), Path(root).resolve()
     manifest_path = parent / "manifest.json"
@@ -234,14 +234,9 @@ def prepare_resume(parent, root, planned_stages, *, expected_parent_manifest_sha
         raise ValueError("Resume proof omits exact qualified reconstruction helper pin")
     if "tools/resume_adoption.py" not in producer_hashes:
         raise ValueError("Resume proof omits its own adoption-validator source pin")
-    required = {str(path.relative_to(root)) for path in (root / "tools").glob("manual_*.py")}
-    required.update(("tools/resume_adoption.py", "tools/manual_reconcile_build.py"))
-    if set(producer_hashes) != required:
-        raise ValueError("Resume producer source map is not the exact required tool inventory")
-    for relative, expected in producer_hashes.items():
-        path = Path(relative)
-        if path.is_absolute() or ".." in path.parts or not (root / path).is_file() or sha(root / path) != expected:
-            raise ValueError("Resume producer source map is stale or forged: " + relative)
+    from manual_retained_midi_caller import validate_producer_sources, archive_retained_call
+    validate_producer_sources(root,producer_hashes,retained_midi_admission)
+    retained_record=archive_retained_call(root,Path(proof_path).parent,retained_midi_admission,producer_hashes)
     archived = parent / "authoring-before"
     if not archived.is_dir():
         raise ValueError("Parent authoring-before snapshot missing")
@@ -333,7 +328,7 @@ def prepare_resume(parent, root, planned_stages, *, expected_parent_manifest_sha
         "parent_manifest": str(manifest_path), "parent_manifest_sha256": sha(manifest_path),
         "parent_builder_sha256": manifest["tool_sha256"], "resume_builder_sha256": current_builder_sha,
         "old_source_start_sha256": hashlib.sha256(json.dumps(old_sources, sort_keys=True).encode()).hexdigest(),
-        "resume_source_start_sha256": None, "producer_hashes": dict(sorted(producer_hashes.items())),
+        "resume_source_start_sha256": None, "producer_hashes": dict(sorted(producer_hashes.items())), "retained_midi_admission": retained_record,
         "adopted": proof_rows, "rejected": rejected,
         "stage_inventory": [s["name"] for s in planned_stages], "scope": dict(SCOPE)}
     if Path(proof_path).exists():
@@ -376,15 +371,14 @@ def audit_resume_lineage(build, manifest, current_root):
     manifest_stage_names = [row.get("name") for row in manifest.get("stages", [])]
     if proof.get("stage_inventory") != manifest_stage_names:
         raise ValueError("Resume stage inventory differs from finalized manifest")
-    required_producers = {str(path.relative_to(current_root)) for path in (current_root / "tools").glob("manual_*.py")}
-    required_producers.update(("tools/resume_adoption.py", "tools/manual_reconcile_build.py"))
-    producer_map = proof.get("producer_hashes", {})
-    if set(producer_map) != required_producers:
-        raise ValueError("Resume lineage producer map is incomplete or unexpected")
-    for relative, expected in producer_map.items():
-        source = current_root / relative
-        if not source.is_file() or sha(source) != expected:
-            raise ValueError("Resume lineage producer source changed: " + relative)
+    from manual_retained_midi_caller import validate_producer_sources, audit_retained_call, required_producer_inventory
+    producer_map=proof.get('producer_hashes',{})
+    retained_record=proof.get('retained_midi_admission')
+    validate_producer_sources(current_root,producer_map,retained_record)
+    audit_retained_call(current_root,build,retained_record,producer_map)
+    if manifest.get('retained_midi_admission')!=retained_record:
+        raise ValueError('Build retained receipt differs from resume source fence')
+    required_producers=required_producer_inventory(current_root,retained_record)
     parent_manifest = Path(proof.get("parent_manifest", ""))
     if not parent_manifest.is_file() or sha(parent_manifest) != proof.get("parent_manifest_sha256"):
         raise ValueError("Original failed parent manifest changed")

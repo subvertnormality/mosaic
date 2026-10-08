@@ -49,10 +49,7 @@ examples:
   description: 'Polyperc 1 on channel 1 plays a bass at velocity 48: MIDI 48 on steps 1, 5 and 13 and MIDI
     55 on step 9 of each bar. Doubledecker on channel 2 plays chords (velocity 32, three steps long) on
     steps 1 and 9 with root MIDI 60 then 62, Chd1 set to 3rd and Chd2 set to 5th, which gives C-E-G and
-    D-F-A in C major. Four bars at 90 BPM, a four-step cycle that repeats every bar. Listen for the chord
-    changing every half bar, at beat 1 and again at beat 3, over a steady bass. The Doubledecker chords
-    are the more prominent layer in this mix and the Polyperc bass sits underneath them. Build it with the
-    Separate fixed bass-and-chord example recipe.'
+    D-F-A in C major. Four bars at 90 BPM, a four-step cycle that repeats every bar. Listen for the C-E-G chord on step 1 and the D-F-A chord on step 9. The bass plays C2 on steps 1, 5 and 13 and G2 on step 9. Build it with the Separate fixed bass-and-chord example recipe.'
   bars: 4
   bpm: 90
   profile: manual-trio

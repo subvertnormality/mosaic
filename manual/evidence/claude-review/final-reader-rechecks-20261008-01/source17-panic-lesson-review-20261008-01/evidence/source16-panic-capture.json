@@ -1,0 +1,139 @@
+{
+  "capturedAt": "2026-10-08T09:33:15.509Z",
+  "reader_url": "http://localhost:8927/manual/",
+  "assets": [
+    {
+      "url": "http://localhost:8927/manual/generated/reader-index.json",
+      "status": 200,
+      "sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+      "bytes": 13895116
+    },
+    {
+      "url": "http://localhost:8927/manual/book.js",
+      "status": 200,
+      "sha256": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+      "bytes": 74737
+    },
+    {
+      "url": "http://localhost:8927/manual/manual.js",
+      "status": 200,
+      "sha256": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+      "bytes": 97929
+    },
+    {
+      "url": "http://localhost:8927/manual/manual.css",
+      "status": 200,
+      "sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+      "bytes": 31222
+    }
+  ],
+  "records": [
+    {
+      "url": "http://localhost:8927/manual/#midi-panic/lesson/panic-from-song-channel",
+      "title": "MIDI Panic · Mosaic",
+      "routeReady": "1",
+      "headings": [
+        "MIDI Panic",
+        "Before you explore Masks",
+        "A place to start",
+        "Panic by holding Channel while on Song",
+        "Small hours · four bars in C major",
+        "Hold Channel for two seconds",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Silence connected MIDI notes from Song view with the Channel panic gesture",
+        "Silence connected MIDI notes from Song view with the Pattern panic gesture",
+        "Related features"
+      ],
+      "midiText": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+      "beforeMidiText": "Recorded MIDI output: none.",
+      "selectedControl": "Show result",
+      "selectedActionHeading": "Panic by holding Channel while on Song",
+      "currentScene": "Before\nShow result\n\nFrom Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.\n\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n03\nAfter\nHold Channel for two seconds\n\nPanic sends Note Off messages to the connected MIDI outputs. This capture starts silent.\n\nRecorded result details\nChoose an interaction\nMUSICAL USE\n\n1. Panic silences a note that is still sounding\n2. Panic by holding Channel while on Song\n3. Panic by holding Pattern while on Song\n← Earlier independent example: Panic silences a note that is still sounding\n\nIts own starting point: Song is already playing a long note through MIDI port 1: C (MIDI 60) at velocity 127 is still sounding, before its four-second natural end. The norns screen shows SONG PLAYBACK; three MIDI ports are connected.\n\nAnother independent example: Panic by holding Pattern while on Song\n\nDifferent starting point: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button. Panic only works from the button of a page you are not on, so every other page button, including Pattern (5,8), is a panic button from here.\n\nOpen its full recorded scene: Panic by holding Pattern while on Song\n03 / QUICK REFERENCE\nControls\nDense view\nYOUR GESTURE\tWHAT HAPPENS\nHold a non-selected page key (stopping first is optional)\tSweep Note Off across connected MIDI channels; holding the selected page key does not panic.\nEvidence: release coverage\n04 / MUSICAL EXAMPLES\nMusical examples\nRECIPE 01\nSilence connected MIDI notes from Song view with the Channel panic gesture\n\nUse this on a connected MIDI instrument when a note is stuck. The panic gesture sends note-release messages to connected MIDI outputs, but it does not stop the sequencer. The manual’s captured Output strip replays a recorded result; it does not send messages to your instrument.\n\nOpen Song at (6,8), so Channel is an inactive page button.\nHold Channel at (3,8) until the panic gesture fires, then release. The page remains Song.\nA stuck MIDI note should stop; inspect the release messages in Output. The seq",
+      "visibleLinks": [
+        {
+          "text": "2. Panic by holding Channel while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-channel"
+        },
+        {
+          "text": "3. Panic by holding Pattern while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-pattern"
+        },
+        {
+          "text": "← Earlier independent example: Panic silences a note that is still sounding",
+          "href": "#midi-panic/lesson/play-panic-stops-sounding-note-note-sounding"
+        },
+        {
+          "text": "Another independent example: Panic by holding Pattern while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-pattern"
+        },
+        {
+          "text": "Open its full recorded scene: Panic by holding Pattern while on Song",
+          "href": "#midi-panic/panic-from-song-pattern"
+        }
+      ],
+      "id": "panic-from-song-channel",
+      "errors": {
+        "page": [],
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (File not found)"
+        ],
+        "failed": [
+          {
+            "url": "http://localhost:8927/manual/audio/masks-small-hours.ogg",
+            "failure": "net::ERR_ABORTED"
+          }
+        ],
+        "http": []
+      },
+      "screenshot": "evidence/panic-from-song-channel.png"
+    },
+    {
+      "url": "http://localhost:8927/manual/#midi-panic/lesson/panic-from-song-pattern",
+      "title": "MIDI Panic · Mosaic",
+      "routeReady": "1",
+      "headings": [
+        "MIDI Panic",
+        "Before you explore Masks",
+        "A place to start",
+        "Panic by holding Pattern while on Song",
+        "Small hours · four bars in C major",
+        "Hold Pattern for two seconds",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Silence connected MIDI notes from Song view with the Channel panic gesture",
+        "Silence connected MIDI notes from Song view with the Pattern panic gesture",
+        "Related features"
+      ],
+      "midiText": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+      "beforeMidiText": "Recorded MIDI output: none.",
+      "selectedControl": "Show result",
+      "selectedActionHeading": "Panic by holding Pattern while on Song",
+      "currentScene": "Before\nShow result\n\nFrom Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.\n\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n03\nAfter\nHold Pattern for two seconds\n\nPanic sends Note Off messages to the connected MIDI outputs. This capture starts silent.\n\nRecorded result details\nChoose an interaction\nMUSICAL USE\n\n1. Panic silences a note that is still sounding\n2. Panic by holding Channel while on Song\n3. Panic by holding Pattern while on Song\n← Earlier independent example: Panic by holding Channel while on Song\n\nIts own starting point: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button. Panic only works from the button of a page you are not on, so every other page button, including Channel (3,8), is a panic button from here.\n\n03 / QUICK REFERENCE\nControls\nDense view\nYOUR GESTURE\tWHAT HAPPENS\nHold a non-selected page key (stopping first is optional)\tSweep Note Off across connected MIDI channels; holding the selected page key does not panic.\nEvidence: release coverage\n04 / MUSICAL EXAMPLES\nMusical examples\nRECIPE 01\nSilence connected MIDI notes from Song view with the Channel panic gesture\n\nUse this on a connected MIDI instrument when a note is stuck. The panic gesture sends note-release messages to connected MIDI outputs, but it does not stop the sequencer. The manual’s captured Output strip replays a recorded result; it does not send messages to your instrument.\n\nOpen Song at (6,8), so Channel is an inactive page button.\nHold Channel at (3,8) until the panic gesture fires, then release. The page remains Song.\nA stuck MIDI note should stop; inspect the release messages in Output. The sequencer keeps running, so new notes may still play. Press Stop separately if you want silence to continue.\n\nUse Silence a sounding note for the long-note comparison. The other examples show the gesture from a silent project.\n\nRECIPE 02\nSilence connected MIDI notes from Song view with the Pattern panic gesture\n\nUse this on a connected MIDI instrument when a note is stuck. The pani",
+      "visibleLinks": [
+        {
+          "text": "2. Panic by holding Channel while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-channel"
+        },
+        {
+          "text": "3. Panic by holding Pattern while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-pattern"
+        },
+        {
+          "text": "← Earlier independent example: Panic by holding Channel while on Song",
+          "href": "#midi-panic/lesson/panic-from-song-channel"
+        }
+      ],
+      "id": "panic-from-song-pattern",
+      "errors": {
+        "page": [],
+        "console": [],
+        "failed": [],
+        "http": []
+      },
+      "screenshot": "evidence/panic-from-song-pattern.png"
+    }
+  ]
+}

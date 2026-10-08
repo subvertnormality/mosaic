@@ -4586,11 +4586,8 @@ scenes:
     input_units: native; encoder units are twice the detents
   steps:
   - id: start
-    title: Starting point
-    caption: 'Channel 1 plays a four-step melody on the test device: trigs on steps
-      1 to 4 on pattern degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62,
-      64 and 65 at velocities 127, 117, 107, 97. No Trig params slot is assigned yet,
-      playback is stopped and the norns shows the Device page.'
+    title: "Starting point"
+    caption: "Channel 1 plays a four-step melody on the test device: trigs on steps 1 to 4 on pattern degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65 at velocities 127, 117, 107, 97. No Trig params slot is assigned yet, playback is stopped and the norns shows the Device page. Assign slots in two batches; after each Show result, check the last visible CC before continuing."
     citation: README.md#trig-param-locks
     inputs:
     - type: grid
@@ -5031,9 +5028,8 @@ scenes:
     expect:
       assertion: *id001
   - id: first-slot
-    title: Assign CC 1 to slot 1
-    caption: Open Trig params, press K2 to enter the slot list and turn E3 to CC 1,
-      press K3, then K2. Slot 1 now holds CC 1.
+    title: "Batch 1 — assign CC 1 to slot 1"
+    caption: "Open Trig params, press K2 to enter the slot list and turn E3 to CC 1, press K3, then K2. Check the visible list: slot 1 holds CC 1."
     citation: README.md#trig-param-locks
     inputs:
     - type: wait
@@ -5485,9 +5481,8 @@ scenes:
         kind: parameter-list-label
         label: CC 1
   - id: slot-two
-    title: Assign CC 2 to slot 2
-    caption: Turn E2 one slot right, press K2, turn E3 to CC 2 and press K3, then
-      K2. Slot 2 now holds CC 2 and slot 1 still holds CC 1.
+    title: "Batch 1 — assign CC 2 to slot 2"
+    caption: "Turn E2 one slot right, press K2, turn E3 to CC 2 and press K3, then K2. Check the visible list: slot 1 holds CC 1 and slot 2 holds CC 2."
     citation: README.md#trig-param-locks
     inputs:
     - type: key
@@ -5890,9 +5885,8 @@ scenes:
         kind: parameter-list-label
         label: CC 2
   - id: slot-five
-    title: Carry on to slot 5
-    caption: Repeat for slots 3, 4 and 5 (E2 to the next slot, K2, E3 to the next
-      controller, K3, K2). Slot 5 now holds CC 5.
+    title: "Finish batch 1 — slots 3 to 5"
+    caption: "Repeat for slots 3, 4 and 5 (E2 to the next slot, K2, E3 to the next controller, K3, K2). Check the list shows CC 1 through CC 5 in order; slot 5 holds CC 5."
     citation: README.md#trig-param-locks
     inputs:
     - type: key
@@ -7127,9 +7121,8 @@ scenes:
         kind: parameter-list-label
         label: CC 5
   - id: assigned-ten
-    title: Fill slots 6 to 10
-    caption: 'Repeat for CC 6 up to CC 10 on slot 10. All ten slots are now assigned:
-      the list holds CC 1 to CC 10, the most a channel can hold.'
+    title: "Finish batch 2 — slots 6 to 10"
+    caption: "Repeat for CC 6 up to CC 10 on slot 10. Check the list shows CC 1 through CC 10 in order; the final slot holds CC 10."
     citation: README.md#trig-param-locks
     inputs:
     - type: key
@@ -9322,12 +9315,8 @@ scenes:
         kind: parameter-list-label
         label: CC 10
   - id: clamped-slots
-    title: The first and last slots hold their ends
-    caption: 'Select slot 10 and keep turning E2 right: it stops at slot 10. Hold
-      step 1 (1,4) and turn E3 to set the value to 0. Turn E2 left well past slot
-      1: it stops at slot 1. Hold step 2 (2,4) and set the value to 1. Tap Play (1,8).
-      Before its note, step 1 sends CC 10 and step 2 sends CC 1: look for the two
-      controller changes in the strip below. Tap Play again to stop.'
+    title: "Check both ends"
+    caption: "Select slot 10 and keep turning E2 right: it stops at slot 10. Hold step 1 (1,4) and turn E3 to set the value to 0. Turn E2 left well past slot 1: it stops at slot 1. Hold step 2 (2,4) and set the value to 1. Tap Play (1,8). Check the strip below: before its note, step 1 sends CC 10 and step 2 sends CC 1. Tap Play again to stop."
     citation: README.md#trig-param-locks
     inputs:
     - type: key

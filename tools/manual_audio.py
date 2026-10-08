@@ -454,6 +454,90 @@ def apply_phase(c,change,origin_ns,key):
     c.results.append(dict(kind="manual-audio-scale-phase",**row))
     return row
 
+MAX_AUDIO_TAKE_ATTEMPTS=3
+
+def host_timing_miss(error,clock_mode):
+    """Only a real-time lane timing miss may authorize another take."""
+    if clock_mode!="real-time":return False
+    if type(error) is not AssertionError or len(error.args)!=1:return False
+    failure=error.args[0]
+    if not isinstance(failure,tuple) or len(failure)!=3:return False
+    kind,packet,row=failure
+    if kind not in ("Musical onset","Musical gate") or not isinstance(packet,dict) or not isinstance(row,dict):return False
+    timestamp=packet.get("monotonic_ns")
+    step=row.get("step")
+    if isinstance(timestamp,bool) or not isinstance(timestamp,int):return False
+    if isinstance(step,bool) or not isinstance(step,(int,float)):return False
+    if kind=="Musical gate":
+        length=row.get("length")
+        if isinstance(length,bool) or not isinstance(length,(int,float)):return False
+    return True
+
+def take_with_retakes(run,name,take,clock_mode):
+    """Keep every attempt. Retry only real-time timing misses, at most three total."""
+    if clock_mode not in ("real-time","controlled-experimental"):raise ValueError("unknown MIDI clock lane")
+    run=Path(run)
+    if not run.is_dir():raise ValueError("take run directory must exist")
+    if not name or Path(name).name!=name or name in (".",".."):raise ValueError("unsafe take name")
+    retakes=[]
+    for attempt in range(1,MAX_AUDIO_TAKE_ATTEMPTS+1):
+        take_name=name if attempt==1 else name+"-retake-"+str(attempt-1)
+        out=run/take_name
+        out.mkdir()
+        try:
+            result=take(out)
+        except Exception as error:
+            eligible=host_timing_miss(error,clock_mode)
+            worker_failure=None
+            failure_path=out/"lesson-failure.json"
+            if eligible:
+                try:
+                    worker_failure=json.loads(failure_path.read_text())
+                except (OSError,ValueError):
+                    worker_failure=None
+                kind,packet,row=error.args[0]
+                expected_failure=dict(category="timing",clock_mode="real-time",kind=kind,packet=packet,row=row)
+                eligible=worker_failure==expected_failure
+            receipt=dict(case=name,path=str(out),clock_mode=clock_mode,attempt=attempt,max_attempts=MAX_AUDIO_TAKE_ATTEMPTS,
+                         error_type=type(error).__name__,error=str(error),retake_eligible=eligible)
+            if eligible:
+                receipt["worker_failure"]=worker_failure
+                receipt["worker_failure_sha256"]=digest(failure_path)
+            receipt_path=out/"retake-receipt.json"
+            write(receipt_path,receipt)
+            receipt["receipt_sha256"]=digest(receipt_path)
+            if eligible and attempt<MAX_AUDIO_TAKE_ATTEMPTS:
+                retakes.append(receipt)
+                continue
+            raise
+        return result,retakes
+    raise AssertionError("unreachable audio take attempt limit")
+
+def worker_failure(error,clock_mode):
+    if host_timing_miss(error,clock_mode):
+        kind,packet,row=error.args[0]
+        return dict(category="timing",clock_mode=clock_mode,kind=kind,packet=packet,row=row)
+    return dict(category="exception",clock_mode=clock_mode,exception_type=type(error).__name__,message=str(error))
+
+def run_midi_lane(run,ident,app,options,lane,env):
+    name=ident+"-midi-"+lane
+    def take(out):
+        completed=subprocess.run(midi_worker_command(run,ident,out,app,options,lane),env=env,check=False)
+        if completed.returncode:
+            failure_path=out/"lesson-failure.json"
+            if not failure_path.is_file():
+                raise subprocess.CalledProcessError(completed.returncode,completed.args)
+            failure=json.loads(failure_path.read_text())
+            if failure.get("category")=="timing":
+                if lane!="real-time" or failure.get("clock_mode")!="real-time":
+                    raise RuntimeError("MIDI worker timing failure is not authorized for this lane")
+                raise AssertionError((failure.get("kind"),failure.get("packet"),failure.get("row")))
+            raise RuntimeError("MIDI worker "+str(failure.get("exception_type","failed"))+": "+str(failure.get("message","")))
+        return json.loads((out/"lesson-result.json").read_text())
+    result,retakes=take_with_retakes(run,name,take,lane)
+    if retakes:result["retakes"]=retakes
+    return result
+
 def midi_worker_command(run,ident,out,app,options,lane):
     if not options.midi_controlled_install:raise ValueError("MIDI witnesses require an explicit controlled installation")
     if not getattr(options,"controlled_local",False) and not options.midi_real_install:
@@ -831,9 +915,17 @@ def main():
     if options.midi_worker:
         options.app_root=options.application
         example=next(v for v in data["examples"] if v["id"]==options.midi_example)
-        options.midi_worker.mkdir(parents=True)
-        result=midi_acceptance(example,options.midi_worker,options,options.clock_mode)
-        write(options.midi_worker/"lesson-result.json",result)
+        if options.midi_worker.exists():
+            if not options.midi_worker.is_dir() or any(options.midi_worker.iterdir()):
+                raise FileExistsError("MIDI worker output directory is not empty")
+        else:
+            options.midi_worker.mkdir(parents=True)
+        try:
+            result=midi_acceptance(example,options.midi_worker,options,options.clock_mode)
+            write(options.midi_worker/"lesson-result.json",result)
+        except Exception as error:
+            write(options.midi_worker/"lesson-failure.json",worker_failure(error,options.clock_mode))
+            raise
         return 0
     if options.course_dry_run:return course_dry_run_main(options,data,source_text)
     if options.controlled_local and options.example:
@@ -912,10 +1004,8 @@ def main():
                 if example.get("purpose")=="lesson-comparison":
                     lanes=("controlled-experimental",) if options.controlled_local else ("real-time","controlled-experimental")
                     for lane in lanes:
-                        out=run/(ident+"-midi-"+lane)
                         env=dict(os.environ,MONOME_EMULATOR=str(options.midi_emulator))
-                        subprocess.run(midi_worker_command(run,ident,out,app,options,lane),env=env,check=True)
-                        musical.append(json.loads((out/"lesson-result.json").read_text()))
+                        musical.append(run_midi_lane(run,ident,app,options,lane,env))
                         print("Literal lesson MIDI passed",ident,lane,flush=True)
                 for track in example["tracks"]:
                     out=run/(ident+"-solo-"+str(track["channel"]));out.mkdir()

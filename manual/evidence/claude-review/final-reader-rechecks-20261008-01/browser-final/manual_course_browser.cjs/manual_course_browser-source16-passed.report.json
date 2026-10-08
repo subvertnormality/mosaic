@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "checks": [
+    "Current served course chapters render accepted native stages once; principal recordings require an exact typed stage relationship",
+    "Course chapters show only their own course audio (stage or chapter id), choose between several, hide unrelated reference audio; the reference page hides course clips",
+    "Single primary lesson; independent prose, recipes and audio separated",
+    "verified binding: link loads captured pixels; deep link, reload and public bound result selection retain course context",
+    "controlled-verified binding: link loads captured pixels; deep link, reload and public bound result selection retain course context",
+    "pending binding: no result link or captured scene",
+    "failed binding: no result link or captured scene",
+    "Public source metadata is absent while the separate developer inventory pins the historical README",
+    "Reference remains complete; checkpoint viewer does not claim to run gestures"
+  ],
+  "reader_fixture": true,
+  "reader_variant": "unspecified",
+  "actual_course_chapters": [
+    {
+      "id": "getting-started",
+      "stages": 2,
+      "captured_links": 2,
+      "captured_scenes": 1
+    },
+    {
+      "id": "setup",
+      "stages": 3,
+      "captured_links": 3,
+      "captured_scenes": 1
+    },
+    {
+      "id": "first-sound",
+      "stages": 5,
+      "captured_links": 5,
+      "captured_scenes": 1
+    },
+    {
+      "id": "build-a-phrase",
+      "stages": 5,
+      "captured_links": 5,
+      "captured_scenes": 1
+    },
+    {
+      "id": "masks",
+      "stages": 10,
+      "captured_links": 10,
+      "captured_scenes": 1
+    },
+    {
+      "id": "sequence-composition",
+      "stages": 8,
+      "captured_links": 8,
+      "captured_scenes": 1
+    },
+    {
+      "id": "harmony-design",
+      "stages": 6,
+      "captured_links": 6,
+      "captured_scenes": 1
+    },
+    {
+      "id": "modulation-movement-and-interest",
+      "stages": 3,
+      "captured_links": 3,
+      "captured_scenes": 1
+    },
+    {
+      "id": "song-composition",
+      "stages": 7,
+      "captured_links": 7,
+      "captured_scenes": 1
+    },
+    {
+      "id": "keep-your-work",
+      "stages": 6,
+      "captured_links": 6,
+      "captured_scenes": 1
+    }
+  ],
+  "authored_course_sha256": "41ffc82cfaef102a738b69ac7a7a85a85b0f05f25b2b94247adb8ed25e9bd449",
+  "served_sources": {
+    "index.html": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482",
+    "book.js": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+    "manual.js": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+    "manual.css": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309"
+  },
+  "archived_readme_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c"
+}

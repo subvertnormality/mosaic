@@ -4,23 +4,18 @@
   "scenes": [
     {
       "feature": "getting-started",
-      "scene": "mask-precedence",
-      "steps": 7
-    },
-    {
-      "feature": "getting-started",
       "scene": "first-sound-equal-note-loop",
       "steps": 6
     },
     {
       "feature": "getting-started",
-      "scene": "workflow-compose-two-channels",
+      "scene": "mask-precedence",
       "steps": 8
     },
     {
-      "feature": "setup",
-      "scene": "channel-routing-visible-scope",
-      "steps": 8
+      "feature": "getting-started",
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
     },
     {
       "feature": "setup",
@@ -30,7 +25,7 @@
     {
       "feature": "lock-lead-time",
       "scene": "lock-lead-menu-values",
-      "steps": 4
+      "steps": 8
     },
     {
       "feature": "mods-and-software-devices",
@@ -48,49 +43,59 @@
       "steps": 1
     },
     {
+      "feature": "mods-and-software-devices",
+      "scene": "player-apply-oilcan",
+      "steps": 4
+    },
+    {
+      "feature": "mods-and-software-devices",
+      "scene": "player-apply-polyperc",
+      "steps": 4
+    },
+    {
+      "feature": "mods-and-software-devices",
+      "scene": "player-apply-doubledecker",
+      "steps": 4
+    },
+    {
       "feature": "midi-keyboard-input",
       "scene": "keyboard-white-key-options",
-      "steps": 6
+      "steps": 10
     },
     {
       "feature": "midi-keyboard-input",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
-    },
-    {
-      "feature": "midi-keyboard-input",
-      "scene": "mask-expression",
-      "steps": 6
+      "scene": "workflow-second-channel",
+      "steps": 5
     },
     {
       "feature": "midi-controller-mapping",
       "scene": "mapping-child-selected-and-fixed",
-      "steps": 6
+      "steps": 11
     },
     {
       "feature": "midi-controller-mapping",
       "scene": "native-relative-midi-map",
-      "steps": 4
+      "steps": 16
     },
     {
       "feature": "getting-around-mosaic",
       "scene": "channel-routing-visible-scope",
-      "steps": 8
+      "steps": 9
     },
     {
       "feature": "getting-around-mosaic",
-      "scene": "scale-edit-versus-apply",
-      "steps": 13
+      "scene": "scale-save-d-and-apply",
+      "steps": 6
     },
     {
       "feature": "getting-around-mosaic",
       "scene": "algorithm-choose-and-preview",
-      "steps": 7
+      "steps": 10
     },
     {
       "feature": "getting-around-mosaic",
       "scene": "song-global-length",
-      "steps": 4
+      "steps": 7
     },
     {
       "feature": "sequencer-start-and-stop",
@@ -100,77 +105,82 @@
     {
       "feature": "arm-live-record",
       "scene": "record-keyboard-steps",
+      "steps": 5
+    },
+    {
+      "feature": "arm-live-record",
+      "scene": "record-parameter-lock",
+      "steps": 2
+    },
+    {
+      "feature": "grid-menu-navigation",
+      "scene": "scale-save-d-and-apply",
       "steps": 6
     },
     {
       "feature": "grid-menu-navigation",
-      "scene": "channel-routing-visible-scope",
-      "steps": 8
-    },
-    {
-      "feature": "grid-menu-navigation",
-      "scene": "scale-edit-versus-apply",
-      "steps": 13
-    },
-    {
-      "feature": "grid-menu-navigation",
       "scene": "algorithm-choose-and-preview",
-      "steps": 7
+      "steps": 10
     },
     {
       "feature": "grid-menu-navigation",
       "scene": "song-global-length",
-      "steps": 4
+      "steps": 7
     },
     {
       "feature": "grid-menu-navigation",
       "scene": "hold-step-return",
-      "steps": 11
+      "steps": 10
     },
     {
       "feature": "norns-menu-navigation",
       "scene": "channel-routing-visible-scope",
-      "steps": 8
+      "steps": 9
     },
     {
       "feature": "norns-menu-navigation",
       "scene": "channel-task-navigation",
-      "steps": 8
+      "steps": 11
     },
     {
       "feature": "tooltips",
       "scene": "paint-shift-and-cancel",
-      "steps": 6
+      "steps": 8
     },
     {
       "feature": "external-midi-transport",
       "scene": "external-midi-source-menu",
-      "steps": 8
+      "steps": 7
     },
     {
       "feature": "midi-panic",
       "scene": "panic-from-song-channel",
-      "steps": 2
+      "steps": 3
     },
     {
       "feature": "midi-panic",
       "scene": "panic-from-song-pattern",
-      "steps": 2
+      "steps": 3
+    },
+    {
+      "feature": "midi-panic",
+      "scene": "panic-stops-sounding-note",
+      "steps": 3
     },
     {
       "feature": "typical-workflow",
       "scene": "merge-overlap-and-union",
-      "steps": 15
+      "steps": 10
     },
     {
       "feature": "typical-workflow",
-      "scene": "scale-edit-versus-apply",
-      "steps": 13
+      "scene": "scale-save-d-and-apply",
+      "steps": 6
     },
     {
       "feature": "typical-workflow",
       "scene": "mask-precedence",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "typical-workflow",
@@ -180,172 +190,167 @@
     {
       "feature": "rhythm-section-design",
       "scene": "algorithm-choose-and-preview",
-      "steps": 7
+      "steps": 10
     },
     {
       "feature": "rhythm-section-design",
       "scene": "paint-shift-and-cancel",
-      "steps": 6
+      "steps": 8
     },
     {
       "feature": "rhythm-section-design",
       "scene": "pattern-note-range",
-      "steps": 11
+      "steps": 7
     },
     {
       "feature": "rhythm-section-design",
       "scene": "pattern-velocity-range",
-      "steps": 11
+      "steps": 9
     },
     {
       "feature": "harmony-design",
-      "scene": "scale-edit-versus-apply",
-      "steps": 13
+      "scene": "scale-save-d-and-apply",
+      "steps": 6
     },
     {
       "feature": "harmony-design",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
     },
     {
       "feature": "harmony-design",
       "scene": "harmony-revoice-two-voices",
-      "steps": 3
+      "steps": 4
     },
     {
       "feature": "sequence-composition",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
     },
     {
       "feature": "sequence-composition",
-      "scene": "merge-overlap-and-union",
-      "steps": 15
+      "scene": "workflow-second-channel",
+      "steps": 5
     },
     {
       "feature": "using-merge-modes",
       "scene": "merge-overlap-and-union",
-      "steps": 15
+      "steps": 10
     },
     {
       "feature": "using-merge-modes",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
     },
     {
       "feature": "melody-composition",
       "scene": "mask-precedence",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "melody-composition",
       "scene": "mask-expression",
-      "steps": 6
-    },
-    {
-      "feature": "melody-composition",
-      "scene": "workflow-compose-two-channels",
       "steps": 8
     },
     {
+      "feature": "melody-composition",
+      "scene": "workflow-second-channel",
+      "steps": 5
+    },
+    {
       "feature": "modulation-movement-and-interest",
-      "scene": "trig-params-assignment-and-selection",
-      "steps": 4
+      "scene": "fixed-note-default-and-locks",
+      "steps": 10
     },
     {
       "feature": "modulation-movement-and-interest",
       "scene": "trig-parameter-locks",
-      "steps": 7
+      "steps": 6
     },
     {
       "feature": "modulation-movement-and-interest",
-      "scene": "locks-default-versus-local",
-      "steps": 7
+      "scene": "device-stored-value-and-step-lock",
+      "steps": 6
     },
     {
       "feature": "modulation-movement-and-interest",
       "scene": "global-parameter-slide",
-      "steps": 3
+      "steps": 8
     },
     {
       "feature": "modulation-movement-and-interest",
       "scene": "local-parameter-slide",
-      "steps": 3
+      "steps": 9
     },
     {
       "feature": "modulation-movement-and-interest",
       "scene": "matrix-macro-route-clear",
-      "steps": 9
+      "steps": 10
     },
     {
       "feature": "modulation-movement-and-interest",
       "scene": "toolkit-clocked-lfo-menu",
-      "steps": 9
+      "steps": 6
     },
     {
       "feature": "song-composition",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-song-chain",
+      "steps": 5
     },
     {
       "feature": "song-composition",
       "scene": "song-global-length",
-      "steps": 4
+      "steps": 7
     },
     {
       "feature": "dig-deeper",
       "scene": "pattern-note-range",
-      "steps": 11
+      "steps": 7
     },
     {
       "feature": "dig-deeper",
       "scene": "pattern-velocity-range",
-      "steps": 11
+      "steps": 9
     },
     {
       "feature": "dig-deeper",
       "scene": "foundation-protected-and-added",
-      "steps": 4
+      "steps": 5
     },
     {
       "feature": "dig-deeper",
       "scene": "harmony-revoice-two-voices",
-      "steps": 3
+      "steps": 4
     },
     {
       "feature": "pattern-editor",
       "scene": "algorithm-choose-and-preview",
-      "steps": 7
+      "steps": 10
     },
     {
       "feature": "pattern-editor",
       "scene": "pattern-note-range",
-      "steps": 11
+      "steps": 7
     },
     {
       "feature": "pattern-editor",
       "scene": "pattern-velocity-range",
-      "steps": 11
+      "steps": 9
     },
     {
       "feature": "pattern-editor",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
     },
     {
       "feature": "adding-trigs",
       "scene": "algorithm-choose-and-preview",
-      "steps": 7
+      "steps": 10
     },
     {
       "feature": "adding-trigs",
       "scene": "paint-shift-and-cancel",
-      "steps": 6
-    },
-    {
-      "feature": "rhythm-doctor",
-      "scene": "rhythm-doctor-open",
-      "steps": 3
+      "steps": 8
     },
     {
       "feature": "rhythm-doctor",
@@ -360,52 +365,47 @@
     {
       "feature": "adding-notes",
       "scene": "pattern-note-range",
-      "steps": 11
+      "steps": 7
     },
     {
       "feature": "adding-notes",
       "scene": "pattern-copy-groups",
-      "steps": 13
+      "steps": 11
     },
     {
       "feature": "adding-velocity",
       "scene": "pattern-velocity-range",
-      "steps": 11
+      "steps": 9
     },
     {
       "feature": "adding-velocity",
       "scene": "pattern-copy-groups",
-      "steps": 13
+      "steps": 11
     },
     {
       "feature": "channel-editor",
       "scene": "channel-routing-visible-scope",
-      "steps": 8
+      "steps": 9
     },
     {
       "feature": "channel-editor",
-      "scene": "merge-overlap-and-union",
-      "steps": 15
+      "scene": "workflow-second-channel",
+      "steps": 5
     },
     {
       "feature": "channel-editor",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
-    },
-    {
-      "feature": "channel-editor",
-      "scene": "trig-params-assignment-and-selection",
-      "steps": 4
+      "scene": "fixed-note-default-and-locks",
+      "steps": 10
     },
     {
       "feature": "channel-editor",
       "scene": "hold-step-return",
-      "steps": 11
+      "steps": 10
     },
     {
       "feature": "devices",
       "scene": "channel-routing-visible-scope",
-      "steps": 8
+      "steps": 9
     },
     {
       "feature": "devices",
@@ -424,8 +424,8 @@
     },
     {
       "feature": "midi-sound-sources",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-second-channel",
+      "steps": 5
     },
     {
       "feature": "norns-sound-sources-with-n-b",
@@ -445,42 +445,37 @@
     {
       "feature": "device-parameters",
       "scene": "global-parameter-slide",
-      "steps": 3
+      "steps": 8
     },
     {
       "feature": "device-parameters",
       "scene": "local-parameter-slide",
-      "steps": 3
-    },
-    {
-      "feature": "device-parameters",
-      "scene": "configured-device-value-boundaries",
       "steps": 9
     },
     {
       "feature": "device-parameters",
-      "scene": "device-sparse-control-domain",
-      "steps": 5
+      "scene": "configured-device-value-boundaries",
+      "steps": 8
     },
     {
       "feature": "device-parameters",
       "scene": "device-stored-value-and-step-lock",
-      "steps": 4
+      "steps": 6
     },
     {
       "feature": "adding-patterns-to-channels",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
     },
     {
       "feature": "adding-trig-masks",
       "scene": "mask-trigs",
-      "steps": 4
+      "steps": 9
     },
     {
       "feature": "adding-melodic-notes-over-harmony-and-drums",
       "scene": "mask-precedence",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "adding-chords",
@@ -490,22 +485,22 @@
     {
       "feature": "adding-chords",
       "scene": "chord-strum-a-timed-chord",
-      "steps": 5
+      "steps": 4
     },
     {
       "feature": "adding-chords",
       "scene": "chord-arpeggio-timed-gates",
-      "steps": 5
+      "steps": 3
     },
     {
       "feature": "removing-masks",
       "scene": "mask-precedence",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "removing-masks",
       "scene": "mask-expression",
-      "steps": 6
+      "steps": 8
     },
     {
       "feature": "removing-masks",
@@ -515,7 +510,7 @@
     {
       "feature": "merge-modes",
       "scene": "merge-overlap-and-union",
-      "steps": 15
+      "steps": 10
     },
     {
       "feature": "merge-modes",
@@ -535,32 +530,37 @@
     {
       "feature": "merge-modes",
       "scene": "shared-merge-strategy-workflow",
-      "steps": 21
+      "steps": 26
     },
     {
       "feature": "trig-merge-modes",
       "scene": "merge-overlap-and-union",
-      "steps": 15
+      "steps": 10
     },
     {
       "feature": "trig-merge-modes",
       "scene": "workflow-compose-two-channels",
       "steps": 8
+    },
+    {
+      "feature": "trig-merge-modes",
+      "scene": "merge-shape-skip-shared-step",
+      "steps": 6
     },
     {
       "feature": "trig-merge-modes",
       "scene": "shared-merge-strategy-workflow",
-      "steps": 21
+      "steps": 26
     },
     {
       "feature": "note-merge-modes",
       "scene": "merge-overlap-and-union",
-      "steps": 15
+      "steps": 10
     },
     {
       "feature": "note-merge-modes",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
     },
     {
       "feature": "note-merge-modes",
@@ -573,18 +573,13 @@
       "steps": 7
     },
     {
-      "feature": "velocity-merge-modes",
-      "scene": "velocity-merge-repeat-cycle",
-      "steps": 5
-    },
-    {
       "feature": "length-merge-modes",
       "scene": "length-merge-numeric-output",
       "steps": 7
     },
     {
-      "feature": "length-merge-modes",
-      "scene": "length-merge-repeat-cycle",
+      "feature": "note-dashboard",
+      "scene": "output-latest-event",
       "steps": 5
     },
     {
@@ -595,17 +590,17 @@
     {
       "feature": "note-dashboard",
       "scene": "output-channel-selection",
-      "steps": 4
+      "steps": 3
     },
     {
       "feature": "clocks-swing-and-shuffle",
       "scene": "channel-routing-visible-scope",
-      "steps": 8
+      "steps": 9
     },
     {
       "feature": "clocks-swing-and-shuffle",
       "scene": "shuffle-smooth-amount-boundaries",
-      "steps": 4
+      "steps": 7
     },
     {
       "feature": "clocks-swing-and-shuffle",
@@ -615,27 +610,22 @@
     {
       "feature": "clocks-swing-and-shuffle",
       "scene": "vertical-clock-neighbors",
-      "steps": 5
+      "steps": 6
     },
     {
       "feature": "memory-undo-and-redo",
       "scene": "memory-undo-redo-and-branch",
-      "steps": 16
+      "steps": 14
     },
     {
       "feature": "channel-length",
       "scene": "range-reject-and-recover",
-      "steps": 8
+      "steps": 7
     },
     {
       "feature": "muting-channels",
       "scene": "mute-live-resume",
-      "steps": 8
-    },
-    {
-      "feature": "trig-parameters",
-      "scene": "trig-params-assignment-and-selection",
-      "steps": 4
+      "steps": 9
     },
     {
       "feature": "trig-parameters",
@@ -650,12 +640,12 @@
     {
       "feature": "sequencer-params",
       "scene": "probability-endpoints",
-      "steps": 11
+      "steps": 20
     },
     {
       "feature": "trig-probability",
       "scene": "probability-endpoints",
-      "steps": 11
+      "steps": 20
     },
     {
       "feature": "fixed-note",
@@ -665,52 +655,42 @@
     {
       "feature": "quantised-fixed-note",
       "scene": "quantised-fixed-note-default-and-locks",
-      "steps": 10
+      "steps": 7
     },
     {
       "feature": "random-note",
       "scene": "random-note-seeded-offsets",
-      "steps": 7
+      "steps": 5
     },
     {
       "feature": "random-twos-note",
       "scene": "random-twos-note-seeded-offsets",
-      "steps": 7
+      "steps": 5
     },
     {
       "feature": "chord-strum",
       "scene": "strum-division-bounds",
-      "steps": 7
-    },
-    {
-      "feature": "chord-strum",
-      "scene": "chord-strum-division-selector",
-      "steps": 8
+      "steps": 6
     },
     {
       "feature": "chord-strum",
       "scene": "chord-strum-a-timed-chord",
-      "steps": 5
-    },
-    {
-      "feature": "chord-arpeggio",
-      "scene": "chord-arpeggio-division-selector",
-      "steps": 8
+      "steps": 4
     },
     {
       "feature": "chord-arpeggio",
       "scene": "chord-arpeggio-timed-gates",
-      "steps": 5
+      "steps": 3
     },
     {
       "feature": "chord-acceleration",
       "scene": "chord-acceleration-termination",
-      "steps": 6
+      "steps": 3
     },
     {
-      "feature": "chord-spread",
-      "scene": "chord-spread-division-selector",
-      "steps": 8
+      "feature": "chord-acceleration",
+      "scene": "chord-acceleration-slowing",
+      "steps": 3
     },
     {
       "feature": "chord-spread",
@@ -720,32 +700,37 @@
     {
       "feature": "chord-velocity-modifier",
       "scene": "chord-velocity-ordinal",
-      "steps": 5
+      "steps": 2
     },
     {
       "feature": "chord-shape-modifier",
       "scene": "chord-shape-forward",
-      "steps": 5
-    },
-    {
-      "feature": "chord-shape-modifier",
-      "scene": "chord-shape-reverse",
-      "steps": 5
-    },
-    {
-      "feature": "chord-shape-modifier",
-      "scene": "chord-pattern-x-is-off",
-      "steps": 7
+      "steps": 3
     },
     {
       "feature": "mute-root-note",
       "scene": "mute-root-retains-slot",
-      "steps": 5
+      "steps": 3
     },
     {
       "feature": "fully-quantise-mask",
       "scene": "full-quantisation-precedence",
-      "steps": 12
+      "steps": 4
+    },
+    {
+      "feature": "fully-quantise-mask",
+      "scene": "full-quantisation-inherit-and-step-off",
+      "steps": 4
+    },
+    {
+      "feature": "fully-quantise-mask",
+      "scene": "full-quantisation-channel-beats-global",
+      "steps": 3
+    },
+    {
+      "feature": "scale-editor",
+      "scene": "scale-save-d-and-apply",
+      "steps": 6
     },
     {
       "feature": "scale-editor",
@@ -755,22 +740,27 @@
     {
       "feature": "transposition",
       "scene": "transpose-next-onset",
-      "steps": 2
+      "steps": 5
     },
     {
-      "feature": "song-editor",
-      "scene": "song-global-length",
-      "steps": 4
-    },
-    {
-      "feature": "song-editor",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "feature": "transposition",
+      "scene": "transpose-song-slot-copy",
+      "steps": 5
     },
     {
       "feature": "song-editor",
       "scene": "song-mode-groups-and-selection",
-      "steps": 9
+      "steps": 12
+    },
+    {
+      "feature": "song-editor",
+      "scene": "song-global-length",
+      "steps": 7
+    },
+    {
+      "feature": "song-editor",
+      "scene": "workflow-song-chain",
+      "steps": 5
     },
     {
       "feature": "button-indicators",
@@ -779,23 +769,33 @@
     },
     {
       "feature": "interacting-with-slots",
-      "scene": "workflow-compose-two-channels",
-      "steps": 8
+      "scene": "workflow-song-chain",
+      "steps": 5
+    },
+    {
+      "feature": "interacting-with-slots",
+      "scene": "song-copy-and-compare",
+      "steps": 3
     },
     {
       "feature": "song-mode-operations",
       "scene": "song-mode-groups-and-selection",
-      "steps": 9
+      "steps": 12
+    },
+    {
+      "feature": "song-mode-operations",
+      "scene": "song-build-two-groups",
+      "steps": 6
     },
     {
       "feature": "adjusting-song-sequence-length",
       "scene": "song-global-length",
-      "steps": 4
+      "steps": 7
     },
     {
       "feature": "navigating-the-norns-display",
       "scene": "song-global-length",
-      "steps": 4
+      "steps": 7
     },
     {
       "feature": "navigating-the-norns-display",
@@ -804,13 +804,18 @@
     },
     {
       "feature": "navigating-the-norns-display",
+      "scene": "song-repeats-advance",
+      "steps": 7
+    },
+    {
+      "feature": "navigating-the-norns-display",
       "scene": "song-tempo-across-slots",
-      "steps": 8
+      "steps": 10
     },
     {
       "feature": "navigating-the-norns-display",
       "scene": "vertical-clock-neighbors",
-      "steps": 5
+      "steps": 6
     },
     {
       "feature": "navigating-the-norns-display",
@@ -820,87 +825,77 @@
     {
       "feature": "locks",
       "scene": "mask-precedence",
-      "steps": 7
-    },
-    {
-      "feature": "locks",
-      "scene": "mask-expression",
-      "steps": 6
-    },
-    {
-      "feature": "locks",
-      "scene": "parameter-slot-endpoints",
-      "steps": 4
-    },
-    {
-      "feature": "locks",
-      "scene": "structure-anchor-chord-and-delete",
-      "steps": 10
-    },
-    {
-      "feature": "locks",
-      "scene": "locks-default-versus-local",
-      "steps": 7
-    },
-    {
-      "feature": "locks",
-      "scene": "trig-parameter-locks",
-      "steps": 7
-    },
-    {
-      "feature": "locks",
-      "scene": "global-parameter-slide",
-      "steps": 3
-    },
-    {
-      "feature": "locks",
-      "scene": "transpose-explicit-zero-and-clear",
-      "steps": 5
-    },
-    {
-      "feature": "locks",
-      "scene": "octave-local-over-global",
       "steps": 8
     },
     {
       "feature": "locks",
-      "scene": "scale-lock-scope-and-lifetime",
-      "steps": 11
+      "scene": "parameter-slot-endpoints",
+      "steps": 6
+    },
+    {
+      "feature": "locks",
+      "scene": "trig-parameter-locks",
+      "steps": 6
+    },
+    {
+      "feature": "locks",
+      "scene": "device-stored-value-and-step-lock",
+      "steps": 6
+    },
+    {
+      "feature": "locks",
+      "scene": "global-parameter-slide",
+      "steps": 8
+    },
+    {
+      "feature": "locks",
+      "scene": "transpose-explicit-zero-and-clear",
+      "steps": 4
+    },
+    {
+      "feature": "locks",
+      "scene": "octave-local-over-global",
+      "steps": 7
     },
     {
       "feature": "trig-param-locks",
       "scene": "parameter-slot-endpoints",
-      "steps": 4
+      "steps": 6
     },
     {
       "feature": "trig-param-locks",
       "scene": "trig-parameter-locks",
-      "steps": 7
+      "steps": 6
+    },
+    {
+      "feature": "trig-param-locks",
+      "scene": "device-stored-value-and-step-lock",
+      "steps": 6
     },
     {
       "feature": "param-slides",
       "scene": "global-parameter-slide",
-      "steps": 3
+      "steps": 8
     },
     {
       "feature": "param-slides",
       "scene": "local-parameter-slide",
-      "steps": 3
+      "steps": 9
     },
     {
       "feature": "mask-locks",
       "scene": "mask-precedence",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "mask-locks",
       "scene": "mask-expression",
-      "steps": 6
+      "steps": 8
     },
     {
       "feature": "mask-locks",
       "scene": "harmony-ensemble-and-local-bypass",
-      "steps": 10
+      "steps": 13
     },
     {
       "feature": "mask-locks",
@@ -908,29 +903,39 @@
       "steps": 4
     },
     {
-      "feature": "mask-locks",
+      "feature": "scale-locks",
       "scene": "scale-lock-scope-and-lifetime",
-      "steps": 11
+      "steps": 2
     },
     {
       "feature": "scale-locks",
-      "scene": "scale-lock-scope-and-lifetime",
-      "steps": 11
+      "scene": "scale-lock-skipped-trig",
+      "steps": 5
+    },
+    {
+      "feature": "scale-locks",
+      "scene": "scale-lock-replacement",
+      "steps": 3
     },
     {
       "feature": "transposition-locks",
       "scene": "transpose-explicit-zero-and-clear",
-      "steps": 5
+      "steps": 4
+    },
+    {
+      "feature": "transposition-locks",
+      "scene": "transpose-lock-direct-taps",
+      "steps": 4
     },
     {
       "feature": "octave-locks",
       "scene": "octave-local-over-global",
-      "steps": 8
+      "steps": 7
     },
     {
       "feature": "save-and-load",
       "scene": "named-project-roundtrip",
-      "steps": 14
+      "steps": 13
     },
     {
       "feature": "options",
@@ -939,8 +944,8 @@
     },
     {
       "feature": "sequencer-options",
-      "scene": "protect-stop-gesture",
-      "steps": 12
+      "scene": "song-change-reset-policies",
+      "steps": 4
     },
     {
       "feature": "shift-press-stop",
@@ -948,29 +953,39 @@
       "steps": 12
     },
     {
+      "feature": "song-mode",
+      "scene": "song-mode-groups-and-selection",
+      "steps": 12
+    },
+    {
       "feature": "reset-at-song-editor-pattern-change",
       "scene": "song-change-reset-policies",
-      "steps": 10
+      "steps": 4
+    },
+    {
+      "feature": "reset-at-song-editor-pattern-change",
+      "scene": "polymeter-song-reset",
+      "steps": 6
     },
     {
       "feature": "reset-at-pattern-repeat",
       "scene": "repeat-reset-policies",
-      "steps": 10
+      "steps": 7
     },
     {
-      "feature": "parameter-slides-wrap",
-      "scene": "slide-wrap-boundary",
-      "steps": 6
+      "feature": "reset-at-pattern-repeat",
+      "scene": "repeat-reset-first-boundary-public",
+      "steps": 4
     },
     {
       "feature": "parameter-slides-wrap",
       "scene": "last-lock-slide-wrap",
-      "steps": 6
+      "steps": 12
     },
     {
       "feature": "elektron-program-changes",
       "scene": "elektron-child-enable-and-announce",
-      "steps": 6
+      "steps": 7
     },
     {
       "feature": "elektron-program-change-channel",
@@ -978,49 +993,89 @@
       "steps": 3
     },
     {
-      "feature": "parameter-lock-options",
-      "scene": "slide-wrap-boundary",
-      "steps": 6
+      "feature": "elektron-program-change-channel",
+      "scene": "elektron-child-enable-and-announce",
+      "steps": 7
     },
     {
       "feature": "parameter-lock-options",
       "scene": "global-parameter-slide",
-      "steps": 3
+      "steps": 8
     },
     {
       "feature": "trigless-locks",
       "scene": "trigless-locks-on",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "trigless-locks",
       "scene": "trigless-locks-off",
-      "steps": 7
+      "steps": 9
     },
     {
       "feature": "quantiser-options",
       "scene": "full-quantisation-precedence",
-      "steps": 12
+      "steps": 4
+    },
+    {
+      "feature": "quantiser-options",
+      "scene": "full-quantisation-inherit-and-step-off",
+      "steps": 4
+    },
+    {
+      "feature": "quantiser-options",
+      "scene": "full-quantisation-channel-beats-global",
+      "steps": 3
     },
     {
       "feature": "snap-note-masks-to-scale",
       "scene": "full-quantisation-precedence",
-      "steps": 12
+      "steps": 4
+    },
+    {
+      "feature": "snap-note-masks-to-scale",
+      "scene": "full-quantisation-inherit-and-step-off",
+      "steps": 4
+    },
+    {
+      "feature": "snap-note-masks-to-scale",
+      "scene": "full-quantisation-channel-beats-global",
+      "steps": 3
+    },
+    {
+      "feature": "snap-note-masks-to-scale",
+      "scene": "snap-note-masks-public-pair",
+      "steps": 8
     },
     {
       "feature": "quantise-note-masks",
       "scene": "full-quantisation-precedence",
-      "steps": 12
+      "steps": 4
+    },
+    {
+      "feature": "quantise-note-masks",
+      "scene": "full-quantisation-inherit-and-step-off",
+      "steps": 4
+    },
+    {
+      "feature": "quantise-note-masks",
+      "scene": "full-quantisation-channel-beats-global",
+      "steps": 3
     },
     {
       "feature": "scales-lock-until-pattern-end",
       "scene": "scale-lock-scope-and-lifetime",
-      "steps": 11
+      "steps": 2
+    },
+    {
+      "feature": "scales-lock-until-pattern-end",
+      "scene": "scale-lock-replacement",
+      "steps": 3
     },
     {
       "feature": "lock-all-to-pentatonic",
       "scene": "pentatonic-snap-all",
-      "steps": 16
+      "steps": 20
     },
     {
       "feature": "lock-random-to-pentatonic",
@@ -1035,22 +1090,22 @@
     {
       "feature": "lock-merged-to-pentatonic",
       "scene": "merged-pentatonic-on",
-      "steps": 7
+      "steps": 9
     },
     {
       "feature": "lock-merged-to-pentatonic",
       "scene": "merged-pentatonic-off",
-      "steps": 7
+      "steps": 9
     },
     {
       "feature": "midi-controller-options",
       "scene": "mapping-child-selected-and-fixed",
-      "steps": 6
+      "steps": 11
     },
     {
       "feature": "midi-controller-options",
       "scene": "keyboard-honour-degree",
-      "steps": 7
+      "steps": 11
     },
     {
       "feature": "midi-controller-options",
@@ -1065,7 +1120,7 @@
     {
       "feature": "map-scale-to-white-keys",
       "scene": "keyboard-white-key-options",
-      "steps": 6
+      "steps": 10
     },
     {
       "feature": "honor-scale-rotations",
@@ -1075,7 +1130,7 @@
     {
       "feature": "honor-scale-degree",
       "scene": "keyboard-honour-degree",
-      "steps": 7
+      "steps": 11
     },
     {
       "feature": "honour-scale-transpose",
@@ -1085,7 +1140,7 @@
     {
       "feature": "screen-options",
       "scene": "screen-motion-on-and-off",
-      "steps": 6
+      "steps": 11
     },
     {
       "feature": "screen-options",
@@ -1095,7 +1150,7 @@
     {
       "feature": "ui-motion",
       "scene": "screen-motion-on-and-off",
-      "steps": 6
+      "steps": 11
     },
     {
       "feature": "ui-motion",
@@ -1103,29 +1158,39 @@
       "steps": 19
     },
     {
+      "feature": "ui-motion",
+      "scene": "ui-motion-public-frames",
+      "steps": 7
+    },
+    {
       "feature": "lfos-and-modulation",
       "scene": "matrix-macro-route-clear",
-      "steps": 9
+      "steps": 10
     },
     {
       "feature": "lfos-and-modulation",
       "scene": "toolkit-clocked-lfo-menu",
-      "steps": 9
+      "steps": 6
+    },
+    {
+      "feature": "lfos-and-modulation",
+      "scene": "matrix-macro-modest-cc",
+      "steps": 5
     },
     {
       "feature": "musical-merge-and-voice-leading",
       "scene": "foundation-protected-and-added",
-      "steps": 4
+      "steps": 5
     },
     {
       "feature": "musical-merge-and-voice-leading",
       "scene": "harmony-revoice-two-voices",
-      "steps": 3
+      "steps": 4
     },
     {
       "feature": "musical-merge-and-voice-leading",
       "scene": "shared-merge-strategy-workflow",
-      "steps": 21
+      "steps": 26
     },
     {
       "feature": "merge-shape",
@@ -1134,18 +1199,23 @@
     },
     {
       "feature": "merge-shape",
+      "scene": "merge-shape-skip-shared-step",
+      "steps": 6
+    },
+    {
+      "feature": "merge-shape",
       "scene": "foundation-protected-and-added",
-      "steps": 4
+      "steps": 5
     },
     {
       "feature": "merge-shape",
       "scene": "foundation-two-cycle-build",
-      "steps": 2
+      "steps": 7
     },
     {
       "feature": "merge-shape",
       "scene": "shared-merge-strategy-workflow",
-      "steps": 21
+      "steps": 26
     },
     {
       "feature": "fragments",
@@ -1155,17 +1225,22 @@
     {
       "feature": "fragments",
       "scene": "shared-merge-strategy-workflow",
-      "steps": 21
+      "steps": 26
     },
     {
       "feature": "interlock",
       "scene": "interlock-leader-window",
-      "steps": 10
+      "steps": 13
     },
     {
       "feature": "structure",
       "scene": "structure-anchor-chord-and-delete",
-      "steps": 10
+      "steps": 15
+    },
+    {
+      "feature": "structure",
+      "scene": "structure-every-4-markers",
+      "steps": 3
     },
     {
       "feature": "result-and-reason",
@@ -1175,27 +1250,27 @@
     {
       "feature": "harmony",
       "scene": "harmony-range-failure-and-fallback",
-      "steps": 12
+      "steps": 13
     },
     {
       "feature": "harmony",
       "scene": "harmony-revoice-two-voices",
-      "steps": 3
+      "steps": 4
     },
     {
       "feature": "harmony",
       "scene": "harmony-ensemble-and-local-bypass",
-      "steps": 10
+      "steps": 13
     },
     {
       "feature": "masks",
       "scene": "mask-precedence",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "masks",
       "scene": "mask-expression",
-      "steps": 6
+      "steps": 8
     },
     {
       "feature": "masks",
@@ -1204,22 +1279,27 @@
     },
     {
       "feature": "masks",
+      "scene": "mask-melody-ending",
+      "steps": 9
+    },
+    {
+      "feature": "masks",
+      "scene": "mask-ghost-note",
+      "steps": 5
+    },
+    {
+      "feature": "masks",
       "scene": "mask-trigs",
-      "steps": 4
+      "steps": 9
+    },
+    {
+      "feature": "masks",
+      "scene": "mask-note-default-x",
+      "steps": 3
     },
     {
       "feature": "first-sound",
       "scene": "first-sound-equal-note-loop",
-      "steps": 6
-    },
-    {
-      "feature": "no-sound",
-      "scene": "merge-overlap-and-union",
-      "steps": 15
-    },
-    {
-      "feature": "no-sound",
-      "scene": "mask-expression",
       "steps": 6
     },
     {
@@ -1230,27 +1310,37 @@
     {
       "feature": "no-sound",
       "scene": "mute-live-resume",
-      "steps": 8
+      "steps": 9
     },
     {
       "feature": "no-sound",
       "scene": "range-reject-and-recover",
-      "steps": 8
-    },
-    {
-      "feature": "build-a-phrase",
-      "scene": "scale-edit-versus-apply",
-      "steps": 13
-    },
-    {
-      "feature": "build-a-phrase",
-      "scene": "mask-precedence",
       "steps": 7
     },
     {
       "feature": "build-a-phrase",
-      "scene": "workflow-compose-two-channels",
+      "scene": "scale-save-d-and-apply",
+      "steps": 6
+    },
+    {
+      "feature": "build-a-phrase",
+      "scene": "mask-precedence",
       "steps": 8
+    },
+    {
+      "feature": "build-a-phrase",
+      "scene": "workflow-patterns-and-scale",
+      "steps": 6
+    },
+    {
+      "feature": "build-a-phrase",
+      "scene": "workflow-second-channel",
+      "steps": 5
+    },
+    {
+      "feature": "build-a-phrase",
+      "scene": "workflow-song-chain",
+      "steps": 5
     },
     {
       "feature": "build-a-phrase",
@@ -1258,14 +1348,9 @@
       "steps": 6
     },
     {
-      "feature": "build-a-phrase",
-      "scene": "foundation-two-cycle-build",
-      "steps": 2
-    },
-    {
       "feature": "small-hours",
       "scene": "mask-precedence",
-      "steps": 7
+      "steps": 8
     },
     {
       "feature": "small-hours",
@@ -1275,7 +1360,12 @@
     {
       "feature": "small-hours",
       "scene": "mask-expression",
-      "steps": 6
+      "steps": 8
+    },
+    {
+      "feature": "pocket-rhythm",
+      "scene": "pocket-ghost-bar",
+      "steps": 4
     },
     {
       "feature": "tilting-harmony",
@@ -1289,18 +1379,23 @@
     },
     {
       "feature": "tilting-harmony",
-      "scene": "strum-division-bounds",
-      "steps": 7
-    },
-    {
-      "feature": "tilting-harmony",
       "scene": "harmony-revoice-two-voices",
-      "steps": 3
+      "steps": 4
     },
     {
       "feature": "loops-that-meet",
       "scene": "loops-four-against-three",
-      "steps": 2
+      "steps": 6
+    },
+    {
+      "feature": "loops-that-meet",
+      "scene": "loops-sixteen-against-five",
+      "steps": 6
+    },
+    {
+      "feature": "loops-that-meet",
+      "scene": "polymeter-song-reset",
+      "steps": 6
     }
   ],
   "audio": [
@@ -1311,7 +1406,7 @@
         13.666666666666666,
         13.666666666666666
       ],
-      "frames": 100
+      "frames": 101
     },
     {
       "id": "bass-and-intervals",
@@ -1320,7 +1415,7 @@
         13.666666666666666,
         13.666666666666666
       ],
-      "frames": 100
+      "frames": 101
     },
     {
       "id": "three-voice-conversation",
@@ -1329,7 +1424,7 @@
         13.666666666666666,
         13.666666666666666
       ],
-      "frames": 100
+      "frames": 101
     },
     {
       "id": "ghost-note-comparison",
@@ -1338,7 +1433,7 @@
         13.666666666666666,
         13.666666666666666
       ],
-      "frames": 99
+      "frames": 100
     },
     {
       "id": "scale-slot-comparison",
@@ -1347,7 +1442,151 @@
         13.666666666666666,
         13.666666666666666
       ],
+      "frames": 99
+    },
+    {
+      "id": "swing-comparison",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
       "frames": 98
+    },
+    {
+      "id": "note-merge-modes",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 99
+    },
+    {
+      "id": "polymeter",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 100
+    },
+    {
+      "id": "song-sections",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 100
+    },
+    {
+      "id": "harmony-strum-arp",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 100
+    },
+    {
+      "id": "param-lock-comparison",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 100
+    },
+    {
+      "id": "voice-leading-revoice",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 100
+    },
+    {
+      "id": "course-first-sound-hear",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 99
+    },
+    {
+      "id": "course-build-a-phrase-compare",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 99
+    },
+    {
+      "id": "course-masks-listen",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 94
+    },
+    {
+      "id": "course-masks-keep",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 92
+    },
+    {
+      "id": "course-sequence-composition-both",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 96
+    },
+    {
+      "id": "course-harmony-design-apply",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 99
+    },
+    {
+      "id": "course-modulation-movement-and-interest-level",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 99
+    },
+    {
+      "id": "course-song-composition-transition",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 99
+    },
+    {
+      "id": "course-keep-your-work-perform",
+      "formats": 2,
+      "durations": [
+        13.666666666666666,
+        13.666666666666666
+      ],
+      "frames": 99
     }
   ],
   "viewports": [

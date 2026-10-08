@@ -24,6 +24,8 @@ def load():
                          parent=data["feature"].get("parent","channel-editor"),level=data["feature"].get("level",3))
             features.append(feature)
     result=dict(config,features=features)
+    if config.get("recordings_source"):
+        result["recordings_context"]=read(course_path(config["recordings_source"]))
     if config.get("course_source"):
         result["course"]=read(course_path(config["course_source"]))
         course=result["course"]
@@ -45,17 +47,46 @@ def capture_catalogue():
             if scene["id"] in result:raise ValueError("Duplicate captured scene")
             result[scene["id"]]=dict(scene,data_path=path.relative_to(MANUAL).as_posix())
     return result
+def validate_feature_presentation(feature, features=None, scenes=None):
+    refs=set(feature.get("scene_refs", []))
+    for link in feature.get("scene_context_links", []):
+        route=link["canonical_route"].split("/")
+        target=next((row for row in (features or []) if len(route)==2 and row["id"]==route[0]), None)
+        if len(route)!=2 or link["scene_id"] not in refs or link["scene_id"] not in (scenes or {}) or not target or route[1] not in target.get("scene_refs", []):
+            raise ValueError("Contextual scene link must preserve legacy ref and target canonical embed")
+        if not link["label"].strip() or not link["reason"].strip():
+            raise ValueError("Contextual scene link needs a label and reason")
+    for link in feature.get("lesson_context_links", []):
+        route=link["canonical_route"].split("/")
+        target=next((row for row in (features or []) if len(route)==3 and row["id"]==route[0]), None)
+        target_lessons={row.get("id") for row in (target or {}).get("teaching_bindings", [])}
+        local_lessons={row.get("id") for row in feature.get("teaching_bindings", [])}
+        if len(route)!=3 or route[1]!="lesson" or link["lesson_id"] not in local_lessons or route[2]!=link["lesson_id"] or link["lesson_id"] not in target_lessons:
+            raise ValueError("Lesson context link must preserve its binding and point to the canonical lesson")
+        if not link["label"].strip() or not link["reason"].strip():
+            raise ValueError("Lesson context links need a label and reason")
+    for item in feature.get("scene_milestones", []):
+        scene=(scenes or {}).get(item["scene_id"])
+        ids=[sid for group in item["groups"] for sid in group["step_ids"]]
+        if item["scene_id"] not in refs or not scene or not item["groups"] or ids != [step["id"] for step in scene["steps"]] or len(ids)!=len(set(ids)):
+            raise ValueError("Scene milestone groups must partition source steps in order")
+    for lesson in feature.get("teaching_bindings", []):
+        for key in ("title", "goal", "starting_point"):
+            if key in lesson and (not isinstance(lesson[key], str) or not lesson[key].strip()):
+                raise ValueError("Feature lesson presentation must be a nonempty authored string: " + key)
+
 def validate(data):
     schema=json.loads((MANUAL/"book.schema.json").read_text())
     try:jsonschema.Draft7Validator(schema).validate(data)
     except jsonschema.ValidationError as error:raise ValueError(error.message) from error
+    scenes=capture_catalogue()
     for feature in data["features"]:
+        validate_feature_presentation(feature, data["features"], scenes)
         review=feature.get("review",{})
         if review.get("status")==CONTROLLED_STATUS and (review.get("validation_scope")!=CONTROLLED_SCOPE or review.get("realtime_qualification")!=REALTIME_PENDING):
             raise ValueError("Controlled feature binding lacks explicit scope or pending realtime qualification")
     ids=[f["id"] for f in data["features"]]
     if len(set(ids))!=len(ids):raise ValueError("Duplicate feature ID")
-    scenes=capture_catalogue()
     for feature in data["features"]:
         for related in feature["related"]:
             if resolve(data,related) not in ids:raise ValueError("Unknown related feature: "+related)
@@ -72,6 +103,10 @@ def validate(data):
         validate_course(data["course"],ids,scenes)
     for old,new in data.get("aliases",{}).items():
         if new not in ids:raise ValueError("Unknown alias target")
+    if "recordings_context" in data:
+        if not data.get("recordings_source"):raise ValueError("Recording context lacks authored source")
+        from manual_recordings import compile_context
+        compile_context(data["recordings_context"],data,ROOT,course_path(data["recordings_source"]))
     legacy=MANUAL/data["legacy_source"]
     if digest(legacy)!=data["legacy_source_sha256"]:raise ValueError("Legacy source identity changed")
     return data
@@ -133,6 +168,9 @@ def compile_book(data):
                 complete_manual=complete,aliases=data["aliases"],navigation=data["navigation"],
                 features=data["features"],
                 scenes={key:value for key,value in scenes.items() if key in course_scenes or any(key in f["scene_refs"] for f in data["features"])})
+    if "recordings_context" in data:
+        from manual_recordings import compile_context
+        result["recordings_context"]=compile_context(data["recordings_context"],data,ROOT,course_path(data["recordings_source"]))
     if course:result.update(course_title=course["title"],course_summary=course["summary"],project=course["project"],learning_path=course["learning_path"])
     if any(f["review"]["status"]==CONTROLLED_STATUS for f in data["features"]) or course and course["project"]["capture_status"]==CONTROLLED_STATUS:
         result.update(validation_scope=CONTROLLED_SCOPE,realtime_qualification=REALTIME_PENDING,complete_regression_run=False)

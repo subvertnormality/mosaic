@@ -297,6 +297,7 @@ jobs:
             /tmp/rd-options/**/results.json
             /tmp/rd-options/**/observations.json
             /tmp/rd-options/**/source.json
+            /tmp/rd-options/**/orchestrator.log
             /tmp/rd-options/**/native/identity.json
             /tmp/rd-options/**/native/cleanup.json
             /tmp/rd-options/**/native/native-events.jsonl

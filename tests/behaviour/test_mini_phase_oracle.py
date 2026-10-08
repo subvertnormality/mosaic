@@ -26,6 +26,16 @@ class NativeMiniPhaseIntegrity(unittest.TestCase):
   args=self.fixture();result=phase.check_stopped_phase(*args);self.assertEqual(result['allowed_phases'],[1])
   sample,obs,events,spec,enabled,tempo,clock=args;events[0]['monotonic_ns']=199999999
   self.assertEqual(phase.check_stopped_phase(*args)['allowed_phases'],[1])
+ def test_stopped_phase_accepts_native_tempo_change_inside_input_frame_bracket(self):
+  args=list(self.fixture(low=.251,high=.35))
+  args[5]=None
+  args[1][0]['state']['diagnostics']['tempo']=100
+  args[1][1]['state']['diagnostics']['tempo']=85.106383
+  args[0]['clock_before']['tempo']=100
+  args[0]['clock_after']['tempo']=85.106383
+  args[0]['native_clock']['tempo']=85.106383
+  result=phase.check_stopped_phase(*args)
+  self.assertEqual(result['allowed_phases'],[1])
  def test_wrong_phase_real_revision_and_changed_clock_receipt_are_refused(self):
   args=self.fixture(low=.751,high=.85)
   with self.assertRaisesRegex(ValueError,'pose phase'):phase.check_stopped_phase(*args)

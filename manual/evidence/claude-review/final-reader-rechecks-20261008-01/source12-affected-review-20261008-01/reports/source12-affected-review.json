@@ -1,0 +1,1772 @@
+{
+  "job_id": "source12-affected-review-20261008-01",
+  "reviewed_at_utc": "2026-10-08T07:21:23.196Z",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reader_url": "http://127.0.0.1:8922/manual/",
+  "source_identity_sha256": "ed37ccb4b6565c6e9f22de5246400f7039ea65a0546c8a32e57254ebfc75408f",
+  "book_sha256": "a2094548646a24a61638a5fc9ba033732b810990eb45bca372436c8430bca3c7",
+  "reader_index_sha256": "117393062db3b22ef5f5f29919da908425a9b9896e1acf0d52101d95a6273dd8",
+  "book_js_sha256": "453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8",
+  "manual_js_sha256": "1c4326d0ca754680aa2f91d01f7dc56985515ef2cc420c545b55cd5717971be6",
+  "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+  "inventory_serialized_sha256": "49180378684db9f038845d69eb42505f161f696b9cd1eb83cc2928cba8339a3d",
+  "scope_manifest_sha256": "9a8ef65039b9f4d425aaff3668b9d37a742be5969f294f1c3148426a0b4a2385",
+  "scope": "12 affected units only: six prose/feature records, three player scene units and three redirected recipe aliases. No all-425 refresh is claimed.",
+  "held_unit": {
+    "id": "lesson:toolkit-clocked-lfo-menu-clock",
+    "status": "held; not independently scored in this report",
+    "reason": "Parent requested this advanced LFO lesson to wait for the source13 ready receipt. The source12 feature page’s broken link is scored under feature:lfos-and-modulation."
+  },
+  "method": "Full-document loads on the pinned live reader. Waited for routeReady and no book-loading, then required route-specific destination text before capture; screenshots and visible DOM exclude preformatted evidence dumps. Checked all current scene owner placements and explicit step links. Compared the broken LFO lesson route against source11. No source edit, compile, native run, audio capture or listening.",
+  "historical_reports": "Prior source08/source09/source10 reports were left untouched; no prior ratings were copied.",
+  "all_scores_at_least_8": false,
+  "units": [
+    {
+      "id": "feature:devices",
+      "title": "Devices",
+      "kind": "feature",
+      "focus": "assigning an output and confirming its channel-specific state",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible assigning an output and confirming its channel-specific state and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for assigning an output and confirming its channel-specific state.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for assigning an output and confirming its channel-specific state.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The page shows the captured Channel 1 and Channel 2 states and the channel-selection control; the apply links are visible below.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps assigning an output and confirming its channel-specific state at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The visible sequence moves from the stated starting point through the action to a check or next step for assigning an output and confirming its channel-specific state.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "Both player handoffs open their separate Apply routes from this feature context, while the device example remains a distinct channel-selection scene.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 9,
+          "rationale": "The labels and verbs used for assigning an output and confirming its channel-specific state match the visible controls and reader context.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies assigning an output and confirming its channel-specific state without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical destination for assigning an output and confirming its channel-specific state resolves to the intended content, as shown by the captured final URL and page.",
+          "evidence": [
+            "browser-evidence/route-00-devices.json",
+            "browser-evidence/route-00-devices.png"
+          ]
+        }
+      },
+      "compiled_feature_record_sha256": "1dce74860a2189fc382f51910e5b3bf9dedd555518a24e4ead9c5493941fa06a",
+      "current_placement": "#devices",
+      "evidence_routes": [
+        "#devices"
+      ]
+    },
+    {
+      "id": "feature:external-midi-transport",
+      "title": "External MIDI Transport",
+      "kind": "feature",
+      "focus": "following external MIDI clock and returning to internal clock",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible following external MIDI clock and returning to internal clock and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for following external MIDI clock and returning to internal clock.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for following external MIDI clock and returning to internal clock.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for following external MIDI clock and returning to internal clock.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "granularity": {
+          "score": 8,
+          "rationale": "The feature combines source selection, clock pulse behavior, start/stop cleanup and return-to-internal steps in a dense article, though the sequence remains divided into actionable paragraphs and a captured example.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The visible sequence moves from the stated starting point through the action to a check or next step for following external MIDI clock and returning to internal clock.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The current placement connects following external MIDI clock and returning to internal clock to the intended supporting lesson or canonical route.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 9,
+          "rationale": "The prose uses the visible CLOCK, Source, MIDI, Start and Stop terms, with a concise first step sequence before the advanced timing explanation.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies following external MIDI clock and returning to internal clock without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical destination for following external MIDI clock and returning to internal clock resolves to the intended content, as shown by the captured final URL and page.",
+          "evidence": [
+            "browser-evidence/route-01-external-midi-transport.json",
+            "browser-evidence/route-01-external-midi-transport.png"
+          ]
+        }
+      },
+      "compiled_feature_record_sha256": "35646d63858fd992ef2b91142e0f6861ad9bca442dadb2ad7a1f954ee0738354",
+      "current_placement": "#external-midi-transport",
+      "evidence_routes": [
+        "#external-midi-transport"
+      ]
+    },
+    {
+      "id": "feature:lfos-and-modulation",
+      "title": "LFOs and Modulation",
+      "kind": "feature",
+      "focus": "routing Macro 1 and setting a clocked LFO",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The main macro example and its 0.10 depth → 0.50 movement → cleared depth narrative agree; the separate clocked-LFO recommendation names a lesson that cannot be opened on source12.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "usefulness": {
+          "score": 7,
+          "rationale": "The small CC example is runnable and the recorded 32→38→32 result is visible, but the page’s clocked-LFO next step currently leads to a not-found screen.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for routing Macro 1 and setting a clocked LFO.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for routing Macro 1 and setting a clocked LFO.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps routing Macro 1 and setting a clocked LFO at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The visible sequence moves from the stated starting point through the action to a check or next step for routing Macro 1 and setting a clocked LFO.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "integration": {
+          "score": 3,
+          "rationale": "The visible clocked-LFO link points to #lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock, which resolves to a not-found message in source12; the same exact URL renders the lesson on source11. The working Macro example does not repair this broken handoff.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 9,
+          "rationale": "The labels and verbs used for routing Macro 1 and setting a clocked LFO match the visible controls and reader context.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies routing Macro 1 and setting a clocked LFO without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 5,
+          "rationale": "The feature page itself opens, but its linked canonical clocked-LFO lesson route fails in source12. The requested destination is therefore not a usable home for that teaching binding.",
+          "evidence": [
+            "browser-evidence/route-02-lfos-and-modulation.json",
+            "browser-evidence/route-02-lfos-and-modulation.png",
+            "browser-evidence/lfo-route-failure-source11.json",
+            "browser-evidence/lfo-route-failure-source11.png",
+            "browser-evidence/lfo-route-failure-source12.json",
+            "browser-evidence/lfo-route-failure-source12.png",
+            "browser-evidence/lfo-cdp-network-source11.json",
+            "browser-evidence/lfo-cdp-network-source12.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.json",
+            "browser-evidence/route-34-lfos-and-modulation-lesson-toolkit-clocked-lfo-menu-clock.png"
+          ]
+        }
+      },
+      "compiled_feature_record_sha256": "1e36235a9180a4689c8b7d463a94ea2f4ec83340b6b8cf6fa86f093a975cb0bb",
+      "current_placement": "#lfos-and-modulation",
+      "evidence_routes": [
+        "#lfos-and-modulation"
+      ],
+      "failed_canonical_lesson": {
+        "route": "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock",
+        "source11": "renders expected lesson",
+        "source12": "renders not-found message",
+        "feature_id": "lfos-and-modulation",
+        "lesson_id": "toolkit-clocked-lfo-menu-clock",
+        "source_scene_id": "toolkit-clocked-lfo-menu",
+        "from_step_id": "depth",
+        "to_step_id": "clock",
+        "preview_target_step_id": "clock",
+        "contract_id": "feature:lfos-and-modulation:toolkit-clocked-lfo-menu-clock",
+        "scene_chunk_sha256": "ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c",
+        "http_failures": "Only /favicon.ico returned 404; the aborted request was media preload. No route or scene asset request failed."
+      }
+    },
+    {
+      "id": "feature:mods-and-software-devices",
+      "title": "Selecting an n.b. Player",
+      "kind": "feature",
+      "focus": "installing, enabling, selecting and applying a supported player",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible installing, enabling, selecting and applying a supported player and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for installing, enabling, selecting and applying a supported player.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for installing, enabling, selecting and applying a supported player.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for installing, enabling, selecting and applying a supported player.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps installing, enabling, selecting and applying a supported player at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The prose orders install, enable, start Mosaic, select the draft, press K3, then reopen Device; the Polyperc apply lesson and two complete player Apply routes are separately reachable.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The Polyperc Apply lesson route and the Oilcan/Doubledecker Apply sequences render from the current feature context; each draft frame points to its correct confirmation flow.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 9,
+          "rationale": "The labels and verbs used for installing, enabling, selecting and applying a supported player match the visible controls and reader context.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies installing, enabling, selecting and applying a supported player without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical destination for installing, enabling, selecting and applying a supported player resolves to the intended content, as shown by the captured final URL and page.",
+          "evidence": [
+            "browser-evidence/route-03-mods-and-software-devices.json",
+            "browser-evidence/route-03-mods-and-software-devices.png"
+          ]
+        }
+      },
+      "compiled_feature_record_sha256": "08d28b63f9403ec61c60e992c20ee662ee4b412cd07d3b1834971cfb1350a513",
+      "current_placement": "#mods-and-software-devices",
+      "evidence_routes": [
+        "#mods-and-software-devices"
+      ]
+    },
+    {
+      "id": "feature:norns-sound-sources-with-n-b",
+      "title": "Norns Sound Sources with n.b.",
+      "kind": "feature",
+      "focus": "choosing supported internal and Crow-connected sound sources",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible choosing supported internal and Crow-connected sound sources and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for choosing supported internal and Crow-connected sound sources.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for choosing supported internal and Crow-connected sound sources.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for choosing supported internal and Crow-connected sound sources.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps choosing supported internal and Crow-connected sound sources at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The visible sequence moves from the stated starting point through the action to a check or next step for choosing supported internal and Crow-connected sound sources.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The current placement connects choosing supported internal and Crow-connected sound sources to the intended supporting lesson or canonical route.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "The page uses n.b. and player names consistently, but several mod names are specialized identifiers that require the reader to already know their installation context.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "naming": {
+          "score": 8,
+          "rationale": "The title and opening sentence identify n.b. sound sources, with the long name “n.b.” remaining a domain-specific term.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical destination for choosing supported internal and Crow-connected sound sources resolves to the intended content, as shown by the captured final URL and page.",
+          "evidence": [
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.json",
+            "browser-evidence/route-04-norns-sound-sources-with-n-b.png"
+          ]
+        }
+      },
+      "compiled_feature_record_sha256": "93af6f5c69bb12bd6dd518e14d0def38498724709408fb27e0d148b10ee72d1b",
+      "current_placement": "#norns-sound-sources-with-n-b",
+      "evidence_routes": [
+        "#norns-sound-sources-with-n-b"
+      ]
+    },
+    {
+      "id": "feature:rhythm-doctor",
+      "title": "Rhythm Doctor",
+      "kind": "feature",
+      "focus": "capturing, analysing, browsing and painting an audio rhythm",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible capturing, analysing, browsing and painting an audio rhythm and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for capturing, analysing, browsing and painting an audio rhythm.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for capturing, analysing, browsing and painting an audio rhythm.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for capturing, analysing, browsing and painting an audio rhythm.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "granularity": {
+          "score": 8,
+          "rationale": "The current page contains a substantial end-to-end procedure and many supporting detail blocks; the controls are structured, though the overall reading unit is long.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The visible sequence moves from the stated starting point through the action to a check or next step for capturing, analysing, browsing and painting an audio rhythm.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The current placement connects capturing, analysing, browsing and painting an audio rhythm to the intended supporting lesson or canonical route.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "The terms lane, bank, preview, Alignment and backend are tied to visible actions and explanatory headings, with some domain terms still demanding familiarity.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies capturing, analysing, browsing and painting an audio rhythm without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical destination for capturing, analysing, browsing and painting an audio rhythm resolves to the intended content, as shown by the captured final URL and page.",
+          "evidence": [
+            "browser-evidence/route-05-rhythm-doctor.json",
+            "browser-evidence/route-05-rhythm-doctor.png"
+          ]
+        }
+      },
+      "compiled_feature_record_sha256": "c26c514d486f74f71e1b58833debdf1c69eeb0ccaff6470c9539038e27fe6797",
+      "current_placement": "#rhythm-doctor",
+      "evidence_routes": [
+        "#rhythm-doctor"
+      ]
+    },
+    {
+      "id": "scene:software-player-oilcan",
+      "title": "Select Oilcan 1",
+      "kind": "scene",
+      "focus": "Oilcan 1 as a draft on channel 1 for percussion",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible Oilcan 1 as a draft on channel 1 for percussion and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for Oilcan 1 as a draft on channel 1 for percussion.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "understandability": {
+          "score": 8,
+          "rationale": "The selected device and K3 draft state are clear, though the caption’s literal Markdown link syntax adds noise.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "representation": {
+          "score": 7,
+          "rationale": "The screen and grid capture identifies Oilcan 1 as a draft on channel 1 for percussion, but its inline Apply Markdown is rendered literally and the caption paragraph contains no anchor element.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps Oilcan 1 as a draft on channel 1 for percussion at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "flow": {
+          "score": 8,
+          "rationale": "The K3 instruction distinguishes selection from application; a working Apply route is visible elsewhere on the page, though the inline caption link is plain text.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "integration": {
+          "score": 8,
+          "rationale": "All three owner placements render the same selected-player scene and the actual Apply handoff appears in the page’s visible controls or feature card; the caption itself is not a clickable link.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "“Draft”, the device name and “Press K3 to confirm” match the captured screen; literal Markdown punctuation in the caption distracts from the instruction.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies Oilcan 1 as a draft on channel 1 for percussion without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "Cold full-document loads of the three owner routes and explicit step routes settle on the intended selected-player caption.",
+          "evidence": [
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.json",
+            "browser-evidence/route-13-mods-and-software-devices-software-player-oilcan.png",
+            "browser-evidence/route-17-devices-software-player-oilcan.json",
+            "browser-evidence/route-17-devices-software-player-oilcan.png",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.json",
+            "browser-evidence/route-21-norns-sound-sources-with-n-b-software-player-oilcan.png",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-14-mods-and-software-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.json",
+            "browser-evidence/route-18-devices-software-player-oilcan-select-player.png",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.json",
+            "browser-evidence/route-22-norns-sound-sources-with-n-b-software-player-oilcan-select-player.png",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.json",
+            "browser-evidence/route-32-mods-and-software-devices-player-apply-oilcan.png",
+            "browser-evidence/caption-link-check-oilcan.json"
+          ]
+        }
+      },
+      "scene_chunk_sha256": "67cdac54c229d0013bbfe0347b67140071e9424bcf219738a6c1c10cec6192c4",
+      "bare_current_routes": [
+        "#mods-and-software-devices/software-player-oilcan",
+        "#devices/software-player-oilcan",
+        "#norns-sound-sources-with-n-b/software-player-oilcan"
+      ],
+      "explicit_step_routes": [
+        "#mods-and-software-devices/software-player-oilcan/select-player",
+        "#devices/software-player-oilcan/select-player",
+        "#norns-sound-sources-with-n-b/software-player-oilcan/select-player"
+      ],
+      "apply_handoff_route": "#mods-and-software-devices/player-apply-oilcan",
+      "caption_anchor_count": 0,
+      "reported_state": "captured frame only; no claim of listening"
+    },
+    {
+      "id": "scene:software-player-doubledecker",
+      "title": "Select Doubledecker",
+      "kind": "scene",
+      "focus": "Doubledecker as a draft on channel 3 for chords",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible Doubledecker as a draft on channel 3 for chords and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for Doubledecker as a draft on channel 3 for chords.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "understandability": {
+          "score": 8,
+          "rationale": "The selected device and K3 draft state are clear, though the caption’s literal Markdown link syntax adds noise.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "representation": {
+          "score": 7,
+          "rationale": "The screen and grid capture identifies Doubledecker as a draft on channel 3 for chords, but its inline Apply Markdown is rendered literally and the caption paragraph contains no anchor element.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps Doubledecker as a draft on channel 3 for chords at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "flow": {
+          "score": 8,
+          "rationale": "The K3 instruction distinguishes selection from application; a working Apply route is visible elsewhere on the page, though the inline caption link is plain text.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "integration": {
+          "score": 8,
+          "rationale": "All three owner placements render the same selected-player scene and the actual Apply handoff appears in the page’s visible controls or feature card; the caption itself is not a clickable link.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "“Draft”, the device name and “Press K3 to confirm” match the captured screen; literal Markdown punctuation in the caption distracts from the instruction.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies Doubledecker as a draft on channel 3 for chords without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "Cold full-document loads of the three owner routes and explicit step routes settle on the intended selected-player caption.",
+          "evidence": [
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.json",
+            "browser-evidence/route-15-mods-and-software-devices-software-player-doubledecker.png",
+            "browser-evidence/route-19-devices-software-player-doubledecker.json",
+            "browser-evidence/route-19-devices-software-player-doubledecker.png",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.json",
+            "browser-evidence/route-23-norns-sound-sources-with-n-b-software-player-doubledecker.png",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-16-mods-and-software-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-20-devices-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.json",
+            "browser-evidence/route-24-norns-sound-sources-with-n-b-software-player-doubledecker-select-player.png",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.json",
+            "browser-evidence/route-33-mods-and-software-devices-player-apply-doubledecker.png",
+            "browser-evidence/caption-link-check-doubledecker.json"
+          ]
+        }
+      },
+      "scene_chunk_sha256": "8a0103ed8d337acb207a43942e2739a421b574392b03c8bf8714f49a256bb47a",
+      "bare_current_routes": [
+        "#mods-and-software-devices/software-player-doubledecker",
+        "#devices/software-player-doubledecker",
+        "#norns-sound-sources-with-n-b/software-player-doubledecker"
+      ],
+      "explicit_step_routes": [
+        "#mods-and-software-devices/software-player-doubledecker/select-player",
+        "#devices/software-player-doubledecker/select-player",
+        "#norns-sound-sources-with-n-b/software-player-doubledecker/select-player"
+      ],
+      "apply_handoff_route": "#mods-and-software-devices/player-apply-doubledecker",
+      "caption_anchor_count": 0,
+      "reported_state": "captured frame only; no claim of listening"
+    },
+    {
+      "id": "scene:software-player-polyperc",
+      "title": "Select Polyperc 1",
+      "kind": "scene",
+      "focus": "Polyperc 1 as a draft on channel 2 for bass",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible Polyperc 1 as a draft on channel 2 for bass and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for Polyperc 1 as a draft on channel 2 for bass.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "understandability": {
+          "score": 8,
+          "rationale": "The selected device and K3 draft state are clear, though the caption’s literal Markdown link syntax adds noise.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "representation": {
+          "score": 7,
+          "rationale": "The screen and grid capture identifies Polyperc 1 as a draft on channel 2 for bass, but its inline Apply Markdown is rendered literally and the caption paragraph contains no anchor element.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps Polyperc 1 as a draft on channel 2 for bass at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "flow": {
+          "score": 8,
+          "rationale": "The K3 instruction distinguishes selection from application; a working Apply route is visible elsewhere on the page, though the inline caption link is plain text.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "integration": {
+          "score": 8,
+          "rationale": "All three owner placements render the same selected-player scene and the actual Apply handoff appears in the page’s visible controls or feature card; the caption itself is not a clickable link.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "“Draft”, the device name and “Press K3 to confirm” match the captured screen; literal Markdown punctuation in the caption distracts from the instruction.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies Polyperc 1 as a draft on channel 2 for bass without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "Cold full-document loads of the three owner routes and explicit step routes settle on the intended selected-player caption.",
+          "evidence": [
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.json",
+            "browser-evidence/route-25-mods-and-software-devices-software-player-polyperc.png",
+            "browser-evidence/route-27-devices-software-player-polyperc.json",
+            "browser-evidence/route-27-devices-software-player-polyperc.png",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.json",
+            "browser-evidence/route-29-norns-sound-sources-with-n-b-software-player-polyperc.png",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-26-mods-and-software-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.json",
+            "browser-evidence/route-28-devices-software-player-polyperc-select-player.png",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.json",
+            "browser-evidence/route-30-norns-sound-sources-with-n-b-software-player-polyperc-select-player.png",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.json",
+            "browser-evidence/route-31-mods-and-software-devices-lesson-play-polyperc-apply-confirm.png",
+            "browser-evidence/caption-link-check-polyperc.json"
+          ]
+        }
+      },
+      "scene_chunk_sha256": "76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53",
+      "bare_current_routes": [
+        "#mods-and-software-devices/software-player-polyperc",
+        "#devices/software-player-polyperc",
+        "#norns-sound-sources-with-n-b/software-player-polyperc"
+      ],
+      "explicit_step_routes": [
+        "#mods-and-software-devices/software-player-polyperc/select-player",
+        "#devices/software-player-polyperc/select-player",
+        "#norns-sound-sources-with-n-b/software-player-polyperc/select-player"
+      ],
+      "apply_handoff_route": "#mods-and-software-devices/lesson/play-polyperc-apply-confirm",
+      "caption_anchor_count": 0,
+      "reported_state": "captured frame only; no claim of listening"
+    },
+    {
+      "id": "recipe:locks:1-make-one-step-override-a-channel-note-default-th",
+      "title": "Make one step override a channel Note default, then restore inheritance",
+      "kind": "recipe-alias",
+      "focus": "setting a channel Note default, adding and clearing a step exception",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible setting a channel Note default, adding and clearing a step exception and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for setting a channel Note default, adding and clearing a step exception.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for setting a channel Note default, adding and clearing a step exception.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for setting a channel Note default, adding and clearing a step exception.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps setting a channel Note default, adding and clearing a step exception at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The section placement is available, and the old recipe route lands on the full canonical recipe with its starting condition, actions and outcome.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The alias redirects to the matching canonical recipe page; the canonical recipe remains directly reachable at #melody-composition/recipe/1.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 9,
+          "rationale": "The labels and verbs used for setting a channel Note default, adding and clearing a step exception match the visible controls and reader context.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies setting a channel Note default, adding and clearing a step exception without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "Cold navigation from #locks/recipe/1 lands on #melody-composition/recipe/1, where the complete recipe title, instructions and outcome appear.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-08-locks-recipe-1.json",
+            "browser-evidence/route-08-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        }
+      },
+      "section_cookbook_route": "#locks/section-cookbook",
+      "redirect_source_route": "#locks/recipe/1",
+      "canonical_route": "#melody-composition/recipe/1",
+      "observed_final_route": "#melody-composition/recipe/1",
+      "alias_behavior": "redirect"
+    },
+    {
+      "id": "recipe:mask-locks:1-make-one-step-override-a-channel-note-default-th",
+      "title": "Make one step override a channel Note default, then restore inheritance",
+      "kind": "recipe-alias",
+      "focus": "setting a channel Note default, adding and clearing a step exception from Mask Locks",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible setting a channel Note default, adding and clearing a step exception from Mask Locks and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for setting a channel Note default, adding and clearing a step exception from Mask Locks.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for setting a channel Note default, adding and clearing a step exception from Mask Locks.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for setting a channel Note default, adding and clearing a step exception from Mask Locks.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps setting a channel Note default, adding and clearing a step exception from Mask Locks at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The section placement is available, and the old recipe route lands on the full canonical recipe with its starting condition, actions and outcome.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The alias redirects to the matching canonical recipe page; the canonical recipe remains directly reachable at #melody-composition/recipe/1.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 9,
+          "rationale": "The labels and verbs used for setting a channel Note default, adding and clearing a step exception from Mask Locks match the visible controls and reader context.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies setting a channel Note default, adding and clearing a step exception from Mask Locks without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "Cold navigation from #mask-locks/recipe/1 lands on #melody-composition/recipe/1, where the complete recipe title, instructions and outcome appear.",
+          "evidence": [
+            "browser-evidence/route-07-mask-locks-section-cookbook.json",
+            "browser-evidence/route-07-mask-locks-section-cookbook.png",
+            "browser-evidence/route-09-mask-locks-recipe-1.json",
+            "browser-evidence/route-09-mask-locks-recipe-1.png",
+            "browser-evidence/route-11-melody-composition-recipe-1.json",
+            "browser-evidence/route-11-melody-composition-recipe-1.png"
+          ]
+        }
+      },
+      "section_cookbook_route": "#mask-locks/section-cookbook",
+      "redirect_source_route": "#mask-locks/recipe/1",
+      "canonical_route": "#melody-composition/recipe/1",
+      "observed_final_route": "#melody-composition/recipe/1",
+      "alias_behavior": "redirect"
+    },
+    {
+      "id": "recipe:locks:2-compare-a-stored-device-value-with-one-step-loca",
+      "title": "Compare a stored device value with one step-local CC lock",
+      "kind": "recipe-alias",
+      "focus": "comparing a stored device value with a step-local CC lock",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The visible comparing a stored device value with a step-local CC lock and its stated action or outcome agree in the captured reader.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The page gives a concrete next action or comparison for comparing a stored device value with a step-local CC lock.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The reader names the starting state and action in direct terms for comparing a stored device value with a step-local CC lock.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured page exposes the relevant screen/caption and its controls or result for comparing a stored device value with a step-local CC lock.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The example keeps comparing a stored device value with a step-local CC lock at a useful scope and separates adjacent stages where needed.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The section placement is available, and the old recipe route lands on the full canonical recipe with its starting condition, actions and outcome.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The alias redirects to the matching canonical recipe page; the canonical recipe remains directly reachable at #device-parameters/recipe/2.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 9,
+          "rationale": "The labels and verbs used for comparing a stored device value with a step-local CC lock match the visible controls and reader context.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The displayed title identifies comparing a stored device value with a step-local CC lock without requiring the reader to infer the subject.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "Cold navigation from #locks/recipe/2 lands on #device-parameters/recipe/2, where the complete recipe title, instructions and outcome appear.",
+          "evidence": [
+            "browser-evidence/route-06-locks-section-cookbook.json",
+            "browser-evidence/route-06-locks-section-cookbook.png",
+            "browser-evidence/route-10-locks-recipe-2.json",
+            "browser-evidence/route-10-locks-recipe-2.png",
+            "browser-evidence/route-12-device-parameters-recipe-2.json",
+            "browser-evidence/route-12-device-parameters-recipe-2.png"
+          ]
+        }
+      },
+      "section_cookbook_route": "#locks/section-cookbook",
+      "redirect_source_route": "#locks/recipe/2",
+      "canonical_route": "#device-parameters/recipe/2",
+      "observed_final_route": "#device-parameters/recipe/2",
+      "alias_behavior": "redirect"
+    }
+  ]
+}

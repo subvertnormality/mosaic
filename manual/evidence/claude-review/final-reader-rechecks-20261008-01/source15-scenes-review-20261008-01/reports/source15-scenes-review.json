@@ -1,0 +1,435 @@
+{
+  "job_id": "source15-scenes-review-20261008-01",
+  "reviewed_at_utc": "2026-10-08T09:14:05.635Z",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reader_url": "http://localhost:8925/manual/",
+  "source_pins": {
+    "source_sha256": "52d70cb543d38b1f155a0f5c4fa6fed510d0a44a161bed6ef0c8faffd518a9e3",
+    "book_sha256": "d49d8551e5a18334d23537974d16b18116cfd1a79122edd7a169452e53060202",
+    "reader_index_sha256": "1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654",
+    "book_js_sha256": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+    "manual_js_sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+    "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309"
+  },
+  "units": [
+    {
+      "id": "panic-from-song-channel",
+      "title": "Panic by holding Channel while on Song",
+      "kind": "scene",
+      "feature_id": "midi-panic",
+      "canonical_route": "#midi-panic/panic-from-song-channel",
+      "scene_chunk_sha256": "92b7daaaffdccff6a2e7bcaa492bb1604e92b7eb76f1612ba2ba6bb892c6394c",
+      "presentation_metadata_sha256": "b7463c54846e5b4ae07e7137d7d715b3a1038620b0ea0531ffe5635443ddd80b",
+      "native_transition_contract_sha256": "6933c35381cd41ad81d7c349d88bdf6eefd2272c81b76990f95c66553494d062",
+      "criterion_scores": {
+        "coherence": {
+          "score": 8,
+          "rationale": "The scene starts silent, keeps Song selected, and says panic leaves playback running; its target matches the visible result and the 6,144 Note Off sweep. The overview says hold for about a second while this capture says about two seconds, a small duration inconsistency within the same gesture.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/panic-from-song-channel.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "It gives a concrete Song starting point, identifies the inactive Channel button, states the hold and release gesture, and explains when the sweep matters.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The scene names the button coordinates, duration, silent starting condition, unchanged Song page, and playback behavior in plain action language.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The selected interaction displays the Song screen, grid, final “Hold Channel for two seconds” result, and the captured sweep count; it explicitly explains that silence means no audible change.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/panic-from-song-channel.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "Three steps isolate the starting project, opening Song, and the final hold-and-release action.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The captured path moves from Device screen to Song, then to the panic gesture and a finished result.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The feature page links the lesson and relates panic to playback controls and troubleshooting; the recipe distinguishes panic from stopping playback.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Note Off and panic are tied to the outcome, and coordinates are explicit. The approximate one-versus-two-second descriptions could be aligned.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The title identifies the action, button, and page context.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "Selecting this named interaction on MIDI Panic changes the fragment to the matching scene ID and renders the complete three-step sequence.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/panic-from-song-channel.png"
+          ]
+        }
+      },
+      "all_scores_at_least_8": true,
+      "rendered_evidence": {
+        "requested_route": "http://localhost:8925/manual/#midi-panic/panic-from-song-channel",
+        "document_title": "MIDI Panic · Mosaic",
+        "route_ready": "1",
+        "selected_interaction": "Panic by holding Channel while on Song",
+        "frame_count": 3,
+        "step_labels": [
+          "Step 1: Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Pattern 1 is assigned to channel 1 over steps 1 to 4. The sequencer is stopped, so no note is sounding, and three MIDI ports are connected. The norns shows channel 1's Device screen; the next step opens Song.",
+          "Step 2: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button. Panic only works from the button of a page you are not on, so every other page button, including Channel (3,8), is a panic button from here.",
+          "Step 3: From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing."
+        ],
+        "final_frame_position": "Example\n03 / 03",
+        "screenshot": "evidence/panic-from-song-channel.png"
+      }
+    },
+    {
+      "id": "panic-from-song-pattern",
+      "title": "Panic by holding Pattern while on Song",
+      "kind": "scene",
+      "feature_id": "midi-panic",
+      "canonical_route": "#midi-panic/panic-from-song-pattern",
+      "scene_chunk_sha256": "4b9ac1897334b95d03d1aa30432d8335b0725bc0ccd07c32b8c9a10b29839a9b",
+      "presentation_metadata_sha256": "67d8bb263d2319dc276eb4e8ebb8a5bee6587a37dc950fbf00e901bfb8d5e262",
+      "native_transition_contract_sha256": "0f0782404a9db2e2be36abd8357997af1ed4e441edfb11bb67546f9244af29f8",
+      "criterion_scores": {
+        "coherence": {
+          "score": 8,
+          "rationale": "The scene starts silent, keeps Song selected, and says panic leaves playback running; its target matches the visible result and 6,144 Note Off sweep. The overview says hold for about a second while this capture says about two seconds, a small duration inconsistency for the same gesture.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "It provides the Song starting state, identifies Pattern as the inactive page button, and gives the hold/release action and expected unchanged page.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The button name and coordinate, approximate duration, silent start, and playback outcome are stated directly.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The selected scene shows the Song screen and grid with its final “Hold Pattern for two seconds” outcome and the captured Note Off count; the silent start is explicit.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "Three focused steps separate setup, navigation to Song, and the Pattern panic gesture.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "It advances from the Device starting view to Song, then applies the gesture and shows the completed sweep.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The lesson is available from the MIDI Panic feature page alongside the Channel variant and related playback/stuck-note guidance.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Pattern and Note Off are paired with coordinates and outcome; the approximate hold duration differs from the overview wording.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The title clearly distinguishes this Pattern-button variation from the Channel version.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The named selector changes to the matching panic-from-song-pattern fragment and displays all three captured steps.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/panic-from-song-pattern.png"
+          ]
+        }
+      },
+      "all_scores_at_least_8": true,
+      "rendered_evidence": {
+        "requested_route": "http://localhost:8925/manual/#midi-panic/panic-from-song-pattern",
+        "document_title": "MIDI Panic · Mosaic",
+        "route_ready": "1",
+        "selected_interaction": "Panic by holding Pattern while on Song",
+        "frame_count": 3,
+        "step_labels": [
+          "Step 1: Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Pattern 1 is assigned to channel 1 over steps 1 to 4. The sequencer is stopped, so no note is sounding, and three MIDI ports are connected. The norns shows channel 1's Device screen; the next step opens Song.",
+          "Step 2: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button. Panic only works from the button of a page you are not on, so every other page button, including Pattern (5,8), is a panic button from here.",
+          "Step 3: From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing."
+        ],
+        "final_frame_position": "Example\n03 / 03",
+        "screenshot": "evidence/panic-from-song-pattern.png"
+      }
+    },
+    {
+      "id": "keyboard-honour-degree",
+      "title": "Start from the chosen scale degree",
+      "kind": "scene",
+      "feature_id": "midi-controller-options",
+      "canonical_route": "#midi-controller-options/keyboard-honour-degree",
+      "scene_chunk_sha256": "da67d2e4d9e3c511f36f62cecbe3f7eb5fc03122d65060553b84429fa0eb7f5d",
+      "presentation_metadata_sha256": "a0bb31c39db85887fb4499baff253e89db3e36204563a98a3bd42de205cbf1c5",
+      "native_transition_contract_sha256": "33503e7de6e3de45f5f2ec9b962c3d134fcf149f36566be92c4471a6a51bc742",
+      "criterion_scores": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The 11-step path first enables white-key mapping, selects natural minor, degree II, rotation 2 and transpose +2, then turns on only Honour scale degree. The final caption states rotation and transpose remain unapplied and the MIDI output lists the expected degree-shifted white-key phrase.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/keyboard-honour-degree.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "It takes a player from defaults through the required mapping and scale setup to a clearly checked degree-II result.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "understandability": {
+          "score": 8,
+          "rationale": "Each step gives a concrete control or grid action and describes the resulting row or notes. The 11-step prerequisite sequence is substantial, but its checkpoints make the sequence traceable.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The final captured frame shows the norns/grid context and MIDI output for the new phrase; the caption supplies note names and separates degree from rotation/transpose.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/keyboard-honour-degree.png"
+          ]
+        },
+        "granularity": {
+          "score": 8,
+          "rationale": "The long sequence covers several prerequisites before the degree switch, but these are needed to isolate what Honour scale degree changes.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The example progresses from unmapped input through white-key mapping and scale setup to a before/after comparison and a usable phrase.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The page places the scene under MIDI Controller Options, links the relevant scale controls, and keeps the other Honour transformations off for an isolated comparison.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Degree II and white-key mapping are contextualized by the resulting notes; musical/control terms such as Scale Editor and Honour switches are used consistently.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "“Start from the chosen scale degree” states the musical outcome rather than a technical flag name.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The “Start from the chosen scale degree” selector updates the feature fragment to `keyboard-honour-degree` and renders the full 11-step scene.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/keyboard-honour-degree.png"
+          ]
+        }
+      },
+      "all_scores_at_least_8": true,
+      "rendered_evidence": {
+        "requested_route": "http://localhost:8925/manual/#midi-controller-options/keyboard-honour-degree",
+        "document_title": "MIDI Controller Options · Mosaic",
+        "route_ready": "1",
+        "selected_interaction": "Start from the chosen scale degree",
+        "frame_count": 11,
+        "step_labels": [
+          "Step 1: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale Editor is on C major.",
+          "Step 2: Play some keys on the keyboard: each sounds the note you pressed, because nothing is mapped yet. Tap K1 and open PARAMS > MOSAIC > Midi control. Select Map scale to white keys and turn E3 right to On. The row reads On.",
+          "Step 3: Close the menu and play the white keys from C3 up to C4 on the keyboard. In C major they sound as written: 60, 62, 64, 65, 67, 69, 71, 72. The MIDI strip lists the notes Mosaic sent.",
+          "Step 4: Open the Scale Editor (grid (4,8)), turn E3 two detents and press K3. The Scale row reads Minor, natural minor.",
+          "Step 5: Return to the Channel editor (3,8) and play the white keys again: they now follow C natural minor, 60, 62, 63, 65, 67, 68, 70, 72 (C D E-flat F G A-flat B-flat C).",
+          "Step 6: Open the Scale Editor (4,8) again, turn E2 one click to Degree, turn E3 one detent and press K3. Degree reads ii°. Degree picks which scale note the keyboard's C starts on.",
+          "Step 7: Turn E2 to the Rotation row, turn E3 two detents and press K3. Rotation reads r2. Rotation moves the top keys down an octave.",
+          "Step 8: Tap the global transpose fader on the grid at its lowest value, then tap its increment button fourteen times, and return to the Channel editor (3,8). The Scale overview lists Transpose +2, which shifts everything.",
+          "Step 9: The three Honour switches are still Off, so none of this is applied yet: the white keys still play 60, 62, 63, 65, 67, 68, 70, 72.",
+          "Step 10: Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale degree and turn E3 right to On. The row reads On.",
+          "Step 11: Close the menu and play C3 to C4 again. Key C now plays the scale's second note: 62, 63, 65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied, so you can start a phrase from degree II without changing the scale."
+        ],
+        "final_frame_position": "Example\n11 / 11",
+        "screenshot": "evidence/keyboard-honour-degree.png"
+      }
+    },
+    {
+      "id": "keyboard-honour-degree-rotation",
+      "title": "Rotate the keyboard voicing",
+      "kind": "scene",
+      "feature_id": "midi-controller-options",
+      "canonical_route": "#midi-controller-options/keyboard-honour-degree-rotation",
+      "scene_chunk_sha256": "e8db3ed73e909eb4a3c08784021b02bed4498007af783c794cc4fc6594b018e4",
+      "presentation_metadata_sha256": "63099345d6952fa62a334fb88ae9549ee6af349ad2957e6428464ae83d6d45d0",
+      "native_transition_contract_sha256": "71edd6b306abf49d5386ed6d060962fa12babec075e60885b06fa8a9f0a475aa",
+      "criterion_scores": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The starting caption establishes white-key mapping, natural minor, degree II, rotation 2, transpose +2, and degree honored; the rotation switch is then the only changed setting. The final caption and MIDI output show the last two white-key positions lowered while the first five stay fixed.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/keyboard-honour-degree-rotation.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "A three-step before/action/after comparison tells the player what to set, which switch to change, and how to use the resulting voicing.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The scene lists the setup state, names the exact menu control, then describes the changed A/B positions with MIDI note values. It explicitly distinguishes the white-key subset from intervening black keys in the practice prompt.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The captured final frame includes norns/grid and MIDI output, and its caption explains the octave drop and unchanged first five keys.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/keyboard-honour-degree-rotation.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "Three steps are enough to isolate the toggle and compare its output; deeper setup remains available in the linked complete lesson.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The progression is a focused baseline, one toggle, and a musical before/after result.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The scene is linked from both MIDI Controller Options and the Honor Scale Rotations feature context, and the feature recipe gives the broader chromatic comparison.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Rotation, degree, transpose and white-key subset are used consistently; the starting-state caption names their exact values.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "“Rotate the keyboard voicing” communicates both the change and its musical use.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The named selector changes the canonical feature fragment to the matching scene ID; the Honor Scale Rotations feature also exposes a link to this full lesson.",
+          "evidence": [
+            "../evidence/source15-scenes-capture.json",
+            "../evidence/keyboard-honour-degree-rotation.png"
+          ]
+        }
+      },
+      "all_scores_at_least_8": true,
+      "rendered_evidence": {
+        "requested_route": "http://localhost:8925/manual/#midi-controller-options/keyboard-honour-degree-rotation",
+        "document_title": "MIDI Controller Options · Mosaic",
+        "route_ready": "1",
+        "selected_interaction": "Rotate the keyboard voicing",
+        "frame_count": 3,
+        "step_labels": [
+          "Step 1: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 70, 72, 74. Honour scale rotations and Honour scale transpose are Off.",
+          "Step 2: Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale rotations and turn E3 right to On. The row reads On.",
+          "Step 3: Close the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down: the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to play a bass note or an inverted voicing of the same scale shape from the keys you already know."
+        ],
+        "final_frame_position": "Example\n03 / 03",
+        "screenshot": "evidence/keyboard-honour-degree-rotation.png"
+      }
+    }
+  ],
+  "all_four_units_meet_threshold": true,
+  "all_ten_criteria_independently_rated": true,
+  "method": "For each unit, full-document-loaded its owning feature at the frozen localhost preview, waited for route readiness and no loading panel, selected the named interaction in the visible selector, verified the scene-specific fragment and all captured-step labels, selected the final captured step, and inspected visible DOM and screenshot. No scene was played as a live Mosaic app; browser evidence shows captured state/output only. No audio was played or listened to. Owned Chrome closed in finally.",
+  "browser_observations": {
+    "incidental_resource_issue": "During the first panic-feature load only, browser emitted a 404/aborted request for unrelated /manual/audio/masks-small-hours.ogg. The other three scoped route captures had no page errors, failed requests, or HTTP errors. The panic scenes and their captures render; this unrelated audio resource was not used as scoring evidence.",
+    "duration_note": "Both panic scene captions say about two seconds, while the feature overview says about a second. Rated as a minor coherence/vocabulary inconsistency because the gesture and outcome remain the same.",
+    "no_below_threshold_findings": true
+  },
+  "capture_sha256": "9b25ea0d0b2abc07abd21adc0dd3f4865e958eaa58b8f1b2513945a1b7d21ffa",
+  "reader_index_sha256": "1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654",
+  "scope": "Only the four listed scene units were reviewed. This report does not claim full-manual re-review or live MIDI/hardware validation."
+}

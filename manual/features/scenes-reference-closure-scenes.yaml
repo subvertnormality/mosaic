@@ -32142,12 +32142,7 @@ scenes:
         kind: panic-note-sounding
   - id: panic-released
     title: Hold Channel to panic
-    caption: 'While the note sounds, hold Channel (3,8), a page you are not on, for
-      about two seconds and release it. The note is cut off about a second and a quarter
-      after it started, well before its four seconds are up: the MIDI strip shows
-      the 6,144 note-offs of the panic sweep, 128 notes on each of the 16 MIDI channels
-      of the three ports. The screen stays on Song and playback carries on, so C starts
-      again when the loop comes round. Press Stop at (1,8).'
+    caption: "While C sounds, hold Channel (3,8), a page you are not on. Keep holding until Panic cuts the note, then release the key. Allow about two seconds for the hold. Here the note is cut off 1.26 seconds after it starts, before its natural four-second end. That interval starts at note onset, not at the start of the hold. Song playback continues, so C sounds again when the loop comes round. Press Stop at (1,8) to stop the sequence."
     citation: README.md#midi-panic
     inputs:
     - type: grid

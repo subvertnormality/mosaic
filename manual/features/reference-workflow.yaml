@@ -2,27 +2,14 @@ features:
 - id: typical-workflow
   title: Composition Workflow
   audience: all
-  summary: Create patterns, assign channels, apply harmony and arrange song slots.
-  prose: '1. Configure one output and create a short pattern.
-
-    2. Assign the pattern to a channel.
-
-    3. Select and apply a scale.
-
-    4. Add melody using masks or MIDI recording.
-
-    5. Apply velocity changes or parameter locks.
-
-    6. Copy the sequence into song slots and edit each variation.
-
-    7. Save a named project.
+  summary: Make your first piece. Start with an empty project. Keep it through all ten chapters; you finish with a saved bass-only/full-phrase arrangement.
+  prose: '[Make your first piece](#getting-started/course) is the complete continuing lesson.
 
 
-    Patterns supply musical material. Channels combine that material and apply exceptions. Song slots store sequence
-    variations. See [Build a phrase](#build-a-phrase) for the complete procedure.
+    Start here: Start with an empty project. Keep it through all ten chapters; you finish with a saved bass-only/full-phrase arrangement.
 
 
-    This page is the overview; each stage links to the detailed reference.'
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
   musical_use: Use a short phrase to compare changes before expanding the arrangement.
   related:
   - dig-deeper
@@ -38,7 +25,29 @@ features:
     code:
     - tests/behaviour/composition_workflow.py
   controls: []
-  details: []
+  details:
+  - title: Complete lesson
+    text: Open [Make your first piece](#getting-started/course) for the ordered actions, their results and the matching listening example. Start with an empty project. Keep it through all ten chapters; you finish with a saved bass-only/full-phrase arrangement.
+  - title: Independent controls example
+    text: '1. Configure one output and create a short pattern.
+
+      2. Assign the pattern to a channel.
+
+      3. Select and apply a scale.
+
+      4. Add melody using masks or MIDI recording.
+
+      5. Apply velocity changes or parameter locks.
+
+      6. Copy the sequence into song slots and edit each variation.
+
+      7. Save a named project.
+
+
+      Patterns supply musical material. Channels combine that material and apply exceptions. Song slots store sequence variations. See [Build a phrase](#build-a-phrase) for the complete procedure.
+
+
+      This page is the overview; each stage links to the detailed reference.'
   recipes: []
   scene_refs:
   - merge-overlap-and-union
@@ -55,38 +64,42 @@ features:
     - M-MERGE-PHRASE-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: The full native composition scene verifies pattern assignment, merge choices, two-channel harmony
-      and melody, slot chaining, autosave and isolated restart. Suggested musical variations retain their own scoped
-      evidence.
+    native_gap: The full native composition scene verifies pattern assignment, merge choices, two-channel harmony and melody, slot chaining, autosave and isolated restart. Suggested musical variations retain their own scoped evidence.
   category: workflow
   parent: null
   level: 2
+  scene_milestones:
+  - scene_id: workflow-compose-two-channels
+    groups:
+    - id: workflow-compose-two-channels-checkpoint-1
+      label: Build patterns in D major and compare Skip with All
+      step_ids:
+      - start
+      - default-skip
+      - trig-merge-all
+      - merge-all
+    - id: workflow-compose-two-channels-checkpoint-2
+      label: Route channel 2 and check its keyboard note
+      step_ids:
+      - channel-2
+      - channel-2-masks
+      - two-channels
+    - id: workflow-compose-two-channels-checkpoint-3
+      label: Copy the song slot and hear the octave-up repeat
+      step_ids:
+      - chained-song
 - id: sound-design
   title: Assigning Instruments to Channels
   audience: all
-  summary: Select an output for each musical part.
-  prose: '1. Press Grid `(3,8)` and select a channel.
-
-    2. Open Channel tasks → Device.
-
-    3. Select a MIDI device or installed n.b. player.
-
-    4. For MIDI, set port and channel to match the instrument.
-
-    5. Press K3 to apply.
-
-    6. Assign a pattern and start playback to verify the output.
+  summary: Choose one sound. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.
+  prose: '[Choose one sound](#setup/course) is the complete continuing lesson.
 
 
-    Use separate channels for parts that need independent notes, masks or clock settings. Channel numbers have no
-    reserved musical roles. A useful grouping is drums on channels 1–6, harmonic and textural parts on 7–10, melodic
-    parts on 11–14, and channels 15 and 16 kept for modulation. Adapt it to your own setup.
+    Start here: Start with an empty channel and playback stopped. Choose and apply its output before entering notes.
 
 
-    A device can be an internal norns player, an external drum machine or synth, or part of a modular patch. Early
-    sound choices may change later; a basic foundation is enough to start the rhythm and harmony work.'
-  musical_use: Use Polyperc for bass or a plucked melody and Doubledecker for chords. Add Oilcan on a separate channel
-    for percussion.
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
+  musical_use: Use Polyperc for bass or a plucked melody and Doubledecker for chords. Add Oilcan on a separate channel for percussion.
   related:
   - channel-editor
   - devices
@@ -100,7 +113,27 @@ features:
     code:
     - tests/behaviour/composition_workflow.py
   controls: []
-  details: []
+  details:
+  - title: Complete lesson
+    text: Open [Choose one sound](#setup/course) for the ordered actions, their results and the matching listening example. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.
+  - title: Independent controls example
+    text: '1. Press Grid `(3,8)` and select a channel.
+
+      2. Open Channel tasks → Device.
+
+      3. Select a MIDI device or installed n.b. player.
+
+      4. For MIDI, set port and channel to match the instrument.
+
+      5. Press K3 to apply.
+
+      6. Assign a pattern and start playback to verify the output.
+
+
+      Use separate channels for parts that need independent notes, masks or clock settings. Channel numbers have no reserved musical roles. A useful grouping is drums on channels 1–6, harmonic and textural parts on 7–10, melodic parts on 11–14, and channels 15 and 16 kept for modulation. Adapt it to your own setup.
+
+
+      A device can be an internal norns player, an external drum machine or synth, or part of a modular patch. Early sound choices may change later; a basic foundation is enough to start the rhythm and harmony work.'
   recipes: []
   scene_refs: []
   review:
@@ -109,41 +142,22 @@ features:
     - M-LIVEUI-CHSELECT-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Device and clock scope are asserted. Physical MIDI receiver sound and every instrument map are outside
-      this native example.
+    native_gap: Device and clock scope are asserted. Physical MIDI receiver sound and every instrument map are outside this native example.
   category: workflow
   parent: typical-workflow
   level: 3
 - id: rhythm-section-design
   title: Creating a Rhythm Pattern
   audience: all
-  summary: Enter trigs, then set note and velocity data.
-  prose: '1. Press Grid `(5,8)` to open Pattern Trig.
-
-    2. Select the required pattern.
-
-    3. Press steps to add or remove trigs. Active steps light on the grid.
-
-    4. Press Pattern again to open Note, then set relative notes.
-
-    5. Press Pattern again to open Velocity, then set attack levels.
-
-    6. Assign the pattern to a channel and start playback.
+  summary: Spread the rhythm across a bar. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.
+  prose: '[Spread the rhythm across a bar](#build-a-phrase/course) is the complete continuing lesson.
 
 
-    A pattern holds trigs, notes, velocities and lengths for 64 steps. For algorithmic entry, prime a pattern, inspect
-    the flashing preview, then paint it. A preview is not committed. Painting toggles overlaps with existing attacks
-    off.
+    Start here: Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.
 
 
-    You can paint more than one algorithm pattern in succession onto the same pattern, then edit the steps XOX style:
-    tap steps on and off to taste. Algorithm choices include the drum banks (bass, snare, hi-hat), Euclidean, Noise
-    Engineering Numeric Repetitor, and a tresillo modifier that adds a 3-3-2 repeating pattern. See [Adding trigs](#adding-trigs).
-
-
-    Patterns are building blocks: they are merged and remixed later on channels.'
-  musical_use: For a 16-step pulse, use steps 1, 5, 9 and 13. Add step 15 for a pickup. For a 3–3–2 rhythm over
-    eight steps, use 1, 4 and 7.
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
+  musical_use: For a 16-step pulse, use steps 1, 5, 9 and 13. Add step 15 for a pickup. For a 3–3–2 rhythm over eight steps, use 1, 4 and 7.
   related:
   - pattern-editor
   - adding-trigs
@@ -162,7 +176,30 @@ features:
     code:
     - tests/behaviour/composition_workflow.py
   controls: []
-  details: []
+  details:
+  - title: Complete lesson
+    text: Open [Spread the rhythm across a bar](#build-a-phrase/course) for the ordered actions, their results and the matching listening example. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.
+  - title: Independent controls example
+    text: '1. Press Grid `(5,8)` to open Pattern Trig.
+
+      2. Select the required pattern.
+
+      3. Press steps to add or remove trigs. Active steps light on the grid.
+
+      4. Press Pattern again to open Note, then set relative notes.
+
+      5. Press Pattern again to open Velocity, then set attack levels.
+
+      6. Assign the pattern to a channel and start playback.
+
+
+      A pattern holds trigs, notes, velocities and lengths for 64 steps. For algorithmic entry, prime a pattern, inspect the flashing preview, then paint it. A preview is not committed. Painting toggles overlaps with existing attacks off.
+
+
+      You can paint more than one algorithm pattern in succession onto the same pattern, then edit the steps XOX style: tap steps on and off to taste. Algorithm choices include the drum banks (bass, snare, hi-hat), Euclidean, Noise Engineering Numeric Repetitor, and a tresillo modifier that adds a 3-3-2 repeating pattern. See [Adding trigs](#adding-trigs).
+
+
+      Patterns are building blocks: they are merged and remixed later on channels.'
   recipes: []
   scene_refs:
   - algorithm-choose-and-preview
@@ -178,8 +215,7 @@ features:
     - M-EDIT-002
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Algorithm preview, paint feedback, note and velocity boundaries are captured. Hardware sound character
-      is separate.
+    native_gap: Algorithm preview, paint feedback, note and velocity boundaries are captured. Hardware sound character is separate.
     audio_refs:
     - oilcan-pocket
     audio_cases:
@@ -190,85 +226,15 @@ features:
 - id: harmony-design
   title: Applying a Scale
   audience: all
-  summary: Compare C major and D major using relative pattern notes.
-  prose: 'Before starting: Start with stopped channel 1 assigned pattern 1, range 16, attacks 1,5,9,13, channel
-    Note 60/Vel 80/Len 1/2 and step 13 Note 62/Vel 50. A second channel can use pattern 2 with attacks 1,9, relative
-    degrees 0,4 and octave −1. Apply C major. [Make a piece](#learn) chapters 2–6 give the full preparation. If
-    using only one channel, ignore the bass comparison.
+  summary: Compare C and D major on the chapter 6 phrase and bass, then restore C major at the end for chapter 8.
+  prose: '[Change harmony without changing the rhythm](#harmony-design/course) is the complete continuing lesson for the phrase and bass from chapter 6. Follow it to move that piece from C major to D major while preserving its rhythm.
 
 
-    Harmony can apply globally, moving every channel to the same key, degree and rotation, or per channel. Because
-    patterns store relative notes, you can change the global scale on a different cycle from a the channel note
-    data for polyrhythmic tonal movement. A project has 16 scale slots, each with a root, scale type, degree, transposition
-    and rotation. Sequence them with Scale locks, globally from the Scale editor or per channel in the Channel editor.
-    See [Scale editor](#scale-editor) and [Scale locks](#scale-locks).
+    The first screen/grid capture below is a separate scale-slot example. It starts with channel 1 playing C, D, E, F (MIDI 60, 62, 64, 65) on steps 1 to 4 at velocities 127, 117, 107 and 97; slot 1 C major is applied and playback is stopped. Save D major in slot 2, then apply it: the phrase becomes D, E, F sharp and G at the same rhythm and velocities. Open [Save D major, then apply it](#harmony-design/scale-save-d-and-apply) to see those steps and results.
 
 
-    ### Restore note inheritance
-
-
-    1. Select CH01 and open Masks.
-
-    2. With no step held, set Note to X.
-
-    3. Hold step 13 and press K2, then release.
-
-    4. Select Vel, hold step 13, set 50 and release.
-
-
-    All Note exceptions are cleared. K2 also cleared the velocity exception, which is deliberately restored.
-
-
-    ### Retain the same melody in the pattern
-
-
-    1. Tap Pattern (5,8) until Note is shown; select pattern 1 at (1,1).
-
-    2. Tap (1,7), (5,7) and (9,7) for degree 0.
-
-    3. Tap (13,6) for degree 1.
-
-    4. Play two bars and stop.
-
-
-    C–C–C–D returns through relative notes. The quieter ending stays in the channel mask.
-
-
-    ### Prepare a second scale
-
-
-    1. Open Scale (4,8).
-
-    2. Select scale slot 2.
-
-    3. Play two bars and stop to hear its stored C-major setting.
-
-    4. Select Root with E2; set D with E3.
-
-    5. Select Scale and choose Major.
-
-
-    The melody and bass still use C major during the comparison. D major is now prepared in the draft; press K3
-    before using the grid.
-
-
-    ### Compare the transposition
-
-
-    1. Press K3 to apply D major.
-
-    2. Play two bars and stop.
-
-    3. Select the unchanged C-major slot 1 and press K3.
-
-
-    The phrase becomes D–D–D–E and bass D–A. Rhythm and velocity are preserved. C major is restored for the arrangement.
-
-
-    Resulting project: CH01 P1 degrees0/0/0/1; Note defaultX; step 13NoteX/Vel 50; Vel 80/Len1/2 defaults retained.
-    CH02 unchanged. Applied C major restored.'
-  musical_use: Repeat a root–third–fifth pattern over two scale slots. The rhythm remains the same while the harmony
-    changes.
+    Keep the course project open while continuing the lesson. Each independent example below has its own stated starting point.'
+  musical_use: Save D major in slot 2 and apply it to move the four-note phrase from C, D, E, F to D, E, F sharp, G; the rhythm and velocities stay the same.
   related:
   - scale-editor
   - scale-locks
@@ -284,17 +250,82 @@ features:
     - tests/behaviour/composition_workflow.py
   controls: []
   details:
+  - title: Continue the course piece
+    text: Open [Change harmony without changing the rhythm](#harmony-design/course) for the ordered actions, their results and the matching listening example. Start with the phrase and bass from chapter 6. Remove fixed Note masks, write the same melody as relative notes, then compare C and D major.
   - title: Recovery
-    text: If pattern notes do not change the sounding pitch, inspect channel and step Note masks before editing
-      the pattern again.
-  - title: Course continuity
-    text: Continue the same project through Make a piece. The separate reference demonstrations below start from
-      their stated starting projects; they do not load a replacement into your project.
-  - title: Separate listening comparison
-    text: Changing Harmony with Scale Slots uses the same upper relative degrees 0,0,0,1 and bass degrees 0,4 to
-      compare two C-major bars with two D-major bars. Its internal-player bass is deliberately set to velocity 60
-      and length 1/2, while the continuing MIDI course keeps inherited velocity 100 and length 1. See the complete
-      preparation in [Changing Harmony with Scale Slots](#tilting-harmony).
+    text: If pattern notes do not change the sounding pitch, inspect channel and step Note masks before editing the pattern again.
+  - title: 'Separate listening comparison: Changing Harmony with Scale Slots'
+    text: '[Listen to Changing Harmony with Scale Slots](#recording/scale-slot-comparison) for the independent audio example. Its [Make the relative-note scale comparison recipe](#tilting-harmony/recipe/1) uses the same upper relative degrees 0,0,0,1 and bass degrees 0,4 under C major for two bars and D major for two bars. Its internal-player bass is velocity 60 and length 1/2; the continuing MIDI course keeps inherited velocity 100 and length 1.'
+  - title: 'Independent controls example: C-C-C-D over a bass'
+    text: 'Before starting: Start with stopped channel 1 assigned pattern 1, range 16, attacks 1,5,9,13, channel Note 60/Vel 80/Len 1/2 and step 13 Note 62/Vel 50. A second channel can use pattern 2 with attacks 1,9, relative degrees 0,4 and octave −1. Apply C major. [Make a piece](#learn) chapters 2–6 give the full preparation. If using only one channel, ignore the bass comparison.
+
+
+      Harmony can apply globally, moving every channel to the same key, degree and rotation, or per channel. Because patterns store relative notes, you can change the global scale on a different cycle from a the channel note data for polyrhythmic tonal movement. A project has 16 scale slots, each with a root, scale type, degree, transposition and rotation. Sequence them with Scale locks, globally from the Scale editor or per channel in the Channel editor. See [Scale editor](#scale-editor) and [Scale locks](#scale-locks).
+
+
+      ### Restore note inheritance
+
+
+      1. Select CH01 and open Masks.
+
+      2. With no step held, set Note to X.
+
+      3. Hold step 13 and press K2, then release.
+
+      4. Select Vel, hold step 13, set 50 and release.
+
+
+      All Note exceptions are cleared. K2 also cleared the velocity exception, which is deliberately restored.
+
+
+      ### Retain the same melody in the pattern
+
+
+      1. Tap Pattern (5,8) until Note is shown; select pattern 1 at (1,1).
+
+      2. Tap (1,7), (5,7) and (9,7) for degree 0.
+
+      3. Tap (13,6) for degree 1.
+
+      4. Play two bars and stop.
+
+
+      C–C–C–D returns through relative notes. The quieter ending stays in the channel mask.
+
+
+      ### Prepare a second scale
+
+
+      1. Open Scale (4,8).
+
+      2. Select scale slot 2.
+
+      3. Play two bars and stop to hear its stored C-major setting.
+
+      4. Select Root with E2; set D with E3.
+
+      5. Select Scale and choose Major.
+
+
+      The melody and bass still use C major during the comparison. D major is now prepared in the draft; press K3 before using the grid.
+
+
+      ### Compare the transposition
+
+
+      1. Press K3 to apply D major.
+
+      2. Play two bars and stop.
+
+      3. Select the unchanged C-major slot 1 and press K3.
+
+
+      The phrase becomes D–D–D–E and bass D–A. Rhythm and velocity are preserved. C major is restored for the arrangement.
+
+
+      Resulting project: CH01 P1 degrees0/0/0/1; Note defaultX; step 13NoteX/Vel 50; Vel 80/Len1/2 defaults retained. CH02 unchanged. Applied C major restored.'
+  - title: 'Independent screen/grid example: Save D major, then apply it'
+    text: The selected independent screen/grid example starts with channel 1 playing C, D, E, F (MIDI 60, 62, 64, 65) on steps 1 to 4 at velocities 127, 117, 107 and 97, with slot 1 C major applied and playback stopped. Open [Save D major, then apply it](#harmony-design/scale-save-d-and-apply) for the captured actions. The four-note scale example has its own setup; use [the continuing course piece](#harmony-design/course) for the phrase and bass from chapter 6.
   recipes: []
   scene_refs:
   - scale-save-d-and-apply
@@ -308,8 +339,7 @@ features:
     - M-HARMONY-REVOICE-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Native scenes show scale edit/apply, two-channel harmony and revoiced output. Sequenced scale-lock
-      variations retain their own feature evidence.
+    native_gap: Native scenes show scale edit/apply, two-channel harmony and revoiced output. Sequenced scale-lock variations retain their own feature evidence.
     audio_refs:
     - scale-slot-comparison
     - bass-and-intervals
@@ -317,8 +347,7 @@ features:
     - MA-AUDIO-scale-slot-comparison
     - MA-AUDIO-bass-and-intervals
     course_status: awaiting-continuous-native-capture
-    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter
-      sequence needs its own continuous capture.
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
     audio_comparison_status: pending-native-capture
   category: workflow
   parent: typical-workflow
@@ -326,78 +355,15 @@ features:
 - id: sequence-composition
   title: Assigning Patterns to Channels
   audience: all
-  summary: Hear an independent bass pulse beneath the phrase.
-  prose: 'Before starting: Use a 16-step CH01 phrase with pattern 1 assigned: attacks 1,5,9,13; channel Note 60,
-    Vel 80, Len 1/2; step 13 Note 62 and Vel 50. Use C major at 90 BPM and Rate /1. Playback is stopped. [Make a
-    piece](#learn) chapters 2–5 supply this project. An independent project with the same state also works; pattern
-    2 must be empty.
+  summary: Add a second part. Start with the softer C, C, C, D ending from chapter 5 and an independent second sound. Add a root-and-fifth bass beneath it.
+  prose: '[Add a second part](#sequence-composition/course) is the complete continuing lesson.
 
 
-    The Channel editor is where patterns are combined into rhythm and harmony sections.
+    Start here: Start with the softer C, C, C, D ending from chapter 5 and an independent second sound. Add a root-and-fifth bass beneath it.
 
 
-    ### Enter two bass notes
-
-
-    1. Tap Pattern (5,8) until Trig is shown; select pattern 2 at (2,1).
-
-    2. Add attacks at (1,4) and (9,4).
-
-    3. Tap Pattern once to open Note.
-
-    4. Tap (1,7) for degree 0 and (9,3) for degree 4.
-
-
-    Pattern 2 supplies a root and fifth.
-
-
-    ### Route channel2
-
-
-    1. Tap Channel (3,8); select channel 2 at (2,1).
-
-    2. Open Channel tasks → Device; select an independent output and press K3 to apply.
-
-    3. Tap pattern slot 2 at (2,2).
-
-    4. Hold (1,4), tap (16,4), release.
-
-    5. Tap (9,8) to set channel octave −1.
-
-
-    The bass uses MIDI 48 and55 in the default C-major scale. Both channels repeat in16 steps.
-
-
-    ### Hear the two parts
-
-
-    Play two bars and stop.
-
-
-    C–C–C–D sounds above a C–G bass pulse. Both parts retain independent settings.
-
-
-    ### Compare overlapping rhythms
-
-
-    1. Select CH01 and temporarily assign pattern 2 alongside pattern 1.
-
-    2. Open Merge modes. Compare Skip and All for Trig.
-
-    3. Play and stop after each comparison.
-
-    4. Unassign pattern 2 from CH01 before continuing.
-
-
-    Skip removes overlapping attacks 1 and9, leaving5 and13. All restores the four attacks. The existing Note 60
-    default and step 13Note62 exception keep the pitch comparison fixed. Unassigning pattern 2 returns the original
-    phrase; CH02 keeps its bass pattern.
-
-
-    Resulting project: CH01 remains C–C–C–D. CH02/P2 attacks 1/9, relative degrees0/4, range 16, octave−1, inherited
-    notes/velocity, no masks.'
-  musical_use: Assign the same pattern to bass and chord channels. Use different masks and lengths to distinguish
-    the parts.
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
+  musical_use: Assign the same pattern to bass and chord channels. Use different masks and lengths to distinguish the parts.
   related:
   - adding-patterns-to-channels
   - typical-workflow
@@ -411,12 +377,78 @@ features:
     - tests/behaviour/composition_workflow.py
   controls: []
   details:
+  - title: Complete lesson
+    text: Open [Add a second part](#sequence-composition/course) for the ordered actions, their results and the matching listening example. Start with the softer C, C, C, D ending from chapter 5 and an independent second sound. Add a root-and-fifth bass beneath it.
   - title: Recovery
-    text: If the first part changes, return to CH01 and inspect its route; channel selection does not erase the
-      first part.
+    text: If the first part changes, return to CH01 and inspect its route; channel selection does not erase the first part.
   - title: Course continuity
-    text: Continue the same project through Make a piece. The separate reference demonstrations below start from
-      their stated starting projects; they do not load a replacement into your project.
+    text: Continue at [Add a second part](#sequence-composition/course). The independent examples have separate starting states; use another project after saving your course piece.
+  - title: Independent controls example
+    text: 'Before starting: Use a 16-step CH01 phrase with pattern 1 assigned: attacks 1,5,9,13; channel Note 60, Vel 80, Len 1/2; step 13 Note 62 and Vel 50. Use C major at 90 BPM and Rate /1. Playback is stopped. [Make a piece](#learn) chapters 2–5 supply this project. An independent project with the same state also works; pattern 2 must be empty.
+
+
+      The Channel editor is where patterns are combined into rhythm and harmony sections.
+
+
+      ### Enter two bass notes
+
+
+      1. Tap Pattern (5,8) until Trig is shown; select pattern 2 at (2,1).
+
+      2. Add attacks at (1,4) and (9,4).
+
+      3. Tap Pattern once to open Note.
+
+      4. Tap (1,7) for degree 0 and (9,3) for degree 4.
+
+
+      Pattern 2 supplies a root and fifth.
+
+
+      ### Route channel2
+
+
+      1. Tap Channel (3,8); select channel 2 at (2,1).
+
+      2. Open Channel tasks → Device; select an independent output and press K3 to apply.
+
+      3. Tap pattern slot 2 at (2,2).
+
+      4. Hold (1,4), tap (16,4), release.
+
+      5. Tap (9,8) to set channel octave −1.
+
+
+      The bass uses MIDI 48 and55 in the default C-major scale. Both channels repeat in16 steps.
+
+
+      ### Hear the two parts
+
+
+      Play two bars and stop.
+
+
+      C–C–C–D sounds above a C–G bass pulse. Both parts retain independent settings.
+
+
+      ### Compare overlapping rhythms
+
+
+      1. Select CH01 and temporarily assign pattern 2 alongside pattern 1.
+
+      2. Open Merge modes. Compare Skip and All for Trig.
+
+      3. Play and stop after each comparison.
+
+      4. Unassign pattern 2 from CH01 before continuing.
+
+
+      Skip removes overlapping attacks 1 and9, leaving5 and13. All restores the four attacks. The existing Note 60 default and step 13Note62 exception keep the pitch comparison fixed. Unassigning pattern 2 returns the original phrase; CH02 keeps its bass pattern.
+
+
+      Resulting project: CH01 remains C–C–C–D. CH02/P2 attacks 1/9, relative degrees0/4, range 16, octave−1, inherited notes/velocity, no masks.'
+  - title: 'Separate demonstration: four neighbouring notes'
+    text: 'The independent screen/grid demonstration starts with its own four-step example: C, D, E, F at velocities 127, 117, 107 and 97. It explains these controls on a different phrase. Follow the complete lesson above for the continuing sixteen-step piece and its matching sound; do not replace your course project with this setup.'
   recipes: []
   scene_refs:
   - workflow-patterns-and-scale
@@ -428,11 +460,9 @@ features:
     - M-LIVEUI-MERGEMODES-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Full composition case assigns multiple patterns and verifies the exact merged phrases and independent
-      second channel.
+    native_gap: Full composition case assigns multiple patterns and verifies the exact merged phrases and independent second channel.
     course_status: awaiting-continuous-native-capture
-    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter
-      sequence needs its own continuous capture.
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
   category: workflow
   parent: typical-workflow
   level: 3
@@ -446,24 +476,18 @@ features:
 
     3. Select Strategy with E2.
 
-    4. Choose Skip, Only or All with E3 and compare playback. The choice requests immediately; no K3 Apply is required.
-    Active shows the sounding strategy; Pending names an accepted change waiting for its boundary.
+    4. Choose Skip, Only or All with E3 and compare playback. The choice requests immediately; no K3 Apply is required. Active shows the sounding strategy; Pending names an accepted change waiting for its boundary.
 
     5. Select the note, velocity or length merge row with E2 and edit its value with E3.
 
 
-    Skip removes overlapping attacks. All retains attacks from either pattern. Only retains shared attacks. Foundation
-    and Fragments are alternative choices of this same Strategy selector, not additional modes layered over Skip,
-    Only or All. Foundation controls trigs while note, velocity and length merge settings remain active. Fragments
-    controls all four attributes; retained note, velocity and length settings are inactive until a strategy that
-    uses them becomes active.
+    Skip removes overlapping attacks. All retains attacks from either pattern. Only retains shared attacks. Foundation and Fragments are alternative choices of this same Strategy selector, not additional modes layered over Skip, Only or All. Foundation controls trigs while note, velocity and length merge settings remain active. Fragments controls all four attributes; retained note, velocity and length settings are inactive until a strategy that uses them becomes active.
 
 
     Skip is the default Strategy.
 
 
-    Example: channel 1 plays pattern 1 with trigs on steps 1 to 4 (C, D, E, F: MIDI 60, 62, 64, 65). Pattern 2 has
-    trigs on steps 1 and 2. Assign both to the channel, open Channel tasks > Merge modes and compare:
+    Example: channel 1 plays pattern 1 with trigs on steps 1 to 4 (C, D, E, F: MIDI 60, 62, 64, 65). Pattern 2 has trigs on steps 1 and 2. Assign both to the channel, open Channel tasks > Merge modes and compare:
 
 
     * Skip: steps 3 and 4 play (MIDI 64, 65). Steps 1 and 2 are in both patterns and drop out.
@@ -473,10 +497,8 @@ features:
     * All: all four steps play (MIDI 60, 62, 64, 65).
 
 
-    Then select Note mode and compare AVERAGE with PAT 2: with PAT 2 every step takes pattern 2’s note, so the same
-    rhythm plays on one pitch.'
-  musical_use: Combine a steady pulse and a syncopated pattern. Compare Skip with All while keeping the output sound
-    unchanged.
+    Then select Note mode and compare AVERAGE with PAT 2: with PAT 2 every step takes pattern 2’s note, so the same rhythm plays on one pitch.'
+  musical_use: Combine a steady pulse and a syncopated pattern. Compare Skip with All while keeping the output sound unchanged.
   related:
   - merge-modes
   - trig-merge-modes
@@ -510,35 +532,22 @@ features:
     - M-MERGE-PHRASE-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: The UI scene asserts mode choices. The full composition and musical merge scenes independently verify
-      resulting note phrases; this is not an exhaustive campaign for every merge combination.
+    native_gap: The UI scene asserts mode choices. The full composition and musical merge scenes independently verify resulting note phrases; this is not an exhaustive campaign for every merge combination.
   category: workflow
   parent: sequence-composition
   level: 4
 - id: melody-composition
   title: Entering a Melody
   audience: all
-  summary: Use note masks to replace selected channel pitches.
-  prose: '1. Select the destination channel.
-
-    2. Open Channel tasks → Masks.
-
-    3. Select Note with E2.
-
-    4. Hold the destination step and turn E3 to change its note.
-
-    5. Release the step and start playback to check the phrase.
+  summary: Give the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.
+  prose: '[Give the phrase an ending](#masks/course) is the complete continuing lesson.
 
 
-    Without a held step, E3 changes the channel default. A held step can also receive a note or chord from MIDI
-    input; set its length manually. For live entry, arm Record `(2,8)` and play during playback. While recording,
-    turning a trig param records it as automation; see [Arm live record](#arm-live-record).
+    Start here: Start with four equal notes on the beats. Raise only the last beat and make it softer.
 
 
-    Masks can overwrite pattern values or create steps the patterns do not have. They accept trigs, notes, velocities
-    and chords.'
-  musical_use: Repeat three notes and change the fourth. Compare a longer final note or a quiet pickup before adding
-    more pitches.
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
+  musical_use: Repeat three notes and change the fourth. Compare a longer final note or a quiet pickup before adding more pitches.
   related:
   - masks
   - sequence-composition
@@ -552,18 +561,34 @@ features:
     code:
     - tests/behaviour/composition_workflow.py
   controls: []
-  details: []
+  details:
+  - title: Complete lesson
+    text: Open [Give the phrase an ending](#masks/course) for the ordered actions, their results and the matching listening example. Start with four equal notes on the beats. Raise only the last beat and make it softer.
+  - title: Independent controls example
+    text: '1. Select the destination channel.
+
+      2. Open Channel tasks → Masks.
+
+      3. Select Note with E2.
+
+      4. Hold the destination step and turn E3 to change its note.
+
+      5. Release the step and start playback to check the phrase.
+
+
+      Without a held step, E3 changes the channel default. A held step can also receive a note or chord from MIDI input; set its length manually. For live entry, arm Record `(2,8)` and play during playback. While recording, turning a trig param records it as automation; see [Arm live record](#arm-live-record).
+
+
+      Masks can overwrite pattern values or create steps the patterns do not have. They accept trigs, notes, velocities and chords.'
   recipes:
   - title: Make one step override a channel Note default, then restore inheritance
     text: '1. On Masks, set the channel Note default to G3.
 
-      2. Hold step 1 and set its Note to C4; release the step and check that the channel readout returns to G3 while
-      step 1 keeps its exception.
+      2. Hold step 1 and set its Note to C4; release the step and check that the channel readout returns to G3 while step 1 keeps its exception.
 
       3. Add a D4 exception on step 2, then clear step 1 and finally clear all step exceptions with K1+K2.
 
-      Outcome: A held-step Note value overrides the channel default for that step. Clearing exceptions restores
-      the channel Note to G3 across the pattern.'
+      Outcome: A held-step Note value overrides the channel default for that step. Clearing exceptions restores the channel Note to G3 across the pattern.'
   - title: Contrast inherited velocity with explicit zero and a cleared exception
     text: '1. Set the channel Vel mask to 50 and add a step-1 accent at 90.
 
@@ -571,8 +596,7 @@ features:
 
       3. Hold step 2, press K2 and release it; the step inherits 50 again while the step-1 accent remains.
 
-      Outcome: X inherits the channel velocity; an explicit 0 silences the step. Clearing the step mask restores
-      50 without erasing the 90 accent.'
+      Outcome: X inherits the channel velocity; an explicit 0 silences the step. Clearing the step mask restores 50 without erasing the 90 accent.'
   scene_refs:
   - mask-precedence
   - mask-expression
@@ -585,8 +609,7 @@ features:
     - M-WORKFLOW-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Native scenes show encoder-entered masks and held-step MIDI melody entry with exact note output.
-      Live-recording input remains in its own guide.
+    native_gap: Native scenes show encoder-entered masks and held-step MIDI melody entry with exact note output. Live-recording input remains in its own guide.
   category: workflow
   parent: sequence-composition
   level: 4
@@ -631,8 +654,15 @@ features:
           - 144
           - 64
           - 117
-      human_outcome: The captured MIDI notes include MIDI 76 at velocity 90, MIDI 69 at velocity 100, MIDI 66 at
-        velocity 127, MIDI 64 at velocity 117.
+      human_outcome: Both channels play on their own ports; channel 2 adds MIDI 76 on step 3.
+      practice_prompt: '1. Hold step 3 at (3,4) and play MIDI note 76 at velocity 90 on a MIDI keyboard or controller. This sets the held step''s Note and Vel masks.
+
+        2. Release (3,4), then tap channel 1 at (1,1).
+
+        3. Press Play at (1,8), compare the two parts for two passes, then press Play again to stop. Channel 2 plays its first note and the note you entered on step 3, while channel 1 keeps its melody.'
+    title: Add a melody on the second output
+    goal: Keep the first melody and add two notes on channel 2, using its own MIDI output.
+    starting_point: Playback is stopped. Channel 2 is selected on NOTE MASKS CH02, with pattern 2 assigned and its separate output configured. Channel 1 retains its four-note melody.
   - id: mask-default-exceptions-and-clear
     binding:
       status: controlled-verified
@@ -662,11 +692,7 @@ features:
         label: Set Step 1 to C4
         value: C4
         direction: clockwise
-        while_held_grid:
-          x: 1
-          y: 4
         mask_field: note
-        expected_marker: L
       - id: mask-priority-release-1
         kind: release-grid
         x: 1
@@ -679,16 +705,12 @@ features:
         label: Hold Step 2 for its local note
       - id: mask-priority-note-2
         kind: select-value
+        mask_field: note
         control: E3
         field_label: Note
         label: Set Step 2 to D4
         value: D4
         direction: clockwise
-        while_held_grid:
-          x: 2
-          y: 4
-        mask_field: note
-        expected_marker: L
       - id: mask-priority-release-2
         kind: release-grid
         x: 2
@@ -751,10 +773,11 @@ features:
           - 144
           - 67
           - 97
-      human_outcome: Step 1 and Step 2 take priority over the channel default while their note masks are set. Clearing
-        Step 1 restores G3 there; clearing the channel mask returns the full pattern to G3.
-      practice_prompt: Set a G3 channel default, try C4 on Step 1 and D4 on Step 2, then clear both levels and compare
-        the restored pattern.
+      human_outcome: All four steps return to G3; the channel default remains after the exceptions clear.
+      practice_prompt: "This is a short field exercise for the Note default and local exception rules. After restoring the default, continue with “Add a melody on the second output” to apply a local note to channel 2 while channel 1 keeps its melody.\n\n1. With no step held on Note Masks, turn E3 clockwise until Note reads G3 (MIDI 67). All four steps use this channel default.\n2. Hold step 1 at (1,4), turn E3 clockwise to C4 (MIDI 72), then release it. Hold step 2 at (2,4), turn E3 clockwise to D4 (MIDI 74), then release it. These two exceptions override the default.\n3. Hold step 1 again, press K2 and release the step. Only its exception clears: step 1 returns to G3, while step 2 keeps D4.\n4. With no step held, hold K1, press K2 and release K1. All step exceptions clear together; the channel default remains G3.\n\nContinue to “Add a melody on the second output” when you are ready to use a local note mask in a second part."
+    title: Set note exceptions, then clear them
+    goal: Compare step Note masks with a channel default, then remove the exceptions while keeping the default.
+    starting_point: Channel 1 plays pattern 1 on steps 1–4, with C, D, E and F and no masks. NOTE MASKS CH01 is open, Note is selected with E2, and its value reads X.
   - id: mask-velocity-accent-and-zero
     binding:
       status: controlled-verified
@@ -771,16 +794,12 @@ features:
         label: Hold Step 1 for its accent velocity
       - id: mask-velocity-accent-1
         kind: select-value
+        mask_field: velocity
         control: E3
         field_label: Velocity
         label: Set Step 1 to velocity 90
         value: '90'
         direction: clockwise
-        while_held_grid:
-          x: 1
-          y: 4
-        mask_field: velocity
-        expected_marker: L
       - id: mask-velocity-release-1
         kind: release-grid
         x: 1
@@ -798,11 +817,7 @@ features:
         label: Set Step 2 velocity to zero
         value: '0'
         direction: anticlockwise
-        while_held_grid:
-          x: 2
-          y: 4
         mask_field: velocity
-        expected_marker: L
       - id: mask-velocity-release-2
         kind: release-grid
         x: 2
@@ -834,64 +849,27 @@ features:
           - 144
           - 65
           - 50
-      human_outcome: Step 1 keeps its 90 accent and Step 2 is set to zero. After Step 2 is released, the channel
-        Velocity readout returns to 50; the captured phrase includes the positive notes at Steps 1, 3 and 4.
-      practice_prompt: Raise Step 1 above the channel value, set Step 2 to zero, release both, and compare the channel
-        readout and captured positive notes.
+      human_outcome: Step 1 accents the phrase at 90; step 2 is silent while steps 3 and 4 use 50.
+      practice_prompt: '1. Hold step 1 at (1,4), turn E3 clockwise until Velocity reads 90, then release.
+
+        2. Hold step 2 at (2,4), turn E3 anticlockwise until Velocity reads 0, then release.
+
+        3. The channel readout returns to 50. The phrase has a louder first note, no second note, and the remaining two notes at 50.'
+    title: Accent one note and silence the next
+    goal: Keep a soft phrase, accent its first note and create a rest on step 2.
+    starting_point: Channel 1 is on its Masks page with Vel selected. Its channel Vel is 50, so the four-note pattern plays softly; no step is held.
 - id: modulation-movement-and-interest
   title: Adding Parameter Variation
   audience: all
-  summary: Extend the phrase with a lighter attack before the loop restarts.
-  prose: 'Before starting: Use stopped channel 1, range 16, Rate /1, C major, pattern 1 assigned with attacks 1,5,9,13
-    and relative degrees 0,0,0,1. Set channel Note to X, Vel to 80 and Len to 1/2; step 13 Vel is 50 and its Note
-    is X. [Applying a Scale](#harmony-design) includes the note-mask clearance procedure.
+  summary: Continue the phrase and bass in C major restored at the end of chapter 7. Add a quiet C pickup before the next bar.
+  prose: '[Add a pickup](#modulation-movement-and-interest/course) is the complete continuing lesson.
 
 
-    ### Add the late attack
+    Start here: Continue the stopped phrase and bass from chapter 7 in C major. That chapter compares D major, then restores slot 1 to C major before it ends. Add a quiet C between the last beat and the next bar.
 
 
-    1. Tap Pattern (5,8) until Trig is shown; select pattern 1 at (1,1).
-
-    2. Tap (15,4) to add step 15.
-
-    3. Tap Pattern once to Note; tap (15,7) for degree 0.
-
-
-    A C pickup falls halfway between the last beat and the next bar.
-
-
-    ### Reduce the pickup level
-
-
-    1. Select CH01, open Masks and select Vel.
-
-    2. Hold step 15 and set 35 with E3.
-
-    3. Release, play two bars and stop.
-
-
-    The pickup is quieter than the main beats and the D ending. Probability and parameter slides are optional follow-up
-    guides; this version remains deterministic.
-
-
-    Resulting project: P1 attacks 1/5/9/13/15; degree 15=0; step 13Vel50; step 15Vel35; other velocities80; CH02
-    unchanged.
-
-
-    ### Go further: lock a value per step
-
-
-    A trig lock fixes a parameter at one step. You can lock device or modulation parameters, the step octave, and
-    the scale it is quantised to.
-
-
-    The captured examples below apply the same idea to other parameters. A Trig params slot holds a default value
-    for every step. Hold a step and turn E3 to lock a different value on that step only; hold the step and press
-    K2 to clear its lock. Press K3 with no step held to turn on a parameter slide, so the value glides between locks
-    instead of jumping. The Matrix examples route a toolkit macro or LFO to Fixed Note from the norns MODS menu
-    and need the matrix and toolkit mods installed.'
-  musical_use: Increase brightness or length on the final note. Apply probability to a quiet pickup while retaining
-    the main attacks.
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
+  musical_use: Increase brightness or length on the final note. Apply probability to a quiet pickup while retaining the main attacks.
   related:
   - trig-parameters
   - trig-param-locks
@@ -912,11 +890,54 @@ features:
     - tests/behaviour/composition_workflow.py
   controls: []
   details:
+  - title: Complete lesson
+    text: Open [Add a pickup](#modulation-movement-and-interest/course) for the ordered actions, their results and the matching listening example. Chapter 7 compares D major, then restores slot 1 to C major before it ends. Continue from that stopped phrase and bass; add a quiet C pickup before the next bar.
   - title: Recovery
     text: Remove step 15 in Pattern Trig to return to the four-beat phrase.
   - title: Course continuity
-    text: Continue the same project through Make a piece. The separate reference demonstrations below start from
-      their stated starting projects; they do not load a replacement into your project.
+    text: Continue at [Add a pickup](#modulation-movement-and-interest/course). The independent examples have separate starting states; use another project after saving your course piece.
+  - title: Independent controls example
+    text: 'Before starting: Use stopped channel 1, range 16, Rate /1, C major, pattern 1 assigned with attacks 1,5,9,13 and relative degrees 0,0,0,1. Set channel Note to X, Vel to 80 and Len to 1/2; step 13 Vel is 50 and its Note is X. [Applying a Scale](#harmony-design) includes the note-mask clearance procedure.
+
+
+      ### Add the late attack
+
+
+      1. Tap Pattern (5,8) until Trig is shown; select pattern 1 at (1,1).
+
+      2. Tap (15,4) to add step 15.
+
+      3. Tap Pattern once to Note; tap (15,7) for degree 0.
+
+
+      A C pickup falls halfway between the last beat and the next bar.
+
+
+      ### Reduce the pickup level
+
+
+      1. Select CH01, open Masks and select Vel.
+
+      2. Hold step 15 and set 35 with E3.
+
+      3. Release, play two bars and stop.
+
+
+      The pickup is quieter than the main beats and the D ending. Probability and parameter slides are optional follow-up guides; this version remains deterministic.
+
+
+      Resulting project: P1 attacks 1/5/9/13/15; degree 15=0; step 13Vel50; step 15Vel35; other velocities80; CH02 unchanged.
+
+
+      ### Go further: lock a value per step
+
+
+      A trig lock fixes a parameter at one step. You can lock device or modulation parameters, the step octave, and the scale it is quantised to.
+
+
+      The captured examples below apply the same idea to other parameters. A Trig params slot holds a default value for every step. Hold a step and turn E3 to lock a different value on that step only; hold the step and press K2 to clear its lock. Press K3 with no step held to turn on a parameter slide, so the value glides between locks instead of jumping. The Matrix examples route a toolkit macro or LFO to Fixed Note from the norns MODS menu and need the matrix and toolkit mods installed.'
+  - title: Separate parameter demonstrations
+    text: The demonstrations below show fixed pitch, parameter locks, slides and modulation routes in their own starting projects. They extend the controls reference; the continuing pickup lesson above changes only the new trig and its velocity.
   recipes: []
   scene_refs:
   - fixed-note-default-and-locks
@@ -937,94 +958,35 @@ features:
     - M-MOD-002
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Native scenes show parameter selection, channel defaults, held-step locks/clearing and global/local
-      slides with actual output. Device-specific sound character and physical receiver timing remain outside this
-      evidence.
+    native_gap: Native scenes show parameter selection, channel defaults, held-step locks/clearing and global/local slides with actual output. Device-specific sound character and physical receiver timing remain outside this evidence.
     native_evidence_catalogues:
     - generated/reference-parameter-scenes.json
     - generated/reference-modulation-scenes.json
     course_status: awaiting-continuous-native-capture
-    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter
-      sequence needs its own continuous capture.
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
   category: workflow
   parent: typical-workflow
   level: 3
+
+  scene_context_links:
+  - scene_id: toolkit-clocked-lfo-menu
+    canonical_route: lfos-and-modulation/toolkit-clocked-lfo-menu
+    route_behavior: redirect
+    label: "Open the complete clocked LFO walkthrough"
+    reason: "Continue to LFOs and Modulation for all six captured actions and the full clocked-LFO lesson."
+  
 - id: song-composition
   title: Arranging Song Slots
   audience: all
-  summary: Alternate a sparse section and the full two-part phrase.
-  prose: 'Before starting: Use one populated Song slot with two independently routed, audible channels and a 16-step
-    loop. Slot 1 is selected; slots 2 and 3 are empty; playback is stopped. The example mutes CH01 while retaining
-    CH02. [Make a piece](#learn) chapters 2–8 prepare the exact phrase and bass; an existing two-part loop with
-    these conditions also works.
+  summary: Arrange two sections. Start with the completed phrase, bass and pickup from chapter 8. Use empty slots 2 and 3; copying overwrites the destination with no undo.
+  prose: '[Arrange two sections](#song-composition/course) is the complete continuing lesson.
 
 
-    Song (6,8) is the last key of the menu cluster. Slot 1 is dimly lit to show the sequence you are on. In a copy
-    you can mute channels, change scale locks, pattern assignments and merge modes, or edit masks, then chain slots.
+    Start here: Start with the completed phrase, bass and pickup from chapter 8. Use empty slots 2 and 3; copying overwrites the destination with no undo.
 
 
-    ### Copy the complete section
-
-
-    1. Open Song (6,8).
-
-    2. Hold slot 1 (1,1), tap slot 2 (2,1), release slot 1.
-
-    3. Select slot 2.
-
-
-    Slot 2 stores the same phrase, bass and channel settings.
-
-
-    ### Make the first section sparse
-
-
-    1. Open Song (6,8); select slot 1 at (1,1).
-
-    2. Tap Channel (3,8).
-
-    3. Hold K1, tap channel 1 at (1,1), then release K1.
-
-    4. Return to Song and select slot 2 at (2,1).
-
-    5. Open Channel and check channel 1 is unmuted in this copy.
-
-
-    Slot 1 contains bass only; slot 2 adds the upper phrase and pickup.
-
-
-    ### Set the section boundary
-
-
-    1. Open Song (6,8); select slot 1 at (1,1).
-
-    2. With transport stopped, tap (3,7), then tap (8,7) three times. Check Global length reads 16.
-
-    3. Open Song tasks → Slot setup. Select Repeats with E2, set 1 with E3 and press K3 to apply.
-
-    4. Return to Song; select slot 2 and repeat the Global length and Repeats settings.
-
-    5. In Slot setup select Song mode, set On and press K3 to apply.
-
-    6. Leave slot 3 empty and select slot 1.
-
-
-    The contiguous group contains slots1 and2, one16-step pass each.
-
-
-    ### Hear the arrangement
-
-
-    Play four section passes and stop.
-
-
-    Bass alone → bass and phrase → bass alone → bass and phrase. The highlighted Song slot changes at each boundary.
-
-
-    Resulting project: Slot 1 CH01 muted/CH02 audible; slot 2 both channels audible. Global length 16; repeats1;
-    Song modeOn; slot 3empty; selectedslot1; stopped.'
-  musical_use: 'Create three sections: bass alone, bass with chords, then bass, chords and lead. Remove the lead
-    for the final section.'
+    If you are joining with your own project, match that starting state first. Keep the course project open while following the course; the independent examples below use their own stated setup.'
+  musical_use: 'Create three sections: bass alone, bass with chords, then bass, chords and lead. Remove the lead for the final section.'
   related:
   - song-editor
   - typical-workflow
@@ -1039,11 +1001,80 @@ features:
     - tests/behaviour/composition_workflow.py
   controls: []
   details:
+  - title: Complete lesson
+    text: Open [Arrange two sections](#song-composition/course) for the ordered actions, their results and the matching listening example. Start with the completed phrase, bass and pickup from chapter 8. Use empty slots 2 and 3; copying overwrites the destination with no undo.
   - title: Recovery
     text: Stop before editing the wrong section; select its slot and check the header.
   - title: Course continuity
-    text: Continue the same project through Make a piece. The separate reference demonstrations below start from
-      their stated starting projects; they do not load a replacement into your project.
+    text: Continue at [Arrange two sections](#song-composition/course). The independent examples have separate starting states; use another project after saving your course piece.
+  - title: Independent controls example
+    text: 'Before starting: Use one populated Song slot with two independently routed, audible channels and a 16-step loop. Slot 1 is selected; slots 2 and 3 are empty; playback is stopped. The example mutes CH01 while retaining CH02. [Make a piece](#learn) chapters 2–8 prepare the exact phrase and bass; an existing two-part loop with these conditions also works.
+
+
+      Song (6,8) is the last key of the menu cluster. Slot 1 is dimly lit to show the sequence you are on. In a copy you can mute channels, change scale locks, pattern assignments and merge modes, or edit masks, then chain slots.
+
+
+      ### Copy the complete section
+
+
+      1. Open Song (6,8).
+
+      2. Hold slot 1 (1,1), tap slot 2 (2,1), release slot 1.
+
+      3. Select slot 2.
+
+
+      Slot 2 stores the same phrase, bass and channel settings.
+
+
+      ### Make the first section sparse
+
+
+      1. Open Song (6,8); select slot 1 at (1,1).
+
+      2. Tap Channel (3,8).
+
+      3. Hold K1, tap channel 1 at (1,1), then release K1.
+
+      4. Return to Song and select slot 2 at (2,1).
+
+      5. Open Channel and check channel 1 is unmuted in this copy.
+
+
+      Slot 1 contains bass only; slot 2 adds the upper phrase and pickup.
+
+
+      ### Set the section boundary
+
+
+      1. Open Song (6,8); select slot 1 at (1,1).
+
+      2. With transport stopped, tap (3,7), then tap (8,7) three times. Check Global length reads 16.
+
+      3. Open Song tasks → Slot setup. Select Repeats with E2, set 1 with E3 and press K3 to apply.
+
+      4. Return to Song; select slot 2 and repeat the Global length and Repeats settings.
+
+      5. In Slot setup select Song mode, set On and press K3 to apply.
+
+      6. Leave slot 3 empty and select slot 1.
+
+
+      The contiguous group contains slots1 and2, one16-step pass each.
+
+
+      ### Hear the arrangement
+
+
+      Play four section passes and stop.
+
+
+      Bass alone → bass and phrase → bass alone → bass and phrase. The highlighted Song slot changes at each boundary.
+
+
+      Resulting project: Slot 1 CH01 muted/CH02 audible; slot 2 both channels audible. Global length 16; repeats1; Song modeOn; slot 3empty; selectedslot1; stopped.'
+  - title: 'Separate demonstration: four neighbouring notes'
+    text: 'The independent screen/grid demonstration starts with its own four-step example: C, D, E, F at velocities 127, 117, 107 and 97. It explains these controls on a different phrase. Follow the complete lesson above for the continuing sixteen-step piece and its matching sound; do not replace your course project with this setup.'
   recipes: []
   scene_refs:
   - workflow-song-chain
@@ -1056,15 +1087,13 @@ features:
     - M-LIVEUI-FOCUS-001
     source_status: code-and-case-reviewed
     applicability: native-ui
-    native_gap: Full composition verifies slot copy, altered octave, song chaining and saved reload. Song selection
-      and length scenes provide scoped controls. It does not establish every reset or physical timing variation.
+    native_gap: Full composition verifies slot copy, altered octave, song chaining and saved reload. Song selection and length scenes provide scoped controls. It does not establish every reset or physical timing variation.
     audio_refs:
     - three-voice-conversation
     audio_cases:
     - MA-AUDIO-three-voice-conversation
     course_status: awaiting-continuous-native-capture
-    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter
-      sequence needs its own continuous capture.
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored chapter sequence needs its own continuous capture.
   category: workflow
   parent: typical-workflow
   level: 3

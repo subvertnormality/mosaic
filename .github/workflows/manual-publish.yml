@@ -71,6 +71,7 @@ jobs:
       pull-requests: read
     outputs:
       publishable: ${{ steps.verify.outputs.publishable }}
+      receipt_sha256: ${{ steps.verify.outputs.receipt_sha256 }}
     steps:
       - name: Check out trusted main publisher code
         uses: actions/checkout@v4
@@ -121,11 +122,35 @@ jobs:
       id-token: write
       actions: read
     steps:
+      - name: Check out trusted main publisher code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
       - name: Download the verified static site
         uses: actions/download-artifact@v4
         with:
           name: verified-manual-site
           path: site
+      - name: Download the publication receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: manual-publication-receipt
+          path: receipt
+      - name: Verify receipt bytes and exact transferred site tree
+        env:
+          EXPECTED_RECEIPT_SHA256: ${{ needs.verify.outputs.receipt_sha256 }}
+        run: |
+          echo "$EXPECTED_RECEIPT_SHA256  receipt/promotion-receipt.json" | sha256sum --check --status
+          python .github/scripts/publish_manual.py \
+            --verify-staged-site \
+            --site-root site \
+            --receipt receipt/promotion-receipt.json \
+            --output-dir unused
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

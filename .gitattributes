@@ -2,3 +2,18 @@
 * text=auto eol=lf
 *.{cmd,[cC][mM][dD]} text eol=crlf
 *.{bat,[bB][aA][tT]} text eol=crlf
+
+# Preserve exact bytes of reviewed receipts and their source-pinned fixtures.
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-shared-reader-audit-20261008-01/README-v06.md -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-shared-reader-audit-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v06-RECEIPT.json -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-shared-reader-audit-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v06.json -text
+test-fixtures/retained-pilot-midi-v1/DERIVATION.json -text
+test-fixtures/retained-pilot-midi-v1/README.md -text
+test-fixtures/retained-pilot-midi-v1/native/identity.json -text
+test-fixtures/retained-pilot-midi-v1/native/native-events.jsonl -text
+test-fixtures/retained-pilot-midi-v1/observations.json -text
+test-fixtures/retained-pilot-midi-v1/results.json -text
+test-fixtures/retained-pilot-midi-v1/scene.json -text
+tests/manual_ci/test_manual_pilot_midi.py -text
+tests_manual_ci/test_manual_native_midi_integer_sequence.py -text
+tools/manual_pilot_midi.py -text

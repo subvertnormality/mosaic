@@ -131,6 +131,108 @@
             "items": {
               "$ref": "#/definitions/feature_teaching_binding"
             }
+          },
+          "scene_context_links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "scene_id",
+                "canonical_route",
+                "label",
+                "reason"
+              ],
+              "properties": {
+                "scene_id": {
+                  "type": "string"
+                },
+                "canonical_route": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "route_behavior": {
+                  "type": "string",
+                  "enum": [
+                    "redirect"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "lesson_context_links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "lesson_id",
+                "canonical_route",
+                "label",
+                "reason"
+              ],
+              "properties": {
+                "lesson_id": {
+                  "type": "string"
+                },
+                "canonical_route": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "scene_milestones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "scene_id",
+                "groups"
+              ],
+              "properties": {
+                "scene_id": {
+                  "type": "string"
+                },
+                "groups": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "label",
+                      "step_ids"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "step_ids": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
           }
         }
       }
@@ -140,6 +242,14 @@
       "minLength": 1
     },
     "course": {
+      "type": "object"
+    },
+    "recordings_source": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "recordings_context": {
       "type": "object"
     }
   },
@@ -1589,6 +1699,21 @@
         },
         "teaching_binding": {
           "$ref": "#/definitions/teaching_binding"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "starting_point": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
         }
       }
     },

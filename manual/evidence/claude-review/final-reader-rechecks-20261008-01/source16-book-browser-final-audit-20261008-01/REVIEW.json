@@ -1,0 +1,44 @@
+{
+  "audit": "independent static audit of final manual_book_browser.cjs delta",
+  "date": "2026-10-08",
+  "baseline_source16": {
+    "path": "/tmp/source16-manual-book.cjs",
+    "sha256": "82cd8bc637a7351ff07140170fed860d2bf8396e122e524f18c18b5b7dab36b9",
+    "manifest_expected_sha256": "82cd8bc637a7351ff07140170fed860d2bf8396e122e524f18c18b5b7dab36b9"
+  },
+  "final_candidate": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-reader-teaching-source08-20261008-01/ownsource08-existing-browser-regressions-20261008-01/candidate-test-contract-updates-20261008-01/scratch/tests/behaviour/manual_book_browser.cjs",
+    "sha256": "39b79cb1def0637a4255020daa18ae1d2bec7a0cfb627db77bfbf385a096ab4f"
+  },
+  "source16_manifest": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/source16-candidate-test-manifest.json",
+    "sha256": "9612753800c347563f2b2b32375ad304d9da9683a85b6bf4fd9454b0bee2d7ac"
+  },
+  "source16_patch": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/source16-candidate-tests-v1.patch",
+    "sha256": "ad0442987a4913722ff8085ebc751d31dde5acf15e2986257072c38c841c9512"
+  },
+  "review_diff": {
+    "path": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source16-book-browser-final-audit-20261008-01/manual_book_browser-final.diff",
+    "sha256": "eaa62303bfa9ff7b103813e9177c9f195ee4212ec82112e5dbc095835d59d5ab"
+  },
+  "changed_behavior": [
+    {
+      "change": "Scene milestone verification is controlled by nativeFrame(..., checkSceneMilestones=true). Scene-mode calls retain the default exact milestone counter/heading/group checks; lesson-context result calls explicitly pass false, assert lesson route and visible lesson workspace, then record lesson_context_native. This scopes scene milestones away from the distinct course lesson workspace. The source-scene traversal still invokes the default checks for scene-mode frames and retains complete milestone step-set assertions."
+    },
+    {
+      "change": "New frameWhenRendered waits for exact expected decoded pixel values and every expected grid level, with equal array lengths and exact element equality, for at most 5000 ms; on success it calls the existing strict frame() assertion. It is used only after audio play/seek timeline transitions. No pixel, grid, or timing tolerance is introduced."
+    }
+  ],
+  "preservation": {
+    "native_source_pins": "unchanged source16 originalScene ordered step IDs and per-step output_sha256/input_sha256 checks; qualified chunk SHA checks remain.",
+    "midi": "Final-only diff does not change MIDI tuple, event, truncation, or gate oracles.",
+    "pixels_and_grid": "The original frame assertion remains byte-for-byte unchanged; exact decoded intensity plane and grid equality remain. This is not an independent RGBA-channel check.",
+    "scene_groups": "The existing scene traversal, canonical-owner/alias milestone source rules, and coverage set equality are unchanged; only lesson-context workspace calls skip the scene-mode counter assertion."
+  },
+  "external_evidence": {
+    "race_context": "Parent reports the focused audio-seek RED sampled pixel value 251 while expected was 119, then exact pixels matched after approximately 100 ms. This audit did not rerun or independently verify that observation.",
+    "live_run": "Parent identifies the full run as live Node PID 13205/session 83377; not inspected or rerun."
+  },
+  "decision": "Static diff supports the stated narrow scope. No native/MIDI/frame/grid assertion or tolerance was weakened. Await live full-run result separately; this audit is not a test pass."
+}

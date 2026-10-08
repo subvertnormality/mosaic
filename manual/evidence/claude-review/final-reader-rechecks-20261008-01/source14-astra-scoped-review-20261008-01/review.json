@@ -1,0 +1,22 @@
+{
+  "review_id":"source14-astra-scoped-review-20261008-01",
+  "reader":"http://127.0.0.1:8924/manual/",
+  "status":"reader_threshold_pass_conditional_final_wording_and_identity",
+  "scores":{"readability":8,"comprehensibility":8,"flow":8,"understandability":8,"user_friendliness":8,"usefulness_of_interactive_examples":8,"cohesion":8},
+  "meets_all_seven_at_least_8":true,
+  "final_unconditional_publication_approval":false,
+  "condition":"Final compile must replace Macro 1 with lfo 1 only in features[112].prose advanced-LFO sentence, then verify actual served wording and identity. It is not changed on14.",
+  "caption_findings_closed":["software-player-doubledecker/select-player","software-player-oilcan/select-player","software-player-polyperc/select-player","workflow-second-channel/two-channels"],
+  "checks":{"actual_caption_links_followed_with_enter":8,"raw_markdown_in_checked_caption_and_accessibility_text":false,"caption_document_overflow":false,"modest_example_first_both_widths":true,"advanced_lfo_result_both_widths":true,"course_keyboard_result_focus_both_widths":true},
+  "viewports":[[1440,900],[390,844]],
+  "observations":22,
+  "parity":{"reader_index_exact_source13":true,"book_js_css_html_exact_source13":true,"only_changed_reader_asset":"manual.js","prior_complete_and_delta_reviews":"source11 + source12 with erratum + source13"},
+  "source12_erratum_preserved":true,
+  "source12_broken_lfo_resolved_on13_and_rechecked14":true,
+  "original_f01_f11_status":"Prior bounded reader closures retained; no blanket native/runtime/audio/CI/accessibility closure",
+  "pins":{"book_owner_supplied":"e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe","reader_index":"984dc86e198f71fb2594dac82add5fe03afbd706f30cded8f5f84f5189a44d6c","book_js":"453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8","manual_js":"e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7","css":"1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309","index_html":"2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482"},
+  "production_mutations":false,
+  "native_audio_rerun":false,
+  "listened":false,
+  "owned_browsers_closed":true
+}

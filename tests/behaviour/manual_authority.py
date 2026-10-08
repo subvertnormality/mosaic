@@ -17,6 +17,8 @@ def authoring_identity(root):
     config=yaml.safe_load(config_path.read_text())
     paths={"manual/book.yaml"}
     configured = [source for key in ("sources","scene_sources","audio_sources","schema_sources") for source in config.get(key,[])]
+    if config.get("recordings_source"):
+        configured.append(config["recordings_source"])
     if config.get("course_source"):
         configured.append(config["course_source"])
     for source in configured:
@@ -73,8 +75,12 @@ def verify_authority(root,inventory,book=None):
         current=hashlib.sha256(json.dumps(authored,sort_keys=True,separators=(",",":")).encode()).hexdigest()
         if book.get("source_sha256")!=current:
             raise ValueError("Compiled manual source changed: regenerate manual")
-        for key in ("features","aliases","navigation","title","edition","learning_path","project","course_title","course_summary"):
-            if book.get(key)!=authored.get(key):raise ValueError("Compiled manual contents changed: "+key)
+        for key in ("features","aliases","navigation","title","edition","learning_path","project","course_title","course_summary","recordings_context"):
+            expected=authored.get(key)
+            if key=="recordings_context" and expected is not None:
+                from manual_recordings import compile_context
+                expected=compile_context(expected,authored,root,Path(root)/"manual"/authored["recordings_source"])
+            if book.get(key)!=expected:raise ValueError("Compiled manual contents changed: "+key)
 
     # Bind compiled contents to YAML when available; JSON alone cannot bless edits.
     if book.get("authoring_identity")!=identity:

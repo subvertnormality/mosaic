@@ -27,6 +27,18 @@ PRIVATE_KEYS = {
     "publication_run", "case_participants_path", "immutable_path", "app_root",
     "run", "report", "native_source_path", "source_identity_path",
 }
+READER_INDEX_KEYS = {
+    "aliases", "audio_chunks", "audio_examples", "course_summary", "course_title",
+    "edition", "features", "learning_path", "navigation", "prelude_receipts",
+    "scene_chunks", "scenes", "teaching_contracts", "title",
+}
+READER_DEVELOPER_KEYS = {
+    "audio_metadata", "authoring_identity", "canonical_inputs",
+    "complete_manual", "complete_regression_run", "inventory",
+    "legacy_source_sha256", "project", "projection_schema",
+    "realtime_qualification", "schema_version", "source_sha256",
+    "validation_scope",
+}
 INTERNAL_DOC_LINKS = re.compile(
     r'<a\s+href=["\'](?:BUILD|INVENTORY|DISCREPANCIES|MIGRATION|SITE_MAP)\.md["\']([^>]*)>(.*?)</a>',
     re.IGNORECASE | re.DOTALL,
@@ -114,7 +126,7 @@ def scrub_public_json(value, key=None):
     if isinstance(value, dict):
         result = {}
         for name, child in value.items():
-            if name in PRIVATE_KEYS:
+            if name in PRIVATE_KEYS or name in READER_DEVELOPER_KEYS:
                 continue
             cleaned = scrub_public_json(child, name)
             if cleaned is not _DROP:
@@ -132,9 +144,36 @@ def scrub_public_json(value, key=None):
 _DROP = object()
 
 
-def write_public_json(source, target):
+def public_reader_index(data):
+    if not isinstance(data, dict):
+        raise ValueError("Reader index must be an object")
+    required = {"features", "navigation", "aliases", "scenes",
+                "scene_chunks", "audio_chunks", "audio_examples",
+                "learning_path", "teaching_contracts", "prelude_receipts"}
+    if not required.issubset(data):
+        raise ValueError("Reader index is missing a runtime field")
+    public = {key: data[key] for key in READER_INDEX_KEYS if key in data}
+    public["features"] = [
+        {key: value for key, value in feature.items() if key != "sources"}
+        for feature in public["features"]
+    ]
+    return scrub_public_json(public)
+
+
+def public_pilot(data):
+    if not isinstance(data, dict) or not {"feature", "audio", "scenes"}.issubset(data):
+        raise ValueError("Pilot is missing a runtime field")
+    return scrub_public_json({key: data[key] for key in ("feature", "audio", "scenes")})
+
+
+def write_public_json(source, target, relative):
     data = read_json(source)
-    public = scrub_public_json(data)
+    if relative == "manual/generated/reader-index.json":
+        public = public_reader_index(data)
+    elif relative == "manual/generated/pilot.json":
+        public = public_pilot(data)
+    else:
+        public = scrub_public_json(data)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(public, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
 
@@ -207,8 +246,7 @@ def collect_public_site(repo, destination):
     fixed = [
         "_config.yml", "README.md", "cheat_sheet.html", "config_creator.html",
         "manual/index.html", "manual/manual.css", "manual/manual.js", "manual/book.js",
-        "manual/inventory.json", "manual/generated/book.json", "manual/generated/pilot.json",
-        "manual/generated/audio-scenes.json",
+        "manual/generated/reader-index.json", "manual/generated/pilot.json",
     ]
     public_data = {}
     for relative in fixed:
@@ -216,7 +254,7 @@ def collect_public_site(repo, destination):
         target = site.joinpath(*PurePosixPath(relative).parts)
         target.parent.mkdir(parents=True, exist_ok=True)
         if relative.endswith(".json"):
-            write_public_json(source, target)
+            write_public_json(source, target, relative)
             public_data[relative] = read_json(target)
         else:
             text = source.read_text(encoding="utf-8")
@@ -271,10 +309,20 @@ def collect_public_site(repo, destination):
                     if asset:
                         refs.add(asset)
 
+    reader = public_data["manual/generated/reader-index.json"]
+    chunk_groups = ("scene_chunks", "audio_chunks", "prelude_receipts")
+    for group in chunk_groups:
+        for chunk_id, ref in reader.get(group, {}).items():
+            if not isinstance(ref, dict) or not isinstance(ref.get("path"), str):
+                raise ValueError("Invalid reader chunk reference: " + group + "/" + str(chunk_id))
+            relative = "manual/generated/" + safe_relative(ref["path"]).as_posix()
+            copied_path = copy_asset(repo, site, relative, copied)
+            chunk = read_json(copied_path)
+            refs.update(json_asset_references(chunk, repo))
     for relative in public_data:
         refs.update(json_asset_references(public_data[relative], repo))
-    # Scene/source catalogs are embedded by the compiled book; only public images/audio above
-    # are copied. Build/evidence directories and raw capture reports are never traversed.
+    # Only learner routes, verified scene/audio chunks and referenced assets are public.
+    # Full raw build reports remain in the separate developer evidence artifact.
     refs.update(("images/logo.svg",))
     for relative in sorted(refs - copied):
         copy_asset(repo, site, relative, copied)

@@ -28,6 +28,7 @@ def check_editorial_overlay(baseline,current):
  return dict(baseline_sha256=source_hash(baseline),current_sha256=source_hash(current),scope='feature editorial fields, scene titles/step captions, and audio title/description only')
 def check_custom_kind(kind):
  supported={'manual-reason-dashboard','manual-reason-midi','manual-course-ui','manual-course-midi','manual-course-persistence','manual-song-indicators','manual-song-slot-setting','manual-song-queue-blink','manual-song-queue-transition','manual-motion-stable-rows','manual-motion-music','manual-motion-pose','manual-song-repeat-advance','manual-modulation-cc-phase'}
+ supported.update({'manual-save-dialog-frame','manual-save-dialog-cancel','manual-save-dialog-return','manual-save-dialog-persistence'})
  supported.update({'manual-player-apply-start','manual-player-apply-pending','manual-player-apply-applied','manual-player-apply-reopened'})
  supported.update({'manual-repeat-reset-public-midi','manual-snap-mask-public-midi','manual-ui-motion-public-frames','manual-ui-motion-public-midi','manual-ui-motion-midi-pair'})
  supported.update({'merge-strategy-ui','effective-foundation-musical-result','effective-fragments-musical-result','restored-legacy-musical-result','merge-strategy-next-cycle','effective-only-silence','public-assignment-marquee','public-fitting-vertical-text','public-readability-summary','public-mini-header'})
@@ -661,6 +662,16 @@ def check_course_dashboard(row,observations,binding,grid):
 
 def verify_teaching_checkpoint(step,observations,path,clock_mode,results):
  row=step['output']['binding']['assertion'];kind=row.get('kind','')
+ if kind.startswith('manual-save-dialog-'):
+  import importlib.util
+  cached=Path(path).parent/'case-source/tests/behaviour/manual_save_dialog_oracle.py'
+  receipt=json.loads((Path(path).parent/'start-source-identity.json').read_text())
+  relative='tests/behaviour/manual_save_dialog_oracle.py'
+  if receipt.get('case_sources',{}).get(relative)!=digest(cached):raise ValueError('Unhashed or changed dialog source cache')
+  spec=importlib.util.spec_from_file_location('_native_save_dialog_audit',cached)
+  module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  module.verify_checkpoint(step,observations,path)
+  return
  if not kind.startswith(('manual-course-','manual-song-')):return
  supported={'manual-course-ui','manual-course-midi','manual-course-persistence','manual-song-indicators','manual-song-slot-setting','manual-song-queue-blink','manual-song-queue-transition','manual-song-repeat-advance'}
  if kind not in supported:raise ValueError('Unsupported new manual semantic kind requires independent native verification')
@@ -1572,12 +1583,108 @@ def check_audio_native_session(path,clock_mode,voices):
 def check_scale_phase_frame(phase,results,observations):
  # manual_audio.apply_phase captures this frame as case MA-AUDIO-SCALE-PHASE.
  check_frame(phase['output'],'MA-AUDIO-SCALE-PHASE',results,observations)
+def verify_audio_retake_receipts(report,run):
+ """Verify bounded real-time retries and their preserved failure evidence."""
+ root=Path(run).resolve(strict=True)
+ referenced=set()
+ expected_attempt_names=set()
+ required_attempt_names=set()
+ successful_attempt_names=set()
+ lane_count=retake_count=0
+ def reject(condition,message):
+  if not condition:raise ValueError("Audio retake receipt: "+message)
+ def verify_successful_lane(lane_path):
+  reject(lane_path.parent==root and lane_path.is_dir(),"successful lane escaped its run")
+  failure_path=lane_path/'lesson-failure.json'
+  receipt_path=lane_path/'retake-receipt.json'
+  reject(not failure_path.exists() and not failure_path.is_symlink() and not receipt_path.exists() and not receipt_path.is_symlink(),"successful lane retains failed-attempt records")
+  result_path=lane_path/'lesson-result.json'
+  reject(result_path.is_file() and result_path.stat().st_size<=1024*1024 and result_path.resolve(strict=True).parent==lane_path,"successful lane result is missing, escaped, or oversized")
+  result=json.loads(result_path.read_text())
+  reject(result.get('passed') is True and result.get('clock_mode')=='real-time' and Path(result.get('path','')).resolve()==lane_path,"successful lane result identity mismatch")
+ for example in report.get('examples',[]):
+  for lane in example.get('musical_evidence',[]):
+   lane_count+=1
+   case=str(example.get('id',''))+'-midi-real-time'
+   if lane.get('clock_mode')=='real-time' and Path(case).name==case and case not in ('','.','..'):
+    expected_attempt_names.update((case,case+'-retake-1',case+'-retake-2'))
+    lane_path_value=lane.get('path')
+    lane_name=Path(lane_path_value).name if isinstance(lane_path_value,str) else None
+    retry_prefix=case+'-retake-'
+    if lane_name==case:implied_attempts=0
+    elif lane_name is not None and lane_name.startswith(retry_prefix) and lane_name[len(retry_prefix):] in ('1','2'):
+     implied_attempts=int(lane_name[len(retry_prefix):])
+    else:implied_attempts=None
+    if implied_attempts is not None:
+     required_attempt_names.update(case if index==1 else case+'-retake-'+str(index-1) for index in range(1,implied_attempts+1))
+   else:
+    lane_name=None
+    implied_attempts=None
+   if 'retakes' not in lane:
+    if lane_name in expected_attempt_names:
+     lane_path=Path(lane['path']).resolve(strict=True)
+     verify_successful_lane(lane_path)
+     successful_attempt_names.add(lane_name)
+    continue  # historical single-attempt sessions remain valid
+   retakes=lane.get('retakes')
+   reject(isinstance(retakes,list) and 1<=len(retakes)<=2,"invalid retry count")
+   reject(lane.get('clock_mode')=='real-time',"retries are allowed only for real-time lanes")
+   reject(Path(case).name==case and case not in ('','.','..'),"invalid case identity")
+   reject(isinstance(lane.get('path'),str),'successful lane path is missing')
+   lane_path=Path(lane['path']).resolve(strict=True)
+   verify_successful_lane(lane_path)
+   successful_attempt_names.add(lane_path.name)
+   reject(implied_attempts==len(retakes),"successful lane path does not identify the reported retry sequence")
+   required_attempt_names.update(case if index==1 else case+'-retake-'+str(index-1) for index in range(1,len(retakes)+1))
+   for index,row in enumerate(retakes,1):
+    reject(isinstance(row,dict),"receipt row is not an object")
+    expected_name=case if index==1 else case+'-retake-'+str(index-1)
+    reject(row.get('case')==case and row.get('clock_mode')=='real-time',"case or lane mismatch")
+    reject(row.get('attempt')==index and type(row.get('attempt')) is int and row.get('max_attempts')==3 and type(row.get('max_attempts')) is int,"attempt sequence or limit mismatch")
+    reject(row.get('retake_eligible') is True and row.get('error_type')=='AssertionError',"failed take was not an eligible timing assertion")
+    reject(isinstance(row.get('path'),str),'failed attempt path is missing')
+    attempt=Path(row['path']).resolve(strict=True)
+    reject(attempt.parent==root and attempt.is_dir() and attempt.name==expected_name,"failed attempt escaped or has wrong path")
+    receipt_path=attempt/'retake-receipt.json'
+    reject(receipt_path.is_file() and receipt_path.stat().st_size<=1024*1024 and receipt_path.resolve(strict=True).parent==attempt,"missing, escaped, or oversized retake receipt")
+    receipt_data=json.loads(receipt_path.read_text())
+    receipt_hash=row.get('receipt_sha256')
+    public_row=dict(row);public_row.pop('receipt_sha256',None)
+    reject(isinstance(receipt_hash,str) and digest(receipt_path)==receipt_hash and receipt_data==public_row,"retake receipt hash/content mismatch")
+    failure_path=attempt/'lesson-failure.json'
+    reject(failure_path.is_file() and failure_path.stat().st_size<=1024*1024 and failure_path.resolve(strict=True).parent==attempt,"missing, escaped, or oversized worker failure record")
+    failure=json.loads(failure_path.read_text())
+    reject(isinstance(row.get('worker_failure'),dict) and row.get('worker_failure')==failure,"worker failure differs from receipt")
+    reject(row.get('worker_failure_sha256')==digest(failure_path),"worker failure hash mismatch")
+    packet=failure.get('packet');timing_row=failure.get('row');kind=failure.get('kind')
+    reject(failure.get('category')=='timing' and failure.get('clock_mode')=='real-time' and kind in ('Musical onset','Musical gate'),"worker failure is not an authorized real-time timing miss")
+    reject(isinstance(packet,dict) and type(packet.get('monotonic_ns')) is int and not isinstance(packet.get('monotonic_ns'),bool),"timing packet has no real-time timestamp")
+    reject(isinstance(timing_row,dict) and type(timing_row.get('step')) in (int,float) and not isinstance(timing_row.get('step'),bool),"timing assertion row is malformed")
+    if kind=='Musical gate':reject(type(timing_row.get('length')) in (int,float) and not isinstance(timing_row.get('length'),bool),"gate assertion row has no length")
+    referenced.add(attempt.resolve())
+    retake_count+=1
+   expected_final=case+'-retake-'+str(len(retakes))
+   reject(lane_path.name==expected_final,"successful lane does not follow the retry sequence")
+ discovered=set()
+ for name in required_attempt_names:
+  attempt=root/name
+  reject(attempt.is_dir() and attempt.resolve(strict=True).parent==root,"missing or escaped generated prior-attempt directory")
+  receipt_path=attempt/'retake-receipt.json'
+  failure_path=attempt/'lesson-failure.json'
+  reject(receipt_path.is_file() and receipt_path.resolve(strict=True).parent==attempt.resolve(strict=True),"generated prior attempt is missing its receipt")
+  reject(failure_path.is_file() and failure_path.resolve(strict=True).parent==attempt.resolve(strict=True),"generated prior attempt is missing its worker failure")
+ for child in root.iterdir():
+  if child.name in expected_attempt_names and child.is_dir() and child.name not in successful_attempt_names:discovered.add(child.resolve())
+ reject(discovered==referenced,"unreported or missing preserved retry attempt")
+ return dict(lanes=lane_count,retakes=retake_count,passed=True)
+
 def audit_audio_session_integrity(path=None,controlled_local=False):
  path=Path(path) if path is not None else MANUAL/'generated/audio-scenes.json';report=json.loads(path.read_text());authored=yaml.safe_load((MANUAL/'audio-scenes.yaml').read_text());check_canonical_audio_lessons(authored);sessions=check_audio_capture_scope(report,authored,controlled_local=controlled_local);session_examples=audio_session_examples(report)
  if controlled_local:
   if report.get('validation_scope')!='controlled-manual-generation' or report.get('realtime_qualification')!='pending-ci' or report.get('clock_mode')!='controlled-experimental' or report.get('audio_capture_clock_mode')!='real-time' or report.get('complete_regression_run') is not False or not str(report.get('controlled_lane','')).startswith('inapplicable:'):raise ValueError('Missing controlled-manual audio scope')
  elif report.get('clock_mode')!='real-time' or report.get('complete_regression_run') is not False or not str(report.get('controlled_lane','')).startswith('inapplicable:'):raise ValueError('Missing native audio real-time scope')
  run=Path(report['examples'][0]['evidence']['path']).parent
+ verify_audio_retake_receipts(report,run)
  import manual_audio_resume
  if manual_audio_resume.require_resume_provenance(report,run):
   import manual_audio
@@ -1660,12 +1767,32 @@ def audit_controlled_stage_adoptions(build,manifest,root):
   audio=audit_build_audio_adoption(build,manifest,root)
  return {'checkpoint':checkpoint,'audio':audio}
 
-def audit_reader_projection():
+def audit_reader_projection(retained=None,fresh_target_midi_manifest=None,fresh_target_midi_sha256=None,fresh_build_root=None):
  from manual_reader_projection import validate_projection
  generated=MANUAL/'generated'
  report=validate_projection(generated/'reader-index.json',generated/'reader-chunks',
-     generated/'book.json',generated/'audio-scenes.json',project_root=ROOT)
+     generated/'book.json',generated/'audio-scenes.json',project_root=ROOT,
+     retained_midi_admissions=ROOT/retained['relative_path'] if retained else None,
+     retained_midi_admissions_sha256=retained['sha256'] if retained else None,
+     fresh_target_midi_manifest=fresh_target_midi_manifest,
+     fresh_target_midi_sha256=fresh_target_midi_sha256,
+     fresh_build_root=fresh_build_root)
  report['producer_sha256']=digest(ROOT/'tools/manual_reader_projection.py')
+ if fresh_target_midi_manifest is not None:
+  manifest_path=Path(fresh_target_midi_manifest).resolve()
+  build_root=Path(fresh_build_root).resolve()
+  if manifest_path!=build_root/'fresh-target-midi-manifest.json':raise ValueError('Fresh target MIDI manifest is outside its build receipt')
+  producer=build_root/'fresh-target-midi-producer.json'
+  if not producer.is_file():raise ValueError('Fresh target MIDI producer stage receipt is missing')
+  stage=json.loads(producer.read_text());expected={'path':str(manifest_path),'sha256':fresh_target_midi_sha256}
+  if stage.get('name')!='fresh-target-midi-producer' or stage.get('passed') is not True or stage.get('returncode')!=0 or stage.get('fresh_target_midi_manifest',{}).get('path')!=expected['path'] or stage.get('fresh_target_midi_manifest',{}).get('sha256')!=expected['sha256'] or stage.get('fresh_target_midi_producer_sha256')!=digest(ROOT/'tools/manual_fresh_target_midi.py'):
+   raise ValueError('Fresh target MIDI producer receipt differs from the projected manifest')
+  log=build_root/'fresh-target-midi-producer.log'
+  if not log.is_file() or stage.get('log_sha256')!=digest(log):raise ValueError('Fresh target MIDI producer log changed')
+  data=json.loads(manifest_path.read_text())
+  report['fresh_target_midi_qualification']=data.get('qualification')
+  report['fresh_target_midi_producer_sha256']=digest(ROOT/'tools/manual_fresh_target_midi.py')
+  report['fresh_target_midi_manifest_sha256']=fresh_target_midi_sha256
  return report
 
 def _audit_controlled_manual_generation(build_evidence,require_manual_generation_complete=True):
@@ -1736,7 +1863,7 @@ def _audit_controlled_manual_generation(build_evidence,require_manual_generation
  inventory_identity=audit_inventory_source_hashes(ROOT,MANUAL/'inventory.json',inventory_sources)
  expected=compile_book(book_source);actual=json.loads((MANUAL/'generated/book.json').read_text())
  if expected!=actual:raise ValueError('Stale compiled book after controlled generation')
- reader_projection=audit_reader_projection()
+ reader_projection=audit_reader_projection(manifest.get('retained_midi_admission'))
  projection_rows=[row for row in rows if row.get('name')=='reader-projection']
  if len(projection_rows)!=1 or projection_rows[0].get('passed') is not True:raise ValueError('Reader projection stage receipt is missing or failed')
  if projection_rows[0].get('reader_projection')!=reader_projection:raise ValueError('Reader projection stage report differs from current source-bound files')
@@ -1762,10 +1889,13 @@ def audit_controlled_manual_generation(build_evidence,require_manual_generation_
  result['reviewed_metadata_proof']={'path':str(Path(metadata_transition_proof).resolve()),'sha256':digest(Path(metadata_transition_proof)),'source_scope':'243 exact Mosaic application files and 3 verified review metadata transitions'}
  return result
 
-def audit_publication():
+def audit_publication(retained=None,fresh_target_midi_manifest=None,fresh_target_midi_sha256=None,fresh_build_root=None):
  expected=compile_book(load());actual=json.loads((MANUAL/'generated/book.json').read_text())
  if expected!=actual:raise ValueError('Stale compiled book; rebuild after authoring changes')
- reader_projection=audit_reader_projection()
+ target_ids={'doctor-local-capture-and-paint','doctor-local-auto-capture-and-paint','panic-from-song-channel','panic-from-song-pattern'}
+ if any(scene.get('id') in target_ids for scene in actual.get('scenes',{}).values()) and not retained and not fresh_target_midi_manifest:
+  raise ValueError('Full publication requires a fresh native or explicit retained target MIDI receipt')
+ reader_projection=audit_reader_projection(retained,fresh_target_midi_manifest,fresh_target_midi_sha256,fresh_build_root)
  course=None
  if actual.get('project',{}).get('capture_status')=='verified':
   from manual_course_bind import verify_publication as verify_course
@@ -1780,7 +1910,11 @@ def audit_publication():
  return dict(report,features=len(actual['features']),reader_projection=reader_projection)
 def main():
  import argparse
- parser=argparse.ArgumentParser();mode=parser.add_mutually_exclusive_group();mode.add_argument('--refresh-editorial',action='store_true');mode.add_argument('--raw-only',action='store_true');parser.add_argument('--controlled-local',action='store_true');parser.add_argument('--build-evidence',type=Path);parser.add_argument('--ffmpeg');options=parser.parse_args()
+ parser=argparse.ArgumentParser();mode=parser.add_mutually_exclusive_group();mode.add_argument('--refresh-editorial',action='store_true');mode.add_argument('--raw-only',action='store_true');parser.add_argument('--controlled-local',action='store_true');parser.add_argument('--build-evidence',type=Path);parser.add_argument('--ffmpeg');parser.add_argument('--retained-midi-admissions',type=Path);parser.add_argument('--retained-midi-admissions-sha256');parser.add_argument('--fresh-target-midi-manifest',type=Path);parser.add_argument('--fresh-target-midi-sha256');parser.add_argument('--fresh-build-root',type=Path);options=parser.parse_args()
+ if bool(options.fresh_target_midi_manifest)!=bool(options.fresh_target_midi_sha256) or bool(options.fresh_target_midi_manifest)!=bool(options.fresh_build_root):parser.error('fresh target MIDI manifest, SHA256 and build root must be supplied together')
+ if options.retained_midi_admissions and options.fresh_target_midi_manifest:parser.error('retained and fresh target MIDI routes are mutually exclusive')
+ from manual_retained_midi_caller import retained_call
+ retained=retained_call(ROOT,options.retained_midi_admissions,options.retained_midi_admissions_sha256,mode='retained-standalone' if options.retained_midi_admissions else 'fresh')
  if options.refresh_editorial:print(json.dumps(refresh_pilot_editorial(options.ffmpeg),indent=2));return
  if options.controlled_local:
   if options.raw_only:report=audit_raw_publications(controlled_local=True)
@@ -1788,7 +1922,7 @@ def main():
   else:parser.error('--controlled-local publication audit requires --build-evidence; use --raw-only for current raw publications')
  else:
   if options.build_evidence:parser.error('--build-evidence requires --controlled-local')
-  report=audit_raw_publications() if options.raw_only else audit_publication()
+  report=audit_raw_publications() if options.raw_only else audit_publication(retained,options.fresh_target_midi_manifest,options.fresh_target_midi_sha256,options.fresh_build_root)
  print(json.dumps(report,indent=2))
 
 if __name__=='__main__':main()

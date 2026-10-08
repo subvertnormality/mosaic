@@ -65,10 +65,38 @@ def _project_root(book_value, supplied=None):
     configured=os.environ.get("MOSAIC_REPO_ROOT")
     return Path(configured).resolve() if configured else None
 
-def build_projection(book_value, audio_value, prelude_admissions=None, project_root=None) -> tuple[dict, dict[str, bytes]]:
+def build_projection(book_value, audio_value, prelude_admissions=None, project_root=None, retained_midi_admissions=None, retained_midi_admissions_sha256=None, fresh_target_midi_manifest=None, fresh_target_midi_sha256=None, fresh_build_root=None) -> tuple[dict, dict[str, bytes]]:
     """Return deterministic reader-index data and relative-path chunk bytes."""
     book, book_raw = _read_source(book_value, "book.json")
     audio, audio_raw = _read_source(audio_value, "audio-scenes.json")
+    from manual_pilot_midi import project_pilot_midi
+    book = dict(book, scenes={scene["id"]: project_pilot_midi(scene) for scene in _scene_rows(book)})
+    if retained_midi_admissions is not None and fresh_target_midi_manifest is not None:
+        raise ProjectionError("retained and fresh target MIDI routes are mutually exclusive")
+    retained_raw = None
+    if retained_midi_admissions is not None:
+        retained, retained_raw = _read_source(retained_midi_admissions, "retained MIDI admission")
+        if not retained_midi_admissions_sha256 or _sha(retained_raw) != retained_midi_admissions_sha256:
+            raise ProjectionError("retained MIDI admission does not match caller pin")
+        from manual_retained_target_midi import project_retained_target_midi, validate_retained_target_admissions
+        validate_retained_target_admissions(_scene_rows(book), _project_root(book_value, project_root), retained)
+        book = dict(book, scenes={scene["id"]: project_retained_target_midi(scene, _project_root(book_value, project_root), retained) for scene in _scene_rows(book)})
+    elif retained_midi_admissions_sha256 is not None:
+        raise ProjectionError("retained MIDI admission pin lacks receipt")
+    fresh_raw = None
+    if fresh_target_midi_manifest is not None:
+        fresh, fresh_raw = _read_source(fresh_target_midi_manifest, "fresh target MIDI manifest")
+        if not fresh_target_midi_sha256 or _sha(fresh_raw) != fresh_target_midi_sha256:
+            raise ProjectionError("fresh target MIDI manifest does not match caller pin")
+        if fresh_build_root is None:
+            raise ProjectionError("fresh target MIDI manifest requires the current build root")
+        from manual_fresh_target_midi import project_fresh_target_midi, validate_fresh_target_midi_manifest
+        scenes = _scene_rows(book)
+        records = validate_fresh_target_midi_manifest(scenes, _project_root(book_value, project_root), fresh_build_root, fresh)
+        book = dict(book, scenes={scene["id"]: project_fresh_target_midi(scene,
+            _project_root(book_value, project_root), fresh_build_root, fresh, records) for scene in scenes})
+    elif fresh_target_midi_sha256 is not None or fresh_build_root is not None:
+        raise ProjectionError("fresh target MIDI pin/build root lacks manifest")
     features = _unique_rows(book.get("features"), "book features")
     scenes = _scene_rows(book); examples, audio_metadata = _audio_document(audio)
     feature_ids = {f["id"] for f in features}; scene_ids = {s["id"] for s in scenes}
@@ -78,6 +106,24 @@ def build_projection(book_value, audio_value, prelude_admissions=None, project_r
         for ref in refs:
             sid = ref if isinstance(ref, str) else ref.get("id") if isinstance(ref, dict) else None
             if not isinstance(sid, str) or sid not in scene_ids: raise ProjectionError(f"feature {feature['id']} has unknown scene reference")
+        for link in feature.get("scene_context_links", []):
+            route=link.get("canonical_route", "").split("/")
+            target=next((row for row in features if len(route)==2 and row["id"]==route[0]), None)
+            if link.get("scene_id") not in refs or link.get("scene_id") not in scene_ids or not target or route[1] not in target.get("scene_refs", []):
+                raise ProjectionError(f"feature {feature['id']} has invalid contextual scene link")
+        for link in feature.get("lesson_context_links", []):
+            route=link.get("canonical_route", "").split("/")
+            target=next((row for row in features if len(route)==3 and row["id"]==route[0]), None)
+            target_lessons={row.get("id") for row in (target or {}).get("teaching_bindings", [])}
+            local_lessons={row.get("id") for row in feature.get("teaching_bindings", [])}
+            if len(route)!=3 or route[1]!="lesson" or link.get("lesson_id") not in local_lessons or route[2]!=link.get("lesson_id") or link.get("lesson_id") not in target_lessons:
+                raise ProjectionError(f"feature {feature['id']} has invalid contextual lesson link")
+        scene_map={row["id"]:row for row in scenes}
+        for item in feature.get("scene_milestones", []):
+            scene=scene_map.get(item.get("scene_id")); groups=item.get("groups", [])
+            ids=[sid for group in groups for sid in group.get("step_ids", [])]
+            if not scene or item["scene_id"] not in refs or ids != [step["id"] for step in scene.get("steps", [])] or len(ids)!=len(set(ids)):
+                raise ProjectionError(f"feature {feature['id']} has invalid scene milestone partition")
     for example in examples:
         ids = example.get("feature_ids", [])
         if not isinstance(ids, list) or any(fid not in feature_ids for fid in ids): raise ProjectionError(f"audio example {example['id']} has unknown feature")
@@ -136,16 +182,21 @@ def build_projection(book_value, audio_value, prelude_admissions=None, project_r
     index = {
         "projection_schema": SCHEMA_VERSION,
         "canonical_inputs": {"book_json_sha256":_sha(book_raw),"audio_scenes_json_sha256":_sha(audio_raw)},
-        **{k:book[k] for k in ("schema_version","edition","title","authoring_identity","source_sha256","legacy_source_sha256","complete_manual","validation_scope","realtime_qualification","complete_regression_run","aliases","navigation","course_title","course_summary","project","learning_path") if k in book},
+        **{k:book[k] for k in ("schema_version","edition","title","authoring_identity","source_sha256","legacy_source_sha256","complete_manual","validation_scope","realtime_qualification","complete_regression_run","aliases","navigation","course_title","course_summary","project","learning_path","recordings_context") if k in book},
         "features":projected_features,"scenes":scene_metadata,"scene_chunks":scene_index,"audio_metadata":audio_metadata,
         "audio_examples":audio_index,"audio_chunks":audio_refs,
         "teaching_contracts":teaching_contracts,"prelude_receipts":prelude_index,
         "inventory":{"feature_ids":[r["id"] for r in features],"scene_ids":[r["id"] for r in scenes],"audio_example_ids":[r["id"] for r in examples]},
     }
+    if retained_raw is not None:
+        index['canonical_inputs']['retained_midi_admission_sha256'] = _sha(retained_raw)
+    if fresh_raw is not None:
+        index['canonical_inputs']['fresh_target_midi_manifest_sha256'] = _sha(fresh_raw)
+        index['canonical_inputs']['fresh_target_midi_qualification'] = fresh['qualification']
     return index, chunks
-def write_projection(book_path, audio_path, output_dir, prelude_admissions=None, project_root=None) -> dict:
+def write_projection(book_path, audio_path, output_dir, prelude_admissions=None, project_root=None, retained_midi_admissions=None, retained_midi_admissions_sha256=None, fresh_target_midi_manifest=None, fresh_target_midi_sha256=None, fresh_build_root=None) -> dict:
     """Write projection files without deleting or replacing differing content."""
-    output_dir=Path(output_dir); index,chunks=build_projection(book_path,audio_path,prelude_admissions,project_root); root=output_dir/"reader-chunks"
+    output_dir=Path(output_dir); index,chunks=build_projection(book_path,audio_path,prelude_admissions,project_root,retained_midi_admissions,retained_midi_admissions_sha256,fresh_target_midi_manifest,fresh_target_midi_sha256,fresh_build_root); root=output_dir/"reader-chunks"
     expected=set(chunks)
     if root.exists():
         existing={p.relative_to(output_dir).as_posix() for p in root.rglob("*") if p.is_file()}
@@ -157,7 +208,7 @@ def write_projection(book_path, audio_path, output_dir, prelude_admissions=None,
     ip=output_dir/"reader-index.json"; raw_index=_canonical_bytes(index)
     if ip.exists() and ip.read_bytes()!=raw_index: raise ProjectionError("refusing to overwrite a different reader index")
     if not ip.exists(): ip.write_bytes(raw_index)
-    validate_projection(ip,root,book_path,audio_path,prelude_admissions,project_root); return index
+    validate_projection(ip,root,book_path,audio_path,prelude_admissions,project_root,retained_midi_admissions,retained_midi_admissions_sha256,fresh_target_midi_manifest,fresh_target_midi_sha256,fresh_build_root); return index
 def _safe_chunk_path(root: Path, relative: Any) -> Path:
     if not isinstance(relative,str) or "\\" in relative: raise ProjectionError("chunk path must be a safe relative POSIX path")
     parts=relative.split("/")
@@ -167,9 +218,9 @@ def _safe_chunk_path(root: Path, relative: Any) -> Path:
     if resolved_root not in (candidate,*candidate.parents): raise ProjectionError("chunk path escapes its root")
     if candidate.is_symlink(): raise ProjectionError("reader chunk path must not be a symlink")
     return candidate
-def validate_projection(index_path, chunk_root, book_value, audio_value, prelude_admissions=None, project_root=None) -> None:
+def validate_projection(index_path, chunk_root, book_value, audio_value, prelude_admissions=None, project_root=None, retained_midi_admissions=None, retained_midi_admissions_sha256=None, fresh_target_midi_manifest=None, fresh_target_midi_sha256=None, fresh_build_root=None) -> None:
     """Reject stale, altered, incomplete, unsafe, or source-mismatched projections."""
-    expected_index,expected_chunks=build_projection(book_value,audio_value,prelude_admissions,project_root); ip=Path(index_path); raw_index=ip.read_bytes(); parsed=_decode(raw_index,"reader-index.json")
+    expected_index,expected_chunks=build_projection(book_value,audio_value,prelude_admissions,project_root,retained_midi_admissions,retained_midi_admissions_sha256,fresh_target_midi_manifest,fresh_target_midi_sha256,fresh_build_root); ip=Path(index_path); raw_index=ip.read_bytes(); parsed=_decode(raw_index,"reader-index.json")
     if raw_index!=_canonical_bytes(expected_index) or parsed!=expected_index: raise ProjectionError("reader index is stale, altered, or does not match canonical inputs")
     root=Path(chunk_root)
     if root.is_symlink(): raise ProjectionError("reader chunk root must not be a symlink")
@@ -213,9 +264,9 @@ class Projection:
     def load_scene(self,scene_id:str)->dict: return self._load(self.index["scene_chunks"],scene_id)
     def load_audio(self,audio_id:str)->dict: return self._load(self.index["audio_chunks"],audio_id)
     def load_prelude(self,receipt_id:str)->dict: return self._load(self.index["prelude_receipts"],receipt_id)
-def load_projection(index_path,canonical_book_path,canonical_audio_path,prelude_admissions=None)->Projection:
+def load_projection(index_path,canonical_book_path,canonical_audio_path,prelude_admissions=None,project_root=None,retained_midi_admissions=None,retained_midi_admissions_sha256=None,fresh_target_midi_manifest=None,fresh_target_midi_sha256=None,fresh_build_root=None)->Projection:
     ip=Path(index_path); root=ip.parent/"reader-chunks"
-    validate_projection(ip,root,canonical_book_path,canonical_audio_path,prelude_admissions)
+    validate_projection(ip,root,canonical_book_path,canonical_audio_path,prelude_admissions,project_root,retained_midi_admissions,retained_midi_admissions_sha256,fresh_target_midi_manifest,fresh_target_midi_sha256,fresh_build_root)
     return Projection(_decode(ip.read_bytes(),"reader-index.json"),root)
 
 def admit_reader_prelude(package_dir, *, verify_cached_ui):
@@ -240,11 +291,18 @@ def main(argv=None):
     parser.add_argument("--output-dir",required=True)
     parser.add_argument("--prelude-package")
     parser.add_argument("--project-root")
+    parser.add_argument("--retained-midi-admissions", help="Explicit audited retained-source receipt; fresh native output uses no retained adapter.")
+    parser.add_argument("--retained-midi-admissions-sha256", help="Required caller/source-fenced receipt SHA256.")
+    parser.add_argument("--fresh-target-midi-manifest")
+    parser.add_argument("--fresh-target-midi-sha256")
+    parser.add_argument("--fresh-build-root")
     args=parser.parse_args(argv)
+    if bool(args.fresh_target_midi_manifest) != bool(args.fresh_target_midi_sha256) or bool(args.fresh_target_midi_manifest) != bool(args.fresh_build_root):
+        parser.error("fresh target MIDI manifest, SHA256 and build root must be supplied together")
     prelude_admissions={"getting-started-start":admit_reader_prelude(args.prelude_package)} if args.prelude_package else None
-    write_projection(args.book,args.audio,args.output_dir,prelude_admissions,args.project_root)
+    write_projection(args.book,args.audio,args.output_dir,prelude_admissions,args.project_root,args.retained_midi_admissions,args.retained_midi_admissions_sha256,args.fresh_target_midi_manifest,args.fresh_target_midi_sha256,args.fresh_build_root)
     report=validate_projection(Path(args.output_dir)/"reader-index.json",
-        Path(args.output_dir)/"reader-chunks",args.book,args.audio,prelude_admissions,args.project_root)
+        Path(args.output_dir)/"reader-chunks",args.book,args.audio,prelude_admissions,args.project_root,args.retained_midi_admissions,args.retained_midi_admissions_sha256,args.fresh_target_midi_manifest,args.fresh_target_midi_sha256,args.fresh_build_root)
     report["producer_sha256"]=_sha(Path(__file__).read_bytes())
     print(json.dumps(report,sort_keys=True,separators=(",",":")))
     return 0

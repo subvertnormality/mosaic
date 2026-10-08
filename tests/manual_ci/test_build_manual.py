@@ -100,7 +100,8 @@ class StaticSitePackageTests(unittest.TestCase):
             "manual/book.js": 'const footer="<a href=\"BUILD.md\">Capture notes</a>";',
             "manual/inventory.json": json.dumps({"features": [{"id": "masks"}]}),
             "manual/generated/book.json": json.dumps({"features": [{"id": "masks"}], "scenes": {"masks": {"evidence": {"path": "/runner/private/report.json"}, "image": "images/scene.png"}}}),
-            "manual/generated/pilot.json": json.dumps({"feature": {"id": "masks"}, "scenes": [{"id": "masks"}], "evidence": {"path": "/runner/private/pilot.json"}}),
+            "manual/generated/reader-index.json": json.dumps({"features": [], "navigation": [], "aliases": {}, "scenes": {}, "scene_chunks": {}, "audio_chunks": {}, "audio_examples": [], "learning_path": [], "teaching_contracts": {}, "prelude_receipts": {}, "source_sha256": "private"}),
+            "manual/generated/pilot.json": json.dumps({"feature": {"id": "masks"}, "audio": {"files": ["manual/audio/demo.ogg"]}, "scenes": [{"id": "masks"}], "evidence": {"path": "/runner/private/pilot.json"}}),
             "manual/generated/audio-scenes.json": json.dumps({"examples": [{"files": ["audio/demo.ogg"]}], "evidence": {"path": "/runner/private/audio.json"}}),
             "manual/audio/demo.ogg": "opus-audio",
         }
@@ -121,11 +122,37 @@ class StaticSitePackageTests(unittest.TestCase):
             self.assertIn("images/quick-bg.png", files)
             self.assertIn("manual/audio/demo.ogg", files)
             self.assertEqual((site / "index.html").read_text(), source["index.html"])
-            self.assertNotIn("runner/private", (site / "manual/generated/book.json").read_text())
+            self.assertTrue((site / "manual/generated/reader-index.json").is_file())
+            self.assertFalse((site / "manual/generated/book.json").exists())
+            self.assertFalse((site / "manual/generated/audio-scenes.json").exists())
+            self.assertNotIn("source_sha256", (site / "manual/generated/reader-index.json").read_text())
             self.assertNotIn('href="BUILD.md"', (site / "manual/book.js").read_text())
             self.assertTrue((site / "README.md").is_file())
             self.assertTrue((site / "config_creator.html").is_file())
             self.assertFalse((site / "manual/evidence").exists())
+
+    def test_public_reader_keeps_runtime_chunk_hashes_but_drops_provenance(self):
+        index = {"features": [], "navigation": [], "aliases": {}, "scenes": {},
+                 "scene_chunks": {"s": {"path": "reader-chunks/s.json", "sha256": "a" * 64}},
+                 "audio_chunks": {}, "audio_examples": [], "learning_path": [],
+                 "teaching_contracts": {"lesson": {"scene_chunk_sha256": "a" * 64}},
+                 "prelude_receipts": {}, "source_sha256": "secret", "authoring_identity": {"commit": "secret"}}
+        public = artifact.public_reader_index(index)
+        self.assertEqual(public["scene_chunks"]["s"]["sha256"], "a" * 64)
+        self.assertEqual(public["teaching_contracts"]["lesson"]["scene_chunk_sha256"], "a" * 64)
+        self.assertNotIn("source_sha256", public)
+        self.assertNotIn("authoring_identity", public)
+
+    def test_reader_chrome_has_no_visible_capture_receipts_or_build_links(self):
+        index = (ROOT / "manual/index.html").read_text()
+        book = (ROOT / "manual/book.js").read_text()
+        player = (ROOT / "manual/manual.js").read_text()
+        self.assertNotIn("INVENTORY.md", index)
+        self.assertNotIn("VOICES.md", index)
+        self.assertNotIn("JSON.stringify({contract_id", book)
+        self.assertNotIn("controlled-time captures", book)
+        self.assertNotIn("data.source_sha256", player)
+        self.assertIn("scene_chunk_sha256", book)  # Runtime verification remains wired.
 
     def test_rejects_encoded_traversal_and_source_symlink(self):
         for value in ("../outside", "%2e%2e/outside", "/etc/passwd", "manual/%2E%2E/private"):
@@ -168,8 +195,8 @@ class StaticSitePackageTests(unittest.TestCase):
             self.assertIs(type(result["producer_run_id"]), int)
             self.assertEqual(result["tested_commit_sha"], "a" * 40)
             self.assertEqual(result["tested_tree_sha"], "b" * 40)
-            self.assertEqual(result["files"]["manual-site/manual/generated/book.json"],
-                             hashlib.sha256((root / "out/manual-site/manual/generated/book.json").read_bytes()).hexdigest())
+            self.assertEqual(result["files"]["manual-site/manual/generated/reader-index.json"],
+                             hashlib.sha256((root / "out/manual-site/manual/generated/reader-index.json").read_bytes()).hexdigest())
             self.assertEqual({p.name for p in (root / "out").iterdir()}, {"manual-site", "manual-artifact-manifest.json"})
 
 
