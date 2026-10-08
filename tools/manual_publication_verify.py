@@ -664,10 +664,19 @@ def verify_teaching_checkpoint(step,observations,path,clock_mode,results):
  row=step['output']['binding']['assertion'];kind=row.get('kind','')
  if kind.startswith('manual-save-dialog-'):
   import importlib.util
-  cached=Path(path).parent/'case-source/tests/behaviour/manual_save_dialog_oracle.py'
   receipt=json.loads((Path(path).parent/'start-source-identity.json').read_text())
-  relative='tests/behaviour/manual_save_dialog_oracle.py'
-  if receipt.get('case_sources',{}).get(relative)!=digest(cached):raise ValueError('Unhashed or changed dialog source cache')
+  sources=receipt.get('case_sources',{})
+  shim='tests/behaviour/manual_save_dialog_oracle.py'
+  implementation='tests/behaviour/contract/manual_save_dialog_oracle.py'
+  if implementation in sources:
+   for relative in (shim,implementation):
+    cached_source=Path(path).parent/'case-source'/relative
+    if sources.get(relative)!=digest(cached_source):raise ValueError('Unhashed or changed dialog source cache')
+   cached=Path(path).parent/'case-source'/implementation
+  else:
+   cached=Path(path).parent/'case-source'/shim
+   if sources.get(shim)!='f65bf1a840e9060d6acfff8c6d8db8abc05487957c81b8b3fc148aad6470aa4a':raise ValueError('Missing contract-owned dialog implementation hash')
+   if digest(cached)!='f65bf1a840e9060d6acfff8c6d8db8abc05487957c81b8b3fc148aad6470aa4a':raise ValueError('Unrecognized or changed legacy flat dialog source cache')
   spec=importlib.util.spec_from_file_location('_native_save_dialog_audit',cached)
   module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
   module.verify_checkpoint(step,observations,path)

@@ -559,3 +559,9 @@ def ready_options(c, fixture):
     _record(c, 'ready-options-complete', fixture_report=str(fixture['acquisition_report']),
             successful_reanalysis_claim=False, staged_unrun=True)
 
+
+
+def run_doctor_setup_options(c):
+    """Registry owner for the existing Rhythm Doctor setup scenario."""
+    c.doctor_options_case_id='M-DOCTOR-SETUP-001'
+    setup_options(c)

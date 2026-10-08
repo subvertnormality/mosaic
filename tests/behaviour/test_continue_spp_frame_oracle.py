@@ -1,6 +1,7 @@
 """Exact-footprint framebuffer comparison keeps nearby header pixels observable."""
 import unittest
 from contract.continue_spp_frame_oracle import assert_same_outside_mini
+from contract.continue_spp import assert_stopped_snapshot
 
 
 class ContinueSppFrameOracle(unittest.TestCase):
@@ -19,6 +20,32 @@ class ContinueSppFrameOracle(unittest.TestCase):
         mini=bytearray(control)
         mini[(3*128+106)*4] = 1
         assert_same_outside_mini(mini,control,spec)
+
+
+    def test_clock_admission_metadata_is_lane_specific_and_independent_of_stopped_output(self):
+        stopped={"grid":[0]*128,"midi_count":34}
+        realtime=dict(stopped,clock={"mode":"real-time","admitted":True})
+        controlled=dict(stopped,clock={"mode":"controlled-experimental","admitted":False})
+        assert_stopped_snapshot(realtime,stopped["grid"],34,"real-time")
+        assert_stopped_snapshot(controlled,stopped["grid"],34,"controlled-experimental")
+
+        with self.assertRaises(AssertionError):
+            assert_stopped_snapshot(realtime,stopped["grid"],34,"controlled-experimental")
+
+        for mode,admitted in (("real-time",False),("controlled-experimental",True)):
+            with self.subTest(mode=mode,admitted=admitted):
+                wrong=dict(stopped,clock={"mode":mode,"admitted":admitted})
+                with self.assertRaises(AssertionError):
+                    assert_stopped_snapshot(wrong,stopped["grid"],34,mode)
+
+        # Realtime admission is metadata, not permission for musical output to resume.
+        changed_grid=dict(realtime,grid=[1]+[0]*127)
+        changed_midi=dict(realtime,midi_count=35)
+        with self.assertRaises(AssertionError):
+            assert_stopped_snapshot(changed_grid,stopped["grid"],34,"real-time")
+        with self.assertRaises(AssertionError):
+            assert_stopped_snapshot(changed_midi,stopped["grid"],34,"real-time")
+
 
 
 if __name__=="__main__":

@@ -174,13 +174,15 @@ class TrigParameterUiMigrationTests(unittest.TestCase):
         import inspect
         import cases
         from trig_parameter_interactions import live_parameter_recording as helper
+        import contract.physical_case_owners as owner
         from unittest.mock import sentinel
 
         self.assertEqual(inspect.signature(helper).parameters["visual_checkpoints"].default,
                          False)
         run = cases.CASES["M-REC-PARAM-001"]["run"]
         self.assertIs(run, cases.live_parameter_recording_with_visual_checkpoints)
-        with patch.object(cases, "live_parameter_recording",
+        self.assertIs(run, owner.live_parameter_recording_with_visual_checkpoints)
+        with patch.object(owner, "live_parameter_recording",
                           return_value=sentinel.result) as delegated:
             self.assertIs(run(sentinel.driver), sentinel.result)
         delegated.assert_called_once_with(sentinel.driver, visual_checkpoints=True)

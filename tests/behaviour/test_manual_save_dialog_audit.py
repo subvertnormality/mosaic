@@ -18,7 +18,7 @@ class SaveDialogAuditTest(unittest.TestCase):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
   self.run=Path(self.tmp.name);self.case=self.run/'M-MANUAL-SAVE-DIALOG-001-base-midi';self.case.mkdir()
   self.fixture=ROOT/'tests/behaviour/config/manual-save-dialog'
-  cases={name:(ROOT/name).read_bytes() for name in ['tests/behaviour/manual_save_dialog_oracle.py','tests/behaviour/frame_oracle.py','tests/behaviour/driver.py','tests/behaviour/ui_map.py','tests/behaviour/manual_save_project_canonical.py','tests/behaviour/persisted_digest.lua']}
+  cases={name:(ROOT/name).read_bytes() for name in ['tests/behaviour/manual_save_dialog_oracle.py','tests/behaviour/contract/manual_save_dialog_oracle.py','tests/behaviour/frame_oracle.py','tests/behaviour/driver.py','tests/behaviour/ui_map.py','tests/behaviour/manual_save_project_canonical.py','tests/behaviour/persisted_digest.lua']}
   fixtures={str(p.relative_to(ROOT)):p.read_bytes() for p in self.fixture.rglob('*') if p.is_file()}
   receipt=persist_start_sources(self.run,dict(case_sources=cases,fixture_sources=fixtures,capture_sources={},plan_files={}))
   self.assertEqual(receipt['case_sources'],{k:hashlib.sha256(v).hexdigest() for k,v in cases.items()})
@@ -38,6 +38,32 @@ class SaveDialogAuditTest(unittest.TestCase):
   p.write_text("raise AssertionError('UNHASHED CODE EXECUTED')\n")
   with self.assertRaisesRegex(ValueError,'Unhashed or changed'):
    verify_teaching_checkpoint(self.step,self.observations,self.case,'controlled-experimental',[])
+ def test_changed_contract_cached_oracle_rejected_before_execution(self):
+  p=self.run/'case-source/tests/behaviour/contract/manual_save_dialog_oracle.py'
+  p.write_text(p.read_text()+'\\n# changed\\n')
+  with self.assertRaisesRegex(ValueError,'Unhashed or changed'):self.audit()
+ def test_missing_contract_oracle_source_hash_rejected(self):
+  p=self.run/'start-source-identity.json';d=json.loads(p.read_text())
+  del d['case_sources']['tests/behaviour/contract/manual_save_dialog_oracle.py'];p.write_text(json.dumps(d))
+  with self.assertRaisesRegex(ValueError,'Missing contract-owned dialog implementation hash'):self.audit()
+ def _legacy_snapshot(self,changed=False):
+  legacy_run=self.run/'legacy-run';legacy_run.mkdir(exist_ok=True)
+  files={name:(ROOT/name).read_bytes() for name in ['tests/behaviour/frame_oracle.py','tests/behaviour/driver.py','tests/behaviour/ui_map.py','tests/behaviour/manual_save_project_canonical.py','tests/behaviour/persisted_digest.lua']}
+  old=ROOT/'tests/behaviour/testdata/legacy_manual_save_dialog_oracle.py'
+  blob=old.read_bytes()+(b'\\n# changed\\n' if changed else b'')
+  files['tests/behaviour/manual_save_dialog_oracle.py']=blob
+  fixtures={str(p.relative_to(ROOT)):p.read_bytes() for p in self.fixture.rglob('*') if p.is_file()}
+  persist_start_sources(legacy_run,dict(case_sources=files,fixture_sources=fixtures,capture_sources={},plan_files={}))
+  case=legacy_run/'legacy-case';case.mkdir()
+  return case
+ def test_legacy_flat_source_snapshot_remains_verifiable(self):
+  case=self._legacy_snapshot()
+  self.assertEqual(hashlib.sha256((case.parent/'case-source/tests/behaviour/manual_save_dialog_oracle.py').read_bytes()).hexdigest(),'f65bf1a840e9060d6acfff8c6d8db8abc05487957c81b8b3fc148aad6470aa4a')
+  verify_teaching_checkpoint(self.step,self.observations,case,'controlled-experimental',[])
+ def test_modified_legacy_flat_source_snapshot_is_rejected(self):
+  case=self._legacy_snapshot(changed=True)
+  with self.assertRaisesRegex(ValueError,'Missing contract-owned dialog implementation hash'):
+   verify_teaching_checkpoint(self.step,self.observations,case,'controlled-experimental',[])
  def test_wrong_kind_rejected(self):
   self.step['output']['binding']['assertion']['kind']='manual-save-dialog-invented'
   with self.assertRaisesRegex(ValueError,'Unsupported'):self.audit()

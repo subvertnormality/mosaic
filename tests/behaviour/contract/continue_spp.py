@@ -1,4 +1,18 @@
 """README.md#external-midi-transport: Continue/SPP leave Mosaic stopped and in place."""
+
+
+def assert_stopped_snapshot(state, expected_grid, expected_midi, expected_clock_mode):
+    """Check stopped output separately from the emulator's clock-mode admission metadata."""
+    admitted_by_mode = {"real-time": True, "controlled-experimental": False}
+    if expected_clock_mode not in admitted_by_mode:
+        raise AssertionError("Unexpected clock mode: %r" % expected_clock_mode)
+    clock = state.get("clock", {})
+    assert clock.get("mode") == expected_clock_mode
+    assert clock.get("admitted") is admitted_by_mode[expected_clock_mode]
+    assert state["grid"] == expected_grid
+    assert state["midi_count"] == expected_midi
+
+
 def continue_spp_unsupported(c):
     import base64
     import time
@@ -80,7 +94,7 @@ def continue_spp_unsupported(c):
             state,events=schedule([(at,data)]);control_packets.extend(events)
             before_index=len(c.observations)-1
             c.elapse(.1);state=c.snapshot()
-        assert state['grid']==stopped_grid and state['midi_count']==stopped_midi and state['clock']['admitted'] is False
+        assert_stopped_snapshot(state,stopped_grid,stopped_midi,c.clock_mode)
         assert_same_outside_mini(state,stopped_frame,spec)
         control_phase.append(phase_check(state,before_index))
         controls.append(base64.b64decode(state['frame']['pixels_base64']))
@@ -91,8 +105,7 @@ def continue_spp_unsupported(c):
         state,events=schedule([(at,data)]);messages.extend(events)
         before_index=len(c.observations)-1
         c.elapse(.1);state=c.snapshot();unsupported.extend(state)
-        assert state['grid']==stopped_grid
-        assert state['midi_count']==stopped_midi and state['clock']['admitted'] is False
+        assert_stopped_snapshot(state,stopped_grid,stopped_midi,c.clock_mode)
         assert_same_outside_mini(state,controls[index],spec)
         screen_phase.append(phase_check(state,before_index))
         stable_samples+=1

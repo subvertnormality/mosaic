@@ -797,6 +797,73 @@ class UiLayerGuardTests(unittest.TestCase):
                          source.parent == contract_root)
 
 
+    def test_newly_classified_entries_have_named_physical_contract_owners(self):
+        import inspect
+        import contract.physical_case_owners as cases_owner
+        import contract.rhythm_doctor_options as doctor_owner
+        from cases import CASES
+
+        expected = {
+            "M-DOCTOR-SETUP-001": doctor_owner.run_doctor_setup_options,
+            "M-EDIT-005": cases_owner.editor_hold_boundaries,
+            "M-REC-PARAM-001": cases_owner.live_parameter_recording_with_visual_checkpoints,
+            "M-REC-PARAM-002": cases_owner.live_parameter_recording_switch_return,
+            "M-REC-PARAM-003": cases_owner.live_parameter_recording_empty_step,
+            "M-REC-PARAM-005": cases_owner.live_parameter_recording_edit_zero,
+            "M-REC-PARAM-006": cases_owner.live_parameter_recording_edit_off,
+            "M-REC-PARAM-028": cases_owner.live_parameter_recording_empty_step_trigless_off,
+            "M-REC-PARAM-029": cases_owner.live_parameter_recording_probability_zero_trigless_off,
+        }
+        contract_root = (BEHAVIOUR / "contract").resolve()
+        for case_id, owner in expected.items():
+            with self.subTest(case_id=case_id):
+                run = CASES[case_id]["run"]
+                self.assertIs(run, owner)
+                self.assertEqual(Path(inspect.getsourcefile(run)).resolve().parent,
+                                 contract_root)
+                self.assertIsNone(run.__closure__)
+
+    def test_new_contract_entries_forward_exact_existing_recipes(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch, sentinel
+        import contract.physical_case_owners as owner
+        import contract.rhythm_doctor_options as doctor_owner
+        from cases import CASES
+
+        driver = sentinel.driver
+        forwards = {
+            "M-REC-PARAM-001": (owner.live_parameter_recording_with_visual_checkpoints,
+                                  {"visual_checkpoints": True}),
+            "M-REC-PARAM-002": (owner.live_parameter_recording_switch_return,
+                                  {"switch_return": True}),
+            "M-REC-PARAM-003": (owner.live_parameter_recording_empty_step,
+                                  {"empty_step": True}),
+            "M-REC-PARAM-005": (owner.live_parameter_recording_edit_zero,
+                                  {"edit_value": 0}),
+            "M-REC-PARAM-006": (owner.live_parameter_recording_edit_off,
+                                  {"edit_value": -1}),
+            "M-REC-PARAM-028": (owner.live_parameter_recording_empty_step_trigless_off,
+                                  {"empty_step": True, "trigless": False}),
+            "M-REC-PARAM-029": (owner.live_parameter_recording_probability_zero_trigless_off,
+                                  {"probability_zero": True, "trigless": False}),
+        }
+        for case_id, (entry, kwargs) in forwards.items():
+            with self.subTest(case_id=case_id), patch.object(
+                    owner, "live_parameter_recording", return_value=sentinel.result) as call:
+                self.assertIs(CASES[case_id]["run"], entry)
+                self.assertIs(entry(driver), sentinel.result)
+                call.assert_called_once_with(driver, **kwargs)
+
+        with patch("cases.editor_hold_boundaries", return_value=sentinel.result) as recipe:
+            self.assertIs(CASES["M-EDIT-005"]["run"](driver), sentinel.result)
+        recipe.assert_called_once_with(driver)
+
+        context = SimpleNamespace()
+        with patch.object(doctor_owner, "setup_options") as recipe:
+            CASES["M-DOCTOR-SETUP-001"]["run"](context)
+        self.assertEqual(context.doctor_options_case_id, "M-DOCTOR-SETUP-001")
+        recipe.assert_called_once_with(context)
+
     def test_contract_inventory_has_a_fixed_ceiling(self):
         import json
         from cases import CASES
@@ -814,10 +881,8 @@ class UiLayerGuardTests(unittest.TestCase):
         from ui_layer_guard import classify_contract_cases
         classified = classify_contract_cases(CASES)
         self.assertEqual(value["cases"], sorted(classified))
-        # Reviewed ceiling raise 476 -> 478 (followup-cases): M-CHORDSHAPE-260 and
-        # M-LIVEUI-SHAPETRIG-002 are contract-owned (the chord family test requires its
-        # cases in contract.chord_shapes), and the ceiling keeps its 10% headroom.
-        self.assertEqual(value["ceiling"], 478)
+        # Nine newly owned cases bring the exact classifier count to 443; retain 10% headroom.
+        self.assertEqual(value["ceiling"], 488)
         self.assertGreaterEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
 
     def test_every_case_owner_matches_the_fixed_contract_inventory(self):

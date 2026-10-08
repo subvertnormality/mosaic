@@ -282,6 +282,8 @@
     "M-DASHBOARD-008",
     "M-DASHBOARD-CHORD-001",
     "M-DASHBOARD-SELECT-001",
+    "M-DOCTOR-SETUP-001",
+    "M-EDIT-005",
     "M-EDIT-FLICKER-001",
     "M-ENDURANCE-001",
     "M-GRID-001",
@@ -360,10 +362,17 @@
     "M-RANGE-SAVED-002",
     "M-RANGE-SAVED-003",
     "M-RANGE-SAVED-004",
+    "M-REC-PARAM-001",
+    "M-REC-PARAM-002",
+    "M-REC-PARAM-003",
     "M-REC-PARAM-004",
+    "M-REC-PARAM-005",
+    "M-REC-PARAM-006",
     "M-REC-PARAM-010",
     "M-REC-PARAM-019",
     "M-REC-PARAM-022",
+    "M-REC-PARAM-028",
+    "M-REC-PARAM-029",
     "M-SAVE-002",
     "M-SAVE-FAIL-001",
     "M-SETUP-001",
@@ -435,5 +444,5 @@
     "M-XA-006-NB-CHORD-ACCEL",
     "M-XA-007-NB-SWITCH-SLOTS"
   ],
-  "ceiling": 478
+  "ceiling": 488
 }

@@ -89,7 +89,7 @@ def _mask_packet_playback(c,expected,cycles,closing_group_size,timeout=5):
     from note_accounting import note_pairs
     assert expected and cycles>=2 and closing_group_size>=1
     before=c.snapshot()['midi_count'];target=len(expected)*cycles+closing_group_size
-    c.tap(1,8)
+    c.ui.play()
     def expanded(state):
         return _expanded_mask_state(state,before)
     def enough(state):
@@ -100,7 +100,7 @@ def _mask_packet_playback(c,expected,cycles,closing_group_size,timeout=5):
     actual=[(event['port'],event['bytes']) for event in onsets]
     assert len(onsets)==target,dict(expected_count=target,actual_count=len(onsets),actual=actual)
     assert actual==wanted,dict(expected=wanted,actual=actual)
-    c.tap(1,8);final=c.wait(lambda row:row['midi_capture']['outstanding']==[])
+    c.ui.stop();final=c.wait(lambda row:row['midi_capture']['outstanding']==[])
     events=expanded(final)
     onsets=[event for event in events if 144<=event['bytes'][0]<=159 and event['bytes'][2]>0]
     actual=[(event['port'],event['bytes']) for event in onsets]

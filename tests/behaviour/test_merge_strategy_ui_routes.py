@@ -200,31 +200,49 @@ class StrategyFooterTemporalGuardTests(unittest.TestCase):
 
 
 class SharedStrategyExampleCheckpointGuardTests(unittest.TestCase):
-    def test_every_pictured_strategy_step_has_exact_public_case_checkpoint(self):
+    def test_every_authored_step_has_native_case_and_exact_public_checkpoint(self):
         from pathlib import Path
         import yaml
+        from cases import CASES
         from contract import live_ui_feedback
-        rows=[];active={'value':'FOUNDATION'}
+        rows=[];active={"value":"FOUNDATION"};playbacks=[];self_test=self
         class Ui:
             def open_channel_task(self,*a):pass
             def expect_header(self,*a,**k):pass
             def select_row(self,*a):pass
-            def expect_selected_field(self,layout,label,value):self_test.assertEqual(value,active['value'])
-        self_test=self
+            def expect_selected_field(self,layout,label,value):
+                self_test.assertEqual(value,active["value"])
+                rows.append(dict(kind="selected-field",layout=layout,label=label,value=value))
         def choose(c,value,after_edit=None):
-            active['value']=value
+            active["value"]=value
             if after_edit:after_edit()
         def leds(cells,values):
-            self.assertEqual((cells,values),([(14,8)],[{'FOUNDATION':11,'ALL':8,'SKIP':2}[active['value']]]))
-        c=SimpleNamespace(ui=Ui(),results=rows,led_values=leds,playback=lambda phrase,cycles:self.assertEqual(cycles,2))
-        with patch('contract.foundation_workflow.setup_foundation'),patch('merge_strategy_routes.select_strategy',side_effect=choose),patch.object(live_ui_feedback,'_expect_footer'):
+            self.assertEqual((cells,values), ([(14,8)],[{"FOUNDATION":11,"ALL":8,"SKIP":2}[active["value"]]]))
+        def playback(phrase,cycles):
+            playbacks.append((phrase,cycles));rows.append(dict(kind="midi",phrase=phrase,cycles=cycles,passed=True))
+        c=SimpleNamespace(ui=Ui(),results=rows,led_values=leds,playback=playback)
+        with patch("contract.foundation_workflow.setup_foundation") as setup, \
+             patch("merge_strategy_routes.select_strategy",side_effect=choose), \
+             patch.object(live_ui_feedback,"_expect_footer"):
             live_ui_feedback.live_ui_merge_shape_trig_mode(c)
+        setup.assert_called_once_with(c)
         root=Path(__file__).resolve().parents[2]
-        scene=next(s for s in yaml.safe_load((root/'manual/scene-plans-extra.yaml').read_text())['scenes'] if s['id']=='merge-shape-owns-trigs')
-        self.assertEqual([s['id']for s in scene['steps']],['shape-only','shape-all','legacy-return'])
-        for step in scene['steps']:
-            selector=step['assertion']
-            self.assertTrue(any(all(row.get(k)==v for k,v in selector.items())for row in rows),'Missing pictured semantic checkpoint: '+str(selector))
-        self.assertEqual([r['value']for r in rows if r.get('kind')=='shape-trig-mode'],['FOUNDATION','ALL'])
+        scene=next(s for s in yaml.safe_load((root/"manual/scene-plans-extra.yaml").read_text())["scenes"] if s["id"]=="merge-shape-owns-trigs")
+        self.assertEqual([s["id"] for s in scene["steps"]],["start","merge-modes-open","shape-only","foundation-phrase","shape-all","all-phrase","legacy-return"])
+        self.assertEqual(scene["behaviour_case"],"M-LIVEUI-SHAPETRIG-001")
+        start=scene["steps"][0]["assertion"]
+        self.assertEqual(start["kind"],"grid")
+        self.assertEqual(start["cells"],[[1,4],[2,4],[3,4],[4,4],[5,4],[7,4]])
+        self.assertEqual(start["expected"],[15]*6)
+        self.assertEqual(start["actual"],[15]*6)
+        self.assertIs(CASES[scene["behaviour_case"]]["run"],live_ui_feedback.live_ui_merge_shape_trig_mode)
+        for step in scene["steps"][1:]:
+            selector=step["assertion"]
+            self.assertTrue(any(all(row.get(k)==v for k,v in selector.items()) for row in rows),"Missing authored semantic checkpoint: "+step["id"])
+        self.assertEqual([r["value"] for r in rows if r.get("kind")=="shape-trig-mode"],["FOUNDATION","ALL"])
+        self.assertEqual(playbacks,[(live_ui_feedback._SHAPE_PHRASE,2),(live_ui_feedback._ALL_PHRASE,2)])
+        mids=[step for step in scene["steps"] if step["assertion"].get("kind")=="midi"]
+        self.assertEqual([step.get("occurrence") for step in mids],[1,2])
+        self.assertEqual([row["phrase"] for row in rows if row.get("kind")=="midi"],[live_ui_feedback._SHAPE_PHRASE,live_ui_feedback._ALL_PHRASE])
 
 if __name__=="__main__":unittest.main()

@@ -11,7 +11,17 @@ from shuffle_matrix import shuffle_matrix
 from shuffle_first_bar_record import shuffle_first_bar_record
 from random_note_domains import random_note_domains
 from contract.grid_hot_disconnect import grid_disconnect_two_key_range
-from contract.rhythm_doctor_options import setup_options as _doctor_setup_options
+from contract.physical_case_owners import (
+    editor_hold_boundaries as editor_hold_boundaries_contract,
+    live_parameter_recording_with_visual_checkpoints,
+    live_parameter_recording_switch_return as recording_switch_return_contract,
+    live_parameter_recording_empty_step as recording_empty_step_contract,
+    live_parameter_recording_edit_zero as recording_edit_zero_contract,
+    live_parameter_recording_edit_off as recording_edit_off_contract,
+    live_parameter_recording_empty_step_trigless_off as recording_empty_step_trigless_off_contract,
+    live_parameter_recording_probability_zero_trigless_off as recording_probability_zero_trigless_off_contract,
+)
+from contract.rhythm_doctor_options import run_doctor_setup_options
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from keyboard_repeated_note_on import keyboard_repeated_note_on
@@ -2802,16 +2812,6 @@ from external_clock_long import long_external_phase
 from external_clock_backlog import external_clock_runtime_backlog
 from trig_param_strum_persistence import trig_param_strum_persistence
 
-def run_doctor_setup_options(c):
-    c.doctor_options_case_id='M-DOCTOR-SETUP-001'
-    _doctor_setup_options(c)
-
-
-def live_parameter_recording_with_visual_checkpoints(c):
-    """Use the public parameter-recording case with its manual checkpoints enabled."""
-    return live_parameter_recording(c,visual_checkpoints=True)
-
-
 CASES={
  'M-DOCTOR-SETUP-001':dict(run=run_doctor_setup_options,requirements=[],case_id='M-DOCTOR-SETUP-001',citation='manual:rhythm-doctor',description='Rhythm Doctor setup UI: AUTO/MANUAL draft, Manual BPM 40/240 clamps and endpoint repeats, STEREO/L/R cycling, discard/reopen, apply/reopen, and playing-state refusal of setup edits and Record (README.md#rhythm-doctor; no backend BPM/input claim)'),
  'M-UI-READABILITY-001':dict(run=readability_workflow,requirements=['CH-ASSIGN'],description='Public Trig Param assignment and long C07 selected-label readability with motion On/Off; fitting converted Clock/Scale text stability, unchanged Masks/Trig Params and exact four-note MIDI. Marquee timing and display bounds are characterized; positive overflowing vertical-list text is component-only because current public converted fields fit.'),
@@ -3076,15 +3076,15 @@ CASES={
  'M-REC-PARAM-009':dict(run=lambda c:recording_lifetime(c,'disarm'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'REC-ARM'],description='Disarm and immediate rearm retire pending automation without rewriting untouched future steps'),
  'M-REC-PARAM-008':dict(run=lambda c:recording_lifetime(c,'nonselected-wrap'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-SELECT'],description='Nonselected channel wrap preserves paused automation for resumption on a later eligible step'),
  'M-REC-PARAM-007':dict(run=lambda c:recording_lifetime(c,'selected-wrap'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'REC-ARM'],description='Selected channel wrap clears retained automation before its start lock sounds'),
- 'M-REC-PARAM-006':dict(run=lambda c:live_parameter_recording(c,edit_value=-1),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded Off suppresses conflicting locks through the cycle and remains silent during distinct-default disarmed replay'),
- 'M-REC-PARAM-005':dict(run=lambda c:live_parameter_recording(c,edit_value=0),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded zero is active MIDI, replacing a conflicting lock and surviving distinct-default disarmed replay'),
+ 'M-REC-PARAM-006':dict(run=recording_edit_off_contract,requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded Off suppresses conflicting locks through the cycle and remains silent during distinct-default disarmed replay'),
+ 'M-REC-PARAM-005':dict(run=recording_edit_zero_contract,requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded zero is active MIDI, replacing a conflicting lock and surviving distinct-default disarmed replay'),
  'M-REC-PARAM-004':dict(run=live_parameter_recording_scale_page,requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
  'M-REC-PARAM-031':dict(run=recording_ten_slots_trigless,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='All ten CC slots record zero on one trigless rest; Stop before step3 and exact fast replay prove step1/3/4 locks unchanged'),
  'M-REC-PARAM-030':dict(run=recording_trigless_toggle,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Toggle trigless Off/On/Off during recording across rest/rest/active steps, then enable for exact24/48/65/65 stored replay and timing'),
- 'M-REC-PARAM-029':dict(run=lambda c:live_parameter_recording(c,probability_zero=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS'],description='Trigless-off recording treats authored probability-zero step3 as eligible despite note silence; exact CC replay distinguishes trigger state from audible outcome'),
- 'M-REC-PARAM-028':dict(run=lambda c:live_parameter_recording(c,empty_step=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-off recording skips a rest without overwriting its old96 lock; re-enable only for disarmed replay to expose exact24/64/96/64 storage'),
- 'M-REC-PARAM-003':dict(run=lambda c:live_parameter_recording(c,empty_step=True),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-on live recording crosses an empty step; exact MIDI automation survives disarmed replay independently of changed patch default, with absent note and four-second deadlines'),
- 'M-REC-PARAM-002':dict(run=lambda c:live_parameter_recording(c,switch_return=True),requirements=['REC-PARAM-AUTOMATION','CH-SELECT','PARAM-SLOTS'],description='Switch away during live parameter recording, hear old locks, return before step4; live value must match its stored disarmed replay while paused steps remain unchanged'),
+ 'M-REC-PARAM-029':dict(run=recording_probability_zero_trigless_off_contract,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS'],description='Trigless-off recording treats authored probability-zero step3 as eligible despite note silence; exact CC replay distinguishes trigger state from audible outcome'),
+ 'M-REC-PARAM-028':dict(run=recording_empty_step_trigless_off_contract,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-off recording skips a rest without overwriting its old96 lock; re-enable only for disarmed replay to expose exact24/64/96/64 storage'),
+ 'M-REC-PARAM-003':dict(run=recording_empty_step_contract,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Trigless-on live recording crosses an empty step; exact MIDI automation survives disarmed replay independently of changed patch default, with absent note and four-second deadlines'),
+ 'M-REC-PARAM-002':dict(run=recording_switch_return_contract,requirements=['REC-PARAM-AUTOMATION','CH-SELECT','PARAM-SLOTS'],description='Switch away during live parameter recording, hear old locks, return before step4; live value must match its stored disarmed replay while paused steps remain unchanged'),
  'M-REC-PARAM-001':dict(run=live_parameter_recording_with_visual_checkpoints,requirements=['REC-PARAM-AUTOMATION','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Live encoder recording holds the edited CC value against old locks, records future steps, and replays exact locks before notes after disarming'),
  'M-PARAM-022':dict(run=lambda c:probability_midi_locks(c,trigless=True,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=True, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
  'M-PARAM-023':dict(run=lambda c:probability_midi_locks(c,trigless=False,nrpn=False),requirements=['OPT-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS','CH-PATCH-SENTINEL'],description='Probability-rejected active trigs versus removed trigs with trigless=False, NRPN=False; exact lock bytes/timing and step100 lock-before-note'),
@@ -3620,7 +3620,7 @@ CASES={
  'M-MERGE-003':dict(run=lambda c:inactive_note_priority(c,3),requirements=['PAT-INACTIVE-NOTE','MERGE-NOTE-PATTERN'],description='Inactive higher-numbered note source: silence, unassigned/assigned priority, later trig and removal'),
  'M-VIEW-001':dict(run=pattern_grid_viewer,requirements=['PAT-VIEWER'],description='Independent screen grid for wide/short channel ranges, all16 E2 selections, clamps and unchanged MIDI/pattern data'),
  'M-EDIT-FLICKER-001':dict(run=editor_pattern_flicker,requirements=['PAT-NOTE-SELECT','PAT-STEP-PAGES','PAT-VELOCITY'],description='The chosen pattern\'s top-row active LED flickers on all four step pages of the note and velocity editors; another column does not (README 471)'),
- 'M-EDIT-005':dict(run=editor_hold_boundaries,requirements=['PAT-NOTE-RANGE','PAT-VELOCITY'],description='Note/velocity range holds immediately before/after1s and cancelled by a second grid press; exact MIDI and measured real-time margins'),
+ 'M-EDIT-005':dict(run=editor_hold_boundaries_contract,requirements=['PAT-NOTE-RANGE','PAT-VELOCITY'],description='Note/velocity range holds immediately before/after1s and cancelled by a second grid press; exact MIDI and measured real-time margins'),
  'M-EDIT-004':dict(run=note_pattern_selectors,requirements=['PAT-NOTE-SELECT'],description='K1 and long-hold note-editor pattern selection across all16 slots, edit/playback and retained-pattern isolation'),
  'M-EDIT-001':dict(run=editor_note_ranges,requirements=['PAT-NOTE-RANGE'],description='Note range fine steps, held extrema, clamps and center reset'),
  'M-EDIT-002':dict(run=editor_velocity_ranges,requirements=['PAT-VELOCITY'],description='Every displayed velocity value, fine range steps, held extrema and clamps'),
