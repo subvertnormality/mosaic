@@ -14,4 +14,11 @@ jobs:
       - uses: leafo/gh-actions-lua@v10
         with:
           luaVersion: "5.3"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install the publisher test YAML parser
+        run: python -m pip install PyYAML==6.0.2
+      - name: Test the trusted manual publisher
+        run: python -m unittest tests.manual_ci.test_publish_manual
       - run: ./test.sh

@@ -1,0 +1,164 @@
+name: Publish manual site
+
+on:
+  workflow_run:
+    workflows: ["Build manual site"]
+    types: [completed]
+  # pull_request_target runs this trusted base-branch workflow with repository
+  # permissions after forks merge; the verifier checks out main only and never
+  # checks out or executes PR code.
+  pull_request_target:
+    branches: [main]
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      publication_policy:
+        description: Keep main-edition as the default; codex promotion requires explicit merged-PR identity
+        required: true
+        type: choice
+        default: main-edition
+        options:
+          - main-edition
+          - codex-1.4.0-promotion
+      promotion_artifact_kind:
+        description: Reuse an exact merged PR preview, or use a post-merge dispatch build
+        required: false
+        type: choice
+        default: merged-pr
+        options:
+          - merged-pr
+          - post-merge-dispatch
+      producer_run_id:
+        description: Successful exact Build manual site run ID
+        required: true
+        type: string
+      producer_run_attempt:
+        description: Exact producer attempt (required for codex promotion)
+        required: false
+        type: string
+      promotion_pr_number:
+        description: Merged codex PR whose exact producer artifact is promoted
+        required: false
+        type: string
+      expected_source_sha:
+        description: Exact current codex/1.4.0 target commit whose tree must match
+        required: false
+        type: string
+      promotion_pr_head_sha:
+        description: Exact merged PR source head commit SHA
+        required: false
+        type: string
+      promotion_pr_base_sha:
+        description: Exact codex/1.4.0 base commit SHA recorded on the merged PR
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify completed manual artifact
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+    outputs:
+      publishable: ${{ steps.verify.outputs.publishable }}
+      receipt_sha256: ${{ steps.verify.outputs.receipt_sha256 }}
+    steps:
+      - name: Check out trusted main publisher code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Verify producer provenance and artifact
+        id: verify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python .github/scripts/publish_manual.py \
+            --event-name "${{ github.event_name }}" \
+            --event-path "${{ github.event_path }}" \
+            --output-dir "${{ runner.temp }}/verified"
+      - name: Stage verified static site
+        if: steps.verify.outputs.publishable == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-manual-site
+          path: ${{ runner.temp }}/verified/manual-site/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+      - name: Preserve publication provenance receipt
+        if: steps.verify.outputs.publishable == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-publication-receipt
+          path: ${{ runner.temp }}/verified/promotion-receipt.json
+          if-no-files-found: error
+          retention-days: 90
+
+  publish:
+    name: Publish verified manual site
+    needs: verify
+    if: needs.verify.outputs.publishable == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      pages: write
+    steps:
+      - name: Check out trusted main publisher code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Download the verified static site
+        uses: actions/download-artifact@v4
+        with:
+          name: verified-manual-site
+          path: site
+      - name: Download the publication receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: manual-publication-receipt
+          path: receipt
+      - name: Verify receipt bytes and exact transferred site tree
+        env:
+          EXPECTED_RECEIPT_SHA256: ${{ needs.verify.outputs.receipt_sha256 }}
+        run: |
+          echo "$EXPECTED_RECEIPT_SHA256  receipt/promotion-receipt.json" | sha256sum --check --status
+          python .github/scripts/publish_manual.py \
+            --verify-staged-site \
+            --site-root site \
+            --receipt receipt/promotion-receipt.json \
+            --output-dir unused
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
