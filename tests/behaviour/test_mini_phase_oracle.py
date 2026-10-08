@@ -54,6 +54,96 @@ class NativeMiniPhaseIntegrity(unittest.TestCase):
   args=self.fixture(tempo=240,low=.1,high=.6);result=phase.check_stopped_phase(*args);self.assertEqual(result['allowed_phases'],[0,1,2])
   args=self.fixture(tempo=240,low=1.1,high=1.6)
   with self.assertRaisesRegex(ValueError,'pose phase'):phase.check_stopped_phase(*args)
+ def test_240_sampler_keeps_native_receipts_within_strict_phase_limit(self):
+  import base64,hashlib,importlib
+  sampling=importlib.import_module("contract.mini_header_animation_ui")
+  spec={"frames":[],"origin":[120,0],"layout":"vertical_list","loop_quarter_beats":2}
+  for pose in range(8):
+   row="."*pose+"c"+"."*(7-pose)
+   spec["frames"].append([row]*8)
+  palette={".":0,"a":7,"b":11,"c":15}
+  captured=((296.208537153,297.355370486),(270.79205625,271.640722917))
+  for low,high in captured:
+   with self.subTest(low=low),self.assertRaisesRegex(ValueError,"bounded"):
+    phase.phase_interval(low,high,spec,3)
+  class Driver:
+   clock_mode="real-time"
+   def __init__(self):
+    self.now=0;self.revision=0;self.observations=[];self.events=[];self.results=[];self.overhead=87166667
+   def elapse(self,seconds):self.now+=round(seconds*1e9)
+   def snapshot(self):
+    self.revision+=1;draw=self.now;pose=int(draw*240/60*4/1e9)%8
+    pixels=bytearray(32768)
+    for y,line in enumerate(spec["frames"][pose]):
+     for x,char in enumerate(line):
+      i=(y*128+120+x)*4;pixels[i:i+3]=bytes([17*palette[char]])*3
+    raw=bytes(pixels);sha=hashlib.sha256(raw).hexdigest()
+    beats=self.now*240/60/1e9
+    diag={"beats":beats,"tempo":240.0,"monotonic_ns":self.now,"clock_epoch":0}
+    state={"frame":{"sha256":sha,"pixels_base64":base64.b64encode(raw).decode(),"width":128,"height":64},
+           "pose":pose,"grid":[0]*128,"midi_count":0,"midi_capture":{"outstanding":[]},
+           "clock":{"mode":"real-time","logical_ns":None},"diagnostics":diag}
+    self.observations.append({"frame_revision":self.revision,"monotonic_ns":self.now,"state":state})
+    self.events.append({"kind":1,"revision":self.revision,"sha256":sha,"monotonic_ns":draw})
+    self.now+=self.overhead
+    return state
+   def wait(self,predicate,timeout=1):
+    state=self.snapshot()
+    if not predicate(state):raise AssertionError("mock wait did not reach a newer native clock/frame")
+    return state
+  old={name:getattr(sampling,name) for name in ("atlas","wait_normal_footer","require_icon","outside_icon","native_events")}
+  sampling.atlas=lambda:{"C04":spec}
+  sampling.wait_normal_footer=lambda *args:None
+  sampling.require_icon=lambda state,page,enabled:[state["pose"]]
+  sampling.outside_icon=lambda data,spec:b"unchanged body"
+  sampling.native_events=lambda c:c.events
+  try:
+   driver=Driver()
+   proof=sampling.sample(driver,"C04",True,5,tempo=240)
+   self.assertEqual(len(driver.results),1)
+   self.assertEqual(len(driver.results[0]["samples"]),40)
+   self.assertTrue(all(row["phase_check"]["passed"] for row in driver.results[0]["samples"]))
+   self.assertGreater(len(set(driver.results[0]["observed_poses"])),1)
+   if hasattr(sampling,"sample_delays"):
+    self.assertEqual(sampling.sample_delays(240),(.115,.010))
+    self.assertEqual(sum(sampling.sample_delays(240)),.125)
+  finally:
+   for name,value in old.items():setattr(sampling,name,value)
+ def test_cached_frame_is_reacquired_only_inside_new_clock_bracket(self):
+  import importlib
+  sampling=importlib.import_module("contract.mini_header_animation_ui")
+  helper=getattr(sampling,"_frame_after_clock_receipt",None)
+  self.assertTrue(callable(helper),"sampler must validate cached-frame receipts")
+  if not callable(helper):return
+  class Driver:
+   def __init__(self):
+    self.observations=[{"frame_revision":7}]
+    self.pending=[{"frame_revision":7,"frame":{"sha256":"old"},"diagnostics":{"monotonic_ns":130}},
+                  {"frame_revision":8,"frame":{"sha256":"new"},"diagnostics":{"monotonic_ns":180}}]
+    self.events=[{"kind":1,"revision":7,"sha256":"old","monotonic_ns":90}]
+   def snapshot(self):
+    state=self.pending.pop(0);self.observations.append({"frame_revision":state["frame_revision"]});return state
+   def wait(self,predicate,timeout=1):
+    state=self.pending.pop(0);self.observations.append({"frame_revision":state["frame_revision"]})
+    self.events.append({"kind":1,"revision":8,"sha256":"new","monotonic_ns":150})
+    self.asserted=predicate(state)
+    if not self.asserted:raise AssertionError("waited frame did not advance")
+    return state
+  c=Driver();old_events=sampling.native_events;old_icon=sampling.require_icon
+  sampling.native_events=lambda driver:driver.events
+  sampling.require_icon=lambda state,page,enabled:[0]
+  try:
+   before={"diagnostics":{"monotonic_ns":100}}
+   stale={"frame_revision":7,"frame":{"sha256":"old"},"diagnostics":{"monotonic_ns":100}}
+   result=helper(c,"C04",before,0,before["diagnostics"],stale)
+   lower,lower_index,clock,frame,events=result
+   draw=next(e["monotonic_ns"] for e in events if e["revision"]==frame["frame_revision"])
+   self.assertGreater(lower_index,0)
+   self.assertLess(clock["monotonic_ns"],draw)
+   self.assertLess(draw,frame["diagnostics"]["monotonic_ns"])
+   self.assertEqual(frame["frame_revision"],8)
+  finally:
+   sampling.native_events=old_events;sampling.require_icon=old_icon
  def test_off_keeps_native_rest_identity_without_fabricated_fresh_redraw(self):
   args=self.fixture(enabled=False,pose=0);args[2][0]['monotonic_ns']=1
   result=phase.check_stopped_phase(*args);self.assertEqual(result['clock_applicable'],False)

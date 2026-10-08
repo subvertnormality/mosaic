@@ -61,13 +61,49 @@ def wait_normal_footer(c,page):
     c.wait(lambda state:_region_matches(base64.b64decode(state["frame"]["pixels_base64"]),expected,57,64),timeout=5)
 
 
+def sample_delays(tempo):
+    """Keep the 240 BPM native draw bracket below its unchanged phase-width cap.
+
+    Keep only 10 ms of the 125 ms delay after the lower clock receipt. A cached
+    frame is rejected and reacquired after a fresh lower receipt; the native
+    frame event must still lie inside the exact clock bracket.
+    """
+    return (.115,.010) if tempo==240 else (0,.125)
+
+def _frame_after_clock_receipt(c,page,before,before_index,before_clock,s):
+    """Select a native draw after the lower clock receipt; fail closed if absent."""
+    for _ in range(4):
+        envelope=c.observations[-1]
+        events=native_events(c)
+        frame_events=[e for e in events if e.get("kind")==1 and e.get("revision")==envelope.get("frame_revision") and e.get("sha256")==s["frame"]["sha256"]]
+        assert frame_events,"Selected native frame has no retained revision/SHA event"
+        event=frame_events[-1]
+        if before_clock.get("monotonic_ns",-1)<event.get("monotonic_ns",-1):
+            return before,before_index,before_clock,s,events
+        # The selected bitmap was already cached at the lower receipt. Re-anchor
+        # after it, then require a new observed frame revision; phase_oracle still
+        # verifies the exact native event against both clock receipts.
+        previous_revision=envelope.get("frame_revision")
+        before=c.snapshot();before_index=len(c.observations)-1
+        before_clock=before.get("diagnostics",{})
+        s=c.wait(lambda state: (require_icon(state,page,True) and
+                               c.observations[-1].get("frame_revision")!=previous_revision),timeout=1)
+    raise AssertionError("No fresh native animation frame followed the selected clock receipt")
+
 def sample(c,page,enabled,seconds,require_all=False,tempo=None):
     wait_normal_footer(c,page)
     spec=atlas()[page];samples=[];seen=set();fixed=None;grid=None;count=None
+    lead_delay,bracket_delay=sample_delays(tempo)
     for _ in range(math.ceil(seconds/.125)):
+        if lead_delay:c.elapse(lead_delay)
         before=c.snapshot();before_index=len(c.observations)-1
         before_clock=before.get("diagnostics",{})
-        c.elapse(.125);s=c.snapshot();found=require_icon(s,page,enabled)
+        c.elapse(bracket_delay);s=c.snapshot()
+        if enabled:
+            before,before_index,before_clock,s,events=_frame_after_clock_receipt(c,page,before,before_index,before_clock,s)
+        # All visible-state checks must use the exact image selected for the
+        # native receipt bracket. A reanchor can replace the first snapshot.
+        found=require_icon(s,page,enabled)
         data=base64.b64decode(s["frame"]["pixels_base64"]);body=outside_icon(data,spec)
         if fixed is None:fixed=body;grid=s["grid"];count=s["midi_count"]
         assert body==fixed,"Title, scope, selection, labels, values or footer changed during header animation"
@@ -76,7 +112,6 @@ def sample(c,page,enabled,seconds,require_all=False,tempo=None):
         image_index=len(c.observations)-1;envelope=c.observations[image_index];diagnostics=s.get("diagnostics",{})
         after=s
         if enabled:
-            events=native_events(c)
             frame_events=[e for e in events if e.get("kind")==1 and e.get("revision")==envelope["frame_revision"] and e.get("sha256")==s["frame"]["sha256"]]
             assert frame_events,"Selected native frame has no retained revision/SHA event"
             draw_ns=frame_events[-1]["monotonic_ns"]
