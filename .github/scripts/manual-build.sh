@@ -22,6 +22,7 @@ PROVISIONING_LOG="$TEMP_ROOT/provisioning.log"
 MODE="${MANUAL_CI_MODE:?MANUAL_CI_MODE must be audio or build}"
 [[ "$MODE" == audio || "$MODE" == build ]] || { echo "Unknown MANUAL_CI_MODE $MODE" >&2; exit 2; }
 AUDIO_BUNDLE_DIR="${AUDIO_BUNDLE_DIR:-$TEMP_ROOT/audio-bundle}"
+AUDIO_FAILURE_RECEIPT="$EVIDENCE_ARTIFACT/audio-failure-receipt.json"
 
 mkdir -p "$TEMP_ROOT" "$EVIDENCE_ROOT" "$EVIDENCE_ARTIFACT"
 if [[ -n "${PR_NUMBER:-}" ]]; then
@@ -48,6 +49,9 @@ finalize() {
     preflight_evidence="$(awk '$1 == "Evidence" { path = $2 } END { print path }' "$PROVISIONING_LOG")"
   fi
   if [[ -n "$preflight_evidence" && -d "$preflight_evidence" ]]; then args+=(--extra-reference "$preflight_evidence"); fi
+  if [[ -f "$AUDIO_FAILURE_RECEIPT" ]]; then
+    args+=(--extra-reference "$AUDIO_FAILURE_RECEIPT")
+  fi
   for reference in "$ROOT/manual/generated/book.json" "$ROOT/manual/generated/audio-scenes.json" "$ROOT/manual/inventory.json"; do
     [[ ! -f "$reference" ]] || args+=(--extra-reference "$reference")
   done
@@ -129,7 +133,7 @@ test -s "$AUDIO_INSTALL"
 
 if [[ "$MODE" == audio ]]; then
   # The exact musical-audio-assets stage command from manual_build.plan (controlled-local).
-  MONOME_EMULATOR="$EMULATOR_ROOT" python3 "$ROOT/tools/manual_audio.py" \
+  MANUAL_AUDIO_FAILURE_RECEIPT="$AUDIO_FAILURE_RECEIPT" MONOME_EMULATOR="$EMULATOR_ROOT" python3 "$ROOT/tools/manual_audio.py" \
     --mod-code-root "$VOICE_ROOT" \
     --audio-install "$AUDIO_INSTALL" \
     --ffmpeg "$(command -v ffmpeg)" \

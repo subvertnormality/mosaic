@@ -363,7 +363,8 @@ def captured_notes(packets,origin,clock_mode,port,status,before_step=None):
         length=Fraction(round((release[key]-message[key])/1e9*6*24),24)
         if abs((message[key]-origin)/1e9-float(step)/6)>tolerance:raise AssertionError(("Onset off the 1/24-step grid",message))
         if abs((release[key]-message[key])/1e9-float(length)/6)>tolerance:raise AssertionError(("Release off the 1/24-step grid",release))
-        rows.append(dict(step=step,note=data[1],velocity=data[2],length=length))
+        rows.append(dict(step=step,note=data[1],velocity=data[2],length=length,
+                         onset_seconds=(message[key]-origin)/1e9))
     return rows
 
 def chords_by_onset(rows):
@@ -384,10 +385,33 @@ def verify_invariants(packets,contract,origin,clock_mode,port,status):
         literal=[dict(port=port,status=status,note=v["note"],velocity=v["velocity"],step=float(v["step"]),length=float(v["length"])) for v in reference]
         wanted=[dict(v,port=port,status=status) for v in contract["notes"] if a<=v["step"]<b]
         if score_order(literal)!=score_order(wanted):raise AssertionError(("Literal slot 1 output",literal,wanted))
-        before=chords_by_onset(reference);after=chords_by_onset(revoiced)
-        if [s+(c-a) for s,_ in before]!=[s for s,_ in after]:raise AssertionError(("Revoice changed the onset steps",before,after))
+        before=chords_by_onset(reference)
+        tolerance=2e-9 if clock_mode=="controlled-experimental" else .01
+        # Check every raw onset against its expected musical step before grouping chords.
+        # Grouping rounded 1/24-step timestamps first can split a chord whose packets straddle
+        # a quantisation boundary even though every packet is inside the existing tolerance.
+        grouped=[]
+        for reference_step,_ in before:
+            expected=(float(reference_step)+(c-a))/6
+            grouped.append((reference_step+(c-a),expected,[]))
+        unmatched=[]
+        for row in revoiced:
+            matches=[index for index,(_,expected,_) in enumerate(grouped)
+                     if abs(row["onset_seconds"]-expected)<=tolerance]
+            if len(matches)!=1:
+                unmatched.append(row)
+                continue
+            grouped[matches[0]][2].append(row["note"])
+        if unmatched or any(not notes for _,_,notes in grouped):
+            raise AssertionError(("Revoice changed the onset steps",before,
+                                  chords_by_onset(revoiced),
+                                  dict(unmatched=unmatched,
+                                       missing=[step for step,_,notes in grouped if not notes],
+                                       tolerance_seconds=tolerance)))
+        after=[(step,sorted(notes)) for step,_,notes in grouped]
+        observed_after=chords_by_onset(revoiced)
         verdict=check_revoice([p for _,p in before],[p for _,p in after])
-        results.append(dict(spec,**verdict,characterisation=dict(revoiced_chords=[dict(step=int(s) if s==int(s) else float(s),notes=p) for s,p in after])))
+        results.append(dict(spec,**verdict,characterisation=dict(revoiced_chords=[dict(step=int(s) if s==int(s) else float(s),notes=p) for s,p in observed_after])))
     covered=[v for v in notes if not any(spec["reference_start_step"]<=v["step"]<spec["reference_start_step"]+spec["length_steps"]
                                          or spec["revoiced_start_step"]<=v["step"]<spec["revoiced_start_step"]+spec["length_steps"]
                                          for spec in contract["invariants"])]
@@ -406,6 +430,64 @@ def witness_origin(example,tracks,first_onset_ns):
     A part may enter after step 0 (song-sections Polyperc enters on step 18)."""
     return first_onset_ns-min(v["step"] for v in mapped_score(example,tracks,witness=True))*1e9/6
 
+def build_witness_failure_receipt(example,tracks,case,packets,origin_ns,clock_mode,error,source_identity):
+    """Return a bounded raw-MIDI window for a failed lesson witness; never copy WAV or app state."""
+    contract=example["midi_contract"]
+    invariants=contract.get("invariants",[])
+    if not invariants:raise ValueError("failure receipt requires an invariant witness")
+    key="logical_ns" if clock_mode=="controlled-experimental" else "monotonic_ns"
+    bounds=[];statuses=set()
+    for spec in invariants:
+        a=spec["reference_start_step"];b=a+spec["length_steps"]
+        c=spec["revoiced_start_step"];d=c+spec["length_steps"]
+        # One step on either side retains note releases at the lesson window edges.
+        bounds.append((min(a,c)-1,max(b,d)+1))
+        statuses.add(143+WITNESS_CHANNEL_OFFSET+spec["channel"])
+    start_ns=int(origin_ns+min(v[0] for v in bounds)*1e9/6)
+    end_ns=int(origin_ns+max(v[1] for v in bounds)*1e9/6)
+    selected=[]
+    for message in midi_messages(packets):
+        stamp=message.get(key)
+        status=message["bytes"][0]
+        if (message.get("port")==1 and status in statuses.union(s-16 for s in statuses)
+                and isinstance(stamp,int) and start_ns<=stamp<=end_ns):
+            selected.append(message["index"])
+    selected=set(selected)
+    raw=[]
+    for packet in packets:
+        if packet.get("index") not in selected:continue
+        row={key_name:packet[key_name] for key_name in ("index","port","monotonic_ns","logical_ns") if key_name in packet}
+        row["bytes"]=list(packet["bytes"])
+        raw.append(row)
+    if len(raw)>4096 or sum(len(v["bytes"]) for v in raw)>65536:
+        raise ValueError("raw MIDI failure window exceeds bounded receipt limits")
+    canonical=json.dumps(raw,sort_keys=True,separators=(",",":"),allow_nan=False).encode("utf-8")
+    contract_bytes=json.dumps(contract,sort_keys=True,separators=(",",":"),allow_nan=False).encode("utf-8")
+    failure_message=str(error)
+    return {
+        "schema_version":1,
+        "kind":"manual-audio-midi-invariant-failure",
+        "example_id":example["id"],"case":case,
+        "track_channels":[track["channel"] for track in tracks],
+        "clock_mode":clock_mode,"origin_ns":int(origin_ns),
+        "expected_windows_steps":[{"start":lo,"end":hi} for lo,hi in bounds],
+        "midi_contract_sha256":hashlib.sha256(contract_bytes).hexdigest(),
+        "source_identity":source_identity,
+        "failure":{"type":type(error).__name__,"message":failure_message[:4096],
+                   "message_truncated":len(failure_message)>4096},
+        "raw_packet_window":{"start_ns":start_ns,"end_ns":end_ns,"count":len(raw),
+                              "sha256":hashlib.sha256(canonical).hexdigest(),"packets":raw},
+    }
+
+def write_witness_failure_receipt(receipt):
+    """Write only when CI explicitly supplies a receipt path; refuse overwrite."""
+    target=os.environ.get("MANUAL_AUDIO_FAILURE_RECEIPT")
+    if not target:return None
+    path=Path(target)
+    path.parent.mkdir(parents=True,exist_ok=True)
+    payload=json.dumps(receipt,indent=2,sort_keys=True,allow_nan=False)+"\n"
+    with path.open("x",encoding="utf-8") as stream:stream.write(payload)
+    return dict(path=str(path),sha256=hashlib.sha256(payload.encode("utf-8")).hexdigest())
 def verify_witness_packets(example,tracks,packets,origin):
     """Audio-session MIDI witness: the contract's literal score, or its invariants, on the witness channel."""
     invariants=example["midi_contract"].get("invariants")
@@ -827,7 +909,20 @@ def capture(example,tracks,out,options,case):
             row=course_row("real-time",before_proof,to_voices,taken,to_midi,after_proof)
             c.results.append(row);result.update(course_before_after=row)
         if witnessed:
-            verified=verify_witness_packets(example,tracks,packets(musical_state),origin)
+            witness_packets=packets(musical_state)
+            try:
+                verified=verify_witness_packets(example,tracks,witness_packets,origin)
+            except Exception as error:
+                if example["midi_contract"].get("invariants"):
+                    try:
+                        identities=dict(source_sha256=digest(options.source),tool_sha256=digest(Path(__file__)),
+                                        helper_sha256=digest(ROOT/"tools/manual_capture.py"))
+                        receipt=build_witness_failure_receipt(example,tracks,case,witness_packets,origin,"real-time",error,identities)
+                        saved=write_witness_failure_receipt(receipt)
+                        if saved:print("Preserved bounded audio failure receipt",saved["sha256"],flush=True)
+                    except Exception as evidence_error:
+                        print("Could not write bounded audio failure receipt:",repr(evidence_error),file=sys.stderr,flush=True)
+                raise
             witness=dict(verified,origin_ns=origin,capture_epoch=epoch,midi_start_index=before,midi_end_index=musical_state["midi_count"])
             wanted_controls=mapped_controls(example,tracks,witness=True)
             if wanted_controls:witness["controls"]=verify_midi_controls(packets(musical_state),wanted_controls,origin,"real-time")["controls"]
