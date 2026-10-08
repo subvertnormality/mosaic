@@ -95,6 +95,9 @@ class DoctorOptionsCiPlanTests(unittest.TestCase):
         self.assertIn("tests/behaviour/ci/rhythm_doctor_options_ci.py", text)
         self.assertIn("--audio-install /tmp/ci-audio-crow-tools/installation.json", text)
         self.assertIn("name: rhythm-doctor-options", text)
+        audio_job = text.split("  audio-crow:", 1)[1].split("\n  rhythm-doctor:", 1)[0]
+        matrix_start = audio_job.index("Run Rhythm Doctor option matrix")
+        self.assertRegex(audio_job[:matrix_start], r"(?m)^\s*run: apt-get install[^\n]*python3-jsonschema\s*$")
 
 
 if __name__ == "__main__":

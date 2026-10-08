@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "publication_kind": "doctor-options-ci-matrix",
+  "passed": false,
+  "failure": "Traceback (most recent call last):\n  File \"tests/behaviour/ci/rhythm_doctor_options_ci.py\", line 163, in main\n    summary = run_matrix(args)\n  File \"tests/behaviour/ci/rhythm_doctor_options_ci.py\", line 146, in run_matrix\n    session = run_session(sys.executable, case, clock, install, out,\n  File \"tests/behaviour/ci/rhythm_doctor_options_ci.py\", line 75, in run_session\n    raise RuntimeError(\"Doctor capture failed for \" + role_name(case, clock)\nRuntimeError: Doctor capture failed for manual_stereo with exit 1\n",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

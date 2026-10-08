@@ -1,0 +1,23 @@
+--- a/.github/workflows/behaviour.yml
++++ b/.github/workflows/behaviour.yml
+@@ -279,6 +279,8 @@
+         run: |
+           pattern="^(?:M-XA-002-AUDIO|M-XA-005-NB-LOCK|M-XA-006-NB-CHORD-ACCEL|M-XA-001-JF|M-XA-003-JF-OWNERSHIP|M-XA-004-JF-OVERLAP|M-XA-007-NB-SWITCH-SLOTS)$"
+           python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-output --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install /tmp/ci-audio-crow-tools/installation.json             --lanes real-time --profiles nb-audio,crow-jf             --mod-code-root nb-audio=/tmp/mosaic-output-mods             --mod-code-root crow-jf=/tmp/mosaic-output-mods             --case-pattern "$pattern" --skip-fast-layers
++      - name: Install source validator for Doctor options
++        run: apt-get install -y --no-install-recommends python3-jsonschema
+       - name: Run Rhythm Doctor option matrix
+         run: |
+           python3 tests/behaviour/ci/rhythm_doctor_options_ci.py \
+--- a/tests/behaviour/ci/test_rhythm_doctor_options_ci.py
++++ b/tests/behaviour/ci/test_rhythm_doctor_options_ci.py
+@@ -95,6 +95,9 @@
+         self.assertIn("tests/behaviour/ci/rhythm_doctor_options_ci.py", text)
+         self.assertIn("--audio-install /tmp/ci-audio-crow-tools/installation.json", text)
+         self.assertIn("name: rhythm-doctor-options", text)
++        audio_job = text.split("  audio-crow:", 1)[1].split("\n  rhythm-doctor:", 1)[0]
++        matrix_start = audio_job.index("Run Rhythm Doctor option matrix")
++        self.assertRegex(audio_job[:matrix_start], r"(?m)^\s*run: apt-get install[^\n]*python3-jsonschema\s*$")
+ 
+ 
+ if __name__ == "__main__":
