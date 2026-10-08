@@ -4,6 +4,7 @@ from unittest import mock
 from pathlib import Path
 from types import SimpleNamespace
 ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/"tools"))
 spec=importlib.util.spec_from_file_location("manual_build",ROOT/"tools/manual_build.py")
 build=importlib.util.module_from_spec(spec);spec.loader.exec_module(build)
 # The 2026-10-06 root installs add six named stages to the frozen 73-full/44-local baseline.

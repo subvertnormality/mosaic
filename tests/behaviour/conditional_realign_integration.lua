@@ -42,14 +42,20 @@ for _,repeat_reset in ipairs({false,true}) do
  end
  channel_edit_page_ui={}
  for _,name in ipairs({'align_global_and_local_swing_shuffle_type_values','align_global_and_local_swing_values','align_global_and_local_shuffle_feel_values','align_global_and_local_shuffle_basis_values','align_global_and_local_shuffle_amount_values','refresh_clock_mods','refresh_swing','refresh_swing_shuffle_type','refresh_shuffle_feel','refresh_shuffle_basis','refresh_shuffle_amount'}) do channel_edit_page_ui[name]=function() end end
+ local trig_lock_refreshes=0
+ channel_edit_page_ui.refresh_trig_locks=function() trig_lock_refreshes=trig_lock_refreshes+1 end
  pattern={update_working_patterns=function() end};song_edit_page={refresh=function() end};channel_edit_page={refresh=function() end}
  local Step=dofile(arg[1] or 'lib/step.lua')
  local now=0
+ local observed_song_changes=0
  lattice:new_sprocket{division=1/16,order=1,action=function()
   if data.global_step_accumulator>0 and data.global_step_accumulator%64==0 then
    Step.queue_next_song_pattern(changed and (data.selected_song_pattern==1 and 2 or 1) or data.selected_song_pattern)
   end
-  Step.process_song_song_patterns();data.global_step_accumulator=data.global_step_accumulator+1
+  local selected_before=data.selected_song_pattern
+  Step.process_song_song_patterns()
+  if data.selected_song_pattern~=selected_before then observed_song_changes=observed_song_changes+1 end
+  data.global_step_accumulator=data.global_step_accumulator+1
  end}
  local reset=song_on and ((changed and transition_reset) or repeat_reset)
  for c=1,2 do
@@ -82,6 +88,7 @@ for _,repeat_reset in ipairs({false,true}) do
   for i,tick in ipairs(expected) do assert(seen[c][i]==tick,'Wrong channel phase at global boundary') end
   for i,tick in ipairs(end_expected) do assert(ending[c][i]==tick,'Wrong companion-clock phase') end
  end
+ assert(trig_lock_refreshes==observed_song_changes,'Trig-lock UI refresh must match applied song-pattern changes')
  if not reset then assert(#delayed==6,'Missing delayed callbacks');for _,event in ipairs(delayed) do assert(event.actual==event.expected,'Boundary moved a pending callback') end end
  checked=checked+1
 end end end end

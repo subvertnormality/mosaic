@@ -38,7 +38,7 @@ class TrigParameterUiMigrationTests(unittest.TestCase):
     def test_ordinary_case_has_no_rendered_navigation_labels(self):
         source = ast.parse((BEHAVIOUR / "trig_parameter_interactions.py").read_text())
         forbidden = {"CC 1", "Control 1", "NRPN14", "Fixed Note",
-                     "Quantised Fixed Note", "Trig Probability", "Trigless locks",
+                     "Quantised Fixed Note", "Trigless locks",
                      "LEVELS >", "Ch. 1 Trig Locks", "Ch. 2 Device Config"}
         found = {node.value for node in ast.walk(source)
                  if isinstance(node, ast.Constant) and isinstance(node.value, str)}

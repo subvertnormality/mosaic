@@ -3,13 +3,14 @@
 No emulated framebuffer or native acceptance report is claimed by these tests.
 Stock source snapshot machinery supplies the source-cache test fixture.
 """
-import base64,copy,hashlib,json,tempfile,unittest
+import base64,copy,hashlib,json,tempfile,unittest,sys
 from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/"tools"))
+sys.path.insert(0,str(ROOT/"tests/behaviour"))
 import manual_save_dialog_oracle as oracle
 from manual_case_capture import persist_start_sources
 from manual_publication_verify import check_custom_kind,verify_teaching_checkpoint
-
-ROOT=Path(__file__).resolve().parents[2]
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
 class SaveDialogAuditTest(unittest.TestCase):

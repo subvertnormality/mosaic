@@ -11,6 +11,14 @@ WORKFLOW = Path(__file__).resolve().parents[3] / '.github' / 'workflows' / 'beha
 
 
 class WorkflowCountTests(unittest.TestCase):
+    def test_base_shards_install_manual_validator_dependencies_before_fast_layers(self):
+        text = WORKFLOW.read_text()
+        packages = re.search(r"(?ms)^      - &packages\n.*?^        run: \|\n(?P<run>.*?)^      - &checkout", text)
+        self.assertIsNotNone(packages)
+        self.assertIn("python3-jsonschema", packages.group("run"))
+        self.assertIn("python3-yaml", packages.group("run"))
+        self.assertLess(text.index("- &packages"), text.index("Run exhaustive base-MIDI shard"))
+
     def test_coverage_expects_every_base_shard_plus_the_two_profile_reports(self):
         text = WORKFLOW.read_text()
         shards = re.search(r'^\s*shard: \[([0-9, ]+)\]', text, re.M)

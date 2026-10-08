@@ -30,11 +30,11 @@
  "manual": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
  "manual_sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "1d96ac8ef6aa7f5fb69b37263ad9d809afd0eede0c706bca82ebdc331c59d595",
+ "inventory_sha256": "e26921ca76795aa043b5b7e1565861e181a911650f6334eb138130815d8b1f1c",
  "counts": {
   "requirements": 177,
-  "production_lua_modules": 171,
-  "unit_integration_files": 140,
+  "production_lua_modules": 175,
+  "unit_integration_files": 148,
   "domains": 17
  },
  "coverage_language": {
@@ -125,7 +125,8 @@
     "lib/musical_merge/timeline.lua",
     "lib/musical_resolution/articulation.lua",
     "lib/optional_config_transaction.lua",
-    "lib/pages/channel_edit_page/channel_feature_editor.lua"
+    "lib/pages/channel_edit_page/channel_feature_editor.lua",
+    "lib/musical_merge/strategy.lua"
    ],
    "existing_unit_integration_files": [
     "lib/tests/lib/channel_feature_editor_tests.lua",
@@ -159,7 +160,8 @@
     "lib/tests/lib/merge_foundation_rank_prefix_tests.lua",
     "lib/tests/lib/merge_wrap_fastpath_tests.lua",
     "lib/tests/lib/merge_wrap_pulse_share_tests.lua",
-    "lib/tests/lib/harmony_scale_pitch_classes_memo_tests.lua"
+    "lib/tests/lib/harmony_scale_pitch_classes_memo_tests.lua",
+    "lib/tests/lib/merge_strategy_ui_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-MERGE-FOUNDATION-001",
@@ -471,7 +473,9 @@
     "lib/ui_router.lua",
     "lib/ui_spec_data.lua",
     "lib/ui_splash.lua",
-    "lib/ui_splash_logo.lua"
+    "lib/ui_splash_logo.lua",
+    "lib/ui_mini.lua",
+    "lib/ui_mini_atlas.lua"
    ],
    "existing_unit_integration_files": [
     "lib/tests/lib/channel_edit_page_ui_delta_killers_tests.lua",
@@ -505,7 +509,9 @@
     "lib/tests/lib/ui_overview_cells_tests.lua",
     "lib/tests/lib/ui_render_footer_hints_tests.lua",
     "lib/tests/lib/ui_router_tests.lua",
-    "lib/tests/lib/ui_splash_tests.lua"
+    "lib/tests/lib/ui_splash_tests.lua",
+    "lib/tests/lib/ui_mini_tests.lua",
+    "lib/tests/lib/ui_vertical_list_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-CHANNEL-001",
@@ -1269,7 +1275,8 @@
     "lib/tests/lib/step_delta_killers_tests.lua",
     "lib/tests/lib/step_mutation_killers_tests.lua",
     "lib/tests/lib/step_test.lua",
-    "lib/tests/lib/strum_descriptor_tests.lua"
+    "lib/tests/lib/strum_descriptor_tests.lua",
+    "lib/tests/lib/strum_gate_release_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-ARP-001",
@@ -2160,7 +2167,8 @@
     "lib/pages/song_edit_page/song_edit_page_ui.lua",
     "lib/project_lifecycle.lua",
     "lib/project_validation.lua",
-    "lib/song_transition.lua"
+    "lib/song_transition.lua",
+    "lib/song_slot_params.lua"
    ],
    "existing_unit_integration_files": [
     "lib/tests/lib/application_parameters_group_tests.lua",
@@ -2170,7 +2178,8 @@
     "lib/tests/lib/program_extra_tests.lua",
     "lib/tests/lib/program_tests.lua",
     "lib/tests/lib/project_load_integration_tests.lua",
-    "lib/tests/lib/project_validation_tests.lua"
+    "lib/tests/lib/project_validation_tests.lua",
+    "lib/tests/lib/song_slot_stock_params_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-ENDURANCE-001",
@@ -2624,7 +2633,10 @@
    ],
    "existing_unit_integration_files": [
     "lib/tests/lib/project_load_integration_tests.lua",
-    "lib/tests/lib/source_pattern_revision_tests.lua"
+    "lib/tests/lib/source_pattern_revision_tests.lua",
+    "lib/tests/lib/rhythm_doctor_mailbox_path_tests.lua",
+    "lib/tests/lib/rhythm_doctor_setup_backend_tests.lua",
+    "lib/tests/lib/ui_live_doctor_route_refresh_tests.lua"
    ],
    "linked_behaviour_cases": [],
    "status": "hardening-complete-generated"
@@ -2715,7 +2727,7 @@
  "current_inventory_counts": {
   "manual_requirements": 178,
   "domain_requirements": 177,
-  "case_ids": 888,
+  "case_ids": 889,
   "outside_domain_requirement_ids": [
    "SETUP-CONFIG-CREATOR"
   ],
