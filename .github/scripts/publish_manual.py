@@ -27,7 +27,7 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # 37503722733 failed there with "MONOME_EMULATOR is required").
     PRODUCER_TOOLING_POLICY_VERSION: {
         ".github/workflows/manual-build.yml": "a70fc1d76e359a4b086ad365a4c79a4bf16fd86ce2a4f336cad3aaa9a06f93e0",
-        ".github/scripts/manual-build.sh": "b7d646e9de859612cf732e9a7fbf7ca061bb9828daabc5b5eb5b839d6b5e6d6e",
+        ".github/scripts/manual-build.sh": "14418558db9a270f2218c802b0c8479d79aeb4ae0a03b0df3b440c9c3d9bc866",
         ".github/scripts/manual_artifact.py": "7b9bc0bdb0f1e4a143370af2cd220a0db1f4cb65a640c72247408332ec1aaab6",
     },
 }
