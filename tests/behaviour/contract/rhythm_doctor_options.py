@@ -238,6 +238,10 @@ def _destination(c, number):
                           contract=CONTRACT,
                           citation='characterisation: docs/ui-reimplementation/spec.json G20 destination route',
                           output=output))
+    # The Rhythm Doctor row is conditional on algorithm 5 for the selected
+    # pattern. Choose it through the public grid control after pattern change,
+    # then use the named task handoff whether the chooser landed on P01 or R05.
+    c.ui.select_rhythm_doctor_algorithm('rhythm_doctor')
     c.ui.open_task('Trig', 'rhythm_doctor')
     c.ui.expect_rhythm_doctor_header('R05')
 
