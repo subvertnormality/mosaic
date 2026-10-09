@@ -3,12 +3,66 @@ import ast,importlib.util,json,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tests/behaviour'))
-spec=importlib.util.spec_from_file_location('doctor_registration_runner',ROOT/'tools/doctor_options_capture.py')
-runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
 from contract import rhythm_doctor_start_beat as procedure
 from contract import rhythm_doctor_options as option_recipe
+from driver import Driver as PublicDriver
+spec=importlib.util.spec_from_file_location('doctor_registration_runner',ROOT/'tools/doctor_options_capture.py')
+runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
 
 STAGED_DOCTOR_OPTION_REGISTRATIONS = {'MA-DOCTOR-SETUP-OPTIONS-001'}
+
+class ReadyMidiJsonBoundary(unittest.TestCase):
+    def playback_driver(self):
+        class UI:
+            def expect_rhythm_doctor_header(self, _route): pass
+        class DriverHarness:
+            playback = PublicDriver.playback
+            def __init__(self):
+                self.ui = UI(); self.results = []; self.calls = 0; self.taps = []
+                canonical = [(1, [144, 60, 91]), (2, [145, 64, 73]), (1, [144, 60, 91])]
+                self.midi = [dict(index=11+i, port=port, bytes=payload)
+                             for i, (port, payload) in enumerate(canonical * 3)]
+            def snapshot(self):
+                self.calls += 1
+                return {'midi_count': 10 if self.calls <= 2 else 10 + len(self.midi),
+                        'midi': self.midi,
+                        'midi_capture': {'outstanding': []}}
+            def tap(self, x, y): self.taps.append((x, y))
+            def wait(self, predicate, timeout=5):
+                state = self.snapshot()
+                if not predicate(state): raise AssertionError('fake capture did not reach Driver playback predicate')
+                return state
+        return DriverHarness()
+
+    def test_ready_playback_converts_json_pairs_to_driver_tuples_without_mutation(self):
+        raw = json.loads('[ [1, [144, 60, 91]], [2, [145, 64, 73]], [1, [144, 60, 91]] ]')
+        original = json.loads(json.dumps(raw))
+        driver = self.playback_driver()
+        option_recipe._ready_playback(driver, {'midi_expected': raw}, 'live-preview-commit')
+        expected = [(1, [144, 60, 91]), (2, [145, 64, 73]), (1, [144, 60, 91])]
+        self.assertEqual(driver.results[0]['expected'], expected * 3)
+        self.assertEqual(driver.results[0]['actual'], expected * 3)
+        self.assertEqual(raw, original, 'Normalization mutated the decoded fixture')
+        self.assertEqual(driver.results[1]['expectedphrase'], original)
+        self.assertEqual(driver.taps, [(1, 8), (1, 8)])
+        self.assertEqual(driver.results[0]['complete_cycles'], 2)
+
+    def test_actual_driver_playback_rejects_missing_extra_reordered_and_changed_events(self):
+        canonical = [[1, [144, 60, 91]], [2, [145, 64, 73]], [1, [144, 60, 91]]]
+        cases = [
+            canonical[:-1],
+            canonical + [[2, [145, 67, 73]]],
+            [canonical[1], canonical[0], canonical[2]],
+            [[9, canonical[0][1]], canonical[1], canonical[2]],
+            [[canonical[0][0], [144, 60, 90]], canonical[1], canonical[2]],
+        ]
+        for raw in cases:
+            with self.subTest(raw=raw):
+                driver = self.playback_driver()
+                with self.assertRaises(AssertionError):
+                    option_recipe._ready_playback(driver, {'midi_expected': raw}, 'live-preview-commit')
+                self.assertEqual(driver.taps, [(1, 8)], 'Rejected phrase must not issue the stop tap as a pass')
+
 
 class DoctorQualificationRegistrationTests(unittest.TestCase):
     def test_stable_id_and_manual_citation_are_not_global_case_registration(self):

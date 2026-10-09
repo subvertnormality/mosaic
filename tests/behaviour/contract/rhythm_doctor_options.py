@@ -313,10 +313,22 @@ def _browse(c, direction, target, tooltip, held=False):
             window_start=target, tooltip=tooltip)
 
 
+def _driver_midi_pairs(events):
+    """Convert JSON [port, bytes] rows to Driver's tuple-pair API unchanged."""
+    if not isinstance(events, (list, tuple)):
+        raise ValueError('Expected a MIDI event sequence')
+    pairs = []
+    for event in events:
+        if not isinstance(event, (list, tuple)) or len(event) != 2:
+            raise ValueError('Expected each MIDI event to be a [port, bytes] pair')
+        pairs.append((event[0], event[1]))
+    return pairs
+
+
 def _ready_playback(c, fixture, ident):
     """Keep Driver's exact phrase oracle and bind its native packet interval."""
     before = c.snapshot()['midi_count']
-    attacks = c.playback(fixture['midi_expected'], cycles=2,
+    attacks = c.playback(_driver_midi_pairs(fixture['midi_expected']), cycles=2,
                          timeout=fixture.get('playback_timeout', 15))
     state = c.snapshot()
     assert state['midi_capture']['outstanding'] == []
