@@ -1358,7 +1358,6 @@ def native_source_identity(path,voice_roots=False,profile='base-midi',applicatio
  if application_root is not None:
   application_root=Path(application_root).resolve(strict=True)
   if not application_root.is_dir():raise ValueError('Invalid frozen application root')
-  allowed.append(application_root)
  if profile=='midi-modulation':allowed.extend(modulation_source_roots(path,app))
  if profile=='manual-player-ui':allowed.extend(player_source_roots(path,app))
  if voice_roots:
@@ -1374,10 +1373,11 @@ def native_source_identity(path,voice_roots=False,profile='base-midi',applicatio
  for item in app['files']:
   file=(root/item['path']).resolve()
   relative=Path(item['path'])
-  if relative.is_absolute() or '..' in relative.parts or not any(parent in file.parents for parent in allowed):raise ValueError('Unsafe native application path')
+  if relative.is_absolute() or '..' in relative.parts:raise ValueError('Unsafe native application path')
   if application_root is not None and relative.parts[0]=='mosaic':
    expected=application_root.joinpath(*relative.parts[1:]).resolve(strict=True)
    if file!=expected:raise ValueError('Unsafe native application path')
+  elif not any(parent in file.parents for parent in allowed):raise ValueError('Unsafe native application path')
   if digest(file)!=item['sha256'] or file.stat().st_size!=item['size']:raise ValueError('Changed native application source')
   if relative.parts[0]=='mosaic':
    current=ROOT.joinpath(*relative.parts[1:])

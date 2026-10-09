@@ -48,6 +48,12 @@ class DoctorFrozenApplicationPath(unittest.TestCase):
    out,app,_,identity_path=self.tree(Path(tmp))
    ident=json.loads(identity_path.read_text()); ident["application_identity"]["files"][0]["path"]="/tmp/outside.lua"; identity_path.write_text(json.dumps(ident))
    with self.assertRaisesRegex(ValueError,"Unsafe native application path"): self.check(out,app)
+ def test_explicit_root_does_not_allow_non_mosaic_symlink(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   out,app,_,identity_path=self.tree(Path(tmp))
+   (out/"code"/"elsewhere").symlink_to(app,target_is_directory=True)
+   ident=json.loads(identity_path.read_text()); ident["application_identity"]["files"][0]["path"]="elsewhere/source.lua"; identity_path.write_text(json.dumps(ident))
+   with self.assertRaisesRegex(ValueError,"Unsafe native application path"): self.check(out,app)
  def test_digest_and_size_changes_remain_rejected(self):
   with tempfile.TemporaryDirectory() as tmp:
    out,app,actual,identity_path=self.tree(Path(tmp)); actual.write_bytes(b"changed source")
