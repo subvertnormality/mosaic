@@ -343,6 +343,29 @@ def _ready_playback(c, fixture, ident):
                           complete_cycles=2, outstanding_notes=[]))
 
 
+def _replace_lane_while_playing(c, lane, outside):
+    """Exercise a visible Replace write, not an identical-pattern no-op.
+
+    The extra destination gate is toggled through the documented public G21
+    grid gesture. Replace preview should leave that base-only gate bright while
+    source/destination overlaps blink dim; the second public Paint press must
+    remove it and leave the exact captured lane.
+    """
+    lane = frozenset(lane)
+    if type(outside) is not int or outside in lane or not 1 <= outside <= 64:
+        raise ValueError('Replace needs one valid destination-only step')
+    _toggle_destination_steps(c, [outside], 3)
+    _mask(c, lane | {outside})
+    c.ui.tap_control('paint')
+    _mask(c, {outside}, True)
+    c.ui.play()
+    try:
+        c.ui.tap_control('paint')
+    finally:
+        c.ui.stop()
+    _mask(c, lane)
+
+
 def ready_options(c, fixture):
     """Prepared genuine project_seed Driver; unrun staged acceptance.
 
@@ -558,17 +581,13 @@ def ready_options(c, fixture):
     witnesses['end'] = _native_witness(c)
     _record(c, 'playing-record-refused', route='R05', released=True,
             bank_bpm=fixture['bank_bpm'], steps=sorted(lane), witnesses=witnesses)
-    # Armed Replace preview survives transport start and commits while playing.
+    # Armed Replace preview survives transport start and commits a real change.
+    # One user-added destination-only gate makes removal observable; using a
+    # lane identical to the capture correctly returns NO_PAINT_CHANGE.
     _select(c, 'R05', 'Paint policy')
     _field(c, 'R05', 'Paint policy', 'REPLACE')
-    ui.tap_control('paint')
-    _mask(c, [], True)  # All source gates overlap existing destination gates.
-    ui.play()
-    try:
-        ui.tap_control('paint')
-    finally:
-        ui.stop()
-    _mask(c, lane)
+    outside = next(s for s in range(1, 65) if s not in lane)
+    _replace_lane_while_playing(c, lane, outside)
     _ready_playback(c, fixture, 'live-preview-commit')
     # Confirm clear only after release. Painted gates/MIDI must survive.
     ui.rhythm_doctor_capture_edge(True)

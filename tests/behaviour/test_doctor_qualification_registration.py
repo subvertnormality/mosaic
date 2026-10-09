@@ -1,11 +1,13 @@
 """Registration-only guards; public ADC/native acceptance remains separate."""
-import ast,importlib.util,json,sys,tempfile,unittest
+import ast,base64,hashlib,importlib.util,json,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tests/behaviour'))
 from contract import rhythm_doctor_start_beat as procedure
 from contract import rhythm_doctor_options as option_recipe
 from driver import Driver as PublicDriver
+from ui import Ui
+from ui_map import control_cell
 spec=importlib.util.spec_from_file_location('doctor_registration_runner',ROOT/'tools/doctor_options_capture.py')
 runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
 
@@ -64,6 +66,63 @@ class ReadyMidiJsonBoundary(unittest.TestCase):
                 self.assertEqual(driver.taps, [(1, 8)], 'Rejected phrase must not issue the stop tap as a pass')
 
 
+class ReadyReplaceGestureRegression(unittest.TestCase):
+    def test_live_replace_uses_public_extra_step_and_preserves_exact_masks(self):
+        lane = frozenset({11,17,23,28,35,41,47,53,58})
+        outside = 1
+        events = []
+
+        class DriverHarness:
+            def __init__(self):
+                self.grid = [0] * 128
+                for step in lane:
+                    x, y = option_recipe.STEP_CELLS[step - 1]
+                    self.grid[(y - 1) * 16 + x - 1] = 15
+                self.results = []; self.paint_count = 0; self.observed_masks = []
+                self.running = False
+            def tap(self, x, y):
+                events.append(('grid-tap', x, y))
+                if (x, y) == control_cell('step', outside):
+                    self.grid[(y - 1) * 16 + x - 1] = 15
+                elif (x, y) == control_cell('paint'):
+                    self.paint_count += 1
+                    for step in lane:
+                        sx, sy = option_recipe.STEP_CELLS[step - 1]
+                        self.grid[(sy - 1) * 16 + sx - 1] = 3 if self.paint_count == 1 else 15
+                    sx, sy = option_recipe.STEP_CELLS[outside - 1]
+                    self.grid[(sy - 1) * 16 + sx - 1] = 15 if self.paint_count == 1 else 0
+                elif (x, y) == control_cell('play_stop'):
+                    self.running = not self.running
+                    events.append(('transport', 'playing' if self.running else 'stopped'))
+                else:
+                    self.fail('unexpected mapped public tap: %r' % ((x, y),))
+            def snapshot(self):
+                pixels = bytes((0,0,0,255)) * (128 * 64)
+                return {'grid': list(self.grid), 'frame': {
+                    'pixels_base64': base64.b64encode(pixels).decode('ascii'),
+                    'sha256': hashlib.sha256(pixels).hexdigest()}}
+            def wait(self, predicate, timeout=5):
+                state = self.snapshot()
+                if not predicate(state): raise AssertionError('exact public grid mask did not match')
+                indexes = [((y - 1) * 16 + x - 1) for x, y in option_recipe.STEP_CELLS]
+                self.observed_masks.append(frozenset(i + 1 for i, idx in enumerate(indexes)
+                                                      if state['grid'][idx] in (12,15)))
+                return state
+
+        class UI(Ui):
+            def expect_rhythm_doctor_header(self, route): events.append(('header', route))
+
+        driver = DriverHarness(); driver.ui = UI(driver)
+        option_recipe._replace_lane_while_playing(driver, lane, outside)
+        self.assertEqual(events, [
+            ('header','R05'), ('grid-tap', *control_cell('step', outside)),
+            ('header','R05'), ('grid-tap', *control_cell('paint')),
+            ('grid-tap', *control_cell('play_stop')), ('transport','playing'),
+            ('grid-tap', *control_cell('paint')),
+            ('grid-tap', *control_cell('play_stop')), ('transport','stopped')])
+        self.assertEqual(driver.observed_masks, [lane | {outside}, {outside}, lane])
+        edit = next(row for row in driver.results if row.get('kind') == 'doctor-ready-step-edit')
+        self.assertEqual(edit['steps'], [outside]); self.assertTrue(edit['passed'])
 class DoctorQualificationRegistrationTests(unittest.TestCase):
     def test_stable_id_and_manual_citation_are_not_global_case_registration(self):
         self.assertEqual(getattr(procedure,'CASE_ID',None),'MA-DOCTOR-MANUAL-START-BEAT-001')
