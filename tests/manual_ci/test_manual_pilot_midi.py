@@ -104,7 +104,7 @@ class RetainedPilotMidi(unittest.TestCase):
     def test_expected_only_phrase_is_rejected_by_real_teaching_producer(self):
         phrase = self.scene["steps"][1]["expect"]["midi_phrase"]
         native = {"to_step": {"output": {}, "expect": {"midi_phrase": phrase}}}
-        with self.assertRaisesRegex(ValueError, "target MIDI missing or truncated"):
+        with self.assertRaisesRegex(ValueError, "target MIDI missing, truncated, or lacks its typed source receipt"):
             manual_teaching_v8._validate_output(native, {"midi_events_at_target": phrase})
 
     def test_missing_note_off_and_reordered_stream_are_rejected(self):

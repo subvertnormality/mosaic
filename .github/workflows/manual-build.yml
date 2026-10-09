@@ -22,7 +22,7 @@ jobs:
     name: Record manual audio assets
     runs-on: ubuntu-latest
     container:
-      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 360
     permissions:
@@ -78,7 +78,7 @@ jobs:
           echo "id=$identity" >> "$GITHUB_OUTPUT"
           echo "Audio input identity: $identity"
         env:
-          CONTAINER_IMAGE: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+          CONTAINER_IMAGE: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       - name: Find audio already recorded from identical inputs
         id: audio-reuse
         shell: bash
@@ -141,7 +141,7 @@ jobs:
     needs: record-audio
     runs-on: ubuntu-latest
     container:
-      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 360
     env:

@@ -28,7 +28,7 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # 2026-10-07 (Claude): manual-build.sh re-pinned after giving the Masks provisioning capture MONOME_EMULATOR (CI run
     # 37503722733 failed there with "MONOME_EMULATOR is required").
     PRODUCER_TOOLING_POLICY_VERSION: {
-        ".github/workflows/manual-build.yml": "15a2c745bda22dad21a080d928d73f487d06ab4f343cffc25b83b0deca57d82f",
+        ".github/workflows/manual-build.yml": "32a350cecd9ef198c999140170e22eeb9473a5aeec35b17c557c0c0b17c271d0",
         ".github/scripts/manual-build.sh": "14418558db9a270f2218c802b0c8479d79aeb4ae0a03b0df3b440c9c3d9bc866",
         ".github/scripts/manual_artifact.py": "8012a9e1e0f51f240954646e82c5dcfa49f92dfaff61eebf2b0ff12a4f826f23",
     },
