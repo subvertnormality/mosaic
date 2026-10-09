@@ -338,6 +338,38 @@ fetch_pin matrix https://example.invalid/matrix.git "$EXPECTED_SHA"
 
 
 class EvidenceSymlinkBoundaryTests(unittest.TestCase):
+    def test_referenced_private_code_symlink_is_excluded_but_included_symlink_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            build = root / "build"
+            build.mkdir()
+            (build / "manifest.json").write_text(json.dumps({"stages": []}))
+            private_code = root / "captured" / "code"
+            private_code.mkdir(parents=True)
+            outside = root / "private-source"
+            outside.mkdir()
+            (outside / "secret.txt").write_text("private source")
+            code_link = private_code / "mosaic"
+            code_link.symlink_to(outside, target_is_directory=True)
+            identity = root / "source-identity.json"
+            identity.write_text(json.dumps({"commit_sha": "a" * 40}))
+            output = root / "bundle"
+
+            result = artifact.make_evidence_bundle(
+                build, output, source_identity=identity, extra_references=[str(code_link)])
+
+            self.assertEqual(result["source_path_map"][str(code_link)]["status"], "excluded-private-tree")
+            self.assertIn("source-identity.json", result["files"])
+            self.assertFalse(any("secret.txt" in name for name in result["files"]))
+
+            native = root / "captured" / "native"
+            native.mkdir()
+            native_link = native / "report.json"
+            native_link.symlink_to(outside / "secret.txt")
+            with self.assertRaisesRegex(ValueError, "Symlink in referenced evidence"):
+                artifact.make_evidence_bundle(
+                    build, root / "second-bundle", extra_references=[str(native_link)])
+
     def test_copy_evidence_skips_excluded_code_symlink_but_rejects_allowed_symlink(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

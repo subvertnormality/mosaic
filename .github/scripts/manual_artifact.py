@@ -505,6 +505,13 @@ def make_evidence_bundle(build, output, source_identity=None, artifact_manifest=
         seen.add(source_value)
         source = Path(source_value)
         record = {"source": source_value, "expected_sha256": expected_sha}
+        # Private captured trees are outside the referenced-evidence contract.
+        # Exclude them before exists()/is_symlink(), which would otherwise
+        # reject (or follow) a private code-tree link.
+        if EVIDENCE_EXCLUDED_PARTS.intersection(source.parts):
+            record["status"] = "excluded-private-tree"
+            path_map[source_value] = record
+            continue
         if not source.is_absolute() or not source.exists():
             record["status"] = "missing-at-export"
             path_map[source_value] = record
@@ -521,12 +528,12 @@ def make_evidence_bundle(build, output, source_identity=None, artifact_manifest=
         candidates = [source] if source.is_file() else sorted(source.rglob("*"))
         copied = []
         for item in candidates:
+            rel = Path(item.name) if source.is_file() else item.relative_to(source)
+            if EVIDENCE_EXCLUDED_PARTS.intersection(rel.parts):
+                continue
             if item.is_symlink():
                 raise ValueError("Symlink in referenced evidence: " + str(item))
-            if not item.is_file():
-                continue
-            rel = Path(item.name) if source.is_file() else item.relative_to(source)
-            if EVIDENCE_EXCLUDED_PARTS.intersection(rel.parts) or item.suffix.lower() not in EVIDENCE_SUFFIXES:
+            if not item.is_file() or item.suffix.lower() not in EVIDENCE_SUFFIXES:
                 continue
             dest_rel = prefix / rel
             dest = target / dest_rel

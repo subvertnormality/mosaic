@@ -9,6 +9,7 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/"tools"))
 sys.path.insert(0,str(ROOT/"tests/behaviour"))
 import manual_save_dialog_oracle as oracle
+import manual_save_dialog_cases as save_case
 from manual_case_capture import persist_start_sources
 from manual_publication_verify import check_custom_kind,verify_teaching_checkpoint
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -30,6 +31,18 @@ class SaveDialogAuditTest(unittest.TestCase):
   self.step=dict(inputs=[],output=dict(grid=[0]*128,binding=dict(sha256=self.sha,assertion=row)))
   self.observations=[dict(state=self.state)]
  def audit(self):oracle.verify_checkpoint(self.step,self.observations,self.case)
+ def test_original_fixture_path_is_resolved_from_fixture_root(self):
+  manifest=json.loads((self.fixture/'DERIVATION.json').read_text())
+  for origin in manifest['origins']:
+   relative=Path(origin['path'])
+   self.assertFalse(relative.is_file(),'fixture-relative path must not depend on the process cwd')
+   resolved=save_case.fixture_origin_path(origin)
+   self.assertEqual(resolved,self.fixture/relative)
+   self.assertEqual(digest(resolved),origin['sha256'])
+   self.assertEqual(digest(resolved),manifest['original_files'][origin['original_name']])
+  for unsafe in ('../outside.ptn','/tmp/outside.ptn'):
+   with self.subTest(path=unsafe),self.assertRaisesRegex(ValueError,'stay within'):
+    save_case.fixture_origin_path(dict(path=unsafe))
  def test_stock_source_cache_inventory_and_valid_literal_frame(self):self.audit()
  def test_stock_verifier_typed_branch(self):
   verify_teaching_checkpoint(self.step,self.observations,self.case,'controlled-experimental',[])

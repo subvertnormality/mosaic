@@ -12,6 +12,15 @@ CASE='M-MANUAL-SAVE-DIALOG-001'
 FIXTURE=ROOT/'tests/behaviour/config/manual-save-dialog'
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
+def fixture_origin_path(origin):
+    relative=Path(origin["path"])
+    if relative.is_absolute() or not relative.parts or ".." in relative.parts:
+        raise ValueError("Save Dialog origin must stay within its pinned fixture")
+    path=FIXTURE/relative
+    if path.is_symlink() or not path.is_file():
+        raise ValueError("Save Dialog origin is missing from its pinned fixture")
+    return path
+
 def save_dialog(c):
     manifest=json.loads((FIXTURE/'DERIVATION.json').read_text())
     witness=c.out/'save-dialog-evidence';witness.mkdir()
@@ -67,8 +76,9 @@ def save_dialog(c):
     # tab.save iteration order varies; all decoded fields/types must be equal.
     # Original and observed byte hashes remain distinct, and pset stays exact.
     from manual_save_project_canonical import prove
-    original=Path(manifest['origins'][0]['path'])
-    assert sha(original)==manifest['original_files']['Four notes.ptn']
+    origin=manifest['origins'][0]
+    original=fixture_origin_path(origin)
+    assert sha(original)==origin['sha256']==manifest['original_files'][origin['original_name']]
     assert saved['Four notes.pset']==manifest['original_files']['Four notes.pset']
     content=prove(c.data_directory/(NAME+'.ptn'),original,FIXTURE,ROOT/'tests/behaviour/persisted_digest.lua')
     for filename in saved:(witness/filename).write_bytes((c.data_directory/filename).read_bytes())
