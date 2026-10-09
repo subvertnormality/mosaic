@@ -17,7 +17,7 @@ from contract import rhythm_doctor_options as recipe
 
 
 class ReadyTransportCoverage(unittest.TestCase):
-    def execute(self, fail_held=False):
+    def execute(self, fail_held=False, fail_output=False):
         events = []
         class UI:
             playing = False
@@ -52,19 +52,40 @@ class ReadyTransportCoverage(unittest.TestCase):
                 self.results = []
                 self.observations = []
                 self.recipe = []
+                self.fail_output = fail_output
+                self.wait_evaluations = []
+                self.midi = [{'index': 1, 'port': 1, 'bytes': [144, 60, 100]}]
+            def _state(self):
+                return {'frame': {'sha256': 'f' * 64}, 'grid': [0] * 128,
+                        'midi_capture': {'outstanding': []},
+                        'midi_count': len(self.midi), 'midi': list(self.midi)}
             def snapshot(self):
-                state = {'frame': {'sha256': 'f' * 64}, 'grid': [0] * 128,
-                         'midi_capture': {'outstanding': []}}
+                state = self._state()
                 self.observations.append({'state': state})
                 return state
             def elapse(self, seconds):
                 pass
-            def wait(self, predicate):
-                return {'midi_capture': {'outstanding': []}}
+            def wait(self, predicate, timeout=3):
+                probes = [self._state()]
+                if self.ui.playing:
+                    self.midi.append({'index': 2, 'port': 1, 'bytes': [144, 60, 99]})
+                    probes.append(self._state())
+                    if not self.fail_output:
+                        self.midi.append({'index': 3, 'port': 1, 'bytes': [144, 60, 100]})
+                        probes.append(self._state())
+                for state in probes:
+                    matched = predicate(state)
+                    observed = tuple((m['index'], m['port'], tuple(m['bytes'])) for m in state['midi'])
+                    self.wait_evaluations.append((self.ui.playing, self.ui.held, matched, observed, timeout))
+                    events.append(('wait-eval', self.ui.playing, self.ui.held, matched, observed, timeout))
+                    if matched:
+                        return state
+                raise AssertionError('Required observable output did not arrive')
         c = Driver()
         owner = c
         fixture = dict(window_max=173, bank_bpm=120, beat_count=60,
                        masks_by_sensitivity={'0': [], '1': [], '0.5': [10]},
+                       midi_expected=[[1, [144, 60, 100]]],
                        acquisition_report='genuine-fixture-path')
         with ExitStack() as stack:
             for name in ('_qualify_fixture', '_select', '_turn', '_key',
@@ -81,10 +102,32 @@ class ReadyTransportCoverage(unittest.TestCase):
             try:
                 recipe.ready_options(c, fixture)
             except AssertionError:
-                if not fail_held:
+                if not (fail_held or fail_output):
                     raise
                 return events, c, True
         return events, c, False
+
+    def test_playing_record_waits_for_new_exact_fixture_midi_before_record(self):
+        events, c, _ = self.execute()
+        playing_waits = [row for row in events if row[0] == 'wait-eval' and row[1]]
+        self.assertEqual([row[3] for row in playing_waits], [False, False, True],
+                         'wait must reject stale and wrong-payload MIDI before accepting the new fixture note')
+        self.assertTrue(all(abs(row[5] - (64 + 10) / 6) < 1e-9 for row in playing_waits),
+                        'musical onset deadline must derive from one cycle plus the lane first gate')
+        record_index = events.index(('record', True, True))
+        accepted_index = max(i for i, row in enumerate(events)
+                            if row[0] == 'wait-eval' and row[1] and row[3])
+        self.assertLess(accepted_index, record_index,
+                        'Record refusal must be exercised only after new playing MIDI is observed')
+        self.assertIn((3, 1, (144, 60, 100)), playing_waits[-1][4])
+
+    def test_missing_playing_midi_times_out_and_releases_transport(self):
+        events, c, failed = self.execute(fail_output=True)
+        self.assertTrue(failed, 'missing actual musical output must fail the READY recipe')
+        self.assertFalse(c.ui.held)
+        self.assertFalse(c.ui.playing, 'timeout must stop public playback in finally')
+        self.assertFalse(any(row == ('record', True, True) for row in events),
+                         'the refusal gesture must not run without prior MIDI output')
 
     def test_public_record_press_and_release_are_exercised_while_playing(self):
         events, _, _ = self.execute()

@@ -546,9 +546,27 @@ def ready_options(c, fixture):
     _field(c, 'R06', 'Half tempo', fixture['bank_bpm'])
     _key(c, 'discard_draft')
     # While playing, READY edits work, Alignment/Record remain stopped-only.
+    # Wait for a new, exact fixture note from the public MIDI capture before
+    # exercising Record refusal; a short button sequence can stop before the
+    # first occupied step in this sparse lane. One 64-step cycle plus the
+    # first gate bounds the wait using the same 120-BPM step scale as the
+    # Doctor phrase oracle.
+    midi_before = c.snapshot()['midi_count']
     witnesses = dict(pre_play=_native_witness(c))
     ui.play()
     try:
+        expected_notes = fixture['midi_expected']
+        lane = fixture['masks_by_sensitivity']['0.5']
+        step_seconds = (1.0 / 6.0) * (120.0 / fixture['bank_bpm'])
+        timeout = (64 + min(lane)) * step_seconds
+        c.wait(lambda state: any(
+            packet.get('index', 0) > midi_before
+            and packet.get('port') == port
+            and packet.get('bytes') == data
+            and 144 <= packet.get('bytes', [0])[0] <= 159
+            and packet['bytes'][2] > 0
+            for packet in state.get('midi', [])
+            for port, data in expected_notes), timeout=timeout)
         _select(c, 'R05', 'Alignment'); _turn(c, 3, 1)
         ui.expect_rhythm_doctor_header('R05')
         # Record's running-transport refusal is silent. It must not open a
