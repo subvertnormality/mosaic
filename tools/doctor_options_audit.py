@@ -55,26 +55,41 @@ def check_phrase(packets,steps,expected,clock,cycles=1,closing=False,stop_time_n
   used.add(off['index'])
  musical=[p for p in packets if 128<=p['bytes'][0]<=159];require(len(musical)==2*len(notes),'Extra or unbalanced Doctor musical packets')
  return dict(onsets=len(notes),complete_cycles=cycles,closing_attack=closing,tolerance_seconds=tolerance)
+def public_play_stop_gestures(events):
+ held=None;gestures=[]
+ for index,event in enumerate(events):
+  if event.get('kind')!='input' or event.get('type')!=3:continue
+  args=event.get('args')
+  if args==[0,7,1]:
+   require(held is None,'Overlapping native public Play/Stop press')
+   held=(index,event)
+  elif args==[0,7,0]:
+   require(held is not None,'Unmatched public Stop release (key-up)')
+   press_index,press=held
+   require(type(press.get('sequence')) is int and type(event.get('sequence')) is int and event['sequence']>press['sequence'] and type(press.get('monotonic_ns')) is int and type(event.get('monotonic_ns')) is int and event['monotonic_ns']>=press['monotonic_ns'],'Invalid native public Play/Stop release ordering')
+   gestures.append((press,event,index));held=None
+ require(held is None,'Missing public Stop release (key-up) for Play/Stop press')
+ return gestures
 def bind_public_stop(events,packets,clock):
  notes=[value for value in packets if 144<=value['bytes'][0]<=159 and value['bytes'][2]>0];require(bool(notes),'Stop binding lacks musical attacks')
  last=notes[-1];releases=[value for value in packets if value['index']>last['index'] and value['port']==last['port'] and value['bytes'] in ([128,last['bytes'][1],last['bytes'][2]],[128,last['bytes'][1],0])];require(bool(releases),'Stop binding lacks exact release')
- off=releases[0];stops=[(index,value) for index,value in enumerate(events) if value.get('kind')=='input' and value.get('type')==3 and value.get('args')==[0,7,1] and value['monotonic_ns']>=last['monotonic_ns']]
- require(bool(stops),'Missing actual native public Stop');index,event=min(stops,key=lambda item:item[1]['monotonic_ns'])
+ off=releases[0];stops=[gesture for gesture in public_play_stop_gestures(events) if gesture[1]['monotonic_ns']>=last['monotonic_ns']]
+ require(bool(stops),'Missing actual native public Stop');press,event,index=min(stops,key=lambda item:item[1]['monotonic_ns'])
  stop_ns=event['monotonic_ns']
  if clock=='controlled-experimental':stop_ns=sum(value['args'][0]*1000000000+value['args'][1] for value in events[:index] if value.get('kind')=='input' and value.get('type')==8)
  key='logical_ns' if clock=='controlled-experimental' else 'monotonic_ns';tolerance=2e-9 if clock=='controlled-experimental' else .01
  length=(off[key]-last[key])/1e9
  require(off['bytes'][2]==last['bytes'][2] and abs(length-1/6)<=tolerance or last[key]<=stop_ns<=off[key]+round(tolerance*1e9) and abs((off[key]-stop_ns)/1e9)<=tolerance,'Native public Stop release time differs')
- return dict(stop_time_ns=stop_ns,input_sequence=event['sequence'],native_event_sha256=canonical_hash(event),clock_mode=clock)
+ return dict(stop_time_ns=stop_ns,input_sequence=event['sequence'],press_sequence=press['sequence'],native_event_sha256=canonical_hash(event),clock_mode=clock)
 def check_adc_playback_horizon(events,packets):
  notes=[row for row in packets if 144<=row['bytes'][0]<=159 and row['bytes'][2]>0];require(bool(notes),'Missing actual ADC musical attacks')
- edges=[row for row in events if row.get('kind')=='input' and row.get('type')==3 and row.get('args')==[0,7,1]]
- pairs=list(zip(edges[::2],edges[1::2]));matches=[(play,stop) for play,stop in pairs if play['monotonic_ns']<=notes[0]['monotonic_ns']<=notes[-1]['monotonic_ns']<=stop['monotonic_ns']]
- require(len(matches)==1,'ADC MIDI witness lacks one exact native public playback window');play,stop=matches[0]
+ gestures=public_play_stop_gestures(events);require(len(gestures)>=2 and len(gestures)%2==0,'Missing complete native public playback gesture pair')
+ pairs=list(zip(gestures[::2],gestures[1::2]));matches=[(play,stop) for play,stop in pairs if play[1]['monotonic_ns']<=notes[0]['monotonic_ns']<=notes[-1]['monotonic_ns']<=stop[1]['monotonic_ns']]
+ require(len(matches)==1,'ADC MIDI witness lacks one exact native public playback window');play_gesture,stop_gesture=matches[0];play,stop=play_gesture[1],stop_gesture[1]
  elapsed=(stop['monotonic_ns']-play['monotonic_ns'])/1e9;require(elapsed>=12-.01,'ADC requires actual authored 12-second public playback horizon')
  actual=[row for row in events if row.get('kind')==3 and len(row.get('bytes',[]))==3 and 128<=row['bytes'][0]<=159 and play['monotonic_ns']<=row['monotonic_ns']<=stop['monotonic_ns']+10000000]
  require(actual==[row for row in packets if 128<=row['bytes'][0]<=159],'ADC packet boundary omits native public playback music')
- return dict(elapsed_seconds=elapsed,play_sequence=play['sequence'],stop_sequence=stop['sequence'],play_native_sha256=canonical_hash(play),stop_native_sha256=canonical_hash(stop),minimum_seconds=12,tolerance_seconds=.01)
+ return dict(elapsed_seconds=elapsed,play_sequence=play['sequence'],stop_sequence=stop['sequence'],play_press_sequence=play_gesture[0]['sequence'],stop_press_sequence=stop_gesture[0]['sequence'],play_native_sha256=canonical_hash(play),stop_native_sha256=canonical_hash(stop),minimum_seconds=12,tolerance_seconds=.01)
 def band_energy(samples,rate,hz):
  stride=20;size=rate//10;energy=0.0
  # Fixed 100ms interiors, averaged energies avoid phase cancellation between

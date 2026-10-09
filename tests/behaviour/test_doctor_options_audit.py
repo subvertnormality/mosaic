@@ -92,8 +92,9 @@ class DoctorPublicStopIntegrity(unittest.TestCase):
  def shortened(self):
   on=dict(kind=11,index=1,port=1,bytes=[144,60,100],logical_ns=1000000000,monotonic_ns=1000000000)
   off=dict(kind=11,index=2,port=1,bytes=[128,60,100],logical_ns=1020000000,monotonic_ns=1020000000)
-  stop=dict(kind='input',sequence=3,type=3,args=[0,7,1],monotonic_ns=1020000000)
-  events=[dict(kind='input',sequence=1,type=8,args=[1,0],monotonic_ns=900000000),on,dict(kind='input',sequence=2,type=8,args=[0,20000000],monotonic_ns=1015000000),stop,off]
+  press=dict(kind='input',sequence=3,type=3,args=[0,7,1],monotonic_ns=1000000000)
+  stop=dict(kind='input',sequence=4,type=3,args=[0,7,0],monotonic_ns=1020000000)
+  events=[dict(kind='input',sequence=1,type=8,args=[1,0],monotonic_ns=900000000),on,dict(kind='input',sequence=2,type=8,args=[0,20000000],monotonic_ns=1015000000),press,stop,off]
   return [on,off],events,stop
  def test_shortened_final_gate_cannot_pass_without_actual_public_stop(self):
   packets,events,stop=self.shortened()
@@ -103,16 +104,27 @@ class DoctorPublicStopIntegrity(unittest.TestCase):
   audit.check_phrase(packets,[1],[[1,[144,60,100]]],'controlled-experimental',stop_time_ns=receipt['stop_time_ns'])
   with self.assertRaisesRegex(ValueError,'gate'):audit.check_phrase(packets,[1],[[1,[144,60,100]]],'controlled-experimental',stop_time_ns=1010000000)
   with self.assertRaisesRegex(ValueError,'public Stop'):audit.bind_public_stop([value for value in events if value!=stop],packets,'controlled-experimental')
-  wrong=copy.deepcopy(events);wrong[3]['args']=[1,7,1]
+  wrong=copy.deepcopy(events);wrong[4]['args']=[1,7,0]
   with self.assertRaisesRegex(ValueError,'public Stop'):audit.bind_public_stop(wrong,packets,'controlled-experimental')
  def test_exact_zero_velocity_public_stop_release_is_a_real_owned_endpoint(self):
   packets,events,stop=self.shortened();packets[-1]['bytes']=[128,60,0]
   receipt=audit.bind_public_stop(events,packets,'controlled-experimental')
   audit.check_phrase(packets,[1],[[1,[144,60,100]]],'controlled-experimental',stop_time_ns=receipt['stop_time_ns'])
   with self.assertRaisesRegex(ValueError,'gate release'):audit.check_phrase(packets,[1],[[1,[144,60,100]]],'controlled-experimental')
+ def test_stop_action_anchors_to_release_when_note_starts_during_held_gesture(self):
+  on=dict(kind=11,index=1,port=1,bytes=[144,60,100],logical_ns=1010000000,monotonic_ns=1010000000)
+  off=dict(kind=11,index=2,port=1,bytes=[128,60,100],logical_ns=1020000000,monotonic_ns=1020000000)
+  press=dict(kind='input',sequence=2,type=3,args=[0,7,1],monotonic_ns=1005000000)
+  release=dict(kind='input',sequence=5,type=3,args=[0,7,0],monotonic_ns=1020000000)
+  events=[dict(kind='input',sequence=1,type=8,args=[1,0],monotonic_ns=1000000000),press,
+   dict(kind='input',sequence=3,type=8,args=[0,10000000],monotonic_ns=1010000000),on,
+   dict(kind='input',sequence=4,type=8,args=[0,10000000],monotonic_ns=1020000000),release,off]
+  receipt=audit.bind_public_stop(events,[on,off],'controlled-experimental')
+  self.assertEqual(receipt['stop_time_ns'],1020000000)
+  audit.check_phrase([on,off],[1],[[1,[144,60,100]]],'controlled-experimental',stop_time_ns=receipt['stop_time_ns'])
  def test_real_stop_uses_native_monotonic_clock(self):
   packets,events,stop=self.shortened();receipt=audit.bind_public_stop(events,packets,'real-time');self.assertEqual(receipt['stop_time_ns'],1020000000)
-  wrong=copy.deepcopy(events);wrong[3]['monotonic_ns']=1040000000
+  wrong=copy.deepcopy(events);wrong[4]['monotonic_ns']=1040000000
   with self.assertRaisesRegex(ValueError,'Stop release'):audit.bind_public_stop(wrong,packets,'real-time')
 class DoctorProductionInventoryIntegrity(unittest.TestCase):
  def test_unloaded_production_source_cannot_be_omitted_from_snapshot(self):
@@ -136,15 +148,31 @@ class DoctorCompleteWindowIntegrity(unittest.TestCase):
  def test_ready_fixture_cannot_skip_held_browse_boundary(self):
   fixture=dict(project_seed_origin=audit.ORIGIN,retained_audio=False,bank_bpm=120,window_max=63,beat_count=40,masks_by_sensitivity={'0':[1,17],'0.5':[1],'1':[]},midi_expected=[[1,[144,60,100]]])
   with self.assertRaisesRegex(ValueError,'geometry'):audit.check_fixture_contract(fixture)
+ def test_public_play_stop_pair_requires_forward_ordered_release(self):
+  press=dict(kind='input',sequence=1,type=3,args=[0,7,1],monotonic_ns=100)
+  release=dict(kind='input',sequence=2,type=3,args=[0,7,0],monotonic_ns=101)
+  with self.assertRaisesRegex(ValueError,'release ordering'):audit.public_play_stop_gestures([press,dict(release,sequence=1)])
+  with self.assertRaisesRegex(ValueError,'release ordering'):audit.public_play_stop_gestures([press,dict(release,monotonic_ns=99)])
+  with self.assertRaisesRegex(ValueError,'release'):audit.public_play_stop_gestures([press])
  def test_adc_requires_actual_twelve_second_public_transport_window(self):
   on=dict(kind=3,index=1,port=1,bytes=[144,60,100],monotonic_ns=1000000000)
   off=dict(kind=3,index=2,port=1,bytes=[128,60,100],monotonic_ns=1166666667)
-  play=dict(kind='input',type=3,args=[0,7,1],monotonic_ns=999000000,sequence=1)
-  stop=dict(kind='input',type=3,args=[0,7,1],monotonic_ns=12999000000,sequence=2)
-  audit.check_adc_playback_horizon([play,on,off,stop],[on,off])
-  short=dict(stop,monotonic_ns=11999000000)
-  with self.assertRaisesRegex(ValueError,'12-second'):audit.check_adc_playback_horizon([play,on,off,short],[on,off])
-  with self.assertRaisesRegex(ValueError,'public playback'):audit.check_adc_playback_horizon([on,off,stop],[on,off])
+  play_down=dict(kind='input',type=3,args=[0,7,1],monotonic_ns=900000000,sequence=1)
+  play_up=dict(kind='input',type=3,args=[0,7,0],monotonic_ns=1000000000,sequence=2)
+  on=dict(kind=3,index=1,port=1,bytes=[144,60,100],monotonic_ns=12900000000)
+  stop_down=dict(kind='input',type=3,args=[0,7,1],monotonic_ns=12995000000,sequence=3)
+  stop_up=dict(kind='input',type=3,args=[0,7,0],monotonic_ns=13019000000,sequence=4)
+  off=dict(kind=3,index=2,port=1,bytes=[128,60,100],monotonic_ns=13020000000)
+  events=[play_down,play_up,on,stop_down,stop_up,off]
+  audit.check_adc_playback_horizon(events,[on,off])
+  audit.bind_public_stop(events,[on,off],'real-time')
+  short_down=dict(stop_down,monotonic_ns=12980000000)
+  short=dict(stop_up,monotonic_ns=12989000000)
+  with self.assertRaisesRegex(ValueError,'12-second'):audit.check_adc_playback_horizon([play_down,play_up,on,short_down,short,off],[on,off])
+  with self.assertRaisesRegex(ValueError,'release'):audit.check_adc_playback_horizon([play_down,play_up,on,stop_down,off],[on,off])
+  duplicate=[play_down,dict(play_down,sequence=8),play_up,on,stop_down,stop_up,off]
+  with self.assertRaisesRegex(ValueError,'Overlapping'):audit.check_adc_playback_horizon(duplicate,[on,off])
+  with self.assertRaisesRegex(ValueError,'public playback'):audit.check_adc_playback_horizon([on,off,stop_down,stop_up],[on,off])
 class DoctorFrameApiIntegrity(unittest.TestCase):
  def test_all_native_frame_checks_supply_the_actual_case_namespace(self):
   import ast,inspect
