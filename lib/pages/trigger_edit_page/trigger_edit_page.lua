@@ -41,7 +41,7 @@ local function discard_stale_rhythm_doctor_paint()
   local preview = rhythm_doctor_paint_preview
   if not preview or type(preview.target) ~= "table" then return false end
   if not trigger_edit_page.paint_target_moved(preview.target, rhythm_doctor_target()) then return false end
-  cancel_rhythm_doctor_paint()
+  cancel_rhythm_doctor_paint(true)
   return true
 end
 
@@ -387,9 +387,18 @@ end
 -- pattern or song slot leaves it pointing at the old target while the screen
 -- shows the new one, and Paint would then write where the player is no longer
 -- looking.
-function cancel_rhythm_doctor_paint()
+function cancel_rhythm_doctor_paint(disarm)
   rhythm_doctor_paint_preview = nil
   trigger_edit_page_sequencer:hide_unsaved_grid()
+  if disarm then
+    trigger_edit_page_paint_button:set_state(1)
+    trigger_edit_page_paint_button:no_blink()
+    trigger_edit_page_cancel_button:set_state(1)
+    trigger_edit_page_cancel_button:no_blink()
+    trigger_edit_page_left_button:set_state(1)
+    trigger_edit_page_centre_button:set_state(1)
+    trigger_edit_page_right_button:set_state(1)
+  end
   if rhythm_doctor and type(rhythm_doctor.invalidate_paint_preview) == "function" then rhythm_doctor:invalidate_paint_preview() end
 end
 

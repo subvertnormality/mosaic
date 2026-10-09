@@ -353,6 +353,32 @@ test("the window position is left to the grid rather than spelled out", function
   check(table.concat(texts, " "):find("PAINT", 1, true), "paint policy still reports its value")
 end)
 
+test("changing the Paint destination removes the preview and visibly disarms Paint", function()
+  local page, observed = trigger_page_context()
+  local data = { selected_pattern = 1, selected_song_pattern = 1 }
+  program.get = function() return data end
+  local invalidations = 0
+  local doctor = {
+    enter = function() end, leave = function() end,
+    paint_preview = function(_, target)
+      return { target = target, shifted_cells = { [1] = { velocity = 80 } } }
+    end,
+    invalidate_paint_preview = function() invalidations = invalidations + 1 end,
+  }
+  page.set_rhythm_doctor(doctor)
+  page.register_press()
+  page.select_algorithm(5)
+  invoke(observed.normal, 16, 8)
+  check(page.rhythm_doctor_preview_armed(), "Paint is armed while its preview is visible")
+  check(observed.sequencer.unsaved ~= nil, "the preview is visible before changing destination")
+
+  invoke(observed.normal, 2, 1)
+  equal(data.selected_pattern, 2, "the public top-row input changed destination")
+  equal(observed.sequencer.unsaved, nil, "the stale preview disappeared")
+  equal(invalidations, 1, "the stale native preview was invalidated once")
+  check(not page.rhythm_doctor_preview_armed(), "the Paint affordance is visibly disarmed so READY routes to WINDOW")
+end)
+
 test("a paint preview does not outlive the destination it was built for", function()
   -- A preview commits to the target it was built for. Leaving it armed after
   -- the selection moves means Paint writes to the pattern the player navigated

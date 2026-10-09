@@ -246,11 +246,10 @@ def _destination(c, number):
            or live_header_matches(state, paint_title, 'CH01', paint_layout))
     state = c.snapshot()
     if live_header_matches(state, paint_title, 'CH01', paint_layout):
-        # The destination switch must already have discarded any Paint preview.
-        # Observe every step cell including dim preview LEDs before leaving via
-        # the public K2 back route; the post-return mask check is separate.
+        # A changed destination must invalidate and visibly disarm Paint before
+        # the named task opens. If Paint remains selected, fail closed; K2 is
+        # not a Paint-page back control.
         _mask(c, [], preview=True)
-        c.ui.press_key(2)
         c.wait(lambda current:
                live_header_matches(current, window_title, 'CH01', window_layout))
     c.ui.expect_rhythm_doctor_header('R05')

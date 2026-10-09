@@ -1,8 +1,8 @@
 """Characterise public Doctor destination navigation composition.
 
 The READY behavior lane retains its native frame/grid/MIDI assertions. These
-helper-level cases cover route selection and prove a stale Paint preview is
-absent on the public grid before K2 can leave that page.
+helper-level cases cover route selection and prove a destination change leaves
+Paint disarmed; no undocumented key press may stand in for that transition.
 """
 import sys
 import unittest
@@ -31,8 +31,8 @@ def _header_matches(state, title, scope, layout):
 class _Case:
     doctor_options_case_id = 'destination-navigation'
 
-    def __init__(self, algorithm_5, remembered_route='R05', preview_steps=()):
-        self.ui = _Ui(algorithm_5, remembered_route)
+    def __init__(self, algorithm_5, remembered_route='R05', preview_steps=(), disarm_on_destination=True):
+        self.ui = _Ui(algorithm_5, remembered_route, disarm_on_destination)
         self.ui.case = self
         self.ui.grid = [0] * 128
         for step in preview_steps:
@@ -50,8 +50,9 @@ class _Case:
 
 
 class _Ui:
-    def __init__(self, algorithm_5, remembered_route):
+    def __init__(self, algorithm_5, remembered_route, disarm_on_destination=True):
         self.algorithm_5 = algorithm_5
+        self.disarm_on_destination = disarm_on_destination
         self.remembered_route = remembered_route
         self.route = 'START'
         self.calls = []
@@ -62,6 +63,10 @@ class _Ui:
         self.calls.append(('grid', name, index))
         if name == 'pattern_select':
             self.route = 'P01'
+            if self.disarm_on_destination and self.remembered_route == 'R08':
+                self.remembered_route = 'R05'
+                self.grid = [0] * 128
+                self.calls.append(('paint-disarmed-on-destination-change',))
 
     def wait_for_header(self, route, **kwargs):
         self.calls.append(('wait-header', route, kwargs))
@@ -88,12 +93,6 @@ class _Ui:
         self.calls.append(('expect-header', route))
         assert route == 'R05' and self.route == 'R05'
 
-    def press_key(self, number):
-        self.calls.append(('key', number))
-        assert number == 2 and self.route == 'R08'
-        self.route = 'R05'
-
-
 class DoctorDestinationNavigationTests(unittest.TestCase):
     def run_destination(self, algorithm_5, remembered_route='R05', preview_steps=()):
         case = _Case(algorithm_5, remembered_route, preview_steps)
@@ -116,19 +115,28 @@ class DoctorDestinationNavigationTests(unittest.TestCase):
         self.assertNotIn(('key', 2), case.ui.calls)
         self.assertIn(('wait', 'R05'), case.ui.calls)
 
-    def test_destination_from_remembered_paint_checks_grid_then_uses_public_k2(self):
+    def test_destination_switch_disarms_remembered_paint_without_key_workaround(self):
         case = self.run_destination(True, remembered_route='R08')
         self.assertEqual(case.ui.route, 'R05')
-        self.assertLess(case.ui.calls.index(('wait', 'R08')),
-                        case.ui.calls.index(('key', 2)))
-        self.assertEqual(case.ui.calls.count(('wait', 'R08')), 2)
+        self.assertIn(('paint-disarmed-on-destination-change',), case.ui.calls)
+        self.assertNotIn(('key', 2), case.ui.calls)
+        self.assertIn(('wait', 'R05'), case.ui.calls)
 
-    def test_dim_and_bright_preview_block_public_back_and_success_receipt(self):
+    def test_empty_but_still_armed_paint_route_fails_closed_without_key_workaround(self):
+        case = _Case(True, remembered_route='R08', disarm_on_destination=False)
+        with patch.object(recipe, 'live_header_matches', side_effect=_header_matches), \
+             patch('manual_capture.frame', return_value={'frame': 'stub'}):
+            with self.assertRaisesRegex(AssertionError, 'required observable output'):
+                recipe._destination(case, 4)
+        self.assertNotIn(('key', 2), case.ui.calls)
+        self.assertFalse(any(result.get('kind') == 'doctor-ready-destination' for result in case.results))
+
+    def test_dim_and_bright_preview_block_completion_before_route_change(self):
         x, y = 1, 4
         cell = (y - 1) * 16 + x - 1
         for level in (12, 15):
             with self.subTest(level=level):
-                case = _Case(True, remembered_route='R08')
+                case = _Case(True, remembered_route='R08', disarm_on_destination=False)
                 case.ui.grid[cell] = level
                 with patch.object(recipe, 'live_header_matches', side_effect=_header_matches), \
                      patch('manual_capture.frame', return_value={'frame': 'stub'}):
@@ -137,7 +145,7 @@ class DoctorDestinationNavigationTests(unittest.TestCase):
                 self.assertNotIn(('key', 2), case.ui.calls)
                 self.assertFalse(case.results)
 
-    def test_unrecognized_route_fails_closed_without_public_back(self):
+    def test_unrecognized_route_fails_closed_without_key_workaround(self):
         case = _Case(True, remembered_route='R06')
         with patch.object(recipe, 'live_header_matches', side_effect=_header_matches), \
              patch('manual_capture.frame', return_value={'frame': 'stub'}):
