@@ -1,0 +1,119 @@
+{
+  "format": "mosaic-independent-documentary-source-rereview-v1",
+  "status": "source-semantics-reviewed; final-owner-ledger-and-new-native-acceptance-pending",
+  "head": "69df623e06efd6721e1cc53e961a1dd845d2a48c",
+  "original_history_preserved": true,
+  "frozen_legacy_readme_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c",
+  "files": {
+    "lib/musical_merge/strategy.lua": {
+      "sha256": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+      "meaning": "Five shared choices; accepted versus requested cursor, queued boundary, Foundation trig-only/Fragments all-attribute ownership; grid wrapping and screen clamping; refused anchor maps NEEDS ANCHOR without accepted state mutation."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page.lua": {
+      "sha256": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+      "meaning": "Old grid three-state branch replaced by shared request; Fragments prevents legacy note/velocity/length cycle and direct pattern assignment; shared validated editor transaction keeps retained legacy settings."
+    },
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": {
+      "sha256": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+      "meaning": "Merge root Strategy read-only; selector action reload discards unapplied draft before route; parameter editing/apply owner remains transactional."
+    },
+    "lib/ui_adapters/read_only.lua": {
+      "sha256": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+      "meaning": "C09 presents requested Strategy plus Active/Pending/Boundary/Request; owned attribute rows are readonly inactive with SAVED value; editable selector shares same owner."
+    },
+    "lib/ui_live.lua": {
+      "sha256": "66ffd22008369999b6d6b24fe58546b869ed5ee5c1551e81745a6b2398d5c31b",
+      "meaning": "Owner route reconciliation before redraw fixes asynchronous Doctor stale route; C09-to-M02 return re-enters accepted editor; vertical footers show actions and confirmation ownership."
+    },
+    "lib/ui_render.lua": {
+      "sha256": "0bffa33541043ab3a8a95926bf2c316f3b622f2d1c980bd4dac6b151ba6b2a3e",
+      "meaning": "Vertical list keeps neighboring fields and full selected value split; selected overflow retains marquee phase while other text stays static. Documentary never-scroll wording requires owner clarification."
+    },
+    "lib/ui_spec_data.lua": {
+      "sha256": "246d92f7a5f4f239a86be6d9ad7d8d064f8c907326bbdb807caa2802f8af97a8",
+      "meaning": "Horizontal focused layouts changed to vertical list; C09 shared fields and M02 selector route registered. Renderer motion wording remains an explicit documentary reconciliation item."
+    },
+    "lib/rhythm_doctor/ui_adapter.lua": {
+      "sha256": "ec03592c858ecefb448f9c649e3f711ecefee3539ffd68717a0eb0bcad9eb06e",
+      "meaning": "Record sends confirmed manual_bpm/input_source, never draft. Existing setup draft K2 cancellation/K3 commit remains owner."
+    },
+    "lib/rhythm_doctor/runtime.lua": {
+      "sha256": "c19a660b367c6f260837a10f619f3975acda1d3e9deb7a89689a9136669f51ca",
+      "meaning": "Validate mode, integer BPM40\u2013240 and stereo/left/right before acquisition; lease snapshot restored on refusal; Manual alignment BPM/origin0 unless explicit correction, Auto detector estimates; project load clears capture settings."
+    },
+    "lib/rhythm_doctor/capture_controller.lua": {
+      "sha256": "8d9fba25659f80f021fcb1633205f252d6658c3858b110dbb612cc5b14496203",
+      "meaning": "Preflight validates input source and sends it to recorder; source does not stay UI-only."
+    },
+    "lib/rhythm_doctor/softcut_recorder.lua": {
+      "sha256": "46e36d8d4bdbef00e43323ff460c2940b9f351e99b75a9bcd807724bfdd1ba95",
+      "meaning": "Stereo ADC1/ADC2 separately; left/right duplicate selected ADC into both buffers; invalid source rejected before arm/acquisition."
+    },
+    "lib/rhythm_doctor/file_mailbox.lua": {
+      "sha256": "c580c40f9b562da4c471b19297a5968dcce0d5207a9f6ae2a3dd52720f256b89",
+      "meaning": "Earlier independent path-budget fix accepts absolute long native roots, validates actual direction/temp filenames against4095 bytes; not modified by current Doctor option task."
+    },
+    "README.md": {
+      "sha256": "23982e0a9d0f1a25a4bf9ac744128033e5a1656a8a252603ea0d672bfc08fcbd",
+      "meaning": "Current shared strategy and vertical controls; Doctor confirmed setup,40\u2013240, Stereo/L/R duplication, Auto estimate/Manual origin and later Alignment replacement agree with consumed source."
+    },
+    "cheat_sheet.html": {
+      "sha256": "353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91",
+      "meaning": "Current shared selector/inactive modes and Doctor confirmed setup/input/timing agree with source; no new native acceptance implied."
+    }
+  },
+  "documentary_receipts": [
+    {
+      "path": "docs/testing/vertical-list-ui/shared-strategy-documentary-review.json",
+      "sha256": "8c37dbd401520382fc34e14bb3155de0aff19d94d0694d4492a8a60b9f8d905d"
+    },
+    {
+      "path": "docs/testing/vertical-list-ui/documentary-source-receipt.json",
+      "sha256": "2f844b82a169985b9abe34008a9252887d85062f7cee0ba6a2289b2f249bfb99"
+    },
+    {
+      "path": "docs/testing/merge-strategy-ui/production-freeze.json",
+      "sha256": "5bf79ea577d20dd5067ea3c497d25ed71f2f8d583c9857b18351bbf5418cef66"
+    }
+  ],
+  "source_claims": [
+    {
+      "claim": "Shared strategy/control/ownership",
+      "sources": [
+        "lib/musical_merge/strategy.lua:5-51",
+        "lib/pages/channel_edit_page/channel_edit_page.lua:352-365",
+        "lib/pages/channel_edit_page/channel_edit_page.lua:579-614",
+        "lib/pages/channel_edit_page/channel_feature_editor.lua:164-176",
+        "lib/ui_adapters/read_only.lua:279-324"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "claim": "Doctor options consumed by capture and analysis",
+      "sources": [
+        "README.md:560-567",
+        "lib/rhythm_doctor/ui_adapter.lua:604-615",
+        "lib/rhythm_doctor/runtime.lua:35-48",
+        "lib/rhythm_doctor/runtime.lua:194-214",
+        "lib/rhythm_doctor/capture_controller.lua:94-110",
+        "lib/rhythm_doctor/softcut_recorder.lua:122-140",
+        "lib/rhythm_doctor/softcut_recorder.lua:184-209"
+      ],
+      "status": "reviewed"
+    }
+  ],
+  "pending": [
+    "New source-pinned native acceptance remains pending for changed shared Strategy/Doctor controls; historical positives not relabelled.",
+    "Miniature graphics and authoritative-document migration re-review recorded independently in next receipt."
+  ],
+  "native_runs_performed": false,
+  "complete_regression_run": false,
+  "closed_pending_items": [
+    "Final ledger owner reports no-skip validator PASS37 files/64callbacks/164historicalbranches/125sections; semantic notes integrated without replacing history.",
+    "Selected overflow wording reconciled in exactly2spec paths/runtime strings; documentary-export-delta.json records preserved executable source identities."
+  ],
+  "followup_receipt": {
+    "path": "docs/testing/merge-strategy-ui/documentary-export-delta.json",
+    "sha256": "73375a17186fa9950500811f8ff9d157e4fc26f4a8208ec14f34fc1f4910843e"
+  }
+}

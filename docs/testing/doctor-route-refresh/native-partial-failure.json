@@ -1,0 +1,14 @@
+{
+  "report": "/home/andy/mosaic-manual-runs/bb4c17d52a43490698a1d066aeef8cfb/report.json",
+  "sha256": "e0f951726454b18ed2ab7a02474a3186170998c45cc7e355fd7f53c514c9b19c",
+  "passed": false,
+  "cleanup_failure": null,
+  "asserted_steps": [
+    "setup",
+    "record",
+    "analyse"
+  ],
+  "failed_step": "ready",
+  "mailbox_root_bytes": 99,
+  "unfixed_root_limit": 96
+}

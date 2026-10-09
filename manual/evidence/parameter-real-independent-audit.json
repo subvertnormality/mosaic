@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "complete_regression_run": false,
+  "hardware_timing_verified": false,
+  "publication": "/home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04/reference-scenes.json",
+  "publication_sha256": "335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07",
+  "clock_mode": "real-time",
+  "scenes": 25,
+  "frames": 74,
+  "deferred_scene_ids": [
+    "global-parameter-slide",
+    "local-parameter-slide"
+  ]
+}

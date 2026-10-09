@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "scope": "Actual root documentation replacement verified; source gate still provisional/inactive.",
+  "replacement_receipt": "manual/evidence/authority-document-replacement.json",
+  "replacement_receipt_sha256": "0ceb144e8cbbb3b37b70881fb4efd1ce01a71e8540c41c213e1f46f2ac5ac739",
+  "authority_status": "inactive",
+  "counts": {
+    "MAN_ids": 125,
+    "requirements": 178,
+    "case_ids": 879,
+    "original_cheat_rows": 77,
+    "resolved_statement_mappings": 55
+  },
+  "root_documents": {
+    "README.md": "a06498ce330b93157ddbf3c853a528d9c87a3c61d8e7f9cd5c4af543945bb5c9",
+    "AGENTS.md": "2b45240fc4350c6de0c47bf8c442728783f8bf6f497eeaf482df29113ca2bd5b",
+    "cheat_sheet.html": "ddf7ccbb3a0e00c604826f2fb5a328451238e181c36c2b495a6aaaddff247ffa"
+  },
+  "full_manual_source": {
+    "path": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+    "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+    "original_path": "README.md"
+  },
+  "original_manual": {
+    "original_path": "README.md",
+    "path": "manual/legacy/README-1.4.0.md",
+    "sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c"
+  },
+  "test_counts": {
+    "transition": 21,
+    "authority": 16,
+    "inventory": 4,
+    "collection": 5,
+    "quick_reference": 7
+  },
+  "total_tests": 53,
+  "failures": 0,
+  "complete_regression_run": false,
+  "complete_manual_claimed": false
+}

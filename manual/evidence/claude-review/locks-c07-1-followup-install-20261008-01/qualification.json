@@ -1,0 +1,33 @@
+{
+  "manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41",
+  "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+  "changed_text_leaves": 3,
+  "candidate_files": [
+    {
+      "path": "manual/features/reference-locks.yaml",
+      "before_sha256": "54dae03014a823c2c68965849b2a9c97d85927c86c2dc106e5a195f22fb22189",
+      "after_sha256": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074"
+    },
+    {
+      "path": "manual/features/cookbook.yaml",
+      "before_sha256": "40e2bc5823c8f256c46ed66d039bbb496962e4285ff1832b30ac8c1a0d4cdc26",
+      "after_sha256": "f2d9bcf4c5bf824f9e809c8a9ae83772a87455cdc97c1b1db7c7fd44d6469ba6"
+    }
+  ],
+  "compiled_book_semantic_diff": "exact three recipe text leaves plus derived authoring_identity/source_sha256 only",
+  "scene_count": 146,
+  "all_scenes_exact": true,
+  "chunk_count": 167,
+  "all_chunks_byte_identical": true,
+  "index_diff": "exact three recipe text leaves plus derived authoring_identity/source_sha256/canonical_inputs.book_json_sha256 only",
+  "caption_changes": 0,
+  "native_audio_runs": 0,
+  "install_requested": true,
+  "installation": {
+    "installed_to": [
+      "/home/andy/mosaic-manual-1.4.0",
+      "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout"
+    ],
+    "rollback_backup": "/home/andy/mosaic-manual-build-operators/locks-c07-1-followup-install-20261008-01/preimage-backup"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "original_failed_run": "/home/andy/mosaic-manual-runs/7b333123096e4c21a1d35f7413548cd5",
+  "reason": "The completed cases retained valid native identities, recipes and results. The prior adapter kept exact requested wait values and returned scene dictionaries only in process memory; abort discarded those data. Rounded recipe nanoseconds cannot recover the exact trace hashes. The full retry therefore creates distinct candidate identities and does not relabel earlier evidence.",
+  "controlled_candidate": "/home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc",
+  "future_recovery": "The adapter now writes capture-trace.json and immutable captured-scenes.json after each completed case, before starting the next case."
+}

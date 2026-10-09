@@ -1,0 +1,6 @@
+{
+  "revision": "69df623e06efd6721e1cc53e961a1dd845d2a48c",
+  "tool_git_blob_sha256": "d6c03ffa8a07428c7498a940fa09a79db2fbe99b99a19571fe1bed5393b5ad51",
+  "test_sha256": "7ede521c71cee2a36069f699cf1676b3e9016fd20939428966400f36d3c8606e",
+  "failure": "Absent merge_audit/book_entry; three AttributeErrors before implementation"
+}

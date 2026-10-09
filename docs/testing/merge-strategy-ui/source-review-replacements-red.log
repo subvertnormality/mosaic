@@ -1,0 +1,53 @@
+FFFF.......
+======================================================================
+FAIL: test_explicit_exact_replacement_keeps_historical_identity (test_refresh_source_inventory.SourceReviewTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 56, in test_explicit_exact_replacement_keeps_historical_identity
+    self.replacement();out,receipt=self.invoke()
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 22, in invoke
+    return tool.refresh(self.baseline,self.review)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/refresh_source_inventory.py", line 53, in refresh
+    assert branch['id'] in {'trigger_edit_page.05.select_algorithm','trigger_edit_page.05.enter_doctor','trigger_edit_page.05.leave_doctor'}, 'unreviewed branch extraction '+branch['id']
+AssertionError: unreviewed branch extraction branch
+
+======================================================================
+FAIL: test_explicit_replacement_rejects_missing_meaning (test_refresh_source_inventory.SourceReviewTests)
+----------------------------------------------------------------------
+AssertionError: unreviewed branch extraction branch
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 68, in test_explicit_replacement_rejects_missing_meaning
+    with self.assertRaisesRegex(AssertionError,'replacement semantic review'):self.invoke()
+AssertionError: "replacement semantic review" does not match "unreviewed branch extraction branch"
+
+======================================================================
+FAIL: test_explicit_replacement_rejects_unreviewed_dependency (test_refresh_source_inventory.SourceReviewTests)
+----------------------------------------------------------------------
+AssertionError: unreviewed branch extraction branch
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 65, in test_explicit_replacement_rejects_unreviewed_dependency
+    with self.assertRaisesRegex(AssertionError,'replacement dependency identity'):self.invoke()
+AssertionError: "replacement dependency identity" does not match "unreviewed branch extraction branch"
+
+======================================================================
+FAIL: test_explicit_replacement_rejects_wrong_historical_body (test_refresh_source_inventory.SourceReviewTests)
+----------------------------------------------------------------------
+AssertionError: unreviewed branch extraction branch
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 62, in test_explicit_replacement_rejects_wrong_historical_body
+    with self.assertRaisesRegex(AssertionError,'historical branch replacement identity'):self.invoke()
+AssertionError: "historical branch replacement identity" does not match "unreviewed branch extraction branch"
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.015s
+
+FAILED (failures=4)

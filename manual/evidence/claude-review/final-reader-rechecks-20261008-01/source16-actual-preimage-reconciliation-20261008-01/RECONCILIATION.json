@@ -1,0 +1,180 @@
+{
+  "audit": "read-only actual-preimage reconciliation for the source16 browser fixture candidate",
+  "date": "2026-10-08",
+  "actual_checkout": "/home/andy/mosaic-manual-1.4.0/tests/behaviour",
+  "candidate_root": "/home/andy/mosaic-manual-build-operators/round4-reader-teaching-source08-20261008-01/ownsource08-existing-browser-regressions-20261008-01/candidate-test-contract-updates-20261008-01/scratch/tests/behaviour",
+  "manifest_path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/source16-candidate-test-manifest.json",
+  "manifest_sha256": "9612753800c347563f2b2b32375ad304d9da9683a85b6bf4fd9454b0bee2d7ac",
+  "source16_candidate_patch_sha256": "ad0442987a4913722ff8085ebc751d31dde5acf15e2986257072c38c841c9512",
+  "files": [
+    {
+      "path": "tests/behaviour/manual_book_browser.cjs",
+      "actual_sha256": "6fffb68e097a2586ca8f7c09f3f737e6cf883927e8ee826a5cc41a4b1a5f0ac9",
+      "candidate_sha256": "39b79cb1def0637a4255020daa18ae1d2bec7a0cfb627db77bfbf385a096ab4f",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/manual_browser.cjs",
+      "actual_sha256": "95458448d1871cf282172311dd878503881ca68756c51da564906b26373caddb",
+      "candidate_sha256": "d95291ce447b91beb1ee80e077cf58337a66184bbeb27bf8e6e1a9dd06cc686e",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/manual_controls_browser.cjs",
+      "actual_sha256": "8ac721e8936a550014266200e153ad3735f13e19cde17ebc15aaf1013ca6efe5",
+      "candidate_sha256": "affaba0f5ca69723ba7ea44cfeab6bd6659ea55d9f86cc85bee84181536e3ca1",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/manual_course_browser.cjs",
+      "actual_sha256": "bd758006eaeacd43512e7b2add23c69e46ca8f166a92078e61dc5c55fc753d5e",
+      "candidate_sha256": "7f0e5ba8dd505d25b8623100cdcecfb3cd564bc58dd5c112a5858c8eae226350",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/manual_reader_text_browser.cjs",
+      "actual_sha256": "0b782c85b4c1e26da039621898c039326566039cd8bf0bb78fb1ca732a4c101e",
+      "candidate_sha256": "1c5af1d520b872015493465bf3212b7542da74cf2020dc1b119db1169410f18c",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/canonical_recipe.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "8d6af65989d83fac6e11c009896f0f4c34ced6662eded75db3723beda3f00e3f",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/device_existing_course.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "cabda15a5164fa20d4cf75da6bee28079468d98bd7f6cb12f8d723ae589a50e0",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/explicit_mobile.cjs",
+      "actual_sha256": "f5ddf3bb3e28c4abe41caf050330143a9a704ca3677de2843daa83694bb756cb",
+      "candidate_sha256": "e3a35c4fc72fc88cd256bf9b6389371b04a3f782425f162ca39991a6c5087edd",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/fixtures/recordings-context-v1.json",
+      "actual_sha256": null,
+      "candidate_sha256": "de9b8a3c926b1e03d8bdcd4303e0c2c0807fe51fcb62901355728613732edfb1",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/grid.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "3b8f0fb69e689604a8e2ac460b837eca157fb6124f875737160d92f58c99c5c9",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/key_tap.cjs",
+      "actual_sha256": "83508ed00af3660536557720ac9b8efee3f8eea7d260ca5d7038a7bc577d964b",
+      "candidate_sha256": "ca7fa0d61728789c1d3bcc5aab2686f89be00afab968142d3b183c323a1333f5",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/metadata.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "76f31466bb7e9ed494e10f9801d35af03cc559b0b6da951509905f5611b26ae7",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/midi_ending.cjs",
+      "actual_sha256": "4b5a2508ef43ba9ce81bfe94fac3c1bafcde802fd5dbf62a5726cd3e8ee4f4c9",
+      "candidate_sha256": "50088218b269e1ef8714e00fc1742617889314f3e6bd0fbcd3427f0b8efe85c2",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/output_view.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "0e76878c664197fec29f4a459c7bf5d774a72e6d0897f102bc9bd7ff87c82e52",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/persistence.cjs",
+      "actual_sha256": "cf02b417c921caa0252146d07785c1a3bf72290da365fb41f1128fd466661079",
+      "candidate_sha256": "ecead5b2e19c87dd4ae6fd2aece42ef529ddcff4c02bd9cc2507ba0ab1fc979f",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/probability.cjs",
+      "actual_sha256": "3206e4cd0bc2668e47d5675e644a8cddf1ac63e270b2ed5696df8683179a24b6",
+      "candidate_sha256": "bf4b46bafd96102c7464bd5fbde3f3ce200a7b3669dc46f4a9b4ace6d05b9df2",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/program_display.cjs",
+      "actual_sha256": "5fa946f4bb65cbf1741bce077a7d689759ea765d4c1adf857f301f4a66084510",
+      "candidate_sha256": "ab9a83b0bb2257333b427c3d074a0f5da270fca85c416643457d71d60c976367",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/receipts.cjs",
+      "actual_sha256": "b9377ace4e97738e68d9f29df5ec6f111c52ad873b5f365d1119bd82d5f995f0",
+      "candidate_sha256": "2629468f7192574dc293454e457a4668b36ee3a1ed165f831b6dddf2b0dbff7f",
+      "actual_status": "replace"
+    },
+    {
+      "path": "tests/behaviour/remediation/recordings.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "0823859f0ebef9fa7f21e2e48f9388702a6b8614e8ba38fb1c0d05e2da64b40a",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/recordings_navigation.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "b1513b28c5252921a7c5c1180cd90a80be0f6f9a0b5ae40fd120cb5591cf9a3d",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/retained_output.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "a170057cc990b506c07b5b101a26ca11bb65003a6623713d75d8fdd0a0b4aba2",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/save_dialog.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "5ac5d6599e65f625325c802652f387aec1503ba96d0737b0fd1a5c21d113c30f",
+      "actual_status": "add"
+    },
+    {
+      "path": "tests/behaviour/remediation/sweeps.cjs",
+      "actual_sha256": null,
+      "candidate_sha256": "50c10231a4c70d071854dee23d4d21e25b8f0c0249d04a22624be1492abec8d2",
+      "actual_status": "add"
+    }
+  ],
+  "reconciliation": {
+    "manual_book_browser": "Candidate preserves actual scene/caption/screen/grid checks and strengthens them with exact source output/input hashes, old placement inventory and contextual aliases. Current course-stage audio checks move to manual_course_browser; canonical recording pages are checked in candidate. Final-only exact frame wait and lesson-versus-scene milestone scoping are retained.",
+    "manual_browser": "Current immediate seek sample is race-prone; candidate waits for seeked, then exact expected native frame and grid. Candidate also preserves exact audio/lesson pause-return expectations with an authored exact course-stage recording relation.",
+    "manual_course_browser": "Same typed course-stage/context audio policy remains explicitly tested, with verification receipt SHA d10669b7fa72b24db1568f1c199e1a2227607fcb385bc9c5df301ca99eda56e9: 9 checks passed across 10 chapters; candidate test SHA matches the manifest.",
+    "manual_reader_text": "Feature-default audio routes are replaced by canonical recording-home, source relationship, and full source-derived MIDI-strip coverage; no raw technical history panel is required. All recording IDs remain pinned in the 22-entry fixture and output chunks.",
+    "explicit_mobile": "Authored linked caption is verified by exact visible label plus href; exact native pixels/grid, reload/back, scene controls and viewport overflow checks remain.",
+    "existing_remediation_files": "Current evidence-status/raw-history assertions are updated to assert the public technical chrome is absent and the reader-facing recovery/status remains exact; source/scene/event hashes and native outputs remain pinned. Current program-display expected prose is updated to omit the hidden developer-history wording.",
+    "absent_actual_files": "Candidate adds its 12 missing remediation helpers/fixtures (canonical_recipe, device_existing_course, grid, metadata, output_view, recordings, recordings_navigation, retained_output, save_dialog, sweeps, and fixture data counted at file level) as new files rather than overwriting current paths.",
+    "absent_actual_paths": [
+      "tests/behaviour/remediation/canonical_recipe.cjs",
+      "tests/behaviour/remediation/device_existing_course.cjs",
+      "tests/behaviour/remediation/fixtures/recordings-context-v1.json",
+      "tests/behaviour/remediation/grid.cjs",
+      "tests/behaviour/remediation/metadata.cjs",
+      "tests/behaviour/remediation/output_view.cjs",
+      "tests/behaviour/remediation/recordings.cjs",
+      "tests/behaviour/remediation/recordings_navigation.cjs",
+      "tests/behaviour/remediation/retained_output.cjs",
+      "tests/behaviour/remediation/save_dialog.cjs",
+      "tests/behaviour/remediation/sweeps.cjs"
+    ],
+    "absent_actual_count": 11
+  },
+  "proposal": {
+    "path": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source16-actual-preimage-reconciliation-20261008-01/ACTUAL-TO-CANDIDATE.patch",
+    "sha256": "2e5d28be906290ef0fdb842065f7c1f737ce12edc6dbfdbdf33afd67391c67e2",
+    "bytes": 237475,
+    "file_count": 23,
+    "status": "review proposal only; no actual checkout files edited"
+  },
+  "qualification": "No tests were run. Reconciliation judged source/test intent and exact file pins; existing separate green course receipt was inspected, but full live run qualification remains with root."
+}

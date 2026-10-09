@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "manual/scene-plans.yaml",
+      "before_sha256": "106ba6bd35f5df34d58e8258f50d1b94703fb303ba7958fd057c92ea79e11765",
+      "after_sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791"
+    },
+    {
+      "path": "tests/behaviour/test_manual_case_capture.py",
+      "before_sha256": "798dc21ede76f5ba7166d0fd2cf4c032e29dac06cf98bd12339470eb04ae2b3d",
+      "after_sha256": "e494152de3ab35a0318f3c3faf273960da7770a621468fe19145be61d662e785"
+    }
+  ],
+  "scene": "merge-overlap-and-union",
+  "unchanged_modes": [
+    "SKIP",
+    "ONLY",
+    "ALL"
+  ],
+  "unchanged_scene_and_step_ids": true,
+  "features": 133,
+  "authoring_schemas_passed": true,
+  "full_model_validation_blocker": "Duplicate captured scene in existing generated catalogue; no evidence deleted or guard changed",
+  "native_launched": false,
+  "red_failure_count": 3,
+  "green_returncode": 0,
+  "green_log_sha256": "14982737b629defe3221210f7148d18341698efae0a2683e03c82dbaa433add3",
+  "diff_sha256": "30a742d329c97e9182d81a33cab426cf8c43a4fa20aa54164073ee6e539f40e5"
+}

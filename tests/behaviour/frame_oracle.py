@@ -228,9 +228,11 @@ def _region_matches(actual,expected,top,bottom,left=0,right=128):
 @any_marquee_phase
 def live_header_matches(state,title,scope,layout):
     expected,rows=live_header(title,scope,layout)
-    actual=base64.b64decode(state['frame']['pixels_base64'])
-    # The top-right tile is a transient motion accent; the text must be exact.
-    return _region_matches(actual,expected,0,rows,0,118)
+    # Text and the authored v2 sprite are both exact. Repeated titles accept
+    # only their explicit literal variants; canonical page recipes additionally
+    # assert the page-specific sprite. No right-header pixels are discarded.
+    from contract.mini_header_animation_ui import exact_header_matches
+    return exact_header_matches(state,title,scope,layout,expected,rows)
 
 DETAIL_ROWS=(27,36,45,54)
 
@@ -255,6 +257,10 @@ def selected_field_matches(state,layout,label=None,value=None,art=False):
     """True when the selected field shows `label` and/or `value` on its layout's full-value route."""
     actual=base64.b64decode(state['frame']['pixels_base64'])
     value=None if value is None else str(value)
+    if layout == 'focused':
+        raise ValueError('retired focused layout; use explicit vertical_list acceptance')
+    if layout == 'vertical_list':
+        return vertical_selected_field_matches(state,label,value)
     if layout=='detail':
         for y in DETAIL_ROWS:
             if label is not None and value is not None:
@@ -500,3 +506,28 @@ def pattern_outline_matches(state,step):
         if any(actual[(py*128+px)*4+c]!=want for px,py in _pattern_ring(k) for c in range(3)):
             return False
     return True
+
+
+def vertical_selected_field_matches(state,label=None,value=None):
+    """Exact selected vertical row; no fallback to the retired carousel.
+
+    Wide selected fields use a dedicated next line for their whole value.
+    Labels remain literal; values may never be accepted through truncation.
+    """
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    value=None if value is None else str(value)
+    full_label=label
+    split=label is not None and value is not None and text_width(label)+text_width(value)+4>119
+    for y in DETAIL_ROWS:
+        if label is not None:
+            if not _region_matches(actual,render([(0,y,15,'>'),(7,y,15,label)]),
+                 y-7,y+2,0,min(128,8+int(text_width(label)))):continue
+        elif not _region_matches(actual,render([(0,y,15,'>')]),y-7,y+2,0,6):continue
+        if value is None:return True
+        split=full_label is not None and text_width(full_label)+text_width(value)+4>119
+        vy=y+9 if split else y
+        if vy>54:continue
+        width=int(text_width(value))+2
+        if _region_matches(actual,render([((None,126),vy,15,value)]),
+                            vy-7,vy+2,max(7,126-width),127):return True
+    return False

@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-08",
+  "verdict": "conditional layout failure",
+  "all_seven_at_least_8": false,
+  "scores": {
+    "readability": 7,
+    "comprehensibility": 8,
+    "flow": 8,
+    "understandability": 8,
+    "user_friendliness": 7,
+    "usefulness_of_interactive_examples": 7,
+    "cohesion": 8
+  },
+  "assets": {
+    "manual.css": "c664709772996b542460a5c55a9c2eaf54e633170a29ce90685b78b10645cbcc",
+    "book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24"
+  },
+  "coverage": {
+    "widths": [
+      1440,
+      1280,
+      1121,
+      768,
+      390
+    ],
+    "routes": [
+      "#rhythm-doctor",
+      "#first-sound/course"
+    ],
+    "states": 40,
+    "modes": [
+      "original compact",
+      "Shield compact",
+      "original enlarged",
+      "Shield enlarged"
+    ],
+    "overflows": 0,
+    "initial_30_states_page_errors": [],
+    "original_enlarged_keyboard_column16_checks": 10
+  },
+  "findings": [
+    {
+      "id": "CG-1",
+      "severity": "blocking",
+      "problem": "Original-norns framebuffer too small in desktop course and narrow desktop reference.",
+      "cases": [
+        {
+          "route": "#first-sound/course",
+          "width": 1280,
+          "screen": [
+            132,
+            66
+          ]
+        },
+        {
+          "route": "#first-sound/course",
+          "width": 1440,
+          "screen": [
+            160.34375,
+            80.171875
+          ]
+        },
+        {
+          "route": "#rhythm-doctor",
+          "width": 1121,
+          "screen": [
+            164.234375,
+            82.109375
+          ]
+        }
+      ],
+      "requirement": "Keep desktop norns and grid paired, allocate approximately224–256px minimum screen width and readable instruction column; use full-width hardware pair below instructions at narrower widths where needed."
+    }
+  ],
+  "carry": {
+    "prior_report": "../locks-c07-1-astra-final-recheck-20261008-01/review.md",
+    "content_findings": "closed by unchanged reader-index/JS",
+    "responsive_closure": "conditional on CG-1"
+  },
+  "evidence": [
+    "observations.json",
+    "enlarged-original.json",
+    "lesson-1280-original.png",
+    "lesson-1440-original.png",
+    "rhythm-1121-original.png"
+  ],
+  "limitations": [
+    "Scoped CSS usability review, not another whole-manual reading.",
+    "No native/audio/listening/CI claims.",
+    "Owned browsers closed; no production changes."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "files": [
+    {
+      "path": "tests/behaviour/test_manual_build.py",
+      "before_sha256": "905f773d13f2a18321a2fc7609d33db10752e63f55478819b568d1c7dd3d8889",
+      "after_sha256": "e884348aeea33040d27dc730fd2e1467b7158dc9a5c0306de00ed2fcab58d63a"
+    },
+    {
+      "path": "tools/test_manual_reconcile_build.py",
+      "before_sha256": "ce80671bea82155db0296192ad263c190fc861562192637332417fbb3306d529",
+      "after_sha256": "148a1e00a614071fe758e5e87103036bc4ceddbc48ca8fafa407f78187a11885"
+    },
+    {
+      "path": "tests/behaviour/test_manual_publication_verify.py",
+      "before_sha256": "73b26edb5148a901e566b92feed1a7602078362af6cb76df53d254a6f7db205c",
+      "after_sha256": "3a149cef46708ffd784a3c8468322b64132c9995b36a763fcfd4b197cfbad7e3"
+    },
+    {
+      "path": "tests/behaviour/test_manual_controlled_generation_integrity.py",
+      "before_sha256": "384381629c4f486dd81d41f07f3d14b127cc2e70d2fd5a74d70326733bd5aff1",
+      "after_sha256": "646f7e120fbfddd556b1fd86a52544b00e1dc7be3fc521f1a9a8901a474b2698"
+    }
+  ],
+  "independent_review_sha256": "61cf37bca93781da5cf4aede6ed20f4302cdec0f118b3c9819266106f24d584a",
+  "native_campaign_qualified": false,
+  "full_ci_qualified": false
+}

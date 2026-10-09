@@ -8,6 +8,7 @@ binary-offset CCs on the emulator MIDI input; outputs are note velocities.
 import shutil
 import re
 from driver import Driver,REPO
+from ui_map import MIDI_MAPPING_PARAMETERS
 
 def pmap_line(param,cc,value=2):
     return '"%s":"{cc=%d, ch=1, dev=1, in_lo=1, in_hi=2, out_lo=-1, out_hi=1, accum=true, echo=false, value=%d}"\n'%(param,cc,value)
@@ -54,15 +55,28 @@ def midi_mapping(c):
             e.results.append(dict(kind='midi-mapping',stage=stage,expected=expected,passed=True))
         pattern=[127,117,107,97]
         velocities('unmapped',{1:pattern,2:pattern})
+        # README.md#midi-controller-mapping: the Masks screen shows the velocity mask a map moves.
+        # A grid channel select keeps the showing screen (G05), so Masks stays open for channel 2.
+        e.ui.channel_page('masks',channel=1);e.ui.select_row('velocity',2)
+        e.ui.expect_selected_mask('velocity','X')
         # Selected channel 1: from Off, eleven increases give velocity mask 10; two decreases give 8.
         for _ in range(11):cc(20,65)
+        e.ui.expect_selected_mask('velocity','10')
         velocities('selected-ch1-plus-11',{1:10,2:pattern})
-        cc(20,63);cc(20,63);velocities('selected-ch1-minus-2',{1:8,2:pattern})
+        cc(20,63);cc(20,63);e.ui.expect_selected_mask('velocity','8')
+        velocities('selected-ch1-minus-2',{1:8,2:pattern})
         # Selection moves the selected-channel map to channel 2; channel 1 keeps 8.
-        e.ui.select_channel(2);cc(20,65);cc(20,65);cc(20,65);velocities('selected-ch2-plus-3',{1:8,2:2})
-        # The fixed channel-2 map ignores selection.
-        e.ui.select_channel(1);cc(21,65);cc(21,65);velocities('fixed-ch2-plus-2',{1:8,2:4})
-        cc(21,0);velocities('fixed-ch2-value-0-decreases',{1:8,2:3})
+        e.ui.select_channel(2);e.ui.expect_selected_mask('velocity','X')
+        cc(20,65);cc(20,65);cc(20,65);e.ui.expect_selected_mask('velocity','2')
+        velocities('selected-ch2-plus-3',{1:8,2:2})
+        # The fixed channel-2 map ignores selection: channel 1 stays selected and shows 8, while
+        # channel 2 (looked at, then channel 1 selected again) took the two increases.
+        e.ui.select_channel(1);e.ui.expect_selected_mask('velocity','8')
+        cc(21,65);cc(21,65)
+        e.ui.select_channel(2);e.ui.expect_selected_mask('velocity','4');e.ui.select_channel(1)
+        velocities('fixed-ch2-plus-2',{1:8,2:4})
+        cc(21,0);e.ui.select_channel(2);e.ui.expect_selected_mask('velocity','3');e.ui.select_channel(1)
+        velocities('fixed-ch2-value-0-decreases',{1:8,2:3})
     finally:e.finish()
     c.results.append(dict(kind='midi-mapping-session',nested=str(out),passed=True))
 
@@ -74,14 +88,25 @@ def midi_map_entry(c):
             c.elapse(.4);c.ui.press_key(n) # menu receives K1 after its 0.25 s threshold
         c.elapse(.1)
     c.ui.seek_native_mapping_parameter('selected_channel_velocity')
+    # README.md#midi-controller-mapping: the native editor's MAP mode lists the parameter by id.
+    c.ui.expect_menu_label(MIDI_MAPPING_PARAMETERS['selected_channel_velocity']['label'])
     hold_k1(3)          # EDIT -> MAP mode
+    c.ui.expect_menu_label('sel_ch_vel')
     c.ui.press_key(3)            # open the parameter's map editor on "learn"
+    c.ui.expect_map_editor('sel_ch_vel','learn')
     c.ui.press_key(3)            # arm learn
+    c.ui.expect_map_editor('sel_ch_vel','learn',learning=True)
     c.action(type='midi',port=1,bytes=[176,20,63]);c.elapse(.2) # learned CC 20 (consumed by learn)
+    learned=dict(cc=20)
+    c.ui.expect_map_editor('sel_ch_vel','learn',learned)
     c.ui.turn(2,5);c.ui.turn(3,1)      # in lo 0 -> 1
+    learned['in_lo']=1;c.ui.expect_map_editor('sel_ch_vel','in_lo',learned)
     c.ui.turn(2,1);c.ui.turn(3,-125)   # in hi 127 -> 2
+    learned['in_hi']=2;c.ui.expect_map_editor('sel_ch_vel','in_hi',learned)
     c.ui.turn(2,3);c.ui.turn(3,1)      # accum yes
+    learned['accum']='yes';c.ui.expect_map_editor('sel_ch_vel','accum',learned)
     c.ui.press_key(2)                   # assign and write the PMAP
+    c.ui.expect_menu_label('sel_ch_vel');c.ui.expect_menu_value('20:1:1')
     hold_k1(3)                 # back to EDIT mode
     c.ui.press_key(2);c.ui.press_key(2);c.ui.press_key(1) # leave the group and the menu
     pmap=(c.data_directory/'mosaic.pmap').read_text()
@@ -91,9 +116,11 @@ def midi_map_entry(c):
     def cc(value):c.action(type='midi',port=1,bytes=[176,20,value]);c.elapse(.2)
     # A fresh map starts below its input range; begin with a decrease (Off stays Off),
     # then five increases reach velocity mask 4 and one decrease gives 3.
+    c.ui.channel_page('masks');c.ui.select_row('velocity',2);c.ui.expect_selected_mask('velocity','X')
     cc(63)
     for _ in range(5):cc(65)
+    c.ui.expect_selected_mask('velocity','4')
     marker=c.snapshot()['midi_count']
     c.playback([(1,[144,n,4]) for n in (60,62,64,65)])
-    cc(63);c.playback([(1,[144,n,3]) for n in (60,62,64,65)])
+    cc(63);c.ui.expect_selected_mask('velocity','3');c.playback([(1,[144,n,3]) for n in (60,62,64,65)])
     c.results.append(dict(kind='pmap-entry-control',velocities=[4,3],passed=True))

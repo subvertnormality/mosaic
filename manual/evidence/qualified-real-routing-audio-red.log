@@ -1,0 +1,21 @@
+.....E.F..............
+======================================================================
+ERROR: test_midi_worker_command_retains_both_explicit_lane_installations (__main__.AudioAuthoring)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/manual_audio_contract.py", line 24, in test_midi_worker_command_retains_both_explicit_lane_installations
+    command=manual_audio.midi_worker_command(Path('/run'),'piece',Path('/out'),Path('/frozen'),options,'real-time')
+AttributeError: module 'manual_audio' has no attribute 'midi_worker_command'
+
+======================================================================
+FAIL: test_real_midi_witness_forwards_explicit_install_to_actual_driver (__main__.AudioAuthoring)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/manual_audio_contract.py", line 18, in test_real_midi_witness_forwards_explicit_install_to_actual_driver
+    self.assertEqual(driver.call_args.kwargs['experimental_install'],'/qualified/real.json')
+AssertionError: None != '/qualified/real.json'
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.009s
+
+FAILED (failures=1, errors=1)

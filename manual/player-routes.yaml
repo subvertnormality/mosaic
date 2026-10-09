@@ -1,0 +1,44 @@
+schema_version: 1
+source_schema: player-route-projection/v1
+fixture_kind: external-native-evidence
+recording_example: three-voice-conversation
+trace_contract: Project the exact selected Device row before the following applied
+  K3 input. Input traces retain native encoder units. Installation and post-apply
+  field persistence are outside these frames.
+scenes:
+- id: software-player-oilcan
+  feature_id: mods-and-software-devices
+  player: Oilcan 1
+  title: Select Oilcan 1
+  steps:
+  - id: select-player
+    title: Select Oilcan 1
+    caption: On channel 1's Device page, turn E3 until the Device row reads Oilcan 1.
+      The row shows the player name and the screen asks you to press K3 to confirm;
+      nothing is applied yet.
+    citation: README.md#mods-and-software-devices
+  channel: 1
+- id: software-player-polyperc
+  feature_id: mods-and-software-devices
+  player: Polyperc 1
+  title: Select Polyperc 1
+  steps:
+  - id: select-player
+    title: Select Polyperc 1
+    caption: On channel 2's Device page, turn E3 until the Device row reads Polyperc 1.
+      The row shows the player name and the screen asks you to press K3 to confirm;
+      nothing is applied yet.
+    citation: README.md#mods-and-software-devices
+  channel: 2
+- id: software-player-doubledecker
+  feature_id: mods-and-software-devices
+  player: Doubledecker
+  title: Select Doubledecker
+  steps:
+  - id: select-player
+    title: Select Doubledecker
+    caption: On channel 3's Device page, turn E3 until the Device row reads Doubledecker.
+      The row shows the player name and the screen asks you to press K3 to confirm;
+      nothing is applied yet.
+    citation: README.md#mods-and-software-devices
+  channel: 3

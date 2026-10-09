@@ -1,0 +1,8 @@
+test_device_entry_points_use_only_the_standard_library (test_runtime_dependencies.RuntimeDependencyTests.test_device_entry_points_use_only_the_standard_library) ... ok
+test_the_native_backend_needs_no_python_at_all (test_runtime_dependencies.RuntimeDependencyTests.test_the_native_backend_needs_no_python_at_all) ... ok
+test_the_vendored_fft_is_free_of_cpython (test_runtime_dependencies.RuntimeDependencyTests.test_the_vendored_fft_is_free_of_cpython) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.013s
+
+OK

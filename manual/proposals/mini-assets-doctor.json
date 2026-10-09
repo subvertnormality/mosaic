@@ -1,0 +1,843 @@
+{
+  "status": "authored_design_assets_not_runtime_configuration",
+  "palette": {
+    ".": "transparent",
+    "a": 7,
+    "b": 11,
+    "c": 15
+  },
+  "assets": [
+    {
+      "id": "R01",
+      "width": 20,
+      "height": 8,
+      "concept": "Doctor greeting",
+      "frames": [
+        [
+          "....cac.......ccc...",
+          "...bbbbb.....ca.ac..",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb......ccc...",
+          "....bbb........b....",
+          "...ccacc.......b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          ".....cac......ccc...",
+          "....bbbbb....ca.ac..",
+          "...cb.b.bc...ca.ac..",
+          "....bbbbb.....ccc...",
+          ".....bbb.......b....",
+          "...ccacc.......b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          "....cac.......ccc...",
+          "...bbbbb.....ca.ac..",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb......ccc...",
+          "....bbb........b....",
+          "...ccacc.......b....",
+          "..cccacccb....aaa...",
+          "...aa.aa............"
+        ],
+        [
+          "....bab.......ccc...",
+          "...bbbbb.....ca.ac..",
+          "..cb.b.bc....ca.ac..",
+          "...bbbbb......ccc...",
+          "....bbb........b....",
+          "...ccacc.......b....",
+          "..cccaccc.....aaa...",
+          "...aa.aa............"
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Original Doctor dude gives a small nod beside his mirror; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R02",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor listening",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb......bbb.........",
+          "..cb.b.bc....b..cb........",
+          "...bbbbb....b..cacb.......",
+          "....bbb.....b..cacb.......",
+          "...ccacc.....b..cb........",
+          "..cccaccc.....bbb.........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb.....bbb.........",
+          "...cb.b.bc...b..cb........",
+          "....bbbbb...b..cacb.......",
+          ".....bbb....b..cacb.......",
+          "...ccacc.....b..cb........",
+          "..cccaccc.....bbb.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb......bbb.........",
+          "..cb.b.bc....b..cb........",
+          "...bbbbb....b..cacb.......",
+          "....bbb.....b..cacb.......",
+          "...ccacc.....b..cb........",
+          "..cccacccb....bbb.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb......bbb.........",
+          "..cb.b.bc....b..cb........",
+          "...bbbbb....b..cacb.......",
+          "....bbb.....b..cacb.......",
+          "...ccacc.....b..cb........",
+          "..cccaccc.....bbb.........",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor leans toward a small recording shell; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R03",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor take card",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb.....cccccccc.....",
+          "..cb.b.bc....c......c.....",
+          "...bbbbb.....c.bbb..c.....",
+          "....bbb......c.b....c.....",
+          "...ccacc.....cccccccc.....",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb....cccccccc.....",
+          "...cb.b.bc...c......c.....",
+          "....bbbbb....c.bbb..c.....",
+          ".....bbb.....c.b....c.....",
+          "...ccacc.....cccccccc.....",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb......cccccccc....",
+          "..cb.b.bc.....c......c....",
+          "...bbbbb......c.bbb..c....",
+          "....bbb.......c.b....c....",
+          "...ccacc......cccccccc....",
+          "..cccacccb................",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb.....cccccccc.....",
+          "..cb.b.bc....c......c.....",
+          "...bbbbb.....c.bbb..c.....",
+          "....bbb......c.b....c.....",
+          "...ccacc.....cccccccc.....",
+          "..cccaccc.................",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor holds a take card that gently tilts; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R04",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor notes",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....bb..cc..bb....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...ccacc.....a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc....bb..cc..bb....",
+          "....bbbbb.....bb..cc..bb....",
+          ".....bbb....................",
+          "...ccacc.....a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....bb..cc..bb....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...ccacc.....a....a....a....",
+          "..cccacccb..aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....bb..cc..bb....",
+          "...bbbbb......bb..cc..bb....",
+          "....bbb.....................",
+          "...ccacc.....a....a....a....",
+          "..cccaccc...aaaaaaaaaaaa....",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor follows three small analysis dots with a subtle head nod; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R05",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor window",
+      "frames": [
+        [
+          "cccccaccccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "c..ccacc..c.................",
+          "c.cccaccc.c.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccccacccc.................",
+          "c...bbbbb.c.....cc..........",
+          "c..cb.b.bcc....c............",
+          "c...bbbbb.c....c............",
+          "c....bbb..c.....cc..........",
+          "c..ccacc..c.................",
+          "c.cccaccc.c.................",
+          "ccccccccccc................."
+        ],
+        [
+          "cccccaccccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "c..ccacc..c.................",
+          "c.cccacccbc.................",
+          "ccccccccccc................."
+        ],
+        [
+          "ccccbabcccc.................",
+          "c..bbbbb..c.....cc..........",
+          "c.cb.b.bc.c....c............",
+          "c..bbbbb..c....c............",
+          "c...bbb...c.....cc..........",
+          "c..ccacc..c.................",
+          "c.cccaccc.c.................",
+          "ccccccccccc................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor leans into a little window frame and returns; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R06",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor alignment",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.............c.......",
+          "...ccacc....cccccccccccc....",
+          "..cccaccc...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb.......b...........",
+          "...cb.b.bc......b...c.......",
+          "....bbbbb.......b...c.......",
+          ".....bbb............c.......",
+          "...ccacc....cccccccccccc....",
+          "..cccaccc...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.............c.......",
+          "...ccacc....cccccccccccc....",
+          "..cccacccb..c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb........b...........",
+          "..cb.b.bc.......b...c.......",
+          "...bbbbb........b...c.......",
+          "....bbb.............c.......",
+          "...ccacc....cccccccccccc....",
+          "..cccaccc...c.a.a.a.a.ac....",
+          "...aa.aa....cccccccccccc...."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor moves a small ruler beside two staggered marks; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R07",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor aligned markers",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb......ccc...ccc.....",
+          "..cb.b.bc.....c.....c.......",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...ccacc......c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb.....ccc...ccc.....",
+          "...cb.b.bc....c.....c.......",
+          "....bbbbb.....c.....c.......",
+          ".....bbb......c.....c.......",
+          "...ccacc......c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb......ccc...ccc.....",
+          "..cb.b.bc.....c.....c.......",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...ccacc......c.....c.......",
+          "..cccacccb...aaa...aaa......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb......ccc...ccc.....",
+          "..cb.b.bc.....c.....c.......",
+          "...bbbbb......c.....c.......",
+          "....bbb.......c.....c.......",
+          "...ccacc......c.....c.......",
+          "..cccaccc....aaa...aaa......",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor nods beside two matched marker flags; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R08",
+      "width": 24,
+      "height": 8,
+      "concept": "Doctor brush",
+      "frames": [
+        [
+          "....cac..........ccc....",
+          "...bbbbb........bcc.....",
+          "..cb.b.bc......ab.......",
+          "...bbbbb......ab........",
+          "....bbb......ab.........",
+          "...ccacc....ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ],
+        [
+          ".....cac.........ccc....",
+          "....bbbbb.......bcc.....",
+          "...cb.b.bc.....ab.......",
+          "....bbbbb.....ab........",
+          ".....bbb.....ab.........",
+          "...ccacc....ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ],
+        [
+          "....cac...........ccc...",
+          "...bbbbb.........bcc....",
+          "..cb.b.bc.......ab......",
+          "...bbbbb.......ab.......",
+          "....bbb.......ab........",
+          "...ccacc.....ab.........",
+          "..cccacccb..............",
+          "...aa.aa................"
+        ],
+        [
+          "....bab..........ccc....",
+          "...bbbbb........bcc.....",
+          "..cb.b.bc......ab.......",
+          "...bbbbb......ab........",
+          "....bbb......ab.........",
+          "...ccacc....ab..........",
+          "..cccaccc...............",
+          "...aa.aa................"
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 2,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor gently raises a small paint brush; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R09",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor painted bed",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....c...c...c.....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...ccacc.....a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc....c...c...c.....",
+          "....bbbbb.....b...b...b.....",
+          ".....bbb.....aaaaaaaaaaa....",
+          "...ccacc.....a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....c...c...c.....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...ccacc.....a.........a....",
+          "..cccacccb...aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....c...c...c.....",
+          "...bbbbb......b...b...b.....",
+          "....bbb......aaaaaaaaaaa....",
+          "...ccacc.....a.........a....",
+          "..cccaccc....aaaaaaaaaaa....",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor tends a small dotted paint bed with a hand nod; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R10",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor bank box",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb.......cccc.......",
+          "..cb.b.bc......c..c.......",
+          "...bbbbb.....cccccccc.....",
+          "....bbb......c.aaaa.c.....",
+          "...ccacc.....c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb......cccc.......",
+          "...cb.b.bc.....c..c.......",
+          "....bbbbb....cccccccc.....",
+          ".....bbb.....c.aaaa.c.....",
+          "...ccacc.....c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb........cccc......",
+          "..cb.b.bc.......c..c......",
+          "...bbbbb......cccccccc....",
+          "....bbb.......c.aaaa.c....",
+          "...ccacc......c......c....",
+          "..cccacccb....cccccccc....",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb.......cccc.......",
+          "..cb.b.bc......c..c.......",
+          "...bbbbb.....cccccccc.....",
+          "....bbb......c.aaaa.c.....",
+          "...ccacc.....c......c.....",
+          "..cccaccc....cccccccc.....",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor holds a closed bank box whose handle tilts; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R11",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor rest stool",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...cccccc...ccc.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc..................",
+          "....bbbbb............ccc....",
+          ".....bbb............ccacc...",
+          "...cccccc...ccc.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...cccccc...ccc.....ccacc...",
+          "..cccacccb...a.......ccc....",
+          "..aa..aa.....a.............."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc...................",
+          "...bbbbb.............ccc....",
+          "....bbb.............ccacc...",
+          "...cccccc...ccc.....ccacc...",
+          "...a..a......a.......ccc....",
+          "..aa..aa.....a.............."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor sits beside a stationary stop pebble and breathes; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R12",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor empty tray",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb..................",
+          "....bbb......b......b.....",
+          "...ccacc.....b......b.....",
+          "..cccaccc.....bbbbbb......",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb.................",
+          "...cb.b.bc................",
+          "....bbbbb.................",
+          ".....bbb.....b......b.....",
+          "...ccacc.....b......b.....",
+          "..cccaccc.....bbbbbb......",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb..................",
+          "....bbb......b......b.....",
+          "...ccacc.....b......b.....",
+          "..cccacccb....bbbbbb......",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb..................",
+          "..cb.b.bc.................",
+          "...bbbbb..................",
+          "....bbb......b......b.....",
+          "...ccacc.....b......b.....",
+          "..cccaccc.....bbbbbb......",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor looks into a small empty tray and returns upright; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R13",
+      "width": 30,
+      "height": 8,
+      "concept": "Doctor lane ribbons",
+      "frames": [
+        [
+          "....cac.......................",
+          "...bbbbb......bbbbbbbbbbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...ccacc......aaaaaaaaaaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          ".....cac......................",
+          "....bbbbb.....bbbbbbbbbbb.....",
+          "...cb.b.bc...b...........b....",
+          "....bbbbb.....ccccccccccc.....",
+          ".....bbb.....c...........c....",
+          "...ccacc......aaaaaaaaaaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          "....cac.......................",
+          "...bbbbb......bbbbbbbbbbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...ccacc......aaaaaaaaaaa.....",
+          "..cccacccb...a...........a....",
+          "...aa.aa......................"
+        ],
+        [
+          "....bab.......................",
+          "...bbbbb......bbbbbbbbbbb.....",
+          "..cb.b.bc....b...........b....",
+          "...bbbbb......ccccccccccc.....",
+          "....bbb......c...........c....",
+          "...ccacc......aaaaaaaaaaa.....",
+          "..cccaccc....a...........a....",
+          "...aa.aa......................"
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor follows three parallel ribbons with a gentle nod; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R14",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor limit fence",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc....c...c...c......",
+          "...bbbbb.....ccccccccc......",
+          "....bbb......c...c...c......",
+          "...ccacc.....ccccccccc......",
+          "..cccaccc....c...c...c......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb...................",
+          "...cb.b.bc...c...c...c......",
+          "....bbbbb....ccccccccc......",
+          ".....bbb.....c...c...c......",
+          "...ccacc.....ccccccccc......",
+          "..cccaccc....c...c...c......",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb....................",
+          "..cb.b.bc.....c...c...c.....",
+          "...bbbbb......ccccccccc.....",
+          "....bbb.......c...c...c.....",
+          "...ccacc......ccccccccc.....",
+          "..cccacccb....c...c...c.....",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb....................",
+          "..cb.b.bc....c...c...c......",
+          "...bbbbb.....ccccccccc......",
+          "....bbb......c...c...c......",
+          "...ccacc.....ccccccccc......",
+          "..cccaccc....c...c...c......",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor adjusts a short measuring fence by one pixel; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R15",
+      "width": 26,
+      "height": 8,
+      "concept": "Doctor browsing leaf",
+      "frames": [
+        [
+          "....cac...................",
+          "...bbbbb........ccc.......",
+          "..cb.b.bc......cb.ac......",
+          "...bbbbb......cb..ac......",
+          "....bbb......cb...ac......",
+          "...ccacc......cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          ".....cac..................",
+          "....bbbbb.......ccc.......",
+          "...cb.b.bc.....cb.ac......",
+          "....bbbbb.....cb..ac......",
+          ".....bbb.....cb...ac......",
+          "...ccacc......cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ],
+        [
+          "....cac...................",
+          "...bbbbb.........ccc......",
+          "..cb.b.bc.......cb.ac.....",
+          "...bbbbb.......cb..ac.....",
+          "....bbb.......cb...ac.....",
+          "...ccacc.......cccccc.....",
+          "..cccacccb.......a........",
+          "...aa.aa.................."
+        ],
+        [
+          "....bab...................",
+          "...bbbbb........ccc.......",
+          "..cb.b.bc......cb.ac......",
+          "...bbbbb......cb..ac......",
+          "....bbb......cb...ac......",
+          "...ccacc......cccccc......",
+          "..cccaccc.......a.........",
+          "...aa.aa.................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor turns one small leaf-shaped page; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    },
+    {
+      "id": "R16",
+      "width": 28,
+      "height": 8,
+      "concept": "Doctor correction leaf",
+      "frames": [
+        [
+          "....cac.....................",
+          "...bbbbb.......bbb..........",
+          "..cb.b.bc.....b...bbb.......",
+          "...bbbbb.....b..c....b......",
+          "....bbb......b..cc....b.....",
+          "...ccacc......b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          ".....cac....................",
+          "....bbbbb......bbb..........",
+          "...cb.b.bc....b...bbb.......",
+          "....bbbbb....b..c....b......",
+          ".....bbb.....b..cc....b.....",
+          "...ccacc......b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ],
+        [
+          "....cac.....................",
+          "...bbbbb........bbb.........",
+          "..cb.b.bc......b...bbb......",
+          "...bbbbb......b..c....b.....",
+          "....bbb.......b..cc....b....",
+          "...ccacc.......b..c...b.....",
+          "..cccacccb......bbbbbb......",
+          "...aa.aa...................."
+        ],
+        [
+          "....bab.....................",
+          "...bbbbb.......bbb..........",
+          "..cb.b.bc.....b...bbb.......",
+          "...bbbbb.....b..c....b......",
+          "....bbb......b..cc....b.....",
+          "...ccacc......b..c...b......",
+          "..cccaccc......bbbbbb.......",
+          "...aa.aa...................."
+        ]
+      ],
+      "rest_pose": 0,
+      "loop_quarter_beats": 4,
+      "provenance": "Authored miniature redraw of lib/rhythm_doctor/dancing_doctor.lua bald dome, head mirror, round spectacles and white coat; page prop authored from page-animation-map.json concept. Not a framebuffer capture.",
+      "motion_notes": "Doctor holds a softly bent correction leaf that straightens; head inclines by one pixel, mirror highlight settles, and applicable prop inclines by one pixel. No change to application data."
+    }
+  ]
+}

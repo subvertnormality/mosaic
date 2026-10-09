@@ -1,0 +1,7 @@
+test_norns_global_include_is_disabled_for_isolated_component_tests (test_hardware_core_runner.HardwareCoreRunnerTests.test_norns_global_include_is_disabled_for_isolated_component_tests) ... ok
+test_runtime_and_app_surface_dependencies_are_deployed (test_hardware_core_runner.HardwareCoreRunnerTests.test_runtime_and_app_surface_dependencies_are_deployed) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK

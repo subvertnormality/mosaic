@@ -1,0 +1,1499 @@
+{
+  "campaign_report": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/report.json",
+  "campaign_report_sha256": "f36318c05f2ec7ed0abc8293a683f0867f8a2eb0f394e0092501d770325ee9d0",
+  "campaign_uuid": "57d9c7f4ab5d4ee8a0228b15aaacbc8d",
+  "checked_at_utc": "2026-10-05T22:06:11.868872+00:00",
+  "cleanup_service_counts": {
+    "crone": 23,
+    "crow": 23,
+    "jack": 23,
+    "matron": 23,
+    "sclang": 23
+  },
+  "conclusion": "All campaign-owned sessions are marked stopped after their final acknowledged action; archived input logs show every grid/norns key released and native MIDI notes balanced. Session metadata PIDs and all cleanup process PIDs are absent at check time. This does not assert anything about unrelated services.",
+  "counts": {
+    "action_ack_statuses": {
+      "applied": 50427
+    },
+    "action_sequences_with_gaps": [],
+    "action_types": {
+      "enc": 46587,
+      "grid": 2844,
+      "key": 996
+    },
+    "actions": 50427,
+    "cleanup_child_pids": 115,
+    "cleanup_child_pids_present": 0,
+    "cleanup_pairs_equal": 23,
+    "cleanup_returncodes": {
+      "crone:0": 23,
+      "crow:-15": 23,
+      "jack:0": 23,
+      "matron:0": 23,
+      "sclang:-15": 23
+    },
+    "failures": [],
+    "final_held_inputs": 0,
+    "native_midi_note_events": {
+      "note_off": 328,
+      "note_on": 328
+    },
+    "session_metadata_pids": 23,
+    "session_metadata_pids_present": 0,
+    "sessions": 23,
+    "stop_after_last_action_ack": 23,
+    "stopped_markers_matching": 23
+  },
+  "scope": "23 campaign-owned session IDs only: 22 completed audio captures plus the failed song-sections first-solo attempt. No live service or public control endpoint was queried. Unrelated preview PID 7052 was not inspected or touched.",
+  "sessions": [
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1743,
+        "grid": 132,
+        "key": 36
+      },
+      "actions_count": 1911,
+      "actions_jsonl_sha256": "d045d62426dd555ca5ea64194ada16cb6d907c8e4b871069f7a62b16328f29bf",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 14456,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 14455,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 14293,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 14285,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 14278,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "oilcan-pocket",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 83830358196003,
+      "native_cleanup_sha256": "fa7f5c9355ddb6664af9a9b58f5074cb5e93c436e830674145fc919965dd4d06",
+      "native_events_sha256": "5b3debe091df571601cdef9571dde3b8fceb295e8191ca57d03a55803e641d0e",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "fa7f5c9355ddb6664af9a9b58f5074cb5e93c436e830674145fc919965dd4d06",
+      "session_id": "5242733c5d6f442eb9152d5a5abae1a1",
+      "session_metadata_sha256": "60f3ed7e926754b726dfe38a467e3be4c0d7024b926dda43a8a9e539afa209a0",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 14276,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 83830977827285,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "bfbb496049fc94b2c0f4b2dcae00880c773509997a83ea8e9d892584a7c334ac"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1743,
+        "grid": 132,
+        "key": 36
+      },
+      "actions_count": 1911,
+      "actions_jsonl_sha256": "35f0b570a30103615225c0033fa22e1df980bbb83c5c541806d91e8cddad244f",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 4324,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 4323,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 4214,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 4206,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 4196,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "oilcan-pocket",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 83663234926404,
+      "native_cleanup_sha256": "1e81b5c58d542294102085edc88852122877c9f0a0d7463872232533ba8549c8",
+      "native_events_sha256": "66f9a10ba575270d9d966d0a474c9de89102d0135eab68636809d18e7d65908d",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "1e81b5c58d542294102085edc88852122877c9f0a0d7463872232533ba8549c8",
+      "session_id": "2b67ede06a0344b7b295ef1981969984",
+      "session_metadata_sha256": "b4025f88193d3b34d2f9728475f48c7916ae7a3ccf808fa47eac2cacb1f15a77",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 4188,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 83663954260104,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "31647b45a5574eef576ad34fe170d50ebb67157ff170258ceee06868a25742f1"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1893,
+        "grid": 92,
+        "key": 42
+      },
+      "actions_count": 2027,
+      "actions_jsonl_sha256": "913d81f35be4ff8d054f5fd61dcb51e940d46232eb9ed85dc37f911d1feed856",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 5637,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 5636,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 5295,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 5287,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 5283,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "bass-and-intervals",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 84257649946159,
+      "native_cleanup_sha256": "04c139741125d2e03b055535693a560bf586fa713a44db4f2408bdddf67fa659",
+      "native_events_sha256": "95a84d6e5e22ac021894d3b713bdfeb04d634229b2c78a670f29e7875b59aa21",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "04c139741125d2e03b055535693a560bf586fa713a44db4f2408bdddf67fa659",
+      "session_id": "cd94da0e69144ab69116c29ed1beb694",
+      "session_metadata_sha256": "be4eb6f58cf35a9de84bfe460b4edaf1fa88cba28c9ebdc0a5a98a1b358409e9",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 5281,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 84258326501076,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "faecf6e3af1e5b95938359790b1cc2e834a2ee7c7506c1e3bfe9ad6ee72bb407"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1331,
+        "grid": 60,
+        "key": 36
+      },
+      "actions_count": 1427,
+      "actions_jsonl_sha256": "487f4305dad6dc94bc2fa32e21e2972690d1da5799b03f39a570550ad35be8f4",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 24439,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 24438,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 24156,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 24148,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 24138,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "bass-and-intervals",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 83964154589714,
+      "native_cleanup_sha256": "1c02bd4c54f56981352ed20ba74dd1e986a65f2b85eb1f43f27f2670c3a4edda",
+      "native_events_sha256": "c7818df0cccf6d6c8fd6805dc4d409c35fe8987998d3bd82856b3090fc8b657f",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "1c02bd4c54f56981352ed20ba74dd1e986a65f2b85eb1f43f27f2670c3a4edda",
+      "session_id": "5bb8489e691c405ebb0e2df23eb0d5fa",
+      "session_metadata_sha256": "4cab06f7d40d9d2e61feaee2a3643371a1db4718567a43be5fc990fb8cc38aa7",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 24130,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 83964824118952,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "a4e97ba3d8e32ddebf350096a722fb007236202f4227d10191169d8e84f3b34d"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1146,
+        "grid": 44,
+        "key": 36
+      },
+      "actions_count": 1226,
+      "actions_jsonl_sha256": "695a20e343f6648511a425145af73ec2e95ecdc284424acbacb1bfd775bcf86a",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 31828,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 31827,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 31682,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 31671,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 31615,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "bass-and-intervals",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 84082946873112,
+      "native_cleanup_sha256": "d27a8fcdf989c8dc7000cc9829c4076122ca6c54c3a8b6a3a6b8d8be37760716",
+      "native_events_sha256": "f95020109f8ccedd68093d3357feec18b084220bddd147d8b70e42edec5bbd2c",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "d27a8fcdf989c8dc7000cc9829c4076122ca6c54c3a8b6a3a6b8d8be37760716",
+      "session_id": "c90c4da112364cc793264380eadb9716",
+      "session_metadata_sha256": "80b5454ae8395449b9fb517502baa4e44e978b6b4d6c1c249d012685171170f5",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 31613,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 84083666238492,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "68b155f544118a7fb7726f4d954b565ea5683b722a78756df60e2c2cd6998ad3"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 2810,
+        "grid": 180,
+        "key": 48
+      },
+      "actions_count": 3038,
+      "actions_jsonl_sha256": "7decde2ed057dcfb993120e0a9d3f8aa13c77952338dc7bcf07cccd2f6256513",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 3038,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 3037,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 2938,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 2924,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 2911,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "three-voice-conversation",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 84904292922678,
+      "native_cleanup_sha256": "52966fdb2474fb89ab6aabb1831477304cc91beb081edfe9ea253b1031b1f279",
+      "native_events_sha256": "4cec8313eb5e9699f550c12fdffb555de7f1833bde089f1ce25c0910ceb8babc",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "52966fdb2474fb89ab6aabb1831477304cc91beb081edfe9ea253b1031b1f279",
+      "session_id": "6e3f97da6a26406cb2b73dfea3bfc811",
+      "session_metadata_sha256": "549b6839f2c588407cf373c0857330b754ed51052410d88cbb7f2033eada9376",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 2909,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 84904962514729,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "b98f4d376b095c821aaf1f0331ea93cda9b944f0895cfdb7cdcecbbe65f41e3d"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1509,
+        "grid": 100,
+        "key": 36
+      },
+      "actions_count": 1645,
+      "actions_jsonl_sha256": "73d36088a5aafb9f8e881d17928a5351317672316f8591ca435b685ca3a5f9f1",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 14885,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 14884,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 14773,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 14765,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 14755,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "three-voice-conversation",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 84406999898017,
+      "native_cleanup_sha256": "5a56023080a7f7bc10c0c1cba85cb7d7c3189ac0289dcf57bfbee482e524aee2",
+      "native_events_sha256": "2d886c067ddc2730929bace10643e2e01ddae506c37ed8501b034e05fc87512f",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "5a56023080a7f7bc10c0c1cba85cb7d7c3189ac0289dcf57bfbee482e524aee2",
+      "session_id": "37828935a883456ca7ee1d2a7f1d6d8c",
+      "session_metadata_sha256": "ea2be5b805096a1a33df76ed1de14987d477083f8bbc68efba9eeb04a7d74e87",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 14747,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 84407719064472,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "3244a46b17a46f44e9091d20588e8ded0ad032c03e2daecdf05a62014f870d78"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1325,
+        "grid": 60,
+        "key": 36
+      },
+      "actions_count": 1421,
+      "actions_jsonl_sha256": "09823cf6725ce64ce6a8ea0813b79d3c4afa9ce6f66a3699a9c763dcd1bc3cb4",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 22570,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 22569,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 22396,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 22388,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 22384,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "three-voice-conversation",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 84540102239319,
+      "native_cleanup_sha256": "ee8fbeae3443b01e5333ca4f0c218f4171b14734fb2f1e4b7599b92b5fb266c2",
+      "native_events_sha256": "6e7b2c183caa0498aba4a09ee69afb25a84d9643957c959aeac6575e7702f8e9",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "ee8fbeae3443b01e5333ca4f0c218f4171b14734fb2f1e4b7599b92b5fb266c2",
+      "session_id": "d0f94fa6f1544a8aab5118b9cf7dc7c8",
+      "session_metadata_sha256": "9ce03fa95cfc79796667179755cc4b9c5ad56ca68ff3d8dcdf56c41dbf548e6f",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 22382,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 84540822839986,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "defe95bfd23e4995b06d07a927dafcbbd6cd69260c43bd914c158ea85e43b1af"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1145,
+        "grid": 44,
+        "key": 36
+      },
+      "actions_count": 1225,
+      "actions_jsonl_sha256": "97559536452fb6382bc89be76371af1fcc2272014dbd3ca8fcec37cf80a5e049",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 29444,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 29443,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 29281,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 29267,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 29263,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "three-voice-conversation",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 84658565555735,
+      "native_cleanup_sha256": "a6a274a3af88dd8e388cb0101b8e99e6d39b5c83b16b480ec6f9e73b0fbcb151",
+      "native_events_sha256": "36e200549907c4b7c3b56c459af0f80dbeb578df2eeff17b376ff361d8a974c7",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "a6a274a3af88dd8e388cb0101b8e99e6d39b5c83b16b480ec6f9e73b0fbcb151",
+      "session_id": "f53e2f23361349eeb35c8509177e74ba",
+      "session_metadata_sha256": "509b8f6c45f8bca5c57ae1417e64044ff52d420cac2afd31d34856c944f167d6",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 29261,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 84659237547081,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "3fbeaf88634141d208db39a02f6bb98f7141004477a8b4fba9152114d3fadc58"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 2619,
+        "grid": 148,
+        "key": 42
+      },
+      "actions_count": 2809,
+      "actions_jsonl_sha256": "a58f1952e1f842ff0b6ff2decdd1ccb92c68ec089d27d3dec12061cf5319a969",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 2311,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 2310,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 2189,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 2178,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 2174,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 36,
+      "example_id": "ghost-note-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 85397166117758,
+      "native_cleanup_sha256": "00b05cb90775f60b5678825c1f61226969e1bb47f989441884dc317738ee4e82",
+      "native_events_sha256": "0e82779a80da934a4898d343cdb9a0daa6088873480dee62f5e875a0d7d66c27",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "00b05cb90775f60b5678825c1f61226969e1bb47f989441884dc317738ee4e82",
+      "session_id": "d7f214940e004eb6bc9b2f34ced9059f",
+      "session_metadata_sha256": "60c137757667ba42552efd8575db4049e15099d03d3d66f0b982a695a2f5a685",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 2172,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 85397835635490,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "b91ad6896319ef876ae16fce43f59907434a591093e1af7e978e645d687ccbee"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 2619,
+        "grid": 148,
+        "key": 42
+      },
+      "actions_count": 2809,
+      "actions_jsonl_sha256": "50910c9d1479b4b0ac110e7ee72e7164b3bc2293dd46b0e6250e11ebe8a1964b",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 22687,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 22686,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 22575,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 22567,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 22557,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 36,
+      "example_id": "ghost-note-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 85173032698207,
+      "native_cleanup_sha256": "9b53f19ad433bc8b9fac7cf0587e4991c8bf043bedc80984eb5f8185eb7a5909",
+      "native_events_sha256": "86a8a89756a43fe1a3d51ed522d51670ff9f84f6efaf23cf8ab9b8a02ed427b3",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "9b53f19ad433bc8b9fac7cf0587e4991c8bf043bedc80984eb5f8185eb7a5909",
+      "session_id": "b63a96d4c5734621a426eb1c82788f19",
+      "session_metadata_sha256": "ac9e49df3725a3e383078a7d7dec928769eac5807261442dbdc10165c1c9cab4",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 22555,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 85173702751732,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "a56a5ab24eb4dfed99147e454d78a7fb78268b8d60a7c8d08990bf5a25d54576"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 2169,
+        "grid": 112,
+        "key": 48
+      },
+      "actions_count": 2329,
+      "actions_jsonl_sha256": "6fc435d29ee12a7954b65f61e4db48f9c55d4333fd9f610a2502b2ba1d7a423f",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 3961,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 3960,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 3852,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 3841,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 3837,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 48,
+      "example_id": "scale-slot-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 85890919712066,
+      "native_cleanup_sha256": "b3d9ae2d23d8eaf50d8edb27e48c9765649241731a720666f823f93e169c55ed",
+      "native_events_sha256": "9d51ac1bfbd11e1eb79332a9a75506622b6d270470b6d9bd5ae7fd0e14f5afb1",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "b3d9ae2d23d8eaf50d8edb27e48c9765649241731a720666f823f93e169c55ed",
+      "session_id": "cd10a8a5f13c4b95b6e5a14f765e25cd",
+      "session_metadata_sha256": "ba65f88a9380561ba118972db0f013004c44854541443065e276cd30a7ba585c",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 3835,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 85891588644523,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "85cdbfa6b4d2b113648bc775fae2bdd20c89adf604eb981fef91ef9f912cc94d"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1528,
+        "grid": 72,
+        "key": 36
+      },
+      "actions_count": 1636,
+      "actions_jsonl_sha256": "cc52f7d659f09d4be74acef5b98db88f10e791be0ae135bd785cfd491858ac2e",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 20559,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 20557,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 20451,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 20443,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 20439,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 32,
+      "example_id": "scale-slot-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 85576518866136,
+      "native_cleanup_sha256": "563d4763a4e82934b7e182b37a109dfdff852107a979286d352ff2901aedaa5d",
+      "native_events_sha256": "81fa084e513dc6dcdf250893302f9302d602edfb038db4ec0c312ada283634e1",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "563d4763a4e82934b7e182b37a109dfdff852107a979286d352ff2901aedaa5d",
+      "session_id": "84ff96e77ce740baab42e29eddf02952",
+      "session_metadata_sha256": "cc6d8eae25a742a37e125fb04375781866bd33ba69163fc283f3658ad6077047",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 20431,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 85577187900807,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "f91999a79c9a678ba29f3f9b752104f84c726e57a51af339dd1e9a93e3ee5416"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1407,
+        "grid": 60,
+        "key": 36
+      },
+      "actions_count": 1503,
+      "actions_jsonl_sha256": "838d388b9411f3a70cc1631a41d399afcb2677b858814f9fe18441b467b7e86d",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 28612,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 28611,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 28464,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 28456,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 28446,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 16,
+      "example_id": "scale-slot-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 85709943205534,
+      "native_cleanup_sha256": "cabab76cfd41cb51c4b6f16894f204bc127fba81b87737ab4c02ae900e699411",
+      "native_events_sha256": "92bfb213f609d262efb40e57df3176a7ae72706aacde782eadfd335d1ff3b702",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "cabab76cfd41cb51c4b6f16894f204bc127fba81b87737ab4c02ae900e699411",
+      "session_id": "7bfbadd7051c4d7ab2a09fccc4239aee",
+      "session_metadata_sha256": "5b77c7281140ddf7a30f9e9628106c50df563d3f8c22978bfb96dcd8aac27f45",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 28440,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 85710663766598,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "580becd188a8c14593e890c3a273a5e0820293ae646a292d973388428b13f19a"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 5258,
+        "grid": 412,
+        "key": 78
+      },
+      "actions_count": 5748,
+      "actions_jsonl_sha256": "375042aace228645360da7bfa767278f3e042f312641bdf59e7194226e76ab82",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 21052,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 21051,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 20937,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 20929,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 20925,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 96,
+      "example_id": "swing-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 86882313391891,
+      "native_cleanup_sha256": "80527fb9f900e0af064a8bf9d1f2471943f96177742ab8488c0df5139cabf0ff",
+      "native_events_sha256": "d49fce7a66fc633c08fb84a4cd21a7c3fc29331ee7e1101730414e8262f7ebee",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "80527fb9f900e0af064a8bf9d1f2471943f96177742ab8488c0df5139cabf0ff",
+      "session_id": "596025039abb40199f896e1845eeb0c6",
+      "session_metadata_sha256": "86bae38af9d58ce708cf817d66c9b4b7049fda119054acd0e7f267f6fe46be8e",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 20923,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 86883034605514,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "d6f2246a82f68cd2918d1725ff815b672c1d0d92810597913d6203ec5e4db6cb"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 3303,
+        "grid": 280,
+        "key": 54
+      },
+      "actions_count": 3637,
+      "actions_jsonl_sha256": "2456b932168b325ed1e1f2d92c70b248301c9a8763c8518f04192d8f46b0cf7e",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 25345,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 25344,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 25233,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 25219,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 25214,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 64,
+      "example_id": "swing-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 86233176800409,
+      "native_cleanup_sha256": "3cbb10aa8c9475efaf2353ed0ece355fa882f713451b63cf54398aaae57d9c0d",
+      "native_events_sha256": "3a6b44d3beb10489e70eb609373b85b83c65d21d389782f1be7d3a7d4871d898",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "3cbb10aa8c9475efaf2353ed0ece355fa882f713451b63cf54398aaae57d9c0d",
+      "session_id": "767b96080a1e4066b5f6d4ddf6339730",
+      "session_metadata_sha256": "029c0bd401855710020a48b6323a49aed9ce95f00c3c5276c4d4403a9f83df22",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 25212,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 86233849188187,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "79e7da5426fb0e62bd2ba48cc06d800e42664237481e3d847e9be66f96764a80"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 2540,
+        "grid": 168,
+        "key": 54
+      },
+      "actions_count": 2762,
+      "actions_jsonl_sha256": "b7129185ff827dcd385f4089032054ff9db1462bc62f4a93a97e34a4a63e2e55",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 9004,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 9003,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 8901,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 8893,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 8876,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 32,
+      "example_id": "swing-comparison",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 86453855848134,
+      "native_cleanup_sha256": "73beabccf209c50f565d00f22a16b8ee8a23378253591ac8ccf12310af1bb448",
+      "native_events_sha256": "9ab99b28c2850d1eddc1f53d7886e83ec8325753b4b454691675f8a548c88ace",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "73beabccf209c50f565d00f22a16b8ee8a23378253591ac8ccf12310af1bb448",
+      "session_id": "3fe7079f09ca4fcf9decea1dc9d1d70f",
+      "session_metadata_sha256": "6a3f9771d00e11feb7ed4353424a325d0926df70ba2934afb955015c484bc00f",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 8871,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 86454574520558,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "ea172785893832929c3d7f3aa762f8e44604ee10e5902f28285845c510ae8301"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1602,
+        "grid": 154,
+        "key": 46
+      },
+      "actions_count": 1802,
+      "actions_jsonl_sha256": "57b85a677655c791b65284642beb05559e2b91ccfefb15522ac67c83dc0c63b0",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 26860,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 26859,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 26692,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 26681,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 26677,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 64,
+      "example_id": "note-merge-modes",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 87212455202091,
+      "native_cleanup_sha256": "01e7afba863c233bfaf700bba556dfc659917ac1589ffe42be9167278089f300",
+      "native_events_sha256": "14f6119308c0ba1f3d85125a8a6a1a6df47dfafbe0e7f2376fdab0a0c66d56ce",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "01e7afba863c233bfaf700bba556dfc659917ac1589ffe42be9167278089f300",
+      "session_id": "7e57d18e078545caaaadc4db8b4e5fd8",
+      "session_metadata_sha256": "3fbd19a67f3b6b81bf38f9c413e88a0e0bb7aef5fcce94e87a70252054b35dd3",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 26675,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 87213175863159,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "a949f6c2f7d8c98516ced1163f9a34e3f82c4b018f2122f45aa311c29a39441e"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1602,
+        "grid": 154,
+        "key": 46
+      },
+      "actions_count": 1802,
+      "actions_jsonl_sha256": "2ab50e424ae3d36db75fcac4debf78b849b014f9d2588b1bc61a189567e1e385",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 18234,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 18233,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 18128,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 18117,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 18106,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 64,
+      "example_id": "note-merge-modes",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 87064316634176,
+      "native_cleanup_sha256": "c978e713d3132e802ad76b8d002d92cdb7e0199349544f58590e0e6f91a5cc68",
+      "native_events_sha256": "187b785ebb0d2f8b9e570cdfaf4dba5718fcfe5c49dea79e23215496204dfb21",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "c978e713d3132e802ad76b8d002d92cdb7e0199349544f58590e0e6f91a5cc68",
+      "session_id": "e5e443ec88b44ad799889980575dea94",
+      "session_metadata_sha256": "f2832a87076fbdc664e00c7df2608a86aa693414cb9462ec1579c38f896e9561",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 18104,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 87064936912407,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "fdf3ee5c674cc372b773a79355c2a074387431ce8b9c6fa0773e351164513433"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 2642,
+        "grid": 104,
+        "key": 54
+      },
+      "actions_count": 2800,
+      "actions_jsonl_sha256": "37cdd12c98d14dced8c7b34f56926b0d958d00bdfdba61e5e0350bcd39f2b27a",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 25289,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 25288,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 25091,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 25083,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 25079,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 84,
+      "example_id": "polymeter",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "main",
+      "last_action_ack_ns": 87776369509933,
+      "native_cleanup_sha256": "bc8975de6bf621ea68b5ee30ca218dad1d30c08e903a8ea1c9bd0122fc38043b",
+      "native_events_sha256": "f6938d3c60d1cf3ee0bdece384b8d770dc59ccb97ed75dd7c20125f4d91d747d",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "bc8975de6bf621ea68b5ee30ca218dad1d30c08e903a8ea1c9bd0122fc38043b",
+      "session_id": "c5ed6e5ce79a4ed6ab922a06f6cbe7b7",
+      "session_metadata_sha256": "7e48bb6927b99248674f404410eeee3671c291a31ef88a10d4b50b208d468316",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 25071,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 87777043431299,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "e4e60b595e18a9297b78f859d77fb4023ccfb1611c3fe5ef8ccb0d389a4c8cc9"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1631,
+        "grid": 60,
+        "key": 42
+      },
+      "actions_count": 1733,
+      "actions_jsonl_sha256": "613d45037c7d252c1e8e3b8d283e171cc44ceeec470968e1c7316a59a724591f",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 9439,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 9438,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 9328,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 9320,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 9316,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 40,
+      "example_id": "polymeter",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 87406321444295,
+      "native_cleanup_sha256": "9dd35853f464b1256ba3e4932ee2bea53a46836386a61dcb2377b9a700a47252",
+      "native_events_sha256": "8c032315075d1008135a2cc6160b9c76383d5506ad8c79e8c2c31c333f17330a",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "9dd35853f464b1256ba3e4932ee2bea53a46836386a61dcb2377b9a700a47252",
+      "session_id": "f51e18eda69f4ce4a49209dff8b54231",
+      "session_metadata_sha256": "138f49d7900ed1e1f4328788bef8780c6a0193ccb3bc6dba7e06db720359fa4b",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 9314,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 87406991781393,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "45bc1c1a3a559dc4aa4c4b23c69c4350f2b1204cbda6c5cbed9fff77ac3468c4"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1596,
+        "grid": 56,
+        "key": 42
+      },
+      "actions_count": 1694,
+      "actions_jsonl_sha256": "ab945d7c3a8eab76c9c910455cba50c857f26497a75a88e91fdab02b8b363428",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 17417,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 17416,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 17269,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 17261,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 17257,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 44,
+      "example_id": "polymeter",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "solo",
+      "last_action_ack_ns": 87554077456511,
+      "native_cleanup_sha256": "72cbb01d60c1a4764555d56b6b2f5126cf6c01495f9d14b60167292be2228aad",
+      "native_events_sha256": "01aec47f056a3d9adcaa30131c9c29afc0585b4480138b97a057f523b977ab4f",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "72cbb01d60c1a4764555d56b6b2f5126cf6c01495f9d14b60167292be2228aad",
+      "session_id": "22d7fa573c2b4accb4c833d638b1d54a",
+      "session_metadata_sha256": "6313a7845d08a8f8bcddb0141ac5885239f47d844665ec470489f97469b5b4bf",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 17249,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 87554750157750,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "93362d8e3033ffa7ae990fcc44c0fc545bf5e9033f3078ea96789e21b7b9e2b3"
+    },
+    {
+      "action_acks_all_applied_and_identity_matched": true,
+      "action_sequences_from_one_contiguous": true,
+      "action_type_counts": {
+        "enc": 1426,
+        "grid": 72,
+        "key": 34
+      },
+      "actions_count": 1532,
+      "actions_jsonl_sha256": "e11ec7bf42922b9f781ee3f947719783eaf2e5adab1c93131b749f0c1cdb6cb6",
+      "active_midi_notes_after_log": {},
+      "cleanup_processes": [
+        {
+          "pid": 12379,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "matron"
+        },
+        {
+          "pid": 12378,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "crow"
+        },
+        {
+          "pid": 12167,
+          "present_at_check": false,
+          "returncode": -15,
+          "service": "sclang"
+        },
+        {
+          "pid": 12159,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "crone"
+        },
+        {
+          "pid": 12149,
+          "present_at_check": false,
+          "returncode": 0,
+          "service": "jack"
+        }
+      ],
+      "decoded_midi_note_messages": 0,
+      "example_id": "song-sections",
+      "final_grid_keys_down": [],
+      "final_norns_keys_down": [],
+      "lane": "failed-first-solo",
+      "last_action_ack_ns": 87918712775453,
+      "native_cleanup_sha256": "e3c2c18d20677660e10edc1fa99ef2bf828ae944c441d1e005976f5a3ce370da",
+      "native_events_sha256": "aeb091f6f54b837527d0ea14bc3cf87b4e77e0566f4d0ce4caefbb97dad896c8",
+      "orphan_note_offs": 0,
+      "session_cleanup_equals_native_cleanup": true,
+      "session_cleanup_sha256": "e3c2c18d20677660e10edc1fa99ef2bf828ae944c441d1e005976f5a3ce370da",
+      "session_id": "e2a0c31b62574ca4893ad3f35603884c",
+      "session_metadata_sha256": "fbf666a00dde8b1ff1316fe518c23f94a11e6664cd0a9e04f1f75bbf1ea64fb7",
+      "session_pid_present_at_check": false,
+      "session_recorded_pid": 12147,
+      "stop_follows_last_ack": true,
+      "stop_monotonic_ns": 87919436484681,
+      "stopped_marker_matches_id": true,
+      "stopped_marker_sha256": "b8f9794001ebf17133dd5e10b82b8277db219fb8cb718a85eeb5cff04ff97e45"
+    }
+  ]
+}

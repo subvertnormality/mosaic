@@ -1,0 +1,10 @@
+Verified M-HARMONY-FAILURE-001 / harmony-range-failure-and-fallback
+Failure evidence /home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 307, in <module>
+    if __name__=="__main__":main()
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 293, in main
+    captured=capture_group(group,out,a);persist_case_scenes(out,captured);results.extend(captured)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 227, in capture_group
+    if missing:raise ValueError("Missing checkpoints: "+str(missing))
+ValueError: Missing checkpoints: ['foundation-protected-and-added/accent-setting']

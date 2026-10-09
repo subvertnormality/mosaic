@@ -1,0 +1,10 @@
+{
+  "kind": "invalid-fixture-not-production-red",
+  "run": "bcdb4425a63d4025ad5e8521a0066ad1",
+  "stage_identity": "3065b22d1485a1c84763d865ee1862f860d156e94f51a53071171ed35416e88b",
+  "failure": "Unknown public channel page trig_params before native readability assertions",
+  "correction": "Only two channel_page literal keys trig_params -> trig_locks. Registered key trig_locks maps native task trig_params/screen C02. No aliases added.",
+  "original_helper_sha256": "8da121edd9f709d4ed049ce6c73a6909d9156d45bae5acb678c873816079cbc2",
+  "corrected_helper_sha256": "62ab08ebe681f5fbe0cc0663b0006b02266d6fda187985bbf494bb53c15043c1",
+  "cleanup": "Four native services closed; no real lane launched; Strategy55400d remains fullpass unchanged source."
+}

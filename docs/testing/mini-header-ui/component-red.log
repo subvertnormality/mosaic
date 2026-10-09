@@ -1,0 +1,18 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+FF
+Failed tests:
+-------------
+1) test_ui_mini_doctor_has_header_mirror_and_coat_without_moving_text
+.///lib/ui_mini_tests.lua:22: missing Doctor header miniature
+Received the not expected value: {}
+stack traceback:
+	.///lib/ui_mini_tests.lua:22: in upvalue 'test_ui_mini_doctor_has_header_mirror_and_coat_without_moving_text'
+
+2) test_ui_mini_scale_has_distinct_header_pitch_stair
+.///lib/ui_mini_tests.lua:28: missing Scale header miniature
+Received the not expected value: {}
+stack traceback:
+	.///lib/ui_mini_tests.lua:28: in upvalue 'test_ui_mini_scale_has_distinct_header_pitch_stair'
+
+Ran 2 tests in 0.001 seconds, 0 successes, 2 failures, 2436 non-selected

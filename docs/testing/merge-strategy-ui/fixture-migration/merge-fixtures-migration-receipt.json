@@ -1,0 +1,22 @@
+{
+  "files": {
+    "lib/tests/lib/ui_adapters_merge_tests.lua": "f9c6650ba50046c5acb55d38e6a542e3ea1eba6d1c989d5d4f4394afa39e055d",
+    "lib/tests/lib/channel_feature_editor_tests.lua": "7fb665f2860a0f7f9a08a4ab912cd2e655fb16cee71c23526214cb2f37c98cc2",
+    "lib/tests/lib/ui_live_tests.lua": "0a7e0a3797863c104ee8ae93dd8968546e8d3df63a7088e317bde996a2831843"
+  },
+  "focused_suite": {
+    "tests": 109,
+    "passed": 109,
+    "failed": 0,
+    "seconds": 4.285
+  },
+  "old_fixture_failures": 7,
+  "source_snapshot": "/tmp/mosaic-merge-fixtures-o7g542d6/mosaic",
+  "production_edited": false,
+  "notes": [
+    "Draft-mode unit seams replace removed independent M02 Mode editing only.",
+    "Shared C09 integration uses actual page owner, not obsolete mock without set_merge_strategy.",
+    "Inactive Fragments saved Note Up is explicitly seeded and preserved; Foundation still advances it to Down.",
+    "Original musical/config/transaction/history/stale-generation assertions preserved."
+  ]
+}

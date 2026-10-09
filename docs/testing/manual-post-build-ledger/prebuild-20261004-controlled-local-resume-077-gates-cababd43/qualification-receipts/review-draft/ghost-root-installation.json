@@ -1,0 +1,25 @@
+{
+  "installed_utc": "2026-10-04T14:26:12.324502+00:00",
+  "scope": "public absolute-pitch audio setup Off plus matching cookbook prerequisite and portable regression; exact musical oracle unchanged",
+  "independent_baseline_red": "2 tests: absolute required setup fails, relative passes",
+  "files": [
+    {
+      "path": "tools/manual_audio.py",
+      "before_sha256": "d1fb7cea325312f9b77ee002c7aa71d5f6b829e86f963d7f384ae60af73e17de",
+      "after_sha256": "33c12d17c053452a891a8c047d0cb4dac60d85ca58466617d456a8c3e1d73f8a"
+    },
+    {
+      "path": "manual/features/cookbook.yaml",
+      "before_sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+      "after_sha256": "af43f4a5bda3c90e712e9ab9278f424d4ae9e9cacf92b4f63bafe20376f8df67"
+    },
+    {
+      "path": "tools/test_manual_audio_configuration.py",
+      "before_sha256": null,
+      "after_sha256": "54e8155f76cd6eb630108adc24f380756a7062701aba86e1ac91b7eb9030d02e"
+    }
+  ],
+  "behavior_test_sources_changed": false,
+  "Mosaic_Lua_changed": false,
+  "native_launched": false
+}

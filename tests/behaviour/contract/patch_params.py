@@ -41,7 +41,7 @@ def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=Fal
     # The Clock screen (C04) shows the selected field's label and its whole
     # (staged, queued) value large: Rate /6, or Swing type Shuffle.
     label='Shuffle' if type_switch else '/6'
-    c.ui.expect_selected_field('focused',label='Swing type' if type_switch else 'Rate',value=label)
+    c.ui.expect_selected_field('vertical_list',label='Swing type' if type_switch else 'Rate',value=label)
     c.results.append(dict(kind='clock-rate-readback',value=label,passed=True))
     def notes(state):
         return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]

@@ -1,0 +1,9 @@
+{
+  "scope": "Regression proof with omitted initial full-plan, Doctor completion/same-build and immutable-byte guards; no native/application mutation",
+  "baseline_source": "docs/testing/manual-post-build-ledger/design-review-missing-guards-147aa73982d7136452a7d6b4014983de253368e6674c66e1ef6df599627cac5f.py",
+  "baseline_sha256": "147aa73982d7136452a7d6b4014983de253368e6674c66e1ef6df599627cac5f",
+  "failed_tests": 3,
+  "errors": 0,
+  "expected_reason": "Each unsafe input was accepted without its required guards",
+  "complete_regression_run": false
+}

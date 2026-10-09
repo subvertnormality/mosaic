@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "native_failure": "/home/andy/mosaic-manual-runs/46fb3925aba34782b54fbecea7423fae",
+  "old_helper_sha256": "3791b8c877d3e36adafce88fdfa96dedca0a41555d9fb26f375ae26abfe04a17",
+  "new_helper_sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+  "red": {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/behaviour",
+      "-p",
+      "test_manual_closure_cases.py"
+    ],
+    "returncode": 1,
+    "log": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/closure-motion-direction-red.log",
+    "sha256": "25c9b9248283a4749706ae28a4d2e246508fac2828652fe53d59a6ee3706046e",
+    "actual_indices": [
+      12,
+      13
+    ],
+    "expected_indices": [
+      14,
+      13
+    ]
+  },
+  "green": {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/behaviour",
+      "-p",
+      "test_manual_closure_cases.py"
+    ],
+    "returncode": 0,
+    "tests": 15,
+    "log": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/closure-motion-direction-green.log",
+    "sha256": "806f01f047c8ec9a9c18ca86883baa0158190fbc78ef7598b22902e1f44741d1"
+  },
+  "actual_owner": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua",
+  "only_changes": "edit rawE3+2 to-2; restore rawE3-2 to+2",
+  "feedback_bound_seconds": 0.25,
+  "musical_oracles_unchanged": true,
+  "production_emulator_unchanged": true
+}

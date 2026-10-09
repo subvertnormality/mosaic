@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "purpose": "strict specialized Doctor Start Beat registry/source audit",
+  "passed": true,
+  "focused_tests": 29,
+  "red": "registration-red.log",
+  "green": "registration-green.log",
+  "source_sha256": {
+    "tools/doctor_options_audit.py": "dd66479af13b6c7c97de54933051f079c23317003f864819e2b1b5f0266fc6cc",
+    "tests/behaviour/test_doctor_options_audit.py": "57fd75ef07388f42b5ec3faab08b54dc39ef2694654140a1784a3d9510796d13",
+    "tools/doctor-qualification-inventory.json": "f0c27bddedfd6c7167b2cb9d040f6d85e2285656d82dee7382983cd085b7825b",
+    "tools/doctor_options_capture.py": "e9fa70d80946b06c034a0877da0f84aef1cbe62009608d0d3d66f9dfbfb7b4f1",
+    "tests/behaviour/contract/rhythm_doctor_start_beat.py": "695f7b3254a246b87d0e011d9435e1b4ceb3cd145cc450c1746bc74f54670763"
+  },
+  "qualification_id": "MA-DOCTOR-MANUAL-START-BEAT-001",
+  "citation": "manual:rhythm-doctor",
+  "scope": "manual_right real ADC only; READY draft UI separate both lanes without backend claim",
+  "provenance": "report and source pointers equal current canonical manifest SHA; exact report copy and frozen harness copies of manifest/runner/procedure; every existing subprocedure row registered",
+  "native_seven_role_qualification": false,
+  "hardware_timing_equivalent": false,
+  "complete_regression_run": false
+}

@@ -1,0 +1,764 @@
+schema_version: 1
+status: semantic-checkpoint-plan-not-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: Replay each existing native case in full and capture only result rows appended after successful
+  semantic oracles. Musical pitches are MIDI numbers to avoid octave-label ambiguity. Captured MIDI checkpoints
+  may show the stable editor after playback; captions distinguish the audited performance from the displayed
+  controls.
+scenes:
+- id: foundation-protected-and-added
+  feature_id: merge-shape
+  title: Keep anchors and accent the additions
+  behaviour_case: M-MERGE-FOUNDATION-001
+  citation: README.md#merge-shape
+  source: tests/behaviour/contract/foundation_workflow.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 loops 8 steps on the test device with Merge Shape set to Foundation. Pattern 1 (C,
+      D, E, F, MIDI 60, 62, 64, 65, velocities 127, 117, 107, 97, on steps 1 to 4) is saved as the protected
+      Anchor: its steps always play as written. Pattern 2 (a C at velocity 100 on steps 5 and 7) offers additions.
+      Add amount is how many additions are admitted and Add accent scales their velocity. The norns shows
+      the Rhythm page and the grid lights steps 1 to 5 and 7.'
+    assertion: &id001
+      kind: grid
+      cells:
+      - - 1
+        - 4
+      - - 2
+        - 4
+      - - 3
+        - 4
+      - - 4
+        - 4
+      - - 5
+        - 4
+      - - 7
+        - 4
+      expected:
+      - 15
+      - 15
+      - 15
+      - 15
+      - 15
+      - 15
+      actual:
+      - 15
+      - 15
+      - 15
+      - 15
+      - 15
+      - 15
+    occurrence: 1
+  - id: accent-setting
+    title: Read Add amount and Add accent
+    caption: 'Turn E2 to Add amount, which reads 100: every candidate addition is admitted. Turn E2 two detents
+      on to Add accent, which reads 70 and scales the velocity of the added trigs to 70 percent. Both settings
+      are already at these values; you only read them here. The grid shows the anchors on steps 1 to 4 and
+      the additions on steps 5 and 7.'
+    assertion:
+      kind: documentation-frame
+      name: images/merge-shape-foundation.png
+      baseline_sha256: 49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463
+      validation: pinned-v2-mini-pose
+      page: M03
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: accented-phrase
+    title: Hear anchors and additions
+    caption: Tap Play (1,8), let two eight-step loops sound, then tap Stop. Each loop plays the four anchors,
+      MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97, then two additions as MIDI 60 at velocity 70, shown
+      in the strip below. Anchor velocities are untouched; only the added notes use Add accent.
+    assertion:
+      kind: foundation-physical-workflow
+      passed: true
+  - id: accent-edit
+    title: Lower Add accent to 40
+    caption: Turn E3 left 30 detents. Add accent reads 40; press K3 to apply it, as the sequencer is stopped.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Add accent
+      value: '40'
+      matched: true
+  - id: accented-low
+    title: Hear quieter additions
+    caption: Tap Play (1,8), let two loops sound, then tap Stop. The four anchors are exactly as before,
+      MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97, but the two additions are now MIDI 60 at velocity
+      40 in the strip below, quieter than the 70 you heard before.
+    assertion:
+      kind: foundation-accent-edit
+      accent: 40
+      addition_velocity: 40
+      passed: true
+- id: foundation-two-cycle-build
+  feature_id: merge-shape
+  title: Build over two channel loops
+  behaviour_case: M-MERGE-PHRASE-001
+  citation: README.md#merge-shape
+  source: tests/behaviour/harmony_merge_workflow.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 loops 8 steps on the test device with Merge Shape set to Foundation. Pattern 1 (C,
+      D, E, F, MIDI 60, 62, 64, 65, on steps 1 to 4) is the protected Anchor and pattern 2 (trigs on steps
+      5 and 7) offers additions; both are assigned. Add amount is 100 and Add accent 70, so all candidate
+      additions are allowed and sound at 70 percent of their velocity. The Phrase settings are still at their
+      defaults, the norns shows the Rhythm page and the grid lights steps 1 to 5 and 7.
+    assertion: *id001
+    occurrence: 1
+  - id: cycles-two
+    title: Set Cycles to 2
+    caption: Press E1 once to the Phrase screen, turn E2 to Phrase and press K3. A cycle is one pass of the
+      eight-step loop. Turn E3 once to set Cycles to 2.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Cycles
+      value: '2'
+    occurrence: 1
+  - id: build-shape
+    title: Choose the Build shape
+    caption: Turn E2 to Shape and E3 once to choose BUILD, which reads Cycle 1 50 and Cycle 2 100.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Shape
+      value: BUILD
+    occurrence: 1
+  - id: applied
+    title: Apply the phrase
+    caption: Press K3. The footer reads APPLIED.
+    assertion:
+      kind: footer-text
+      text: APPLIED
+      matched: true
+    occurrence: 1
+  - id: loop-one
+    title: Loop 1 adds one note
+    caption: Tap Play (1,8) and listen. The first loop plays steps 1 to 4 plus one addition (step 7), five
+      notes in the strip below.
+    assertion:
+      kind: foundation-build-cycle
+      cycle: 1
+      passed: true
+  - id: loop-two
+    title: Loop 2 adds both
+    caption: The second loop plays steps 1 to 4 plus both additions (steps 5 and 7), six notes. Keep
+      listening to at least four loops, then tap Stop.
+    assertion:
+      kind: foundation-build-cycle
+      cycle: 2
+      passed: true
+  - id: alternating-build
+    title: Build over two channel loops
+    caption: 'The two loops keep alternating: the strip below shows the notes of each pass, loop 1 with step
+      7 added and loop 2 with steps 5 and 7 added, back to the first anchor at the end.'
+    assertion:
+      kind: foundation-build-phrase
+      positions:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 7
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 7
+      - 1
+      - 2
+      - 3
+      - 4
+      - 7
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 7
+      - 1
+      exact_timing: true
+      passed: true
+- id: fragments-seed-source-choice
+  feature_id: fragments
+  title: Let each fragment keep its source notes
+  behaviour_case: M-MERGE-FRAGMENTS-001
+  citation: README.md#fragments
+  source: tests/behaviour/contract/merge_extensions.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays through the test device on an 8-step loop at 90 BPM, rate /1. Pattern 1 holds
+      C, D, E, F (MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) on steps 1 to 4 and pattern 2 holds a
+      C at velocity 100 on steps 3 and 6. Both patterns are assigned to channel 1 and Strategy is still SKIP.
+      Merge modes is open for channel 1. In this scene a Seed makes a repeatable draw of which pattern each
+      fragment comes from: the same seed always gives the same choice.'
+    assertion:
+      kind: screen-header
+      expected: MERGE MODES CH01
+      matched: true
+    occurrence: 2
+  - id: fragments-active
+    title: Choose Fragments
+    caption: 'Select Strategy and turn E3 to FRAGMENTS. Strategy and Active both read FRAGMENTS: the loop
+      will be cut into fragments and each fragment will come from one source pattern, chosen by the Seed.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Active
+      value: FRAGMENTS
+    occurrence: 1
+  - id: size-four
+    title: Set Size to 4
+    caption: 'Open Merge Shape > Rhythm. Turn E3 once left so Size reads 4 and press K3. The footer reads
+      APPLIED and the eight-step loop is now cut into two four-step fragments, one for steps 1 to 4 and one
+      for steps 5 to 8. On the grid only step 3 is bright: with the starting seed the first fragment comes
+      from pattern 2 (a note on step 3 only) and the second from pattern 1, which has no notes in steps 5
+      to 8.'
+    assertion:
+      kind: grid
+      expected: [2, 2, 15, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0]
+    occurrence: 1
+  - id: seed-zero
+    title: Seed 0 picks the sparse draw
+    caption: Tap Play (1,8), let two loops sound, then tap Stop. Each loop plays one C (MIDI 60) at velocity
+      100, a single note in the strip below. Seed 0 gives steps 1 to 4 to pattern 2 and steps 5 to 8 to pattern
+      1, which has no trigs there, and pattern 1's own E on step 3 is not mixed in.
+    assertion:
+      kind: fragments-seed-0
+      seed: 0
+      loops: 2
+      loop_steps: 8
+      passed: true
+  - id: seed-edit
+    title: Pick seed 1
+    caption: Turn E2 to Seed and turn E3 once right so it reads 1. The grid still shows the result of seed
+      0 until you apply the change.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Seed
+      value: '1'
+    occurrence: 1
+  - id: seed-one-editor
+    title: Apply seed 1
+    caption: Press K3. The footer reads APPLIED and the grid now lights steps 1, 2, 3, 4 and 6. Seed 1 gives
+      steps 1 to 4 to pattern 1 and steps 5 to 8 to pattern 2. Try other seeds, 2, 3 and so on, and listen
+      for how each draw reshuffles the fragments.
+    assertion:
+      kind: documentation-frame
+      name: images/merge-shape-fragments.png
+      baseline_sha256: 760b9f276791a959a98a73441d88f534d9f77730fad051d93dd890841581689b
+      validation: pinned-v2-mini-pose
+      page: M15
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: seed-one-playback
+    title: Each fragment keeps its source
+    caption: Tap Play, let two loops sound, then tap Stop. Each loop plays pattern 1's C D E F (MIDI 60, 62,
+      64, 65 at velocities 127, 117, 107, 97) and then pattern 2's C on step 6 at velocity 100. Each fragment
+      keeps the notes and velocities of the pattern it came from.
+    assertion:
+      kind: fragments-seed-1
+      seed: 1
+      loops: 2
+      loop_steps: 8
+      passed: true
+- id: interlock-leader-window
+  feature_id: interlock
+  title: Leave room around a leader’s anchors
+  behaviour_case: M-MERGE-INTERLOCK-001
+  citation: README.md#interlock
+  source: tests/behaviour/contract/merge_extensions.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Two 8-step channels play at 90 BPM through the test device. Channel 1 (MIDI channel 1) has pattern
+      1 (C, D, E, F on steps 1 to 4) as its Foundation anchor and pattern 2 (steps 5 and 7) as additions.
+      Channel 2 (MIDI channel 2) has pattern 3, a single trig on step 5, as its Foundation anchor. Channel
+      1 has no Interlock leader yet. The norns shows channel 1's Rhythm page and the grid lights steps 1 to
+      5 and 7.
+    assertion:
+      kind: grid
+      expected:
+      - 15
+      - 15
+      - 15
+      - 15
+      - 15
+      - 2
+      - 15
+      - 2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    occurrence: 1
+  - id: interlock-open
+    title: Open Interlock
+    caption: Select Interlock with E2 and press K3 to open the Interlock page for channel 1. This keeps channel
+      1's additions out of the way of another channel's anchors.
+    assertion:
+      kind: screen-header
+      expected: INTERLOCK CH01
+      matched: true
+    occurrence: 1
+  - id: leader-chosen
+    title: Choose the leader
+    caption: Select Leader and turn E3 once right to CH02. Channel 2 would lead channel 1; nothing changes
+      until you apply.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Leader
+      value: CH02
+    occurrence: 1
+  - id: active-status
+    title: 'Apply: channel 2 leads'
+    caption: Press K3. The footer reads APPLIED, Window is 0 and Status reads ON. Step 5 goes dark on the
+      grid because channel 1's addition starts exactly on channel 2's anchor. Steps 1 to 4 and step 7 stay
+      lit.
+    assertion:
+      kind: detail-row
+      row: 2
+      label: Status
+      value: 'ON'
+      passed: true
+  - id: zero-window-midi
+    title: Only the coincidence is removed
+    caption: Tap Play (1,8), let two loops sound, then tap Stop. Channel 1 plays steps 1 to 4 and step 7,
+      and channel 2 plays its anchor on step 5 on MIDI channel 2. Nothing from channel 1 sounds on step 5.
+    assertion:
+      kind: interlock-window-0
+      window: 0
+      loops: 2
+      loop_steps: 8
+      passed: true
+  - id: window-queued
+    title: 'Edge case: widen the window while playing'
+    caption: 'The lesson above is complete; the next four steps are edge cases. Tap Play. While it plays,
+      select Window, turn E3 twice right to 2 and press K3. The footer reads NEXT CYCLE: playback is still
+      running, so Window 2 is queued and starts at the next loop.'
+    assertion:
+      kind: footer-text
+      text: NEXT CYCLE
+      matched: true
+    occurrence: 1
+  - id: draft-discarded
+    title: 'Edge case: a later draft is discarded'
+    caption: 'Window 2 is still queued. Turn E3 back to 0 as a new draft and press K2: the draft is discarded
+      and Rhythm returns. Press K3 to reopen Interlock: Window still reads 2, the accepted value, not the
+      discarded 0.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Window
+      value: '2'
+    occurrence: 2
+  - id: queued-window
+    title: 'Edge case: the window takes over at the loop boundary'
+    caption: 'After a few loops press Stop. The strip shows every loop played whole: the first loops with
+      step 7, then without it once Window 2 took effect. The grid now shows steps 1 to 4.'
+    assertion:
+      kind: interlock-queued-window
+      passed: true
+  - id: channel-two-selected
+    title: Select channel 2
+    caption: Select channel 2 (grid (2,1)). The screen shows channel 2's Merge Shape list, ready to set a
+      leader for it.
+    assertion:
+      kind: screen-header
+      expected: MERGE SHAPE CH02
+      matched: true
+    occurrence: 3
+  - id: interlock-open-ch2
+    title: Open channel 2's Interlock
+    caption: 'Open Rhythm and then Interlock for channel 2: turn E2 to the row and press K3 each time. The
+      header reads INTERLOCK CH02.'
+    assertion:
+      kind: screen-header
+      expected: INTERLOCK CH02
+      matched: true
+    occurrence: 1
+  - id: chain-requested
+    title: Make channel 1 its leader
+    caption: Select Leader and turn E3 once right to CH01. Channel 2 already leads channel 1, so this would
+      make a chain.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Leader
+      value: CH01
+    occurrence: 1
+  - id: chain-refused
+    title: 'Edge case: a leader chain is refused'
+    caption: 'Press K3 to apply. The footer reads INVALID CHANNEL IS A LEADER: channel 2 already leads channel
+      1, so it cannot follow channel 1, and nothing changes.'
+    assertion:
+      kind: footer-text
+      text: INVALID CHANNEL IS A LEADER
+      matched: true
+    occurrence: 1
+  - id: refused-chain
+    title: The refusal changes nothing
+    caption: 'Press K2 to discard the draft and select channel 1 (grid (1,1)); the screen shows its Merge
+      Shape list. Play two loops: Window 2 still applies, so channel 1 plays steps 1 to 4 and channel
+      2 plays step 5.'
+    assertion:
+      kind: interlock-after-refusal
+      window: 2
+      loops: 2
+      loop_steps: 8
+      passed: true
+- id: structure-anchor-chord-and-delete
+  feature_id: structure
+  title: Snap Foundation anchors to a chord
+  behaviour_case: M-MERGE-STRUCTURE-001
+  citation: README.md#structure
+  source: tests/behaviour/contract/merge_extensions.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays pattern 1 on the test device, the four-note melody C, D, E, F (MIDI 60, 62, 64,
+      65) on steps 1 to 4. The additions of the Foundation phrase on steps 5 and 7 do not exist yet; you add
+      them in the next step. No Harmony Ensemble group exists and Structure markers are off, so every note
+      plays as written. The norns shows the Device page and the grid lights steps 1 to 4.
+    assertion: &id002
+      kind: screen-header
+      expected: DEVICE CH01
+  - id: ensemble-open
+    title: Add the additions, open Ensemble
+    caption: Hold step 1 (1,4) and tap step 8 (8,4) to loop eight steps. Open the pattern page (5,8), choose
+      pattern 2 (2,1), tap trigs on steps 5 and 7, return to Channel (3,8) and assign pattern 2 (2,2). Then
+      open Channel tasks > Harmony and choose Ensemble. The header reads ENSEMBLE CH01.
+    assertion:
+      kind: screen-header
+      expected: ENSEMBLE CH01
+      matched: true
+    occurrence: 1
+  - id: template-three
+    title: Make the chord three notes
+    caption: 'On the Ensemble list choose Create group and press K3 to make group 1. Select Template count
+      with E2 and turn E3 to 3: the group''s chord has three tones.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Template count
+      value: '3'
+    occurrence: 1
+  - id: tone-two
+    title: Set Tone 2
+    caption: Select Tone 2 with E2 and turn E3 to 2, two scale degrees above the root, which is E in C major.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Tone 2
+      value: '2'
+    occurrence: 1
+  - id: tone-three
+    title: Set Tone 3
+    caption: Select Tone 3 with E2 and turn E3 to 4, four scale degrees above the root, which is G. The chord
+      is now C, E and G.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Tone 3
+      value: '4'
+    occurrence: 1
+  - id: group-enabled
+    title: Apply the chord
+    caption: 'Press K3 to apply: the footer reads APPLIED.'
+    assertion:
+      kind: footer-text
+      text: APPLIED
+      matched: true
+    occurrence: 1
+  - id: members-open
+    title: Open Members
+    caption: 'Press K2 to return to the Ensemble list, select Members and press K3. The header reads MEMBERS
+      CH01: the list of channels that follow the group''s chord.'
+    assertion:
+      kind: screen-header
+      expected: MEMBERS CH01
+      matched: true
+    occurrence: 1
+  - id: group-chord
+    title: Switch the group on
+    caption: 'Set Group enabled to On with E3 and press K3. Voice count reads 1: channel 1, the only member,
+      carries the chord on its own. The footer reads APPLIED.'
+    assertion:
+      kind: footer-text
+      text: APPLIED
+      matched: true
+    occurrence: 2
+  - id: foundation-on
+    title: Turn Foundation on
+    caption: 'Open Channel tasks > Merge Shape, set Mode to Foundation and press K3 to apply. Open Merge modes:
+      Strategy and Active read FOUNDATION, so the four anchors on steps 1 to 4 plus the additions on steps
+      5 and 7 now play.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Active
+      value: FOUNDATION
+    occurrence: 1
+  - id: structure-open
+    title: Open Structure
+    caption: Open Merge Shape > Pitch, then choose Structure. Structure snaps chosen moments of the Foundation
+      line to a chord while the notes in between keep their own pitch.
+    assertion:
+      kind: screen-header
+      expected: STRUCTURE CH01
+      matched: true
+    occurrence: 1
+  - id: markers-anchors
+    title: Markers on anchors
+    caption: 'Turn E3 once to set Markers to ANCHORS: every anchor onset now counts as a marker.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Markers
+      value: ANCHORS
+    occurrence: 1
+  - id: selected-group
+    title: Chord group one appears
+    caption: A Chord group row appears showing 1, the Ensemble group you made. Structure needs an enabled
+      group before Apply will accept the markers.
+    assertion:
+      kind: detail-row
+      row: 1
+      label: Chord group
+      value: '1'
+      passed: true
+  - id: snapped-anchors
+    title: Anchors snap to the chord
+    caption: 'Press K3 to apply, then tap Play. Each anchor note snaps to the nearest chord tone, and a note
+      exactly between two chord tones snaps to the lower one. Step 1 stays at 60, step 2 moves from 62 to
+      60, step 3 stays at 64 and step 4 moves from 65 to 64: the loop plays MIDI 60, 60, 64, 64 in the strip
+      below. The added notes on steps 5 and 7 keep their own pitch and accent. Tap Play to stop.'
+    assertion:
+      kind: structure-anchor-markers
+      markers: anchors
+      loops: 2
+      loop_steps: 8
+      passed: true
+  - id: delete-warning
+    title: Check who deletion affects
+    caption: Open Channel tasks > Harmony > Ensemble and choose Delete group for group 1. A confirmation opens
+      before anything is deleted; its Affected row reads 1, naming channel 1 as the channel that uses the
+      group.
+    assertion:
+      kind: detail-row
+      row: 1
+      label: Affected
+      value: '1'
+      passed: true
+  - id: markers-off
+    title: Deletion restores authored pitches
+    caption: 'Press K3 to confirm. Deleting the group also sets Markers to OFF in the same change. Tap Play:
+      the anchors return to their written pitches, MIDI 60, 62, 64 and 65, and the added notes on steps 5
+      and 7 are unchanged. Tap Play to stop.'
+    assertion:
+      kind: structure-group-deleted
+      markers: 'off'
+      loops: 2
+      loop_steps: 8
+      passed: true
+- id: harmony-revoice-two-voices
+  feature_id: harmony
+  title: Place two voices smoothly
+  behaviour_case: M-HARMONY-REVOICE-001
+  citation: README.md#harmony
+  source: tests/behaviour/contract/harmony_workflows.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step phrase on steps 1 to 4 (MIDI 60, 62, 64, 65 at velocities 127, 117,
+      107, 97) through the test device on OUT 1, in C major at 90 BPM with sixteenth-note steps (rate /1).
+      Each step is a single voice: no chord notes are set and Harmony is Off. Playback is stopped and the
+      norns shows the Device page.'
+    assertion: *id002
+  - id: masks-chord
+    title: Add a second voice
+    caption: 'Open Masks for channel 1 and turn E3 one detent on Chd1, the first chord note. Chd1 reads
+      2nd: each step now sounds a second voice one scale step above its note, so the pairs are C+D, D+E,
+      E+F and F+G (60+62, 62+64, 64+65, 65+67).'
+    assertion:
+      kind: selected-mask
+      field: chord_1
+      value: 2nd
+      passed: true
+  - id: harmony-open
+    title: Open Harmony
+    caption: 'Open Channel tasks > Harmony; the header reads VOICE LEADING CH01.'
+    assertion:
+      kind: screen-header
+      expected: VOICE LEADING CH01
+      matched: true
+    occurrence: 1
+  - id: two-voice-placement
+    title: Revoice the pairs
+    caption: 'Set Mode to REVOICE and press K3 (Preset SMOOTH). Tap Play for two loops. Revoice keeps each
+      pair''s two pitch classes but chooses their octaves for the smoothest movement: both notes drop an octave
+      to 48+50, 50+52, 52+53 and 53+55, at velocities 127, 117, 107, 97 in the strip below. Tap Stop.'
+    assertion:
+      kind: revoice-physical-workflow
+      passed: true
+- id: harmony-ensemble-and-local-bypass
+  feature_id: harmony
+  title: Share a voicing while keeping each channel’s rhythm
+  behaviour_case: M-HARMONY-ENSEMBLE-001
+  citation: README.md#harmony
+  source: tests/behaviour/contract/harmony_workflows.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Four channels play through the test device, each on its own MIDI channel (1 to 4) with its own
+      sparse rhythm: channel 1 plays the four-step phrase, channel 2 steps 1 and 3, channel 3 steps 2 and
+      4 and channel 4 step 4. Scale slot 1 (C major) is applied, Harmony is Off on every channel and no scale
+      or octave locks are set, so each channel plays its own written pitches. A Harmony Ensemble group lets
+      several channels share one chord: each member gets a role (Bass, Inner or Top), keeps its own rhythm,
+      and takes its pitch from the group''s shared voicing. The norns shows the Device page of channel 4.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH04
+      matched: true
+    occurrence: 1
+  - id: members-saved
+    title: Create group 1 and open Members
+    caption: 'On channel 1 open Channel tasks > Harmony, go to Groups, create group 1 with the Four-part smooth
+      preset and open Members. The header reads MEMBERS CH01: this is where you choose which channels belong
+      to the group.'
+    assertion:
+      kind: screen-header
+      expected: MEMBERS CH01
+      matched: true
+    occurrence: 1
+  - id: members-assigned
+    title: Assign the members, join channel 1
+    caption: 'Assign channels 1 to 4 as the members, in order, with E2 and E3, and press K3 to save: the group
+      is complete but still off. Press E1 back to the Harmony list, set Mode to ENSEMBLE with E3, choose group
+      1 and press K3 to join channel 1. Then select channel 2 (2,1): its Voice leading page opens.'
+    assertion:
+      kind: screen-header
+      expected: VOICE LEADING CH02
+      matched: true
+    occurrence: 1
+  - id: channel-two-joined
+    title: Join channel 2
+    caption: 'Set Mode to ENSEMBLE, choose group 1 and press K3 to join channel 2. Then select channel 3 (3,1):
+      its Voice leading page opens.'
+    assertion:
+      kind: screen-header
+      expected: VOICE LEADING CH03
+      matched: true
+    occurrence: 1
+  - id: channel-three-joined
+    title: Join channel 3
+    caption: 'Set Mode to ENSEMBLE, choose group 1 and press K3 to join channel 3. Then select channel 4 (4,1):
+      its Voice leading page opens.'
+    assertion:
+      kind: screen-header
+      expected: VOICE LEADING CH04
+      matched: true
+    occurrence: 1
+  - id: opted-in
+    title: Join channel 4 and open Ensemble
+    caption: Set Mode to ENSEMBLE, choose group 1 and press K3 to join channel 4. Then turn E2 to Ensemble
+      and press K3. The header reads ENSEMBLE CH04.
+    assertion:
+      kind: screen-header
+      expected: ENSEMBLE CH04
+      matched: true
+    occurrence: 1
+  - id: group-enabled
+    title: Switch the group on
+    caption: On channel 4's Ensemble page select Group enabled and turn E3 to ON. Until now the group existed
+      but did nothing.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Group enabled
+      value: 'ON'
+    occurrence: 1
+  - id: four-channel-roles
+    title: Four roles, four rhythms, one chord
+    caption: 'Press K3 to apply, then tap Play. Channels 1 to 4 take the roles Bass, Inner, Inner and Top.
+      Each channel keeps its own rhythm and velocities, but all four take their pitch from one shared chord
+      voicing: listen for a single chord spread across the four channels, MIDI 48, 55, 64 and 67 in the strip
+      below. Tap Play to stop.'
+    assertion:
+      kind: ensemble-polyrhythm
+      role_pitches:
+        1: 48
+        2: 55
+        3: 64
+        4: 67
+      passed: true
+  - id: scale-result-open
+    title: Lock channel 2 to E major
+    caption: Tap Scale (4,8) and set scale slot 3 to root E. Return to Channel (3,8), select channel 2, hold
+      step 1 (1,4) and press slot 3 at (3,3) to lock that channel to E major. Tap Play and Stop, then open
+      Harmony > Result for channel 2. The header reads VOICE MOVEMENT CH02.
+    assertion:
+      kind: screen-header
+      expected: VOICE MOVEMENT CH02
+      matched: true
+    occurrence: 1
+  - id: scale-bypass
+    title: A scale lock bypasses the group
+    caption: 'A scale lock on a member conflicts with the shared voicing, so channel 2 steps out of the Ensemble
+      and plays its ordinary pitches: all five of its notes play MIDI 64 instead of 55, and Result reads LOCAL
+      SCALE BYPASS.'
+    assertion:
+      kind: local-scale-bypass
+      channel: 2
+      pitches:
+      - 64
+      - 64
+      - 64
+      - 64
+      - 64
+      status: LOCAL SCALE BYPASS
+      passed: true
+  - id: octave-set
+    title: Give channel 3 its own octave
+    caption: 'Select channel 3 (3,1) and press octave +1 at (11,8), then tap Play and Stop. Open Harmony:
+      the Voice leading header for channel 3 reads OCT+1.'
+    assertion:
+      kind: screen-header
+      expected: VOICE LEADING CH03 OCT+1
+      matched: true
+    occurrence: 1
+  - id: octave-result-open
+    title: Open Result for channel 3
+    caption: 'Select Result in Voice leading and press K3: the Voice movement page for CH03 OCT+1 opens.'
+    assertion:
+      kind: screen-header
+      expected: VOICE MOVEMENT CH03 OCT+1
+      matched: true
+    occurrence: 1
+  - id: octave-bypass
+    title: An octave override bypasses too
+    caption: A channel octave also leaves the shared voicing, so all six of channel 3's notes play MIDI 72
+      in the strip. In Result select Step with E2 and turn E3 to step 2. Result reads LOCAL OCTAVE BYPASS.
+    assertion:
+      kind: local-octave-bypass
+      channel: 3
+      inspected_step: 2
+      pitches:
+      - 72
+      - 72
+      - 72
+      - 72
+      - 72
+      - 72
+      status: LOCAL OCTAVE BYPASS
+      passed: true

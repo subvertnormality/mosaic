@@ -1,0 +1,12 @@
+{
+  "failed_runs": [
+    "db5f550f7acd448b87ff8519357cdbfc",
+    "e73eef94eb1c4ab7a887e224651c3787"
+  ],
+  "failure": "Next Result header never arrived after admitted Reason dashboard passed six independent rows",
+  "cause": "Fixture used one E1 feature_root from information-only Reason dashboard; public Channel Tasks route is required",
+  "change": "Use Ui.channel_page(merge_shape, channel=1) before each Result and Rhythm operation",
+  "oracle_changes": false,
+  "production_changes": false,
+  "helper_sha256": "f179c29d600663e45ac17401d859cd44d7a54438e989e12f000017061adb08d2"
+}

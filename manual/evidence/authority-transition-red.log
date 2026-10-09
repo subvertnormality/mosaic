@@ -1,0 +1,20 @@
+Pre-transition API acceptance: new transition test initially failed because verify_manual_sources did not exist. This is tooling unit evidence, not native behavior acceptance.
+E
+======================================================================
+ERROR: test_manual_authority_transition (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_manual_authority_transition
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.8/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority_transition.py", line 6, in <module>
+    from manual_authority import authoring_identity,verify_authority,verify_manual_sources
+ImportError: cannot import name 'verify_manual_sources' from 'manual_authority' (/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_authority.py)
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

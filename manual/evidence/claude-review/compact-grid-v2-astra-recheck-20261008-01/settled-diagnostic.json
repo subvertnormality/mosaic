@@ -1,0 +1,34 @@
+[
+  {
+    "mode": "original",
+    "scroll": 401,
+    "scrollWidth": 1163,
+    "clientWidth": 718,
+    "lastRight": 1073.21875,
+    "wrapRight": 1043.4375,
+    "focus": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "mode": "shield",
+    "scroll": 401,
+    "scrollWidth": 1163,
+    "clientWidth": 718,
+    "lastRight": 1073.21875,
+    "wrapRight": 1043.4375,
+    "focus": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 1440,
+    "guide": true,
+    "columns": "279.578px 755.953px",
+    "actions": "Follow the controls one at a time\n\nThese buttons guide the sequence. The displayed frame changes only when you show the result; they send no instrument input.\n\nOpen the Pattern page\nChoose pattern 1\nAdd the first note\nAdd the second note\nAdd the third note\nAdd the fourth note\nShow result",
+    "overflow": false
+  },
+  {
+    "width": 1280,
+    "guide": true,
+    "columns": "914.25px",
+    "actions": "Follow the controls one at a time\n\nThese buttons guide the sequence. The displayed frame changes only when you show the result; they send no instrument input.\n\nOpen the Pattern page\nChoose pattern 1\nAdd the first note\nAdd the second note\nAdd the third note\nAdd the fourth note\nShow result",
+    "overflow": false
+  }
+]

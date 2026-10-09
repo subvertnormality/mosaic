@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "tests": 4,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "actual_native_result_and_identity_match": true,
+  "source_pins": {
+    "manual/scene-plans-musical.yaml": "3db17925ed6199acde01aee88b06fa98311bcd371a83c5da31f8b35b5b52bfc8",
+    "tests/behaviour/test_manual_documentation_frame_selectors.py": "36a50bd867515ac573e95af8690da17ffb017cd2ac0c103e32a0cb8eb5c1add4",
+    "tests/behaviour/suite.py": "1c3653ab614f4a6e1f0773c52396b1812516090f0ea9b814031b81f48202d091",
+    "tests/behaviour/contract/harmony_merge_visual.py": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296"
+  },
+  "log_sha256": "377aed043d92bc96e5177c3b806ec69c2db989f21dbde70de5884ed94c10a503",
+  "real_time_tests_run": false
+}

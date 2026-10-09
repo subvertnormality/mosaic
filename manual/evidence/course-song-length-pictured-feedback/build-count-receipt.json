@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "path": "manual/BUILD.md",
+  "before_sha256": "ddb32c65f05abe4c604791f9b635156921f4df5bb1125e941d5b30fd5c9f375f",
+  "after_sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089",
+  "checkpoint_count": 50,
+  "teaching_stage_count": 38,
+  "builder_stage_count": 72,
+  "native_acceptance_claimed": false,
+  "diff_sha256": "9d92b4e2545b006e9b0ea419ee31ebf212390ebc06bd81f6058b228d3c08a3f2"
+}

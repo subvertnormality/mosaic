@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "scope": "engineering explicit immutable v10 stage and existing boundary-capable experimental runtime; actual real-time lane",
+  "passed_scoped_raw_acceptance": true,
+  "generic_publication_rejection": "Unsafe native application path",
+  "manifest": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261004/real-boundary-quiet/5f7a319726114a769773cad44698245a/manifest.json",
+  "manifest_sha256": "19988cd615b4a1ea4ae8e08d26fa46be524d07b224bd636fd9c51649701fa2dc",
+  "source_stage": "/home/andy/mosaic-mini-header-engineering-v10-20261003/mosaic",
+  "native_application_files": 17789,
+  "identity_sha256": "4206a60e14d64e19852c1daeade6a5660742527149efa44fb520e1048e4e353d",
+  "auditor_sha256": "0b6964b935ce59cb08318580f9202589f4774856c0256805586ee3074582cb74",
+  "runtime_installation": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "runtime_installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+  "runtime_identity_exactly_matches_installation": true,
+  "runtime_binaries": {
+    "matron": {
+      "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/matron/matron",
+      "sha256": "c60c21338c3b1a5b6a7be40b136d090fd751a0c864b9c3e3e4f8dd17223eab7a"
+    },
+    "crone": {
+      "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/crone/crone",
+      "sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f"
+    },
+    "libmonome": {
+      "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix/lib/libmonome.so",
+      "sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f"
+    }
+  },
+  "runtime_interpreted_files_verified": 168,
+  "runtime_admission": "experimental-unadmitted",
+  "actual_clock_mode": "real-time",
+  "checkpoints": 17,
+  "stopped_mini_rows": 10,
+  "playing_phase": {
+    "clock_ticks": 51,
+    "active_frames": 23,
+    "distinct_poses": 6,
+    "complete_pose_coverage": false
+  },
+  "cleanup": "all four services clean, no held inputs/outstanding notes",
+  "preserved_failures": [
+    "stock-real45ce6626eb414d42864e2672dbd9d4d2",
+    "qualified-realhoststalle7c3f6db2473405dad9cf41427672a0f"
+  ],
+  "full_current_publication": false,
+  "hardware_timing_equivalent": false
+}

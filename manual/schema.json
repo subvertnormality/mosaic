@@ -1,0 +1,479 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mosaic review pilot authoring data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "feature",
+    "scenes"
+  ],
+  "properties": {
+    "schema_version": {
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "feature": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "audience",
+        "summary",
+        "prose",
+        "musical_use",
+        "related",
+        "sources",
+        "controls",
+        "details",
+        "recipes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audience": {
+          "enum": [
+            "beginner",
+            "intermediate",
+            "expert",
+            "all"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "prose": {
+          "type": "string"
+        },
+        "musical_use": {
+          "type": "string"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sources": {
+          "type": "object"
+        },
+        "controls": {
+          "type": "array"
+        },
+        "details": {
+          "type": "array"
+        },
+        "recipes": {
+          "type": "array"
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "behaviour_case",
+          "setup",
+          "steps"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "behaviour_case": {
+            "type": "string",
+            "pattern": "^M-[A-Z0-9-]+$"
+          },
+          "setup": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "fixture",
+              "seed",
+              "voices"
+            ],
+            "properties": {
+              "fixture": {
+                "enum": [
+                  "four-note-pattern",
+                  "four-note-eight-step",
+                  "empty"
+                ]
+              },
+              "seed": {
+                "const": 42
+              },
+              "voices": {
+                "type": "object"
+              }
+            }
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "caption",
+                "inputs",
+                "expect",
+                "citation"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "caption": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "citation": {
+                  "type": "string",
+                  "pattern": "^(README.md#|characterisation:|manual:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S]))"
+                },
+                "inputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "type": {
+                        "enum": [
+                          "grid",
+                          "key",
+                          "enc",
+                          "wait",
+                          "play",
+                          "stop"
+                        ]
+                      },
+                      "n": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 3
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8
+                      },
+                      "state": {
+                        "type": "integer",
+                        "enum": [
+                          0,
+                          1
+                        ]
+                      },
+                      "delta": {
+                        "type": "integer",
+                        "minimum": -128,
+                        "maximum": 128
+                      },
+                      "seconds": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 5
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "allOf": [
+                      {
+                        "if": {
+                          "properties": {
+                            "type": {
+                              "const": "grid"
+                            }
+                          }
+                        },
+                        "then": {
+                          "required": [
+                            "x",
+                            "y",
+                            "state"
+                          ]
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "type": {
+                              "const": "key"
+                            }
+                          }
+                        },
+                        "then": {
+                          "required": [
+                            "n"
+                          ]
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "type": {
+                              "const": "enc"
+                            }
+                          }
+                        },
+                        "then": {
+                          "required": [
+                            "n",
+                            "delta"
+                          ]
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "type": {
+                              "const": "wait"
+                            }
+                          }
+                        },
+                        "then": {
+                          "required": [
+                            "seconds"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "expect": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "additionalProperties": false,
+                  "properties": {
+                    "screen": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2
+                      }
+                    },
+                    "midi_phrase": {
+                      "type": "array",
+                      "minItems": 1
+                    },
+                    "durations": {
+                      "type": "array"
+                    },
+                    "positions": {
+                      "type": "array"
+                    },
+                    "cycle_steps": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 64
+                    },
+                    "header": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "page"
+                      ],
+                      "properties": {
+                        "page": {
+                          "enum": [
+                            "assignment",
+                            "channel_tasks",
+                            "channel_view",
+                            "clock_mods",
+                            "harmony",
+                            "harmony_delete_group",
+                            "harmony_ensemble",
+                            "harmony_entry",
+                            "harmony_members",
+                            "harmony_register",
+                            "harmony_result",
+                            "harmony_tone_map",
+                            "masks",
+                            "memory",
+                            "merge_detail",
+                            "merge_fragments",
+                            "merge_interlock",
+                            "merge_phrase",
+                            "merge_pitch",
+                            "merge_reason",
+                            "merge_result",
+                            "merge_rhythm",
+                            "merge_shape",
+                            "merge_structure",
+                            "midi_config",
+                            "note_dashboard",
+                            "note_editor",
+                            "paint_preview",
+                            "pattern_tasks",
+                            "scale",
+                            "scale_clock",
+                            "scale_overview",
+                            "scale_source",
+                            "scale_tasks",
+                            "song",
+                            "trig_algorithm",
+                            "trig_locks",
+                            "trig_step_edit",
+                            "trigger_editor",
+                            "trigger_editor_confirmation",
+                            "velocity_editor"
+                          ]
+                        },
+                        "params": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "device": {
+                      "type": "string"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "layout",
+                          "label",
+                          "value"
+                        ],
+                        "properties": {
+                          "layout": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "art": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    "leds": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "x",
+                          "y",
+                          "level"
+                        ],
+                        "properties": {
+                          "x": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 16
+                          },
+                          "y": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 8
+                          },
+                          "level": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 15
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "required": [
+        "title",
+        "profile",
+        "bars",
+        "bpm",
+        "files",
+        "tracks",
+        "description"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "profile": {
+          "const": "manual-duo"
+        },
+        "bars": {
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 16
+        },
+        "bpm": {
+          "type": "number",
+          "minimum": 30,
+          "maximum": 240
+        },
+        "files": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "tracks": {
+          "type": "array",
+          "minItems": 2
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": 1
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "audio"
+        ]
+      }
+    }
+  ]
+}

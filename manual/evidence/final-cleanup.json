@@ -1,0 +1,650 @@
+{
+  "passed": true,
+  "active_native_processes": [],
+  "owned_receipts": [
+    {
+      "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/controlled-experimental/M-MASK-017/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 3863,
+          "returncode": 0,
+          "seconds": 0.1139052479993552
+        },
+        {
+          "service": "sclang",
+          "pid": 3733,
+          "returncode": -15,
+          "seconds": 0.11442230799002573
+        },
+        {
+          "service": "crone",
+          "pid": 3722,
+          "returncode": 0,
+          "seconds": 6.453105015680194e-05
+        },
+        {
+          "service": "jack",
+          "pid": 3718,
+          "returncode": 0,
+          "seconds": 0.031563364958856255
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/controlled-experimental/M-MASK-021/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 5478,
+          "returncode": 0,
+          "seconds": 0.16418591199908406
+        },
+        {
+          "service": "sclang",
+          "pid": 5375,
+          "returncode": -15,
+          "seconds": 0.06418820697581396
+        },
+        {
+          "service": "crone",
+          "pid": 5366,
+          "returncode": 0,
+          "seconds": 6.17409823462367e-05
+        },
+        {
+          "service": "jack",
+          "pid": 5350,
+          "returncode": 0,
+          "seconds": 0.03156589699210599
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/real-time/M-MASK-017/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 27755,
+          "returncode": 0,
+          "seconds": 0.11392185103613883
+        },
+        {
+          "service": "sclang",
+          "pid": 27654,
+          "returncode": -15,
+          "seconds": 0.11441814101999626
+        },
+        {
+          "service": "crone",
+          "pid": 27646,
+          "returncode": 0,
+          "seconds": 5.925103323534131e-05
+        },
+        {
+          "service": "jack",
+          "pid": 27642,
+          "returncode": 0,
+          "seconds": 0.015531680022832006
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/real-time/M-MASK-021/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 29300,
+          "returncode": 0,
+          "seconds": 0.11389823700301349
+        },
+        {
+          "service": "sclang",
+          "pid": 29201,
+          "returncode": -15,
+          "seconds": 0.1145839579985477
+        },
+        {
+          "service": "crone",
+          "pid": 29190,
+          "returncode": 0,
+          "seconds": 6.329099414870143e-05
+        },
+        {
+          "service": "jack",
+          "pid": 29183,
+          "returncode": 0,
+          "seconds": 0.031733338022604585
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/f3f4ab10272d41568558e4f5ab069043/audio/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 16428,
+          "returncode": 0,
+          "seconds": 0.11386647098697722
+        },
+        {
+          "service": "crow",
+          "pid": 16427,
+          "returncode": -15,
+          "seconds": 0.0032718880102038383
+        },
+        {
+          "service": "sclang",
+          "pid": 16317,
+          "returncode": -15,
+          "seconds": 0.06430284801172093
+        },
+        {
+          "service": "crone",
+          "pid": 16309,
+          "returncode": 0,
+          "seconds": 7.565197302028537e-05
+        },
+        {
+          "service": "jack",
+          "pid": 16305,
+          "returncode": 0,
+          "seconds": 0.03161169699160382
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-007/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 32153,
+          "returncode": 0,
+          "seconds": 0.06388371397042647
+        },
+        {
+          "service": "sclang",
+          "pid": 32061,
+          "returncode": -15,
+          "seconds": 0.11440455901902169
+        },
+        {
+          "service": "crone",
+          "pid": 32053,
+          "returncode": 0,
+          "seconds": 6.595096783712506e-05
+        },
+        {
+          "service": "jack",
+          "pid": 32049,
+          "returncode": 0,
+          "seconds": 0.031711117015220225
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/mask-precedence/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 4824,
+          "returncode": 0,
+          "seconds": 0.1139111120137386
+        },
+        {
+          "service": "sclang",
+          "pid": 4735,
+          "returncode": -15,
+          "seconds": 0.11459304997697473
+        },
+        {
+          "service": "crone",
+          "pid": 4724,
+          "returncode": 0,
+          "seconds": 7.340096635743976e-05
+        },
+        {
+          "service": "jack",
+          "pid": 4720,
+          "returncode": 0,
+          "seconds": 0.01565184397622943
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/audio/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 10461,
+          "returncode": 0,
+          "seconds": 0.11407708399929106
+        },
+        {
+          "service": "sclang",
+          "pid": 10346,
+          "returncode": -15,
+          "seconds": 0.11453838896704838
+        },
+        {
+          "service": "crone",
+          "pid": 10338,
+          "returncode": 0,
+          "seconds": 6.66310079395771e-05
+        },
+        {
+          "service": "jack",
+          "pid": 10328,
+          "returncode": 0,
+          "seconds": 0.015569940966088325
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/mask-chords/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 7804,
+          "returncode": 0,
+          "seconds": 0.11393505200976506
+        },
+        {
+          "service": "sclang",
+          "pid": 7712,
+          "returncode": -15,
+          "seconds": 0.11449917202116922
+        },
+        {
+          "service": "crone",
+          "pid": 7704,
+          "returncode": 0,
+          "seconds": 7.093098247423768e-05
+        },
+        {
+          "service": "jack",
+          "pid": 7693,
+          "returncode": 0,
+          "seconds": 0.015499098983127624
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/mask-trigs/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 8773,
+          "returncode": 0,
+          "seconds": 0.11407010204857215
+        },
+        {
+          "service": "sclang",
+          "pid": 8668,
+          "returncode": -15,
+          "seconds": 0.11466119304532185
+        },
+        {
+          "service": "crone",
+          "pid": 8657,
+          "returncode": 0,
+          "seconds": 7.880100747570395e-05
+        },
+        {
+          "service": "jack",
+          "pid": 8649,
+          "returncode": 0,
+          "seconds": 0.015593160002026707
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-010/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 2814,
+          "returncode": 0,
+          "seconds": 0.11400314298225567
+        },
+        {
+          "service": "sclang",
+          "pid": 2695,
+          "returncode": -15,
+          "seconds": 0.06447205203585327
+        },
+        {
+          "service": "crone",
+          "pid": 2687,
+          "returncode": 0,
+          "seconds": 6.320100510492921e-05
+        },
+        {
+          "service": "jack",
+          "pid": 2683,
+          "returncode": 0,
+          "seconds": 0.03163961000973359
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/mask-expression/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 6208,
+          "returncode": 0,
+          "seconds": 0.06384530197829008
+        },
+        {
+          "service": "sclang",
+          "pid": 6116,
+          "returncode": -15,
+          "seconds": 0.11455571197438985
+        },
+        {
+          "service": "crone",
+          "pid": 6108,
+          "returncode": 0,
+          "seconds": 7.134099723771214e-05
+        },
+        {
+          "service": "jack",
+          "pid": 6098,
+          "returncode": 0,
+          "seconds": 0.03164537699194625
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-005/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 3870,
+          "returncode": 0,
+          "seconds": 0.06379046197980642
+        },
+        {
+          "service": "sclang",
+          "pid": 3778,
+          "returncode": -15,
+          "seconds": 0.11442533897934482
+        },
+        {
+          "service": "crone",
+          "pid": 3770,
+          "returncode": 0,
+          "seconds": 5.820096703246236e-05
+        },
+        {
+          "service": "jack",
+          "pid": 3766,
+          "returncode": 0,
+          "seconds": 0.031716607976704836
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-008/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 1312,
+          "returncode": 0,
+          "seconds": 0.11429122998379171
+        },
+        {
+          "service": "sclang",
+          "pid": 1220,
+          "returncode": -15,
+          "seconds": 0.11455392197240144
+        },
+        {
+          "service": "crone",
+          "pid": 1212,
+          "returncode": 0,
+          "seconds": 8.246098877862096e-05
+        },
+        {
+          "service": "jack",
+          "pid": 1178,
+          "returncode": 0,
+          "seconds": 0.03171790298074484
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-007/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 16347,
+          "returncode": 0,
+          "seconds": 0.06373554799938574
+        },
+        {
+          "service": "sclang",
+          "pid": 16246,
+          "returncode": -15,
+          "seconds": 0.11445115797687322
+        },
+        {
+          "service": "crone",
+          "pid": 16235,
+          "returncode": 0,
+          "seconds": 7.069099228829145e-05
+        },
+        {
+          "service": "jack",
+          "pid": 16225,
+          "returncode": 0,
+          "seconds": 0.015470298007130623
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/mask-precedence/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 25064,
+          "returncode": 0,
+          "seconds": 0.11390957800904289
+        },
+        {
+          "service": "sclang",
+          "pid": 24953,
+          "returncode": -15,
+          "seconds": 0.0642872869502753
+        },
+        {
+          "service": "crone",
+          "pid": 24945,
+          "returncode": 0,
+          "seconds": 7.683096919208765e-05
+        },
+        {
+          "service": "jack",
+          "pid": 24935,
+          "returncode": 0,
+          "seconds": 0.03162087599048391
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/mask-chords/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 29407,
+          "returncode": 0,
+          "seconds": 0.11393769702408463
+        },
+        {
+          "service": "sclang",
+          "pid": 29218,
+          "returncode": -15,
+          "seconds": 0.1144266439951025
+        },
+        {
+          "service": "crone",
+          "pid": 29210,
+          "returncode": 0,
+          "seconds": 7.079099304974079e-05
+        },
+        {
+          "service": "jack",
+          "pid": 29150,
+          "returncode": 0,
+          "seconds": 0.03157975402427837
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/mask-trigs/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 30996,
+          "returncode": 0,
+          "seconds": 0.11384009604807943
+        },
+        {
+          "service": "sclang",
+          "pid": 30777,
+          "returncode": -15,
+          "seconds": 0.11431388201890513
+        },
+        {
+          "service": "crone",
+          "pid": 30769,
+          "returncode": 0,
+          "seconds": 5.962996510788798e-05
+        },
+        {
+          "service": "jack",
+          "pid": 30765,
+          "returncode": 0,
+          "seconds": 0.031566443969495595
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-010/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 21106,
+          "returncode": 0,
+          "seconds": 0.11389514000620693
+        },
+        {
+          "service": "sclang",
+          "pid": 21008,
+          "returncode": -15,
+          "seconds": 0.11440182698424906
+        },
+        {
+          "service": "crone",
+          "pid": 21000,
+          "returncode": 0,
+          "seconds": 6.470101652666926e-05
+        },
+        {
+          "service": "jack",
+          "pid": 20987,
+          "returncode": 0,
+          "seconds": 0.015549939998891205
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/mask-expression/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 27186,
+          "returncode": 0,
+          "seconds": 0.11392306996276602
+        },
+        {
+          "service": "sclang",
+          "pid": 27073,
+          "returncode": -15,
+          "seconds": 0.11447531700832769
+        },
+        {
+          "service": "crone",
+          "pid": 27059,
+          "returncode": 0,
+          "seconds": 6.646098336204886e-05
+        },
+        {
+          "service": "jack",
+          "pid": 27049,
+          "returncode": 0,
+          "seconds": 0.0317381689674221
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-005/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 23295,
+          "returncode": 0,
+          "seconds": 0.11399143101880327
+        },
+        {
+          "service": "sclang",
+          "pid": 23185,
+          "returncode": -15,
+          "seconds": 0.11442581698065624
+        },
+        {
+          "service": "crone",
+          "pid": 23175,
+          "returncode": 0,
+          "seconds": 7.316202390938997e-05
+        },
+        {
+          "service": "jack",
+          "pid": 23170,
+          "returncode": 0,
+          "seconds": 0.031623905000742525
+        }
+      ]
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-008/native/cleanup.json",
+      "records": [
+        {
+          "service": "matron",
+          "pid": 18687,
+          "returncode": 0,
+          "seconds": 0.11384621600154787
+        },
+        {
+          "service": "sclang",
+          "pid": 18573,
+          "returncode": -15,
+          "seconds": 0.11450661299750209
+        },
+        {
+          "service": "crone",
+          "pid": 18565,
+          "returncode": 0,
+          "seconds": 6.286101415753365e-05
+        },
+        {
+          "service": "jack",
+          "pid": 18561,
+          "returncode": 0,
+          "seconds": 0.03163256502011791
+        }
+      ]
+    }
+  ]
+}

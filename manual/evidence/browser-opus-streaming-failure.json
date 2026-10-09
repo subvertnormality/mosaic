@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "passed": false,
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": [
+    "All scene captions, forward/back frames and 128 LED values",
+    "Clickable and keyboard encoder advances",
+    "Search, dense reference and theme switching"
+  ]
+}

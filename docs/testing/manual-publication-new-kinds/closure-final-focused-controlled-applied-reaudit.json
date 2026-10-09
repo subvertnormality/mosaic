@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "error": "Motion marker differs from full authored C04 footprint",
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 6, in <module>\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 168, in audit_reference\n    verify_motion_checkpoint(step,observations,path,document['clock_mode'])\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 672, in verify_motion_checkpoint\n    actions=[json.loads(line) for line in (path/'native/actions.jsonl').read_text().splitlines()];receipts=check_motion_feedback(row,observations,json.loads((path/'recipe.json').read_text()),events,actions);results=json.loads((path/'results.json').read_text());states=check_motion_samples(row,observations,clock_mode,events,results,binding['assertion_index'])\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 625, in check_motion_samples\n    if item.get('mark_sha256')!=sha:raise ValueError('Motion marker differs from full authored C04 footprint')\nValueError: Motion marker differs from full authored C04 footprint\n",
+  "report": "/home/andy/mosaic-manual-runs/4e136b11b7204a8db9930dd78b6c34ed/reference-scenes.json",
+  "report_sha256": "94f53046e05895e4b9457dac88d708a5aba7056f198dbf10791a2d85ff69c31f",
+  "seconds": 1.4348847080254927,
+  "clock_mode": "controlled-experimental",
+  "scope": "Two closure cases, three scenes; not complete regression or hardware timing",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

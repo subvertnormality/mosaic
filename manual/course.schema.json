@@ -1,0 +1,2063 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "title",
+    "summary",
+    "project",
+    "learning_path"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "output",
+        "incoming_state",
+        "capture_status"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "incoming_state": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "capture_status": {
+          "enum": [
+            "pending",
+            "verified",
+            "controlled-verified"
+          ]
+        },
+        "validation_scope": {
+          "const": "controlled-manual-generation"
+        },
+        "realtime_qualification": {
+          "const": "pending-ci"
+        }
+      }
+    },
+    "learning_path": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "goal",
+          "prerequisite",
+          "outgoing_state",
+          "recovery",
+          "stages"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "goal": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "prerequisite": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "outgoing_state": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "recovery": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "stages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "title",
+                "goal",
+                "action",
+                "result",
+                "binding"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$"
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "goal": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "action": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "result": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "binding": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "scene",
+                    "step"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "verified",
+                        "controlled-verified"
+                      ]
+                    },
+                    "scene": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "minLength": 1
+                    },
+                    "step": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "minLength": 1
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "status": {
+                            "const": "verified"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "scene": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          },
+                          "step": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "scene": {
+                            "type": "null"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "step": {
+                            "type": "null"
+                          }
+                        }
+                      },
+                      "else": {
+                        "properties": {
+                          "step": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "status": {
+                            "const": "controlled-verified"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "scene": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          },
+                          "step": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "teaching_binding": {
+                  "$ref": "#/definitions/teaching_binding"
+                },
+                "human_outcome": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mosaic continuing musical course",
+  "definitions": {
+    "teaching_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actions",
+        "semantic_requires",
+        "human_outcome"
+      ],
+      "properties": {
+        "from_step_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "transition_scope": {
+          "enum": [
+            "adjacent",
+            "interval"
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "x",
+                  "y"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "tap-grid"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 16
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 8
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "x",
+                  "y"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "hold-grid"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 16
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 8
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "x",
+                  "y"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "release-grid"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 16
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 8
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "n"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "tap-key"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "n"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "hold-key"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "n"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "release-key"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "control",
+                  "value",
+                  "field_label"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "select-value"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "control": {
+                    "enum": [
+                      "E2",
+                      "E3"
+                    ]
+                  },
+                  "value": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "direction": {
+                    "enum": [
+                      "clockwise",
+                      "anticlockwise"
+                    ]
+                  },
+                  "field_label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "field_control": {
+                    "const": "E2"
+                  },
+                  "field_direction": {
+                    "enum": [
+                      "clockwise",
+                      "anticlockwise"
+                    ]
+                  },
+                  "between_trigger": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "x",
+                      "y",
+                      "gesture"
+                    ],
+                    "properties": {
+                      "type": {
+                        "const": "grid"
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8
+                      },
+                      "gesture": {
+                        "const": "tap"
+                      }
+                    }
+                  },
+                  "between_hold": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "x",
+                      "y",
+                      "gesture"
+                    ],
+                    "properties": {
+                      "type": {
+                        "const": "grid"
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8
+                      },
+                      "gesture": {
+                        "const": "hold"
+                      }
+                    }
+                  },
+                  "field_slot": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "expected_marker": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "L",
+                      "S",
+                      null
+                    ]
+                  },
+                  "mask_field": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "while_held_grid": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "x",
+                      "y"
+                    ],
+                    "properties": {
+                      "x": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8
+                      }
+                    }
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "required": [
+                        "field_control"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "control": {
+                          "const": "E3"
+                        },
+                        "field_direction": {
+                          "enum": [
+                            "clockwise",
+                            "anticlockwise"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "required": [
+                        "between_trigger"
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "field_control"
+                      ],
+                      "properties": {
+                        "field_control": {
+                          "const": "E2"
+                        },
+                        "control": {
+                          "const": "E3"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "required": [
+                        "between_hold"
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "field_control"
+                      ],
+                      "properties": {
+                        "field_control": {
+                          "const": "E2"
+                        },
+                        "control": {
+                          "const": "E3"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "required": [
+                        "while_held_grid"
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "expected_marker"
+                      ],
+                      "properties": {
+                        "expected_marker": {
+                          "const": "L"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "trigger"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "choose-menu"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "menu_text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "destination": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "page"
+                        ],
+                        "properties": {
+                          "page": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "header_title"
+                        ],
+                        "properties": {
+                          "header_title": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "trigger": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "type",
+                          "x",
+                          "y",
+                          "gesture"
+                        ],
+                        "properties": {
+                          "type": {
+                            "const": "grid"
+                          },
+                          "x": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 16
+                          },
+                          "y": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 8
+                          },
+                          "gesture": {
+                            "const": "tap"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "type",
+                          "n",
+                          "gesture"
+                        ],
+                        "properties": {
+                          "type": {
+                            "const": "key"
+                          },
+                          "n": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 3
+                          },
+                          "gesture": {
+                            "const": "tap"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "type",
+                          "n",
+                          "direction"
+                        ],
+                        "properties": {
+                          "type": {
+                            "const": "enc"
+                          },
+                          "n": {
+                            "enum": [
+                              1,
+                              2,
+                              3
+                            ]
+                          },
+                          "direction": {
+                            "enum": [
+                              "clockwise",
+                              "anticlockwise"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "required": [
+                      "menu_text"
+                    ],
+                    "not": {
+                      "required": [
+                        "destination"
+                      ]
+                    }
+                  },
+                  {
+                    "required": [
+                      "destination"
+                    ],
+                    "not": {
+                      "required": [
+                        "menu_text"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "trigger"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "play-phrase"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "trigger": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "type",
+                          "x",
+                          "y",
+                          "gesture"
+                        ],
+                        "properties": {
+                          "type": {
+                            "const": "grid"
+                          },
+                          "x": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 16
+                          },
+                          "y": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 8
+                          },
+                          "gesture": {
+                            "const": "tap"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "type",
+                          "n",
+                          "gesture"
+                        ],
+                        "properties": {
+                          "type": {
+                            "const": "key"
+                          },
+                          "n": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 3
+                          },
+                          "gesture": {
+                            "const": "tap"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "type",
+                          "n",
+                          "direction"
+                        ],
+                        "properties": {
+                          "type": {
+                            "const": "enc"
+                          },
+                          "n": {
+                            "enum": [
+                              2,
+                              3
+                            ]
+                          },
+                          "direction": {
+                            "enum": [
+                              "clockwise",
+                              "anticlockwise"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "target_step_id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "preview-recorded-result"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "target_step_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "port",
+                  "notes"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "play-keyboard-phrase"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "port": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                  },
+                  "notes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "note",
+                        "velocity"
+                      ],
+                      "properties": {
+                        "note": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 127
+                        },
+                        "velocity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 127
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "kind",
+                  "label",
+                  "play_step_id",
+                  "stop_step_id",
+                  "window_result_id",
+                  "window_duration_s"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "kind": {
+                    "const": "play-note-silence"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "play_step_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "stop_step_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "window_result_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "window_duration_s": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "semantic_requires": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "screen_contains": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "midi_phrase_contains": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "port",
+                  "bytes"
+                ],
+                "properties": {
+                  "port": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "bytes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 255
+                    }
+                  }
+                }
+              }
+            },
+            "held_controls_at_target": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "x",
+                      "y"
+                    ],
+                    "properties": {
+                      "type": {
+                        "const": "grid"
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "type",
+                      "n"
+                    ],
+                    "properties": {
+                      "type": {
+                        "const": "key"
+                      },
+                      "n": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 3
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "public_readout_equals": {
+              "type": "object",
+              "additionalProperties": false,
+              "minProperties": 1,
+              "properties": {
+                "page": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "header.title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "header.scope": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "header.layout": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "selected_field.label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "selected_field.value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "selected_field.layout": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "mask_fields": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "field",
+                      "value"
+                    ],
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      "layout": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      }
+                    }
+                  }
+                },
+                "dashboard_rows": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "row",
+                      "label",
+                      "value"
+                    ],
+                    "properties": {
+                      "row": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 55
+                      },
+                      "label": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      }
+                    }
+                  }
+                },
+                "selected_menu_text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "device_configuration": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "device"
+                      ],
+                      "properties": {
+                        "device": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "device",
+                        "midi_channel",
+                        "midi_port"
+                      ],
+                      "properties": {
+                        "device": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        },
+                        "midi_channel": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        },
+                        "midi_port": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "grid_cells": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "x",
+                  "y",
+                  "level"
+                ],
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 16
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 8
+                  },
+                  "level": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 15
+                  }
+                }
+              }
+            },
+            "leds_at_target": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "x",
+                  "y",
+                  "level"
+                ],
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 16
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 8
+                  },
+                  "level": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 15
+                  }
+                }
+              }
+            },
+            "midi_events_at_target": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "port",
+                  "bytes"
+                ],
+                "properties": {
+                  "port": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "bytes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 255
+                    }
+                  }
+                }
+              }
+            },
+            "midi_silence_at_target": {
+              "const": true
+            },
+            "project_files_at_target": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^(?!\\.{1,2}$)(?!.*[/\\\\]).+\\S.*$"
+              }
+            },
+            "parameter_readout_equals": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "schema_version",
+                "parameter_label",
+                "display_label",
+                "slot",
+                "value",
+                "marker",
+                "picker_step_id",
+                "assignment_step_id",
+                "readout_step_id",
+                "effect_step_id",
+                "effect_assertion"
+              ],
+              "properties": {
+                "schema_version": {
+                  "const": 1
+                },
+                "parameter_label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "display_label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "slot": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "marker": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "L",
+                    "S",
+                    null
+                  ]
+                },
+                "picker_step_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "assignment_step_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "readout_step_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "effect_step_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "effect_assertion": {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "passed"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    },
+                    "passed": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            },
+            "play_note_silence_at_target": {
+              "const": true
+            }
+          }
+        },
+        "human_outcome": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "practice_prompt": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "preserve_holds_at_target": {
+          "type": "boolean"
+        },
+        "from_prelude_receipt_id": {
+          "type": "string",
+          "const": "getting-started-start"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "from_step_id"
+          ],
+          "not": {
+            "required": [
+              "from_prelude_receipt_id"
+            ]
+          }
+        },
+        {
+          "required": [
+            "from_prelude_receipt_id"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "from_step_id"
+                ]
+              },
+              {
+                "required": [
+                  "transition_scope"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "semantic_requires": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "screen_contains": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "midi_phrase_contains": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "port",
+              "bytes"
+            ],
+            "properties": {
+              "port": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "bytes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255
+                }
+              }
+            }
+          }
+        },
+        "held_controls_at_target": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "type",
+                  "x",
+                  "y"
+                ],
+                "properties": {
+                  "type": {
+                    "const": "grid"
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 16
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 8
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "type",
+                  "n"
+                ],
+                "properties": {
+                  "type": {
+                    "const": "key"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "public_readout_equals": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "page": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "header.title": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "header.scope": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "header.layout": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "selected_field.label": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "selected_field.value": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "selected_field.layout": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "mask_fields": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "field",
+                  "value"
+                ],
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "value": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "layout": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                }
+              }
+            },
+            "dashboard_rows": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "row",
+                  "label",
+                  "value"
+                ],
+                "properties": {
+                  "row": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 55
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "value": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                }
+              }
+            },
+            "selected_menu_text": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "device_configuration": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "device"
+                  ],
+                  "properties": {
+                    "device": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "device",
+                    "midi_channel",
+                    "midi_port"
+                  ],
+                  "properties": {
+                    "device": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    },
+                    "midi_channel": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    },
+                    "midi_port": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "grid_cells": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y",
+              "level"
+            ],
+            "properties": {
+              "x": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 16
+              },
+              "y": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 8
+              },
+              "level": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 15
+              }
+            }
+          }
+        },
+        "leds_at_target": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y",
+              "level"
+            ],
+            "properties": {
+              "x": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 16
+              },
+              "y": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 8
+              },
+              "level": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 15
+              }
+            }
+          }
+        },
+        "midi_events_at_target": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "port",
+              "bytes"
+            ],
+            "properties": {
+              "port": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "bytes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255
+                }
+              }
+            }
+          }
+        },
+        "midi_silence_at_target": {
+          "const": true
+        },
+        "project_files_at_target": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!\\.{1,2}$)(?!.*[/\\\\]).+\\S.*$"
+          }
+        },
+        "parameter_readout_equals": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "parameter_label",
+            "display_label",
+            "slot",
+            "value",
+            "marker",
+            "picker_step_id",
+            "assignment_step_id",
+            "readout_step_id",
+            "effect_step_id",
+            "effect_assertion"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": 1
+            },
+            "parameter_label": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "display_label": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "slot": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "marker": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "L",
+                "S",
+                null
+              ]
+            },
+            "picker_step_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "assignment_step_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "readout_step_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "effect_step_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "effect_assertion": {
+              "type": "object",
+              "required": [
+                "kind",
+                "passed"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                },
+                "passed": {
+                  "const": true
+                }
+              }
+            }
+          }
+        },
+        "play_note_silence_at_target": {
+          "const": true
+        }
+      }
+    }
+  }
+}

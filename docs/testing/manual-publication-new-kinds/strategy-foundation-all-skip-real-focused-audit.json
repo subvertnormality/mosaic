@@ -1,0 +1,16 @@
+{
+  "scope": "Focused real Foundation/All/Skip raw audit only; otherrealrole pending",
+  "clock_mode": "real-time",
+  "report": "/home/andy/mosaic-manual-runs/916152fc32ae415682123f69597cc97d/reference-scenes.json",
+  "report_sha256": "b807b19e3292cdb3e446e9e6187fd2a984527d5484ff93d2db5b0fc55afad60b",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "frames": 3,
+  "passed": true,
+  "positive_native_kind3_onsets": 26,
+  "native_releases": 26,
+  "wire_sequence_matches": true,
+  "cleanup_sha256": "79050aa1e79cc24f3d2f28993d1e6501bc19d1ab19254a28c42e8c368a03ccbf",
+  "native_events_sha256": "e7b5ebad2ac5385a0c0491a187b32225192e9a8f79a1162674ce14c3b23854e3",
+  "seconds": 0.31063947099028155
+}

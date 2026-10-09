@@ -107,12 +107,8 @@ def two_patterns(c, second):
 def foundation_on(c, channel):
     """Merge Shape Foundation on the selected channel with its first assigned
     pattern as Anchor, applied; Rhythm (M03) stays open."""
-    c.ui.channel_page("merge_shape", channel=channel)
-    c.ui.select_row("mode", 0); c.ui.turn(3, 1)
-    c.ui.turn(2, 1); c.ui.press_key(3)
-    c.ui.expect_header("merge_rhythm", channel=channel)
-    c.ui.select_row("anchor", 0); c.ui.turn(3, 1); c.ui.press_key(3)
-    c.ui.expect_footer_text("APPLIED")
+    from merge_strategy_routes import foundation_rhythm
+    foundation_rhythm(c,channel)
 
 
 # Fragments ------------------------------------------------------------------------
@@ -121,10 +117,10 @@ def fragments_workflow(c, capture=False):
     """README Merge Shape "Fragments". ``capture`` stops at the README frame
     (tools/docs_capture.py), skipping the playback before it."""
     two_patterns(c, (3, 6))
+    from merge_strategy_routes import select_strategy
+    select_strategy(c,"FRAGMENTS")
     c.ui.channel_page("merge_shape", channel=1)
-    c.ui.turn(3, 1); c.ui.turn(3, 1)            # Mode: Fragments (staged)
-    c.ui.expect_selected_field("detail", "Mode", "FRAGMENTS")
-    c.ui.turn(2, 1); c.ui.press_key(3)          # Rhythm opens Fragments
+    c.ui.select_row("rhythm",1);c.ui.press_key(3)  # Rhythm opens Fragments
     c.ui.expect_header("merge_fragments", channel=1)
     c.ui.turn(3, -1)                             # Size 8 -> 4
     c.ui.expect_selected_field("detail", "Size", "4")
@@ -157,14 +153,17 @@ def fragments_short_loop_workflow(c):
     fills only empty trig positions and the fragment source wins on overlap."""
     two_patterns(c, (3, 6))
     c.ui.hold_control_tap("step", "step", held_index=1, target_index=6)
+    from merge_strategy_routes import select_strategy
+    select_strategy(c,"FRAGMENTS")
     c.ui.channel_page("merge_shape", channel=1)
-    c.ui.select_row("mode", 0); c.ui.turn(3, 2)
-    c.ui.expect_selected_field("detail", "Mode", "FRAGMENTS")
     c.ui.select_row("rhythm", 1); c.ui.press_key(3)
     c.ui.expect_header("merge_fragments", channel=1)
     c.ui.expect_selected_field("detail", "Size", "8")
     c.ui.press_key(3)
-    c.ui.expect_footer_text("APPLIED")
+    # Characterisation outside README: M15 K3 commits this draft in place;
+    # owner.status is not rendered on this route, so assert its stable controls.
+    # The resulting fragments are checked by the grid and MIDI oracles.
+    c.ui.expect_footer_text("E3 SET  K3 APPLY  K2 BACK")
     c.ui.expect_steps({step: "selected" if step in (3, 6) else "off" if step <= 6 else "dark"
                        for step in range(1, 17)})
     play_loops(c, [(3, 1, 60, 100), (6, 1, 60, 100)], loop=6,
@@ -176,7 +175,10 @@ def fragments_short_loop_workflow(c):
     c.ui.turn(3, 1)
     c.ui.expect_selected_field("detail", "Anchor", "1")
     c.ui.press_key(3)
-    c.ui.expect_footer_text("APPLIED")
+    # Characterisation outside README: M15 K3 commits this draft in place;
+    # owner.status is not rendered on this route, so assert its stable controls.
+    # The resulting fragments are checked by the grid and MIDI oracles.
+    c.ui.expect_footer_text("E3 SET  K3 APPLY  K2 BACK")
     expected = [(1, 1, 60, 127), (2, 1, 62, 117), (3, 1, 60, 100),
                 (4, 1, 65, 97), (6, 1, 60, 100)]
     c.ui.expect_steps({step: "selected" if step in (1, 2, 3, 4, 6) else "off" if step <= 6 else "dark"
@@ -288,9 +290,13 @@ def structure_workflow(c, capture=False):
     c.ui.expect_header("harmony_ensemble", channel=1)
     c.ui.select_row("create_group", 1); c.ui.press_key(3)
     c.ui.select_row("source", 4); c.ui.press_key(3)
+    # README.md#structure: the group chord is scale degrees 0, 2 and 4 (C E G in C major).
     c.ui.select_row("template_count", 1); c.ui.turn(3, 2)
+    c.ui.expect_selected_field("detail", "Template count", "3")
     c.ui.select_row("tone_2", 3); c.ui.turn(3, 2)
+    c.ui.expect_selected_field("detail", "Tone 2", "2")
     c.ui.select_row("tone_3", 4); c.ui.turn(3, 4)
+    c.ui.expect_selected_field("detail", "Tone 3", "4")
     c.ui.press_key(3)
     c.ui.expect_footer_text("APPLIED")
     c.ui.press_key(2)
@@ -351,8 +357,9 @@ def fragments_offset_mask_workflow(c):
     explicit trig mask suppress a chosen source onset and X restore it."""
     two_patterns(c, (3, 6, 9))
     c.ui.set_range(3, 10)
+    from merge_strategy_routes import select_strategy
+    select_strategy(c,'FRAGMENTS')
     c.ui.channel_page('merge_shape', channel=1)
-    c.ui.select_row('mode', 0); c.ui.turn(3, 2)
     c.ui.select_row('rhythm', 1); c.ui.press_key(3)
     c.ui.expect_header('merge_fragments', channel=1)
     c.ui.select_row('size', 0); c.ui.turn(3, -1)

@@ -11,11 +11,19 @@ def song_mode_flow(c):
     ui = c.ui
     ui.configure()
     ui.song_editor();ui.tap_control('global_pattern_length',2);ui.tap_control('global_pattern_length',8)
+    # README Song Mode Operations: the global length fader sets the two-note motif every slot plays.
+    ui.expect_dashboard('song',[('Playing','SONG 01'),('Next','SONG 01'),('Pass','1 / 1'),('Global length','2'),('Song mode','AUTO')])
     for target,x in ((2,11),(4,12),(5,9)):                   # copy slot 1, then set that copy's octave
         ui.song_editor();ui.tap_control('song_pattern_slot',1)
         ui.copy_slot(1,target,control='song_pattern_slot')
-        ui.tap_control('song_pattern_slot',target);ui.menu('channel_editor')
+        ui.tap_control('song_pattern_slot',target)
+        # README Interacting with Slots: the copy is a new slot, selected for editing.
+        ui.expect_leds({('song_pattern_slot',target):'selected'})
+        c.results.append(dict(kind='song-slot-copied',slot=target,passed=True))
+        ui.menu('channel_editor')
         ui.select_channel(1);ui.tap_control('channel_octave',x-10)
+        ui.expect_channel_octave(x-10)
+        c.results.append(dict(kind='song-slot-voiced',slot=target,octave=x-10,passed=True))
     ui.song_editor();ui.tap_control('song_pattern_slot',1)
     def onsets(state,marker):return [m['bytes'][1] for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
     def play(stage,slots,start=None,after_first=None):

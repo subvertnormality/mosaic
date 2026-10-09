@@ -1,0 +1,13 @@
+.........E........
+======================================================================
+ERROR: test_exact_record_interval_alternatives_reject_short_or_wrong_spacing (__main__.NestedCaptureIntegration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 162, in test_exact_record_interval_alternatives_reject_short_or_wrong_spacing
+    selector=module.Selector(primary,alternatives=[alternative])
+TypeError: __init__() got an unexpected keyword argument 'alternatives'
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.136s
+
+FAILED (errors=1)

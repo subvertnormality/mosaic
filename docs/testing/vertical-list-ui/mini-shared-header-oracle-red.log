@@ -1,0 +1,13 @@
+F
+======================================================================
+FAIL: test_shared_header_accepts_only_exact_new_sprite_with_exact_text (test_mini_header_animation_ui.V2MiniHeaderOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_mini_header_animation_ui.py", line 41, in test_shared_header_accepts_only_exact_new_sprite_with_exact_text
+    self.assertTrue(live_header_matches(state(e),"CLOCK","CH01","vertical_list"))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+FAILED (failures=1)

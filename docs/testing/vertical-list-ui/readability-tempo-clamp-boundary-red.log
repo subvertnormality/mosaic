@@ -1,0 +1,26 @@
+.......F
+======================================================================
+FAIL: test_reset_clamp_covers_the_authored_240bpm_boundary_with_legal_events (test_merge_strategy_ui_routes.TempoBoundaryClampGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 144, in test_reset_clamp_covers_the_authored_240bpm_boundary_with_legal_events
+    ui_readability.internal_tempo(c,90)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/ui_readability.py", line 85, in internal_tempo
+    c.ui.expect_menu_value("1")
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 140, in expect_menu_value
+    self_test.assertEqual(clamps,[dict(type="enc",n=3,delta=-126)]*4)
+AssertionError: Lists differ: [{'ty[92 chars]'n': 3, 'delta': -126}] != [{'ty[92 chars]'n': 3, 'delta': -126}, {'type': 'enc', 'n': 3, 'delta': -126}]
+
+Second list contains 1 additional elements.
+First extra element 3:
+{'type': 'enc', 'n': 3, 'delta': -126}
+
+  [{'delta': -126, 'n': 3, 'type': 'enc'},
+   {'delta': -126, 'n': 3, 'type': 'enc'},
++  {'delta': -126, 'n': 3, 'type': 'enc'},
+   {'delta': -126, 'n': 3, 'type': 'enc'}]
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.049s
+
+FAILED (failures=1)

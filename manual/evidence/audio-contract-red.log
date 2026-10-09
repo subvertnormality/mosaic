@@ -1,0 +1,9 @@
+Acceptance-first authoring check, before tools/manual_audio.py existed.
+Command: python3 tests/behaviour/manual_audio_contract.py
+Observed failure:
+Traceback (most recent call last):
+  File "tests/behaviour/manual_audio_contract.py", line 6, in <module>
+    from manual_audio import validate, expand
+ModuleNotFoundError: No module named 'manual_audio'
+
+The unchanged original four authoring acceptance cases passed after the module was added; four subsequent PCM boundary tests cover silence, headroom and unsettled tail. These are digital-asset characterisations outside the README.

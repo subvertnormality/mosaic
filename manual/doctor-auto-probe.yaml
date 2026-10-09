@@ -1,0 +1,163 @@
+schema_version: 1
+publication_kind: doctor-native-audio
+case: MA-DOCTOR-AUDIO-001
+scene_id: doctor-local-auto-capture-and-paint
+title: Record audio in Auto mode and paint detected attacks
+fixture:
+  seed: 42
+  bpm: 120
+  input_seconds: 29
+  input_rate: 48000
+  input_channels: 2
+  pulse_hz: 60
+  pulse_level: 18000
+  pulse_seconds: 0.12
+  pulse_decay: 100
+  capture_finish_seconds: 25
+controlled_time:
+  applicable: false
+  reason: The public audio input helper and native softcut/DSP analysis require real audio time. The emulator
+    rejects audio capture in controlled-time sessions.
+steps:
+- id: setup
+  caption: Select Rhythm Doctor while the sequencer is stopped.
+  inputs:
+  - type: ui
+    method: tap_control
+    args:
+    - channel_editor
+  - type: ui
+    method: open_channel_task
+    args:
+    - device
+  - type: ui
+    method: set_value
+    args:
+    - 1
+  - type: ui
+    method: press_key
+    args:
+    - 3
+  - type: ui
+    method: tap_control
+    args:
+    - pattern_slot
+    - 1
+  - type: ui
+    method: set_range
+    args:
+    - 1
+    - 64
+  - type: ui
+    method: tap_control
+    args:
+    - pattern_editor
+  - type: ui
+    method: select_rhythm_doctor_algorithm
+    args:
+    - rhythm_doctor
+  expect:
+    route: R01
+    empty_grid: true
+  citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+- id: record
+  caption: Tap Record. Doctor starts listening to the audio input using Auto tempo.
+  inputs:
+  - type: ui
+    method: rhythm_doctor_capture_edge
+    args:
+    - true
+  - type: wait
+    seconds: 0.08
+  - type: ui
+    method: rhythm_doctor_capture_edge
+    args:
+    - false
+  - type: wait
+    seconds: 0.08
+  - type: audio-input-start
+  expect:
+    route: R02
+  citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+- id: analyse
+  caption: Press K3 after enough audio has been recorded. Doctor analyses the recording.
+  inputs:
+  - type: wait
+    fixture: capture_finish_seconds
+  - type: ui
+    method: rhythm_doctor_key_edge
+    args:
+    - apply_correction
+    - true
+  - type: wait
+    seconds: 0.04
+  - type: ui
+    method: rhythm_doctor_key_edge
+    args:
+    - apply_correction
+    - false
+  - type: wait
+    seconds: 0.12
+  expect:
+    route: R04
+  citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+- id: ready
+  caption: When analysis finishes, Doctor displays the recording window.
+  inputs: []
+  expect:
+    route: R05
+    timeout: 180
+  citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+- id: preview
+  caption: Select BD and tap Paint to preview its detected attacks.
+  inputs:
+  - type: ui
+    method: select_rhythm_doctor_lane
+    args:
+    - BD
+  - type: ui
+    method: tap_control
+    args:
+    - paint
+  expect:
+    route: R08
+    grid: preview
+    levels:
+    - 12
+    - 15
+    minimum_trigs: 2
+  citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+- id: paint
+  caption: Tap Paint again. The attacks are stored in pattern 1.
+  inputs:
+  - type: ui
+    method: tap_control
+    args:
+    - paint
+  expect:
+    tooltip: Pattern painted
+    grid: commit
+    level: 15
+    matches: preview
+  citation: manual/legacy/README-1.4.0.md#rhythm-doctor
+- id: play
+  caption: Tap Play. Channel 1 sends the painted attacks to its MIDI output. Tap Play again to stop.
+  inputs:
+  - type: ui
+    method: tap_control
+    args:
+    - channel_editor
+  - type: midi-baseline
+  - type: ui
+    method: play
+    args: []
+  - type: wait
+    seconds: 3
+  - type: ui
+    method: stop
+    args: []
+  expect:
+    midi_minimum_attacks: 2
+    port: 1
+    outstanding_notes: []
+  citation: manual/legacy/README-1.4.0.md#rhythm-doctor

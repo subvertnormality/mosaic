@@ -1,0 +1,1731 @@
+features:
+- id: getting-started
+  title: Getting Started
+  audience: beginner
+  summary: Install Mosaic and configure one channel before creating a song.
+  prose: 'Patterns supply trigs, relative notes and velocities. Channels assign these patterns to outputs
+    and add exceptions. Scale slots define harmony. Song slots store sections.
+
+
+    Follow [Make a piece](#learn) to keep one project from four equal notes to a saved two-section arrangement.
+    Begin with [Choose one sound](#setup), then [Make four notes](#first-sound). Each chapter states its
+    incoming project, action and result.
+
+
+    Use [No Sound](#no-sound) if the playhead moves without audible output. Open the Reference when you
+    need a particular parameter rather than continuing the course.'
+  musical_use: ''
+  related:
+  - first-sound
+  - setup
+  - getting-around-mosaic
+  - typical-workflow
+  sources:
+    readme: manual/legacy/README-1.4.0.md#getting-started
+    behaviour_cases:
+    - M-MASK-007
+    - M-LIVEUI-CHSELECT-001
+    - M-SCALE-001
+    - M-PAT-001
+    - M-WORKFLOW-001
+    code:
+    - lib/clock/lock_lookahead.lua
+    - lib/pages/trigger_edit_page/trigger_edit_page.lua
+    - lib/rhythm_doctor/analysis_worker_host.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - mask-precedence
+  - channel-routing-visible-scope
+  - scale-edit-versus-apply
+  - first-sound-equal-note-loop
+  - workflow-compose-two-channels
+  review:
+    status: verified
+    cases:
+    - M-MASK-007
+    - M-LIVEUI-CHSELECT-001
+    - M-SCALE-001
+    - M-PAT-001
+    - M-WORKFLOW-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Overview links the exact empty-project first-loop capture and scoped device, mask, scale
+      and full-composition scenes. Physical instrument setup remains outside native acceptance.
+  category: learn
+  parent: null
+  level: 2
+- id: install
+  title: Installing Mosaic
+  audience: beginner
+  summary: Install Mosaic from maiden or the norns community catalogue.
+  prose: '1. In maiden, enter `;install https://github.com/subvertnormality/mosaic`, or install Mosaic
+    from the norns community catalogue.
+
+    2. Connect a 128 grid.
+
+    3. Select Mosaic from the norns script list.
+
+    4. Continue with [Setup](#setup).
+
+
+    When replacing an alpha or beta installation, back up projects and custom configurations first. The
+    legacy manual instructs you to remove that installation and its `data/mosaic` folder. This applies
+    to the migration, not routine reinstallation.'
+  musical_use: ''
+  related:
+  - hardware
+  - setup
+  - stock-devices
+  - mods-and-software-devices
+  sources:
+    readme: manual/legacy/README-1.4.0.md#install
+    behaviour_cases: []
+    code:
+    - mosaic.lua
+    - lib/application_parameters.lua
+    - lib/clock/m_clock.lua
+    - lib/clock/timing_probe.lua
+    - lib/devices/midi_input.lua
+    - lib/devices/midi_mapping_params.lua
+    - lib/m_grid.lua
+    - lib/m_midi.lua
+    - lib/models/program.lua
+    - lib/pages/channel_edit_page/channel_edit_parameters.lua
+    - lib/quantiser.lua
+    - lib/rhythm_doctor/analysis_transport.lua
+    - lib/rhythm_doctor/analysis_worker_host.lua
+    - lib/rhythm_doctor/runtime.lua
+    - lib/rhythm_doctor/softcut_recorder.lua
+    - lib/rhythm_doctor/state_machine.lua
+    - lib/step.lua
+    - lib/ui.lua
+    - lib/ui_adapters/device.lua
+    - lib/ui_adapters/scale.lua
+    - lib/ui_live.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    source_status: code-and-case-reviewed
+    applicability: documentation-only
+    native_gap: Installation through maiden and the norns script catalogue is external to the running
+      Mosaic application.
+    rationale: Installation through maiden and the norns script catalogue is external to the running Mosaic
+      application.
+  category: learn
+  parent: getting-started
+  level: 3
+- id: setup
+  title: Configuring an Output
+  audience: beginner
+  summary: Route channel 1 to one instrument.
+  prose: 'Before starting: Mosaic is installed, a grid is connected and a new project is stopped. Record
+    is off. Choose either a working MIDI instrument or an enabled Polyperc 1 player.
+
+
+    ### Open Device
+
+
+    1. Tap Channel (3,8).
+
+    2. Check CH01.
+
+    3. Turn E1 to Channel tasks.
+
+    4. Select Device with E2 and press K3.
+
+
+    Device opens for channel 1.
+
+
+    ### Apply one output
+
+
+    1. Select a working MIDI output or enabled Polyperc 1 with E3.
+
+    2. For MIDI, select port and channel with E2 and adjust each with E3 to match the receiver.
+
+    3. Press K3 to apply.
+
+
+    The selected output becomes active. Selecting a draft alone does not apply it.
+
+
+    ### Set the tempo
+
+
+    1. Tap Song (6,8).
+
+    2. Turn E1 to Song tasks; select Tempo & feel with E2 and press K3.
+
+    3. Select Tempo with E2; set 90 BPM with E3.
+
+    4. Press K3 to apply.
+
+    5. Return to Channel (3,8).
+
+
+    The project uses 90 BPM. With Rate /4, each channel step lasts one sixth of a second.
+
+
+    Resulting project: CH01 routes to a working MIDI instrument or Polyperc 1; no pattern assigned.'
+  musical_use: ''
+  related:
+  - first-sound
+  - hardware
+  - stock-devices
+  - mods-and-software-devices
+  - devices
+  sources:
+    readme: manual/legacy/README-1.4.0.md#setup
+    behaviour_cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-PAT-001
+    code:
+    - lib/devices/midi_mapping_params.lua
+    - lib/m_midi.lua
+    - lib/pages/channel_edit_page/channel_edit_parameters.lua
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/pages/trigger_edit_page/trigger_edit_page_ui.lua
+    - lib/rhythm_doctor/ui_adapter.lua
+    - lib/ui_adapters/doctor.lua
+    - lib/ui_grid_outcomes.lua
+    - lib/ui_live.lua
+    - lib/ui_spec_data.lua
+  controls: []
+  details:
+  - title: Recovery
+    text: Check the destination port/channel or enabled player before changing notes.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  - first-sound-equal-note-loop
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-PAT-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native Device scope is captured. Physical instrument setup and receiving hardware are
+      not verified by the emulator.
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+  category: learn
+  parent: getting-started
+  level: 3
+- id: hardware
+  title: Hardware Requirements
+  audience: beginner
+  summary: Mosaic requires norns and a 128 grid.
+  prose: 'Connect a 128 grid to norns. For internal sound, install a supported n.b. player and use the
+    norns audio output. For external sound, connect a MIDI instrument and configure its receiving channel.
+
+
+    A MIDI keyboard is optional. It can enter notes into held steps or record into a playing channel.
+    Crow, Just Friends and Ansible require their supported n.b. integrations and the corresponding hardware.'
+  musical_use: ''
+  related:
+  - mods-and-software-devices
+  - midi-keyboard-input
+  - midi-sound-sources
+  sources:
+    readme: manual/legacy/README-1.4.0.md#hardware
+    behaviour_cases:
+    - M-KEYBOARD-STOP-001
+    - M-MIDI-REPEAT-001
+    - M-OPT-KEYS-001
+    code:
+    - lib/ui_render.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    source_status: code-and-case-reviewed
+    applicability: external-hardware
+    native_gap: Physical connections, device compatibility and real-norns audio/hardware timing require
+      hardware evidence.
+    rationale: Physical connections, device compatibility and real-norns audio/hardware timing require
+      hardware evidence.
+  category: learn
+  parent: setup
+  level: 4
+- id: midi-device-configuration
+  title: MIDI Device Configuration
+  audience: beginner
+  summary: Device configurations define output defaults and mapped parameters.
+  prose: 'A device configuration supplies parameter names, CC/NRPN assignments and output defaults. Basic
+    MIDI note output does not require a custom configuration.
+
+
+    1. Put the required JSON device files in `data/mosaic/config`.
+
+    2. Restart Mosaic to discover the files.
+
+    3. Open Channel tasks → Device.
+
+    4. Select the device and press K3 to apply.
+
+    5. Check the MIDI port and channel against the receiving instrument.
+
+
+    Use a [stock configuration](#stock-devices), or [create a custom configuration](#adding-custom-devices)
+    from the instrument’s MIDI implementation.'
+  musical_use: ''
+  related:
+  - stock-devices
+  - adding-custom-devices
+  - devices
+  - lock-lead-time
+  sources:
+    readme: manual/legacy/README-1.4.0.md#midi-device-configuration
+    behaviour_cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-PATCH-002
+    code:
+    - lib/clock/m_clock.lua
+    - lib/clock/parameter_preview.lua
+    - lib/clock/voice_lifetime.lua
+    - lib/devices/device_descriptors.lua
+    - lib/devices/device_map.lua
+    - lib/devices/midi_input.lua
+    - lib/devices/midi_patch_recall.lua
+    - lib/devices/midi_wire_output.lua
+    - lib/devices/nrpn_codec.lua
+    - lib/devices/param_manager.lua
+    - lib/devices/param_slots.lua
+    - lib/helpers/functions.lua
+    - lib/m_midi.lua
+    - lib/models/model_defaults.lua
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/pages/channel_edit_page/channel_edit_page_ui.lua
+    - lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua
+    - lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua
+    - lib/pages/channel_edit_page/channel_edit_parameters.lua
+    - lib/project_lifecycle.lua
+    - lib/song_transition.lua
+    - lib/step.lua
+    - lib/ui_adapters/device.lua
+    - lib/ui_adapters/native.lua
+    - lib/ui_live.lua
+    - lib/ui_spec_data.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  - configured-device-value-boundaries
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-PATCH-002
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The native scene starts with a seeded valid configuration. It does not verify copying
+      files in maiden, browser Config Creator editing, file discovery as a user workflow, every stock
+      map, or physical receiving devices.
+    rationale: 'Mixed scope: JSON authoring and file-copy instructions are source-reviewed external filesystem
+      operations. Native Device selection, configured parameter fields and resulting MIDI are supported
+      by the scoped configured-device scene.'
+    native_evidence_catalogues:
+    - generated/reference-device-scenes.json
+  category: learn
+  parent: setup
+  level: 4
+- id: stock-devices
+  title: Installing Stock Device Configurations
+  audience: all
+  summary: Copy selected stock JSON files into data/mosaic/config.
+  prose: '1. In maiden, open `code/mosaic/lib/config`. Stock maps include Digitone, Digitakt, Digitakt
+    2, Syntakt and Nord Drum 2.
+
+    2. Create `data/mosaic/config` if it does not exist.
+
+    3. Copy the required JSON files into that folder.
+
+    4. Restart Mosaic.
+
+    5. Open Channel tasks → Device, select the map and press K3. The device becomes available to the channel.
+
+
+    Check its MIDI output port and channel. The receiving instrument must use the matching setup.'
+  musical_use: ''
+  related:
+  - midi-device-configuration
+  - devices
+  - adding-custom-devices
+  sources:
+    readme: manual/legacy/README-1.4.0.md#stock-devices
+    behaviour_cases:
+    - M-OPT-ELEK-001
+    - M-OPT-ELEK-004
+    - M-SETUP-001
+    - M-SETUP-002
+    - M-SETUP-003
+    - M-SETUP-DEVICE-NAMES-001
+    - M-SETUP-SYNTAKT-PEDALS-001
+    - M-SETUP-UNREADABLE-CONFIG-001
+    - M-XA-001-JF
+    - M-XA-002-AUDIO
+    - M-LIVEUI-CHSELECT-001
+    - M-PATCH-002
+    code:
+    - lib/devices/device_descriptors.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  - configured-device-value-boundaries
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-PATCH-002
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The native scene starts with a seeded valid configuration. It does not verify copying
+      files in maiden, browser Config Creator editing, file discovery as a user workflow, every stock
+      map, or physical receiving devices.
+    rationale: 'Mixed scope: JSON authoring and file-copy instructions are source-reviewed external filesystem
+      operations. Native Device selection, configured parameter fields and resulting MIDI are supported
+      by the scoped configured-device scene.'
+    native_evidence_catalogues:
+    - generated/reference-device-scenes.json
+  category: learn
+  parent: midi-device-configuration
+  level: 5
+- id: adding-custom-devices
+  title: Creating a Custom Device Configuration
+  audience: beginner
+  summary: Create a JSON map from the instrument’s MIDI implementation.
+  prose: '1. Open the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
+
+    2. Enter the instrument’s port, MIDI channel, note policy and CC/NRPN addresses.
+
+    3. Save the JSON file in `data/mosaic/config`.
+
+    4. Restart Mosaic.
+
+    5. Select the device in Channel tasks → Device and press K3.
+
+
+    Invalid configurations are skipped so valid devices can still load. The legacy README’s `dust > mosaic
+    > config` path is inconsistent with the loader; use `data/mosaic/config`.'
+  musical_use: ''
+  related:
+  - stock-devices
+  - device-parameters
+  - devices
+  sources:
+    readme: manual/legacy/README-1.4.0.md#adding-custom-devices
+    behaviour_cases:
+    - M-SETUP-001
+    - M-SETUP-002
+    - M-SETUP-003
+    - M-SETUP-UNREADABLE-CONFIG-001
+    - M-LIVEUI-CHSELECT-001
+    - M-PATCH-002
+    code:
+    - lib/devices/device_descriptors.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  - configured-device-value-boundaries
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-PATCH-002
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The native scene starts with a seeded valid configuration. It does not verify copying
+      files in maiden, browser Config Creator editing, file discovery as a user workflow, every stock
+      map, or physical receiving devices.
+    rationale: 'Mixed scope: JSON authoring and file-copy instructions are source-reviewed external filesystem
+      operations. Native Device selection, configured parameter fields and resulting MIDI are supported
+      by the scoped configured-device scene.'
+    native_evidence_catalogues:
+    - generated/reference-device-scenes.json
+  category: learn
+  parent: midi-device-configuration
+  level: 5
+- id: lock-lead-time
+  title: Lock lead time
+  audience: all
+  summary: Set the lead time for MIDI parameter locks before their step.
+  prose: '1. Tap K1 briefly and open the norns PARAMS menu.
+
+    2. Open MOSAIC and select **Lock lead time (ms)** in the Parameter locks section.
+
+    3. Turn E3 to set the required lead time. The menu displays the selected value.
+
+    4. Return to Mosaic to compare playback.
+
+    This global setting accepts 0–50 ms and defaults to **25 ms**. It gives MIDI CC/NRPN
+
+    parameter locks time to settle before the note attack, particularly on devices
+
+    that smooth incoming controllers. Set it to **0** to send each value at its own
+
+    step, which is the original output timing. The value is saved with Mosaic''s
+
+    project settings.
+
+
+    A step''s parameter values leave ahead of the step, in an earlier clock pulse.
+
+    Nothing is delayed to achieve this: note-ons, note-offs, live MIDI-thru, outgoing
+
+    MIDI Clock, Start, Continue, Stop and song position all keep the timing they have
+
+    at a lead of 0, and gate lengths are unchanged. N.b. players are unaffected.
+
+
+    Because a value leaves on a clock pulse, the wait it achieves is the setting
+
+    rounded **up** to the next whole pulse, so a value never leaves with less lead
+
+    than was asked for. At 130 bpm a pulse is about 4.8 ms, so a 25 ms setting
+
+    delivers about 28.8 ms; at 200 bpm it delivers 25 ms exactly. The figure follows
+
+    the tempo, and every value of a step leaves on the same pulse, so what you hear
+
+    stays consistent between events rather than fixed to the number in the menu.
+
+
+    No step is looked ahead musically: probability, conditions, fills, random notes,
+
+    strum, arps and micro-timing still make their decisions at their own times. Only
+
+    the parameter values a step will send are resolved early.
+
+
+    Every note sounds with its own step''s values. When two notes on the same MIDI
+
+    channel are less than twice the lead apart (a fast tempo, a fast channel clock,
+
+    or swing and shuffle bringing steps together), a value does not take the whole
+
+    lead: it waits until halfway between the previous sounding note and its own step.
+
+    The previous note keeps its value through the first half of the gap, and the new
+
+    value settles in the second half. A trigless step sounds nothing, so it is not
+
+    the note a later value waits behind. A strummed chord''s later voices are sounding
+
+    notes, so the next step''s values wait behind the last of them.
+
+
+    An address that more than one slot writes, whether two slots of one channel or
+
+    two channels addressing one device parameter, is not sent early: its values leave
+
+    at their own step, in the order the step would send them at a lead of 0.
+
+
+    Two cases give no lead at all. The first step after Play resolves its lock on the
+
+    transport''s own first pulse, so there is no earlier pulse for its values to leave
+
+    in and they leave with the note. A parameter that is mid-slide keeps its slide
+
+    until the slide''s destination step, so that step''s lock arrives with the step
+
+    rather than before it. Nothing is delayed to hide either case.
+
+
+    The lead covers the time a receiver takes for a parameter change to take effect,
+
+    so every value follows the same rule whether or not its step has a note: trigless
+
+    locks, assigned values and slide values leave ahead of the step they belong to and
+
+    take effect as that step is heard.
+
+
+    Editing a lock that has already left changes what the next pass sends, and the
+
+    edited value is sent again at its own step, so the receiver is corrected rather
+
+    than left holding the superseded value. Mosaic restores its output hooks on
+
+    cleanup; stop and panic release held voices without leaving queued output behind.'
+  musical_use: ''
+  related:
+  - midi-device-configuration
+  sources:
+    readme: manual/legacy/README-1.4.0.md#lock-lead-time
+    behaviour_cases:
+    - M-SYNC-LEAD-001
+    - M-SYNC-LEAD-002
+    code:
+    - lib/application_parameters.lua
+    - lib/clock/m_clock.lua
+    - lib/m_midi.lua
+    - lib/musical_merge/config.lua
+    - lib/musical_merge/dependency.lua
+    - lib/musical_merge/interlock.lua
+    - lib/musical_merge/leader_query.lua
+    - lib/pages/channel_edit_page/channel_feature_editor.lua
+    - lib/pattern.lua
+    - lib/ui_adapters/native.lua
+    - lib/ui_spec_data.lua
+    - tests/behaviour/contract/lock_lead_time.py
+    - tests/behaviour/contract/lock_lead_clock_matrix.py
+  controls:
+  - gesture: PARAMS → MOSAIC → Parameter locks → Lock lead time (ms)
+    result: Set the global MIDI lock lead from 0 to 50 ms (default 25).
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: pending
+    cases: []
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The supported native 0/25/50 ms menu and exact MIDI timing plan is authored but has not
+      been captured. Publication remains pending.
+  category: learn
+  parent: midi-device-configuration
+  level: 5
+- id: mods-and-software-devices
+  title: Selecting an n.b. Player
+  audience: all
+  summary: Install and enable a supported player before assigning it to a channel.
+  prose: '1. Install the player’s n.b. mod.
+
+    2. Enable the mod in the norns MODS menu and restart as required by the mod.
+
+    3. Start Mosaic.
+
+    4. Open Channel tasks → Device. Select the player and press K3.
+
+
+    Supported, enabled players appear in the Device list. The researched and pinned voices are Doubledecker, Oilcan,
+    Polyperc and Emplaitress. Recorded examples use Doubledecker, Oilcan and Polyperc; Emplaitress has
+    no recording because the installed runtime lacks MiPlaits. Availability depends on the installed
+    player and its dependencies. Crow,
+    Just Friends and Ansible also require their corresponding hardware.'
+  musical_use: ''
+  related:
+  - norns-sound-sources-with-n-b
+  - devices
+  - first-sound
+  sources:
+    readme: manual/legacy/README-1.4.0.md#mods-and-software-devices
+    behaviour_cases:
+    - MA-AUDIO-three-voice-conversation
+    code: []
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - software-player-oilcan
+  - software-player-polyperc
+  - software-player-doubledecker
+  review:
+    status: verified
+    cases:
+    - MA-AUDIO-three-voice-conversation
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Picker frames show candidate selection before apply. The subsequent native input receipt
+      records K3, and separate audio acceptance proves assigned-player sound. These frames do not verify
+      mod installation, file copying or a post-apply Device persistence frame.
+    rationale: 'Mixed scope: installing and enabling mods is a source-reviewed external norns setup operation.
+      Native projections assert the Oilcan, Polyperc and Doubledecker candidate labels/channel scope before
+      apply and preserve the subsequent K3 apply receipt.'
+    audio_refs:
+    - three-voice-conversation
+    audio_cases:
+    - MA-AUDIO-three-voice-conversation
+    native_evidence_catalogues:
+    - generated/player-routes.json
+    route_projection_evidence:
+      publication_kind: audio-route-projection
+      catalogue: generated/player-routes.json
+      catalogue_sha256: 299372d709f403f2a81446e33d65488f765c6325d692f0d48fb13b58c2a29fa0
+      parent_publication:
+        path: manual/generated/audio-scenes.json
+        sha256: 16d0347c0005656a934930027c910868f13432a53eb372038b6f44afa9cb263c
+        example_id: three-voice-conversation
+        acceptance_case: MA-AUDIO-three-voice-conversation
+        immutable_path: /home/andy/mosaic-manual-audio-runs/8f01f0f4ae0d42148bfcdeda7a1a8939/audio-scenes.json
+        immutable_sha256: f85169152400b4c1f769f9d0786c89d41c0cc77ef8ca4e55049c1ae8756fce1d
+      scene_ids:
+      - software-player-oilcan
+      - software-player-polyperc
+      - software-player-doubledecker
+      scope: Selected Device rows before subsequent K3 application. No mod-installation or post-apply
+        field-persistence frame.
+      passed: true
+      complete_regression_run: false
+  category: learn
+  parent: midi-device-configuration
+  level: 5
+- id: midi-keyboard-input
+  title: MIDI Keyboard Input
+  audience: all
+  summary: Hold a step to enter it, or arm recording and play.
+  prose: 'To audition the selected channel without recording:
+
+
+    1. Select the channel and apply its output device.
+
+    2. Leave Record disarmed and release all grid steps.
+
+    3. Play and release MIDI keys. The channel’s selected output plays the notes; no step masks are entered.
+
+
+    To enter a step:
+
+
+    1. Select the destination channel.
+
+    2. Hold the destination channel step.
+
+    3. Play a MIDI note or chord. The Masks screen shows the entered values for the held step.
+
+    4. Release the MIDI keys, then release the grid step.
+
+    5. Set the note length manually.
+
+
+    For live entry, arm Record `(2,8)` and play during playback. Notes are assigned to the active step
+    when processed. A recorded chord shares one length from its first key press to its final release.
+
+
+    By default, MIDI input plays the pressed keys. Map scale to white keys maps the selected scale onto
+    white keys with its root at C. The scale-degree and rotation options affect this mapping.'
+  musical_use: ''
+  related:
+  - arm-live-record
+  - masks
+  - map-scale-to-white-keys
+  sources:
+    readme: manual/legacy/README-1.4.0.md#midi-keyboard-input
+    behaviour_cases:
+    - M-KEYBOARD-STOP-001
+    - M-MEMORY-001
+    - M-MEMORY-002
+    - M-MEMORY-003
+    - M-MEMORY-004
+    - M-MEMORY-014
+    - M-WORKFLOW-001
+    - M-OPT-KEYS-001
+    - M-MASK-008
+    code:
+    - lib/devices/midi_input.lua
+    - lib/recorder.lua
+    - tests/behaviour/keyboard_options.py
+  controls:
+  - gesture: Select channel; Record off; no step held; play MIDI keys
+    result: Audition the selected channel’s output without entering step masks.
+  - gesture: Select channel → hold step → play MIDI keys
+    result: Enter that step’s note, velocity and chord masks.
+  - gesture: Record (2,8) + running transport + MIDI keys
+    result: Record onto the selected channel’s active steps.
+  details: []
+  recipes: []
+  scene_refs:
+  - keyboard-white-key-options
+  - workflow-compose-two-channels
+  - mask-expression
+  review:
+    status: verified
+    cases:
+    - M-OPT-KEYS-001
+    - M-WORKFLOW-001
+    - M-MASK-008
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native raw/mapped MIDI audition and held-step melody entry are captured with exact output.
+      Mask length is demonstrated separately. The live-recording route remains in its own pending guide.
+  category: learn
+  parent: midi-device-configuration
+  level: 5
+- id: midi-controller-mapping
+  title: MIDI Controller Mapping
+  audience: all
+  summary: Assign MIDI controls to channel parameters through the norns MIDI Map menu.
+  prose: 'Use a MIDI controller that supports relative (binary offset) messages.
+
+
+    1. Open the norns PARAMS menu and select Mosaic Midi Mapping.
+
+    2. Choose selected channel parameters for the currently selected channel, or channel parameters for
+    a fixed channel. Select the required parameter.
+
+    3. Hold K1 and press K3 to switch from EDIT to MAP mode.
+
+    4. Press K3 to open the parameter’s map editor. Select Learn and press K3 to arm it.
+
+    5. Operate the MIDI control. The editor learns its CC, input channel and device.
+
+    6. Set Input low to 1 and Input high to 2. Set Output low to −1.0 and Output high to 1.0, and Accum
+    to Yes. Use E2 to select a row and E3 to change it.
+
+    7. Press K2 to leave the editor and save the assignment.
+
+    8. Hold K1 and press K3 to return to EDIT mode, then leave the parameter menu.
+
+    9. Operate the mapped MIDI control. The selected Mosaic value changes.
+
+
+    Trig parameters, masks and channel memory can be mapped. The first MIDI message used by Learn identifies
+    the control; it does not perform the mapped parameter change.'
+  musical_use: ''
+  related:
+  - midi-controller-options
+  - trig-parameters
+  - masks
+  - memory-undo-and-redo
+  sources:
+    readme: manual/legacy/README-1.4.0.md#midi-controller-mapping
+    behaviour_cases:
+    - M-MAP-001
+    - M-MAP-002
+    - M-MAP-003
+    - M-MAP-004
+    - M-MAP-PAGE-RETURN-001
+    code:
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/pages/channel_edit_page/channel_edit_page_ui.lua
+    - lib/pages/channel_edit_page/channel_edit_parameters.lua
+    - lib/ui_adapters/device.lua
+    - tests/behaviour/midi_mapping.py
+  controls:
+  - gesture: 'Native PARAMS: hold K1 and press K3'
+    result: Switch between EDIT and MAP modes.
+  - gesture: 'Map editor: select Learn and press K3; operate MIDI control'
+    result: Learn its CC, input channel and device.
+  - gesture: 'Map editor: press K2'
+    result: Leave the editor and save the assignment.
+  - gesture: Operate assigned relative MIDI control
+    result: Change the mapped Mosaic value.
+  details: []
+  recipes: []
+  scene_refs:
+  - mapping-child-selected-and-fixed
+  - native-relative-midi-map
+  review:
+    status: verified
+    cases:
+    - M-MAP-001
+    - M-MAP-002
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native Learn and K2 assignment save, written PMAP fields and exact relative-input velocities
+      4 and 3. Loaded selected/fixed-channel response has its own scene. No cold PMAP reload claim.
+    native_evidence:
+    - scene: mapping-child-selected-and-fixed
+      data: reference-nested-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828
+      data_sha256: 2fa470ae66b750bc23c62606863c9fc906797752bbcfff1414d3cb85e869d6ba
+      case: M-MAP-001
+      assertions:
+      - kind: midi-mapping
+        stage: unmapped
+        passed: true
+      - kind: midi-mapping
+        stage: selected-ch1-plus-11
+        passed: true
+      - kind: midi-mapping
+        stage: selected-ch2-plus-3
+        passed: true
+      - kind: midi-mapping
+        stage: fixed-ch2-plus-2
+        passed: true
+      - kind: midi-mapping
+        stage: fixed-ch2-value-0-decreases
+        passed: true
+      scope: Saved PMAP fixture response covers selected/fixed channel mapping and exact wire velocities.
+        PMAP entry and save/reload are outside this scene.
+    - scene: native-relative-midi-map
+      data: reference-option-scenes.json
+      clock_mode: real-time
+      publication_run: /home/andy/mosaic-manual-runs/07ff0a9fe4324961b9cca1b05e62dd89
+      data_sha256: 6cc688de9c23de5900a9799d3fbed72b2debcbe845fd8f950dae641c86423203
+      case: M-MAP-002
+      native_case_evidence:
+        path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-MAP-002-base-midi
+        session_context:
+          session_ordinal: 0
+          clock_mode: real-time
+          profile: base-midi
+          app_root: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/application
+          experimental_install: null
+          installation_sha256: null
+          session_id: 2ac6d170586f49308e3554d974302b87
+          runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+          application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+          finished: true
+          held_inputs: []
+          cleanup_verified: true
+        results_sha256: 9cf89a363a8e0a84a838c29dab6efaf08688e1dea52e6764c70813283e4ffd21
+        identity_sha256: fa5885464f43f71597d251762249ac90f0d832d16a95d3b00cb371236eede44a
+        recipe_sha256: 29a379a10cd504d24632387bbff0291c74ec91176b7e4b4a9398c33977f2a485
+        native_events_sha256: 3cb2474785a7bbc41ebab69ade7a7a66405e35dd2b0b4d97e5ad0ee3e3c03521
+        capture_trace_sha256: 340e46015f8c9b9362ed05f3a0aa1eee21da582867eee2a91389cca4d053d2cb
+        session_context_sha256: e8a7f724152541129a2dcc518043ad36ca0b5f253366d76fee72adc6b4235489
+        native_config_sha256: 3b6173437cb2cfb4f1c1d6ba8a7d5bd1b31cb2eb1e4703fa9d69c007573374d4
+        cleanup_sha256: 70a92df83c1c495f44e5b6cec559726f23b198d146f4dcda24ac1e9259b0d37c
+        case_participants:
+        - path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-MAP-002-base-midi
+          session_context:
+            session_ordinal: 0
+            clock_mode: real-time
+            profile: base-midi
+            app_root: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/application
+            experimental_install: null
+            installation_sha256: null
+            session_id: 2ac6d170586f49308e3554d974302b87
+            runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+            application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+            finished: true
+            held_inputs: []
+            cleanup_verified: true
+          results_sha256: 9cf89a363a8e0a84a838c29dab6efaf08688e1dea52e6764c70813283e4ffd21
+          identity_sha256: fa5885464f43f71597d251762249ac90f0d832d16a95d3b00cb371236eede44a
+          recipe_sha256: 29a379a10cd504d24632387bbff0291c74ec91176b7e4b4a9398c33977f2a485
+          native_events_sha256: 3cb2474785a7bbc41ebab69ade7a7a66405e35dd2b0b4d97e5ad0ee3e3c03521
+          capture_trace_sha256: 340e46015f8c9b9362ed05f3a0aa1eee21da582867eee2a91389cca4d053d2cb
+          session_context_sha256: e8a7f724152541129a2dcc518043ad36ca0b5f253366d76fee72adc6b4235489
+          native_config_sha256: 3b6173437cb2cfb4f1c1d6ba8a7d5bd1b31cb2eb1e4703fa9d69c007573374d4
+          cleanup_sha256: 70a92df83c1c495f44e5b6cec559726f23b198d146f4dcda24ac1e9259b0d37c
+        case_participants_path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-MAP-002-base-midi/case-participants.json
+        case_participants_sha256: 1154c615df78ef554cddc9ed55e953683bdef62e7b82e81e3f0d4bf147d5d4f1
+      independent_audit: manual/evidence/options-complete-start-recovery-real-independent-audit.json
+      independent_audit_sha256: 15ec2a6d85de9c24d12b8c7709c6fb737c2e3665c0642938ec8f31ebf8b4c320
+      scope: Native Learn and K2 assignment save, written PMAP fields and exact relative-input velocities
+        4 and 3. Loaded selected/fixed-channel response has its own scene. No cold PMAP reload claim.
+      complete_regression_run: false
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa
+      data_sha256: a76a8f6ea2b124d05fcf98dd2523ffaa23387937fc17e77d62d09363e583a748
+      scene: mapping-child-selected-and-fixed
+      clock_mode: controlled-experimental
+    - scene: native-relative-midi-map
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-MAP-002
+      assertions:
+      - kind: pmap-entry
+        source: mosaic.pmap
+        passed: true
+      - kind: pmap-entry-control
+        velocities:
+        - 4
+        - 3
+        passed: true
+      scope: Full M-MAP-002 performs native Learn and K2 assignment save, verifies the written PMAP fields,
+        and then exact relative-input velocities 4 and 3. The displayed checkpoints are the saved-map/control
+        results; no claim of a cold PMAP save/reload lifecycle.
+    rationale: Native Learn and K2 assignment save, written PMAP fields and exact relative-input velocities
+      4 and 3. Loaded selected/fixed-channel response has its own scene. No cold PMAP reload claim.
+  category: learn
+  parent: midi-device-configuration
+  level: 5
+- id: getting-around-mosaic
+  title: Controls and Navigation
+  audience: beginner
+  summary: Use the bottom-row page keys and check the screen header.
+  prose: 'Grid coordinates are `(column,row)`, counted from the top left. The bottom-left keys are Play
+    `(1,8)`, Record `(2,8)`, Channel `(3,8)`, Scale `(4,8)`, Pattern `(5,8)` and Song `(6,8)`.
+
+
+    1. Press the required page key. The screen shows that page.
+
+    2. Check the header. `CH01` identifies channel 1; `ST05` identifies held step 5.
+
+    3. Release a held step to return to channel scope.
+
+
+    When a procedure says hold, keep the control pressed until the release instruction.'
+  musical_use: ''
+  related:
+  - grid-menu-navigation
+  - norns-menu-navigation
+  - tooltips
+  - first-sound
+  sources:
+    readme: manual/legacy/README-1.4.0.md#getting-around-mosaic
+    behaviour_cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-SCALE-001
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-FOCUS-001
+    code: []
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  - scale-edit-versus-apply
+  - algorithm-choose-and-preview
+  - song-global-length
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-SCALE-001
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-FOCUS-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Scoped editor captures verify page context; physical grid installation is outside native
+      acceptance.
+  category: learn
+  parent: null
+  level: 2
+- id: sequencer-start-and-stop
+  title: Starting and Stopping Playback
+  audience: beginner
+  summary: Grid (1,8) starts and stops the sequencer.
+  prose: '1. Press Grid `(1,8)` to start. The grid playhead advances through the sequence.
+
+    2. Press Grid `(1,8)` again to stop.
+
+
+    With Shift press stop enabled, stop with a long press or hold K1 while pressing Grid `(1,8)`. Stop
+    playback before using panic to release hanging voices. Panic does not stop the sequencer.'
+  musical_use: ''
+  related:
+  - external-midi-transport
+  - midi-panic
+  - shift-press-stop
+  sources:
+    readme: manual/legacy/README-1.4.0.md#sequencer-start-and-stop
+    behaviour_cases:
+    - M-PAT-001
+    code:
+    - mosaic.lua
+    - lib/rhythm_doctor/ui_adapter.lua
+  controls:
+  - gesture: Grid (1,8)
+    result: Start or stop playback, subject to Shift press stop.
+  details: []
+  recipes: []
+  scene_refs:
+  - first-sound-equal-note-loop
+  review:
+    status: verified
+    cases:
+    - M-PAT-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Basic Play/Stop and exact loop playback are native-tested in both lanes. Shift press stop
+      is a separately documented option; its publication scene is still pending.
+  category: learn
+  parent: getting-around-mosaic
+  level: 3
+- id: arm-live-record
+  title: Arm live record
+  audience: all
+  summary: Record notes and edited parameters into the selected channel.
+  prose: '1. Select the channel and apply its output.
+
+    2. Tap Record `(2,8)` to arm recording.
+
+    3. Start playback and play notes on the MIDI keyboard. Notes become masks on the selected channel
+    at the step active when Mosaic processes each note-on.
+
+    4. Release the keys to finish the recorded note lengths. A chord shares one length from its first
+    press to its final release.
+
+    5. Tap Record again to disarm. Notes already begun while armed retain their lengths when released.
+
+
+    To record a trig parameter, edit its value while recording is armed. Mosaic records that value on
+    subsequent eligible steps; earlier steps are unchanged. With Trigless Locks on, every step is eligible.
+    With it off, only active steps are eligible. Stop or disarm clears pending parameter recording.
+
+
+    Selecting another channel or Scale pauses pending parameter recording; returning can resume it. Read
+    the parameter-recording rules before changing assignments or using slides during a take.'
+  musical_use: ''
+  related:
+  - midi-keyboard-input
+  - trig-parameters
+  - trigless-locks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#arm-live-record
+    behaviour_cases:
+    - M-MASK-018
+    - M-MIDI-002
+    - M-PERSIST-COMBINED-001
+    - M-REC-001
+    - M-REC-002
+    - M-REC-003
+    - M-REC-004
+    - M-REC-005
+    - M-REC-006
+    - M-REC-007
+    - M-REC-008
+    - M-REC-009
+    - M-REC-010
+    - M-REC-011
+    - M-REC-012
+    - M-REC-013
+    - M-REC-014
+    - M-REC-015
+    - M-REC-016
+    - M-REC-017
+    - M-REC-018
+    - M-REC-019
+    - M-REC-020
+    - M-REC-021
+    - M-REC-022
+    - M-REC-023
+    - M-REC-024
+    - M-REC-025
+    - M-REC-026
+    - M-REC-027
+    - M-REC-028
+    - M-REC-029
+    - M-REC-030
+    - M-REC-031
+    - M-REC-032
+    - M-REC-033
+    - M-REC-PAGE-KEY-001
+    - M-REC-PARAM-001
+    - M-REC-PARAM-002
+    - M-REC-PARAM-003
+    - M-REC-PARAM-004
+    - M-REC-PARAM-005
+    - M-REC-PARAM-006
+    - M-REC-PARAM-007
+    - M-REC-PARAM-008
+    - M-REC-PARAM-009
+    - M-REC-PARAM-010
+    - M-REC-PARAM-011
+    - M-REC-PARAM-012
+    - M-REC-PARAM-013
+    - M-REC-PARAM-014
+    - M-REC-PARAM-015
+    - M-REC-PARAM-016
+    - M-REC-PARAM-017
+    - M-REC-PARAM-018
+    - M-REC-PARAM-019
+    - M-REC-PARAM-020
+    - M-REC-PARAM-021
+    - M-REC-PARAM-022
+    - M-REC-PARAM-023
+    - M-REC-PARAM-024
+    - M-REC-PARAM-025
+    - M-REC-PARAM-026
+    - M-REC-PARAM-027
+    - M-REC-PARAM-028
+    - M-REC-PARAM-029
+    - M-REC-PARAM-030
+    - M-REC-PARAM-031
+    - M-REC-SONG-LENGTH-001
+    - M-REC-SONG-LENGTH-002
+    - M-REC-SOURCES-001
+    - M-REC-SOURCES-002
+    - M-TIME-015
+    - M-TRIPLE-002
+    - M-TRIPLE-003
+    - M-TRIPLE-005
+    - M-XA-003-JF-OWNERSHIP
+    - M-XA-004-JF-OVERLAP
+    code:
+    - lib/musical_merge/state.lua
+    - lib/rhythm_doctor/softcut_recorder.lua
+    - lib/recorder.lua
+    - lib/devices/midi_input.lua
+  controls:
+  - gesture: Grid (2,8)
+    result: Arm or disarm live recording.
+  details:
+  - title: Parameter recording interactions
+    text: 'To enable record mode, press the second button from the left on the grid.
+
+
+      When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on
+      the currently selected channel. This includes note lengths and chords. All recordings are quantised
+      to align with the current step: the step active when Mosaic processes the note-on, rather than the
+      nearest step. An incoming MIDI clock pulse and a sequencer step transition are separate events;
+      a note processed before the transition still belongs to the preceding active step. A recorded chord
+      has one shared note length, measured from the first key press to the final key release and quantised
+      to the nearest supported note length. This applies even when the chord keys are pressed or released
+      at different times. Disarming recording prevents new notes from being recorded. Notes that began
+      while recording was armed are kept, and their full note lengths are measured and committed when
+      you release them, even if recording has since been disarmed.
+
+
+      While recording is armed, editing a trig parameter starts recording that parameter’s value on subsequent
+      eligible steps processed for the selected channel. Already-processed steps are unchanged. Only edited
+      parameters are recorded, overwriting their existing locks through the channel’s final step; recording
+      clears before its next starting step is processed while the channel remains selected. Further encoder
+      edits update or restart recording. Grid Stop or disarm clears pending parameter recording. Active
+      MIDI values are sent again before each eligible step’s note, even when the value has not changed.
+      Selecting another channel or the Scale Editor pauses this parameter recording; returning resumes
+      on the next eligible step unless that step clears recording at the selected channel’s wrap. Wraps
+      while the channel is not selected leave its pending values intact. An active recorded value cancels
+      that slot’s existing slide at the next eligible step. Off sends nothing and leaves an existing slide
+      running. Changing a parameter assignment clears its pending recording; confirming the same assignment
+      preserves it. Applying a MIDI device, channel or port change resets the device locks, assignments,
+      defaults and pending parameter recording. Unconfirmed changes and cancellation leave the original
+      recording intact.
+
+
+      With Trigless Locks off, parameter values are recorded only on active steps. When it is on, every
+      step is eligible. Trigless Locks is enabled by default.'
+  recipes: []
+  scene_refs: []
+  review:
+    status: pending
+    cases: []
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: 'The controlled native Record replay passes. Fresh real-time M-REC-001 remains blocked
+      by the unchanged Tempo=90 UI assertion: the captured tempo changes from 108 to 98. Do not promote
+      the guide from controlled capture or partial real-time receipts. Note/chord-length and parameter-recording
+      interactions remain separately scoped source cases.'
+  category: learn
+  parent: getting-around-mosaic
+  level: 3
+- id: grid-menu-navigation
+  title: Selecting a Grid Page
+  audience: beginner
+  summary: Grid (3,8) through (6,8) select the four editors.
+  prose: 'Press Grid `(3,8)` for Channel, `(4,8)` for Scale, `(5,8)` for Pattern or `(6,8)` for Song.
+    The norns screen follows the selected page.
+
+
+    Press Pattern repeatedly to cycle Trig → Note → Velocity. Channels hold output settings and masks.
+    Patterns hold source material. Scales hold pitch collections. Song slots hold variations of the sequence.'
+  musical_use: ''
+  related:
+  - norns-menu-navigation
+  - channel-editor
+  - pattern-editor
+  - song-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#grid-menu-navigation
+    behaviour_cases:
+    - M-GRID-001
+    - M-NAV-001
+    - M-PANIC-001
+    - M-PANIC-002
+    - M-PANIC-003
+    - M-PANIC-005
+    - M-PANIC-006
+    - M-PANIC-011
+    - M-PANIC-012
+    - M-PANIC-013
+    - M-PANIC-014
+    - M-REC-PARAM-004
+    - M-REC-PARAM-019
+    - M-UIACC-A01-001
+    - M-LIVEUI-CHSELECT-001
+    - M-SCALE-001
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-FOCUS-001
+    code:
+    - lib/draw.lua
+    - lib/m_grid.lua
+    - lib/pages/pages.lua
+    - lib/ui_grid_outcomes.lua
+    - lib/ui_spec_data.lua
+  controls:
+  - gesture: Grid (3,8) / (4,8) / (5,8) / (6,8)
+    result: Channel / Scale / Pattern / Song.
+  - gesture: Tap Pattern again
+    result: Cycle Trig, Note and Velocity views.
+  details: []
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  - scale-edit-versus-apply
+  - algorithm-choose-and-preview
+  - song-global-length
+  - hold-step-return
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-SCALE-001
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-FOCUS-001
+    - M-LIVEUI-FOLLOW-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native child scenes show the four editor contexts. Pattern note and velocity views are
+      captured separately.
+    native_evidence:
+    - scene: hold-step-return
+      data: reference-navigation-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: 812e38aaebe56c621949975aa29f8bcea9199b92bdb4d90e7b5f4306b86b1e05
+      case: M-LIVEUI-FOLLOW-001
+      assertions:
+      - kind: held-scope
+        step: 5
+        passed: true
+      - kind: hold-returns-to-parent
+        screen: clock_mods
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+  category: learn
+  parent: getting-around-mosaic
+  level: 3
+- id: norns-menu-navigation
+  title: Norns Menu Navigation
+  audience: beginner
+  summary: Open tasks with E1; choose a row with E2 and change its value with E3.
+  prose: '1. Turn E1 to open the current context’s task list.
+
+    2. Select a task with E1 or E2.
+
+    3. Press K3 to open it.
+
+    4. Turn E2 to choose a vertical row.
+
+    5. Turn E3 to change the selected value.
+
+
+    Long values appear on a separate full-width line. A position indicator identifies the selected row
+    when the list extends beyond the screen. The header retains the current page and channel or pattern
+    scope.
+
+
+    For staged Device, Clock, Scale and Song settings, press K3 to apply; K2 cancels the draft or returns
+    to its parent. For a row marked OPEN >, K3 opens the nested list. Check the footer for the selected
+    row’s action.
+
+
+    Masks retain eight controls visible together on one screen. Masks and Trig params update their values
+    directly. Their held-step K2 clear operation and K1 combinations remain as described on those pages;
+    they are not cancelled drafts. Hold a channel step to edit its local values, then release to return
+    to channel scope.
+
+
+    A short K1 tap opens the norns system menu. Holding K1 is Shift. E1 opens task lists.'
+  musical_use: ''
+  related:
+  - grid-menu-navigation
+  - tooltips
+  - masks
+  - devices
+  sources:
+    readme: manual/legacy/README-1.4.0.md#norns-menu-navigation
+    behaviour_cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-LIVEUI-DASH-001
+    - M-LIVEUI-FOCUS-001
+    - M-LIVEUI-FOLLOW-001
+    - M-LIVEUI-MERGEMODES-001
+    - M-LIVEUI-SPLASH-001
+    - M-LIVEUI-TASKS-001
+    - M-TIME-001
+    - M-TIME-002
+    - M-UIACC-A01-001
+    - M-UIACC-A18-001
+    code:
+    - mosaic.lua
+    - lib/ui_adapters/native.lua
+    - lib/ui_live.lua
+    - lib/ui_spec_data.lua
+  controls:
+  - gesture: E1 → E2 → K3
+    result: Open the context task list, select a task, then open it.
+  - gesture: E2 / E3
+    result: Select a row / change its value.
+  - gesture: K3 / K2 on staged settings
+    result: Apply the draft / cancel or return. Check the footer for nested OPEN rows.
+  - gesture: Hold step + K2 in Masks
+    result: Clear all mask attributes of that step.
+  details: []
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  - channel-task-navigation
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    - M-LIVEUI-TASKS-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Device and clock routes show selected-channel scope. Other staged tasks retain their own
+      feature evidence.
+    native_evidence:
+    - scene: channel-task-navigation
+      data: reference-navigation-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: 812e38aaebe56c621949975aa29f8bcea9199b92bdb4d90e7b5f4306b86b1e05
+      case: M-LIVEUI-TASKS-001
+      assertions:
+      - kind: e1-opens-tasks
+        source: masks
+        passed: true
+      - kind: task-scroll
+        encoder: 2
+        delta: 1
+        row: Clock
+        passed: true
+      - kind: e1-opens-tasks
+        source: trig_locks
+        passed: true
+      - kind: channel-task
+        page: memory
+        passed: true
+      - kind: channel-task
+        page: midi_config
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    ui_alignment_status: awaiting-candidate-capture
+  category: learn
+  parent: getting-around-mosaic
+  level: 3
+- id: tooltips
+  title: Tooltips
+  audience: beginner
+  summary: The screen footer displays controls or feedback for the last grid action.
+  prose: 'Perform a grid action to show its tooltip in the screen footer. The footer otherwise lists available
+    controls.
+
+
+    Check the header and selected value before editing. The header identifies the channel and any held-step
+    scope.'
+  musical_use: ''
+  related:
+  - norns-menu-navigation
+  - getting-around-mosaic
+  sources:
+    readme: manual/legacy/README-1.4.0.md#tooltips
+    behaviour_cases:
+    - M-TOOLTIP-001
+    - M-UIACC-A18-001
+    - M-LIVEUI-PAINT-001
+    code:
+    - lib/pages/channel_edit_page/channel_edit_page_ui.lua
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - paint-shift-and-cancel
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-PAINT-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Paint preview shows assertion-backed footer and shift/cancel feedback; this is not exhaustive
+      tooltip coverage.
+  category: learn
+  parent: getting-around-mosaic
+  level: 3
+- id: external-midi-transport
+  title: External MIDI Transport
+  audience: all
+  summary: An external MIDI clock can drive the transport.
+  prose: 'With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per
+    quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi
+    clock in** to select one input when other devices also send transport or clock. Mosaic follows received
+    pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns
+    estimates timing between received pulses from recent intervals. If clock pulses disappear without
+    Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks
+    the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step
+    1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected
+    devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic
+    locally at the current clock phase.
+
+
+    Pinned norns does not interpret MIDI Continue or Song Position Pointer as clock-transport commands.
+    Mosaic therefore remains stopped when it receives them and does not reposition; send MIDI Start to
+    begin again from step 1. The messages remain available to scripts through the normal MIDI event API.'
+  musical_use: ''
+  related:
+  - getting-around-mosaic
+  sources:
+    readme: manual/legacy/README-1.4.0.md#external-midi-transport
+    behaviour_cases:
+    - M-KEYBOARD-STOP-001
+    - M-LEN-004
+    - M-MASK-028
+    - M-MASK-029
+    - M-MIDI-001
+    - M-MIDI-002
+    - M-MIDI-003
+    - M-MIDI-004
+    - M-MIDI-005
+    - M-MIDI-REPEAT-001
+    - M-OPT-STOP-001
+    - M-PATCH-031
+    - M-PROJECT-LIVE-001
+    - M-PROJECT-LIVE-002
+    - M-PROJECT-LIVE-003
+    - M-PROJECT-LIVE-004
+    - M-REC-005
+    - M-REC-015
+    - M-REC-016
+    - M-REC-024
+    - M-REC-025
+    - M-REC-PARAM-010
+    - M-REC-PARAM-022
+    - M-REC-SOURCES-001
+    - M-REC-SOURCES-002
+    - M-STARTUP-TRANSPORT-001
+    - M-SYNC-001
+    - M-SYNC-002
+    - M-SYNC-003
+    - M-SYNC-004
+    - M-SYNC-005
+    - M-SYNC-006
+    - M-SYNC-007
+    - M-SYNC-008
+    - M-SYNC-009
+    - M-SYNC-010
+    - M-SYNC-011
+    - M-SYNC-012
+    - M-SYNC-013
+    - M-SYNC-014
+    - M-SYNC-015
+    - M-SYNC-016
+    - M-SYNC-017
+    - M-SYNC-018
+    - M-SYNC-019
+    - M-SYNC-020
+    - M-SYNC-021
+    - M-SYNC-022
+    - M-SYNC-023
+    - M-SYNC-LEAD-001
+    - M-SYNC-LEAD-002
+    - M-SYNC-LEAD-003
+    - M-SYNC-LEAD-004
+    - M-SYNC-LEAD-005
+    - M-SYNC-LEAD-006
+    - M-SYNC-LEAD-007
+    - M-SYNC-LEAD-008
+    - M-SYNC-LEAD-009
+    - M-SYNC-LEAD-010
+    - M-SYNC-LEAD-011
+    - M-SYNC-LEAD-012
+    - M-SYNC-LEAD-013
+    - M-SYNC-LEAD-014
+    - M-SYNC-LEAD-015
+    - M-TIM-003
+    - M-TRANS-009
+    - M-TRIPLE-004
+    - M-UI-001
+    - M-UI-002
+    - M-XA-003-JF-OWNERSHIP
+    - M-XA-004-JF-OVERLAP
+    code: []
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - external-midi-source-menu
+  review:
+    status: verified
+    cases:
+    - M-TIM-003
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native CLOCK source selection and Tempo display plus the full M-TIM-003 incoming Start/Clock/Stop
+      acceptance. Physical MIDI host scheduling is separate.
+    native_evidence:
+    - scene: external-midi-source-menu
+      data: reference-option-scenes.json
+      clock_mode: real-time
+      publication_run: /home/andy/mosaic-manual-runs/07ff0a9fe4324961b9cca1b05e62dd89
+      data_sha256: 6cc688de9c23de5900a9799d3fbed72b2debcbe845fd8f950dae641c86423203
+      case: M-TIM-003
+      native_case_evidence:
+        path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-TIM-003-base-midi
+        session_context:
+          session_ordinal: 0
+          clock_mode: real-time
+          profile: base-midi
+          app_root: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/application
+          experimental_install: null
+          installation_sha256: null
+          session_id: eee7f0bc0d124790b7cdbcee44383921
+          runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+          application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+          finished: true
+          held_inputs: []
+          cleanup_verified: true
+        results_sha256: e9e1cd95d00f8030e112bc7c9bdc0b6a67e90570d143c9b83a5d70a176816d94
+        identity_sha256: b2746c872baa78bfcef536e2ad66b6174b8380d44839931a7b9fde3e2afc81c0
+        recipe_sha256: c88604f28090aab8e752a6954516fed521b78be1185fa39930b5cec3392cf80b
+        native_events_sha256: 18f830c0a8c69401ed74d9b9249a322a882133e03ab8ace563752cdff4d27218
+        capture_trace_sha256: f643355aae0eeae21c08c85bd708404aa03d4a35fc7dfb3c2c80fbe11443599b
+        session_context_sha256: 8638b051877e9125e9a24649e057d55b9734431dda7f2225e0f17de737c13f4e
+        native_config_sha256: c6a33a5307a907f243b4502043b62c843dbf15073dd8389148c9832d93e38b2d
+        cleanup_sha256: 3899d1cadf3c8d1253b06f52ded25d4ca60cf61bbb2ede486e0b8a3aba39806f
+        case_participants:
+        - path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-TIM-003-base-midi
+          session_context:
+            session_ordinal: 0
+            clock_mode: real-time
+            profile: base-midi
+            app_root: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/application
+            experimental_install: null
+            installation_sha256: null
+            session_id: eee7f0bc0d124790b7cdbcee44383921
+            runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+            application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+            finished: true
+            held_inputs: []
+            cleanup_verified: true
+          results_sha256: e9e1cd95d00f8030e112bc7c9bdc0b6a67e90570d143c9b83a5d70a176816d94
+          identity_sha256: b2746c872baa78bfcef536e2ad66b6174b8380d44839931a7b9fde3e2afc81c0
+          recipe_sha256: c88604f28090aab8e752a6954516fed521b78be1185fa39930b5cec3392cf80b
+          native_events_sha256: 18f830c0a8c69401ed74d9b9249a322a882133e03ab8ace563752cdff4d27218
+          capture_trace_sha256: f643355aae0eeae21c08c85bd708404aa03d4a35fc7dfb3c2c80fbe11443599b
+          session_context_sha256: 8638b051877e9125e9a24649e057d55b9734431dda7f2225e0f17de737c13f4e
+          native_config_sha256: c6a33a5307a907f243b4502043b62c843dbf15073dd8389148c9832d93e38b2d
+          cleanup_sha256: 3899d1cadf3c8d1253b06f52ded25d4ca60cf61bbb2ede486e0b8a3aba39806f
+        case_participants_path: /home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f/M-TIM-003-base-midi/case-participants.json
+        case_participants_sha256: 1174cb9ace5cafabc12b43e3069474ef1ddef48105ff82c8eed0f12ad2e4d31e
+      independent_audit: manual/evidence/options-complete-start-recovery-real-independent-audit.json
+      independent_audit_sha256: 15ec2a6d85de9c24d12b8c7709c6fb737c2e3665c0642938ec8f31ebf8b4c320
+      scope: Native CLOCK source selection and Tempo display plus the full M-TIM-003 incoming Start/Clock/Stop
+        acceptance. Physical MIDI host scheduling is separate.
+      complete_regression_run: false
+    rationale: Native CLOCK source selection and Tempo display plus the full M-TIM-003 incoming Start/Clock/Stop
+      acceptance. Physical MIDI host scheduling is separate.
+    controlled_baselines:
+    - scene: external-midi-source-menu
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-TIM-003
+      assertions:
+      - kind: selected-menu-value
+        text: internal
+      - kind: selected-menu-value
+        text: midi
+      - kind: selected-menu-value
+        text: internal
+      - kind: selected-menu-value
+        text: '90'
+      scope: Public internal/MIDI clock-source menu selection and tempo 90 display. External hardware
+        scheduling is outside this menu example.
+  category: learn
+  parent: getting-around-mosaic
+  level: 3
+- id: midi-panic
+  title: MIDI Panic
+  audience: all
+  summary: Send a Note Off sweep without stopping the sequencer.
+  prose: '1. Stop playback with Play/Stop if new notes must be prevented.
+
+    2. Hold the navigation button for a non-selected page.
+
+    3. Release the button after the Note Off sweep. The selected page does not change.
+
+
+    Panic sends Note Off for every note on every MIDI channel and connected device. Holding the selected
+    page button does not trigger Panic.
+
+
+    Panic does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled
+    voices continue, so new notes can sound during or after the sweep. Use Play/Stop to stop playback.'
+  musical_use: ''
+  related:
+  - sequencer-start-and-stop
+  - no-sound
+  sources:
+    readme: manual/legacy/README-1.4.0.md#midi-panic
+    behaviour_cases:
+    - M-PANIC-001
+    - M-PANIC-002
+    - M-PANIC-003
+    - M-PANIC-004
+    - M-PANIC-005
+    - M-PANIC-006
+    - M-PANIC-007
+    - M-PANIC-008
+    - M-PANIC-009
+    - M-PANIC-010
+    - M-PANIC-011
+    - M-PANIC-012
+    - M-PANIC-013
+    - M-PANIC-014
+    code:
+    - lib/clock/m_clock.lua
+    - lib/m_grid.lua
+    - lib/m_midi.lua
+  controls:
+  - gesture: Stop, then hold a non-selected page key
+    result: Sweep Note Off across connected MIDI channels; holding the selected page key does not panic.
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: pending
+    cases: []
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The supported non-selected-page hold plan asserts the retained Song screen and complete
+      Note Off sweep. Capture is pending; selected-page and running-playback boundaries are separately
+      scoped source cases.
+  category: learn
+  parent: getting-around-mosaic
+  level: 3
+- id: cheat-sheet
+  title: Quick Control Reference
+  audience: beginner
+  summary: Use the cheat sheet for a compact list of gestures.
+  prose: 'Open the [cheat sheet](../cheat_sheet.html) for control lookup. Use the feature reference for
+    ranges, scope and interactions.
+
+
+    Interactive walkthroughs replay recorded operations. Their controls advance the walkthrough;
+    the page does not run a live Mosaic application.'
+  musical_use: ''
+  related:
+  - getting-around-mosaic
+  - first-sound
+  sources:
+    readme: manual/legacy/README-1.4.0.md#cheat-sheet
+    behaviour_cases: []
+    code: []
+  controls: []
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    source_status: code-and-case-reviewed
+    applicability: documentation-only
+    native_gap: This section is a documentation link and explanation of walkthrough scope; it has no Mosaic
+      UI operation.
+    rationale: This section is a documentation link and explanation of walkthrough scope; it has no Mosaic
+      UI operation.
+  category: learn
+  parent: getting-around-mosaic
+  level: 3

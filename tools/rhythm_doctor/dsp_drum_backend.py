@@ -39,6 +39,7 @@ on real full-mix music exists to measure a replacement against (see CORPUS.md).
 from __future__ import annotations
 
 from pathlib import Path
+import math
 
 import numpy as np
 
@@ -555,6 +556,24 @@ def confirmed_alignment(value):
     return {"bpm": bpm, "origin_sample": origin}
 
 
+def confirmed_beat_grid(confirmed, sample_rate, capture_samples):
+    """Player-confirmed beat positions in the half-open captured sample range.
+
+    Include valid beats before the origin. Match the native backend's half-up
+    sample rounding and calculate each position from the origin, without drift.
+    """
+    origin = confirmed["origin_sample"]
+    spacing = sample_rate * 60.0 / confirmed["bpm"]
+    first = -math.floor(origin / spacing)
+    stop = math.ceil((capture_samples - origin) / spacing)
+    beats = []
+    for k in range(first, stop):
+        sample = math.floor(origin + k * spacing + 0.5)
+        if 0 <= sample < capture_samples and (not beats or sample != beats[-1]):
+            beats.append(sample)
+    return beats
+
+
 def analyse_request(wav_path, deltas=None, alignment=None):
     """Produce one worker-valid analysis result from a captured WAV."""
     mono, source_rate, _ = read_capture_wav(wav_path)
@@ -573,7 +592,8 @@ def analyse_request(wav_path, deltas=None, alignment=None):
         empty.update({"bpm": confirmed["bpm"], "tempo_detected": True,
                       "origin_sample": confirmed["origin_sample"], "tempo_mode": "manual",
                       "phrase_start_sample": confirmed["origin_sample"],
-                      "phrase_confidence": 1.0})
+                      "phrase_confidence": 1.0,
+                      "beat_positions": confirmed_beat_grid(confirmed, source_rate, mono.size)})
     if not mono.size or not np.any(mono):
         return empty
     analysis = mono if source_rate == SR else _resample(mono, source_rate, SR)
@@ -615,9 +635,9 @@ def analyse_request(wav_path, deltas=None, alignment=None):
         # the whole point of the correction is to say where the phrase begins.
         bpm, detected, origin, mode = confirmed["bpm"], True, confirmed["origin_sample"], "manual"
         phrase_start, phrase_confidence = origin, 1.0
-        # A corrected origin is a beat by definition, so it joins the grid the
-        # player steps through rather than sitting between two of its entries.
-        beats = sorted(set(beats) | {int(origin)})
+        # Manual beat choices follow the confirmed tempo and origin rather
+        # than the automatic estimate that the player has overridden.
+        beats = confirmed_beat_grid(confirmed, source_rate, mono.size)
     return {"bpm": float(bpm), "tempo_detected": bool(detected), "origin_sample": int(origin),
             "phrase_start_sample": int(phrase_start),
             "phrase_confidence": float(phrase_confidence),

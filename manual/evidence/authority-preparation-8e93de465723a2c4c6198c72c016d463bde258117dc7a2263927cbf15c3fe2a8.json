@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "scope": "Prepared documentation switch for root review; native acceptance remains inactive.",
+  "original_manual": {
+    "original_path": "README.md",
+    "path": "manual/legacy/README-1.4.0.md",
+    "sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c"
+  },
+  "section_manual": {
+    "path": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+    "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+    "original_path": "README.md"
+  },
+  "manual_source_aliases": {
+    "README.md": {
+      "path": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+      "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+      "original_path": "README.md"
+    },
+    "cheat_sheet.html": {
+      "path": "manual/legacy/cheat-sheet-before-authority-6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed.html",
+      "sha256": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+      "original_path": "cheat_sheet.html"
+    }
+  },
+  "acceptance_authority": "inactive",
+  "counts": {
+    "original_MAN_ids": 125,
+    "requirements": 178,
+    "case_ids": 879,
+    "original_cheat_rows": 77,
+    "feature_destinations": 133
+  },
+  "proposals": [
+    {
+      "path": "manual/README.proposed.md",
+      "target": "README.md",
+      "sha256": "a06498ce330b93157ddbf3c853a528d9c87a3c61d8e7f9cd5c4af543945bb5c9"
+    },
+    {
+      "path": "manual/AGENTS.proposed.md",
+      "target": "AGENTS.md",
+      "sha256": "2b45240fc4350c6de0c47bf8c442728783f8bf6f497eeaf482df29113ca2bd5b"
+    },
+    {
+      "path": "manual/cheat-sheet.proposed.html",
+      "target": "cheat_sheet.html",
+      "sha256": "ddf7ccbb3a0e00c604826f2fb5a328451238e181c36c2b495a6aaaddff247ffa"
+    }
+  ],
+  "complete_regression_run": false,
+  "root_replacements_performed": false,
+  "expected_sequence": [
+    "Review these exact proposals and frozen full source aliases.",
+    "Apply overview, AGENTS and generated root cheat together.",
+    "Refresh docs/UI ledger with explicit frozen full README manual_source, retaining original125 MAN IDs and previous identities.",
+    "Freeze runtime/adapters/authoring; capture applicable real and controlled lanes.",
+    "Audit raw publication and scope bindings; compile a genuinely complete book.",
+    "Activate acceptance authority only after final independent acceptance review."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "original_windows_package": "C:/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/locks-c07-1-astra-final-recheck-20261008-01",
+  "index_snapshot_omitted": true,
+  "repository_reference": "manual/generated/reader-index.json",
+  "sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+  "verified_against_original_review_snapshot": true,
+  "replay_note": "Review evidence is immutable. The original harness fetches served inputs when run; if replaying an auxiliary script that expects a local reader-index.json, use a separately copied index only after verifying this exact SHA. Do not overwrite archived review results.",
+  "sibling_reports": [
+    "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/review.md",
+    "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/review.md",
+    "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/review.md"
+  ]
+}

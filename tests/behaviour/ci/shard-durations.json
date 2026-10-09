@@ -34,6 +34,10 @@
     "behaviour-base-8/suite-effective.json": "d9efec94a4de7d23f6f80f481a1bb4c8d3711ba2af60f8dcd75d88a8894b712a",
     "behaviour-base-9/suite.json": "b168ed09537e6f0475954417b50c5784558e595af3b1e5caeaf11d307350a1a6"
   },
+  "estimated_cases": {
+    "reason": "Hand estimates, not measured: no source-run timing exists for these cases yet; the next real run replaces them.",
+    "cases": ["M-CHORDSHAPE-260", "M-LIVEUI-SHAPETRIG-002", "M-RANGE-LCM-001", "M-RANGE-REJECT-006", "M-TRANS-011", "M-TRIGPARAM-STRUM-PERSIST-001"]
+  },
   "cases_ms": {
     "M-ALG-001": [53500, 84700],
     "M-ALG-002": [139600, 32300],
@@ -314,6 +318,7 @@
     "M-CHORDSHAPE-257": [63600, 13500],
     "M-CHORDSHAPE-258": [50300, 10500],
     "M-CHORDSHAPE-259": [50000, 10100],
+    "M-CHORDSHAPE-260": [67700, 13500],
     "M-CHORDVEL-001": [54800, 13400],
     "M-CHORDVEL-002": [50300, 12700],
     "M-CHORDVEL-003": [53700, 13600],
@@ -358,6 +363,7 @@
     "M-LEN-003": [46600, 62800],
     "M-LEN-004": [14100, 7100],
     "M-LIFECYCLE-001": [778400, 92800],
+    "M-LIVEUI-SHAPETRIG-002": [45000, 15000],
     "M-MAP-001": [33600, 15400],
     "M-MAP-002": [30800, 12000],
     "M-MAP-003": [78100, 21400],
@@ -632,6 +638,8 @@
     "M-RANGE-REJECT-003": [15000, 8500],
     "M-RANGE-REJECT-004": [15300, 8900],
     "M-RANGE-REJECT-005": [28100, 12300],
+    "M-RANGE-LCM-001": [34000, 14000],
+    "M-RANGE-REJECT-006": [28100, 12300],
     "M-RANGE-SAVED-001": [201500, 11700],
     "M-RANGE-SAVED-002": [225200, 16600],
     "M-RANGE-SAVED-003": [292600, 24800],
@@ -843,6 +851,7 @@
     "M-TIME-015": [28000, 10100],
     "M-TOOLTIP-001": [22700, 12300],
     "M-TOOLTIP-002": [79600, 7800],
+    "M-TRIGPARAM-STRUM-PERSIST-001": [60000, 40000],
     "M-TRANS-001": [56500, 17000],
     "M-TRANS-002": [15400, 6700],
     "M-TRANS-003": [15000, 9000],
@@ -852,6 +861,8 @@
     "M-TRANS-007": [49100, 13100],
     "M-TRANS-008": [91500, 18700],
     "M-TRANS-009": [14800, 7800],
+    "M-TRANS-010": [16000, 8000],
+    "M-TRANS-011": [9000, 6000],
     "M-TRIPLE-001": [23000, 12800],
     "M-TRIPLE-002": [23900, 12400],
     "M-TRIPLE-003": [24100, 12800],

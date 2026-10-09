@@ -1,0 +1,7 @@
+{
+  "command": "python3 -m unittest test_suite.CollectionTests.test_every_existing_test_file_is_classified",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "E\n======================================================================\nERROR: test_every_existing_test_file_is_classified (test_suite.CollectionTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_suite.py\", line 77, in test_every_existing_test_file_is_classified\n    lua,python=suite.collect(set(suite.case_registry()))\n  File \"/home/andy/mosaic-manual-1.4.0/tests/behaviour/suite.py\", line 151, in collect\n    if unknown or stale:raise SystemExit('Unclassified tests %r; stale declarations %r'%(unknown,stale))\nSystemExit: Unclassified tests ['test_manual_capture', 'test_manual_controlled_generation_integrity']; stale declarations []\n\n----------------------------------------------------------------------\nRan 1 test in 0.136s\n\nFAILED (errors=1)\n",
+  "expected_red": true
+}

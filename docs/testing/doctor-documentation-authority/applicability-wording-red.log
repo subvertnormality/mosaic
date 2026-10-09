@@ -1,0 +1,29 @@
+....
+======================================================================
+FAIL: test_controlled_lane_reason_distinguishes_setup_ready_and_actual_audio (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) (role='setup_options')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 49, in test_controlled_lane_reason_distinguishes_setup_ready_and_actual_audio
+    for word in words:self.assertIn(word,result['reason'].lower())
+AssertionError: 'draft' not found in 'public adc input and native softcut acquisition require real-time audio; ui-only setup applies in both lanes.'
+
+======================================================================
+FAIL: test_controlled_lane_reason_distinguishes_setup_ready_and_actual_audio (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) (role='ready_options')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 49, in test_controlled_lane_reason_distinguishes_setup_ready_and_actual_audio
+    for word in words:self.assertIn(word,result['reason'].lower())
+AssertionError: 'persisted' not found in 'public adc input and native softcut acquisition require real-time audio; ui-only setup applies in both lanes.'
+
+======================================================================
+FAIL: test_controlled_lane_reason_distinguishes_setup_ready_and_actual_audio (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) (role='manual_right')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 49, in test_controlled_lane_reason_distinguishes_setup_ready_and_actual_audio
+    for word in words:self.assertIn(word,result['reason'].lower())
+AssertionError: 'retained' not found in 'public adc input and native softcut acquisition require real-time audio; ui-only setup applies in both lanes.'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.040s
+
+FAILED (failures=3)

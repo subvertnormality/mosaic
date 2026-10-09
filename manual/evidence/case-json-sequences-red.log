@@ -1,0 +1,13 @@
+......F
+======================================================================
+FAIL: test_yaml_sequences_match_native_json_sequences_exactly (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 40, in test_yaml_sequences_match_native_json_sequences_exactly
+    self.assertTrue(selector.accept({"kind":"midi","notes":[(60,80),(62,70)],"passed":True}))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.008s
+
+FAILED (failures=1)

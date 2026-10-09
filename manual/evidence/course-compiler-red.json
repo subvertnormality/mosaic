@@ -1,0 +1,12 @@
+{
+  "scope": "Authoring compiler characterisation outside instrument manual",
+  "baseline": "Prechange tools/manual_book.py accepted malformed course authoring",
+  "new_regressions_failed": [
+    "Duplicate routes and stages accepted",
+    "Missing teaching and unknown routes accepted",
+    "Unsafe course source accepted",
+    "Verified bindings without real scene and step accepted",
+    "Verified binding without semantic evidence accepted"
+  ],
+  "independent_existing_failure": "Caption semantic contract changed: external-midi-source-menu/internal; guard preserved; overlay agent notified"
+}

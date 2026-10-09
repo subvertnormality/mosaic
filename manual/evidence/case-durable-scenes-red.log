@@ -1,0 +1,13 @@
+.E.......
+======================================================================
+ERROR: test_completed_case_is_durable_before_later_failure_and_cannot_be_relabelled (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 58, in test_completed_case_is_durable_before_later_failure_and_cannot_be_relabelled
+    module.persist_case_scenes(out,scenes)
+AttributeError: module 'manual_case_capture' has no attribute 'persist_case_scenes'
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.012s
+
+FAILED (errors=1)

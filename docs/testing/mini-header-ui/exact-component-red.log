@@ -1,0 +1,121 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+FFF
+Failed tests:
+-------------
+1) test_ui_mini_beat_changes_only_literal_header_pixels
+.///lib/ui_mini_tests.lua:47: expected: 
+{
+    370=15,
+    497=15,
+    498=15,
+    501=7,
+    502=7,
+    503=7,
+    504=7,
+    752=7,
+    753=7,
+    754=7,
+    755=7,
+    875=7,
+    876=7,
+    877=7,
+    878=7
+}
+actual: 
+{}
+stack traceback:
+	.///lib/ui_mini_tests.lua:47: in upvalue 'test_ui_mini_beat_changes_only_literal_header_pixels'
+
+2) test_ui_mini_doctor_has_header_mirror_and_coat_without_moving_text
+.///lib/ui_mini_tests.lua:35: missing exact Doctor header miniature
+expected: 
+{
+    112=15,
+    113=7,
+    114=15,
+    122=15,
+    123=15,
+    124=15,
+    239=11,
+    240=11,
+    241=11,
+    242=11,
+    243=11,
+    249=15,
+    250=7,
+    252=7,
+    253=15,
+    366=15,
+    367=11,
+    369=11,
+    371=11,
+    372=15,
+    377=15,
+    378=7,
+    380=7,
+    381=15,
+    495=11,
+    496=11,
+    497=11,
+    498=11,
+    499=11,
+    506=15,
+    507=15,
+    508=15,
+    624=11,
+    625=11,
+    626=11,
+    635=11,
+    751=15,
+    752=15,
+    753=7,
+    754=15,
+    755=15,
+    763=11,
+    878=15,
+    879=15,
+    880=15,
+    881=7,
+    882=15,
+    883=15,
+    884=15,
+    890=7,
+    891=7,
+    892=7,
+    1007=7,
+    1008=7,
+    1010=7,
+    1011=7
+}
+actual: 
+{}
+stack traceback:
+	.///lib/ui_mini_tests.lua:35: in upvalue 'test_ui_mini_doctor_has_header_mirror_and_coat_without_moving_text'
+
+3) test_ui_mini_scale_has_distinct_header_pitch_stair
+.///lib/ui_mini_tests.lua:41: missing exact Scale header miniature
+expected: 
+{
+    370=15,
+    497=15,
+    498=15,
+    501=7,
+    502=7,
+    503=7,
+    504=7,
+    752=7,
+    753=7,
+    754=7,
+    755=7,
+    875=7,
+    876=7,
+    877=7,
+    878=7
+}
+actual: 
+{}
+stack traceback:
+	.///lib/ui_mini_tests.lua:41: in upvalue 'test_ui_mini_scale_has_distinct_header_pitch_stair'
+
+Ran 3 tests in 0.006 seconds, 0 successes, 3 failures, 2436 non-selected

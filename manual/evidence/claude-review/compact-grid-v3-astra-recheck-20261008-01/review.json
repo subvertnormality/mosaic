@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-08",
+  "verdict": "reader pass",
+  "all_seven_at_least_8": true,
+  "scores": {
+    "readability": 8,
+    "comprehensibility": 8,
+    "flow": 8,
+    "understandability": 8,
+    "user_friendliness": 8,
+    "usefulness_of_interactive_examples": 8,
+    "cohesion": 8
+  },
+  "open_findings": [],
+  "closed_findings": [
+    "CG-1",
+    "CG-2"
+  ],
+  "assets": {
+    "manual.css": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+    "manual.js": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+    "book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24"
+  },
+  "endCSS": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+  "endJS": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+  "coverage": {
+    "states": 40,
+    "widths": [
+      1440,
+      1280,
+      1121,
+      768,
+      390
+    ],
+    "routes": [
+      "#rhythm-doctor",
+      "#first-sound/course"
+    ],
+    "modes": [
+      "original compact",
+      "Shield compact",
+      "original enlarged",
+      "Shield enlarged"
+    ],
+    "compact_states": 20,
+    "compact_clipped_pads": 0,
+    "page_overflows": 0,
+    "page_errors": [],
+    "labels_per_state": 16,
+    "pads_per_state": 128,
+    "max_label_center_offset": 1,
+    "keyboard_last_pad_checks": 20,
+    "last_pad_right_margin_min": 9.53125,
+    "last_pad_right_margin_max": 10.21875,
+    "keyboard_document_scroll_delta_max": 0,
+    "all_accessible_pad_labels_preserved": true
+  },
+  "carry": {
+    "content_report": "../locks-c07-1-astra-final-recheck-20261008-01/review.md",
+    "content_report_sha256": "c704b486fc630f6826a4ccc0de39a8dcf47578e3ea850f2d892a7493a0ad1909",
+    "whole_reader_prior_route_viewport_observations": 116,
+    "public_prose_features": 133,
+    "course_openings": 10,
+    "original_F01_F11": "reader closure retained; unchanged content plus fresh responsive interaction closure",
+    "R1_R5": "closed, unchanged content"
+  },
+  "preserved_failures": [
+    {
+      "report": "../compact-grid-astra-recheck-20261008-01/review.md",
+      "sha256": "7ac8f0389d25ecc761e7f76eba01c29a5add5deb23df43d24a2a62a6f6205a37"
+    },
+    {
+      "report": "../compact-grid-v2-astra-recheck-20261008-01/review.md",
+      "sha256": "e46bb13bbf9dfb3d6ce63560d8b56d1d06ce29bcafe060f9d188f3c283078938"
+    }
+  ],
+  "evidence": [
+    "observations.json",
+    "rhythm-1121-original-enlarged.png",
+    "rhythm-1121-shield-enlarged.png",
+    "lesson-1440-original.png",
+    "lesson-1280-original.png",
+    "lesson-390-shield-enlarged.png"
+  ],
+  "limitations": [
+    "Scoped final layout recheck with prior content carry, not another entire prose read.",
+    "No native/audio/listening/full-build/CI claims.",
+    "No production edit/install/commit/restart; owned browsers closed.",
+    "Reader approval does not itself publish."
+  ]
+}

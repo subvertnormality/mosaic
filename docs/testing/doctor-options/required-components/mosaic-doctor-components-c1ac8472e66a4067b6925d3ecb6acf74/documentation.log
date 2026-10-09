@@ -1,0 +1,10 @@
+test_missing_or_duplicate_feature_fails_instead_of_falling_back (test_documentation.DocumentationAuthorityMigrationTests.test_missing_or_duplicate_feature_fails_instead_of_falling_back) ... ok
+test_reads_current_stable_feature_prose_details_and_controls (test_documentation.DocumentationAuthorityMigrationTests.test_reads_current_stable_feature_prose_details_and_controls) ... ok
+test_both_documents_state_the_unconfigured_analysis_backend (test_documentation.RhythmDoctorDocumentationTests.test_both_documents_state_the_unconfigured_analysis_backend) ... ok
+test_detector_document_names_the_pinned_pretrained_worker_contract (test_documentation.RhythmDoctorDocumentationTests.test_detector_document_names_the_pinned_pretrained_worker_contract) ... ok
+test_manual_and_cheat_sheet_name_the_same_lanes_and_stop_gate (test_documentation.RhythmDoctorDocumentationTests.test_manual_and_cheat_sheet_name_the_same_lanes_and_stop_gate) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.609s
+
+OK

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "purpose": "Approved public grid gesture for one 16-step bar in each Song section",
+  "files": [
+    {
+      "path": "manual/course.yaml",
+      "before_sha256": "5793ae5cfb895958bd0f0e9f3e62fcecabf0206ab9ee4c73389586f8b2279f10",
+      "after_sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420"
+    },
+    {
+      "path": "manual/features/reference-workflow.yaml",
+      "before_sha256": "5421750bec25107d491c6da07c9cf5f6eb5f1915960486648a93608fba2b6670",
+      "after_sha256": "305fe19ee02d961f73d64ed359a29957b8aff31d7e220d194e1d11bcce58406a"
+    },
+    {
+      "path": "manual/scene-plans-course.yaml",
+      "before_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
+      "after_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5"
+    }
+  ],
+  "features": 133,
+  "chapters": 10,
+  "teaching_stages": 38,
+  "checkpoints": 48,
+  "checkpoint_ids_and_assertions_unchanged": true,
+  "native_acceptance_claimed": false,
+  "diff_sha256": "1e236494ab3b5ed3c45f6653ec857e2896330476a3af4f364103e754a6d45af6"
+}

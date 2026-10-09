@@ -1,0 +1,14 @@
+{
+  "files": [
+    {
+      "archive": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/pre-mini-frame-fix/tests/behaviour/contract/harmony_merge_visual.py",
+      "path": "tests/behaviour/contract/harmony_merge_visual.py",
+      "sha256": "0f9b3aa105dfb0ab3870bba938bbdc52e9d3c461bcc76c93f93fc068615f277f"
+    },
+    {
+      "archive": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/pre-mini-frame-fix/tests/behaviour/test_mini_header_animation_ui.py",
+      "path": "tests/behaviour/test_mini_header_animation_ui.py",
+      "sha256": "7ab16c6cd9dd614fe47ce50cbf8c6ec06b034bb26bd14104dc31ac8c96846734"
+    }
+  ]
+}

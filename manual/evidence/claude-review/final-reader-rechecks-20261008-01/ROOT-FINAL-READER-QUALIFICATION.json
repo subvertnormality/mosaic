@@ -1,0 +1,90 @@
+{
+  "reader_qualified": true,
+  "poststyle_score_carry_authorized": true,
+  "public_units": 425,
+  "criteria_per_unit": 10,
+  "minimum_score": 8,
+  "fresh_score_rows": 15,
+  "retained_score_rows": 410,
+  "score_candidate_sha256": "cd2e1f67a498e211c0524e432997b11acb1e02752d77b5c65844cd04f61cb990",
+  "style_installed": true,
+  "astra_seven_scores": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "astra_report_sha256": "ee05d9cd1fd6e445449b7ac2ddab962560c957577d2de0e8f09e9cdb6e1bc472",
+  "adversarial_findings": "F01\u2013F11 closed within the recorded reader-review scope; prior limitations preserved",
+  "browser_evidence": [
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_inline.cjs/manual_inline.cjs.log",
+      "sha256": "e33cf6405419f48f1871a9414c8d37d1f739a01f8fdc38ad463e7a52d1688027"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_browser.cjs/manual_browser.cjs.log",
+      "sha256": "ba64602a1fb45a2da5ae6db795c0c7cd5d61c41ca897cc3ec8e1df1a53a5ceda"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_book_browser.cjs/manual_book_browser-source18-passed.report.json",
+      "sha256": "c3a13bd4c4689da187cf9d5be811184f426b064c05e820fdd9878e61d81853c8"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_book_browser.cjs/manual_book_browser-source18-final.cjs.log",
+      "sha256": "fac0bd115e2d9eb244c77d93531bdb9b34da233736c9fa91adfa4bf0a0e50fe9"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_audio_race.cjs/manual_audio_race.cjs.log",
+      "sha256": "5884d24d9753cc680e555c837b249b7cfe8f6b8fb46c840803880e1338cbd14a"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_narrative_browser.cjs/manual_narrative_browser.cjs.log",
+      "sha256": "21f46da955a823a032109c5df8f11cef5b0e0cc5e76274a7d1dad6c929ec42dc"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_course_browser.cjs/manual_course_browser-source16-passed.report.json",
+      "sha256": "d10669b7fa72b24db1568f1c199e1a2227607fcb385bc9c5df301ca99eda56e9"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_controls_browser.cjs/manual_controls_browser.report.json",
+      "sha256": "1efaf056e010113de421e827de0d741ffda813636c13d7f699bdb74d20a1cf98"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/manual_reader_text_browser.cjs/manual_reader_text-source16-passed.receipt.json",
+      "sha256": "b44f41cb55d86809588249be6dcee0b12b37eb6c15d5f94c768738e817a5f8ba"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/browser-final/source18-eight-suite-qualification.json",
+      "sha256": "272da899825917c08430f36284805f9354db73edf84c3fccfb636fb43f83299a"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-book-browser-final-audit-20261008-01/REVIEW.md",
+      "sha256": "bac1d9e3a9c2079d651ae0b5671d30b27974c26203d370d5d19642173bf4f744"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-book-browser-final-audit-20261008-01/REVIEW.json",
+      "sha256": "90ecde6bdd66f359ec58efebb6436eef5907f1052845269d4747c74800616c8e"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-actual-preimage-reconciliation-20261008-01/RECONCILIATION.md",
+      "sha256": "9e227f2937d7c6b5ad461b4583263198b0bb5e5dfc63f75a8940d96360333524"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-actual-preimage-reconciliation-20261008-01/RECONCILIATION.json",
+      "sha256": "608de320afba962152e85dcb20be02dc71f7dd55e266d3f8813db16235311236"
+    }
+  ],
+  "qualification_basis": "Fresh Source18 full book-browser run, bounded Source18 Astra recheck, exact affected lesson reviews, preserved earlier suite receipts with explicit carry scopes, exact 167-chunk integrity and 146-scene native parity",
+  "full_local_native_rebuild_performed": false,
+  "audio_rerecorded": false,
+  "publication_qualified": false,
+  "remaining": [
+    "Commit validated candidate",
+    "Fresh exact-commit CI build and complete behaviour qualification",
+    "Approved PR merge",
+    "Separate trusted GitHub Pages artifact promotion and verification"
+  ]
+}

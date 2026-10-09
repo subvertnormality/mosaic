@@ -1,0 +1,11 @@
+test_ambiguous_open_hat_assets_fail_without_selecting_one (test_build_scheduled.ScheduledOpenHatAssets.test_ambiguous_open_hat_assets_fail_without_selecting_one) ... ok
+test_development_midi_keeps_closed_and_open_hats_independent (test_build_scheduled.ScheduledOpenHatAssets.test_development_midi_keeps_closed_and_open_hats_independent) ... ok
+test_frozen_source_archive_contains_open_hat_and_license (test_build_scheduled.ScheduledOpenHatAssets.test_frozen_source_archive_contains_open_hat_and_license) ... ok
+test_missing_open_hat_fails_without_guessing_a_path (test_build_scheduled.ScheduledOpenHatAssets.test_missing_open_hat_fails_without_guessing_a_path) ... ok
+test_serialized_crop_boundary_remains_half_open (test_build_scheduled.ScheduledOpenHatAssets.test_serialized_crop_boundary_remains_half_open) ... ok
+test_uses_the_existing_open_hat_asset (test_build_scheduled.ScheduledOpenHatAssets.test_uses_the_existing_open_hat_asset) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.017s
+
+OK

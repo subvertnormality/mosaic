@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "verify_only": false,
+  "course_before_sha256": "13678de82bc79aad6c8c9ae1aa8205fb2ce692d29ba37ac7014515f0c6bbed21",
+  "course_after_sha256": "13678de82bc79aad6c8c9ae1aa8205fb2ce692d29ba37ac7014515f0c6bbed21",
+  "plan_sha256": "5cf1f212b80690ca5a9bd5b338fc2872668109c33dd343d969fb54fb7a114d7a",
+  "lanes": [
+    {
+      "clock_mode": "controlled-experimental",
+      "session_id": "24bc0109f1d347cfaead3f460440171a",
+      "participant": "/home/andy/mosaic-manual-runs/2cf8c1dd4d7a49e3b93af84407452b72/M-MANUAL-COURSE-001-base-midi",
+      "scenes": 10,
+      "checkpoints": 105,
+      "report": "/home/andy/mosaic-manual-runs/2cf8c1dd4d7a49e3b93af84407452b72/reference-scenes.json",
+      "report_sha256": "fc516f34e81342b70d00c88cbd2857941e93dfe4d93f155bb9b5d5ca1e1acc8c",
+      "independent_audit_frames": 105,
+      "validation_scope": "controlled-manual-generation",
+      "realtime_qualification": "pending-ci"
+    }
+  ],
+  "mappings": [
+    {
+      "stage": "getting-started-objects",
+      "scene": "course-getting-started",
+      "step": "getting-started-objects"
+    },
+    {
+      "stage": "getting-started-notation",
+      "scene": "course-getting-started",
+      "step": "getting-started-notation"
+    },
+    {
+      "stage": "setup-route",
+      "scene": "course-setup",
+      "step": "setup-route"
+    },
+    {
+      "stage": "setup-apply",
+      "scene": "course-setup",
+      "step": "setup-apply"
+    },
+    {
+      "stage": "setup-tempo",
+      "scene": "course-setup",
+      "step": "setup-tempo"
+    },
+    {
+      "stage": "first-sound-attacks",
+      "scene": "course-first-sound",
+      "step": "first-sound-attacks"
+    },
+    {
+      "stage": "first-sound-assign",
+      "scene": "course-first-sound",
+      "step": "first-sound-assign"
+    },
+    {
+      "stage": "first-sound-masks-open",
+      "scene": "course-first-sound",
+      "step": "first-sound-masks-open"
+    },
+    {
+      "stage": "first-sound-defaults",
+      "scene": "course-first-sound",
+      "step": "first-sound-defaults"
+    },
+    {
+      "stage": "first-sound-hear",
+      "scene": "course-first-sound",
+      "step": "first-sound-hear"
+    },
+    {
+      "stage": "build-a-phrase-range",
+      "scene": "course-build-a-phrase",
+      "step": "build-a-phrase-range"
+    },
+    {
+      "stage": "build-a-phrase-rate",
+      "scene": "course-build-a-phrase",
+      "step": "build-a-phrase-rate"
+    },
+    {
+      "stage": "build-a-phrase-rhythm",
+      "scene": "course-build-a-phrase",
+      "step": "build-a-phrase-rhythm"
+    },
+    {
+      "stage": "build-a-phrase-open-masks",
+      "scene": "course-build-a-phrase",
+      "step": "build-a-phrase-open-masks"
+    },
+    {
+      "stage": "build-a-phrase-compare",
+      "scene": "course-build-a-phrase",
+      "step": "build-a-phrase-compare"
+    },
+    {
+      "stage": "masks-open",
+      "scene": "course-masks",
+      "step": "masks-open"
+    },
+    {
+      "stage": "masks-hold",
+      "scene": "course-masks",
+      "step": "masks-hold"
+    },
+    {
+      "stage": "masks-edit",
+      "scene": "course-masks",
+      "step": "masks-edit"
+    },
+    {
+      "stage": "masks-release",
+      "scene": "course-masks",
+      "step": "masks-release"
+    },
+    {
+      "stage": "masks-listen",
+      "scene": "course-masks",
+      "step": "masks-listen"
+    },
+    {
+      "stage": "masks-quiet",
+      "scene": "course-masks",
+      "step": "masks-quiet"
+    },
+    {
+      "stage": "masks-default",
+      "scene": "course-masks",
+      "step": "masks-default"
+    },
+    {
+      "stage": "masks-default-restore",
+      "scene": "course-masks",
+      "step": "masks-default-restore"
+    },
+    {
+      "stage": "masks-clear",
+      "scene": "course-masks",
+      "step": "masks-clear"
+    },
+    {
+      "stage": "masks-keep",
+      "scene": "course-masks",
+      "step": "masks-keep"
+    },
+    {
+      "stage": "sequence-composition-bass-pattern",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-bass-pattern"
+    },
+    {
+      "stage": "sequence-composition-bass-open-device",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-bass-open-device"
+    },
+    {
+      "stage": "sequence-composition-bass-route",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-bass-route"
+    },
+    {
+      "stage": "sequence-composition-both",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-both"
+    },
+    {
+      "stage": "sequence-composition-merge-skip",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-merge-skip"
+    },
+    {
+      "stage": "sequence-composition-merge-only",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-merge-only"
+    },
+    {
+      "stage": "sequence-composition-merge-all",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-merge-all"
+    },
+    {
+      "stage": "sequence-composition-merge",
+      "scene": "course-sequence-composition",
+      "step": "sequence-composition-merge"
+    },
+    {
+      "stage": "harmony-design-inherit",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-inherit"
+    },
+    {
+      "stage": "harmony-design-relative",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-relative"
+    },
+    {
+      "stage": "harmony-design-draft-before",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-draft-before"
+    },
+    {
+      "stage": "harmony-design-draft",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-draft"
+    },
+    {
+      "stage": "harmony-design-apply",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-apply"
+    },
+    {
+      "stage": "harmony-design-restore-c",
+      "scene": "course-harmony-design",
+      "step": "harmony-design-restore-c"
+    },
+    {
+      "stage": "modulation-movement-and-interest-pickup",
+      "scene": "course-modulation-movement-and-interest",
+      "step": "modulation-movement-and-interest-pickup"
+    },
+    {
+      "stage": "modulation-movement-and-interest-open-masks",
+      "scene": "course-modulation-movement-and-interest",
+      "step": "modulation-movement-and-interest-open-masks"
+    },
+    {
+      "stage": "modulation-movement-and-interest-level",
+      "scene": "course-modulation-movement-and-interest",
+      "step": "modulation-movement-and-interest-level"
+    },
+    {
+      "stage": "song-composition-copy",
+      "scene": "course-song-composition",
+      "step": "song-composition-copy"
+    },
+    {
+      "stage": "song-composition-sparse-muted",
+      "scene": "course-song-composition",
+      "step": "song-composition-sparse-muted"
+    },
+    {
+      "stage": "song-composition-sparse",
+      "scene": "course-song-composition",
+      "step": "song-composition-sparse"
+    },
+    {
+      "stage": "song-composition-global-length-slot1",
+      "scene": "course-song-composition",
+      "step": "song-composition-global-length-slot1"
+    },
+    {
+      "stage": "song-composition-global-length-slot2",
+      "scene": "course-song-composition",
+      "step": "song-composition-global-length-slot2"
+    },
+    {
+      "stage": "song-composition-length",
+      "scene": "course-song-composition",
+      "step": "song-composition-length"
+    },
+    {
+      "stage": "song-composition-transition",
+      "scene": "course-song-composition",
+      "step": "song-composition-transition"
+    },
+    {
+      "stage": "keep-your-work-menu",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-menu"
+    },
+    {
+      "stage": "keep-your-work-save",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-save"
+    },
+    {
+      "stage": "keep-your-work-temporary-edit",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-temporary-edit"
+    },
+    {
+      "stage": "keep-your-work-load-menu",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-load-menu"
+    },
+    {
+      "stage": "keep-your-work-reload",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-reload"
+    },
+    {
+      "stage": "keep-your-work-perform",
+      "scene": "course-keep-your-work",
+      "step": "keep-your-work-perform"
+    }
+  ],
+  "complete_regression_run": false,
+  "hardware_timing_verified": false,
+  "course_written": true,
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci",
+  "immutable_receipt": "/home/andy/mosaic-manual-build-operators/round4-course-remediation-20261007-01/course-bind-02/binding-receipt.json",
+  "immutable_receipt_sha256": "980a1faa1bc0c3d50641951fed647641bd662120ad4b9cdd661ea9d6f97f5019"
+}

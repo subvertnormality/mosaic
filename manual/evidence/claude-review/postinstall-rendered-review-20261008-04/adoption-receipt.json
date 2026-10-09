@@ -1,0 +1,49 @@
+{
+  "receipt_id": "postinstall-rendered-scoped-review-adoption-20261008-04",
+  "status": "SCOPED_RENDERED_REVIEW_ADOPTED; OVERALL_QUALIFICATION_NOT_MET",
+  "conditional_astra": {
+    "review_json_sha256": "70f8d342d727343f272c25e73a439b490e6e1fb4d3015a61134c5272f3ea7768",
+    "review_md_sha256": "066f06fb28362b9fe2c93787fddb4f77b5fdd92c31bca73d068c6327df641d5d",
+    "scores": {
+      "readability": 8,
+      "comprehensibility": 8,
+      "flow": 7,
+      "understandability": 8,
+      "user_friendliness": 8,
+      "usefulness_of_interactive_examples": 7,
+      "cohesion": 8
+    },
+    "verdict": "conditional failure",
+    "blocking_finding": "C07-1: Locks Decay endpoint practice copies Song slot 1 over slot 2 after Decay was assigned only in slot 2; follow-up must explicitly reassign Decay in slot 2 before held-step editing.",
+    "nonblocking_wording": "Small Hours interim listening text could identify which part is silent and which completed parts continue."
+  },
+  "rendered_scope": {
+    "receipt_sha256": "6b4b057f509b0bf28e61c1b24d8b737c3fbc4999fc85bbfbb7f7e45f35881d99",
+    "harness_sha256": "8150d4e5ed86753a4527f8a196be525df5dbeac517160c2533a8de27ef8ef4fc",
+    "passed": true,
+    "pages": 19,
+    "page_errors": 0,
+    "held_route": "Locks Decay endpoint intentionally omitted pending assignment-continuity correction."
+  },
+  "identity": {
+    "book_sha256": "38beead5d88faa3a5aa1a5a0fc27c25796308c4d84bd831060035fe5085ef89f",
+    "reader_index_sha256": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca",
+    "reader_script_sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "authority_sha256": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+    "preview": "http://localhost:8785/manual/"
+  },
+  "rating_status": "The earlier v07 source-only 52+2 all-criteria pass is superseded for this Locks Decay unit by the rendered C07-1 HOLD. It remains source-only evidence for the other units and is not whole-book rendered qualification.",
+  "other_gates": {
+    "three_leaf_candidate": "source-only candidate manifest prefix 7c47…; installation and rendered review pending",
+    "current_425_ledger_candidate": "external only; not installed",
+    "overall_astra": "NOT QUALIFIED",
+    "publication": "NOT QUALIFIED"
+  },
+  "limitations": [
+    "No listening claim; media checks were muted.",
+    "No native capture, audio generation, CI campaign, hardware or scheduling certification.",
+    "Root 425-unit ratings and native/chunk qualification remain separately attributed.",
+    "Owned browser sessions closed; production source and services unchanged."
+  ],
+  "installation": "Copied only this receipt, the conditional review JSON/Markdown, rendered scope receipt, and its harness. No source/YAML/generated/native/audio/ledger writes."
+}

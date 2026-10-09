@@ -1,0 +1,10 @@
+......F
+Failed tests:
+-------------
+1) test_ui_vertical_list_uses_semantic_labels_when_legacy_short_labels_differ
+...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:70: Rate
+expected: not nil, actual: nil
+stack traceback:
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:70: in function 'test_ui_vertical_list_uses_semantic_labels_when_legacy_short_labels_differ'
+
+Ran 7 tests in 0.001 seconds, 6 successes, 1 failure

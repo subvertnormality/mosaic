@@ -1,0 +1,12 @@
+{
+  "sceneCount": 146,
+  "rows": [
+    {
+      "scene": "chord-strum-a-timed-chord",
+      "step": "assign-strum",
+      "field": "caption",
+      "text": "From the verified half-step Strum slot, turn E2 to the next slot, press K2 and turn E3 to Chord Pattern."
+    }
+  ],
+  "failures": []
+}

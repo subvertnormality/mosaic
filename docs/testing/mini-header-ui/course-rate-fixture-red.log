@@ -1,0 +1,13 @@
+F
+======================================================================
+FAIL: test_bar_recipe_keeps_sixteenth_note_rate_through_actual_owner (test_manual_course_rate.CourseRateRecipe)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_rate.py", line 38, in test_bar_recipe_keeps_sixteenth_note_rate_through_actual_owner
+    self.assertEqual(int(actual.stdout.strip()),13,'four attacks at steps 1/5/9/13 require Rate /1, not /15 or /4')
+AssertionError: 30 != 13 : four attacks at steps 1/5/9/13 require Rate /1, not /15 or /4
+
+----------------------------------------------------------------------
+Ran 1 test in 0.009s
+
+FAILED (failures=1)

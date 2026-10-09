@@ -1,0 +1,113 @@
+{
+  "candidate": "grid-enlargement-fix-20261008-01",
+  "baseline": {
+    "url": "http://127.0.0.1:8785/manual/",
+    "sourceMirror": "C:/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/norns-layout-source-mirror-20261008-01",
+    "sha256": {
+      "manual/index.html": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482",
+      "manual/manual.js": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+      "manual/manual.css": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+      "manual/book.js": "6ca93f90d90196ac2c1ee6cbef31ae73bce2e9b065228016f65eae501c68ca18",
+      "tests/behaviour/manual_browser.cjs": "d95291ce447b91beb1ee80e077cf58337a66184bbeb27bf8e6e1a9dd06cc686e"
+    }
+  },
+  "candidateSourceSha256": {
+    "manual/manual.js": "044e9eb9317007ff306e894d00cef43dc4e1db258812abec623ba5f41b01624c",
+    "manual/manual.css": "fe941dd362280a148edc9afe20f4e6e05c86df34468d11d48445fdef4c17fe21",
+    "tests/behaviour/manual_browser.cjs": "b41b3c188784a2463c0af4d603b67876b602a010344295e8d18e91386f45f38a",
+    "grid_enlargement_regression.cjs": "e353478055fcfea31961ad128ec4b6facee7b7258103a7213471dcb33c5fe56d"
+  },
+  "proof": {
+    "red": {
+      "path": "proof/red-final.log",
+      "sha256": "d3bdfa92acced2bee510de39f598cb82442e9dd1457fe2f2972906e2aad37d11",
+      "result": "Frozen source failure: size/caption/disclosure assertions fail, including cases where enlarged 44px was smaller than the standard 5:éÝyø§yÓ63px grid."
+    },
+    "green": {
+      "path": "proof/green-final.log",
+      "sha256": "92a8571984b0eb74daada94fc952864eed5112c617ca8be60701ec0e156c6f99",
+      "result": "Candidate pass with issues=[] across 10 cases: Quickºw^~)Þvcontrol, control, lesson at 390 and 1440; control at 768, 1100, 1920, 2560."
+    },
+    "twoFileDiff": {
+      "path": "proof/two-file.diff",
+      "sha256": "7a76471de9cfcdd30f742b8395b8a9b25c9e47ad7bfc2c17768f8c5dfc5ddffd"
+    },
+    "registeredTestDiff": {
+      "path": "proof/registered-test.diff",
+      "sha256": "e0d78e8489973dd004a7891a2656b98e75a60d6733a69dcefff77137668a0374"
+    }
+  },
+  "matrix": [
+    {
+      "width": 390,
+      "routes": [
+        "#quick -> #grid-menu-navigation",
+        "#adding-trigs",
+        "#first-sound/lesson/first-sound-assign"
+      ]
+    },
+    {
+      "width": 768,
+      "routes": [
+        "#adding-trigs"
+      ]
+    },
+    {
+      "width": 1100,
+      "routes": [
+        "#adding-trigs"
+      ]
+    },
+    {
+      "width": 1440,
+      "routes": [
+        "#quick -> #grid-menu-navigation",
+        "#adding-trigs",
+        "#first-sound/lesson/first-sound-assign"
+      ]
+    },
+    {
+      "width": 1920,
+      "routes": [
+        "#adding-trigs"
+      ]
+    },
+    {
+      "width": 2560,
+      "routes": [
+        "#adding-trigs"
+      ]
+    }
+  ],
+  "measuredWidths": {
+    "390": [
+      16.8125,
+      44
+    ],
+    "768": [
+      38.9375,
+      44
+    ],
+    "1100": [
+      45.8125,
+      64
+    ],
+    "1440": [
+      59.28125,
+      80
+    ],
+    "1920": [
+      63.3125,
+      80
+    ],
+    "2560": [
+      63.3125,
+      80
+    ]
+  },
+  "unchangedPadLevelSha256": "474a3ba17fdd01c0f8ff7b1e8604e4c40ffd1f8d661fa376b05f0bf2d23b4db6",
+  "unchangedPadLabelSha256": "3366477c4cfd8c941bd5b49036b95461761e5fe9c9682f187a7a4ba9928e7533",
+  "registeredRegression": "tests/behaviour/manual_browser.cjs adds keyboard toggle assertions at 390,1100,1440,1920,2560 for 44px floor and >=20% growth when standard pads are already >=44px; checks document width and all 128 LED values and accessible labels before/after; baseline test file SHA256 d95291ce447b91beb1ee80e077cf58337a66184bbeb27bf8e6e1a9dd06cc686e.",
+  "patch": "manual.js synchronizes compact/enlarged disclosure text, caption and accessible grid name. manual.css uses clamp(44px,calc(8vw - 24px),80px) for expanded grid pads and preserves horizontal pan inside the grid wrapper. No grid data changes.",
+  "limitations": "External proposal only; :8785 source remains frozen. Candidate-injected browser regression and registered test diff are preserved. No source install, compile, emulator, audio, or service restart."
+}

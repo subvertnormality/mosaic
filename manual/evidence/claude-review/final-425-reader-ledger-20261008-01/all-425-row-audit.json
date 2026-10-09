@@ -1,0 +1,4060 @@
+{
+  "schema": "final-425-row-audit-v1",
+  "baseline_ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+  "source_only_candidate_sha256": "42e59780fc1ce5987564ccc7f62f4e8ca3a214cdcea927c2498b5cbeb6d86699",
+  "source_only_delta_sha256": "e90c2b2e0761d588967ba57988cc5cc0b187c9ba7e77aa11a5d72bcbd6006cbb",
+  "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+  "source_review_v07_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+  "followup_review_sha256": "0423e6769944cda6103733b065be49d28659bd8e3e0648592bb291577270f98a",
+  "rendered_receipt_sha256": "1c36a781104d1e5cd33cfa75aed3c96f417efbbc105c8744960726914bf7ab21",
+  "astra_review_sha256": "c84cb0994000d8810f27fe58319a20c99fe9dd8a3f9f7544d5bd3d69c3fe0be0",
+  "final_ledger_sha256": "78d46761bfe935c480d50cd5a8aedb26f8b9e9fcd59cf063e824ad4cbbe2f4bc",
+  "counts": {
+    "ledger_rows": 425,
+    "unique_ids": 425,
+    "rubric_criteria": 10,
+    "direct_rows_from_source_only_review": 38,
+    "direct_subunits": 41,
+    "final_followup_rows_within_direct_set": 3,
+    "unchanged_rows_vs_fe378": 387,
+    "source_review_units": 52,
+    "additional_performance_scalars": 2,
+    "standalone_or_projection_units_outside_inventory": 11,
+    "unique_dependency_units_outside_direct_inventory": 63
+  },
+  "criterion_minima": {
+    "coherence": 8,
+    "usefulness": 8,
+    "understandability": 8,
+    "representation": 8,
+    "granularity": 8,
+    "flow": 8,
+    "integration": 8,
+    "vocabulary": 8,
+    "naming": 8,
+    "canonical_home": 8
+  },
+  "threshold": 8,
+  "all_425_meet_threshold": true,
+  "all_425_freshly_rated": false,
+  "carry_definition": "Each of the 387 non-direct rows is exactly equal, as a complete JSON record including score, basis, and score_evidence, to the fe378 baseline row. The other 38 IDs are the exact crosswalk direct targets; all 38 have 10/10 criteria >=8 from v07, with three of those rows refreshed by the final follow-up review.",
+  "carried_rows": [
+    {
+      "id": "course:build-a-phrase-compare",
+      "baseline_row_sha256": "dfda00b138872d8de97178c29952b6bd7321c208617a4497cb65181d5030f742",
+      "final_row_sha256": "dfda00b138872d8de97178c29952b6bd7321c208617a4497cb65181d5030f742"
+    },
+    {
+      "id": "course:build-a-phrase-open-masks",
+      "baseline_row_sha256": "3672ecdc10bbcf3e749e717d03e728cfd6fc68bdf888660dafd6e1a854edf6ab",
+      "final_row_sha256": "3672ecdc10bbcf3e749e717d03e728cfd6fc68bdf888660dafd6e1a854edf6ab"
+    },
+    {
+      "id": "course:build-a-phrase-range",
+      "baseline_row_sha256": "55db9ce0791b8d3dc6c7d1ac0e48c55c13f636dd4b064fea7141efdd999e1c7f",
+      "final_row_sha256": "55db9ce0791b8d3dc6c7d1ac0e48c55c13f636dd4b064fea7141efdd999e1c7f"
+    },
+    {
+      "id": "course:build-a-phrase-rate",
+      "baseline_row_sha256": "3766efc4ae0223e2a1057d7fa0ef2c3f6208a6973b421438da2d98f867140400",
+      "final_row_sha256": "3766efc4ae0223e2a1057d7fa0ef2c3f6208a6973b421438da2d98f867140400"
+    },
+    {
+      "id": "course:build-a-phrase-rhythm",
+      "baseline_row_sha256": "8b3dc7dd8a0b50b4f3454aeec79d84570bf451a13e81abfdd6802d228225b483",
+      "final_row_sha256": "8b3dc7dd8a0b50b4f3454aeec79d84570bf451a13e81abfdd6802d228225b483"
+    },
+    {
+      "id": "course:first-sound-assign",
+      "baseline_row_sha256": "c2d503661531f8071bce5ff4b20c9993e0c946b5dd28d96e6b49ab8ebaee5e74",
+      "final_row_sha256": "c2d503661531f8071bce5ff4b20c9993e0c946b5dd28d96e6b49ab8ebaee5e74"
+    },
+    {
+      "id": "course:first-sound-attacks",
+      "baseline_row_sha256": "664d1e92f4cba007de9565885fe289b57c8bc2ce680886c14285d3fc652363e2",
+      "final_row_sha256": "664d1e92f4cba007de9565885fe289b57c8bc2ce680886c14285d3fc652363e2"
+    },
+    {
+      "id": "course:first-sound-defaults",
+      "baseline_row_sha256": "8453981b6c53d8df1746cf2f89e6b82f97022e96de8746dd558ef3190f95838f",
+      "final_row_sha256": "8453981b6c53d8df1746cf2f89e6b82f97022e96de8746dd558ef3190f95838f"
+    },
+    {
+      "id": "course:first-sound-hear",
+      "baseline_row_sha256": "576e42d8a0b7825d405550cd280faed77a4b3356993c737280754814fa3757c6",
+      "final_row_sha256": "576e42d8a0b7825d405550cd280faed77a4b3356993c737280754814fa3757c6"
+    },
+    {
+      "id": "course:first-sound-masks-open",
+      "baseline_row_sha256": "18a27ab3881fdcdc135571170efbc40ad76e21eff5297411b145b0c369e8631f",
+      "final_row_sha256": "18a27ab3881fdcdc135571170efbc40ad76e21eff5297411b145b0c369e8631f"
+    },
+    {
+      "id": "course:getting-started-notation",
+      "baseline_row_sha256": "139824d093e9516e385a53d19ccf91111f40380b51c7a5e70e79c5b2d812298d",
+      "final_row_sha256": "139824d093e9516e385a53d19ccf91111f40380b51c7a5e70e79c5b2d812298d"
+    },
+    {
+      "id": "course:getting-started-objects",
+      "baseline_row_sha256": "058fcf549de4fa9b08fd2b738df9fc67770cee3769063b1e9708d342a87b75a1",
+      "final_row_sha256": "058fcf549de4fa9b08fd2b738df9fc67770cee3769063b1e9708d342a87b75a1"
+    },
+    {
+      "id": "course:harmony-design-apply",
+      "baseline_row_sha256": "19bc5d97ddc5140c3c44fc9fc222738813539e932f2f07bc82eb2b38e055fc08",
+      "final_row_sha256": "19bc5d97ddc5140c3c44fc9fc222738813539e932f2f07bc82eb2b38e055fc08"
+    },
+    {
+      "id": "course:harmony-design-draft",
+      "baseline_row_sha256": "4647c3ed3e35ba82ad5d2989072ecc8b7b87f9dabfdff540bcfe561bb311b945",
+      "final_row_sha256": "4647c3ed3e35ba82ad5d2989072ecc8b7b87f9dabfdff540bcfe561bb311b945"
+    },
+    {
+      "id": "course:harmony-design-draft-before",
+      "baseline_row_sha256": "c56f4396245c38d6a8beb9edb704e7a4b243f417cc2d4da8dce9ad9c3fd3dccb",
+      "final_row_sha256": "c56f4396245c38d6a8beb9edb704e7a4b243f417cc2d4da8dce9ad9c3fd3dccb"
+    },
+    {
+      "id": "course:harmony-design-inherit",
+      "baseline_row_sha256": "a1b9deba1b8f2f2d60ec8fcdf2c77905ab13bcfc9fd4ee4a99cb888383784074",
+      "final_row_sha256": "a1b9deba1b8f2f2d60ec8fcdf2c77905ab13bcfc9fd4ee4a99cb888383784074"
+    },
+    {
+      "id": "course:harmony-design-relative",
+      "baseline_row_sha256": "b1b059e49efbc06c2e0a1a0e94625cf2dbf474e9cf8063a86b8ec1f880b6c417",
+      "final_row_sha256": "b1b059e49efbc06c2e0a1a0e94625cf2dbf474e9cf8063a86b8ec1f880b6c417"
+    },
+    {
+      "id": "course:harmony-design-restore-c",
+      "baseline_row_sha256": "5e82b613f6121b24e350f22de60086a4d48fde58282579885e620833a8dbbc9c",
+      "final_row_sha256": "5e82b613f6121b24e350f22de60086a4d48fde58282579885e620833a8dbbc9c"
+    },
+    {
+      "id": "course:keep-your-work-load-menu",
+      "baseline_row_sha256": "00e4db8cf974ced14697944f0c04193a171871599876ab48eb545010b1d6ee85",
+      "final_row_sha256": "00e4db8cf974ced14697944f0c04193a171871599876ab48eb545010b1d6ee85"
+    },
+    {
+      "id": "course:keep-your-work-menu",
+      "baseline_row_sha256": "0a7075e501a1e7376f9a904191b54dae103097e5179a89a14b3926419c1de3bc",
+      "final_row_sha256": "0a7075e501a1e7376f9a904191b54dae103097e5179a89a14b3926419c1de3bc"
+    },
+    {
+      "id": "course:keep-your-work-perform",
+      "baseline_row_sha256": "a61e58fc5c3e8cd534d7a05142e4a9d23048d9e7eae1ec32d8dd6376f85e5419",
+      "final_row_sha256": "a61e58fc5c3e8cd534d7a05142e4a9d23048d9e7eae1ec32d8dd6376f85e5419"
+    },
+    {
+      "id": "course:keep-your-work-reload",
+      "baseline_row_sha256": "49acabbb2960b43ffe819ab25c33cf381973b858baf7e36e63389eb9d91e5594",
+      "final_row_sha256": "49acabbb2960b43ffe819ab25c33cf381973b858baf7e36e63389eb9d91e5594"
+    },
+    {
+      "id": "course:keep-your-work-save",
+      "baseline_row_sha256": "419527bdfe495a6be3ea9689264a274fc14c1e3bfaf8fc5d993bf1af5bd9f2cb",
+      "final_row_sha256": "419527bdfe495a6be3ea9689264a274fc14c1e3bfaf8fc5d993bf1af5bd9f2cb"
+    },
+    {
+      "id": "course:keep-your-work-temporary-edit",
+      "baseline_row_sha256": "d7d53e52fd61e191a0412d9e6fe09a0305a98ab210ddb61f9cf77117f2105676",
+      "final_row_sha256": "d7d53e52fd61e191a0412d9e6fe09a0305a98ab210ddb61f9cf77117f2105676"
+    },
+    {
+      "id": "course:masks-clear",
+      "baseline_row_sha256": "4d2b061863ba49ed946116800d31d48a03455ee93e2f59c0153d91fcce430f95",
+      "final_row_sha256": "4d2b061863ba49ed946116800d31d48a03455ee93e2f59c0153d91fcce430f95"
+    },
+    {
+      "id": "course:masks-default",
+      "baseline_row_sha256": "23a014ee8d3dd1d50526ffda9af342418d59182c1ff02140b670b104a5eacb1e",
+      "final_row_sha256": "23a014ee8d3dd1d50526ffda9af342418d59182c1ff02140b670b104a5eacb1e"
+    },
+    {
+      "id": "course:masks-default-restore",
+      "baseline_row_sha256": "726e12ffa142b8e3caef56e89e693052114319ae45e9923f21feb4ebfe10e0d4",
+      "final_row_sha256": "726e12ffa142b8e3caef56e89e693052114319ae45e9923f21feb4ebfe10e0d4"
+    },
+    {
+      "id": "course:masks-edit",
+      "baseline_row_sha256": "b28a892911bd9cafa5214d24b24bcd3cc8082ee226dfba614889e5e9c65fac53",
+      "final_row_sha256": "b28a892911bd9cafa5214d24b24bcd3cc8082ee226dfba614889e5e9c65fac53"
+    },
+    {
+      "id": "course:masks-hold",
+      "baseline_row_sha256": "db40a5fd44b2b999d6823e45526b89504ca9f021ebc99adf44c0a3fd736ec391",
+      "final_row_sha256": "db40a5fd44b2b999d6823e45526b89504ca9f021ebc99adf44c0a3fd736ec391"
+    },
+    {
+      "id": "course:masks-keep",
+      "baseline_row_sha256": "6ea9f30d49c8206d525fce5328d86b43c78a0f2d315719a99b85a298e6e3959b",
+      "final_row_sha256": "6ea9f30d49c8206d525fce5328d86b43c78a0f2d315719a99b85a298e6e3959b"
+    },
+    {
+      "id": "course:masks-listen",
+      "baseline_row_sha256": "0071d50b0d853b4f07df867c9433c19494c3693a0c0bac22cd62f86c9fb6a107",
+      "final_row_sha256": "0071d50b0d853b4f07df867c9433c19494c3693a0c0bac22cd62f86c9fb6a107"
+    },
+    {
+      "id": "course:masks-open",
+      "baseline_row_sha256": "2f6ca8dd39f016380c41f80eeee3aec1664178e633a38543fcac97a7775bf43e",
+      "final_row_sha256": "2f6ca8dd39f016380c41f80eeee3aec1664178e633a38543fcac97a7775bf43e"
+    },
+    {
+      "id": "course:masks-quiet",
+      "baseline_row_sha256": "e05ec40874eceec39073a9ae1ef4580664e41428a23794c26d37b98a67b15ca6",
+      "final_row_sha256": "e05ec40874eceec39073a9ae1ef4580664e41428a23794c26d37b98a67b15ca6"
+    },
+    {
+      "id": "course:masks-release",
+      "baseline_row_sha256": "c6585bed870d0c9c58cc4e263cc9fae53b3c939f23af52dcd6db0b8837611add",
+      "final_row_sha256": "c6585bed870d0c9c58cc4e263cc9fae53b3c939f23af52dcd6db0b8837611add"
+    },
+    {
+      "id": "course:modulation-movement-and-interest-level",
+      "baseline_row_sha256": "3a1b4465962d8a2f44b21adcd59cd8b68285568f43f3a6de973e9038c6afe093",
+      "final_row_sha256": "3a1b4465962d8a2f44b21adcd59cd8b68285568f43f3a6de973e9038c6afe093"
+    },
+    {
+      "id": "course:modulation-movement-and-interest-open-masks",
+      "baseline_row_sha256": "0d8ed4faa4595bbd8f1ad1c4df19c9b2c14afc27458346d29aadb3bec7331c1a",
+      "final_row_sha256": "0d8ed4faa4595bbd8f1ad1c4df19c9b2c14afc27458346d29aadb3bec7331c1a"
+    },
+    {
+      "id": "course:modulation-movement-and-interest-pickup",
+      "baseline_row_sha256": "6c43ff6541474bda421b0549de9caa20e10245c932a3996d878c2f958124af7f",
+      "final_row_sha256": "6c43ff6541474bda421b0549de9caa20e10245c932a3996d878c2f958124af7f"
+    },
+    {
+      "id": "course:sequence-composition-bass-open-device",
+      "baseline_row_sha256": "bf3bf31417e6aa7867356d550cdc719fbb586932108d2fdbddbea3b1ffaa1f63",
+      "final_row_sha256": "bf3bf31417e6aa7867356d550cdc719fbb586932108d2fdbddbea3b1ffaa1f63"
+    },
+    {
+      "id": "course:sequence-composition-bass-pattern",
+      "baseline_row_sha256": "daad9f9a8cb82f3039dc4067074f0f3581b0a7a33c52a396b1d2afc4b7a91d02",
+      "final_row_sha256": "daad9f9a8cb82f3039dc4067074f0f3581b0a7a33c52a396b1d2afc4b7a91d02"
+    },
+    {
+      "id": "course:sequence-composition-bass-route",
+      "baseline_row_sha256": "1d7d805ab4942a63222da5befca2acaba18738c4133dce2ee62b8faac415e934",
+      "final_row_sha256": "1d7d805ab4942a63222da5befca2acaba18738c4133dce2ee62b8faac415e934"
+    },
+    {
+      "id": "course:sequence-composition-both",
+      "baseline_row_sha256": "9a168b7ab6634b70ef58653621731990a105dab75e78d5ed3a2d5154a211e769",
+      "final_row_sha256": "9a168b7ab6634b70ef58653621731990a105dab75e78d5ed3a2d5154a211e769"
+    },
+    {
+      "id": "course:sequence-composition-merge",
+      "baseline_row_sha256": "dca12e2fe8fbd9a032675e8a52e16141224d8726135fdb98e23e12a5c42c323d",
+      "final_row_sha256": "dca12e2fe8fbd9a032675e8a52e16141224d8726135fdb98e23e12a5c42c323d"
+    },
+    {
+      "id": "course:sequence-composition-merge-all",
+      "baseline_row_sha256": "0139cd685dbf3969547278402b46b3707b17041dae70cc5e4f364f62b394ce3b",
+      "final_row_sha256": "0139cd685dbf3969547278402b46b3707b17041dae70cc5e4f364f62b394ce3b"
+    },
+    {
+      "id": "course:sequence-composition-merge-only",
+      "baseline_row_sha256": "0163639317d269f39f3ff8621835235db5952faed24d8d2e559aeb9351c5f5ee",
+      "final_row_sha256": "0163639317d269f39f3ff8621835235db5952faed24d8d2e559aeb9351c5f5ee"
+    },
+    {
+      "id": "course:sequence-composition-merge-skip",
+      "baseline_row_sha256": "a289ecc6b81c75a1cde274fb60240aab91add5f897c425eb0bd234460a6f6446",
+      "final_row_sha256": "a289ecc6b81c75a1cde274fb60240aab91add5f897c425eb0bd234460a6f6446"
+    },
+    {
+      "id": "course:setup-apply",
+      "baseline_row_sha256": "0c3b615b34f38964348f29f05f9df05ad5fee2a24a1b1089d804ff543e6a8e70",
+      "final_row_sha256": "0c3b615b34f38964348f29f05f9df05ad5fee2a24a1b1089d804ff543e6a8e70"
+    },
+    {
+      "id": "course:setup-route",
+      "baseline_row_sha256": "6b9af6341c35e90cb934d33b057d764b94f4ff3aa9dc7914d9780a520524e1df",
+      "final_row_sha256": "6b9af6341c35e90cb934d33b057d764b94f4ff3aa9dc7914d9780a520524e1df"
+    },
+    {
+      "id": "course:setup-tempo",
+      "baseline_row_sha256": "511f287092eaa2e0480a49a342ce4f38040a33c03f2fbf7e64e58f7e030f5bf6",
+      "final_row_sha256": "511f287092eaa2e0480a49a342ce4f38040a33c03f2fbf7e64e58f7e030f5bf6"
+    },
+    {
+      "id": "course:song-composition-copy",
+      "baseline_row_sha256": "3ddf9ceccc44afb2afd3f9b0f86d3cff727d66e8f5531cd1af9ae8429618c089",
+      "final_row_sha256": "3ddf9ceccc44afb2afd3f9b0f86d3cff727d66e8f5531cd1af9ae8429618c089"
+    },
+    {
+      "id": "course:song-composition-global-length-slot1",
+      "baseline_row_sha256": "51fa9e9f077ff43df7769f1790c992b97b058aacb0acc551e6ead0084426c128",
+      "final_row_sha256": "51fa9e9f077ff43df7769f1790c992b97b058aacb0acc551e6ead0084426c128"
+    },
+    {
+      "id": "course:song-composition-global-length-slot2",
+      "baseline_row_sha256": "fe3f3bd8387f118a19c6ad1b4499e26df0a32e4ebf3e16630d3a4ee4537b7c44",
+      "final_row_sha256": "fe3f3bd8387f118a19c6ad1b4499e26df0a32e4ebf3e16630d3a4ee4537b7c44"
+    },
+    {
+      "id": "course:song-composition-length",
+      "baseline_row_sha256": "3fe81743d0a8f38c012d7691006689bf90fdd8639e5b16756bea9953ae2f3aa1",
+      "final_row_sha256": "3fe81743d0a8f38c012d7691006689bf90fdd8639e5b16756bea9953ae2f3aa1"
+    },
+    {
+      "id": "course:song-composition-sparse",
+      "baseline_row_sha256": "c31e696b5444cd36de9df6edfcdb5f9acf1fd03a0461a6a522086e9c4c9f7e07",
+      "final_row_sha256": "c31e696b5444cd36de9df6edfcdb5f9acf1fd03a0461a6a522086e9c4c9f7e07"
+    },
+    {
+      "id": "course:song-composition-sparse-muted",
+      "baseline_row_sha256": "3c65c2740adbcb7d396af6d316e666cad678d44c115ab012ad73d880bd573f00",
+      "final_row_sha256": "3c65c2740adbcb7d396af6d316e666cad678d44c115ab012ad73d880bd573f00"
+    },
+    {
+      "id": "course:song-composition-transition",
+      "baseline_row_sha256": "cc9e22776904f0349ae3e0590ea391e4d51689bd0f1a3a7af50b3a0a4a143162",
+      "final_row_sha256": "cc9e22776904f0349ae3e0590ea391e4d51689bd0f1a3a7af50b3a0a4a143162"
+    },
+    {
+      "id": "lesson:adding-chords:add-scale-third-to-chord",
+      "baseline_row_sha256": "46a9ad457991bc11a031d649184f2ec6e2b132092e9e512ca6009a1e90097027",
+      "final_row_sha256": "46a9ad457991bc11a031d649184f2ec6e2b132092e9e512ca6009a1e90097027"
+    },
+    {
+      "id": "lesson:adding-chords:chord-arpeggio-gates",
+      "baseline_row_sha256": "1c8cb4d5073e34b4aebeb86b0a6f8e1f55045f6d85ea600d162ee90d43199f57",
+      "final_row_sha256": "1c8cb4d5073e34b4aebeb86b0a6f8e1f55045f6d85ea600d162ee90d43199f57"
+    },
+    {
+      "id": "lesson:adding-chords:chord-strum-forward",
+      "baseline_row_sha256": "9b7e86da63206646b0041698bbded40b642080023e2edce9cbb8c9685d1021c6",
+      "final_row_sha256": "9b7e86da63206646b0041698bbded40b642080023e2edce9cbb8c9685d1021c6"
+    },
+    {
+      "id": "lesson:adding-melodic-notes-over-harmony-and-drums:mask-default-exceptions-and-clear",
+      "baseline_row_sha256": "776d00a910a3a717a9ed0c46381f58fb4eb7b4c21cf207d8db1ea0f6e51232b4",
+      "final_row_sha256": "776d00a910a3a717a9ed0c46381f58fb4eb7b4c21cf207d8db1ea0f6e51232b4"
+    },
+    {
+      "id": "lesson:adding-notes:play-pattern-copy-groups-play-step-group-1",
+      "baseline_row_sha256": "5b5c99a89f891dbe29baf84afe7f85ace53b754d71b89fdddcfefadf0fdf6492",
+      "final_row_sha256": "5b5c99a89f891dbe29baf84afe7f85ace53b754d71b89fdddcfefadf0fdf6492"
+    },
+    {
+      "id": "lesson:adding-notes:step-4-degree-6",
+      "baseline_row_sha256": "89a7c0de10590ae0330eb83eabc61a1da2b2d32a5cd45a16ad16c8e6972902ef",
+      "final_row_sha256": "89a7c0de10590ae0330eb83eabc61a1da2b2d32a5cd45a16ad16c8e6972902ef"
+    },
+    {
+      "id": "lesson:adding-notes:step-4-restored-root-page",
+      "baseline_row_sha256": "039f3e89960738b7d42e7b452f8f207d83c793ae197bef276e99958dd5475de6",
+      "final_row_sha256": "039f3e89960738b7d42e7b452f8f207d83c793ae197bef276e99958dd5475de6"
+    },
+    {
+      "id": "lesson:adding-patterns-to-channels:play-workflow-patterns-and-scale-default-skip",
+      "baseline_row_sha256": "207ed78b176da265625ad51d3b92de6d00f9f01d9eecb4920e8654e552d5049a",
+      "final_row_sha256": "207ed78b176da265625ad51d3b92de6d00f9f01d9eecb4920e8654e552d5049a"
+    },
+    {
+      "id": "lesson:adding-trig-masks:add-trig-mask-to-silent-step-five",
+      "baseline_row_sha256": "4a2337e8bee229b0de4f5140e0e2b0a6df49b609f6a6b4b835cae1a87cfcd22a",
+      "final_row_sha256": "4a2337e8bee229b0de4f5140e0e2b0a6df49b609f6a6b4b835cae1a87cfcd22a"
+    },
+    {
+      "id": "lesson:adding-trig-masks:store-e3-note-before-trig",
+      "baseline_row_sha256": "0191b84674a342ddfc9db9b81de8283d50ac56c443e06bab1d03bfb4adf81ed9",
+      "final_row_sha256": "0191b84674a342ddfc9db9b81de8283d50ac56c443e06bab1d03bfb4adf81ed9"
+    },
+    {
+      "id": "lesson:adding-trigs:field-algorithm-choose-and-preview-reopen-algorithm",
+      "baseline_row_sha256": "1a58279f08ca54e9856d225f8176c9f6fa751f3ce3ecbb621bd9eb897f4e6eef",
+      "final_row_sha256": "1a58279f08ca54e9856d225f8176c9f6fa751f3ce3ecbb621bd9eb897f4e6eef"
+    },
+    {
+      "id": "lesson:adding-trigs:paint-shift-and-cancel",
+      "baseline_row_sha256": "1910ff403c2cf896f078704ee0a3677d8f93222f0357d749e2ccf3faea8206ac",
+      "final_row_sha256": "1910ff403c2cf896f078704ee0a3677d8f93222f0357d749e2ccf3faea8206ac"
+    },
+    {
+      "id": "lesson:adding-velocity:play-pattern-copy-groups-play-step-group-1",
+      "baseline_row_sha256": "b2d26cc4e49ddb4dba2094e66fc79e9506972c965f06575ccca006cb7c63f3e3",
+      "final_row_sha256": "b2d26cc4e49ddb4dba2094e66fc79e9506972c965f06575ccca006cb7c63f3e3"
+    },
+    {
+      "id": "lesson:adding-velocity:step-4-full-velocity",
+      "baseline_row_sha256": "d6a7e3b34f189285f051666f5a1d4e908137112db55df439f1a6f2f1f0e413ef",
+      "final_row_sha256": "d6a7e3b34f189285f051666f5a1d4e908137112db55df439f1a6f2f1f0e413ef"
+    },
+    {
+      "id": "lesson:adding-velocity:step-4-velocity-68",
+      "baseline_row_sha256": "c375ca201eea4a18d3e93d5358eee8fa33e30f9a457a6f998e1e66c4f08df9c3",
+      "final_row_sha256": "c375ca201eea4a18d3e93d5358eee8fa33e30f9a457a6f998e1e66c4f08df9c3"
+    },
+    {
+      "id": "lesson:adding-velocity:step-4-velocity-9",
+      "baseline_row_sha256": "d205b733c2f3629b0008f6aa47b8517370fb7dfa19d698c745ba9fddeedf3846",
+      "final_row_sha256": "d205b733c2f3629b0008f6aa47b8517370fb7dfa19d698c745ba9fddeedf3846"
+    },
+    {
+      "id": "lesson:adjusting-song-sequence-length:four-step-song-phrase",
+      "baseline_row_sha256": "d43ed856e567c91026ce30d8978464711f770d49ab65f5b43dded8c34e6e1327",
+      "final_row_sha256": "d43ed856e567c91026ce30d8978464711f770d49ab65f5b43dded8c34e6e1327"
+    },
+    {
+      "id": "lesson:adjusting-song-sequence-length:two-step-song-phrase",
+      "baseline_row_sha256": "974f715df315b3d412560fda8d15447674c644b703298e6fb84b1f787da1af69",
+      "final_row_sha256": "974f715df315b3d412560fda8d15447674c644b703298e6fb84b1f787da1af69"
+    },
+    {
+      "id": "lesson:arm-live-record:play-record-keyboard-steps-replay",
+      "baseline_row_sha256": "016c8a81515688c604d59039a66ccc29f4353cff132d0c9c22217a5802b465ff",
+      "final_row_sha256": "016c8a81515688c604d59039a66ccc29f4353cff132d0c9c22217a5802b465ff"
+    },
+    {
+      "id": "lesson:button-indicators:play-song-slot-light-states-playing",
+      "baseline_row_sha256": "8fa4d67e92965edb1bdcbf0dcfc105952a407d6f02618e4697c654a7d70239f4",
+      "final_row_sha256": "8fa4d67e92965edb1bdcbf0dcfc105952a407d6f02618e4697c654a7d70239f4"
+    },
+    {
+      "id": "lesson:channel-editor:channel-2-rate-half-speed",
+      "baseline_row_sha256": "60859bdfce2ab880c8c94453460cad95d6fbd4ac014b7563ecd36ce421a2dc7a",
+      "final_row_sha256": "60859bdfce2ab880c8c94453460cad95d6fbd4ac014b7563ecd36ce421a2dc7a"
+    },
+    {
+      "id": "lesson:channel-editor:hold-step-return",
+      "baseline_row_sha256": "1ec941f7a672f1b4430d59ac253c96ab12697591238aaf0b1dc647a4075800ce",
+      "final_row_sha256": "1ec941f7a672f1b4430d59ac253c96ab12697591238aaf0b1dc647a4075800ce"
+    },
+    {
+      "id": "lesson:channel-editor:play-fixed-note-default-and-locks-channel60",
+      "baseline_row_sha256": "160a39241f65c6990c19162a035ddc7de3efb35f561d2ada8b3a410ac9f2220b",
+      "final_row_sha256": "160a39241f65c6990c19162a035ddc7de3efb35f561d2ada8b3a410ac9f2220b"
+    },
+    {
+      "id": "lesson:channel-editor:play-workflow-second-channel-two-channels",
+      "baseline_row_sha256": "95d78710ec48fccbc4574808c0d2623c5bdcc63197f4f983d23b3f07941ba05c",
+      "final_row_sha256": "95d78710ec48fccbc4574808c0d2623c5bdcc63197f4f983d23b3f07941ba05c"
+    },
+    {
+      "id": "lesson:channel-length:play-range-reject-and-recover-valid-range",
+      "baseline_row_sha256": "82ea24a02279a897c724d9d8e7b015051da5cb148771323a0dba45f671aa792d",
+      "final_row_sha256": "82ea24a02279a897c724d9d8e7b015051da5cb148771323a0dba45f671aa792d"
+    },
+    {
+      "id": "lesson:chord-acceleration:play-chord-acceleration-slowing-positive",
+      "baseline_row_sha256": "00e4dfe7f93abe40caca7bc6ab0dd8b3bc2758f217c1fe78fdf1aa3e1062214f",
+      "final_row_sha256": "00e4dfe7f93abe40caca7bc6ab0dd8b3bc2758f217c1fe78fdf1aa3e1062214f"
+    },
+    {
+      "id": "lesson:chord-acceleration:play-chord-acceleration-termination-negative",
+      "baseline_row_sha256": "9dca8efadac6420e26e0d4b03b88122ad72c3d1143218e5928415ede4f65ad85",
+      "final_row_sha256": "9dca8efadac6420e26e0d4b03b88122ad72c3d1143218e5928415ede4f65ad85"
+    },
+    {
+      "id": "lesson:chord-arpeggio:play-chord-arpeggio-timed-gates-arp",
+      "baseline_row_sha256": "a749297e0fe7ef412e7adce15a381bdfe44654933ac6c104c29008327388ed5a",
+      "final_row_sha256": "a749297e0fe7ef412e7adce15a381bdfe44654933ac6c104c29008327388ed5a"
+    },
+    {
+      "id": "lesson:chord-shape-modifier:play-chord-shape-forward-forward",
+      "baseline_row_sha256": "d875ef9cbca66f42848cfb8140811877b81abe8a5dbbf08ab3ec515f54fa692a",
+      "final_row_sha256": "d875ef9cbca66f42848cfb8140811877b81abe8a5dbbf08ab3ec515f54fa692a"
+    },
+    {
+      "id": "lesson:chord-spread:play-chord-spread-separate-gap-constant",
+      "baseline_row_sha256": "eb18653c25482bba445ebf5dc22c6f303ce589a50a3d542be334ffce0f17cdae",
+      "final_row_sha256": "eb18653c25482bba445ebf5dc22c6f303ce589a50a3d542be334ffce0f17cdae"
+    },
+    {
+      "id": "lesson:chord-strum:play-chord-strum-a-timed-chord-forward",
+      "baseline_row_sha256": "8e7f3274297710a3ea3239f6ee9b0f3cc964473a25ffa9308f669e261e26dd79",
+      "final_row_sha256": "8e7f3274297710a3ea3239f6ee9b0f3cc964473a25ffa9308f669e261e26dd79"
+    },
+    {
+      "id": "lesson:chord-velocity-modifier:voices-grow-louder",
+      "baseline_row_sha256": "7348438232efd4bbe04c13288e31406f75e86a2acfd4e1509606cbcc15ff1ec2",
+      "final_row_sha256": "7348438232efd4bbe04c13288e31406f75e86a2acfd4e1509606cbcc15ff1ec2"
+    },
+    {
+      "id": "lesson:clocks-swing-and-shuffle:field-channel-routing-visible-scope-open-clock",
+      "baseline_row_sha256": "79bb9b1bd0c8d9f41ce51ca379323b6ff127fb70660ef11d656ee2972effa020",
+      "final_row_sha256": "79bb9b1bd0c8d9f41ce51ca379323b6ff127fb70660ef11d656ee2972effa020"
+    },
+    {
+      "id": "lesson:clocks-swing-and-shuffle:field-swing-interlock-pulse-times-swing-setting",
+      "baseline_row_sha256": "c432bd432c23301acc5036628dfe8e780eccd845bab1f7dbbfdae794e58e7511",
+      "final_row_sha256": "c432bd432c23301acc5036628dfe8e780eccd845bab1f7dbbfdae794e58e7511"
+    },
+    {
+      "id": "lesson:clocks-swing-and-shuffle:field-vertical-clock-neighbors-select-swing",
+      "baseline_row_sha256": "2716658f30543fb334691232b371b14f79ab319ab77003c4b21957f0dbbf03dc",
+      "final_row_sha256": "2716658f30543fb334691232b371b14f79ab319ab77003c4b21957f0dbbf03dc"
+    },
+    {
+      "id": "lesson:clocks-swing-and-shuffle:play-shuffle-smooth-amount-boundaries-amount-50",
+      "baseline_row_sha256": "bb354967b023417be7225b5fc132efd7ebcf66d26eb91f03b0ba98b7bd4d0b09",
+      "final_row_sha256": "bb354967b023417be7225b5fc132efd7ebcf66d26eb91f03b0ba98b7bd4d0b09"
+    },
+    {
+      "id": "lesson:device-parameters:cc1-global-slide",
+      "baseline_row_sha256": "4310345c6cfba0be0599c3aa4328b10c488749e9bdd53828c22b128e688ad0ef",
+      "final_row_sha256": "4310345c6cfba0be0599c3aa4328b10c488749e9bdd53828c22b128e688ad0ef"
+    },
+    {
+      "id": "lesson:device-parameters:configured-device-value-boundaries-select-control-1",
+      "baseline_row_sha256": "b17af9ca953d761e0357cfac1faa09c60cae21f16f5739c655e0f2e0c0a5342e",
+      "final_row_sha256": "b17af9ca953d761e0357cfac1faa09c60cae21f16f5739c655e0f2e0c0a5342e"
+    },
+    {
+      "id": "lesson:device-parameters:device-cc1-lock-and-play",
+      "baseline_row_sha256": "f17d462b9f1bd256c57fab0e1d67618010062343d7e850266d4f0ff2eb85ab19",
+      "final_row_sha256": "f17d462b9f1bd256c57fab0e1d67618010062343d7e850266d4f0ff2eb85ab19"
+    },
+    {
+      "id": "lesson:device-parameters:step-local-cc1-slide",
+      "baseline_row_sha256": "e90a169753d2bb230faa8186d49a3d08fcd94a566f35bacb89c16cc1b625ea1a",
+      "final_row_sha256": "e90a169753d2bb230faa8186d49a3d08fcd94a566f35bacb89c16cc1b625ea1a"
+    },
+    {
+      "id": "lesson:devices:field-channel-routing-visible-scope-open-clock",
+      "baseline_row_sha256": "52f3e993ca694c4d8bb5b5ee9314538ed4ee14ff4596373dff3756701d10761f",
+      "final_row_sha256": "52f3e993ca694c4d8bb5b5ee9314538ed4ee14ff4596373dff3756701d10761f"
+    },
+    {
+      "id": "lesson:dig-deeper:play-foundation-protected-and-added-accented-phrase",
+      "baseline_row_sha256": "1d7686a60653bdfbf4c18aed8901de6281167ebd3414a80b417cc0a43d5bc55f",
+      "final_row_sha256": "1d7686a60653bdfbf4c18aed8901de6281167ebd3414a80b417cc0a43d5bc55f"
+    },
+    {
+      "id": "lesson:dig-deeper:play-harmony-revoice-two-voices-two-voice-placement",
+      "baseline_row_sha256": "02f14740364c32afd0359a6f12cb5af9ada7f60d6784f600e8bd666e5ae550fe",
+      "final_row_sha256": "02f14740364c32afd0359a6f12cb5af9ada7f60d6784f600e8bd666e5ae550fe"
+    },
+    {
+      "id": "lesson:dig-deeper:play-pattern-note-range-initial-note-range",
+      "baseline_row_sha256": "f975eb208479a8107841ed3afe5e095ed97a6033140f15c04bd6fc26847a7285",
+      "final_row_sha256": "f975eb208479a8107841ed3afe5e095ed97a6033140f15c04bd6fc26847a7285"
+    },
+    {
+      "id": "lesson:dig-deeper:play-pattern-velocity-range-velocity-127",
+      "baseline_row_sha256": "a1ba7c48c0c0b4554145c492c8ed3a6be1f08604a4ec4fd44bd50d4e52ce044c",
+      "final_row_sha256": "a1ba7c48c0c0b4554145c492c8ed3a6be1f08604a4ec4fd44bd50d4e52ce044c"
+    },
+    {
+      "id": "lesson:elektron-program-change-channel:play-elektron-child-enable-and-announce-off",
+      "baseline_row_sha256": "6c238019c7a73b9f4219b4e7190343312702695469e2f70c4a229421427ef612",
+      "final_row_sha256": "6c238019c7a73b9f4219b4e7190343312702695469e2f70c4a229421427ef612"
+    },
+    {
+      "id": "lesson:elektron-program-change-channel:slot-2-program-channel-1",
+      "baseline_row_sha256": "7ac482d98410a5fa0cfaf8fcf3fec36ebdba57b57563c2f9941af86ae301c338",
+      "final_row_sha256": "7ac482d98410a5fa0cfaf8fcf3fec36ebdba57b57563c2f9941af86ae301c338"
+    },
+    {
+      "id": "lesson:elektron-program-changes:play-elektron-child-enable-and-announce-off",
+      "baseline_row_sha256": "b0bde9ffefa83439489565c5521fd7cdda16bc862b70d3cbc096bbac54dc12fd",
+      "final_row_sha256": "b0bde9ffefa83439489565c5521fd7cdda16bc862b70d3cbc096bbac54dc12fd"
+    },
+    {
+      "id": "lesson:external-midi-transport:play-external-midi-source-menu-restored",
+      "baseline_row_sha256": "640310ec97950adff5bd0b8684c092ac876059f6ef8876db64ac08af60707458",
+      "final_row_sha256": "640310ec97950adff5bd0b8684c092ac876059f6ef8876db64ac08af60707458"
+    },
+    {
+      "id": "lesson:fixed-note:fixed-c3-phrase",
+      "baseline_row_sha256": "e517b8b4bf2919470faac1613bfe46f4a95eca756ffd0a5ffb1a1b04fa6e5590",
+      "final_row_sha256": "e517b8b4bf2919470faac1613bfe46f4a95eca756ffd0a5ffb1a1b04fa6e5590"
+    },
+    {
+      "id": "lesson:fragments:choose-fragments-strategy",
+      "baseline_row_sha256": "cafc7b6959cfe861e537c968318e3614680c9909fb28a5a3fd9850a9c787be94",
+      "final_row_sha256": "cafc7b6959cfe861e537c968318e3614680c9909fb28a5a3fd9850a9c787be94"
+    },
+    {
+      "id": "lesson:fragments:field-fragments-seed-source-choice-fragments-active",
+      "baseline_row_sha256": "f2b4a3d5e90d5221450ec9518cf8376dc25d74058dac85044264f1456f29039f",
+      "final_row_sha256": "f2b4a3d5e90d5221450ec9518cf8376dc25d74058dac85044264f1456f29039f"
+    },
+    {
+      "id": "lesson:fully-quantise-mask:play-full-quantisation-channel-beats-global-channel-on",
+      "baseline_row_sha256": "1875b2cc0a9a4bd7bfa741e29ecc7cc2942786ef569c01215652016396cbd31f",
+      "final_row_sha256": "1875b2cc0a9a4bd7bfa741e29ecc7cc2942786ef569c01215652016396cbd31f"
+    },
+    {
+      "id": "lesson:fully-quantise-mask:play-full-quantisation-inherit-and-step-off-step-off",
+      "baseline_row_sha256": "7bd4688e3904f7b131c81593635bb2389ddacf22df990735ae5463fd23127ba2",
+      "final_row_sha256": "7bd4688e3904f7b131c81593635bb2389ddacf22df990735ae5463fd23127ba2"
+    },
+    {
+      "id": "lesson:fully-quantise-mask:play-full-quantisation-precedence-global-full-degree-and-rotation",
+      "baseline_row_sha256": "9f9642217717bd18f181096f34a040fca57e1427051a4247643dd1a522f29edf",
+      "final_row_sha256": "9f9642217717bd18f181096f34a040fca57e1427051a4247643dd1a522f29edf"
+    },
+    {
+      "id": "lesson:getting-around-mosaic:field-algorithm-choose-and-preview-reopen-algorithm",
+      "baseline_row_sha256": "38e3abe665d5625fd897fe2c75d60aa751e6224ab101cbad594b9f383eb68e7a",
+      "final_row_sha256": "38e3abe665d5625fd897fe2c75d60aa751e6224ab101cbad594b9f383eb68e7a"
+    },
+    {
+      "id": "lesson:getting-around-mosaic:field-channel-routing-visible-scope-open-clock",
+      "baseline_row_sha256": "ae7a78400585c41327027026762f555cd389a76895098c1446fe2ccc0e3b64db",
+      "final_row_sha256": "ae7a78400585c41327027026762f555cd389a76895098c1446fe2ccc0e3b64db"
+    },
+    {
+      "id": "lesson:getting-around-mosaic:play-scale-save-d-and-apply-save-unused",
+      "baseline_row_sha256": "a20eaffeaa9145af8ceff43574fe87c798d80026bd17ca3d1afcf4d1ea836421",
+      "final_row_sha256": "a20eaffeaa9145af8ceff43574fe87c798d80026bd17ca3d1afcf4d1ea836421"
+    },
+    {
+      "id": "lesson:getting-around-mosaic:play-song-global-length-length-two",
+      "baseline_row_sha256": "8d8c884809425ab1aaef84382d72442a3ef206c66125b1ebf095804a0badde71",
+      "final_row_sha256": "8d8c884809425ab1aaef84382d72442a3ef206c66125b1ebf095804a0badde71"
+    },
+    {
+      "id": "lesson:grid-menu-navigation:field-algorithm-choose-and-preview-reopen-algorithm",
+      "baseline_row_sha256": "91ea39bcc5ead4a92902a5869334bc261291e06f6dbbd5b4f78b397654e19275",
+      "final_row_sha256": "91ea39bcc5ead4a92902a5869334bc261291e06f6dbbd5b4f78b397654e19275"
+    },
+    {
+      "id": "lesson:grid-menu-navigation:hold-step-return",
+      "baseline_row_sha256": "6d2ca4d3b99796e0f74c57fc73a0f9e338eaae7172e985904107bd8b2384a62c",
+      "final_row_sha256": "6d2ca4d3b99796e0f74c57fc73a0f9e338eaae7172e985904107bd8b2384a62c"
+    },
+    {
+      "id": "lesson:grid-menu-navigation:play-scale-save-d-and-apply-save-unused",
+      "baseline_row_sha256": "09b6a4b0e8d34401ca8a08437e64bb8bd96c0dea0e2ec7daff080ddd59d3736d",
+      "final_row_sha256": "09b6a4b0e8d34401ca8a08437e64bb8bd96c0dea0e2ec7daff080ddd59d3736d"
+    },
+    {
+      "id": "lesson:grid-menu-navigation:play-song-global-length-length-two",
+      "baseline_row_sha256": "4623f84b20bd437a1616006ab41f94df2f33ff41ca67c7ae9f095042c497179e",
+      "final_row_sha256": "4623f84b20bd437a1616006ab41f94df2f33ff41ca67c7ae9f095042c497179e"
+    },
+    {
+      "id": "lesson:harmony:field-harmony-ensemble-and-local-bypass-group-enabled",
+      "baseline_row_sha256": "44ba7de578b567ac9d9c8ba7af355d45cb234827fe4342791263e7f826e945d2",
+      "final_row_sha256": "44ba7de578b567ac9d9c8ba7af355d45cb234827fe4342791263e7f826e945d2"
+    },
+    {
+      "id": "lesson:harmony:field-harmony-range-failure-and-fallback-register-low",
+      "baseline_row_sha256": "1a6eb5e0ff559525849d6aa5271acafd43f0f2a057a1955e4fff4b3eada82ceb",
+      "final_row_sha256": "1a6eb5e0ff559525849d6aa5271acafd43f0f2a057a1955e4fff4b3eada82ceb"
+    },
+    {
+      "id": "lesson:harmony:play-harmony-revoice-two-voices-two-voice-placement",
+      "baseline_row_sha256": "2cc68668108ebe1bba9073e5e8652f9b7dd5c352663b561856480c063d2c1e51",
+      "final_row_sha256": "2cc68668108ebe1bba9073e5e8652f9b7dd5c352663b561856480c063d2c1e51"
+    },
+    {
+      "id": "lesson:honor-scale-degree:field-keyboard-honour-degree-pick-natural-minor",
+      "baseline_row_sha256": "eb50cad2816810b296f9b314a0f6d55704a49345910be0b4316615f4f606c618",
+      "final_row_sha256": "eb50cad2816810b296f9b314a0f6d55704a49345910be0b4316615f4f606c618"
+    },
+    {
+      "id": "lesson:honor-scale-rotations:keyboard-honour-degree-rotation",
+      "baseline_row_sha256": "03cd42a65be7963a3cdc8aa5f75e4f8e16fbe53e13a021fd76e1b626659809a9",
+      "final_row_sha256": "03cd42a65be7963a3cdc8aa5f75e4f8e16fbe53e13a021fd76e1b626659809a9"
+    },
+    {
+      "id": "lesson:honour-scale-transpose:keyboard-honour-all",
+      "baseline_row_sha256": "9c940e39d640a26607a51ff60a0538a2081e9633363a8a537acb74520c984200",
+      "final_row_sha256": "9c940e39d640a26607a51ff60a0538a2081e9633363a8a537acb74520c984200"
+    },
+    {
+      "id": "lesson:interacting-with-slots:slot-2-octave-repeat",
+      "baseline_row_sha256": "10a178026064ec07ae00d23f62cdadced773bc3332c303d2f7c597dc4f0d7446",
+      "final_row_sha256": "10a178026064ec07ae00d23f62cdadced773bc3332c303d2f7c597dc4f0d7446"
+    },
+    {
+      "id": "lesson:interacting-with-slots:song-copy-and-compare",
+      "baseline_row_sha256": "fe6c8fc783d5d1ed9234cc015275a821955284b629297f9aee9dbdca36b62cbe",
+      "final_row_sha256": "fe6c8fc783d5d1ed9234cc015275a821955284b629297f9aee9dbdca36b62cbe"
+    },
+    {
+      "id": "lesson:interlock:field-interlock-leader-window-leader-chosen",
+      "baseline_row_sha256": "d7eeb6407ef5783f801174139790e4681ead53f2a6df0e0cf4f1113776807edb",
+      "final_row_sha256": "d7eeb6407ef5783f801174139790e4681ead53f2a6df0e0cf4f1113776807edb"
+    },
+    {
+      "id": "lesson:length-merge-modes:play-length-merge-numeric-output-average",
+      "baseline_row_sha256": "f81bf717d7f11cd1af33541999f530f088d603c4d02df8f55f0a00a448140785",
+      "final_row_sha256": "f81bf717d7f11cd1af33541999f530f088d603c4d02df8f55f0a00a448140785"
+    },
+    {
+      "id": "lesson:lfos-and-modulation:matrix-macro-route-clear-target",
+      "baseline_row_sha256": "d7ad616e3df460f58ae91127dadb44fd456fd12c5e354d2124ffcda31cda3391",
+      "final_row_sha256": "d7ad616e3df460f58ae91127dadb44fd456fd12c5e354d2124ffcda31cda3391"
+    },
+    {
+      "id": "lesson:lfos-and-modulation:toolkit-clocked-lfo-menu-clock",
+      "baseline_row_sha256": "aaa8d084b33e26080d26c3bc3e35b1dd96674d786bddd1006b24b4a0444d7d6a",
+      "final_row_sha256": "aaa8d084b33e26080d26c3bc3e35b1dd96674d786bddd1006b24b4a0444d7d6a"
+    },
+    {
+      "id": "lesson:lock-all-to-pentatonic:play-pentatonic-snap-all-off",
+      "baseline_row_sha256": "6c257ff533b7697a3b3ef4cb260262f85b723856aa906d4ecea01b619e3299e4",
+      "final_row_sha256": "6c257ff533b7697a3b3ef4cb260262f85b723856aa906d4ecea01b619e3299e4"
+    },
+    {
+      "id": "lesson:lock-lead-time:play-lock-lead-menu-values-play-0",
+      "baseline_row_sha256": "ba2312bbc8fca952a9a11dd4a8fc34bc7d776c3f291e35371458c82fd287b7e6",
+      "final_row_sha256": "ba2312bbc8fca952a9a11dd4a8fc34bc7d776c3f291e35371458c82fd287b7e6"
+    },
+    {
+      "id": "lesson:lock-merged-to-pentatonic:play-merged-pentatonic-off-phrase",
+      "baseline_row_sha256": "20e091207bf0d5205636c518a22600f88c9044a9eec9c34a731bc6a1954b1f94",
+      "final_row_sha256": "20e091207bf0d5205636c518a22600f88c9044a9eec9c34a731bc6a1954b1f94"
+    },
+    {
+      "id": "lesson:lock-merged-to-pentatonic:play-merged-pentatonic-on-phrase",
+      "baseline_row_sha256": "eed95c2796872b37b969a7e9495996462da045807bba84da588f01329f90076c",
+      "final_row_sha256": "eed95c2796872b37b969a7e9495996462da045807bba84da588f01329f90076c"
+    },
+    {
+      "id": "lesson:lock-random-to-pentatonic:play-random-pentatonic-off-plain",
+      "baseline_row_sha256": "5d7c429ee556ae5dfe953e641fc8a24c05cb7420c425db5592248e589d0f019b",
+      "final_row_sha256": "5d7c429ee556ae5dfe953e641fc8a24c05cb7420c425db5592248e589d0f019b"
+    },
+    {
+      "id": "lesson:lock-random-to-pentatonic:play-random-pentatonic-on-phrase",
+      "baseline_row_sha256": "9f477943df271fa206e47fe4642907d3585d3b2dac522cb7966d8c881c9ed4a2",
+      "final_row_sha256": "9f477943df271fa206e47fe4642907d3585d3b2dac522cb7966d8c881c9ed4a2"
+    },
+    {
+      "id": "lesson:locks:clear-transpose-lock-to-global",
+      "baseline_row_sha256": "5a6ff81b38240369c6c1e85c15e858f15922239579c44d4f87ce9e41884dfde9",
+      "final_row_sha256": "5a6ff81b38240369c6c1e85c15e858f15922239579c44d4f87ce9e41884dfde9"
+    },
+    {
+      "id": "lesson:locks:device-cc1-lock-and-play",
+      "baseline_row_sha256": "64183d9448a181551176197ea96848b2415ac2fe593618beb8e49226578af94d",
+      "final_row_sha256": "64183d9448a181551176197ea96848b2415ac2fe593618beb8e49226578af94d"
+    },
+    {
+      "id": "lesson:locks:mask-default-exceptions-and-clear",
+      "baseline_row_sha256": "e95225034f527179e519f200cc55b98823952ea7bb2cdc5d9a78906e62cc518e",
+      "final_row_sha256": "e95225034f527179e519f200cc55b98823952ea7bb2cdc5d9a78906e62cc518e"
+    },
+    {
+      "id": "lesson:locks:octave-step-2-local-minus-one",
+      "baseline_row_sha256": "abe3e854955b6827a2bd52aa66e609dadc468520f4be89efe0868c72cbe14c19",
+      "final_row_sha256": "abe3e854955b6827a2bd52aa66e609dadc468520f4be89efe0868c72cbe14c19"
+    },
+    {
+      "id": "lesson:locks:play-global-parameter-slide-play",
+      "baseline_row_sha256": "7b8446622ced3e0cb081bc8f3b8a395a0a7345fd998d5525257713db48c30999",
+      "final_row_sha256": "7b8446622ced3e0cb081bc8f3b8a395a0a7345fd998d5525257713db48c30999"
+    },
+    {
+      "id": "lesson:locks:play-parameter-slot-endpoints-clamped-slots",
+      "baseline_row_sha256": "3637af47f5bf312178605bd7582fe3adcd68086a0a342f60df21b4b415c6f340",
+      "final_row_sha256": "3637af47f5bf312178605bd7582fe3adcd68086a0a342f60df21b4b415c6f340"
+    },
+    {
+      "id": "lesson:locks:play-trig-parameter-locks-default",
+      "baseline_row_sha256": "762cd85e2074fe0ec70b278a444e7d4d07777a289f945985bf0d7c5fa68370bc",
+      "final_row_sha256": "762cd85e2074fe0ec70b278a444e7d4d07777a289f945985bf0d7c5fa68370bc"
+    },
+    {
+      "id": "lesson:loops-that-meet:play-loops-four-against-three-step-4-offset",
+      "baseline_row_sha256": "c3a01c89ec531f2c8c2c47f76aadd464afbdb45805538bf06d2c0b4a690102bf",
+      "final_row_sha256": "c3a01c89ec531f2c8c2c47f76aadd464afbdb45805538bf06d2c0b4a690102bf"
+    },
+    {
+      "id": "lesson:loops-that-meet:play-loops-sixteen-against-five-play-eighty",
+      "baseline_row_sha256": "aba6b1dcb74eab68910dd82fe64c5afa89cf49010615e8d23ea2f79776897645",
+      "final_row_sha256": "aba6b1dcb74eab68910dd82fe64c5afa89cf49010615e8d23ea2f79776897645"
+    },
+    {
+      "id": "lesson:loops-that-meet:play-polymeter-song-reset-reset-on",
+      "baseline_row_sha256": "e700d13a5995bbb68a0bba9a7078b6f756df17eccf1c0086a6fecbd12d870ec9",
+      "final_row_sha256": "e700d13a5995bbb68a0bba9a7078b6f756df17eccf1c0086a6fecbd12d870ec9"
+    },
+    {
+      "id": "lesson:mask-locks:field-harmony-ensemble-and-local-bypass-group-enabled",
+      "baseline_row_sha256": "b54b1bf3a691aaaab6a8fdd30cb4ad9b0c4bf82fafc7b4c510838f43fa678391",
+      "final_row_sha256": "b54b1bf3a691aaaab6a8fdd30cb4ad9b0c4bf82fafc7b4c510838f43fa678391"
+    },
+    {
+      "id": "lesson:mask-locks:mask-default-exceptions-and-clear",
+      "baseline_row_sha256": "3d18a97ceeb49b728a509f4bff69158d9b8433a533914c387ce83aa8da8de722",
+      "final_row_sha256": "3d18a97ceeb49b728a509f4bff69158d9b8433a533914c387ce83aa8da8de722"
+    },
+    {
+      "id": "lesson:mask-locks:mask-velocity-accent-and-zero",
+      "baseline_row_sha256": "0770bcde4589668f15a53d698363ecff7978eac86e009805d89c524d8ae1b09c",
+      "final_row_sha256": "0770bcde4589668f15a53d698363ecff7978eac86e009805d89c524d8ae1b09c"
+    },
+    {
+      "id": "lesson:mask-locks:play-mask-locks-clear-neighbours-one",
+      "baseline_row_sha256": "f0c60052e0425669063a3a329bb9863353e5adde847817a53470719917ba2b21",
+      "final_row_sha256": "f0c60052e0425669063a3a329bb9863353e5adde847817a53470719917ba2b21"
+    },
+    {
+      "id": "lesson:masks:add-scale-third-to-chord",
+      "baseline_row_sha256": "205471a5fbd1c68d3c552270e9bc3ed3017c54ea0a86f4651109f33d9431a999",
+      "final_row_sha256": "205471a5fbd1c68d3c552270e9bc3ed3017c54ea0a86f4651109f33d9431a999"
+    },
+    {
+      "id": "lesson:masks:change-melody-ending-to-d",
+      "baseline_row_sha256": "e9c32348b9b7e785d86748160b07df0f82070f2fbd323c61dfbcb1cdefc416a0",
+      "final_row_sha256": "e9c32348b9b7e785d86748160b07df0f82070f2fbd323c61dfbcb1cdefc416a0"
+    },
+    {
+      "id": "lesson:masks:ghost-note-before-accent",
+      "baseline_row_sha256": "0c85d637854af5f82f07a91c73b9e207bedf7d610a10bb9ff106b16427c227f6",
+      "final_row_sha256": "0c85d637854af5f82f07a91c73b9e207bedf7d610a10bb9ff106b16427c227f6"
+    },
+    {
+      "id": "lesson:masks:note-default-g3",
+      "baseline_row_sha256": "25d024d3a60b4f9eb6a51f13cc70f8f7f119b26dd734beb243444d9cf54bdaaf",
+      "final_row_sha256": "25d024d3a60b4f9eb6a51f13cc70f8f7f119b26dd734beb243444d9cf54bdaaf"
+    },
+    {
+      "id": "lesson:melody-composition:mask-default-exceptions-and-clear",
+      "baseline_row_sha256": "e3170a5862ad46e05c0d72bb7472947aa05a118f7208bc472b3495c5327d299f",
+      "final_row_sha256": "e3170a5862ad46e05c0d72bb7472947aa05a118f7208bc472b3495c5327d299f"
+    },
+    {
+      "id": "lesson:melody-composition:mask-velocity-accent-and-zero",
+      "baseline_row_sha256": "9048d3395fd2d4091320e6588980c4a66b878a9dc8af74edda0e32bf9313d05c",
+      "final_row_sha256": "9048d3395fd2d4091320e6588980c4a66b878a9dc8af74edda0e32bf9313d05c"
+    },
+    {
+      "id": "lesson:melody-composition:play-workflow-second-channel-two-channels",
+      "baseline_row_sha256": "c61666cca59efd4397919b6fc06db4fce474fa94b602ce56f79ac94301ba5d3f",
+      "final_row_sha256": "c61666cca59efd4397919b6fc06db4fce474fa94b602ce56f79ac94301ba5d3f"
+    },
+    {
+      "id": "lesson:memory-undo-and-redo:hear-redo-result",
+      "baseline_row_sha256": "687bb1511ebeee9cdb4f7bb3ce3705b3b3872003cd7ab7fc7f2587eb96c8a51f",
+      "final_row_sha256": "687bb1511ebeee9cdb4f7bb3ce3705b3b3872003cd7ab7fc7f2587eb96c8a51f"
+    },
+    {
+      "id": "lesson:memory-undo-and-redo:hear-undo-result",
+      "baseline_row_sha256": "31a364b2caaf82d21bdc0789984ef11bbab6ad4b152276eb77fcd6fd8a4e7f3c",
+      "final_row_sha256": "31a364b2caaf82d21bdc0789984ef11bbab6ad4b152276eb77fcd6fd8a4e7f3c"
+    },
+    {
+      "id": "lesson:memory-undo-and-redo:play-memory-undo-redo-and-branch-c-d-e-f",
+      "baseline_row_sha256": "f275a0f65d5f0cb042689486081d20b80f158576b71d72c1ea8a03d4a6ec7c76",
+      "final_row_sha256": "f275a0f65d5f0cb042689486081d20b80f158576b71d72c1ea8a03d4a6ec7c76"
+    },
+    {
+      "id": "lesson:merge-modes:play-length-merge-numeric-output-average",
+      "baseline_row_sha256": "022f04c65806ccac272d1e565aca3272a7504481cc3081bb63c54f1eefd6a791",
+      "final_row_sha256": "022f04c65806ccac272d1e565aca3272a7504481cc3081bb63c54f1eefd6a791"
+    },
+    {
+      "id": "lesson:merge-modes:play-merge-overlap-and-union-hear-skip",
+      "baseline_row_sha256": "f6ad10d01c96e284a98a3977905576005fc336123f988aaedb25dfbbb62bee6c",
+      "final_row_sha256": "f6ad10d01c96e284a98a3977905576005fc336123f988aaedb25dfbbb62bee6c"
+    },
+    {
+      "id": "lesson:merge-modes:play-note-merge-numeric-output-average",
+      "baseline_row_sha256": "dc372ed9b16371e86dfaa285ca9ba83e87535381e04878acb994e07d75016cdc",
+      "final_row_sha256": "dc372ed9b16371e86dfaa285ca9ba83e87535381e04878acb994e07d75016cdc"
+    },
+    {
+      "id": "lesson:merge-modes:play-shared-merge-strategy-workflow-foundation-phrase",
+      "baseline_row_sha256": "c980281401025f9ef186e73fab93ea98cb919c6ef786986bd83d9cf15f75dc6e",
+      "final_row_sha256": "c980281401025f9ef186e73fab93ea98cb919c6ef786986bd83d9cf15f75dc6e"
+    },
+    {
+      "id": "lesson:merge-modes:play-velocity-merge-numeric-output-average",
+      "baseline_row_sha256": "a710741a086dc6757e7fcd8ab252d789c0c2e6062be55c60f3b1b29841ed1f3d",
+      "final_row_sha256": "a710741a086dc6757e7fcd8ab252d789c0c2e6062be55c60f3b1b29841ed1f3d"
+    },
+    {
+      "id": "lesson:merge-shape:field-foundation-two-cycle-build-cycles-two",
+      "baseline_row_sha256": "c2f4f30f1c3d4b03674ea2f697266213dca0d05a7c85c3428bd3ec5526b53728",
+      "final_row_sha256": "c2f4f30f1c3d4b03674ea2f697266213dca0d05a7c85c3428bd3ec5526b53728"
+    },
+    {
+      "id": "lesson:merge-shape:field-merge-shape-owns-trigs-merge-modes-open",
+      "baseline_row_sha256": "76d587e6077f50ac2018f9127cf7c0afafb6dc60e0fd11da7946a65ec6a24719",
+      "final_row_sha256": "76d587e6077f50ac2018f9127cf7c0afafb6dc60e0fd11da7946a65ec6a24719"
+    },
+    {
+      "id": "lesson:merge-shape:play-foundation-protected-and-added-accented-phrase",
+      "baseline_row_sha256": "a29a16d3bf727c644139ace3fd943af2755b6f62cedce7dd672581f9191c3388",
+      "final_row_sha256": "a29a16d3bf727c644139ace3fd943af2755b6f62cedce7dd672581f9191c3388"
+    },
+    {
+      "id": "lesson:merge-shape:play-merge-shape-skip-shared-step-skip-phrase",
+      "baseline_row_sha256": "7da5382959f166991b67782d2863d050ce0c7b6c5398289a812ae2b8f1aa5d98",
+      "final_row_sha256": "7da5382959f166991b67782d2863d050ce0c7b6c5398289a812ae2b8f1aa5d98"
+    },
+    {
+      "id": "lesson:merge-shape:play-shared-merge-strategy-workflow-foundation-phrase",
+      "baseline_row_sha256": "c3c48143c0e081aa0de30e2b7f3b8ce9db281895c8731713f4d34444f0347065",
+      "final_row_sha256": "c3c48143c0e081aa0de30e2b7f3b8ce9db281895c8731713f4d34444f0347065"
+    },
+    {
+      "id": "lesson:midi-controller-mapping:native-relative-midi-map-select-parameter",
+      "baseline_row_sha256": "b55b981c10aab686a3e9e942fb78d7b4f7ab31ef8fa8884d01e775cf131c7e40",
+      "final_row_sha256": "b55b981c10aab686a3e9e942fb78d7b4f7ab31ef8fa8884d01e775cf131c7e40"
+    },
+    {
+      "id": "lesson:midi-controller-mapping:play-mapping-child-selected-and-fixed-raw",
+      "baseline_row_sha256": "8d0cda502048d923a3106a359b15430ef5a52b5400e902931f8e6465340ce05f",
+      "final_row_sha256": "8d0cda502048d923a3106a359b15430ef5a52b5400e902931f8e6465340ce05f"
+    },
+    {
+      "id": "lesson:midi-controller-options:field-keyboard-honour-degree-pick-natural-minor",
+      "baseline_row_sha256": "59c1f98743f39b718ab6399e5415def262715163e888ac6642ea51174ded4fa7",
+      "final_row_sha256": "59c1f98743f39b718ab6399e5415def262715163e888ac6642ea51174ded4fa7"
+    },
+    {
+      "id": "lesson:midi-controller-options:keyboard-honour-all",
+      "baseline_row_sha256": "611f136c07fc943f27a0398f60a2ea79a73e44e613e2c108e9c2c2e9c4e5a730",
+      "final_row_sha256": "611f136c07fc943f27a0398f60a2ea79a73e44e613e2c108e9c2c2e9c4e5a730"
+    },
+    {
+      "id": "lesson:midi-controller-options:keyboard-honour-degree-rotation",
+      "baseline_row_sha256": "ba9dc80ace3a5ad30b56f04fb5d75df567860174d8efc65a486b3bbb0609f36c",
+      "final_row_sha256": "ba9dc80ace3a5ad30b56f04fb5d75df567860174d8efc65a486b3bbb0609f36c"
+    },
+    {
+      "id": "lesson:midi-controller-options:play-mapping-child-selected-and-fixed-raw",
+      "baseline_row_sha256": "75569c09bcc9d6d6d5bd2fca4ab352e3f879407f6ced67f51d4639659212dca5",
+      "final_row_sha256": "75569c09bcc9d6d6d5bd2fca4ab352e3f879407f6ced67f51d4639659212dca5"
+    },
+    {
+      "id": "lesson:midi-keyboard-input:play-workflow-second-channel-two-channels",
+      "baseline_row_sha256": "03ceb5dbfbc7c913414675de1e00182aed7a7bb5de1b8fbb3bb95a02fecb4e66",
+      "final_row_sha256": "03ceb5dbfbc7c913414675de1e00182aed7a7bb5de1b8fbb3bb95a02fecb4e66"
+    },
+    {
+      "id": "lesson:midi-panic:panic-from-song-channel",
+      "baseline_row_sha256": "28e03a2216f1f87b5e0c6a7e535505a1d394aab2400b643a1cb75003c9cb052d",
+      "final_row_sha256": "28e03a2216f1f87b5e0c6a7e535505a1d394aab2400b643a1cb75003c9cb052d"
+    },
+    {
+      "id": "lesson:midi-panic:panic-from-song-pattern",
+      "baseline_row_sha256": "796f2e5546a146719ba8f1a5011ca01f5a7c1eb93a06e1d621e2ef702f1f6e19",
+      "final_row_sha256": "796f2e5546a146719ba8f1a5011ca01f5a7c1eb93a06e1d621e2ef702f1f6e19"
+    },
+    {
+      "id": "lesson:midi-panic:play-panic-stops-sounding-note-note-sounding",
+      "baseline_row_sha256": "94c899b09446ed363b901e0d74b529470966f045fe4e2882c0581fdd93377a7a",
+      "final_row_sha256": "94c899b09446ed363b901e0d74b529470966f045fe4e2882c0581fdd93377a7a"
+    },
+    {
+      "id": "lesson:midi-sound-sources:play-workflow-second-channel-two-channels",
+      "baseline_row_sha256": "7899836134e108b91d7177e080ea15a173d5a152767e011d6d2d56d97bdee1ed",
+      "final_row_sha256": "7899836134e108b91d7177e080ea15a173d5a152767e011d6d2d56d97bdee1ed"
+    },
+    {
+      "id": "lesson:mods-and-software-devices:play-polyperc-apply-confirm",
+      "baseline_row_sha256": "0da2146a605a9c91657338707fb0839f04befb9d6c3f9513456a4d7101b7bb3a",
+      "final_row_sha256": "0da2146a605a9c91657338707fb0839f04befb9d6c3f9513456a4d7101b7bb3a"
+    },
+    {
+      "id": "lesson:musical-merge-and-voice-leading:play-foundation-protected-and-added-accented-phrase",
+      "baseline_row_sha256": "a21a41258e8b85387c28532209c6fc48dc10b297c515db73528b342aa6b356de",
+      "final_row_sha256": "a21a41258e8b85387c28532209c6fc48dc10b297c515db73528b342aa6b356de"
+    },
+    {
+      "id": "lesson:musical-merge-and-voice-leading:play-harmony-revoice-two-voices-two-voice-placement",
+      "baseline_row_sha256": "a287e894a7bdf0d3dae3014d02ebee8c25b67f4b358e2df3db6aee1ce66d0250",
+      "final_row_sha256": "a287e894a7bdf0d3dae3014d02ebee8c25b67f4b358e2df3db6aee1ce66d0250"
+    },
+    {
+      "id": "lesson:musical-merge-and-voice-leading:play-shared-merge-strategy-workflow-foundation-phrase",
+      "baseline_row_sha256": "4f010d1a9139b2b6198d81847d0c5e7d3d27ccb7d14058092b6f473a882395b7",
+      "final_row_sha256": "4f010d1a9139b2b6198d81847d0c5e7d3d27ccb7d14058092b6f473a882395b7"
+    },
+    {
+      "id": "lesson:mute-root-note:hear-upper-chord-voices",
+      "baseline_row_sha256": "526db8f0454ceeacdde321e44807c2001b8f799e158c97c9d7643bc640377f4e",
+      "final_row_sha256": "526db8f0454ceeacdde321e44807c2001b8f799e158c97c9d7643bc640377f4e"
+    },
+    {
+      "id": "lesson:muting-channels:unmuted-channel-phrase",
+      "baseline_row_sha256": "2e50f30af8427e157999b0196898032be2f38ce8a1efd24ea99a5108cdb38c5f",
+      "final_row_sha256": "2e50f30af8427e157999b0196898032be2f38ce8a1efd24ea99a5108cdb38c5f"
+    },
+    {
+      "id": "lesson:param-slides:global-cc1-glide",
+      "baseline_row_sha256": "0d7ac4a6774beab691a8d89bf7eaff8f49e5e9efad5083e8edc4b9469d046951",
+      "final_row_sha256": "0d7ac4a6774beab691a8d89bf7eaff8f49e5e9efad5083e8edc4b9469d046951"
+    },
+    {
+      "id": "lesson:param-slides:step-local-cc1-glide",
+      "baseline_row_sha256": "bf1b5b0f9515d174e596d875d16f962ff5987f985d3094e9ec04bc40d9e7d893",
+      "final_row_sha256": "bf1b5b0f9515d174e596d875d16f962ff5987f985d3094e9ec04bc40d9e7d893"
+    },
+    {
+      "id": "lesson:save-and-load:save-named-arrangement",
+      "baseline_row_sha256": "a04cdb314db22e27303e3d66034176b38710583b6b5bde84f82289d57e5a4d02",
+      "final_row_sha256": "a04cdb314db22e27303e3d66034176b38710583b6b5bde84f82289d57e5a4d02"
+    },
+    {
+      "id": "lesson:trig-probability:channel-probability-100",
+      "baseline_row_sha256": "9f90dd36f422dbda15aa7e010727cd3feaa4494fcfb684641a041cb38bdefff3",
+      "final_row_sha256": "9f90dd36f422dbda15aa7e010727cd3feaa4494fcfb684641a041cb38bdefff3"
+    },
+    {
+      "id": "lesson:trig-probability:channel-probability-zero-rest",
+      "baseline_row_sha256": "6d7ee6e73782c8faa4c203f75d0a1b8bbb91dad36e2e8ac529175c7c34aa5bad",
+      "final_row_sha256": "6d7ee6e73782c8faa4c203f75d0a1b8bbb91dad36e2e8ac529175c7c34aa5bad"
+    },
+    {
+      "id": "lesson:trig-probability:step-local-zero-override",
+      "baseline_row_sha256": "8a97270ce16648863610ee33d069e98c050d96837a0a9d2e228d6f48e69dc899",
+      "final_row_sha256": "8a97270ce16648863610ee33d069e98c050d96837a0a9d2e228d6f48e69dc899"
+    },
+    {
+      "id": "recipe:adding-chords:1-add-a-scale-third-chord-voice-and-override-it-on",
+      "baseline_row_sha256": "c12c28d629814b7c6dcc13f3b376a4c85787d623df9e31d3cace0905e5184af1",
+      "final_row_sha256": "c12c28d629814b7c6dcc13f3b376a4c85787d623df9e31d3cace0905e5184af1"
+    },
+    {
+      "id": "recipe:adding-chords:2-build-the-recording-block-chords-strummed-then-a",
+      "baseline_row_sha256": "54609e8bc3f6cb785b3fcc33042171db0b9bd32bc0f34bae85d94cc3309dbd1c",
+      "final_row_sha256": "54609e8bc3f6cb785b3fcc33042171db0b9bd32bc0f34bae85d94cc3309dbd1c"
+    },
+    {
+      "id": "recipe:adding-melodic-notes-over-harmony-and-drums:1-make-one-step-override-a-channel-note-default-th",
+      "baseline_row_sha256": "27a2f123a5be459373bc33175bedd213a7893ac1f4a4105a7304bd017a0d7d8f",
+      "final_row_sha256": "27a2f123a5be459373bc33175bedd213a7893ac1f4a4105a7304bd017a0d7d8f"
+    },
+    {
+      "id": "recipe:adding-trig-masks:1-add-a-melodic-note-to-an-empty-step-then-toggle-",
+      "baseline_row_sha256": "a8f2ca3f17043805eebb1260be94fa050d7cd7786920bab75ace9ea08f26c19e",
+      "final_row_sha256": "a8f2ca3f17043805eebb1260be94fa050d7cd7786920bab75ace9ea08f26c19e"
+    },
+    {
+      "id": "recipe:adding-trigs:1-preview-a-shifted-numeric-pattern-cancel-it-then",
+      "baseline_row_sha256": "10648bfbd9c2658bb6b98454575d7a5156f6ce2605b0293b3919b991f5be83ba",
+      "final_row_sha256": "10648bfbd9c2658bb6b98454575d7a5156f6ce2605b0293b3919b991f5be83ba"
+    },
+    {
+      "id": "recipe:adjusting-song-sequence-length:1-shorten-and-restore-a-phrase",
+      "baseline_row_sha256": "05637569ac5f85ff47dbefbd4014e7463376e8f80a9189922be0e0cac23d2296",
+      "final_row_sha256": "05637569ac5f85ff47dbefbd4014e7463376e8f80a9189922be0e0cac23d2296"
+    },
+    {
+      "id": "recipe:channel-editor:1-return-from-a-held-step-edit-to-the-page-you-wer",
+      "baseline_row_sha256": "9f0765275df050c1ee58dac7d02551362eac3569c5e6efc060e69cf8d4d61d55",
+      "final_row_sha256": "9f0765275df050c1ee58dac7d02551362eac3569c5e6efc060e69cf8d4d61d55"
+    },
+    {
+      "id": "recipe:clocks-swing-and-shuffle:1-build-the-recording-straight-then-swung",
+      "baseline_row_sha256": "b2ea3307187fc9b415fc224245d6f186801da735085deec4dc66ad8f23183453",
+      "final_row_sha256": "b2ea3307187fc9b415fc224245d6f186801da735085deec4dc66ad8f23183453"
+    },
+    {
+      "id": "recipe:device-parameters:1-shape-a-cc-ramp-between-two-step-locks",
+      "baseline_row_sha256": "bba049610ceaa4bc0b533fc138475d79d4b3fd6200225c428adf4f6bc2b4fe95",
+      "final_row_sha256": "bba049610ceaa4bc0b533fc138475d79d4b3fd6200225c428adf4f6bc2b4fe95"
+    },
+    {
+      "id": "recipe:device-parameters:2-compare-a-stored-device-value-with-one-step-loca",
+      "baseline_row_sha256": "7a9923fb1231d5012de34d90576f99a21ff32a5a34116f9db4b8d5ee6ae5607c",
+      "final_row_sha256": "7a9923fb1231d5012de34d90576f99a21ff32a5a34116f9db4b8d5ee6ae5607c"
+    },
+    {
+      "id": "recipe:elektron-program-change-channel:1-send-program-changes-on-channel-1",
+      "baseline_row_sha256": "96a3b47727b32e7beb976a3324a552254c90eaf4a348d7d7484932be47493edc",
+      "final_row_sha256": "96a3b47727b32e7beb976a3324a552254c90eaf4a348d7d7484932be47493edc"
+    },
+    {
+      "id": "recipe:elektron-program-changes:1-follow-mosaic-s-slots-with-a-digitakt",
+      "baseline_row_sha256": "e2e69fd869d6a8964c362ae2b26f873fd4e704716f5e21e6e583f547ac6ecd1e",
+      "final_row_sha256": "e2e69fd869d6a8964c362ae2b26f873fd4e704716f5e21e6e583f547ac6ecd1e"
+    },
+    {
+      "id": "recipe:fragments:1-set-four-step-fragments",
+      "baseline_row_sha256": "f7079f3f21ced5ee1b146913158faeec0598e6feda16e9211e884bcd21f3c7b2",
+      "final_row_sha256": "f7079f3f21ced5ee1b146913158faeec0598e6feda16e9211e884bcd21f3c7b2"
+    },
+    {
+      "id": "recipe:grid-menu-navigation:1-return-from-a-held-step-edit-to-the-page-you-wer",
+      "baseline_row_sha256": "2370e566e680735e615504eae785ada65196633ae1c02b8dd9759b745c812002",
+      "final_row_sha256": "2370e566e680735e615504eae785ada65196633ae1c02b8dd9759b745c812002"
+    },
+    {
+      "id": "recipe:harmony:1-map-three-relative-values",
+      "baseline_row_sha256": "b4d1627529f91d5b64d64a942f2b624d13201e49490b69f73f7cb2a09794d455",
+      "final_row_sha256": "b4d1627529f91d5b64d64a942f2b624d13201e49490b69f73f7cb2a09794d455"
+    },
+    {
+      "id": "recipe:harmony:2-build-the-recording-block-chords-then-revoice",
+      "baseline_row_sha256": "4385d7a37597e6d4400706e1e8df3e5f8a00526dcacccd47879f66d960831ec5",
+      "final_row_sha256": "4385d7a37597e6d4400706e1e8df3e5f8a00526dcacccd47879f66d960831ec5"
+    },
+    {
+      "id": "recipe:honor-scale-rotations:1-map-an-external-keyboard-through-the-scale-s-rot",
+      "baseline_row_sha256": "5d45bd3c0b22d39b6bb6eed80f3bf0695d764313dbf5d75d563ad20892c0b300",
+      "final_row_sha256": "5d45bd3c0b22d39b6bb6eed80f3bf0695d764313dbf5d75d563ad20892c0b300"
+    },
+    {
+      "id": "recipe:honour-scale-transpose:1-apply-scale-rotation-and-global-transpose-to-eve",
+      "baseline_row_sha256": "659b124386644fa5a113f9f98a6e4104a30573823a2a68c01c86dfe366e202cb",
+      "final_row_sha256": "659b124386644fa5a113f9f98a6e4104a30573823a2a68c01c86dfe366e202cb"
+    },
+    {
+      "id": "recipe:interacting-with-slots:1-copy-a-slot-before-editing",
+      "baseline_row_sha256": "1c3ba110f4462335bc7c6d259c54b3553f60b7def724995c51424c4920d40b60",
+      "final_row_sha256": "1c3ba110f4462335bc7c6d259c54b3553f60b7def724995c51424c4920d40b60"
+    },
+    {
+      "id": "recipe:interlock:1-set-window-0",
+      "baseline_row_sha256": "5b273d6ce6674c045dca9eab07e4d02cfc551984980b4ba974ef14cd74b9419d",
+      "final_row_sha256": "5b273d6ce6674c045dca9eab07e4d02cfc551984980b4ba974ef14cd74b9419d"
+    },
+    {
+      "id": "recipe:lock-merged-to-pentatonic:1-compare-merged-notes-with-and-without-the-filter",
+      "baseline_row_sha256": "2c0ff13f8b07acf265aa6e60d5a5521ed0e6cf269831ee30d194b5a28b3cda30",
+      "final_row_sha256": "2c0ff13f8b07acf265aa6e60d5a5521ed0e6cf269831ee30d194b5a28b3cda30"
+    },
+    {
+      "id": "recipe:locks:1-make-one-step-override-a-channel-note-default-th",
+      "baseline_row_sha256": "f00dd8df88d6bbd71d9f16f1aad4638c8a51dd4dcd7af5c11baa3de7d5714907",
+      "final_row_sha256": "f00dd8df88d6bbd71d9f16f1aad4638c8a51dd4dcd7af5c11baa3de7d5714907"
+    },
+    {
+      "id": "recipe:locks:2-compare-a-stored-device-value-with-one-step-loca",
+      "baseline_row_sha256": "99c3dab6b197c857899c5c6f4a334dc444fa871f7bda25165d3636595c7f1943",
+      "final_row_sha256": "99c3dab6b197c857899c5c6f4a334dc444fa871f7bda25165d3636595c7f1943"
+    },
+    {
+      "id": "recipe:locks:3-use-a-channel-octave-for-a-bass-line-and-a-local",
+      "baseline_row_sha256": "19383f74006a559c461dd7f1acaa0b000e741dc1fff9ccc6dc9efbc572f91698",
+      "final_row_sha256": "19383f74006a559c461dd7f1acaa0b000e741dc1fff9ccc6dc9efbc572f91698"
+    },
+    {
+      "id": "recipe:locks:4-distinguish-an-explicit-zero-transpose-lock-from",
+      "baseline_row_sha256": "a0ba15b339e91f9b7e02bcb00310aed99adde7149a494cd3a5e8e1c3ff4af47f",
+      "final_row_sha256": "a0ba15b339e91f9b7e02bcb00310aed99adde7149a494cd3a5e8e1c3ff4af47f"
+    },
+    {
+      "id": "recipe:loops-that-meet:2-comparing-song-boundary-resets",
+      "baseline_row_sha256": "9daa37159edf1f756161e3661e87ce1f212dbdacdb92e34d0bbd439c1b3c7a8c",
+      "final_row_sha256": "9daa37159edf1f756161e3661e87ce1f212dbdacdb92e34d0bbd439c1b3c7a8c"
+    },
+    {
+      "id": "recipe:loops-that-meet:3-run-two-channels-at-different-lengths",
+      "baseline_row_sha256": "c62582895e7e2fc7643753d3d73f8a790bbff03d10048dd18120579a9996f0fa",
+      "final_row_sha256": "c62582895e7e2fc7643753d3d73f8a790bbff03d10048dd18120579a9996f0fa"
+    },
+    {
+      "id": "recipe:loops-that-meet:4-listening-extension-sixteen-steps-against-twelve",
+      "baseline_row_sha256": "49ea722a8cf68adf39485b611205544364f2e0ea6d18108cb43c5fea37777497",
+      "final_row_sha256": "49ea722a8cf68adf39485b611205544364f2e0ea6d18108cb43c5fea37777497"
+    },
+    {
+      "id": "recipe:map-scale-to-white-keys:1-play-a-minor-scale-on-the-white-keys",
+      "baseline_row_sha256": "23bdd1a576fded938e0fca34ce22f44be69df0e56632299788149e765dd5a953",
+      "final_row_sha256": "23bdd1a576fded938e0fca34ce22f44be69df0e56632299788149e765dd5a953"
+    },
+    {
+      "id": "recipe:mask-locks:1-make-one-step-override-a-channel-note-default-th",
+      "baseline_row_sha256": "e040061341f8473a967bb1a6057989268799e793cb7c44bdf5883447ef523f6d",
+      "final_row_sha256": "e040061341f8473a967bb1a6057989268799e793cb7c44bdf5883447ef523f6d"
+    },
+    {
+      "id": "recipe:mask-locks:2-contrast-inherited-velocity-with-explicit-zero-a",
+      "baseline_row_sha256": "faf75cc0c37029a728216fdf4ded1b74bc72120d4cd154f60479b51fa6b365e4",
+      "final_row_sha256": "faf75cc0c37029a728216fdf4ded1b74bc72120d4cd154f60479b51fa6b365e4"
+    },
+    {
+      "id": "recipe:masks:1-try-a-different-ending-for-a-four-note-melody",
+      "baseline_row_sha256": "2ed48bd1b25726985c8e56c3a4b02bb157201dd63962eac49fd68f853a8ed4ff",
+      "final_row_sha256": "2ed48bd1b25726985c8e56c3a4b02bb157201dd63962eac49fd68f853a8ed4ff"
+    },
+    {
+      "id": "recipe:masks:2-add-a-ghost-note-before-an-accent",
+      "baseline_row_sha256": "1780f660ba7a101bff066007ff7aa777f08cd3a5cde572485670ed5f2735e46b",
+      "final_row_sha256": "1780f660ba7a101bff066007ff7aa777f08cd3a5cde572485670ed5f2735e46b"
+    },
+    {
+      "id": "recipe:masks:3-make-the-ghost-note-intermittent",
+      "baseline_row_sha256": "a59fa78a6d19c7e3c065e737a09552b993a1ba1819a86908d5868010dd006031",
+      "final_row_sha256": "a59fa78a6d19c7e3c065e737a09552b993a1ba1819a86908d5868010dd006031"
+    },
+    {
+      "id": "recipe:masks:4-add-chord-voices-over-a-bass",
+      "baseline_row_sha256": "32f07b280524e1cfa8e727e382e5995f97699edf17ac011c621993a616663c08",
+      "final_row_sha256": "32f07b280524e1cfa8e727e382e5995f97699edf17ac011c621993a616663c08"
+    },
+    {
+      "id": "recipe:melody-composition:1-make-one-step-override-a-channel-note-default-th",
+      "baseline_row_sha256": "da8e4ebcfe8b23c225bb87acb068b801c75eb2fd9b474d4c9258f995b621e7a6",
+      "final_row_sha256": "da8e4ebcfe8b23c225bb87acb068b801c75eb2fd9b474d4c9258f995b621e7a6"
+    },
+    {
+      "id": "recipe:melody-composition:2-contrast-inherited-velocity-with-explicit-zero-a",
+      "baseline_row_sha256": "9a11dec2e6d7a13930cf37c7b57ac121dc16d5393d94ad80f1cab0a869b09479",
+      "final_row_sha256": "9a11dec2e6d7a13930cf37c7b57ac121dc16d5393d94ad80f1cab0a869b09479"
+    },
+    {
+      "id": "recipe:merge-shape:1-set-a-two-cycle-build-phrase",
+      "baseline_row_sha256": "8f9ff97d73166ad00860fb9b74461f65cb3a8299dd64c0f637cbd1856fd5d26e",
+      "final_row_sha256": "8f9ff97d73166ad00860fb9b74461f65cb3a8299dd64c0f637cbd1856fd5d26e"
+    },
+    {
+      "id": "recipe:midi-controller-options:1-map-an-external-keyboard-through-the-scale-s-rot",
+      "baseline_row_sha256": "cbdda5ea695068a1876200db0108c12113f6eeebc5629fbabbfc08a58e492a41",
+      "final_row_sha256": "cbdda5ea695068a1876200db0108c12113f6eeebc5629fbabbfc08a58e492a41"
+    },
+    {
+      "id": "recipe:midi-controller-options:2-apply-scale-rotation-and-global-transpose-to-eve",
+      "baseline_row_sha256": "1e7d4adb19408b426fa25dfec5a29d17e29715ad0670b6e918b1cb39479acdf9",
+      "final_row_sha256": "1e7d4adb19408b426fa25dfec5a29d17e29715ad0670b6e918b1cb39479acdf9"
+    },
+    {
+      "id": "recipe:midi-panic:1-silence-connected-midi-notes-from-song-view-with",
+      "baseline_row_sha256": "6a4ef7bf459aab6d668379a167f26669f516eb856cba54406b122c5f4570f129",
+      "final_row_sha256": "6a4ef7bf459aab6d668379a167f26669f516eb856cba54406b122c5f4570f129"
+    },
+    {
+      "id": "recipe:midi-panic:2-silence-connected-midi-notes-from-song-view-with",
+      "baseline_row_sha256": "a703c40a40701f62577074453e13220eb02cbf481f43ebe7f1c7497386e065aa",
+      "final_row_sha256": "a703c40a40701f62577074453e13220eb02cbf481f43ebe7f1c7497386e065aa"
+    },
+    {
+      "id": "recipe:options:1-prepare-mosaic-for-a-live-set",
+      "baseline_row_sha256": "7ed20cba715b204bbc3f0ffe61ed4fac97dbfb94107bd1eefbec1cf5fe3e90eb",
+      "final_row_sha256": "7ed20cba715b204bbc3f0ffe61ed4fac97dbfb94107bd1eefbec1cf5fe3e90eb"
+    },
+    {
+      "id": "recipe:param-slides:1-open-a-filter-over-two-steps",
+      "baseline_row_sha256": "9d685b16bceed4d9b223b3822c93bb933f84bd718bd5feb26dee34181529668f",
+      "final_row_sha256": "9d685b16bceed4d9b223b3822c93bb933f84bd718bd5feb26dee34181529668f"
+    },
+    {
+      "id": "recipe:parameter-slides-wrap:1-sweep-a-filter-around-the-loop",
+      "baseline_row_sha256": "b4f3ca48f753e11fe4cff68a12cc8fafae83744cbf33dd0505468a7784ed72ef",
+      "final_row_sha256": "b4f3ca48f753e11fe4cff68a12cc8fafae83744cbf33dd0505468a7784ed72ef"
+    },
+    {
+      "id": "recipe:pocket-rhythm:3-separate-fixed-percussion-example",
+      "baseline_row_sha256": "8f26ab5a06df973048c92af35c00b21cdcafee7453aa62b23da7069d26cc7f1c",
+      "final_row_sha256": "8f26ab5a06df973048c92af35c00b21cdcafee7453aa62b23da7069d26cc7f1c"
+    },
+    {
+      "id": "recipe:reset-at-pattern-repeat:1-restart-a-slow-channel-on-each-repeat",
+      "baseline_row_sha256": "4b853bc4f8022b6b86400474f215db34f8eb7478132ec538e629c8f1c90ad718",
+      "final_row_sha256": "4b853bc4f8022b6b86400474f215db34f8eb7478132ec538e629c8f1c90ad718"
+    },
+    {
+      "id": "recipe:reset-at-song-editor-pattern-change:1-hear-the-section-restart",
+      "baseline_row_sha256": "b936eecf33a63482b474b6084a6d0872607be6bc78af8418fb5ddb7864b6d098",
+      "final_row_sha256": "b936eecf33a63482b474b6084a6d0872607be6bc78af8418fb5ddb7864b6d098"
+    },
+    {
+      "id": "recipe:sequencer-options:1-arrange-sections-that-restart-together",
+      "baseline_row_sha256": "9f86f4e3c0d1a7662ef87c6724d91f3ac1cf716a6634b2edfc04d32df1033cda",
+      "final_row_sha256": "9f86f4e3c0d1a7662ef87c6724d91f3ac1cf716a6634b2edfc04d32df1033cda"
+    },
+    {
+      "id": "recipe:shift-press-stop:1-play-a-set-without-accidental-stops",
+      "baseline_row_sha256": "05ef101c294c6747a7cf7e867372ce80c92d4032131d5c979d31950fee4abfb6",
+      "final_row_sha256": "05ef101c294c6747a7cf7e867372ce80c92d4032131d5c979d31950fee4abfb6"
+    },
+    {
+      "id": "recipe:song-mode-operations:1-create-two-song-groups",
+      "baseline_row_sha256": "641b457201ee8efdcaaebb06c47b12c14b32d537e9df5e0c1d662e44bb1f05d9",
+      "final_row_sha256": "641b457201ee8efdcaaebb06c47b12c14b32d537e9df5e0c1d662e44bb1f05d9"
+    },
+    {
+      "id": "recipe:song-mode:1-rehearse-one-section",
+      "baseline_row_sha256": "9b277dadd43af2ca414b0c481db0769f014707d938d6c84761ffb81140c4c236",
+      "final_row_sha256": "9b277dadd43af2ca414b0c481db0769f014707d938d6c84761ffb81140c4c236"
+    },
+    {
+      "id": "recipe:structure:1-snap-anchors-to-a-chord-then-try-every-4",
+      "baseline_row_sha256": "69c915a08d432f8a3bd909282603e96c6c1a971048e70edfa539d3e3a2bb6c9e",
+      "final_row_sha256": "69c915a08d432f8a3bd909282603e96c6c1a971048e70edfa539d3e3a2bb6c9e"
+    },
+    {
+      "id": "recipe:tilting-harmony:2-separate-fixed-bass-and-chord-example",
+      "baseline_row_sha256": "705890078e6810b51135781389f6148537c7383fc0bdad9b2619c89633ce003d",
+      "final_row_sha256": "705890078e6810b51135781389f6148537c7383fc0bdad9b2619c89633ce003d"
+    },
+    {
+      "id": "recipe:transposition:1-play-a-copied-song-slot-a-tone-higher",
+      "baseline_row_sha256": "5dd3fef6f55bcf671889f0b670d014ebb7dce7907dc68724854107e64a4420b2",
+      "final_row_sha256": "5dd3fef6f55bcf671889f0b670d014ebb7dce7907dc68724854107e64a4420b2"
+    },
+    {
+      "id": "recipe:trig-param-locks:1-brighten-the-last-note-with-a-cutoff-lock",
+      "baseline_row_sha256": "4504eed9b438cb4500d92879c48319113c474f212ea8088e6832607b81e6d129",
+      "final_row_sha256": "4504eed9b438cb4500d92879c48319113c474f212ea8088e6832607b81e6d129"
+    },
+    {
+      "id": "recipe:trigless-locks:1-hear-automation-on-rests",
+      "baseline_row_sha256": "5e33583e91d80dd8229ec01c51471d93a9acd44abaac722f26adb6e4d9d31e90",
+      "final_row_sha256": "5e33583e91d80dd8229ec01c51471d93a9acd44abaac722f26adb6e4d9d31e90"
+    },
+    {
+      "id": "recipe:ui-motion:1-compare-the-screen-with-motion-off-and-on",
+      "baseline_row_sha256": "fa1b4ccaca0a4ebb7380250149184d99f96ac3074fc49d0b550d733db8f3e274",
+      "final_row_sha256": "fa1b4ccaca0a4ebb7380250149184d99f96ac3074fc49d0b550d733db8f3e274"
+    },
+    {
+      "id": "scene:algorithm-choose-and-preview",
+      "baseline_row_sha256": "133f11e4b2d30a58645fd9f91ef5541b25c53c94bb04ef57f059cc037c8f3eca",
+      "final_row_sha256": "133f11e4b2d30a58645fd9f91ef5541b25c53c94bb04ef57f059cc037c8f3eca"
+    },
+    {
+      "id": "scene:channel-routing-visible-scope",
+      "baseline_row_sha256": "bd49f7d8442f1e18323c410e31c2cbbdb95273c238dd32ff0be9a61234fc9d0e",
+      "final_row_sha256": "bd49f7d8442f1e18323c410e31c2cbbdb95273c238dd32ff0be9a61234fc9d0e"
+    },
+    {
+      "id": "scene:channel-task-navigation",
+      "baseline_row_sha256": "ce207702057c1a23f69b6e6cefb1873e35e090e16c8d0ab6bad20cbfb94e9893",
+      "final_row_sha256": "ce207702057c1a23f69b6e6cefb1873e35e090e16c8d0ab6bad20cbfb94e9893"
+    },
+    {
+      "id": "scene:chord-acceleration-slowing",
+      "baseline_row_sha256": "6db14adaa52ca856ef203a9a732a568edc8ec62008f19eca33eef9f045095477",
+      "final_row_sha256": "6db14adaa52ca856ef203a9a732a568edc8ec62008f19eca33eef9f045095477"
+    },
+    {
+      "id": "scene:chord-acceleration-termination",
+      "baseline_row_sha256": "3dec1ea4d02bdc1ef9d8e42470116e39179975396d709258d74048ed01e5943e",
+      "final_row_sha256": "3dec1ea4d02bdc1ef9d8e42470116e39179975396d709258d74048ed01e5943e"
+    },
+    {
+      "id": "scene:chord-arpeggio-timed-gates",
+      "baseline_row_sha256": "14d8362e192479b4b5ec46035a22c2420519a7e1f5afb96e01ed8577e8335b6f",
+      "final_row_sha256": "14d8362e192479b4b5ec46035a22c2420519a7e1f5afb96e01ed8577e8335b6f"
+    },
+    {
+      "id": "scene:chord-shape-forward",
+      "baseline_row_sha256": "8165855207339df7dc0ea8581e1b59a25f2ba41a77bc87575f65941e264fd947",
+      "final_row_sha256": "8165855207339df7dc0ea8581e1b59a25f2ba41a77bc87575f65941e264fd947"
+    },
+    {
+      "id": "scene:chord-spread-separate-gap",
+      "baseline_row_sha256": "856dc7a849f08f91bc3a5482287e833ac6d8dadf5933005982e7b6ec72e15186",
+      "final_row_sha256": "856dc7a849f08f91bc3a5482287e833ac6d8dadf5933005982e7b6ec72e15186"
+    },
+    {
+      "id": "scene:chord-strum-a-timed-chord",
+      "baseline_row_sha256": "9fd0e148753fd0cde2e4c9a039fdb2d043e4cbc95f074180cb64fc50cb3437a5",
+      "final_row_sha256": "9fd0e148753fd0cde2e4c9a039fdb2d043e4cbc95f074180cb64fc50cb3437a5"
+    },
+    {
+      "id": "scene:chord-velocity-ordinal",
+      "baseline_row_sha256": "95e5086a17fd44cad6648e929195590535216ccadb70b04c59bf366b3719e646",
+      "final_row_sha256": "95e5086a17fd44cad6648e929195590535216ccadb70b04c59bf366b3719e646"
+    },
+    {
+      "id": "scene:configured-device-value-boundaries",
+      "baseline_row_sha256": "0389fe4e0f5aac62599fa7e83f58dbaeb2be8b2892fd9464ef8508b2942b572c",
+      "final_row_sha256": "0389fe4e0f5aac62599fa7e83f58dbaeb2be8b2892fd9464ef8508b2942b572c"
+    },
+    {
+      "id": "scene:course-save-dialog",
+      "baseline_row_sha256": "0e4bd9969779ed2aba1f49ba818169d463e817adcd36ce4c1db22208edf10ec6",
+      "final_row_sha256": "0e4bd9969779ed2aba1f49ba818169d463e817adcd36ce4c1db22208edf10ec6"
+    },
+    {
+      "id": "scene:device-stored-value-and-step-lock",
+      "baseline_row_sha256": "d552a7b5e92330847cb6b11297c082c1fe00ff742bd1d863053c826f608ff1dc",
+      "final_row_sha256": "d552a7b5e92330847cb6b11297c082c1fe00ff742bd1d863053c826f608ff1dc"
+    },
+    {
+      "id": "scene:doctor-local-auto-capture-and-paint",
+      "baseline_row_sha256": "db150966b4a18940d7b24ea1867d99c19604a6aa1888dd7db61c9d84d7cb3d4f",
+      "final_row_sha256": "db150966b4a18940d7b24ea1867d99c19604a6aa1888dd7db61c9d84d7cb3d4f"
+    },
+    {
+      "id": "scene:doctor-local-capture-and-paint",
+      "baseline_row_sha256": "88519cbbb59bb563783022253b3b0ca076a48b87b2d90ac1da02e2f79c891d6f",
+      "final_row_sha256": "88519cbbb59bb563783022253b3b0ca076a48b87b2d90ac1da02e2f79c891d6f"
+    },
+    {
+      "id": "scene:elektron-child-enable-and-announce",
+      "baseline_row_sha256": "d0b83690e70dbbc15a2a52f48f7b52005762a4f8a21798f9918423b08379c86d",
+      "final_row_sha256": "d0b83690e70dbbc15a2a52f48f7b52005762a4f8a21798f9918423b08379c86d"
+    },
+    {
+      "id": "scene:elektron-child-program-channel",
+      "baseline_row_sha256": "e8590dbf2db04ae8bfdc7f63d530ee5f721419d75a3c74a7e9a671651af16f06",
+      "final_row_sha256": "e8590dbf2db04ae8bfdc7f63d530ee5f721419d75a3c74a7e9a671651af16f06"
+    },
+    {
+      "id": "scene:external-midi-source-menu",
+      "baseline_row_sha256": "8d2a2b5d2724b7c260c7fd75f5c793b5fda4f5bfe8802ed34f52b904cb233d0c",
+      "final_row_sha256": "8d2a2b5d2724b7c260c7fd75f5c793b5fda4f5bfe8802ed34f52b904cb233d0c"
+    },
+    {
+      "id": "scene:first-sound-equal-note-loop",
+      "baseline_row_sha256": "b87cbe0e3639d380a7ed7b6af2911eb3a239692c64d02714ac62062fee28f729",
+      "final_row_sha256": "b87cbe0e3639d380a7ed7b6af2911eb3a239692c64d02714ac62062fee28f729"
+    },
+    {
+      "id": "scene:fixed-note-default-and-locks",
+      "baseline_row_sha256": "a9c894fc1b7319c3fde641e4da4fa2792854ada5e2e4e7b76326b9edf1a47572",
+      "final_row_sha256": "a9c894fc1b7319c3fde641e4da4fa2792854ada5e2e4e7b76326b9edf1a47572"
+    },
+    {
+      "id": "scene:foundation-protected-and-added",
+      "baseline_row_sha256": "af757613df97b59e8b8f10ed53bb4bc6b6a26b0a4f0df980084a3305e82911a4",
+      "final_row_sha256": "af757613df97b59e8b8f10ed53bb4bc6b6a26b0a4f0df980084a3305e82911a4"
+    },
+    {
+      "id": "scene:foundation-two-cycle-build",
+      "baseline_row_sha256": "23763e5734bf23f6d91c6159465f8facf04e4b2b12e81ab22a7e989eb0e2213f",
+      "final_row_sha256": "23763e5734bf23f6d91c6159465f8facf04e4b2b12e81ab22a7e989eb0e2213f"
+    },
+    {
+      "id": "scene:fragments-seed-source-choice",
+      "baseline_row_sha256": "f8eefafc5f41c6cb17d8c9693b27da843081cd1ef9fa7ff8263dd73840e99e10",
+      "final_row_sha256": "f8eefafc5f41c6cb17d8c9693b27da843081cd1ef9fa7ff8263dd73840e99e10"
+    },
+    {
+      "id": "scene:full-quantisation-channel-beats-global",
+      "baseline_row_sha256": "3a62f6e375880d8cc76b418e1d1896365b0443e9d9d9453235b2958c5a68a4e5",
+      "final_row_sha256": "3a62f6e375880d8cc76b418e1d1896365b0443e9d9d9453235b2958c5a68a4e5"
+    },
+    {
+      "id": "scene:full-quantisation-inherit-and-step-off",
+      "baseline_row_sha256": "14e2028ed46c700901b859fbaac8ebd46948bf919e96af858011f495bd4de581",
+      "final_row_sha256": "14e2028ed46c700901b859fbaac8ebd46948bf919e96af858011f495bd4de581"
+    },
+    {
+      "id": "scene:full-quantisation-precedence",
+      "baseline_row_sha256": "6fc6fd16fc955f928e495ffb0c349f063855ab3366f7d517ab23a5c5cec402a9",
+      "final_row_sha256": "6fc6fd16fc955f928e495ffb0c349f063855ab3366f7d517ab23a5c5cec402a9"
+    },
+    {
+      "id": "scene:global-parameter-slide",
+      "baseline_row_sha256": "538d5979e890660fc5557ed3b3c76bea0689edbdd9162ff6a012ff6c00f25dc8",
+      "final_row_sha256": "538d5979e890660fc5557ed3b3c76bea0689edbdd9162ff6a012ff6c00f25dc8"
+    },
+    {
+      "id": "scene:harmony-ensemble-and-local-bypass",
+      "baseline_row_sha256": "5614d0d3807e9d19979ffab460f640cd79a1495fc09b384d84147a8d70d5dcfb",
+      "final_row_sha256": "5614d0d3807e9d19979ffab460f640cd79a1495fc09b384d84147a8d70d5dcfb"
+    },
+    {
+      "id": "scene:harmony-range-failure-and-fallback",
+      "baseline_row_sha256": "b4dff1d784243f39313e291000102c5abb10a0645172da7718a8857cc0f518ed",
+      "final_row_sha256": "b4dff1d784243f39313e291000102c5abb10a0645172da7718a8857cc0f518ed"
+    },
+    {
+      "id": "scene:harmony-revoice-two-voices",
+      "baseline_row_sha256": "bc5f5d9402635b47561a15bc87a26454a235af9e3a2ed1999e8f1aa900d99d2d",
+      "final_row_sha256": "bc5f5d9402635b47561a15bc87a26454a235af9e3a2ed1999e8f1aa900d99d2d"
+    },
+    {
+      "id": "scene:hold-step-return",
+      "baseline_row_sha256": "2a5ee71279fad54b778c0c4d39913199cd00d302dbbe17e2fcbf31461cb8202e",
+      "final_row_sha256": "2a5ee71279fad54b778c0c4d39913199cd00d302dbbe17e2fcbf31461cb8202e"
+    },
+    {
+      "id": "scene:interlock-leader-window",
+      "baseline_row_sha256": "a1ef0a37a7ed4d483cd572b73ad0dbc23fc5e2047d15b9fd2bb8de840b65b8bf",
+      "final_row_sha256": "a1ef0a37a7ed4d483cd572b73ad0dbc23fc5e2047d15b9fd2bb8de840b65b8bf"
+    },
+    {
+      "id": "scene:keyboard-honour-all",
+      "baseline_row_sha256": "c1ab7438c51adc2ed1fbb26efb7427c3a70a4e4b67330b19a5ad304d649ee73a",
+      "final_row_sha256": "c1ab7438c51adc2ed1fbb26efb7427c3a70a4e4b67330b19a5ad304d649ee73a"
+    },
+    {
+      "id": "scene:keyboard-honour-degree",
+      "baseline_row_sha256": "17832e164851c19b929d7faa693079e451ceccf7728d0b0cb415d12cc13356fa",
+      "final_row_sha256": "17832e164851c19b929d7faa693079e451ceccf7728d0b0cb415d12cc13356fa"
+    },
+    {
+      "id": "scene:keyboard-honour-degree-rotation",
+      "baseline_row_sha256": "e2315f163ce7cc9ffd1c02e931e64ff2afbb190ef2563be44faa7d3f0aa2e53f",
+      "final_row_sha256": "e2315f163ce7cc9ffd1c02e931e64ff2afbb190ef2563be44faa7d3f0aa2e53f"
+    },
+    {
+      "id": "scene:keyboard-white-key-options",
+      "baseline_row_sha256": "8e79b56d17b75e7bc2f4ec66d1dee77702c372acd5d5360c889093c0845313a9",
+      "final_row_sha256": "8e79b56d17b75e7bc2f4ec66d1dee77702c372acd5d5360c889093c0845313a9"
+    },
+    {
+      "id": "scene:last-lock-slide-wrap",
+      "baseline_row_sha256": "8ca6dda711fa9b09e9652843f55a92072bd07bad3b61f7d6802ec70548feb383",
+      "final_row_sha256": "8ca6dda711fa9b09e9652843f55a92072bd07bad3b61f7d6802ec70548feb383"
+    },
+    {
+      "id": "scene:length-merge-numeric-output",
+      "baseline_row_sha256": "8658213c38e1d81a0bd58463102876281c3e57956b1d9bf205e09e4fc7e998d4",
+      "final_row_sha256": "8658213c38e1d81a0bd58463102876281c3e57956b1d9bf205e09e4fc7e998d4"
+    },
+    {
+      "id": "scene:local-parameter-slide",
+      "baseline_row_sha256": "1030aa36c166ff1a7b48610ccba2166f9fbd27de6fca829dcbb28f6a03a5cd12",
+      "final_row_sha256": "1030aa36c166ff1a7b48610ccba2166f9fbd27de6fca829dcbb28f6a03a5cd12"
+    },
+    {
+      "id": "scene:lock-lead-menu-values",
+      "baseline_row_sha256": "90dbf1f8e58dedfca4043e6fa952d8d25447f1fe4e756c63220b65459823b89b",
+      "final_row_sha256": "90dbf1f8e58dedfca4043e6fa952d8d25447f1fe4e756c63220b65459823b89b"
+    },
+    {
+      "id": "scene:loops-four-against-three",
+      "baseline_row_sha256": "c1fb1260005e89e58afde3945366497e1bb2d20f398f6447304b592d6b695352",
+      "final_row_sha256": "c1fb1260005e89e58afde3945366497e1bb2d20f398f6447304b592d6b695352"
+    },
+    {
+      "id": "scene:loops-sixteen-against-five",
+      "baseline_row_sha256": "c79bb863ca0903fc28c1ab44b8338771027b01f9171a9a5ca6299d46fae6a6d4",
+      "final_row_sha256": "c79bb863ca0903fc28c1ab44b8338771027b01f9171a9a5ca6299d46fae6a6d4"
+    },
+    {
+      "id": "scene:mapping-child-selected-and-fixed",
+      "baseline_row_sha256": "2cc986d62d0f24cfd9cfbf7f07f44df10b584b62cf89ea4de0fe51c8e1842e21",
+      "final_row_sha256": "2cc986d62d0f24cfd9cfbf7f07f44df10b584b62cf89ea4de0fe51c8e1842e21"
+    },
+    {
+      "id": "scene:mask-chords",
+      "baseline_row_sha256": "5e67d9d8d25bcbb77de2258de73ff77c5601f2193d6a15892dbf28c808153e00",
+      "final_row_sha256": "5e67d9d8d25bcbb77de2258de73ff77c5601f2193d6a15892dbf28c808153e00"
+    },
+    {
+      "id": "scene:mask-expression",
+      "baseline_row_sha256": "cae4cb31b3dc02757406ecf6ff16b8ac0b5756b5ce9c4059236d71a713fe6b74",
+      "final_row_sha256": "cae4cb31b3dc02757406ecf6ff16b8ac0b5756b5ce9c4059236d71a713fe6b74"
+    },
+    {
+      "id": "scene:mask-ghost-note",
+      "baseline_row_sha256": "18450fa2273322b2c7ded8d71555965783314f98bffd54833e8dc48062ac444d",
+      "final_row_sha256": "18450fa2273322b2c7ded8d71555965783314f98bffd54833e8dc48062ac444d"
+    },
+    {
+      "id": "scene:mask-locks-clear-neighbours",
+      "baseline_row_sha256": "94231f2774857ea788fa3c21f5f6466cfa6b0047771d32837288b5721abc630b",
+      "final_row_sha256": "94231f2774857ea788fa3c21f5f6466cfa6b0047771d32837288b5721abc630b"
+    },
+    {
+      "id": "scene:mask-melody-ending",
+      "baseline_row_sha256": "24d6fd99683e32b0d925d25a7638d1261b7f888d77b745ba9e2ac2db509b00e7",
+      "final_row_sha256": "24d6fd99683e32b0d925d25a7638d1261b7f888d77b745ba9e2ac2db509b00e7"
+    },
+    {
+      "id": "scene:mask-note-default-x",
+      "baseline_row_sha256": "7d95af8bef6ef63db992121aaceb9d03e369ddfabb059c94502d72ee5153a1bf",
+      "final_row_sha256": "7d95af8bef6ef63db992121aaceb9d03e369ddfabb059c94502d72ee5153a1bf"
+    },
+    {
+      "id": "scene:mask-precedence",
+      "baseline_row_sha256": "b014904c46745e1545ce274370b4762627b512a8cc7c68603308e0d8bb1e5291",
+      "final_row_sha256": "b014904c46745e1545ce274370b4762627b512a8cc7c68603308e0d8bb1e5291"
+    },
+    {
+      "id": "scene:mask-trigs",
+      "baseline_row_sha256": "7010e991dc5f641daaad265caf70b945a286e5ec8107d8da8fe180f42f5fe9cd",
+      "final_row_sha256": "7010e991dc5f641daaad265caf70b945a286e5ec8107d8da8fe180f42f5fe9cd"
+    },
+    {
+      "id": "scene:matrix-macro-modest-cc",
+      "baseline_row_sha256": "c53fe3a6429af4b5e92e1ebab84e6d1ed9c2e08a783d333f6df94761705749af",
+      "final_row_sha256": "c53fe3a6429af4b5e92e1ebab84e6d1ed9c2e08a783d333f6df94761705749af"
+    },
+    {
+      "id": "scene:matrix-macro-route-clear",
+      "baseline_row_sha256": "57fa4b87ed589a33a05b5927ba3c3179f3dd4c8835ccf62ea5df26ee16dcb9ff",
+      "final_row_sha256": "57fa4b87ed589a33a05b5927ba3c3179f3dd4c8835ccf62ea5df26ee16dcb9ff"
+    },
+    {
+      "id": "scene:memory-undo-redo-and-branch",
+      "baseline_row_sha256": "855b210480ec845fe5eddaacf8879379a8477277dea146cc789f33d2ad4c960c",
+      "final_row_sha256": "855b210480ec845fe5eddaacf8879379a8477277dea146cc789f33d2ad4c960c"
+    },
+    {
+      "id": "scene:merge-overlap-and-union",
+      "baseline_row_sha256": "aa0fefae549d4ff2d4f7cca5613dc6854356a05ba08f3a1b9f0774d65424bacb",
+      "final_row_sha256": "aa0fefae549d4ff2d4f7cca5613dc6854356a05ba08f3a1b9f0774d65424bacb"
+    },
+    {
+      "id": "scene:merge-shape-owns-trigs",
+      "baseline_row_sha256": "499273a7ca05cdf2230823bef2c49a5cd54432f528945ee09f8566c90ada7848",
+      "final_row_sha256": "499273a7ca05cdf2230823bef2c49a5cd54432f528945ee09f8566c90ada7848"
+    },
+    {
+      "id": "scene:merge-shape-skip-shared-step",
+      "baseline_row_sha256": "6a60456b2920604e60688f3b4310af803afd941e583f6d3216bf713a0c85cec0",
+      "final_row_sha256": "6a60456b2920604e60688f3b4310af803afd941e583f6d3216bf713a0c85cec0"
+    },
+    {
+      "id": "scene:merged-pentatonic-off",
+      "baseline_row_sha256": "baf405bff273c9358c72ef5073e60db3ab442106f1547e1733d8a0a2be7c1214",
+      "final_row_sha256": "baf405bff273c9358c72ef5073e60db3ab442106f1547e1733d8a0a2be7c1214"
+    },
+    {
+      "id": "scene:merged-pentatonic-on",
+      "baseline_row_sha256": "1725db4d20cd6d224f931a36a58a65de6a6353e461d37e7055e64a5ea2775870",
+      "final_row_sha256": "1725db4d20cd6d224f931a36a58a65de6a6353e461d37e7055e64a5ea2775870"
+    },
+    {
+      "id": "scene:mute-live-resume",
+      "baseline_row_sha256": "55ffc8da77c9bc56828b34c529f1996eb05160ef47cc8a5253a07243c4ff56cc",
+      "final_row_sha256": "55ffc8da77c9bc56828b34c529f1996eb05160ef47cc8a5253a07243c4ff56cc"
+    },
+    {
+      "id": "scene:mute-root-retains-slot",
+      "baseline_row_sha256": "cbcf49f3151f6cbfa76f2d1702d4590139f29b1d8a9c68335d5baab12ea790bf",
+      "final_row_sha256": "cbcf49f3151f6cbfa76f2d1702d4590139f29b1d8a9c68335d5baab12ea790bf"
+    },
+    {
+      "id": "scene:named-project-roundtrip",
+      "baseline_row_sha256": "6fe532d2292f94af35ce04d77eb8e24e31840adf2967dbc9911774ace8bded70",
+      "final_row_sha256": "6fe532d2292f94af35ce04d77eb8e24e31840adf2967dbc9911774ace8bded70"
+    },
+    {
+      "id": "scene:native-relative-midi-map",
+      "baseline_row_sha256": "63a1026c3adb492e7e7f63c6c56fcce625b4e890dd2cc3a0ce665e4a791d3571",
+      "final_row_sha256": "63a1026c3adb492e7e7f63c6c56fcce625b4e890dd2cc3a0ce665e4a791d3571"
+    },
+    {
+      "id": "scene:note-merge-numeric-output",
+      "baseline_row_sha256": "9c5232a7a9ff381651c4055f0663f88b052aa012929121f542197ff8e0b7177c",
+      "final_row_sha256": "9c5232a7a9ff381651c4055f0663f88b052aa012929121f542197ff8e0b7177c"
+    },
+    {
+      "id": "scene:octave-local-over-global",
+      "baseline_row_sha256": "5fb8e59848163fe0e389aa42cd478f2dd41a9237120ad8017ef50894e78c3919",
+      "final_row_sha256": "5fb8e59848163fe0e389aa42cd478f2dd41a9237120ad8017ef50894e78c3919"
+    },
+    {
+      "id": "scene:output-channel-selection",
+      "baseline_row_sha256": "cd17a3a28903c5baced5f356aaab57aca9bfd5c31baebb8a36a7ceca73e1d6d2",
+      "final_row_sha256": "cd17a3a28903c5baced5f356aaab57aca9bfd5c31baebb8a36a7ceca73e1d6d2"
+    },
+    {
+      "id": "scene:output-dashboard-readout",
+      "baseline_row_sha256": "272a64e418ad962af220b736f3e36743d2c58412e1d1f29d5d96e0d373153ccd",
+      "final_row_sha256": "272a64e418ad962af220b736f3e36743d2c58412e1d1f29d5d96e0d373153ccd"
+    },
+    {
+      "id": "scene:output-latest-event",
+      "baseline_row_sha256": "870db54029ffe917850f096f34ecbc396a5642af4de4f82338e0915db986dec8",
+      "final_row_sha256": "870db54029ffe917850f096f34ecbc396a5642af4de4f82338e0915db986dec8"
+    },
+    {
+      "id": "scene:paint-shift-and-cancel",
+      "baseline_row_sha256": "77912d39c6e6ec197bfe9c1142e6ce2fee0eefe4d5dd7cb0cf05062ee182c2d7",
+      "final_row_sha256": "77912d39c6e6ec197bfe9c1142e6ce2fee0eefe4d5dd7cb0cf05062ee182c2d7"
+    },
+    {
+      "id": "scene:panic-from-song-channel",
+      "baseline_row_sha256": "44595c1e6e67d91fed95a6d7564c97ac847ffc6f20f73afb487c3d89fbaaa4bb",
+      "final_row_sha256": "44595c1e6e67d91fed95a6d7564c97ac847ffc6f20f73afb487c3d89fbaaa4bb"
+    },
+    {
+      "id": "scene:panic-from-song-pattern",
+      "baseline_row_sha256": "fd59b8ced14ad2d2fd8a4c97ed2a10e5c9b99aa3eb6f4cd99f54cee76f606439",
+      "final_row_sha256": "fd59b8ced14ad2d2fd8a4c97ed2a10e5c9b99aa3eb6f4cd99f54cee76f606439"
+    },
+    {
+      "id": "scene:panic-stops-sounding-note",
+      "baseline_row_sha256": "328a086bca679aceae22e9d7771a67bcb08896faf0622e186314c9f439e50275",
+      "final_row_sha256": "328a086bca679aceae22e9d7771a67bcb08896faf0622e186314c9f439e50275"
+    },
+    {
+      "id": "scene:parameter-slot-endpoints",
+      "baseline_row_sha256": "bd958295b4f620c0abac7d5f58cf17537fac1bd0522817d92743e7bea101bc1a",
+      "final_row_sha256": "bd958295b4f620c0abac7d5f58cf17537fac1bd0522817d92743e7bea101bc1a"
+    },
+    {
+      "id": "scene:pattern-copy-groups",
+      "baseline_row_sha256": "016ea1a4aefeb70a3ee792f6a3bcb18b357f59ed55e7c5eae614b663742a7e04",
+      "final_row_sha256": "016ea1a4aefeb70a3ee792f6a3bcb18b357f59ed55e7c5eae614b663742a7e04"
+    },
+    {
+      "id": "scene:pattern-note-range",
+      "baseline_row_sha256": "6a3daca7052d30f6d684e5a5d9dd0ddc27c9a4fe8ef41963cdc897f7785a0aeb",
+      "final_row_sha256": "6a3daca7052d30f6d684e5a5d9dd0ddc27c9a4fe8ef41963cdc897f7785a0aeb"
+    },
+    {
+      "id": "scene:pattern-velocity-range",
+      "baseline_row_sha256": "eee26ef5b451b6a46100fe2a8e3197b5462db8fa788ce27da205c903b6eab264",
+      "final_row_sha256": "eee26ef5b451b6a46100fe2a8e3197b5462db8fa788ce27da205c903b6eab264"
+    },
+    {
+      "id": "scene:pentatonic-snap-all",
+      "baseline_row_sha256": "1fe8e82360ba386576e5bda3177a0b2f358b41f532764bc517e1b996584ecfc4",
+      "final_row_sha256": "1fe8e82360ba386576e5bda3177a0b2f358b41f532764bc517e1b996584ecfc4"
+    },
+    {
+      "id": "scene:player-apply-doubledecker",
+      "baseline_row_sha256": "07bc01c45ff4a98c8244560a273a3d7fc82602c49ccc7f8ae35647bc63e8a888",
+      "final_row_sha256": "07bc01c45ff4a98c8244560a273a3d7fc82602c49ccc7f8ae35647bc63e8a888"
+    },
+    {
+      "id": "scene:player-apply-oilcan",
+      "baseline_row_sha256": "b24afaf5b5c99574ddc439fad82a61e2b99d531c05d65c08e86d0bd6f3222026",
+      "final_row_sha256": "b24afaf5b5c99574ddc439fad82a61e2b99d531c05d65c08e86d0bd6f3222026"
+    },
+    {
+      "id": "scene:player-apply-polyperc",
+      "baseline_row_sha256": "f0a77c2a6dc8cceffc27b72e8275a675a8e21aca41f62eb75b7c44bae099c601",
+      "final_row_sha256": "f0a77c2a6dc8cceffc27b72e8275a675a8e21aca41f62eb75b7c44bae099c601"
+    },
+    {
+      "id": "scene:pocket-ghost-bar",
+      "baseline_row_sha256": "b33b0bcab38947d50e9944f24da1055424d479bab1e53b80dc74e4badcb27642",
+      "final_row_sha256": "b33b0bcab38947d50e9944f24da1055424d479bab1e53b80dc74e4badcb27642"
+    },
+    {
+      "id": "scene:polymeter-song-reset",
+      "baseline_row_sha256": "1dae17d19fe7346aeb3282b9fb0b3a66d0e7a2731d065981baf8eefc2d40c980",
+      "final_row_sha256": "1dae17d19fe7346aeb3282b9fb0b3a66d0e7a2731d065981baf8eefc2d40c980"
+    },
+    {
+      "id": "scene:probability-endpoints",
+      "baseline_row_sha256": "1208803ff169ea84aebf69226d337a604cb7ef66cc25aac7c20ecc728b093d91",
+      "final_row_sha256": "1208803ff169ea84aebf69226d337a604cb7ef66cc25aac7c20ecc728b093d91"
+    },
+    {
+      "id": "scene:protect-stop-gesture",
+      "baseline_row_sha256": "8cd563b90d25849b6a418f43c5b75ebb89833b2303904116015a9b213aaa5de6",
+      "final_row_sha256": "8cd563b90d25849b6a418f43c5b75ebb89833b2303904116015a9b213aaa5de6"
+    },
+    {
+      "id": "scene:public-display-readability",
+      "baseline_row_sha256": "003c7c718768a5ee41706cedc5cd923a9ee86206903655b7a3f695529d3c9d29",
+      "final_row_sha256": "003c7c718768a5ee41706cedc5cd923a9ee86206903655b7a3f695529d3c9d29"
+    },
+    {
+      "id": "scene:quantised-fixed-note-default-and-locks",
+      "baseline_row_sha256": "6250678981590282b817e297a751d012dbc7ce796e1f855eabd5ff5bf93bf1b6",
+      "final_row_sha256": "6250678981590282b817e297a751d012dbc7ce796e1f855eabd5ff5bf93bf1b6"
+    },
+    {
+      "id": "scene:random-note-seeded-offsets",
+      "baseline_row_sha256": "7a4671d352d6ed9b81349d086e9e442b2d4bd2eb3b2a50f0b7f07618cdc82f31",
+      "final_row_sha256": "7a4671d352d6ed9b81349d086e9e442b2d4bd2eb3b2a50f0b7f07618cdc82f31"
+    },
+    {
+      "id": "scene:random-pentatonic-off",
+      "baseline_row_sha256": "ae4ab4cfa7ae371be740bc6e65fa6fd7c381d53cef73a3bf8f4b0eecdf5d65ee",
+      "final_row_sha256": "ae4ab4cfa7ae371be740bc6e65fa6fd7c381d53cef73a3bf8f4b0eecdf5d65ee"
+    },
+    {
+      "id": "scene:random-pentatonic-on",
+      "baseline_row_sha256": "6f072d00de4e56a5a674878a2962e8e724b59808aa14c78ce56fa82adce03bf3",
+      "final_row_sha256": "6f072d00de4e56a5a674878a2962e8e724b59808aa14c78ce56fa82adce03bf3"
+    },
+    {
+      "id": "scene:random-twos-note-seeded-offsets",
+      "baseline_row_sha256": "d065a6f94dae374bdef1430e81d3f62f8f045e83db1183e4da1f07b32f9abaf9",
+      "final_row_sha256": "d065a6f94dae374bdef1430e81d3f62f8f045e83db1183e4da1f07b32f9abaf9"
+    },
+    {
+      "id": "scene:range-reject-and-recover",
+      "baseline_row_sha256": "cccb5e3de5d15420919e2ec5f879f87c4a7bd2c83c85260d8107f57498001bec",
+      "final_row_sha256": "cccb5e3de5d15420919e2ec5f879f87c4a7bd2c83c85260d8107f57498001bec"
+    },
+    {
+      "id": "scene:reason-ordered-rejections",
+      "baseline_row_sha256": "71c38f39d37146041d2b31759b7540659a4316c612730c88aa6276143e73ea45",
+      "final_row_sha256": "71c38f39d37146041d2b31759b7540659a4316c612730c88aa6276143e73ea45"
+    },
+    {
+      "id": "scene:record-keyboard-steps",
+      "baseline_row_sha256": "552bf36089e60ce0b6be0b084376bcdc1752dbb69d26c0bfdb49ab0cac3a7728",
+      "final_row_sha256": "552bf36089e60ce0b6be0b084376bcdc1752dbb69d26c0bfdb49ab0cac3a7728"
+    },
+    {
+      "id": "scene:record-parameter-lock",
+      "baseline_row_sha256": "b2034ecfe680a0e176e9ef46a8df276866033239ea847c61593552abc712eb25",
+      "final_row_sha256": "b2034ecfe680a0e176e9ef46a8df276866033239ea847c61593552abc712eb25"
+    },
+    {
+      "id": "scene:repeat-reset-first-boundary-public",
+      "baseline_row_sha256": "5d61c681d74be3d5dac12addd532f8475ab47ede0f0ebe442e0157d8c3c8ece5",
+      "final_row_sha256": "5d61c681d74be3d5dac12addd532f8475ab47ede0f0ebe442e0157d8c3c8ece5"
+    },
+    {
+      "id": "scene:repeat-reset-policies",
+      "baseline_row_sha256": "4b771e7452a8667c7dfcb3a6664d5358bb89edb08fc7133eaccd713506a6c3ed",
+      "final_row_sha256": "4b771e7452a8667c7dfcb3a6664d5358bb89edb08fc7133eaccd713506a6c3ed"
+    },
+    {
+      "id": "scene:scale-edit-versus-apply",
+      "baseline_row_sha256": "836ed994f6e51bd81a35692c53248118f3a28734a1ea549c2a5ebcda48a9da17",
+      "final_row_sha256": "836ed994f6e51bd81a35692c53248118f3a28734a1ea549c2a5ebcda48a9da17"
+    },
+    {
+      "id": "scene:scale-lock-replacement",
+      "baseline_row_sha256": "b52b314017e3267ac5f380460f376de6112c983e1d8b50b31eab18c97524247a",
+      "final_row_sha256": "b52b314017e3267ac5f380460f376de6112c983e1d8b50b31eab18c97524247a"
+    },
+    {
+      "id": "scene:scale-lock-scope-and-lifetime",
+      "baseline_row_sha256": "af3e97d8a51b730cf91c2f4824ee82df524b59a1e369a2f9ded9627b53d319f9",
+      "final_row_sha256": "af3e97d8a51b730cf91c2f4824ee82df524b59a1e369a2f9ded9627b53d319f9"
+    },
+    {
+      "id": "scene:scale-lock-skipped-trig",
+      "baseline_row_sha256": "db1adee64937deac97331ce29a15dcbf726e1ea25f38a26d831cf60715ee6678",
+      "final_row_sha256": "db1adee64937deac97331ce29a15dcbf726e1ea25f38a26d831cf60715ee6678"
+    },
+    {
+      "id": "scene:scale-save-d-and-apply",
+      "baseline_row_sha256": "6d9ca3355fd6fa81110ba781799f5f67389f53e2c121ff9a6aff91a5fd7a295d",
+      "final_row_sha256": "6d9ca3355fd6fa81110ba781799f5f67389f53e2c121ff9a6aff91a5fd7a295d"
+    },
+    {
+      "id": "scene:screen-motion-on-and-off",
+      "baseline_row_sha256": "e6721f261b38640a4dd1ff19ee8c99d0890078416a7ad461bfc9b5fc7fc25133",
+      "final_row_sha256": "e6721f261b38640a4dd1ff19ee8c99d0890078416a7ad461bfc9b5fc7fc25133"
+    },
+    {
+      "id": "scene:shared-merge-strategy-workflow",
+      "baseline_row_sha256": "711cf68c2f1b615bc6c944a4668f4760f308d817df538c20f981dc9cd3d153a3",
+      "final_row_sha256": "711cf68c2f1b615bc6c944a4668f4760f308d817df538c20f981dc9cd3d153a3"
+    },
+    {
+      "id": "scene:shuffle-smooth-amount-boundaries",
+      "baseline_row_sha256": "610687133b97a376484d369468d492a560ce0270975b6db91e5a472d52d0486b",
+      "final_row_sha256": "610687133b97a376484d369468d492a560ce0270975b6db91e5a472d52d0486b"
+    },
+    {
+      "id": "scene:snap-note-masks-public-pair",
+      "baseline_row_sha256": "cb6715ccfbb9b9580d0aa3c9349eebaf6ffaae14a86a4613a31ec86eae17ffcf",
+      "final_row_sha256": "cb6715ccfbb9b9580d0aa3c9349eebaf6ffaae14a86a4613a31ec86eae17ffcf"
+    },
+    {
+      "id": "scene:software-player-doubledecker",
+      "baseline_row_sha256": "03d7babc0149b303ecd7fb3ea9533f00530a02e1a1b91cb4549939c726bac1bd",
+      "final_row_sha256": "03d7babc0149b303ecd7fb3ea9533f00530a02e1a1b91cb4549939c726bac1bd"
+    },
+    {
+      "id": "scene:software-player-oilcan",
+      "baseline_row_sha256": "d7b0b84c2c8a2a1e4ee5f28209aa61a3c1f41c9208d5993086b2db54266fabd7",
+      "final_row_sha256": "d7b0b84c2c8a2a1e4ee5f28209aa61a3c1f41c9208d5993086b2db54266fabd7"
+    },
+    {
+      "id": "scene:software-player-polyperc",
+      "baseline_row_sha256": "a414c94555e6041fdacf282016632c890484396d34a197bac347d7b09a92836e",
+      "final_row_sha256": "a414c94555e6041fdacf282016632c890484396d34a197bac347d7b09a92836e"
+    },
+    {
+      "id": "scene:song-build-two-groups",
+      "baseline_row_sha256": "ca60e4f8bbe0bb0f1d5d8124be5b30d6ff370ccfd3cb98f881b8c39178b2fd6c",
+      "final_row_sha256": "ca60e4f8bbe0bb0f1d5d8124be5b30d6ff370ccfd3cb98f881b8c39178b2fd6c"
+    },
+    {
+      "id": "scene:song-change-reset-policies",
+      "baseline_row_sha256": "862e225935c21e20c81940be1735c9ef37463c52794bde8069ff8994e701dab9",
+      "final_row_sha256": "862e225935c21e20c81940be1735c9ef37463c52794bde8069ff8994e701dab9"
+    },
+    {
+      "id": "scene:song-copy-and-compare",
+      "baseline_row_sha256": "103f5489bcfa4836b7fad35368186f39c707aaedeb27050cb238ab57a91966b1",
+      "final_row_sha256": "103f5489bcfa4836b7fad35368186f39c707aaedeb27050cb238ab57a91966b1"
+    },
+    {
+      "id": "scene:song-global-length",
+      "baseline_row_sha256": "5a001dc46f4c75d2c4e8b7cfc65ad9d471bad25a2892d660fb50f8aae80933af",
+      "final_row_sha256": "5a001dc46f4c75d2c4e8b7cfc65ad9d471bad25a2892d660fb50f8aae80933af"
+    },
+    {
+      "id": "scene:song-mode-groups-and-selection",
+      "baseline_row_sha256": "b0b5803864d49f2a53dcf3fa39178655d25bbeaabf26d87269c9a44f5ae975cb",
+      "final_row_sha256": "b0b5803864d49f2a53dcf3fa39178655d25bbeaabf26d87269c9a44f5ae975cb"
+    },
+    {
+      "id": "scene:song-repeats-advance",
+      "baseline_row_sha256": "4544f95ebc227a4f9f3c06395c641ed51eadc2b013214b1b437b1ac3961f29b2",
+      "final_row_sha256": "4544f95ebc227a4f9f3c06395c641ed51eadc2b013214b1b437b1ac3961f29b2"
+    },
+    {
+      "id": "scene:song-slot-light-states",
+      "baseline_row_sha256": "106817c02d76ec09474b3e2e2699b834ababa6aad113d3a1f279eacd2ee9dbb6",
+      "final_row_sha256": "106817c02d76ec09474b3e2e2699b834ababa6aad113d3a1f279eacd2ee9dbb6"
+    },
+    {
+      "id": "scene:song-slot-repeat-values",
+      "baseline_row_sha256": "1ec3b6f58c9ff35964a41f3e0d2a8d133ebc8c7354e81e493752ea1cf3950f34",
+      "final_row_sha256": "1ec3b6f58c9ff35964a41f3e0d2a8d133ebc8c7354e81e493752ea1cf3950f34"
+    },
+    {
+      "id": "scene:song-tempo-across-slots",
+      "baseline_row_sha256": "adff05bc28ddcc1a745bba034ab3f285648a257b67f3ef6e562ddab9e0502054",
+      "final_row_sha256": "adff05bc28ddcc1a745bba034ab3f285648a257b67f3ef6e562ddab9e0502054"
+    },
+    {
+      "id": "scene:structure-anchor-chord-and-delete",
+      "baseline_row_sha256": "07b058ee64bc8de799f1cfeaf6500e5345c54719de17538ff1d06364bc1a22b8",
+      "final_row_sha256": "07b058ee64bc8de799f1cfeaf6500e5345c54719de17538ff1d06364bc1a22b8"
+    },
+    {
+      "id": "scene:structure-every-4-markers",
+      "baseline_row_sha256": "9ee1c811e2f663128acff4d097fdb92abe8bf354ebd730c792f93ca68c4bf1e5",
+      "final_row_sha256": "9ee1c811e2f663128acff4d097fdb92abe8bf354ebd730c792f93ca68c4bf1e5"
+    },
+    {
+      "id": "scene:strum-division-bounds",
+      "baseline_row_sha256": "05ece2c5d1c54e565f6b1e5ee3c3ef3d98d4af16509ce6906ed67a173baa0745",
+      "final_row_sha256": "05ece2c5d1c54e565f6b1e5ee3c3ef3d98d4af16509ce6906ed67a173baa0745"
+    },
+    {
+      "id": "scene:swing-interlock-pulse-times",
+      "baseline_row_sha256": "5d7cc6dd5e40081215c2711a6cd7c9e4585f1386861da08f47a6fb6e845e35eb",
+      "final_row_sha256": "5d7cc6dd5e40081215c2711a6cd7c9e4585f1386861da08f47a6fb6e845e35eb"
+    },
+    {
+      "id": "scene:toolkit-clocked-lfo-menu",
+      "baseline_row_sha256": "5a8313fd902e6fbe6a9db1c0eff00faa4a352dad70714dc0579398f710629ebf",
+      "final_row_sha256": "5a8313fd902e6fbe6a9db1c0eff00faa4a352dad70714dc0579398f710629ebf"
+    },
+    {
+      "id": "scene:transpose-explicit-zero-and-clear",
+      "baseline_row_sha256": "03b90ef20e5f896c68216b16bd0b15e5bd29b55430f85f352fb6182fd90c3b3a",
+      "final_row_sha256": "03b90ef20e5f896c68216b16bd0b15e5bd29b55430f85f352fb6182fd90c3b3a"
+    },
+    {
+      "id": "scene:transpose-lock-direct-taps",
+      "baseline_row_sha256": "dbf0be994412a6fd155b93c8ac42b842b8ebdff521b099e64a83fb1b3fca3357",
+      "final_row_sha256": "dbf0be994412a6fd155b93c8ac42b842b8ebdff521b099e64a83fb1b3fca3357"
+    },
+    {
+      "id": "scene:transpose-next-onset",
+      "baseline_row_sha256": "5650d6ae430583f304b8718b7a20a169131df28da9826ed122c9135d13f90017",
+      "final_row_sha256": "5650d6ae430583f304b8718b7a20a169131df28da9826ed122c9135d13f90017"
+    },
+    {
+      "id": "scene:transpose-song-slot-copy",
+      "baseline_row_sha256": "10c7c910cdd7f66df0b2d91fc1e6810dfec269a2452bc4c4dd369c49274b9146",
+      "final_row_sha256": "10c7c910cdd7f66df0b2d91fc1e6810dfec269a2452bc4c4dd369c49274b9146"
+    },
+    {
+      "id": "scene:trig-parameter-locks",
+      "baseline_row_sha256": "9d3fe8ecc5505d48271ed3c2e3d52f8ea030e3d1bf0f65a251adc5b87be47817",
+      "final_row_sha256": "9d3fe8ecc5505d48271ed3c2e3d52f8ea030e3d1bf0f65a251adc5b87be47817"
+    },
+    {
+      "id": "scene:trigless-locks-off",
+      "baseline_row_sha256": "11e96100e108da8bb8770f881293e514c78e2ee91bb9da5981551d0a413fc1f8",
+      "final_row_sha256": "11e96100e108da8bb8770f881293e514c78e2ee91bb9da5981551d0a413fc1f8"
+    },
+    {
+      "id": "scene:trigless-locks-on",
+      "baseline_row_sha256": "55f4c9d29ff26e28e5cc9159cd95956dd52a7f8d0115cf8ffd6ac89601805ac6",
+      "final_row_sha256": "55f4c9d29ff26e28e5cc9159cd95956dd52a7f8d0115cf8ffd6ac89601805ac6"
+    },
+    {
+      "id": "scene:ui-motion-public-frames",
+      "baseline_row_sha256": "442a0d603ef03893f502b7e865ae500245efed0004c823fd341daba1d694729a",
+      "final_row_sha256": "442a0d603ef03893f502b7e865ae500245efed0004c823fd341daba1d694729a"
+    },
+    {
+      "id": "scene:velocity-merge-numeric-output",
+      "baseline_row_sha256": "f64847f5b10ec661f4006bb6cffd195661470610e9289100bb25780c6e9211cf",
+      "final_row_sha256": "f64847f5b10ec661f4006bb6cffd195661470610e9289100bb25780c6e9211cf"
+    },
+    {
+      "id": "scene:vertical-clock-neighbors",
+      "baseline_row_sha256": "042cd1e8136156bb220df726efebd47babcb2049ab772db9ec11780240356131",
+      "final_row_sha256": "042cd1e8136156bb220df726efebd47babcb2049ab772db9ec11780240356131"
+    },
+    {
+      "id": "scene:workflow-compose-two-channels",
+      "baseline_row_sha256": "abe886e2fd24e4f5938dd2612ebfc0fd3bc60222f48189497d06c4b06b2af57a",
+      "final_row_sha256": "abe886e2fd24e4f5938dd2612ebfc0fd3bc60222f48189497d06c4b06b2af57a"
+    },
+    {
+      "id": "scene:workflow-patterns-and-scale",
+      "baseline_row_sha256": "9d41068ec99eece1446e2336db705b89f0f76b59fae824402d0e443ce5b84867",
+      "final_row_sha256": "9d41068ec99eece1446e2336db705b89f0f76b59fae824402d0e443ce5b84867"
+    },
+    {
+      "id": "scene:workflow-second-channel",
+      "baseline_row_sha256": "cd3885846bf68fd7469f3fab4d579e4603c01202d4effdfa32a0fe6bbc20e6a5",
+      "final_row_sha256": "cd3885846bf68fd7469f3fab4d579e4603c01202d4effdfa32a0fe6bbc20e6a5"
+    },
+    {
+      "id": "scene:workflow-song-chain",
+      "baseline_row_sha256": "bde5f9cec191097ae92f0b7cff579b1eb2d0c2861a2dc2e04785cf9c1a8fe71a",
+      "final_row_sha256": "bde5f9cec191097ae92f0b7cff579b1eb2d0c2861a2dc2e04785cf9c1a8fe71a"
+    }
+  ],
+  "direct_rows": [
+    {
+      "id": "recipe:interacting-with-slots:2-copy-a-song-slot-then-raise-the-copy-by-one-octa",
+      "review_units": [
+        "doc-language-cleanup:feature:interacting-with-slots:recipes[1]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "final_scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:feature:interacting-with-slots:recipes[1]",
+        "mapped_public_unit_id": "recipe:interacting-with-slots:2-copy-a-song-slot-then-raise-the-copy-by-one-octa",
+        "mapping_basis": "Feature interacting-with-slots, authored recipes[1] mapped to one-based ledger ordinal 2.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "fresh source review of the exact v07 three-leaf delta"
+      }
+    },
+    {
+      "id": "recipe:interacting-with-slots:3-build-the-recording-intro-verse-and-outro",
+      "review_units": [
+        "practical-small:interacting-with-slots:recipes[2]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 8,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "practical-small:interacting-with-slots:recipes[2]",
+        "mapped_public_unit_id": "recipe:interacting-with-slots:3-build-the-recording-intro-verse-and-outro",
+        "mapping_basis": "Feature interacting-with-slots, authored recipes[2] mapped to one-based ledger ordinal 3.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "fresh source review of the exact v07 three-leaf delta"
+      }
+    },
+    {
+      "id": "recipe:lock-all-to-pentatonic:1-hear-every-note-restricted",
+      "review_units": [
+        "practical-small:lock-all-to-pentatonic:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "practical-small:lock-all-to-pentatonic:recipes[0]",
+        "mapped_public_unit_id": "recipe:lock-all-to-pentatonic:1-hear-every-note-restricted",
+        "mapping_basis": "Feature lock-all-to-pentatonic, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:lock-random-to-pentatonic:1-compare-random-notes-with-and-without-the-filter",
+      "review_units": [
+        "practical-small:lock-random-to-pentatonic:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "practical-small:lock-random-to-pentatonic:recipes[0]",
+        "mapped_public_unit_id": "recipe:lock-random-to-pentatonic:1-compare-random-notes-with-and-without-the-filter",
+        "mapping_basis": "Feature lock-random-to-pentatonic, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+      "review_units": [
+        "doc-language-cleanup:feature:locks:recipes[4]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": "doc-language-cleanup:feature:locks:recipes[4]",
+      "final_score_evidence": {
+        "kind": "locks-c07-1-followup-final-rendered-review",
+        "source_review_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/followup-review.json",
+        "source_review_sha256": "0423e6769944cda6103733b065be49d28659bd8e3e0648592bb291577270f98a",
+        "rendered_receipt_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/final-rendered-followup-receipt.json",
+        "rendered_receipt_sha256": "1c36a781104d1e5cd33cfa75aed3c96f417efbbc105c8744960726914bf7ab21",
+        "rendered_harness_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/postinstall-followup-review.cjs",
+        "rendered_harness_sha256": "5641df8ac5e5948d59a4084252895e5086bb6692c4883297bbdeaf26e9808d45",
+        "review_unit_id": "doc-language-cleanup:feature:locks:recipes[4]",
+        "mapped_public_unit_id": "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+        "mapping_basis": "Exact direct target in the preserved 52-unit crosswalk; no new ledger row.",
+        "candidate_manifest_sha256": "7c47faeea25788afcd2afc924352488b2b5fdfb9ae62b7b44e3e81d682644392",
+        "installed_manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41",
+        "book_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+        "reader_index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+        "authority_sha256": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+        "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+        "rationale": "The new endpoint sequence reselects the destination Song slot after copying and explicitly assigns Decay to parameter slot 1 after the copy, before editing steps. This closes the real per-song-slot assignment loss. The relative-turn exercise already assigns Decay in the selected destination. The recipe remains long, so granularity stays 8; the older relative sentence “assign Decay to slot 1” is slightly less explicit than the new endpoint phrasing, but its Trig params context disambiguates it."
+      }
+    },
+    {
+      "id": "recipe:loops-that-meet:1-comparing-the-loop-alignment",
+      "review_units": [
+        "recipe-text-overlay:loops-that-meet:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "recipe-text-overlay:loops-that-meet:recipes[0]",
+        "mapped_public_unit_id": "recipe:loops-that-meet:1-comparing-the-loop-alignment",
+        "mapping_basis": "Feature loops-that-meet, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:masks:5-build-the-recording-small-hours-four-bars-in-c-m",
+      "review_units": [
+        "recipe-text-overlay:masks:recipes[4]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "recipe-text-overlay:masks:recipes[4]",
+        "mapped_public_unit_id": "recipe:masks:5-build-the-recording-small-hours-four-bars-in-c-m",
+        "mapping_basis": "Feature masks, authored recipes[4] mapped to one-based ledger ordinal 5.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:note-merge-modes:1-build-the-recording-average-then-higher",
+      "review_units": [
+        "recipe-text-overlay:note-merge-modes:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "recipe-text-overlay:note-merge-modes:recipes[0]",
+        "mapped_public_unit_id": "recipe:note-merge-modes:1-build-the-recording-average-then-higher",
+        "mapping_basis": "Feature note-merge-modes, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:pocket-rhythm:1-make-the-recorded-ghost-note-comparison",
+      "review_units": [
+        "recipe-text-overlay:pocket-rhythm:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "recipe-text-overlay:pocket-rhythm:recipes[0]",
+        "mapped_public_unit_id": "recipe:pocket-rhythm:1-make-the-recorded-ghost-note-comparison",
+        "mapping_basis": "Feature pocket-rhythm, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:pocket-rhythm:2-optional-probability-variation",
+      "review_units": [
+        "recipe-text-overlay:pocket-rhythm:recipes[1]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 8,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "recipe-text-overlay:pocket-rhythm:recipes[1]",
+        "mapped_public_unit_id": "recipe:pocket-rhythm:2-optional-probability-variation",
+        "mapping_basis": "Feature pocket-rhythm, authored recipes[1] mapped to one-based ledger ordinal 2.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:scale-editor:1-prepare-and-apply-a-second-scale",
+      "review_units": [
+        "practical-small:scale-editor:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 10,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "practical-small:scale-editor:recipes[0]",
+        "mapped_public_unit_id": "recipe:scale-editor:1-prepare-and-apply-a-second-scale",
+        "mapping_basis": "Feature scale-editor, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:small-hours:1-percussion-channel",
+      "review_units": [
+        "recipe-text-overlay:small-hours:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "recipe-text-overlay:small-hours:recipes[0]",
+        "mapped_public_unit_id": "recipe:small-hours:1-percussion-channel",
+        "mapping_basis": "Feature small-hours, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:small-hours:2-bass-channel",
+      "review_units": [
+        "recipe-text-overlay:small-hours:recipes[1]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": "recipe-text-overlay:small-hours:recipes[1]",
+      "final_score_evidence": {
+        "kind": "locks-c07-1-followup-final-rendered-review",
+        "source_review_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/followup-review.json",
+        "source_review_sha256": "0423e6769944cda6103733b065be49d28659bd8e3e0648592bb291577270f98a",
+        "rendered_receipt_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/final-rendered-followup-receipt.json",
+        "rendered_receipt_sha256": "1c36a781104d1e5cd33cfa75aed3c96f417efbbc105c8744960726914bf7ab21",
+        "rendered_harness_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/postinstall-followup-review.cjs",
+        "rendered_harness_sha256": "5641df8ac5e5948d59a4084252895e5086bb6692c4883297bbdeaf26e9808d45",
+        "review_unit_id": "recipe-text-overlay:small-hours:recipes[1]",
+        "mapped_public_unit_id": "recipe:small-hours:2-bass-channel",
+        "mapping_basis": "Exact direct target in the preserved 52-unit crosswalk; no new ledger row.",
+        "candidate_manifest_sha256": "7c47faeea25788afcd2afc924352488b2b5fdfb9ae62b7b44e3e81d682644392",
+        "installed_manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41",
+        "book_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+        "reader_index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+        "authority_sha256": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+        "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+        "rationale": "The edit distinguishes the bass part’s silence in bars 2–4 from the continuing four-bar drums, matching the recipe’s partial build and making the listening check usable. It changes no notes or setup; the recipe’s existing granularity is unchanged."
+      }
+    },
+    {
+      "id": "recipe:small-hours:3-chord-channel",
+      "review_units": [
+        "recipe-text-overlay:small-hours:recipes[2]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 10,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 8,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": "recipe-text-overlay:small-hours:recipes[2]",
+      "final_score_evidence": {
+        "kind": "locks-c07-1-followup-final-rendered-review",
+        "source_review_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/followup-review.json",
+        "source_review_sha256": "0423e6769944cda6103733b065be49d28659bd8e3e0648592bb291577270f98a",
+        "rendered_receipt_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/final-rendered-followup-receipt.json",
+        "rendered_receipt_sha256": "1c36a781104d1e5cd33cfa75aed3c96f417efbbc105c8744960726914bf7ab21",
+        "rendered_harness_path": "manual/evidence/claude-review/final-425-reader-ledger-20261008-01/postinstall-followup-review.cjs",
+        "rendered_harness_sha256": "5641df8ac5e5948d59a4084252895e5086bb6692c4883297bbdeaf26e9808d45",
+        "review_unit_id": "recipe-text-overlay:small-hours:recipes[2]",
+        "mapped_public_unit_id": "recipe:small-hours:3-chord-channel",
+        "mapping_basis": "Exact direct target in the preserved 52-unit crosswalk; no new ledger row.",
+        "candidate_manifest_sha256": "7c47faeea25788afcd2afc924352488b2b5fdfb9ae62b7b44e3e81d682644392",
+        "installed_manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41",
+        "book_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+        "reader_index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+        "authority_sha256": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+        "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+        "rationale": "The edit distinguishes the chord part’s silence in bars 2–4 from the continuing drums and bass, matching the preceding completed parts and clarifying the audition. It changes no notes or setup; the recipe’s existing granularity is unchanged."
+      }
+    },
+    {
+      "id": "recipe:song-editor:1-create-a-two-slot-group",
+      "review_units": [
+        "practical-small:song-editor:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "practical-small:song-editor:recipes[0]",
+        "mapped_public_unit_id": "recipe:song-editor:1-create-a-two-slot-group",
+        "mapping_basis": "Feature song-editor, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recipe:tilting-harmony:1-make-the-relative-note-scale-comparison",
+      "review_units": [
+        "recipe-text-overlay:tilting-harmony:recipes[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 10,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "recipe-text-overlay:tilting-harmony:recipes[0]",
+        "mapped_public_unit_id": "recipe:tilting-harmony:1-make-the-relative-note-scale-comparison",
+        "mapping_basis": "Feature tilting-harmony, authored recipes[0] mapped to one-based ledger ordinal 1.",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "fresh source review of the exact v07 three-leaf delta"
+      }
+    },
+    {
+      "id": "recording:bass-and-intervals",
+      "review_units": [
+        "doc-language-cleanup:recording:bass-and-intervals:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:bass-and-intervals:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:bass-and-intervals",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-build-a-phrase-compare",
+      "review_units": [
+        "doc-language-cleanup:recording:course-build-a-phrase-compare:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-build-a-phrase-compare:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-build-a-phrase-compare",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-first-sound-hear",
+      "review_units": [
+        "doc-language-cleanup:recording:course-first-sound-hear:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 8,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 8,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-first-sound-hear:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-first-sound-hear",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-harmony-design-apply",
+      "review_units": [
+        "doc-language-cleanup:recording:course-harmony-design-apply:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 8,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 8,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 8,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-harmony-design-apply:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-harmony-design-apply",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-keep-your-work-perform",
+      "review_units": [
+        "doc-language-cleanup:recording:course-keep-your-work-perform:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-keep-your-work-perform:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-keep-your-work-perform",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-masks-keep",
+      "review_units": [
+        "doc-language-cleanup:recording:course-masks-keep:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 8,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-masks-keep:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-masks-keep",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-masks-listen",
+      "review_units": [
+        "doc-language-cleanup:recording:course-masks-listen:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 8,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-masks-listen:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-masks-listen",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-modulation-movement-and-interest-level",
+      "review_units": [
+        "doc-language-cleanup:recording:course-modulation-movement-and-interest-level:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 8,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 8,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 8,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-modulation-movement-and-interest-level:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-modulation-movement-and-interest-level",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-sequence-composition-both",
+      "review_units": [
+        "doc-language-cleanup:recording:course-sequence-composition-both:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-sequence-composition-both:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-sequence-composition-both",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:course-song-composition-transition",
+      "review_units": [
+        "doc-language-cleanup:recording:course-song-composition-transition:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:course-song-composition-transition:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:course-song-composition-transition",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:ghost-note-comparison",
+      "review_units": [
+        "doc-language-cleanup:recording:ghost-note-comparison:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 8,
+        "coherence": 8,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 8,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 8,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:ghost-note-comparison:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:ghost-note-comparison",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:harmony-strum-arp",
+      "review_units": [
+        "doc-language-cleanup:recording:harmony-strum-arp:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:harmony-strum-arp:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:harmony-strum-arp",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:masks-small-hours",
+      "review_units": [
+        "doc-language-cleanup:recording:masks-small-hours:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:masks-small-hours:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:masks-small-hours",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:note-merge-modes",
+      "review_units": [
+        "doc-language-cleanup:recording:note-merge-modes:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 10,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 9,
+        "representation": 9,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:note-merge-modes:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:note-merge-modes",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:oilcan-pocket",
+      "review_units": [
+        "doc-language-cleanup:recording:oilcan-pocket:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:oilcan-pocket:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:oilcan-pocket",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:param-lock-comparison",
+      "review_units": [
+        "doc-language-cleanup:recording:param-lock-comparison:lesson_relations[0]",
+        "doc-language-cleanup:recording:param-lock-comparison:build_steps[4]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 10,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:param-lock-comparison:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:param-lock-comparison",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:polymeter",
+      "review_units": [
+        "doc-language-cleanup:recording:polymeter:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:polymeter:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:polymeter",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:scale-slot-comparison",
+      "review_units": [
+        "doc-language-cleanup:recording:scale-slot-comparison:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:scale-slot-comparison:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:scale-slot-comparison",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:song-sections",
+      "review_units": [
+        "doc-language-cleanup:recording:song-sections:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 8,
+        "granularity": 9,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 9,
+        "usefulness": 9,
+        "vocabulary": 9
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:song-sections:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:song-sections",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:swing-comparison",
+      "review_units": [
+        "doc-language-cleanup:recording:swing-comparison:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 8,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:swing-comparison:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:swing-comparison",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:three-voice-conversation",
+      "review_units": [
+        "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[0]",
+        "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[1]",
+        "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[2]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 8,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:three-voice-conversation",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    },
+    {
+      "id": "recording:voice-leading-revoice",
+      "review_units": [
+        "doc-language-cleanup:recording:voice-leading-revoice:lesson_relations[0]"
+      ],
+      "baseline_scores": {
+        "canonical_home": 9,
+        "coherence": 9,
+        "flow": 9,
+        "granularity": 8,
+        "integration": 9,
+        "naming": 9,
+        "representation": 8,
+        "understandability": 8,
+        "usefulness": 9,
+        "vocabulary": 8
+      },
+      "source_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "final_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "followup_review_unit": null,
+      "final_score_evidence": {
+        "kind": "source-only-v07-review-not-rendered",
+        "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+        "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+        "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+        "review_unit_id": "doc-language-cleanup:recording:voice-leading-revoice:lesson_relations[0]",
+        "mapped_public_unit_id": "recording:voice-leading-revoice",
+        "mapping_basis": "",
+        "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+        "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+      }
+    }
+  ],
+  "crosswalk_scope_note": "The 11 standalone/projection units and 63 dependency IDs are retained as review dependencies and are not added as 425-ledger records. The two Performance Management scalar ratings likewise do not create additional ledger IDs."
+}

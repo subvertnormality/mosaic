@@ -1,0 +1,73 @@
+{
+  "assets": {
+    "manual.css": {
+      "status": 200,
+      "sha256": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+      "bytes": 38580
+    },
+    "manual.js": {
+      "status": 200,
+      "sha256": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+      "bytes": 99336
+    }
+  },
+  "cases": [
+    {
+      "width": 1121,
+      "mode": "original",
+      "labelCenterDelta": {
+        "column1": 1,
+        "column16": 1
+      },
+      "focusedIndex": 15,
+      "visibleMargin": 10.21875,
+      "documentScrollDelta": 0,
+      "scrollLeft": 441,
+      "gridStatePreserved": true,
+      "labelsPreserved": true
+    },
+    {
+      "width": 1121,
+      "mode": "shield",
+      "labelCenterDelta": {
+        "column1": 1,
+        "column16": 1
+      },
+      "focusedIndex": 15,
+      "visibleMargin": 10.21875,
+      "documentScrollDelta": 2,
+      "scrollLeft": 441,
+      "gridStatePreserved": true,
+      "labelsPreserved": true
+    },
+    {
+      "width": 1440,
+      "mode": "original",
+      "labelCenterDelta": {
+        "column1": 1,
+        "column16": 1
+      },
+      "focusedIndex": 15,
+      "visibleMargin": 9.53125,
+      "documentScrollDelta": 0,
+      "scrollLeft": 401,
+      "gridStatePreserved": true,
+      "labelsPreserved": true
+    },
+    {
+      "width": 1440,
+      "mode": "shield",
+      "labelCenterDelta": {
+        "column1": 1,
+        "column16": 1
+      },
+      "focusedIndex": 15,
+      "visibleMargin": 9.53125,
+      "documentScrollDelta": 0,
+      "scrollLeft": 401,
+      "gridStatePreserved": true,
+      "labelsPreserved": true
+    }
+  ],
+  "issues": []
+}

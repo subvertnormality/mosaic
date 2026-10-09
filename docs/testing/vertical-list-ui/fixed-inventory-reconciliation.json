@@ -1,0 +1,22 @@
+{
+  "purpose": "Explicit bounded UI contract inventory reconciliation",
+  "prior_count": 430,
+  "prior_ceiling": 473,
+  "current_count": 432,
+  "current_ceiling": 476,
+  "reserve_formula": "ceil(count*1.10)",
+  "added": [
+    "M-MERGE-STRATEGY-001",
+    "M-UI-READABILITY-001"
+  ],
+  "removed": [],
+  "helper_body_preserved": true,
+  "namespace_review": "manual/proposals/strategy-route-namespace-review.json",
+  "source_hashes": {
+    "tests/behaviour/contract_cases.json": "9d678a2a0e147d39850209c18e120bcdd9ab3968869ded8cc0b8cdc0590a7e89",
+    "tests/behaviour/test_ui_layer.py": "882397c160243a3d1657b24c807ca8d479a0938714ce997a766fe1b6ed742cd0",
+    "tests/behaviour/merge_strategy_routes.py": "1e7366a3330072f53e5e953ad23675ad412f999ae03f8bae8de9d20cbd24ab88",
+    "manual/proposals/strategy-route-namespace-review.json": "26773f713b87a0a1c00f065707890ffe5f29a5e3efa0b8afd1a1a751298e02ef"
+  },
+  "staging_failure": "final-ui-integration-corrected.log loaded old test literal while writer subprocess was pending; rerun from settled sources required"
+}

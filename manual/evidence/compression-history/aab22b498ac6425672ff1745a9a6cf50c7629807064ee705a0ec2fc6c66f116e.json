@@ -1,0 +1,10 @@
+{
+  "native_wav_sha256": "89108f47b4201c5992ae6fa8ec14b6de2430ea2dbfd4c4c8bb696a3d9f8a6d91",
+  "source_sha256": "5ac374c77acc5db199b2826553a84f0a9829eb56c8beac70f8fccb16ea944b32",
+  "files": {
+    "audio/masks-small-hours.ogg": "1d1bda4e92100ad8bb60ac3106d2c9a719b3fe81d5d5a068c324e39beca9c93a",
+    "audio/masks-small-hours.mp3": "68ec44ec3d97a2fdb3acb22f4f57a81e4ab437002182ff7e733333bbe1a04ac3"
+  },
+  "decoded_signal_verified": true,
+  "complete_regression_run": false
+}

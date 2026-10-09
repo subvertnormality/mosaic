@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": [
+    "All scene captions, forward/back frames and 128 LED values",
+    "Without a recorded cue encoder click, key press and drag leave the captured frame and step unchanged",
+    "Uncued pictured controls preserve current frame; explicit Next, grid focus and autoplay",
+    "Recorded hold cue rejects wrong encoder and pad, accepts the matching pad and reveals the exact held result only on View next result",
+    "Recorded encoder cue rejects the wrong direction and accepts the recorded clockwise turn",
+    "Search, dense reference and theme switching",
+    "Selected Opus and MP3 match authored four-bar tempo and independent three-second native capture tail",
+    "Historical pilot duration oracle preserved separately",
+    "Real web audio decoding, seek/pause and captured playhead sync"
+  ],
+  "audio_contract_source_sha256": "d144e75601b9f682e3d29212e06356e5a6ac58477b4fdd1b3b48d7e7f39893c5"
+}

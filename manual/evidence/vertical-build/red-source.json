@@ -1,0 +1,11 @@
+{
+  "sha256": "53f677d95b1932ee98462881a46f85af9f9c82978f184326ecaf640e7848c8b3",
+  "returncode": 1,
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_manual_build.BuildPlan.test_vertical_list_capture_pins_its_local_helper_in_both_lanes",
+    "test_manual_build.BuildPlan.test_multiple_additive_helpers_are_retained_for_mixed_plans"
+  ]
+}

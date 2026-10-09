@@ -1,0 +1,224 @@
+schema_version: 1
+status: source-plan-not-yet-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: Exact public-input semantic checkpoints; publication requires the entire cited case to pass. Lead
+  uses its native child session. Panic caches a separately asserted live Song header before shutdown and
+  binds the image to subsequent full native MIDI accounting. No closed-session snapshot is permitted.
+scenes:
+- id: lock-lead-menu-values
+  feature_id: lock-lead-time
+  title: Send lock values before their notes
+  behaviour_case: M-SYNC-LEAD-002
+  citation: README.md#lock-lead-time
+  session_ordinal: 1
+  related:
+  - trig-param-locks
+  - trigless-locks
+  - clocks-swing-and-shuffle
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays a four-note phrase through a MIDI device. The tempo is 130 BPM, the sequencer
+      is stopped, the norns shows channel 1's Device screen and the PARAMS menu is closed. No trig params
+      are assigned yet, so no CC values are sent.
+    session_ordinal: 1
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: locks-ready
+    title: Assign CC 1 to a Trig params slot
+    caption: Hold step 1 at (1,4) and tap step 5 at (5,4) to extend the channel range to steps 1 to 5.
+      Then on Channel tasks > Trig params assign CC 1 to a slot with E3 and K3, so steps can carry CC
+      lock values. The phrase plays from the internal clock at 130 BPM.
+    session_ordinal: 1
+    assertion:
+      kind: parameter-list-label
+      label: CC 1
+      passed: true
+  - id: lead-0
+    title: Give steps CC values, set lead to 0
+    caption: On Trig params, hold each of steps 1, 3, 4 and 5 in turn and turn E3 to give it its own CC
+      1 lock value. Then tap K1 to open the norns PARAMS menu, choose MOSAIC and select Lock lead time
+      (ms) in the Parameter locks section. Turn E3 to 0. At 0 each lock value is sent at the same moment
+      as its step, together with the note. This is the original timing.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock lead time (ms)
+      value: '0'
+      matched: true
+  - id: play-0
+    title: Hear it at 0 ms
+    session_ordinal: 1
+    caption: Close the menu and press Play (1,8), listen to the phrase and press Play again to stop. In
+      the MIDI strip every CC 1 value sits at the same millisecond as its Note On.
+    assertion:
+      kind: lock-lead-clock-run
+      condition: normal
+      lead_ms: 0
+      passed: true
+  - id: lead-25
+    title: Set 25 ms lead
+    caption: Tap K1, open PARAMS > MOSAIC > Lock lead time (ms) and set it to 25, the default. At 130
+      BPM each lock value will now leave about 29 ms before its step (25 ms rounded up to a whole clock
+      pulse of 4.8 ms). The notes keep their exact times.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock lead time (ms)
+      value: '25'
+      matched: true
+  - id: play-25
+    title: Hear it at 25 ms
+    session_ordinal: 1
+    caption: Close the menu, press Play (1,8) and Stop. In the MIDI strip each CC 1 value now arrives
+      about 29 ms before its Note On, which still falls at its usual time. A synth that smooths incoming
+      CC changes has already reached the new value when the note starts.
+    assertion:
+      kind: lock-lead-clock-run
+      condition: normal
+      lead_ms: 25
+      passed: true
+  - id: lead-50
+    title: Set 50 ms lead
+    caption: Tap K1, reopen Lock lead time (ms) and set it to 50. At 130 BPM lock values will leave about
+      53 ms (11 pulses) ahead of their step, and the notes still sound at their usual times. Use the larger
+      lead for slow filters or effects that need longer to settle.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock lead time (ms)
+      value: '50'
+      matched: true
+  - id: play-50
+    title: Hear it at 50 ms
+    session_ordinal: 1
+    caption: Close the menu, press Play (1,8) and Stop. In the MIDI strip each CC 1 value arrives about
+      53 ms before its Note On, so the change lands before the note rather than gliding through it. The
+      notes do not move.
+    assertion:
+      kind: lock-lead-clock-run
+      condition: normal
+      lead_ms: 50
+      passed: true
+- id: panic-from-song-channel
+  feature_id: midi-panic
+  title: Panic by holding Channel while on Song
+  behaviour_case: M-PANIC-001
+  citation: README.md#midi-panic
+  related:
+  - song-editor
+  - norns-menu-navigation
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+      C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Pattern 1 is assigned to
+      channel 1 over steps 1 to 4. The sequencer is stopped, so no note is sounding, and three MIDI ports
+      are connected. The norns shows channel 1''s Device screen; the next step opens Song.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: open-song
+    title: Open the Song page
+    caption: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button.
+      Panic only works from the button of a page you are not on, so every other page button, including
+      Channel (3,8), is a panic button from here.
+    assertion:
+      kind: grid
+      cells:
+      - - 3
+        - 8
+      - - 4
+        - 8
+      - - 5
+        - 8
+      - - 6
+        - 8
+      expected:
+      - 2
+      - 2
+      - 2
+      - 15
+  - id: hold-and-release
+    title: Hold Channel for two seconds
+    caption: Hold the Channel button (3,8), a page you are not on, for about two seconds, then release
+      it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the
+      three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen
+      stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are
+      already on does nothing. Playback is not stopped by a panic.
+    assertion:
+      kind: panic-full-stream-accounting
+      note_events: 6144
+      windows: 1
+      unaccounted: 0
+      passed: true
+    capture_stage: before-finish
+    pre_finish_expect:
+      header:
+        page: song
+- id: panic-from-song-pattern
+  feature_id: midi-panic
+  title: Panic by holding Pattern while on Song
+  behaviour_case: M-PANIC-002
+  citation: README.md#midi-panic
+  related:
+  - song-editor
+  - norns-menu-navigation
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+      C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Pattern 1 is assigned to
+      channel 1 over steps 1 to 4. The sequencer is stopped, so no note is sounding, and three MIDI ports
+      are connected. The norns shows channel 1''s Device screen; the next step opens Song.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: open-song
+    title: Open the Song page
+    caption: Press Song (6,8). The Song page opens (Song Playback, SONG 01) and Song is the lit page button.
+      Panic only works from the button of a page you are not on, so every other page button, including
+      Pattern (5,8), is a panic button from here.
+    assertion:
+      kind: grid
+      cells:
+      - - 3
+        - 8
+      - - 4
+        - 8
+      - - 5
+        - 8
+      - - 6
+        - 8
+      expected:
+      - 2
+      - 2
+      - 2
+      - 15
+  - id: hold-and-release
+    title: Hold Pattern for two seconds
+    caption: Hold the Pattern button (5,8), a page you are not on, for about two seconds, then release
+      it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the
+      three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen
+      stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are
+      already on does nothing. Playback is not stopped by a panic.
+    assertion:
+      kind: panic-full-stream-accounting
+      note_events: 6144
+      windows: 1
+      unaccounted: 0
+      passed: true
+    capture_stage: before-finish
+    pre_finish_expect:
+      header:
+        page: song
+gaps:
+- feature_id: lock-lead-time
+  case: M-SYNC-LEAD-001
+  reason: Parent closes before child runs. Separate child sessions test leads 0,5,10,25; final comparison
+    arrives after every child has closed. Use M-SYNC-LEAD-002 for a compact single-child 0/25/50 scene;
+    do not snapshot parent comparison.
+- feature_id: midi-panic
+  reason: Selected-page no-panic boundary and overlapping/hotplug panic are existing cases but not included
+    in this compact guide scene. Their final UI state needs separate exact expectations before capture.

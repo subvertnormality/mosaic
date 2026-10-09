@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "focused_tests": 73,
+  "prior_auditor_sha256": "3d6ae35d5035415cdd9a552af19ff11197dd01073b775007d291b7ef5425023f",
+  "prior_test_sha256": "64363f16c8d5cec7d4e77ac99ab66c1e47d7a15935662b469d691d6129cdf19f",
+  "files": {
+    "tools/manual_publication_verify.py": "10b339ed62fd08b12926abffb67e72f2dce466a84f3b714e0d6b7a05703974a9",
+    "tests/behaviour/test_manual_publication_verify.py": "32d9f2bfb6293bafff4003041dd213d5534b8ede7abdd27fbc1b9664b4b6ec89",
+    "tools/manual_course_cases.py": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5",
+    "manual/scene-plans-course.yaml": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad"
+  },
+  "logs": {
+    "course-dashboard-length-red.log": "cb6050a98df47a47e7bfb7b98b4ac0d6ef68db87ddead2eea4037f644607e5b3",
+    "course-dashboard-dispatch-red.log": "ebfd20033444c8841f27d5b757af23bd0b1a4ad52aad3879c99cd487ce4a31ee",
+    "course-dashboard-length-green.log": "e1692cec3f8da37144c228ed3412dcf29b81e7fe4de1dc2200540add15c63d69"
+  },
+  "scope": "Existing manual-course-ui: two explicit Song Global length16 pictures only",
+  "checks": [
+    "Exact owning native_observation_index and full boundframe SHA/fullgrid",
+    "ExactcanonicalSongslot1/2 dashboardstage/header declaration",
+    "Independentframe_oracle row4 Global length16 pixels",
+    "Existingfullheader/gridLED checks retained",
+    "Absentoptionalfield for existingotherUI unchanged",
+    "Missingrow/value/index/frame/grid/staleheader metadata rejects",
+    "No musical packet/source/time/phase tolerances changed"
+  ],
+  "native_course_complete": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

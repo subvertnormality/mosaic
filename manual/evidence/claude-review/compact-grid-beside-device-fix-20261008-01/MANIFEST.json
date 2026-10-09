@@ -1,0 +1,55 @@
+{
+  "change": "Compact norns/grid layout with a responsive lesson breakpoint.",
+  "source_roots": [
+    "/home/andy/mosaic-manual-1.4.0",
+    "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout"
+  ],
+  "source_files": {
+    "manual/manual.css": {
+      "before_sha256": "c664709772996b542460a5c55a9c2eaf54e633170a29ce90685b78b10645cbcc",
+      "after_sha256": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25"
+    },
+    "tests/behaviour/manual_browser.cjs": {
+      "before_sha256": "7313ace18df11a31449cb7634c40a61f2db6a046f7ea048fd4e0cad3f929a4ba",
+      "after_sha256": "81ed1501edba2a7a34108640fc12e81891f8cf4e96c03f0bf20d263d6b9bec5b"
+    }
+  },
+  "behavior": "CSS only: compact Norns and interactive grid share a desktop row. At course widths below 1440px, instructions get a full row and the paired player follows. At 1440px+, course instructions and paired player share the workspace. The 128 interactive pads are unchanged; expanded mode uses a full-width row.",
+  "focused_matrix": {
+    "harness": "layout_regression.cjs",
+    "route_viewports": [
+      "Rhythm Doctor 1121, 1440",
+      "First Sound lesson 1121, 1280, 1440",
+      "both routes 768, 390"
+    ],
+    "red": "proof/red-final.json",
+    "green": "proof/green-final.json",
+    "earlier_false_green_preserved": "proof/green-v2-false-green.json",
+    "assertions": [
+      "no page horizontal overflow",
+      "128 grid controls and unchanged accessible labels/levels after resize",
+      "desktop screen >=256 CSS px",
+      "compact grid >=280px at 1121 and lesson routes",
+      "device and grid share a row with >=80% vertical overlap",
+      "all 16 pads fit within grid, player, and viewport boundaries",
+      "expanded grid moves below device, grows, and retains all LED states"
+    ]
+  },
+  "actual_served": {
+    "preview": "http://127.0.0.1:8785/manual/",
+    "css_sha256": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25",
+    "screenshots": "screenshots/",
+    "metrics": "proof/served-final.json"
+  },
+  "screenshots": [
+    "served-rhythm-doctor-1121-original.png",
+    "served-rhythm-doctor-1121-shield.png",
+    "served-rhythm-doctor-1440-original.png",
+    "served-rhythm-doctor-1440-shield.png",
+    "served-lesson-1280-original.png",
+    "served-lesson-1280-shield.png",
+    "served-lesson-1440-original.png",
+    "served-lesson-1440-shield.png"
+  ],
+  "scope": "No book, HTML, JavaScript, generated content, controls or native pixels changed. No rebuild, audio, native run, or service restart."
+}

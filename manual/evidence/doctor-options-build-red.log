@@ -1,0 +1,33 @@
+...E.F............E......
+======================================================================
+ERROR: test_completion_rejects_missing_doctor_option_qualification_gates (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 203, in test_completion_rejects_missing_doctor_option_qualification_gates
+    build.complete_build(True,["scene-plans.yaml"],["scene-plans.yaml"],{"complete_manual":True},stages=[])
+TypeError: complete_build() got an unexpected keyword argument 'stages'
+
+======================================================================
+ERROR: test_ready_stage_requires_exact_successful_manual_right_fixture_receipt (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 195, in test_ready_stage_requires_exact_successful_manual_right_fixture_receipt
+    with mock.patch.object(build,"qualify_ready_fixture",return_value=None):
+  File "/usr/lib/python3.8/unittest/mock.py", line 1393, in __enter__
+    original, local = self.get_original()
+  File "/usr/lib/python3.8/unittest/mock.py", line 1366, in get_original
+    raise AttributeError(
+AttributeError: <module 'manual_build' from '/home/andy/mosaic-manual-1.4.0/tools/manual_build.py'> does not have the attribute 'qualify_ready_fixture'
+
+======================================================================
+FAIL: test_doctor_options_are_seven_mandatory_independent_qualification_stages (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 183, in test_doctor_options_are_seven_mandatory_independent_qualification_stages
+    self.assertTrue(expected<=set(names));self.assertIn("doctor-options-audit",names)
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.499s
+
+FAILED (failures=1, errors=2)

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "feature_bind_tests": 31,
+  "build_tests": 32,
+  "readability_checkpoints": 17,
+  "native_acceptance_claimed": false,
+  "feature_promoted": false,
+  "files": {
+    "manual/scene-plans-readability.yaml": "ff31ee4e6326b7aea3e39d4673925e2bf3aa62fc5c1b08ef90b39e7f1059734d",
+    "tools/manual_feature_bind.py": "4c585dca0a1d5a2a0b6b20af7468f86292f52d1fce341120154025b6121a7171",
+    "tests/behaviour/test_manual_feature_bind.py": "b01ac0868da84592e539c07bfe83a9df3166901256b59ece78163b2db2a58d5e",
+    "tests/behaviour/test_manual_build.py": "161cfeb75d8d19671cc53bfdb1265b1b0d68d5b9c4919e83dcaaf0e8940c6265",
+    "manual/BUILD.md": "e0ceabd2471a60a5a5cf91da63b82c7925803c119d306450ee85118472b0a16b"
+  }
+}

@@ -1,0 +1,31 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+..........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Saving project as absent.v2
+Loading project /tmp/lua_lPhalW/absent.v2.ptn
+Loading project /tmp/lua_lPhalW/absent.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Saving project as explicit_off.v2
+Loading project /tmp/lua_9xJ4sW/explicit_off.v2.ptn
+Loading project /tmp/lua_9xJ4sW/explicit_off.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Saving project as foundation.v2
+Loading project /tmp/lua_6FeKEW/foundation.v2.ptn
+Loading project /tmp/lua_6FeKEW/foundation.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Saving project as foundation_harmony_pattern.v2
+Loading project /tmp/lua_H74hAU/foundation_harmony_pattern.v2.ptn
+Loading project /tmp/lua_H74hAU/foundation_harmony_pattern.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Saving project as unknown_keys.v2
+Loading project /tmp/lua_ZmliNW/unknown_keys.v2.ptn
+Loading project /tmp/lua_ZmliNW/unknown_keys.v2.ptn
+.......................................................................................................................................................................................................................................................................................................................................................................................................................................ls: cannot access '/tmp/lua_4jQCCU/config': No such file or directory
+.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Ran 2398 tests in 88.782 seconds, 2398 successes, 0 failures
+OK

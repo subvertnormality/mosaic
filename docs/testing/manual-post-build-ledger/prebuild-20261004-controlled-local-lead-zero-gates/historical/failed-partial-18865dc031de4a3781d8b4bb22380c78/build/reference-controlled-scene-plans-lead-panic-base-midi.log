@@ -1,0 +1,9 @@
+Failure evidence /home/andy/mosaic-manual-runs/33673a502aca40a8a8c1d3c1924ac5d7
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 307, in <module>
+    if __name__=="__main__":main()
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 293, in main
+    captured=capture_group(group,out,a);persist_case_scenes(out,captured);results.extend(captured)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 227, in capture_group
+    if missing:raise ValueError("Missing checkpoints: "+str(missing))
+ValueError: Missing checkpoints: ['lock-lead-menu-values/lead-0']

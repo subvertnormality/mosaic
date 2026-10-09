@@ -1,0 +1,21 @@
+.......................EE
+======================================================================
+ERROR: test_extra_helpers_must_be_pinned_inside_tools (test_manual_publication_verify.StartSourceReceiptIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 189, in test_extra_helpers_must_be_pinned_inside_tools
+    with self.assertRaisesRegex(ValueError,'extra-case'):audit.check_start_source_receipt(document,receipt)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_start_source_receipt'
+
+======================================================================
+ERROR: test_final_source_must_reuse_every_start_map_and_selection (test_manual_publication_verify.StartSourceReceiptIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 181, in test_final_source_must_reuse_every_start_map_and_selection
+    audit.check_start_source_receipt(document,receipt)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_start_source_receipt'
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.037s
+
+FAILED (errors=2)

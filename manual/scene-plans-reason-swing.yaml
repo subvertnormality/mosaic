@@ -1,0 +1,143 @@
+schema_version: 1
+status: authoring-plan-not-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scenes:
+- id: reason-ordered-rejections
+  feature_id: result-and-reason
+  title: Inspect Merge Shape decisions
+  behaviour_case: M-MANUAL-REASON-001
+  citation: README.md#result-and-reason
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Two 8-step channels at 90 BPM. Channel 1 has Pattern 1 (C D E F on steps 1 to 4) as its
+      Foundation anchor and Pattern 2 (trigs on steps 5 and 7) as additions. Channel 2 (MIDI channel 2)
+      has Pattern 3, one trig on step 5, as its Foundation anchor, and is channel 1''s Interlock leader
+      with Window 0. Interlock ON removes a channel 1 addition that lands on the leader''s anchor, so
+      channel 1''s grid shows steps 1, 2, 3, 4 and 7 lit. Anchor gap is 0: Gap is a safety distance, 0
+      to 8 steps, kept clear of additions around an anchor, and 0 turns it off. Every step below is on
+      channel 1 under Channel tasks > Merge Shape (E1 to Channel tasks, E2 to Merge Shape, K3); Result,
+      Reason and Rhythm are screens of that list.'
+    assertion:
+      kind: grid
+      cells: [[5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4], [11, 4], [12, 4], [13, 4], [14, 4], [15,
+          4], [16, 4]]
+      expected: [2, 2, 15, 2, 0, 0, 0, 0, 0, 0, 0, 0]
+  - id: result-step-7
+    title: Open Result for step 7
+    caption: 'Open Result and turn E3 to Step 7. Result shows Decision OK: the addition on step 7 is admitted.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Decision
+      value: OK
+      matched: true
+  - id: admitted-addition
+    title: Inspect an admitted addition
+    caption: Select Reason and press K3. Merge Reason lists Step 7, Role ADDITION P2 (an addition taken
+      from Pattern 2), Decision OK, Interlock ON, Velocity 70 and Pitch target LEGACY.
+    assertion:
+      kind: manual-reason-dashboard
+      checkpoint: admitted-addition
+      passed: true
+  - id: result-step-5
+    title: Open Result for step 5
+    caption: 'Return to Result and turn E3 to Step 5. Result shows Decision INTERLOCK CH02: this addition
+      is refused.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Decision
+      value: INTERLOCK CH02
+      matched: true
+  - id: interlock-rejection
+    title: Inspect an Interlock rejection
+    caption: Open Reason again. Step 5 sits on the leader's anchor, so Role reads EMPTY P2, Decision reads
+      INTERLOCK CH02 and Velocity reads NONE. The addition was refused and sends no note. EMPTY P2 does
+      not mean Pattern 2 lacks a trig on step 5.
+    assertion:
+      kind: manual-reason-dashboard
+      checkpoint: interlock-rejection
+      passed: true
+  - id: anchor-gap
+    title: Set Anchor gap to 1
+    caption: Open Rhythm, select Anchor gap, turn E3 once right to 1 and press K3. Anchor gap 1 keeps
+      additions one step clear of an anchor, and step 5 is now next to the anchor on step 4 as well as
+      on the leader's anchor.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Anchor gap
+      value: '1'
+      matched: true
+  - id: result-gap
+    title: Read the two reasons in Result
+    caption: 'Open Result and select Step 5. Decision now reads GAP, INTERLOCK: two reasons are listed.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Decision
+      value: GAP, INTERLOCK
+      matched: true
+  - id: ordered-gap-interlock
+    title: Inspect two rejection reasons
+    caption: 'Open Reason for Step 5: Decision reads GAP, INTERLOCK, with Gap listed first.'
+    assertion:
+      kind: manual-reason-dashboard
+      checkpoint: ordered-gap-interlock
+      passed: true
+  - id: hear-suppression
+    title: Play the filtered pattern
+    caption: Press Play (1,8) for two loops, then Stop. Channel 1 plays C D E F on steps 1 to 4 and its
+      addition on step 7. Step 5 stays silent on channel 1 even though Pattern 2 has a trig there.
+    assertion:
+      kind: manual-reason-midi
+      passed: true
+- id: swing-interlock-pulse-times
+  feature_id: clocks-swing-and-shuffle
+  title: 'Swing a merged part: Interlock still removes step 5'
+  behaviour_case: M-MANUAL-SWING-001
+  citation: README.md#clocks-swing-and-shuffle
+  steps:
+  - id: start
+    title: Starting point
+    caption: Two 8-step channels at 90 BPM. Channel 1 has Pattern 1 (C D E F on steps 1 to 4) as its Foundation
+      anchor and Pattern 2 (trigs on steps 5 and 7) as additions. Channel 2 (MIDI channel 2) has one anchor
+      trig on step 5 and is channel 1's Interlock leader. Interlock removes channel 1's addition on step
+      5, so channel 1's grid shows steps 1, 2, 3, 4 and 7 lit. Clock Rate is /1 and Swing is not set (X).
+    assertion:
+      kind: grid
+      cells: [[5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4], [11, 4], [12, 4], [13, 4], [14, 4], [15,
+          4], [16, 4]]
+      expected: [2, 2, 15, 2, 0, 0, 0, 0, 0, 0, 0, 0]
+  - id: swing-setting
+    title: Set Swing to 25
+    caption: Turn E1 to Channel tasks, turn E2 to Clock and press K3. Set Feel source to CHANNEL (E3,
+      then K3) so this channel uses its own feel instead of the Song page's. Then select Swing and turn
+      E3 up to 25. Swing runs from -50 to 50 and at 25 every second step is played a quarter of a step
+      late.
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Swing
+      value: '25'
+      matched: true
+  - id: interlock-still-on
+    title: Interlock is still on
+    caption: 'Open Merge Shape > Interlock: Status is still ON and step 5 is still removed (step 7 is
+      lit). Swing did not change the merge.'
+    assertion:
+      kind: grid
+      cells: [[5, 4], [7, 4]]
+      expected: [2, 15]
+  - id: swing-25
+    title: Hear the swung notes
+    caption: 'Tap Play (1,8), listen to a loop or two and tap Play again to stop. Step 5 is still silent.
+      Steps 2 and 4 sound a quarter of a step (about 42 ms) late: in the MIDI strip they sit near 208
+      ms and 542 ms instead of 167 ms and 500 ms, while steps 1 and 3 stay put (0 and 333 ms) and the
+      added step 7 plays quietly (velocity 70) at 1000 ms. Swing moves the notes but the merge result
+      stays the same.'
+    assertion:
+      kind: interlock-swing-invariance
+      swing: 25
+      passed: true

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "checked": 364,
+  "midi_strips": 40,
+  "source": "source16",
+  "url": "http://localhost:8926/manual/",
+  "pins": {
+    "book": "d49d8551e5a18334d23537974d16b18116cfd1a79122edd7a169452e53060202",
+    "reader_index": "1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654",
+    "book_js": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+    "manual_js": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+    "manual_css": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+    "index": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482"
+  },
+  "command": "NODE_PATH=/home/andy/mosaic-manual-tools/node_modules MOSAIC_MANUAL_URL=http://localhost:8926/manual/ node tests/behaviour/manual_reader_text_browser.cjs",
+  "stdout": "{\"passed\":true,\"checked\":364,\"midi_strips\":40}"
+}

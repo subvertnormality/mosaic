@@ -1,0 +1,20 @@
+{
+  "review_id":"source17-astra-scoped-review-20261008-01",
+  "reader":"http://localhost:8927/manual/",
+  "status":"scoped_reader_pass_with_source16_global_findings_retained",
+  "reader_approval":true,
+  "scores":{"readability":8,"comprehensibility":8,"flow":8,"understandability":8,"user_friendliness":8,"usefulness_of_interactive_examples":8,"cohesion":8},
+  "blocking_findings":[],
+  "routes":["#midi-panic/lesson/panic-from-song-channel","#midi-panic/lesson/panic-from-song-pattern"],
+  "viewports":[[1440,900],[390,844]],
+  "checks":{"before_states":true,"show_result":true,"primary_human_outcomes":true,"midi_result_panels":true,"expanded_recorded_details":true,"auditing_metadata_absent_from_inspected_text":true,"practical_constraints_preserved":true,"document_overflow":false},
+  "observations":12,
+  "browser_errors":0,
+  "parity":{"only_feature_changes":"two Panic human_outcome values, duplicated presentation/binding values and derived presentation hashes","learning_path_identical":true,"scene_chunk_map_identical":true,"audio_chunk_map_identical":true,"js_css_html_quickref_exact_source16":true},
+  "original_findings":{"F01_F10":"source16 bounded reader closures retained","F11":"additional Panic lesson-outcome views now independently closed"},
+  "pins":{"book_owner_supplied":"db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e","reader_index":"300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52","book_js":"914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825","manual_js":"474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436","css":"1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309","index_html":"2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482","quick_reference":"6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"},
+  "source16_report_preserved":true,
+  "whole133_or425_campaign_repeated":false,
+  "blanket_native_pcm_runtime_ci_accessibility_closure":false,
+  "listened":false,"production_mutations":false,"native_audio_rerun":false,"owned_browsers_closed":true
+}

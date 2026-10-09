@@ -1,0 +1,28 @@
+{
+  "kind": "invalid-transient-baseline-fixture",
+  "run": "9803259897a641c4974d763872accf9f",
+  "stage_identity": "f3ec981fb4cf0aee4cb9133312adb8fc931720b6237da0a790e690c637fcf283",
+  "first_observation": 231,
+  "first_frame_sha256": "ed316009f98a764b6c6bf58192e75fa1931836cf8156ae994abaf46c788898d8",
+  "failure_observation": 245,
+  "pixel_delta": {
+    "locations": 228,
+    "rows": [
+      58,
+      59,
+      60,
+      61,
+      62
+    ],
+    "outside_footer": 0
+  },
+  "first_footer": "Scale Editor",
+  "settled_footer": "E3 SET K3 APPLY K2 CANCEL",
+  "correction": "Exact normal footer wait before fixed baseline on every mini sample page; same strict footer wait before fitting Clock/Scale text baseline",
+  "unchanged": "Body equality, icon bounds, all clock phase/tempo/font/grid/MIDI literals and tolerances unchanged",
+  "cleanup": "Four services exited; no real lane launched",
+  "helpers": {
+    "tests/behaviour/contract/mini_header_animation_ui.py": "050c7ff3deaaf4401014d148f989075ab03fcac5be050b03e4ad10f0f8ab40b8",
+    "tests/behaviour/contract/ui_readability.py": "74f7ae189216c700edaed31cafa6c41adb85b41706b27ad94c3c2940503e2c55"
+  }
+}

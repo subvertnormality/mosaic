@@ -51,7 +51,7 @@ def main():
                         'audio_frontend', 'omnizart_onnx',
                          'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
                          'pretrained_composite_backend', 'dsp_drum_backend', 'native_backend',
-                         'build_scheduled', 'pretrained_corpus_evaluate'))
+                         'build_scheduled', 'pretrained_corpus_evaluate', 'manual_beat_grid'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
     # The analysis server's own suites. They stub the models, so they need
@@ -65,7 +65,7 @@ def main():
     detector_tests = {'detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend',
                       'omnizart_onnx', 'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
                       'pretrained_composite_backend', 'dsp_drum_backend', 'native_backend', 'build_scheduled',
-                      'pretrained_corpus_evaluate'}
+                      'pretrained_corpus_evaluate', 'manual_beat_grid'}
     commands += [(name, [args.analysis_python if name in detector_tests else sys.executable,
                          '-m', 'unittest', 'discover', '-s',
                         'tests/rhythm_doctor', '-p', 'test_' + name + '.py', '-v'])

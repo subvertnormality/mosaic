@@ -1,0 +1,205 @@
+name: Build manual site
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main, codex/1.4.0, codex/rhythm-doctor-phrase]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+  EMULATOR_REVISION: 68ab70903d22500237ce68edc7e31c3b867cf179
+
+jobs:
+  record-audio:
+    name: Record manual audio assets
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      actions: read
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+      PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
+      MANUAL_CI_MODE: audio
+    steps:
+      - name: Install native build and font dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential ca-certificates cmake ffmpeg fonts-dejavu-core \
+            fonts-liberation fonts-noto-core fonts-noto-mono git jackd2 lua5.3 \
+            pkg-config python3 python3-jsonschema python3-pytest python3-yaml libasound2-dev \
+            libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev \
+            libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev \
+            libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+          fc-cache -f
+      - name: Check out exact PR source or dispatch ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          submodules: recursive
+      - name: Trust checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Preflight authored scene case registrations
+        run: PYTHONPATH=tests/behaviour python3 -m unittest test_manual_build.BuildPlan.test_every_authored_scene_case_resolves_through_its_planned_registry
+      - name: Set up Node for manual browser checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+      - name: Restore the pinned emulator runtime
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/monome-emulator/.runtime
+          key: monome-emulator-ubuntu20-68ab709-qualified-v9
+      # Real-time audio takes about three hours, so reuse a bundle an earlier run recorded from
+      # byte-identical audio inputs. The build job still re-audits it through --adopt-audio-report.
+      - name: Identify the audio recording inputs
+        id: audio-identity
+        shell: bash
+        run: |
+          inputs="$(git ls-files -s -- mosaic.lua lib docs/ui-reimplementation/code tests/behaviour \
+            tools/manual_audio.py tools/manual_audio_setups.py tools/manual_audio_resume.py \
+            tools/manual_audio_origin_audit.py tools/manual_capture.py manual/audio-scenes.yaml \
+            manual/audio.schema.json manual/voices.lock.json .github/scripts/manual_runtime.py \
+            ':(exclude)tests/behaviour/test_*' ':(exclude)tests/behaviour/ci')"
+          identity="$(printf '%s\n%s\n%s\n' "$EMULATOR_REVISION" "$CONTAINER_IMAGE" "$inputs" | sha256sum | cut -c1-40)"
+          echo "id=$identity" >> "$GITHUB_OUTPUT"
+          echo "Audio input identity: $identity"
+        env:
+          CONTAINER_IMAGE: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      - name: Find audio already recorded from identical inputs
+        id: audio-reuse
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          AUDIO_IDENTITY: ${{ steps.audio-identity.outputs.id }}
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os, urllib.request
+          url = "https://api.github.com/repos/%s/actions/artifacts?per_page=20&name=manual-audio-src-%s" % (os.environ["GITHUB_REPOSITORY"], os.environ["AUDIO_IDENTITY"])
+          request = urllib.request.Request(url, headers={"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"], "Accept": "application/vnd.github+json"})
+          artifacts = json.load(urllib.request.urlopen(request, timeout=30)).get("artifacts", [])
+          live = [a for a in artifacts if not a.get("expired") and a.get("workflow_run", {}).get("id")]
+          print("run_id=%s" % (live[0]["workflow_run"]["id"] if live else ""))
+          PY
+      - name: Download the reusable audio bundle
+        if: steps.audio-reuse.outputs.run_id != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: manual-audio-src-${{ steps.audio-identity.outputs.id }}
+          run-id: ${{ steps.audio-reuse.outputs.run_id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
+      - name: Lint, unit-test and record every audio example
+        shell: bash
+        env:
+          AUDIO_REUSED: ${{ steps.audio-reuse.outputs.run_id }}
+        run: .github/scripts/manual-build.sh
+      - name: Keep this recording for identical audio inputs
+        if: steps.audio-reuse.outputs.run_id == ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-audio-src-${{ steps.audio-identity.outputs.id }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 1
+      - name: Upload the audio report, clips and native evidence
+        uses: actions/upload-artifact@v4
+        with:
+          # One name per run (not per attempt), so re-running only a failed build job reuses this audio.
+          name: manual-audio-${{ github.run_id }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 3
+          compression-level: 1
+      - name: Upload audio provisioning evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-audio-evidence-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/manual-build-evidence
+          if-no-files-found: ignore
+          retention-days: 90
+          compression-level: 9
+
+  build-controlled-manual:
+    name: Full controlled manual build
+    needs: record-audio
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 360
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+      PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
+      MANUAL_CI_MODE: build
+    steps:
+      - name: Install native build and font dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential ca-certificates cmake ffmpeg fonts-dejavu-core \
+            fonts-liberation fonts-noto-core fonts-noto-mono git jackd2 lua5.3 \
+            pkg-config python3 python3-jsonschema python3-pytest python3-yaml libasound2-dev \
+            libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev \
+            libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev \
+            libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+          fc-cache -f
+      - name: Check out exact PR source or dispatch ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          submodules: recursive
+      - name: Trust checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Set up Node for manual browser checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+      - name: Restore the pinned emulator runtime
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/monome-emulator/.runtime
+          key: monome-emulator-ubuntu20-68ab709-qualified-v9
+      - name: Download the recorded audio bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: manual-audio-${{ github.run_id }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
+      - name: Build, strictly audit, and package the complete manual
+        id: manual
+        shell: bash
+        run: .github/scripts/manual-build.sh
+      - name: Upload static preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.manual.outputs.artifact_name }}
+          path: ${{ steps.manual.outputs.artifact_root }}
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 6
+      - name: Upload immutable generation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-build-evidence-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/manual-build-evidence
+          if-no-files-found: ignore
+          retention-days: 90
+          compression-level: 9

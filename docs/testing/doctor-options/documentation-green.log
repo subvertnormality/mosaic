@@ -1,0 +1,8 @@
+test_both_documents_state_the_unconfigured_analysis_backend (test_documentation.RhythmDoctorDocumentationTests) ... ok
+test_detector_document_names_the_pinned_pretrained_worker_contract (test_documentation.RhythmDoctorDocumentationTests) ... ok
+test_manual_and_cheat_sheet_name_the_same_lanes_and_stop_gate (test_documentation.RhythmDoctorDocumentationTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.003s
+
+OK

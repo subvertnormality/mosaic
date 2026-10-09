@@ -1,0 +1,13 @@
+................E.............
+======================================================================
+ERROR: test_missing_refusal_wrong_public_edges_or_borrowed_frame_and_bank_rejected (test_doctor_options_audit.DoctorPlayingRecordRefusalIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 257, in test_missing_refusal_wrong_public_edges_or_borrowed_frame_and_bank_rejected
+    audit.check_playing_record_refusal([row],obs,recipe,events,fixture,'real-time',Path('/unused'));self.assertEqual(verify.call_count,3)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_playing_record_refusal'
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.133s
+
+FAILED (errors=1)

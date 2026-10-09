@@ -1,0 +1,52 @@
+{
+  "format": "mosaic-mini-header-documentary-review-v1",
+  "status": "Normative implemented candidate prose; native actual-app acceptance pending separately in review and REPORT",
+  "files": {
+    "README.md": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+    "cheat_sheet.html": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+    "manual/features/reference-options.yaml": "85f3f0a06727e60d9bf856091567bd6cc940db8c1ab4f724cbf03134124d9d39"
+  },
+  "design_atlas": "manual/proposals/mini-header-atlas.json",
+  "design_atlas_sha256": "ed4d8972b1012b7570d402b6ba997c6c78c6c0926e577f974e03758782ed3c54",
+  "registered_identities": 93,
+  "identities_include": [
+    "dormant descriptors",
+    "declared variants",
+    "retired M10"
+  ],
+  "native_params_exceptions": 9,
+  "reachable_screen_claim": false,
+  "claims": [
+    "Selected label/value overflow only scrolls with MotionOn; fitting text/title/scope/neighbors/footer static",
+    "MotionOff stops marquee; ~ shortenedtext; exactunfit value LAYOUT OVERFLOW",
+    "Normal miniature bounds32x9; Masks/Params7x8 overviewcontrols/scope preserved",
+    "Playing sequencertransport/ppqn; stopped selectednornsmusicalclock; invalidclock/Offrest; no walltime fallback",
+    "Miniatures replace4tiletitlemark onregisteredpages whengeometryfits; title/scopecontrols takepriority; boundedfallbackmark onlyifcornerfree"
+  ],
+  "historical_evidence": "Untouched; design preview remains explicitly not native instrument evidence",
+  "normative_revisions": [
+    {
+      "previous_full_sources": {
+        "README.md": {
+          "sha256": "159b8ce0f5258ab1091030f48eb34a4f2f31c33d737912a3fa158aaec1eb3a70",
+          "archive": "docs/testing/mini-header-ui/documentary-history/159b8ce0f5258ab1091030f48eb34a4f2f31c33d737912a3fa158aaec1eb3a70-README.md"
+        },
+        "cheat_sheet.html": {
+          "sha256": "753e89b4372c3049b792ab2422f5fc4e61a4e945688916294484f8a783fa341f",
+          "archive": "docs/testing/mini-header-ui/documentary-history/753e89b4372c3049b792ab2422f5fc4e61a4e945688916294484f8a783fa341f-cheat_sheet.html"
+        },
+        "manual/features/reference-options.yaml": {
+          "sha256": "67e67524a3395c8d6ba2526b8d74a70f83fdf522543cedb997f31747b84f6ace",
+          "archive": "docs/testing/mini-header-ui/documentary-history/67e67524a3395c8d6ba2526b8d74a70f83fdf522543cedb997f31747b84f6ace-reference-options.yaml"
+        }
+      },
+      "previous_readme_ui_motion_excerpt": "##### UI Motion\n\nTurns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On). The startup animation and selection shadows on the Masks and Trig params overview grids remain. Characters and other decorative feedback can animate on musical and status views. Editable vertical lists keep fitting labels, values, neighboring rows and controls still; they do not roll values into place or replace visible rows with previous/next-field labels. If the selected label or value is too long for its available row, only that selected text scrolls right to left with motion On. Long selected values first use a separate full-width row. With motion Off, the scrolling stops: shortened text shows `~`; an exact value that cannot fit reports `LAYOUT OVERFLOW` rather than silently displaying a different value. Screen decoration is still. The setting does not change input or sequencer timing.\n\nThe miniature-header design replaces the four-tile title mark with a small screen graphic wherever it fits in Mosaic\u2019s title area, without covering the title, scope or controls. Normal icons occupy at most 32 \u00d7 9 pixels; Masks and Trig params use a compact 7 \u00d7 8 graphic and retain all visible controls. Native norns PARAMS keeps its own display.\n\nWhile Mosaic plays, the miniature follows sequencer transport pulses. While stopped, it follows the selected norns musical clock without starting Mosaic or sounding notes. Motion Off or an unavailable or invalid clock leaves it at rest. The miniature uses musical position, not elapsed wall time. This header design\u2019s actual-app acceptance remains pending; its preview is not a captured instrument screen.\n\n### Sinfonion Connect\n\nYou can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).\n\n### LFOs and Modulation\n\n_Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.\n\n\n## Musical Merge and Voice Leading\n\nMosaic can reshape a channel's merged rhythm and place its notes into stable\nregisters without rewriting any source pattern. Foundation and Fragments are optional strategies; Harmony defaults to Off. An older project with Merge Shape Off uses its saved legacy strategy and keeps its original MIDI, timing ",
+      "status": "Normative candidate instructions; native acceptance status belongs to publication review/report",
+      "candidate_files": {
+        "README.md": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+        "cheat_sheet.html": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+        "manual/features/reference-options.yaml": "85f3f0a06727e60d9bf856091567bd6cc940db8c1ab4f724cbf03134124d9d39"
+      }
+    }
+  ]
+}

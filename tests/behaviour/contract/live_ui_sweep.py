@@ -49,7 +49,7 @@ HINTS = {
     "device": "E3 SET  K3 APPLY  K2 CANCEL", "assignment": "E3 PICK  K3 SET  K2 BACK",
     "scale": "E3 SET  K3 APPLY  K2 CANCEL", "scale_clock": "E3 SET  K3 APPLY  K2 CANCEL",
     "song": "E3 SET  K3 APPLY  K2 CANCEL", "song_clock": "E3 SET  K3 APPLY  K2 CANCEL",
-    "trig_options": "E3 SET  K3 APPLY", "merge_modes": "E2 MODE  E3 SET  K2 BACK", "feature": "E3 SET  K3 APPLY  K2 BACK",
+    "trig_options": "E3 SET", "merge_modes": "E2 MODE  E3 SET  K2 BACK", "feature": "E3 SET  K3 APPLY  K2 BACK",
     "tasks": "E2 CHOOSE  K3 OPEN", "read_only": "E1 TASKS", "doctor": "E2 FIELD  E3 SET",
     "confirmation": "K3 CONFIRM  K2 CANCEL", "native": "K1 PARAMS",
 }
@@ -62,7 +62,12 @@ def hints(sid):
     if sid == "N01":
         # Channel tasks names K1 for the norns parameters (Norns settings is gone).
         return "K3 OPEN  K1 PARAMS"
-    return HINTS[SPEC[sid]["profile"]]
+    if sid == "R01":
+        # The sweep observes READY at rest, not an active setup draft. Doctor
+        # recording uses its public grid control; norns E2 enters setup.
+        return "E2 SETUP GRID REC"
+    hint = HINTS[SPEC[sid]["profile"]]
+    return hint.replace("  ", " ") if SPEC[sid]["live_render"]["layout"] == "vertical_list" else hint
 
 
 def child_footer(sid, field):
@@ -74,7 +79,7 @@ def child_footer(sid, field):
 
 
 # lib/ui_render.lua: the line LAYOUT OVERFLOW would be painted on, per layout.
-OVERFLOW_Y = {"overview_masks": 53, "overview_params": 53, "pattern64": 17, "detail": 17, "focused": 55,
+OVERFLOW_Y = {"overview_masks": 53, "overview_params": 53, "pattern64": 17, "detail": 17, "focused": 55, "vertical_list": 17,
               "dashboard": 7}
 # Row 56 is the bottom edge of a selected second-row overview cell's outline.
 FOOTER_ROWS = range(57, 64)
@@ -253,7 +258,7 @@ def live_ui_sweep(c):
     channel_task(c, "harmony")
     sw.screen("H01", field=("Mode", "OFF"))
     channel_task(c, "clock")
-    sw.screen("C04", field=("Rate", "/1"), footer=(START, "Swing type"))
+    sw.screen("C04", field=("Rate", "/1"), footer=hints("C04"))
     channel_task(c, "merge")
     sw.screen("C09", field=("Patterns", "01"))
     c.key(2)
@@ -263,7 +268,7 @@ def live_ui_sweep(c):
     channel_task(c, "history")
     sw.screen("C03", field=("Position", "0 of 0"))
     channel_task(c, "merge_shape")
-    sw.screen("M02", field=("Mode", "OFF"))
+    sw.screen("M02", field=("Strategy", "SKIP"))
     channel_screens(c, sw)
     merge_screens(c, sw)
     harmony_screens(c, sw)
@@ -321,8 +326,9 @@ def channel_screens(c, sw):
     walk(c, sw, "C03", [("Position", "0 of 0"), ("Selected event", "NO HISTORY"),
                         ("Undo available", "0"), ("Redo available", "0")])
     channel_task(c, "merge")
-    walk(c, sw, "C09", [("Patterns", "01"), ("Trig mode", "SKIP"), ("Note mode", "AVERAGE"),
-                        ("Velocity mode", "AVERAGE"), ("Length mode", "AVERAGE")])
+    walk(c, sw, "C09", [("Patterns", "01"), ("Strategy", "SKIP"), ("Active", "SKIP"), ("Pending", "NONE"),
+                        ("Note mode", "AVERAGE"), ("Velocity mode", "AVERAGE"), ("Length mode", "AVERAGE"),
+                        ("Boundary", "NONE"), ("Request", "READY")])
     c.key(2)  # K2 returns, as its footer says, to the remembered family (Masks)
     sw.screen("C01", field=("Note", "X"))
     channel_task(c, "device")
@@ -371,10 +377,11 @@ C06_NO_EVENT = [("Note", "NO EVENT"), ("Vel / Len", "NO EVENT"), ("Step", "NO EV
 
 def merge_screens(c, sw):
     channel_task(c, "merge_shape")
-    shape = [("Mode", "OFF"), ("Rhythm", OPEN), ("Phrase", OPEN), ("Pitch", OPEN), ("Result", OPEN)]
+    shape = [("Strategy", "SKIP"), ("Rhythm", OPEN), ("Phrase", OPEN), ("Pitch", OPEN), ("Result", OPEN),
+             ("Strategy selector", OPEN)]
     labels = [label for label, _ in shape]
     walk(c, sw, "M02", shape)
-    e2(c, -3); c.key(3)
+    e2(c, -4); c.key(3)
     rhythm = [("Anchor", "NONE"), ("Add amount", "100"), ("Amount detail", OPEN), ("Add accent", "70"),
               ("Anchor gap", "0"), ("Seed", "0"), ("Interlock", OPEN)]
     walk(c, sw, "M03", rhythm)
@@ -434,13 +441,17 @@ def merge_screens(c, sw):
     sw.screen("M05", field=("Reason", OPEN))
     c.key(2)
     sw.screen("M02", field=("Result", OPEN))
-    # Mode Fragments (plan §5): Rhythm opens Fragments (M15), whose Anchor row
-    # appears only with Keep anchor. K2 cancels the staged draft.
-    e2(c, -4); c.enc(3, 2)
-    sw.screen("M02", field=("Mode", "FRAGMENTS"))
-    # README Merge Shape Fragments: the fourth row is Result, not a Pitch detour.
-    expect_detail_row(c, 3, "Result", OPEN)
-    e2(c, 1); c.key(3)
+    # Characterisation outside README: use the current shared Strategy route.
+    # The old M02 -> K3 path to C09 MERGE MODES no longer reaches that screen.
+    from merge_strategy_routes import select_strategy
+    select_strategy(c, "FRAGMENTS", channel=1)
+    sw.screen("C09", field=("Strategy", "FRAGMENTS"))
+    c.key(2)
+    c.ui.channel_page("merge_shape", channel=1)
+    c.ui.select_row("strategy_selector", 4)
+    sw.screen("M02", field=("Strategy selector", OPEN))
+    c.ui.select_row("rhythm", 1)
+    c.ui.press_key(3)
     walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", BOOLEAN_FALSE), ("Seed", "0")], top=True)
     e2(c, -1); c.enc(3, 1)
     walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", "ON"), ("Anchor", "NONE"), ("Seed", "0")], top=True)
@@ -511,6 +522,20 @@ def harmony_screens(c, sw):
     e2(c, 1)
     sw.screen("H17", field=("Delete group", "1"), tips=("K3 CONFIRM  K2 CANCEL",))
     c.key(2)
+    # README Norns Menu Navigation: controls describe the visible screen.
+    # Characterization: after a public cancel callback, normal controls return
+    # within 250 ms. Keep the existing eventual screen acceptance below.
+    immediate = sw.checks("H04", "CH01", ("Delete group", ">"), [hints("H04"), "Autosaved"])
+    immediate_ok = True
+    try:
+        c.wait(lambda state: all(immediate(state).values()), timeout=.25)
+    except AssertionError:
+        immediate_ok = False
+    c.results.append(dict(kind="h17-cancel-immediate-footer", within_seconds=.25,
+                          passed=immediate_ok,
+                          citation="README.md#norns-menu-navigation",
+                          characterization="250 ms public cancel feedback bound"))
+    assert immediate_ok, "H17 K2 cancel leaves confirmation footer on H04 beyond 250 ms"
     sw.screen("H04", field=("Delete group", ">"))
     c.key(2)
     sw.screen("H01", field=("Groups", OPEN))
@@ -636,13 +661,13 @@ def pattern_screens(c, sw):
     c.action(type="grid", x=1, y=4, state=0)
     # Rhythm Doctor (algorithm 5): R01 at rest, READY.
     c.tap(16, 2)
-    sw.screen("R01", field=("Record", "READY"), footer=(START, "Tempo"), tips=("Rhythm Doctor selected",))
+    sw.screen("R01", field=("Record", "READY"), footer=hints("R01"), tips=("Rhythm Doctor selected",))
     c.enc(1, 1)
     walk(c, sw, "N03", [(t, OPEN) for t in ("Pattern", "Options", "Algorithm", "Channel view", "Rhythm Doctor")],
          top=True, tips=("Rhythm Doctor selected",))
     # K3 on the Rhythm Doctor row opens R01.
     c.key(3)
-    sw.screen("R01", field=("Record", "READY"), footer=(START, "Tempo"))
+    sw.screen("R01", field=("Record", "READY"), footer=hints("R01"))
     task(c, "Trig", "pattern")
     sw.screen("P01", scope=PAT)
     c.tap(12, 2)

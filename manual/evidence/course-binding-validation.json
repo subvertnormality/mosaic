@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "focused_tests": 22,
+  "native_acceptance_claimed": false,
+  "course_promoted": false,
+  "durable_verification_ready": true,
+  "reviewed_teaching_stages": 38,
+  "reviewed_native_checkpoints": 48,
+  "files": {
+    "tools/manual_course_bind.py": "803e66d0ee9ae466c342bb4eab48cfed3793d2d6279c5e5bad6c4d2631dbae8a",
+    "tests/behaviour/test_manual_course_bind.py": "66dd27dcf22b91177306635acb3b0da980aa595666f1d221d794657e7128dac2",
+    "manual/scene-plans-course.yaml": "a401daf93e4fd19a5b222b89f488394417e653f4ec999df1cb753bfa360c703c"
+  }
+}

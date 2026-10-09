@@ -1,0 +1,11 @@
+{
+  "sha256": "4c8128087e8df33b8cbe81d5ae5ba01e2ffdabc31a0db46096ba5692fe9ad0ef",
+  "returncode": 1,
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_manual_build.BuildPlan.test_doctor_real_audio_lanes_are_audited_before_publication",
+    "test_manual_build.BuildPlan.test_doctor_stdout_report_must_be_successful_and_confined"
+  ]
+}

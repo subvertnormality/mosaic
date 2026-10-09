@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "focused_tests": 26,
+  "feature_scope": 25,
+  "shared_strategy_checkpoint_count": 13,
+  "native_acceptance_claimed": false,
+  "feature_promoted": false,
+  "files": {
+    "tools/manual_feature_bind.py": "fa515b7c2bf8d013fbc144e9f29bbd017a33049b86fd8d813d84c5d0da065bb4",
+    "tests/behaviour/test_manual_feature_bind.py": "812b98718a1006227f6d443124e4fe08ff442b78996ae49021818e0298fafd27",
+    "manual/scene-plans-merge-strategy.yaml": "015521e5917a8fbd3a998886b07a38fd2239c9289fc537f3afc7fba113d603b0"
+  }
+}

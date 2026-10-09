@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "scope": "strict rejected real engineering note/F8 origin diagnostic only",
+  "report": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261003/real/45ce6626eb414d42864e2672dbd9d4d2/manifest.json",
+  "manifest_sha256": "e0beb21a143bdb2bd0a90338b6fb922400b61abc77b9e4ede7943fd366249442",
+  "native_warning": "Mosaic: native MIDI output boundary unavailable; master phase alignment is not guaranteed",
+  "warning_line": 2667,
+  "actual_native_start_index": 340,
+  "actual_native_stop_index": 449,
+  "notes": 9,
+  "clock_ticks": 52,
+  "note_to_F8_pairs": [
+    {
+      "note_index": 347,
+      "tick_index": 348,
+      "note_to_corresponding_F8_seconds": -0.022319858
+    },
+    {
+      "note_index": 359,
+      "tick_index": 360,
+      "note_to_corresponding_F8_seconds": -0.022137972
+    },
+    {
+      "note_index": 371,
+      "tick_index": 372,
+      "note_to_corresponding_F8_seconds": -0.02238903
+    },
+    {
+      "note_index": 383,
+      "tick_index": 384,
+      "note_to_corresponding_F8_seconds": -0.021329968
+    },
+    {
+      "note_index": 395,
+      "tick_index": 396,
+      "note_to_corresponding_F8_seconds": -0.02148613
+    },
+    {
+      "note_index": 407,
+      "tick_index": 408,
+      "note_to_corresponding_F8_seconds": -0.021525599
+    },
+    {
+      "note_index": 419,
+      "tick_index": 420,
+      "note_to_corresponding_F8_seconds": -0.021343357
+    },
+    {
+      "note_index": 431,
+      "tick_index": 432,
+      "note_to_corresponding_F8_seconds": -0.02156328
+    },
+    {
+      "note_index": 443,
+      "tick_index": 444,
+      "note_to_corresponding_F8_seconds": -0.021354569
+    }
+  ],
+  "first_clock_cadence_max_error_seconds": 0.0007237901111111084,
+  "notes_cadence_max_error_seconds": 0.0007746389999999659,
+  "source_cause": "real runtime lacks public native after-F8 subscription; production explicitly falls back ordinary lattice origin; F8 firsttick is not guaranteed latticeorigin",
+  "acceptance_changed": false,
+  "native_report_passed": false,
+  "full_current_publication": false,
+  "hardware_timing_equivalent": false
+}

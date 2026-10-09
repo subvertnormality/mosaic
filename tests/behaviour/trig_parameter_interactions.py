@@ -1,5 +1,23 @@
 """Native stock-parameter precedence; literal MIDI and musical-time oracles."""
 
+def append_selected_param_checkpoint(c, slot, value, marker, citation, characterisation, label=None):
+    """Append a cited checkpoint only after validating the UI helper's raw row."""
+    import copy
+    results=c.results
+    source_index=len(results)
+    c.ui.expect_selected_param(slot,value,marker=marker,label=label)
+    if len(results)!=source_index+1:
+        raise AssertionError('Selected-param UI oracle must append exactly one source row')
+    source_assertion=copy.deepcopy(results[source_index])
+    expected=dict(kind='selected-param',slot=slot,value=str(value),marker=marker,passed=True)
+    if source_assertion!=expected:
+        raise AssertionError(dict(expected_source=expected,actual_source=source_assertion))
+    results.append(dict(kind='parameter-recording-selected-value',slot=slot,value=str(value),
+                        marker=marker,passed=True,citation=citation,
+                        characterisation=characterisation,
+                        source_assertion_index=source_index,
+                        source_assertion=source_assertion))
+
 def fixed_note_domain(c,start=0,count=16):
     from cases import assert_durations
     assert 0<=start<128 and 1<=count<=16 and start+count<=128
@@ -65,6 +83,8 @@ def stock_pitch_lock_inheritance(c,quantised=True):
     from cases import assert_durations
     c.ui.configure();c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
     c.ui.assign_trig_parameter_key('quantised_fixed_note' if quantised else 'fixed_note')
+    # README.md#trig-parameters: an assigned slot starts at X (Off) and shows the default once it is set.
+    c.ui.expect_selected_param(1,'X')
     def phrase(pitches,phase):
         notes=c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],cycles=2)
         assert_durations(c,notes,[1]*(len(notes)-1))
@@ -82,7 +102,9 @@ def stock_pitch_lock_inheritance(c,quantised=True):
         with c.ui.hold_step(step):
             c.elapse(.05);c.ui.press_key(2)
         c.elapse(.15)
-    c.ui.set_value(61);phrase([60]*4,'channel60')
+    c.ui.set_value(61)
+    # Fixed Note labels MIDI 60 as C5 in its slot; Quantised Fixed Note has no note names and shows 60.
+    c.ui.expect_selected_param(1,'60' if quantised else 'C5');phrase([60]*4,'channel60')
     lock(2,63);locked=62 if quantised else 63
     phrase([60,locked,60,60],'step2-override')
     lock(1,0);phrase([0,locked,60,60],'zero-is-active')
@@ -143,6 +165,23 @@ def probability_endpoint_locks(c):
     c.ui.configure();c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
     c.ui.assign_trig_parameter_key('fixed_note');c.ui.set_value(66)
     c.ui.turn(2,1);c.ui.assign_trig_parameter_key('trig_probability')
+    def probability_readout(value,marker=None):
+        # Case-local wrapper: shared UI code verifies public label/value/slot/marker pixels.
+        before=len(c.results)
+        c.ui.expect_selected_param(2,str(value),marker=marker,label='Trig Probability')
+        if len(c.results)!=before+1:
+            raise AssertionError('Expected exactly one selected-param source checkpoint')
+        row=c.results[-1]
+        expected=dict(kind='selected-param',slot=2,value=str(value),marker=marker,passed=True)
+        if row!=expected:
+            raise AssertionError(dict(expected_source=expected,actual_source=row))
+        # Re-append the enriched row so manual capture hooks see the field labels
+        # (they bind on append); exactly one row remains.
+        c.results.pop()
+        row.update(field_label='Trig Probability',field_slot=2,field_marker=marker)
+        c.results.append(row)
+        return row
+    probability_readout('X',None)
     def phrase(steps,phase):
         velocities=(127,117,107,97)
         notes=c.playback([(1,[144,65,velocities[step-1]]) for step in steps],cycles=3)
@@ -157,7 +196,7 @@ def probability_endpoint_locks(c):
         c.ui.gesture([('step',step)],[])
         try:
             c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
-            c.ui.set_value(value+1)
+            c.ui.set_value(value+1);probability_readout(value,'L')
         finally:c.ui.gesture([],[('step',step)])
         c.elapse(.15)
     def clear(step):
@@ -165,20 +204,28 @@ def probability_endpoint_locks(c):
         try:c.elapse(.05);c.ui.press_key(2)
         finally:c.ui.gesture([],[('step',step)])
         c.elapse(.15)
-    c.ui.set_value(101);phrase([1,2,3,4],'100-always')
+    c.ui.set_value(101);probability_readout(100,None);phrase([1,2,3,4],'100-always')
     c.ui.set_value(3);phrase([1,2,3,4],'upper-clamp100')
-    c.ui.encoder_event(3,-126);c.elapse(.15);c.ui.set_value(1)
-    # Include the very first onset opportunity in the silence window.
-    before=c.snapshot()['midi_count'];c.ui.play();c.elapse(2.8)
-    state=c.snapshot()
-    notes=[e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
+    c.ui.encoder_event(3,-126);c.elapse(.15);c.ui.set_value(1);probability_readout(0,None)
+    # Include the first onset opportunity in the complete bounded window.
+    before=c.snapshot()['midi_count'];c.ui.play()
+    c.ui.expect_leds({('play_stop',None):'active'})
+    c.results.append(dict(kind='probability-play-led',phase='active',control='play_stop',state='active',passed=True))
+    c.elapse(2.8)
+    state=c.snapshot();window_end=state['midi_count']
+    notes=[e for e in state['midi'] if e['index']>before and e['index']<=window_end and e['bytes'][0]&240==144 and e['bytes'][2]>0]
     assert notes==[],notes
     assert state['midi_capture']['outstanding']==[]
-    c.ui.stop()
-    c.results.append(dict(kind='probability-zero-silence',seconds=2.8,note_ons=notes,fixed_pitch=65,passed=True))
-    lock(2,100);phrase([2],'step100-overrides-channel0')
-    c.ui.set_value(100);lock(1,0);phrase([2,3,4],'step0-overrides-channel100')
-    lock(4,0);phrase([2,3],'first-and-wrap-step0')
+    c.ui.stop();c.ui.expect_leds({('play_stop',None):'off'})
+    c.results.append(dict(kind='probability-play-led',phase='stopped',control='play_stop',state='off',passed=True))
+    c.results.append(dict(kind='probability-zero-silence',seconds=2.8,logical_duration_s=2.8,
+                          note_ons=notes,positive_velocity_note_on_count=len(notes),fixed_pitch=65,
+                          play_step_id='zero-play-active',stop_step_id='zero-play-stopped',
+                          window_result_id='silent',window_start_index=before,window_end_index=window_end,
+                          play_led_during='active',stop_led_after='off',passed=True))
+    lock(2,100);probability_readout(0,None);phrase([2],'step100-overrides-channel0')
+    c.ui.set_value(100);probability_readout(100,None);lock(1,0);probability_readout(100,None);phrase([2,3,4],'step0-overrides-channel100')
+    lock(4,0);probability_readout(100,None);phrase([2,3],'first-and-wrap-step0')
     clear(1);phrase([1,2,3],'clear-first-zero')
     clear(4);phrase([1,2,3,4],'clear-wrap-zero')
 
@@ -250,6 +297,8 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
         try:
             c.elapse(.05);c.ui.encoder_event(3,-126)
             c.ui.set_value((1 if value==126 else 2) if nrpn else value+1)
+            # README.md#trig-param-locks: a held step's lock shows on slot 1 with an L.
+            if not nrpn:c.ui.expect_selected_param(1,value,marker='L')
             if nrpn:
                 with c.ui.hold_keys(1):
                     c.elapse(.3)
@@ -323,7 +372,30 @@ def assert_immediate_cc_on_edit(control,receipt):
     return delay_ns
 
 
-def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False):
+def _playback_with_bounded_controlled_settle(c,expected,cycles,timeout,settle_seconds,maximum_advance_ns=60_000_000):
+    """Run Driver.playback but split one long controlled-time settle into bounded advances."""
+    if c.clock_mode=="real-time":
+        return c.playback(expected,cycles=cycles,timeout=timeout,settle_seconds=settle_seconds)
+    settle_ns=round(settle_seconds*1_000_000_000)
+    if settle_ns<0 or maximum_advance_ns<1:
+        raise ValueError("Controlled playback settle and maximum advance must be nonnegative")
+    original_elapse=c.elapse
+    def bounded_elapse(seconds):
+        if round(seconds*1_000_000_000)!=settle_ns:
+            return original_elapse(seconds)
+        remaining=settle_ns
+        while remaining:
+            quantum=min(maximum_advance_ns,remaining)
+            original_elapse(quantum/1_000_000_000)
+            remaining-=quantum
+    c.elapse=bounded_elapse
+    try:
+        return c.playback(expected,cycles=cycles,timeout=timeout,settle_seconds=settle_seconds)
+    finally:
+        c.elapse=original_elapse
+
+
+def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False,visual_checkpoints=False):
     c.ui.configure()
     assert not (empty_step and probability_zero)
     if empty_step or probability_zero:c.ui.set_mosaic_option_keys([('trigless_locks',trigless)])
@@ -343,6 +415,11 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
         c.ui.pattern_editor();c.ui.tap_step(3);c.ui.menu('channel_editor') # Remove note3 through pattern editor.
     c.ui.channel_page('clock_mods',from_page='trig_locks',confirm=False);c.ui.set_value(-23);c.ui.press_key(3);c.ui.channel_page('trig_locks',from_page='clock_mods',confirm=False) # Four seconds per step.
     c.ui.tap_control('record') # Native recording arm.
+    if visual_checkpoints:
+        from contract.trig_parameter_interactions import expect_record_button_state
+        expect_record_button_state(c, armed=True)
+        append_selected_param_checkpoint(c,1,63,None,'manual:arm-live-record',
+                                         'Current Trig Params screen shows the assigned channel default while armed.')
     before=c.snapshot()['midi_count'];c.ui.play()
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
     first=c.wait(lambda state:len(notes(state))==1)
@@ -419,6 +496,11 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     c.ui.tap_control('record')
     remaining=origin_live+16_200_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
     c.ui.stop();c.wait(lambda state:state['midi_capture']['outstanding']==[])
+    if visual_checkpoints:
+        expect_record_button_state(c, armed=False)
+        with c.ui.hold_step(2):
+            append_selected_param_checkpoint(c,1,64,'L','manual:arm-live-record',
+                                             'Current Trig Params screen marks the recorded step value with L.')
     live_events=[e for e in c.snapshot()['midi'] if e['index']>before]
     from note_accounting import note_pairs
     pairs=note_pairs(live_events);assert [on for on,off in pairs[:len(live_notes)]]==live_notes
@@ -439,7 +521,14 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     # merely suppressed during the recording pass. Step1 already sounded before
     # the edit; steps2..4 receive64 through the end of this channel cycle.
     before=c.snapshot()['midi_count']
-    returned=c.playback([(1,[144,n,v]) for n,v in phrase],cycles=2,timeout=36,settle_seconds=30)
+    replay_expected=[(1,[144,n,v]) for n,v in phrase]
+    if visual_checkpoints and c.clock_mode!="real-time":
+        # The native 30-second callback exceeded the emulator's per-input deadline.
+        # Split only this case's settle into 60 ms logical advances; total time and
+        # the Driver.playback MIDI/timing oracles remain unchanged.
+        returned=_playback_with_bounded_controlled_settle(c,replay_expected,cycles=2,timeout=36,settle_seconds=30)
+    else:
+        returned=c.playback(replay_expected,cycles=2,timeout=36,settle_seconds=30)
     replay_events=[e for e in c.snapshot()['midi'] if e['index']>before]
     cc=[e for e in replay_events if e['bytes'][0]==176]
     values=([24,65,96,64] if switch_return else [24,edit_value,96,edit_value] if empty_step and not trigless else [24,edit_value,edit_value,edit_value])

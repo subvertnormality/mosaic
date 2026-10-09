@@ -1,0 +1,41 @@
+{
+  "source_root": "/home/andy/mosaic-manual-1.4.0",
+  "files": {
+    "tools/manual_course_bind.py": {
+      "sha256": "accc616d62db234edd7d6862c7fbafb52e2daffc702823cc5ef6f33f9a4d7883",
+      "bytes": 11758
+    },
+    "tools/manual_feature_bind.py": {
+      "sha256": "5c1ebc754388649cf14077e373ea3f0ec0712c458e8e21b8d1f7901d2b3020bc",
+      "bytes": 27347
+    },
+    "tools/manual_book.py": {
+      "sha256": "9b51cc90587d8a01bce4637d850054a5cdd2a2143ec61b03a14c7dd5947c78ec",
+      "bytes": 7214
+    },
+    "manual/book.schema.json": {
+      "sha256": "c30b65cd5e5f7f155060342682f7d24562b1661a7f247f4c002f2f7bb4e6daa2",
+      "bytes": 3130
+    },
+    "manual/course.schema.json": {
+      "sha256": "37ceedad42d6a95dadd5aa741ea4426da549cd9eece14a1de08573131312477d",
+      "bytes": 6129
+    },
+    "manual/course.yaml": {
+      "sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
+      "bytes": 20931
+    },
+    "tests/behaviour/test_manual_course_bind.py": {
+      "sha256": "c5045b7e98984e1909091b670c49da26fc78fac3355a6695e05c65fe5c658f5f",
+      "bytes": 20417
+    },
+    "tests/behaviour/test_manual_feature_bind.py": {
+      "sha256": "2033891a4b3c480d04aca3974a6593d3ae02d883651c73233c67013fc4452f71",
+      "bytes": 16459
+    },
+    "tests/behaviour/test_manual_book.py": {
+      "sha256": "9b7d1a5ae4d1227d49c7ca3ed348d338681a748d00c4bc3d661e2d8e4e606a57",
+      "bytes": 6538
+    }
+  }
+}

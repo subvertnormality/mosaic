@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "run_id": "00f72436a2a24a63b4fec30764332937",
+  "case": "manual_stereo",
+  "passed": true,
+  "clock_mode": "real-time",
+  "report_sha256": "43c7ea7d5c62f5836e855cce65535d947de136366fa8a42ebc38057bf20f4218",
+  "source_identity": "f7e9117145d5218e361f71d29eef325df614290f47aefd0fb5c9e0f4b2a72ca3",
+  "complete_regression_run": false,
+  "images": [
+    {
+      "image": "images/ui-preview/doctor-setup-manual-bpm.png",
+      "png_sha256": "32c159fd3352918c4ebd6d9b36cbb4bdd02f429664087697107e1315fac87451",
+      "checkpoint": "setup-manual-bpm",
+      "expect": {
+        "route": "R01",
+        "label": "Manual BPM",
+        "value": "100"
+      },
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/setup-manual-bpm",
+        "sha256": "fc7f5e39e4af1f5af27c40599b59910698c6f7b7b5cb41dba2e5c071664ddbba",
+        "stable_rows": 55,
+        "stable_sha256": "4a166ae981891c03080074fcb50877fe342c389e2f4856adac9fe5b2ab727254",
+        "grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+        "semantic_assertions": 5,
+        "passed": true
+      },
+      "raw_rle_sha256": "48c7a943d50091ddd43e9b95b1782cd9794f9c93ff8687012c6f8de8523a6467"
+    },
+    {
+      "image": "images/ui-preview/doctor-window-lower-row.png",
+      "png_sha256": "0ae6b1d2bb55ee83273d7c1adf281ccfd6d8aaab68f5ffcb8094e43f0256fd22",
+      "checkpoint": "window-lower-row",
+      "expect": {
+        "route": "R05",
+        "label": "Alignment",
+        "value": "OPEN >"
+      },
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/window-lower-row",
+        "sha256": "4efe822cc5e0389877b3704d32593e0443cdadd064974dfb91453c380daaac3e",
+        "stable_rows": 55,
+        "stable_sha256": "be46fb534bc2b26712327860a1f0a64260a35a73224c6c5bbddb2b2a04d48b8f",
+        "grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+        "semantic_assertions": 8,
+        "passed": true
+      },
+      "raw_rle_sha256": "5189fde4db6de489b4758a73111d53ef14eb0ee8fd2725e8e1f94f709e181d60"
+    },
+    {
+      "image": "images/ui-preview/doctor-alignment-lower-row.png",
+      "png_sha256": "6c97382715d8c50dcaa0324dbbe0eedba029966fbaaae1310639066a460e4ed7",
+      "checkpoint": "alignment-lower-row",
+      "expect": {
+        "route": "R06",
+        "label": "Fine start",
+        "value": "0ms"
+      },
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/alignment-lower-row",
+        "sha256": "aedbd51bf0a42e2d115f300b3eb4db5fe0b9da848c0412b28952a53b346f081c",
+        "stable_rows": 55,
+        "stable_sha256": "cc700f86aaf76d8775a8479b81350114393ec24d0073e989d1a2b32a99302172",
+        "grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+        "semantic_assertions": 10,
+        "passed": true
+      },
+      "raw_rle_sha256": "4c7371de4cfbf54ec429da913b50abf4492460dfd18340472beaa9ccb72a051f"
+    }
+  ]
+}

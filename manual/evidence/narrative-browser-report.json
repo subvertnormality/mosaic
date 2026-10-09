@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "Visible ordered first-loop course and recovery",
+    "Active reference parent, linked ancestry and browser back",
+    "Explicit complete-gesture demonstration and separated next action",
+    "Quick lookup filters by task",
+    "Search includes detail answers with context",
+    "Mobile local outline, accessible demonstration controls, no page overflow"
+  ],
+  "book_sha256": "5777d5c4a8b78ad9cb81a4c1c70b8d024ee6960e572e2fd0bc89a30957caad88",
+  "served_sources": {
+    "index.html": "7291b3ea7025d3279b47707a2b21678fdd31d26dcc689f8a00b4ba1795cf5653",
+    "book.js": "0fb6b16b9c037faa044b441114e78aeb406be6ef9a929037dea46235da00cd05",
+    "manual.js": "525f626459d3e2c4de0614dde12e7db65860f21c73f470fd5d7988c1fe150908",
+    "manual.css": "4ee6261b1daf80656dab9e0700607b1ab71eec005400fb651dd0ade285698997"
+  }
+}

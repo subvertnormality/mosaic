@@ -1,0 +1,57 @@
+--- unfixedplan
++++ candidateplan
+@@ -316,32 +316,31 @@
+       passed: true
+ - id: merge-shape-owns-trigs
+   feature_id: merge-shape
+-  title: Read when Merge Shape is deciding the trigs
++  title: Hear Foundation, All and Skip
+   behaviour_case: M-LIVEUI-SHAPETRIG-001
+   citation: README.md#merge-shape
+   source: tests/behaviour/contract/live_ui_feedback.py
+   steps:
+   - id: shape-only
+-    title: Shape is active
+-    caption: With Foundation applied, the saved Only mode reads SHAPE (ONLY); the
+-      merge-button feedback says Merge Shape is in use.
++    title: Choose Foundation
++    caption: Foundation adds attacks on steps 5 and 7 with velocity 70. Strategy
++      and Active read FOUNDATION.
+     assertion:
+       kind: shape-trig-mode
+-      value: ONLY
++      value: FOUNDATION
+       passed: true
+   - id: shape-all
+-    title: All remains saved beneath Shape
+-    caption: The next button press reads SHAPE (ALL). Foundation still decides the
+-      additions, including their velocity-70 accent.
++    title: Switch to All
++    caption: All restores the pattern's own additions on steps 5 and 7 at velocity
++      100. Listen for the louder accents.
+     assertion:
+       kind: shape-trig-mode
+       value: ALL
+       passed: true
+   - id: legacy-return
+-    title: Turn Shape off to restore the saved mode
+-    caption: After Mode Off is applied, ordinary All returns and plays the pattern
+-      additions at velocity 100. The next merge-button press shows plain Skip feedback
+-      and its dim indicator.
++    title: Return to Skip
++    caption: Choose Skip in the same Strategy list. Strategy and Active read SKIP,
++      the footer confirms SKIP APPLIED, and the merge indicator dims.
+     assertion:
+       kind: live-ui-merge-shape-trig-mode-summary
+       passed: true
+--- unfixedcase
++++ candidatecase
+@@ -514,6 +514,8 @@
+     c.playback(_SHAPE_PHRASE,cycles=2)
+     select_strategy(c,'ALL')
+     c.led_values([(14,8)],[8])
++    ui.expect_selected_field('detail','Strategy','ALL')
++    c.results.append(dict(kind='shape-trig-mode',value='ALL',passed=True))
+     c.playback(_ALL_PHRASE,cycles=2)
+     select_strategy(c,'SKIP',after_edit=lambda:_expect_footer(c,'SKIP APPLIED'))
+     c.led_values([(14,8)],[2])

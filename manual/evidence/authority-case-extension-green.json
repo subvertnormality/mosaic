@@ -1,0 +1,32 @@
+{
+  "scope": "Canonical registration traceability only; no native qualification or authority activation.",
+  "original_case_count": 876,
+  "current_case_count": 878,
+  "original_ids_preserved": true,
+  "added_case": "M-MERGE-STRATEGY-001",
+  "requirement_links": [
+    "MERGE-FOUNDATION",
+    "MERGE-FRAGMENTS"
+  ],
+  "matrix_domain": "H16",
+  "prior_ui_extension_domain": "H08",
+  "tests": {
+    "test_manual_authority_transition": 21,
+    "test_inventory": 4,
+    "test_collection": 5
+  },
+  "dry_run": {
+    "sections": 126,
+    "requirements": 178,
+    "cases": 878,
+    "writes_performed": false
+  },
+  "complete_regression_run": false,
+  "source_snapshots_frozen": false,
+  "sha256": {
+    "tests/behaviour/reconcile_manual.py": "ccc102d8cedad2c71d357aae2165eca8f8d4316656f8d416bdc64fc1b31de298",
+    "tests/behaviour/manual-inventory.json": "3b636f4c4db9a6a4fc40c1b7abb410e652fe8e1d5a725bafa5fd06cc10064a1a",
+    "docs/testing/unit-integration-hardening-matrix.json": "4cae323d4b675ad2417a15fba5ef2845b9acac0688147e533a6a6615f386343b",
+    "tests/behaviour/test_manual_authority_transition.py": "498b7306b4c56ac3ee3e02d9be009ff271840fa34190a3b7f9353edd76c05533"
+  }
+}

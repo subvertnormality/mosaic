@@ -1,0 +1,47 @@
+{
+  "name": "reference-controlled-scene-plans-merge-strategy-base-midi",
+  "command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-merge-strategy.yaml",
+    "--profile",
+    "base-midi",
+    "--output",
+    "reference-merge-strategy-scenes.json",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--publish",
+    "--controlled-local"
+  ],
+  "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+  "exclusive_lock": false,
+  "action": null,
+  "passed": true,
+  "executed_command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-merge-strategy.yaml",
+    "--profile",
+    "base-midi",
+    "--output",
+    "reference-merge-strategy-scenes.json",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--publish",
+    "--controlled-local"
+  ],
+  "returncode": 0,
+  "native_report": {
+    "path": "/home/andy/mosaic-manual-runs/db19b94b5a1a4d71820818a98913d2f4/reference-scenes.json",
+    "sha256": "df625cebbf0e5b063d816e46493de65bf4d0b0ccf767410ee202092e20e25c58"
+  },
+  "started_utc": "2026-10-04T10:10:12.583541+00:00",
+  "finished_utc": "2026-10-04T10:11:06.496417+00:00",
+  "log_sha256": "97dd09b00f8415475615f4ba3e021c14adb06c5deb41ae377cf8b4a5033b63dc"
+}

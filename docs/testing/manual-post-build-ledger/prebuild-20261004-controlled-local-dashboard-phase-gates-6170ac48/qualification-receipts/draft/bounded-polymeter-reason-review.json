@@ -1,0 +1,100 @@
+{
+  "scope": "Root-approved exact bounded partial-publication review for polymeter and Reason/Swing only",
+  "whole_build": {
+    "path": "/home/andy/mosaic-manual-build-runs/controlled-local-43-retry-81b93ec61d534fd3a734648b3e5bebcf/c267aa2b68774bec98111a09b82ec17e/manifest.json",
+    "sha256": "51904c9db687e16dce2dc588b87b2b403128ac2c6badf4d2e0a5ebe732325ef0",
+    "passed": false,
+    "build_complete": false,
+    "successful_stages": 17,
+    "failed_stage": 18
+  },
+  "prebuild_snapshot": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-policy-record-gates-a9bd63cf/snapshot.json",
+    "sha256": "543e2184b0713283215fe02a3635abc751f8335073d4d03fde385335efe177cf"
+  },
+  "members": [
+    {
+      "member": "manual/features/scenes-reference-polymeter-scenes.yaml",
+      "before_sha256": "d664e3aec6044b10d812b67f5ea595efd2b0350a959aca6682c7949edb768475",
+      "after_sha256": "edf572eb89be95baf6ddb4403ef1492895217aa110ac8e656b89b806faed926e",
+      "native_report": {
+        "path": "/home/andy/mosaic-manual-runs/b312f68014634a39a4e3276412e07e17/reference-scenes.json",
+        "sha256": "fafd8d95a64c55dcc03e618c9a42869cb46d4ba5edf384942c9ca32417c192d4"
+      },
+      "published_json": {
+        "path": "/home/andy/mosaic-manual-1.4.0/manual/generated/reference-polymeter-scenes.json",
+        "sha256": "fafd8d95a64c55dcc03e618c9a42869cb46d4ba5edf384942c9ca32417c192d4"
+      },
+      "stage": {
+        "path": "/home/andy/mosaic-manual-build-runs/controlled-local-43-retry-81b93ec61d534fd3a734648b3e5bebcf/c267aa2b68774bec98111a09b82ec17e/reference-controlled-scene-plans-polymeter-base-midi.json",
+        "sha256": "f0c1e4cf1a6ca38c880b5866dffea0168955b520a455d27876d012095c5d9f83",
+        "log_sha256": "8c7b19868376eecdf9d65c167af9b3fbaa1018c56e69ab6b1463ed8b21dcdfb2",
+        "passed": true
+      },
+      "frozen_generator": {
+        "path": "/home/andy/mosaic-manual-runs/b312f68014634a39a4e3276412e07e17/capture-source/tools/manual_case_capture.py",
+        "sha256": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c"
+      },
+      "source_manifest_checks": {
+        "plan_files": 1,
+        "case_sources": 235,
+        "capture_sources": 3,
+        "fixture_sources": 1
+      },
+      "plans_match_immutable_build_authoring_before": true,
+      "typed_selector_restoration": [
+        {
+          "scene": "loops-four-against-three",
+          "step": "alignment",
+          "field": "expect.assertion.phrases",
+          "kind": "rejected-range-channel-isolation",
+          "reason": "JSON stringified original integer channel keys; exact full actual selector values match frozen YAML before type restoration"
+        }
+      ],
+      "historical_strict_audit_frames": 1,
+      "current_source_audit_frames": null,
+      "current_source_audit_error": "ValueError('Stale behaviour case source: tests/behaviour/contract/live_ui_feedback.py')",
+      "scope": "Historical successful controlled partial stage within FAILED whole build; not final current-source/full-manual qualification"
+    },
+    {
+      "member": "manual/features/scenes-reference-reason-swing-scenes.yaml",
+      "before_sha256": "13c5d9aa6258b561caa9955fe00ebd475aef3d575ddd942cb7ec48d5be8e9666",
+      "after_sha256": "9c206523acbf747168bec38015827bbe2b8fdc92266fae47eb8485c4a2db5249",
+      "native_report": {
+        "path": "/home/andy/mosaic-manual-runs/50beafcd961a4581981b7973a57c5e7b/reference-scenes.json",
+        "sha256": "7e7067437362fec0dde388df1ccc5a2e3b81fc9cdcd9db01ed7ac8f62666adf8"
+      },
+      "published_json": {
+        "path": "/home/andy/mosaic-manual-1.4.0/manual/generated/reference-reason-swing-scenes.json",
+        "sha256": "7e7067437362fec0dde388df1ccc5a2e3b81fc9cdcd9db01ed7ac8f62666adf8"
+      },
+      "stage": {
+        "path": "/home/andy/mosaic-manual-build-runs/controlled-local-43-retry-81b93ec61d534fd3a734648b3e5bebcf/c267aa2b68774bec98111a09b82ec17e/reference-controlled-scene-plans-reason-swing-base-midi.json",
+        "sha256": "35c4e793931118c382dff9ec98614bed43a9c8a254402305f38e68d0cace69a0",
+        "log_sha256": "bc46eb11049424af5477284e41ecdfa9c216e1de3118bc9c2eab5443ecb21122",
+        "passed": true
+      },
+      "frozen_generator": {
+        "path": "/home/andy/mosaic-manual-runs/50beafcd961a4581981b7973a57c5e7b/capture-source/tools/manual_case_capture.py",
+        "sha256": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c"
+      },
+      "source_manifest_checks": {
+        "plan_files": 1,
+        "case_sources": 235,
+        "capture_sources": 4,
+        "fixture_sources": 1
+      },
+      "plans_match_immutable_build_authoring_before": true,
+      "typed_selector_restoration": [],
+      "historical_strict_audit_frames": 6,
+      "current_source_audit_frames": null,
+      "current_source_audit_error": "ValueError('Stale behaviour case source: tests/behaviour/contract/live_ui_feedback.py')",
+      "scope": "Historical successful controlled partial stage within FAILED whole build; not final current-source/full-manual qualification"
+    }
+  ],
+  "reviewed_source_count": 78,
+  "whole_manual_complete": false,
+  "complete_regression_run": false,
+  "authority_activation": false,
+  "current_native_full_qualification": false
+}

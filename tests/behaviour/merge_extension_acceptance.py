@@ -11,6 +11,7 @@ Timing is exact in the controlled lane and within 20 ms in real time.
 """
 import time
 
+from channel_gestures import set_channel_swing
 from midi_window import MidiWindow
 
 # ui.configure(): Pattern 1 holds C4 D4 E4 F4 at steps 1-4 with velocities
@@ -131,12 +132,8 @@ def two_patterns(c, second):
 def foundation_on(c, channel):
     """Merge Shape Foundation on the selected channel with its first assigned
     pattern as Anchor, applied; Rhythm (M03) stays open."""
-    c.ui.channel_page("merge_shape", channel=channel)
-    c.ui.select_row("mode", 0); c.ui.turn(3, 1)
-    c.ui.turn(2, 1); c.ui.press_key(3)
-    c.ui.expect_header("merge_rhythm", channel=channel)
-    c.ui.select_row("anchor", 0); c.ui.turn(3, 1); c.ui.press_key(3)
-    c.ui.expect_footer_text("APPLIED")
+    from merge_strategy_routes import foundation_rhythm
+    foundation_rhythm(c,channel)
 
 
 def interlock_pair(c, leader_step=5):
@@ -1090,9 +1087,7 @@ def interlock_swing_invariance_workflow(c):
     """README Interlock and Clocks: local Swing 25 moves onset times, but
     Interlock still removes the coincident addition from the nominal plan."""
     interlock_pair(c, leader_step=5)
-    c.ui.channel_page('clock_mods', channel=1, confirm=False)
-    c.ui.select_field('swing', offset=1); c.ui.set_value(1); c.ui.press_key(3)
-    c.ui.select_field('swing_x', offset=1); c.ui.set_value(25 + 51); c.ui.press_key(3)
+    set_channel_swing(c.ui, 1, 25)
     interlock_screen(c)
     c.ui.expect_selected_field('detail', 'Status', 'ON')
     c.ui.expect_steps({5: 'off', 7: 'selected'})

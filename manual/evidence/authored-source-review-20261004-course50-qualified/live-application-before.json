@@ -1,0 +1,20 @@
+{
+  "purpose": "Exact historical live ledger bytes preserved before explicitly root-approved655apply",
+  "before": {
+    "docs/ui-reimplementation/current-source-review.json": {
+      "sha256": "d924a17d8e88f13e09c10178b25ab08a5b7e67d5e2b87303cfa32c71fd23ee2a",
+      "archive": "manual/evidence/authored-source-review-20261004-course50-qualified/live-application-before/d924a17d8e88f13e09c10178b25ab08a5b7e67d5e2b87303cfa32c71fd23ee2a-current-source-review.json"
+    },
+    "docs/ui-reimplementation/source-inventory.json": {
+      "sha256": "82e05ac517fed12071e1474ecfb427c78d782582336f18eb274f55c1c41b2205",
+      "archive": "manual/evidence/authored-source-review-20261004-course50-qualified/live-application-before/82e05ac517fed12071e1474ecfb427c78d782582336f18eb274f55c1c41b2205-source-inventory.json"
+    },
+    "docs/ui-reimplementation/generated/source-review-receipt.json": {
+      "sha256": "245e0d55a802272d12b1247f72ccd87afe3c690a3480b9d4a49474efe81d02b2",
+      "archive": "manual/evidence/authored-source-review-20261004-course50-qualified/live-application-before/245e0d55a802272d12b1247f72ccd87afe3c690a3480b9d4a49474efe81d02b2-source-review-receipt.json"
+    }
+  },
+  "approved_proposal_sha256": "655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741",
+  "authorization": "Root /root message explicitly APPROVES liveapply exact655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741; applystatus recorded separately, preparedproposal unchanged",
+  "complete_regression_run": false
+}

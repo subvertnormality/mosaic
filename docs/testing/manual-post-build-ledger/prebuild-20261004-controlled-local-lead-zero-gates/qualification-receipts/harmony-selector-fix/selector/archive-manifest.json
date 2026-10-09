@@ -1,0 +1,57 @@
+{
+  "purpose": "Immutable pre-edit archive for the controlled documentation-frame selector migration",
+  "source_run": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37",
+  "files": {
+    "scene-plans-musical-before.yaml": {
+      "original_path": "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-musical.yaml",
+      "sha256": "779d537e108bc21180542e94aa2b476f4c5d523dcb212c2bd57ae04167d02df0",
+      "bytes": 8873,
+      "sha256_equals_current_plan": true
+    },
+    "foundation-results.json": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/M-MERGE-FOUNDATION-001-base-midi/results.json",
+      "sha256": "82f17bee8aa2c98d86388b2ed727d22e3997d592d133cfd05e01a4ed1b15abbc",
+      "bytes": 6539
+    },
+    "failure.json": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/failure.json",
+      "sha256": "12b44c2bc4ba148a841eb9874917eff459008611b1637ba6dbeb2a9e0ab25191",
+      "bytes": 57119
+    },
+    "start-source-identity.json": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/start-source-identity.json",
+      "sha256": "506d0aefc6655304a0516b4dfb775346b59eabc0110e267d08210d45b6a6dc6b",
+      "bytes": 28416
+    },
+    "foundation-workflow.py": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/case-source/tests/behaviour/contract/foundation_workflow.py",
+      "sha256": "1fe0b023d69fca4d9cac99129ac3bdcfd7aeac044bfede13fe1c149dcaadc138",
+      "bytes": 1691
+    },
+    "harmony-merge-visual.py": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/case-source/tests/behaviour/contract/harmony_merge_visual.py",
+      "sha256": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296",
+      "bytes": 8738
+    },
+    "musical-plan-at-capture.yaml": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/plan-source/manual/scene-plans-musical.yaml",
+      "sha256": "779d537e108bc21180542e94aa2b476f4c5d523dcb212c2bd57ae04167d02df0",
+      "bytes": 8873,
+      "sha256_equals_current_plan": true
+    }
+  },
+  "source_run_results_sha256": "82f17bee8aa2c98d86388b2ed727d22e3997d592d133cfd05e01a4ed1b15abbc",
+  "captured_foundation_documentation_result": {
+    "kind": "documentation-frame",
+    "name": "images/merge-shape-foundation.png",
+    "sha256": "bfef1e487a4d957d65587e682bdeeaf60f793603c5d7f56cbf2edb472e6baca4",
+    "passed": true,
+    "validation": "pinned-v2-mini-pose",
+    "page": "M03",
+    "baseline_sha256": "49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463",
+    "atlas_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+    "matching_poses": [
+      0
+    ]
+  }
+}

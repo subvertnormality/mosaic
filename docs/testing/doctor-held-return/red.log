@@ -1,0 +1,23 @@
+test_g20_without_step_hold_remains_destination_p01 (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+test_g21_preserves_doctor_return_frame_until_release (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+test_recipe_observes_release_return_without_extra_navigation (test_doctor_ready_routes.DoctorHeldRouteTests) ... FAIL
+
+======================================================================
+FAIL: test_recipe_observes_release_return_without_extra_navigation (test_doctor_ready_routes.DoctorHeldRouteTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_routes.py", line 71, in test_recipe_observes_release_return_without_extra_navigation
+    _toggle_destination_steps(c, [3, 9], 3)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/rhythm_doctor_options.py", line 231, in _toggle_destination_steps
+    c.ui.wait_for_header('trigger_editor', pattern=pattern, channel=1)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_routes.py", line 63, in wait_for_header
+    test.assertEqual(self.state['screen'], 'P01',
+AssertionError: 'R05' != 'P01'
+- R05
++ P01
+ : old observer incorrectly expects P01 after held-step release
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.042s
+
+FAILED (failures=1)

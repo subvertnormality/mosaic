@@ -1,0 +1,27 @@
+{
+  "scope": "Doctor documentation-only assertion migration to current manual:rhythm-doctor YAML; all original semantic assertions preserved.",
+  "old_baseline": "baseline-red.log",
+  "baseline_failures": 2,
+  "intermediate_quick_reference_gap": "post-migration-quick-reference-gap.log",
+  "tests": 5,
+  "passed": true,
+  "source_files": {
+    "tests/rhythm_doctor/test_documentation.py": "b11a48c82e25ae0499e367d17ed2c15b348dd261367b14b6e1f90c9447731003",
+    "manual/book.yaml": "422934c09a9aa2c4b97e223c4d9aaeb4144b30d6be5fa2e43c77461cf43a95cc",
+    "manual/features/reference-pattern.yaml": "56acd949c1573d9ad066591f32b94d65f65798cd5df61b4c547446a0bb434534",
+    "cheat_sheet.html": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11"
+  },
+  "complete_regression_run": false,
+  "broad_doctor_result": {
+    "run_tests": 275,
+    "passed": 270,
+    "failures": 2,
+    "errors": 3,
+    "not_full_green": true
+  },
+  "research_dependencies": {
+    "tempo_corpus": "Matching pinned files found separately; RD_TEMPO_CORPUS_ROOT=/home/andy/.cache/rhythm-doctor-corpus/slakh/babyslakh-selected/babyslakh_16k; original broad run lacked env.",
+    "bass_precision": "Missing tests/rhythm_doctor/artifacts/bass-rf-precision-operating-point-v4-20260919/run_precision_operating_point.py",
+    "adtof": "Pinned ADTOF package unavailable"
+  }
+}

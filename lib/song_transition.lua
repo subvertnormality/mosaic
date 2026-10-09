@@ -240,6 +240,7 @@ function transition.process_song_song_patterns()
           channel_edit_page_ui.refresh_shuffle_feel()
           channel_edit_page_ui.refresh_shuffle_basis()
           channel_edit_page_ui.refresh_shuffle_amount()
+          channel_edit_page_ui.refresh_trig_locks()
           song_edit_page.refresh()
           channel_edit_page.refresh()
         end

@@ -1,0 +1,51 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+FFF.FFFFF
+Failed tests:
+-------------
+1) test_rhythm_doctor_setup_backend_adapter_commits_and_forwards_values
+.///lib/rhythm_doctor_setup_backend_tests.lua:37: expected: {input_source="left", manual_bpm=100}
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:37: in upvalue 'test_rhythm_doctor_setup_backend_adapter_commits_and_forwards_values'
+
+2) test_rhythm_doctor_setup_backend_auto_omits_manual_alignment
+.///lib/rhythm_doctor_setup_backend_tests.lua:54: expected: "left"
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:54: in upvalue 'test_rhythm_doctor_setup_backend_auto_omits_manual_alignment'
+
+3) test_rhythm_doctor_setup_backend_bad_settings_shape_has_no_worker_side_effect
+.///lib/rhythm_doctor_setup_backend_tests.lua:119: expected: false, actual: true
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:119: in upvalue 'test_rhythm_doctor_setup_backend_bad_settings_shape_has_no_worker_side_effect'
+
+4) test_rhythm_doctor_setup_backend_manual_bounds_reach_analysis_exactly
+.///lib/rhythm_doctor_setup_backend_tests.lua:103: expected: {bpm=40, origin_sample=0}
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:103: in upvalue 'test_rhythm_doctor_setup_backend_manual_bounds_reach_analysis_exactly'
+
+5) test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition
+.///lib/rhythm_doctor_setup_backend_tests.lua:92: expected: "FAILED"
+actual: "READY"
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:92: in upvalue 'test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition'
+
+6) test_rhythm_doctor_setup_backend_recorder_routes_only_selected_adc
+.///lib/rhythm_doctor_setup_backend_tests.lua:85: expected: 1, actual: 0
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:85: in upvalue 'test_rhythm_doctor_setup_backend_recorder_routes_only_selected_adc'
+
+7) test_rhythm_doctor_setup_backend_rejects_invalid_values_before_open
+.///lib/rhythm_doctor_setup_backend_tests.lua:63: expected: false, actual: true
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:63: in upvalue 'test_rhythm_doctor_setup_backend_rejects_invalid_values_before_open'
+
+8) test_rhythm_doctor_setup_backend_runtime_freezes_source_and_manual_analysis
+.///lib/rhythm_doctor_setup_backend_tests.lua:44: expected: "right"
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:44: in upvalue 'test_rhythm_doctor_setup_backend_runtime_freezes_source_and_manual_analysis'
+
+Ran 9 tests in 0.003 seconds, 1 success, 8 failures, 2415 non-selected

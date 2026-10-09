@@ -1,0 +1,24 @@
+F
+======================================================================
+FAIL: test_song_slot_setup_ring_uses_current_vertical_layout (test_vertical_list_ui.VerticalListOracle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_vertical_list_ui.py", line 13, in test_song_slot_setup_ring_uses_current_vertical_layout
+    self.assertEqual(PAGE_RINGS["Song"][0],("A01","SLOT SETUP","vertical_list","slot_setup"))
+AssertionError: Tuples differ: ('A01', 'SLOT SETUP', 'detail', 'slot_setup') != ('A01', 'SLOT SETUP', 'vertical_list', 'slot_setup')
+
+First differing element 2:
+'detail'
+'vertical_list'
+
+- ('A01', 'SLOT SETUP', 'detail', 'slot_setup')
+?                        ^    ^
+
++ ('A01', 'SLOT SETUP', 'vertical_list', 'slot_setup')
+?                        ^ + ++ +++ ^^
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)

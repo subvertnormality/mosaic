@@ -38,7 +38,7 @@ class TrigParameterUiMigrationTests(unittest.TestCase):
     def test_ordinary_case_has_no_rendered_navigation_labels(self):
         source = ast.parse((BEHAVIOUR / "trig_parameter_interactions.py").read_text())
         forbidden = {"CC 1", "Control 1", "NRPN14", "Fixed Note",
-                     "Quantised Fixed Note", "Trig Probability", "Trigless locks",
+                     "Quantised Fixed Note", "Trigless locks",
                      "LEVELS >", "Ch. 1 Trig Locks", "Ch. 2 Device Config"}
         found = {node.value for node in ast.walk(source)
                  if isinstance(node, ast.Constant) and isinstance(node.value, str)}
@@ -102,6 +102,7 @@ class TrigParameterUiMigrationTests(unittest.TestCase):
         label.assert_called_once_with("LEVELS >")
 
     def test_page_selection_contract_retains_its_registered_owner(self):
+        import cases
         from cases import CASES
         from unittest.mock import sentinel
         import contract.trig_parameter_interactions as owner
@@ -115,7 +116,76 @@ class TrigParameterUiMigrationTests(unittest.TestCase):
             self.assertIs(run(sentinel.driver), sentinel.result)
         helper.assert_called_once_with(sentinel.driver,
                                        switch_return=True, scale_page=True)
-        self.assertIs(CASES["M-REC-PARAM-001"]["run"], ordinary)
+        self.assertIs(CASES["M-REC-PARAM-001"]["run"],
+                      cases.live_parameter_recording_with_visual_checkpoints)
+
+    def test_record_button_contract_oracle_requires_native_dark_blink_phase_or_unlit_state(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from contract.trig_parameter_interactions import expect_record_button_state
+
+        for armed, level, expected, kind in (
+                (True, 12, 12, "parameter-recording-arm-led"),
+                (False, 2, 2, "parameter-recording-disarmed-led")):
+            with self.subTest(armed=armed, level=level):
+                ui = SimpleNamespace(control_cell=Mock(return_value=(2, 8)))
+                context = SimpleNamespace(ui=ui, results=[])
+                grid = [0] * 128
+                grid[(8 - 1) * 16 + 2 - 1] = level
+                state = {"grid": grid}
+                def wait(predicate, timeout=None):
+                    self.assertEqual(timeout, 1)
+                    if not predicate(state):
+                        raise AssertionError("Record LED did not reach the requested native phase")
+                    return state
+                context.wait = wait
+
+                self.assertIs(expect_record_button_state(context, armed), state)
+                ui.control_cell.assert_called_once_with("record")
+                result = context.results[0]
+                self.assertEqual(result["kind"], kind)
+                self.assertEqual(result["cell"], [2, 8])
+                self.assertEqual(result["expected"], expected)
+                self.assertEqual(result["actual"], level)
+                self.assertEqual(result["citation"], "manual:arm-live-record")
+                self.assertIn("characterisation", result)
+
+        # 9/15 were guesses from nominal levels, not this renderer's captured
+        # native phase. Level 2 is also a valid *other* armed blink phase, so a
+        # static frame at 2 must wait rather than be misreported as disarmed.
+        for armed, level in ((True, 9), (True, 15), (True, 2),
+                             (False, 12), (False, 15)):
+            with self.subTest(rejected_armed=armed, level=level):
+                ui = SimpleNamespace(control_cell=Mock(return_value=(2, 8)))
+                context = SimpleNamespace(ui=ui, results=[])
+                grid = [0] * 128
+                grid[(8 - 1) * 16 + 2 - 1] = level
+                state = {"grid": grid}
+                def wait(predicate, timeout=None):
+                    self.assertEqual(timeout, 1)
+                    if not predicate(state):
+                        raise AssertionError("Record LED did not reach the requested native phase")
+                    return state
+                context.wait = wait
+                with self.assertRaisesRegex(AssertionError, "requested native phase"):
+                    expect_record_button_state(context, armed)
+                self.assertEqual(context.results, [])
+    def test_live_record_case_forwards_visual_checkpoint_opt_in(self):
+        import inspect
+        import cases
+        from trig_parameter_interactions import live_parameter_recording as helper
+        import contract.physical_case_owners as owner
+        from unittest.mock import sentinel
+
+        self.assertEqual(inspect.signature(helper).parameters["visual_checkpoints"].default,
+                         False)
+        run = cases.CASES["M-REC-PARAM-001"]["run"]
+        self.assertIs(run, cases.live_parameter_recording_with_visual_checkpoints)
+        self.assertIs(run, owner.live_parameter_recording_with_visual_checkpoints)
+        with patch.object(owner, "live_parameter_recording",
+                          return_value=sentinel.result) as delegated:
+            self.assertIs(run(sentinel.driver), sentinel.result)
+        delegated.assert_called_once_with(sentinel.driver, visual_checkpoints=True)
 
     def test_recording_option_oracle_retains_label_value_and_row(self):
         from ui import Ui

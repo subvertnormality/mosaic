@@ -1,0 +1,774 @@
+{
+  "job_id": "source14-scene-review-20261008-01",
+  "reviewed_at_utc": "2026-10-08T07:53:17.802Z",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reader_url": "http://127.0.0.1:8924/manual/",
+  "source_identity_sha256": "da8b8d63986e46f1432278cc0cd8bdc800db727154c07bf18be05bd093e91049",
+  "source_identity_inventory_serialization": "UTF8 JSON sorted keys, compact separators, ensure_ascii=False",
+  "inventory_serialized_sha256": "49180378684db9f038845d69eb42505f161f696b9cd1eb83cc2928cba8339a3d",
+  "book_sha256": "e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe",
+  "reader_index_sha256": "984dc86e198f71fb2594dac82add5fe03afbd706f30cded8f5f84f5189a44d6c",
+  "audio_scenes_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+  "book_js_sha256": "453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8",
+  "manual_js_sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+  "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+  "index_html_sha256": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482",
+  "root_staged_receipt_sha256": "cffef64c66d07ff3089ecd31ff2e2be9c4f2777d41625af28997e481a58f7a93",
+  "caption_scope_sha256": "c4309d225b174b1d4935b7e9eeec7d58a857a156d81d20fc7b07002974d2fca3",
+  "scope": "Four units independently reviewed: three caption-link repair scenes and the newly identified workflow-second-channel/two-channels scene. Eight unaffected units carry source12 ratings by exact compiled feature metadata; two LFO units carry source13 ratings on identical book/index pins. This report does not claim a fresh review of all reader units.",
+  "all_fresh_scores_at_least_8": true,
+  "all_scoped_scores_at_least_8": true,
+  "fresh_units": [
+    {
+      "id": "scene:software-player-oilcan",
+      "title": "Select Oilcan 1",
+      "kind": "scene",
+      "focus": "Oilcan 1 as a draft on channel 1 for percussion",
+      "scene_id": "software-player-oilcan",
+      "scene_chunk_sha256": "67cdac54c229d0013bbfe0347b67140071e9424bcf219738a6c1c10cec6192c4",
+      "current_placements": [
+        "#mods-and-software-devices/software-player-oilcan",
+        "#devices/software-player-oilcan",
+        "#norns-sound-sources-with-n-b/software-player-oilcan"
+      ],
+      "explicit_step_routes": [
+        "#mods-and-software-devices/software-player-oilcan/select-player",
+        "#devices/software-player-oilcan/select-player",
+        "#norns-sound-sources-with-n-b/software-player-oilcan/select-player"
+      ],
+      "caption_link": {
+        "text": "Apply Oilcan to the percussion channel",
+        "href": "#mods-and-software-devices/player-apply-oilcan",
+        "clicked": true
+      },
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The selected frame labels Oilcan 1 as a draft on channel 1; its caption says K3 applies it and the Apply sequence ends with the value still present and no prompt.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-handoff.png",
+            "browser-evidence/sequence-oilcan-04.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The reader gives the device install/enable setup, E3 selection, K3 confirmation, and a re-open check; the four-frame Apply route includes all four actions.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-handoff.png",
+            "browser-evidence/sequence-oilcan-04.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The displayed caption separates draft selection from the confirmation action, and the final frame explicitly says the prompt is gone.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-handoff.png",
+            "browser-evidence/sequence-oilcan-04.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "All three owner routes and all three explicit-step routes show the Oilcan frame and a visible caption anchor; the reader also presents its recorded norns screen and grid.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-06.png",
+            "browser-evidence/oilcan-handoff.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The selection remains a single focused captured frame, while the separate Apply destination carries the four-step confirm-and-reopen procedure.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-handoff.png",
+            "browser-evidence/sequence-oilcan-04.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "Clicking the caption moves from the draft scene to “Apply Oilcan to the percussion channel,” whose sequence progresses from opening Device through K3 confirmation to reopening it.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-handoff.png",
+            "browser-evidence/sequence-oilcan-04.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The caption link resolves to its authored Apply target on click, and the three owner routes plus their explicit-step routes all render the same intended selection.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-03.png",
+            "browser-evidence/oilcan-handoff.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Device, channel, draft, E3, and K3 match the shown controls and action; “n.b. mod” remains domain-specific terminology.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-handoff.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "“Select Oilcan 1” names the chosen player, while the destination names the percussion channel and the apply task.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-handoff.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The caption opens the canonical Oilcan Apply route, and all three owner placements plus all three explicit-step paths resolve to the same selected-player state.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/oilcan-01.png",
+            "browser-evidence/oilcan-06.png",
+            "browser-evidence/oilcan-handoff.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "scene:software-player-doubledecker",
+      "title": "Select Doubledecker",
+      "kind": "scene",
+      "focus": "Doubledecker as a draft on channel 3 for chords",
+      "scene_id": "software-player-doubledecker",
+      "scene_chunk_sha256": "8a0103ed8d337acb207a43942e2739a421b574392b03c8bf8714f49a256bb47a",
+      "current_placements": [
+        "#mods-and-software-devices/software-player-doubledecker",
+        "#devices/software-player-doubledecker",
+        "#norns-sound-sources-with-n-b/software-player-doubledecker"
+      ],
+      "explicit_step_routes": [
+        "#mods-and-software-devices/software-player-doubledecker/select-player",
+        "#devices/software-player-doubledecker/select-player",
+        "#norns-sound-sources-with-n-b/software-player-doubledecker/select-player"
+      ],
+      "caption_link": {
+        "text": "Apply Doubledecker to the chord channel",
+        "href": "#mods-and-software-devices/player-apply-doubledecker",
+        "clicked": true
+      },
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The selected frame identifies Doubledecker as a draft on channel 3 for chords; the Apply sequence ends with Doubledecker retained and the confirmation prompt cleared.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-handoff.png",
+            "browser-evidence/sequence-doubledecker-04.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "A reader can install/enable the mod, select it with E3, confirm with K3, and reopen Device to verify the applied value.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-handoff.png",
+            "browser-evidence/sequence-doubledecker-04.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The caption states the selected device is still a draft and gives K3 as the next action; the destination shows a four-step sequence ending in the persisted value.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-handoff.png",
+            "browser-evidence/sequence-doubledecker-04.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The visible caption anchor works on all three owner routes and all three explicit-step routes; the recorded screen/grid and four-step Apply viewer are visible.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-06.png",
+            "browser-evidence/doubledecker-handoff.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The selection frame stays focused, with the longer K3 Apply-and-reopen sequence in a separate captured scene.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-handoff.png",
+            "browser-evidence/sequence-doubledecker-04.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The caption handoff opens the matching chord-channel Apply route; its steps proceed from Device through selecting, confirming, and reopening.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-handoff.png",
+            "browser-evidence/sequence-doubledecker-04.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The actual caption click reaches the authored Doubledecker Apply route, and each of the six owner/step routes shows the same selection and link.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-06.png",
+            "browser-evidence/doubledecker-handoff.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "The channel, Device, draft, E3 and K3 wording matches the displayed controls; “n.b. mod” is the main specialized term.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-handoff.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The title identifies Doubledecker; the caption destination names the chord channel and Apply task.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-handoff.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The caption opens the canonical Doubledecker Apply route, while all three owner placements and all three explicit-step paths load the intended selection.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/doubledecker-01.png",
+            "browser-evidence/doubledecker-06.png",
+            "browser-evidence/doubledecker-handoff.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "scene:software-player-polyperc",
+      "title": "Select Polyperc 1",
+      "kind": "scene",
+      "focus": "Polyperc 1 as a draft on channel 2 for bass",
+      "scene_id": "software-player-polyperc",
+      "scene_chunk_sha256": "76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53",
+      "current_placements": [
+        "#mods-and-software-devices/software-player-polyperc",
+        "#devices/software-player-polyperc",
+        "#norns-sound-sources-with-n-b/software-player-polyperc"
+      ],
+      "explicit_step_routes": [
+        "#mods-and-software-devices/software-player-polyperc/select-player",
+        "#devices/software-player-polyperc/select-player",
+        "#norns-sound-sources-with-n-b/software-player-polyperc/select-player"
+      ],
+      "caption_link": {
+        "text": "Apply Polyperc 1",
+        "href": "#mods-and-software-devices/lesson/play-polyperc-apply-confirm",
+        "clicked": true
+      },
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The captured selection is explicitly a Polyperc 1 draft on channel 2; the destination states that K3 confirms it and that reopening Device verifies persistence.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png",
+            "browser-evidence/polyperc-apply-result.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The caption directs the reader to the two-step Apply lesson; its Show result control displays the applied Polyperc value with the prompt gone.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png",
+            "browser-evidence/polyperc-apply-result.json",
+            "browser-evidence/polyperc-apply-result.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The text calls out the “Press K3 to confirm” draft state and describes the post-K3 check in plain operational terms.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png",
+            "browser-evidence/polyperc-apply-result.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The repaired caption is a visible anchor in all six owner/step routes; the canonical Apply lesson shows the recorded norns/grid state and an explicit Show result control.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-06.png",
+            "browser-evidence/polyperc-handoff.png",
+            "browser-evidence/polyperc-apply-result.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "Player selection is kept in its own one-step scene, and the caption reaches a separate two-step Apply lesson.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png",
+            "browser-evidence/polyperc-apply-result.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The caption moves directly from the draft selection to the matching Apply Polyperc lesson; Show result reveals the confirmation outcome.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png",
+            "browser-evidence/polyperc-apply-result.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "Clicking the caption reaches the authored canonical lesson route; the scene’s owner routes and explicit-step variants also render the link.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-06.png",
+            "browser-evidence/polyperc-handoff.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Channel, Device, draft, E3 and K3 align with visible controls; “n.b. mod” remains specialized but is used consistently.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "“Select Polyperc 1” identifies the selection; the linked “Apply Polyperc 1” lesson states the next task.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The caption opens `#mods-and-software-devices/lesson/play-polyperc-apply-confirm`, which visibly contains the matching Apply Polyperc lesson and result control.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/polyperc-01.png",
+            "browser-evidence/polyperc-handoff.png",
+            "browser-evidence/polyperc-apply-result.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "scene:workflow-second-channel",
+      "title": "Add one keyboard note and check both channel outputs",
+      "kind": "scene",
+      "focus": "Add MIDI note 76 to step 3 on channel 2 while checking separate channel 1 and channel 2 routes",
+      "scene_id": "workflow-second-channel",
+      "step_id": "two-channels",
+      "current_placement": "#midi-keyboard-input/workflow-second-channel/two-channels",
+      "caption_link": {
+        "text": "MIDI Keyboard Input",
+        "href": "#midi-keyboard-input/workflow-second-channel",
+        "clicked": true
+      },
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The final checkpoint says to add note 76 to channel 2 step 3 and check the original channel 1 phrase plus the new channel 2 note; the captured state is the matching Note Masks checkpoint.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "It supplies an actionable note, velocity, step, channel, transport check, and expected MIDI values/routes for both outputs.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "understandability": {
+          "score": 8,
+          "rationale": "The starting point explains that a port is an output and a channel is its numbered route; the precise MIDI list is useful but dense.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The five-step recorded scene shows the norns screen, full grid, final caption, and the newly rendered “MIDI Keyboard Input” anchor.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "granularity": {
+          "score": 8,
+          "rationale": "The current two-channel checkpoint is one step within a five-frame workflow; the caption is long because it retains both expected output sequences.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The last checkpoint links back to the feature route for the complete workflow; the click lands on the MIDI Keyboard Input page with its full lesson context.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The contextual link is visible and clickable from the nested current placement, and its destination resolves to the owning MIDI Keyboard Input route.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Mask, step, velocity, port and channel are used consistently, with the starting-point text defining port and channel; the notation assumes basic MIDI familiarity.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The parent title names MIDI Keyboard Input and the checkpoint names the two channel outputs being checked.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The caption’s explicit route opens the canonical MIDI Keyboard Input owner route and shows its complete lesson context.",
+          "evidence": [
+            "browser-evidence/source14-live-captures.json",
+            "browser-evidence/workflow-two-channels.png",
+            "browser-evidence/workflow-two-channels-handoff.png"
+          ]
+        }
+      }
+    }
+  ],
+  "carried_forward_units": [
+    {
+      "id": "feature:devices",
+      "title": "Devices",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "devices",
+      "source12_compiled_feature_record_sha256": "1dce74860a2189fc382f51910e5b3bf9dedd555518a24e4ead9c5493941fa06a",
+      "source13_compiled_feature_record_sha256": "1dce74860a2189fc382f51910e5b3bf9dedd555518a24e4ead9c5493941fa06a",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "feature:external-midi-transport",
+      "title": "External MIDI Transport",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "external-midi-transport",
+      "source12_compiled_feature_record_sha256": "35646d63858fd992ef2b91142e0f6861ad9bca442dadb2ad7a1f954ee0738354",
+      "source13_compiled_feature_record_sha256": "35646d63858fd992ef2b91142e0f6861ad9bca442dadb2ad7a1f954ee0738354",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "feature:mods-and-software-devices",
+      "title": "Selecting an n.b. Player",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "mods-and-software-devices",
+      "source12_compiled_feature_record_sha256": "08d28b63f9403ec61c60e992c20ee662ee4b412cd07d3b1834971cfb1350a513",
+      "source13_compiled_feature_record_sha256": "08d28b63f9403ec61c60e992c20ee662ee4b412cd07d3b1834971cfb1350a513",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "feature:norns-sound-sources-with-n-b",
+      "title": "Norns Sound Sources with n.b.",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 9
+      },
+      "feature_record_id": "norns-sound-sources-with-n-b",
+      "source12_compiled_feature_record_sha256": "93af6f5c69bb12bd6dd518e14d0def38498724709408fb27e0d148b10ee72d1b",
+      "source13_compiled_feature_record_sha256": "93af6f5c69bb12bd6dd518e14d0def38498724709408fb27e0d148b10ee72d1b",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "feature:rhythm-doctor",
+      "title": "Rhythm Doctor",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "rhythm-doctor",
+      "source12_compiled_feature_record_sha256": "c26c514d486f74f71e1b58833debdf1c69eeb0ccaff6470c9539038e27fe6797",
+      "source13_compiled_feature_record_sha256": "c26c514d486f74f71e1b58833debdf1c69eeb0ccaff6470c9539038e27fe6797",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "recipe:locks:1-make-one-step-override-a-channel-note-default-th",
+      "title": "Make one step override a channel Note default, then restore inheritance",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "locks",
+      "source12_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "source13_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "recipe:mask-locks:1-make-one-step-override-a-channel-note-default-th",
+      "title": "Make one step override a channel Note default, then restore inheritance",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "mask-locks",
+      "source12_compiled_feature_record_sha256": "fea106737a58625fe3d767f6e701145743fcc161dc5fe4b78368223dbdd46f5e",
+      "source13_compiled_feature_record_sha256": "fea106737a58625fe3d767f6e701145743fcc161dc5fe4b78368223dbdd46f5e",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "recipe:locks:2-compare-a-stored-device-value-with-one-step-loca",
+      "title": "Compare a stored device value with one step-local CC lock",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "locks",
+      "source12_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "source13_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed.",
+      "source12_report_path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json"
+    },
+    {
+      "id": "feature:lfos-and-modulation",
+      "title": "LFOs and Modulation",
+      "source_report_sha256": "e14e7491b8884ecbb0df89ced8d09e7ff7831a106197ead2c1643f0ca57c8adb",
+      "source_report_path": "../source13-lfo-review-20261008-01/reports/source13-lfo-review.json",
+      "criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "lfos-and-modulation",
+      "compiled_feature_record_sha256": "e0b002ef77960435ee4bee8134c6e10994ef3d276f9914c22e01c4359302ea66",
+      "carry_reason": "Parent-authorized carry-forward: source14 book and reader index are exact source13 pins and only manual.js changed for safe caption-link rendering; no fresh LFO score is claimed here."
+    },
+    {
+      "id": "lesson:toolkit-clocked-lfo-menu-clock",
+      "title": "Advanced: Set up a clocked LFO at full depth",
+      "source_report_sha256": "e14e7491b8884ecbb0df89ced8d09e7ff7831a106197ead2c1643f0ca57c8adb",
+      "source_report_path": "../source13-lfo-review-20261008-01/reports/source13-lfo-review.json",
+      "criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "lesson:toolkit-clocked-lfo-menu-clock",
+      "compiled_feature_record_sha256": "ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c",
+      "carry_reason": "Parent-authorized carry-forward: source14 book and reader index are exact source13 pins and only manual.js changed for safe caption-link rendering; no fresh LFO score is claimed here."
+    }
+  ],
+  "historical_reports": [
+    {
+      "path": "../source12-affected-review-20261008-01/reports/source12-affected-review.json",
+      "sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "status": "preserved historical source12 review; its three caption representation failures remain unchanged"
+    },
+    {
+      "path": "../source13-lfo-review-20261008-01/reports/source13-lfo-review.json",
+      "sha256": "e14e7491b8884ecbb0df89ced8d09e7ff7831a106197ead2c1643f0ca57c8adb",
+      "status": "preserved source13 LFO review; source14 carries its two scores because book/index pins are identical"
+    }
+  ],
+  "change_identity": {
+    "changed_source_file": "manual/manual.js",
+    "changed_file_sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+    "rendering_change": "safe DOM rendering of the four authored same-document caption links and accessible labels",
+    "authoring_native_scene_audio_and_193_contracts_exact_source13_parity": true,
+    "all_167_actual_served_chunks_verified": true,
+    "compiled_or_recaptured": false
+  },
+  "actual_served_asset_checks": [
+    {
+      "url": "http://127.0.0.1:8924/manual/manual.js",
+      "status": 200,
+      "sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+      "bytes": 97763
+    },
+    {
+      "url": "http://127.0.0.1:8924/manual/book.js",
+      "status": 200,
+      "sha256": "453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8",
+      "bytes": 72837
+    },
+    {
+      "url": "http://127.0.0.1:8924/manual/manual.css",
+      "status": 200,
+      "sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+      "bytes": 31222
+    }
+  ],
+  "route_capture_evidence": "browser-evidence/source14-live-captures.json",
+  "scope_inputs": {
+    "scene_count": 146,
+    "step_count": 1056,
+    "linked_caption_count": 4
+  },
+  "method": "Cold full-document navigations checked all nine bare owner placements and all nine explicit select-player placements for the three player scenes. Each route was matched against the expected player title and loaded caption anchor href. Each caption anchor was clicked and the destination was checked. The three Apply sequences were inspected through their reader controls (four captured Oilcan and Doubledecker steps; Polyperc Show result); no native application was run, and no audio was played or listened to. The workflow two-channels route was loaded, its MIDI Keyboard Input caption anchor clicked, and the destination checked. The old start-card wording is in the DOM but computed display:none and zero-sized, so it was excluded from ratings."
+}

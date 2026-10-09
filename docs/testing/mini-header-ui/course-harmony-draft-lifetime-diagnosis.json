@@ -1,0 +1,76 @@
+{
+  "run": "/home/andy/mosaic-manual-runs/f435a5b46e6643979afd1302951904d1",
+  "clock_mode": "real-time",
+  "helper_sha256": "846b62015e247cebe6986bbfbef7e2352b9b895928ff6fb9859baa1d1f5c3053",
+  "failure_sha256": "87588978d47db497921e11a604f4e65e107286b29df00219c38b10e5bc8c11cd",
+  "results_sha256": "52446c92458ac70127d1d02c33bcf2d885e2a60468c2a57a707d68fe80d3705e",
+  "recipe_sha256": "fedb897df2fac6b6e1703dcdb05e3a749b45ca3613e19e15adffea2739535163",
+  "observations_sha256": "bbaaa5eda6fece8a99d135f9e18eb2210ed06cef44e9d9921f47681e786d53b0",
+  "cleanup_sha256": "56b2bca90839370c50fa3382db9daab82c9d74727636447878e4fb0ef7198901",
+  "passed_musical_stages": [
+    "first-sound-hear",
+    "build-a-phrase-compare",
+    "masks-listen",
+    "masks-quiet",
+    "masks-default-g",
+    "masks-default-restored",
+    "masks-clear",
+    "masks-keep",
+    "sequence-composition-both",
+    "sequence-composition-merge-skip",
+    "sequence-composition-merge-all",
+    "sequence-composition-merge-restored",
+    "harmony-design-relative",
+    "harmony-design-draft"
+  ],
+  "failed_stage": "harmony-design-apply-d",
+  "expected_port1_notes": [
+    62,
+    62,
+    62,
+    64,
+    62,
+    62,
+    62,
+    64
+  ],
+  "actual_port1_notes": [
+    60,
+    60,
+    60,
+    62,
+    60,
+    60,
+    60,
+    62
+  ],
+  "diagnosis": "Public grid Play/Stop cancels pending Scale edits via press.handle save_confirm.cancel. Course listened to a draft with ordinary grid transport, then attempted K3 without restaging the canceled draft.",
+  "production_source": [
+    {
+      "path": "/home/andy/mosaic-manual-runs/f435a5b46e6643979afd1302951904d1/application/lib/press.lua",
+      "sha256": "1a96e57271dd0b7aedcb1496e20cece6b898cabaeefd57b46707e183e9777360",
+      "lines": "66-84"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/f435a5b46e6643979afd1302951904d1/application/lib/pages/scale_edit_page/scale_edit_page.lua",
+      "sha256": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc",
+      "lines": "99-118"
+    }
+  ],
+  "native_page_remained_scale02": [
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    158,
+    159
+  ],
+  "whole_course_passed": false,
+  "all_native_services_closed": true,
+  "production_and_fixture_unchanged": true
+}

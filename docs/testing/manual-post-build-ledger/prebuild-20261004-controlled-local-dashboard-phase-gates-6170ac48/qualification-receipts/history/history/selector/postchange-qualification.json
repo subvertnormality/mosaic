@@ -1,0 +1,53 @@
+{
+  "scope": "narrow selector metadata migration; no native work",
+  "source_delta": {
+    "path": "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-musical.yaml",
+    "before_sha256": "779d537e108bc21180542e94aa2b476f4c5d523dcb212c2bd57ae04167d02df0",
+    "after_sha256": "3db17925ed6199acde01aee88b06fa98311bcd371a83c5da31f8b35b5b52bfc8",
+    "old_review_membership": "not a member of reviewed 78; preserve prior 33ed/f885 review bytes"
+  },
+  "regression": {
+    "path": "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_documentation_frame_selectors.py",
+    "sha256": "36a50bd867515ac573e95af8690da17ffb017cd2ac0c103e32a0cb8eb5c1add4",
+    "tests": 4,
+    "result": "passed",
+    "green_log": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/documentation-frame-selector-migration-20261004/green-run.log",
+    "green_log_sha256": "e700c0fcb1ddf3121081922e8b8521c870c9813aad4828d212ec59273b68ba60",
+    "red_log": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/documentation-frame-selector-migration-20261004/red-run.log",
+    "red_log_sha256": "f264a644c6dd1daa5132a0d0c44b27b23c8393bf3619e58615142fbe75eae822"
+  },
+  "suite_classification": {
+    "module": "test_manual_documentation_frame_selectors",
+    "classification": "PYTHON_UNITTEST",
+    "registration_owner": "luna_stage_operator",
+    "receipt": "/home/andy/mosaic-manual-build-operators/mini-frame-focused-a467669549e2480eb5bc253066afbe83/selector-classification-qualification.json",
+    "receipt_sha256": "6b7b4b3d8210238ad7ffd3e23ba3511efc11bf8f3e5f743a01a6b905178c3c5e"
+  },
+  "captured_fixture": {
+    "run": "630f2a5078824322998691fce24e4a37",
+    "case": "M-MERGE-FOUNDATION-001-base-midi",
+    "results_sha256": "82f17bee8aa2c98d86388b2ed727d22e3997d592d133cfd05e01a4ed1b15abbc",
+    "native_identity_sha256": "4b220eb6d1ddee37189c8b1f8315ca26c159f0d1674e6ed99e0fa92816fe6c0e",
+    "captured_row_sha256": "a158f7071130a906402dd0191836ae446d17d163c533f4c97010d5305ee0003d",
+    "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/documentation-frame-selector-migration-20261004/archive-manifest.json",
+    "archive_sha256": "00d8fe14492d044f0fe6afec45a80301ce352f46910f2ff685138aacdbaf3a1f",
+    "native_provenance": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/documentation-frame-selector-migration-20261004/native-provenance.json",
+    "native_provenance_sha256": "910d8f6b49c7dde0222927bc10b34be6e481032836ff507b63c578f9632e7785"
+  },
+  "changes": [
+    "Exactly two scene-plan assertion dictionaries changed: the Foundation and Fragments documentation-frame selector metadata.",
+    "Both preserve their baseline SHA as baseline_sha256 and pin validation, page, and atlas SHA; no dynamic phase SHA is asserted.",
+    "No prose, IDs, musical expectations, case source, helper, review ledger, or other scene-plan YAML changed."
+  ],
+  "validation": [
+    "The old Foundation selector rejects the actual archived result through manual_case_capture.Selector.accept.",
+    "The new selector accepts the same captured row; wrong baseline, page, and atlas all reject.",
+    "The suite fixture audits all six helper image mappings and inventories exactly two matching authored selectors.",
+    "Normalized scene-plans-musical.yaml equals its pre-edit semantic content after reverting only those two assertion maps."
+  ],
+  "not_performed": [
+    "native capture",
+    "full build",
+    "full suite"
+  ]
+}

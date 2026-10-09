@@ -37,14 +37,20 @@ def keyboard_options(c):
     assert [mapped(k,MAJOR) for k in octave]==[60,62,62,64,64,65,67,67,69,69,71,71,72]
     # The scale page selects the scale track, which takes no keyboard notes;
     # return to channel 1 before each sweep.
-    ui.scale_editor();ui.set_value(2);ui.press_key(3);ui.tap_control('channel_editor') # Major -> natural minor: mapping follows the scale.
+    ui.scale_editor();ui.set_value(2);ui.press_key(3)
+    # README.md#scale-editor: the Scale row shows the chosen scale before K3 applies it.
+    ui.expect_selected_field('vertical_list','Scale','Minor')
+    ui.tap_control('channel_editor') # Major -> natural minor: mapping follows the scale.
     sweep('white-minor',octave,lambda k:mapped(k,MINOR))
     # Degree II, rotation two and transpose +2 on the scale page and fader.
     ui.scale_editor()
-    ui.turn(2,1);ui.set_value(1);ui.press_key(3);ui.turn(2,-1)
-    ui.turn(2,3);ui.set_value(2);ui.press_key(3);ui.turn(2,-3)
+    ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.expect_selected_field('vertical_list','Degree','ii\u00b0');ui.turn(2,-1)
+    ui.turn(2,3);ui.set_value(2);ui.press_key(3)
+    ui.expect_selected_field('vertical_list','Rotation','r2');ui.turn(2,-3)
     ui.tap_control('global_transpose_minimum')
     for _ in range(14):ui.tap_control('global_transpose_increment')
+    ui.expect_dashboard_row('Transpose','+2') # README.md#scale-editor: the transpose fader's +2 on the Scale overview.
     ui.tap_control('channel_editor')
     # Honour switches still at their defaults (Off): none of the three applies.
     sweep('honour-defaults-off',octave,lambda k:mapped(k,MINOR))

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_reconcile_build.py": "c52cffddd8fd64a54b9f3043b2aaed0d96886a05d681dbb8dedc422aa168b404",
+    "/home/andy/mosaic-manual-1.4.0/tools/test_manual_reconcile_build.py": "497e02078d59b54c8d48cc9287fba479f1facb4d729a2f115fec8870e654e954"
+  },
+  "preserved_native_pins": {
+    "reconcile_manual_build.py": "387f549f69147003be47d17ddef9cc2085c3665a91ebc61daa840dea9f140b95",
+    "test_reconcile_manual_build.py": "3c4b7069967eb64bc0f3b001212658391ee240e0da9143a9e66d861f965dbe65"
+  },
+  "test_returncode": 0,
+  "log_sha256": "360edd07499507ce60eb3a84a41a81affbdcff645b6846d355fced91ea9d1f33",
+  "native_launched": false
+}

@@ -1,0 +1,14 @@
+{
+  "event": "accidental actual-checkout invocation before scratch-only compile",
+  "command": "python3 tools/manual_book.py --help",
+  "cwd": "/home/andy/mosaic-manual-1.4.0",
+  "entrypoint_fact": "manual_book.py has no CLI parser; main() compiles and writes manual/generated/book.json after validation.",
+  "session_id": "7760",
+  "outcome": "Interrupted with Ctrl+C after no output; process poll later returned unknown session. Cannot prove from the interruption alone whether the write point had been reached.",
+  "preserved_actual_output_identity": {
+    "manual/generated/book.json": "db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e",
+    "manual/generated/reader-index.json": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52"
+  },
+  "comparison": "These are the exact pre-existing Source18 pins observed before/after the incident; no mismatch was observed. No restore or regeneration was applied to the authoritative checkout.",
+  "followup": "All successful compiles/projections in this package ran only in scratch-v01/projection-v02."
+}

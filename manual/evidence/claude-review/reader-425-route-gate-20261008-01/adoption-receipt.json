@@ -1,0 +1,42 @@
+{
+  "schema": "mosaic-reader-425-route-gate-adoption-v1",
+  "candidate": "current public reader gate; CSS v2, exact book/index/runtime pins in current-route-receipt.json",
+  "source_bundle": "visualroot/reader-425-route-gate-source-20261008-01/final-css-c6647097-run-20261008-01",
+  "files": {
+    "source-route-manifest-v3.json": "1f6b5e5ebba81f5a8d1cde9563d1f03c2706aca5c7d34a40d26c5ec0cd12d62c",
+    "current-route-manifest-v4.json": "8620ce3df63d35489e9473257313117a3d56c37f034d2f75cc2f986e488829f9",
+    "route-gate-harness.cjs": "552e5295de5fee73a426c7e5ccba699cbf587403b2446639663ffafeee46c093",
+    "prepare-current-route-manifest.cjs": "d6a8d9d43d38ee2a02a15ecc5716f18fbf0ad8b7964a226cbbdd3c503f3c2573",
+    "route-manifest-audit.py": "19713e9d8a63887e34b71ee4b2c99f0ec05524c1c7ed67517b36ff8c64d822a2",
+    "manifest-handoffs.py": "aeee9bd70a16112b3d7b86882eb56d5edd835fcfabb884e414d23976d9dadb0a",
+    "source-route-preflight-v3.json": "5043165f5b83fe5250d50f4556e8a29b366f21beb5b7eeec3317e447473e95f9",
+    "prior-diagnostic-initial.json": "10c0bb2bc75aab96b9b8a030b7e9574020273f01a6ae7daaedf9e892d7bae3ab",
+    "prior-diagnostic-corrected-v1.json": "1f05d27ef35ebe1a34fb711b66fc810622d6095e5f4a6e603be2e9cb36911a88",
+    "prior-diagnostic-corrected-v2.json": "34e06bae599b04bcbfe5d6feadd9f6a4aed04e31e2278d5ee507f30722e9fd1f",
+    "current-route-report.json": "caa9973c061f75f384466f23bd59ffe3e9775bb48a9ff317572184ca39a78653",
+    "current-route-receipt.json": "17b60c7f2b1c571ffd52002e17bef1111d6f5421c9bdb0b42f446cc259618ca2"
+  },
+  "prior_runs": {
+    "initial": {
+      "result": "unqualified initial harness diagnostic; preserve without relabeling",
+      "sha256": "10c0bb2bc75aab96b9b8a030b7e9574020273f01a6ae7daaedf9e892d7bae3ab"
+    },
+    "corrected_v1": {
+      "result": "310/425, harness still mis-scoped",
+      "sha256": "1f05d27ef35ebe1a34fb711b66fc810622d6095e5f4a6e603be2e9cb36911a88"
+    },
+    "corrected_v2": {
+      "result": "367/425, remaining harness mismatches diagnosed",
+      "sha256": "34e06bae599b04bcbfe5d6feadd9f6a4aed04e31e2278d5ee507f30722e9fd1f"
+    }
+  },
+  "current": {
+    "result": "425/425 PASS; all 146 scene chunks verified; 8 authored requested-to-canonical mappings; all 22 recording players paused",
+    "sha256": "caa9973c061f75f384466f23bd59ffe3e9775bb48a9ff317572184ca39a78653",
+    "receipt_sha256": "17b60c7f2b1c571ffd52002e17bef1111d6f5421c9bdb0b42f446cc259618ca2"
+  },
+  "limits": [
+    "This adopts route/source reconciliation evidence only; score ledger remains a separate candidate and style approval CG2 remains pending.",
+    "No generated book/index, YAML, audio, native evidence or source content is copied into this evidence folder."
+  ]
+}

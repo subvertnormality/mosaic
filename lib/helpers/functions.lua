@@ -523,6 +523,14 @@ function fn.param_value(id)
   return params:get(id)
 end
 
+-- Calls visit(stock_id, param_id) for each sequencer (stock) trig param of the
+-- channel: the controls that shape the sequencer rather than the sound.
+function fn.each_stock_param_id(channel_number, visit)
+  for stock_id in pairs(stock_id_to_param_id) do
+    visit(stock_id, string.format(stock_id_to_param_id[stock_id], channel_number))
+  end
+end
+
 -- Step playback resolves stock ids for every channel on every step; format each once.
 local stock_param_ids = {}
 

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "path": "tools/manual_course_bind.py",
+  "before_sha256": "803e66d0ee9ae466c342bb4eab48cfed3793d2d6279c5e5bad6c4d2631dbae8a",
+  "after_sha256": "accc616d62db234edd7d6862c7fbafb52e2daffc702823cc5ef6f33f9a4d7883",
+  "reviewed_checkpoint_count": 50,
+  "teaching_stage_count": 38,
+  "red_log": "docs/testing/mini-header-ui/course-50-publication-count-red.log",
+  "red_sha256": "31d00f8a19328ed1265ec46b9f709731f56ba7ec2525a157eb04956e267662e4",
+  "green_returncode": 1,
+  "green_log_sha256": "002519360a857a7fe645f2a6de426a962f6344be2b63ea9ce7e68af2d703071b",
+  "diff_sha256": "777cfdae19ff14841389acb1981c6d0d859b07be801a5c9dabd38d72179e5548",
+  "native_acceptance_claimed": false
+}

@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "kind": "independent-doctor-qualification-auditor-component-proof",
+  "native_qualification_passed": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "focused_tests": 18,
+  "approved_proposal_sha256": "5d2ce3a1ecf438e87b80c529380672164392e0dbb92cbecfdc8b50e7cb0eb22d",
+  "approved_candidate_sha256": "24a341b007bb7f30f2800cdc8f9c661104fc519691ed44fcc1bcd7eba59d589f",
+  "current_files": {
+    "tools/doctor_options_audit.py": "a45fc1ce34576ed1a0b3d26b7993fcdc86e57a6d5a77681539eb9b932d721007",
+    "tests/behaviour/test_doctor_options_audit.py": "046bf3a9b14f2cb5ee8313a6278ef1645a7bf8d91e8cc538d2870cbbe5f546b2"
+  },
+  "existing_auditors_unchanged": {
+    "tools/manual_doctor_audit.py": "31c6acf50841fd72877f478f6e7bdc048e1ab3aad5d10ee0761904494790ec1e",
+    "tools/manual_publication_verify.py": "a3d1112df7b3941357b3f9912da0608a64f2c4243ac8137ab42239fdf1bff498"
+  },
+  "function_ast_sha256": {
+    "digest": "0912095a3b8d15a8d8ca1972b11e0d6c62c625a675779346b53c736d6396afb8",
+    "read": "5aa5c347b7a125c22f4f1043469f346f39c346a13db70948e76fcc951d7a0f47",
+    "require": "a9fd24712c078d39163b56746f165190c9792bd1bb65a1dfef20fd61173b4a51",
+    "bounded": "a44770523e3360ff1f1e94ef71d43fda499ceee867c2e6a4ec61326c927d9ccb",
+    "check_roles": "c2072ad6b4226aa26ccdd11845bc81384cf9185849e51f299085139ef812c749",
+    "check_scope": "11b9888dcb7d54876378d6409e2d070e5654f7401310fdbae3434df22631be3d",
+    "native_midi_window": "679bea792aaef6efe2f9637608bab49a38c8a25d192b58001edb2ee0935db7cc",
+    "check_phrase": "fcf6ae16bdc7c26bcf2e22e9ada7c028b4c9ceb95f11396413995915b37f6d44",
+    "bind_public_stop": "fda4acea1c33d7946ebe281d236d9b615cef78fc627b81055e7a2f68bae2f2cc",
+    "band_energy": "00efc7c0fbfe1173bf378b449529e1d86fbc73f866f6cdc67bb7fdcab9fc4a1a",
+    "check_selected_channels": "01ed8b8c90ddd1c67700bc8399b75ee959310f15f90e79642d7f643951a4b0ca",
+    "check_fixture_contract": "0862e7723922371daa0fd1ad0ed4cd1087fa8a05ea5c8a536cae1a6b5d47d310",
+    "seed_files": "d2d68737a7774bd919efef459042d8a4301a4ae4a8abaff445c89b6e5d6a8f53",
+    "check_harness_inventory": "c790b6753d58e2a7c95a60aba2cdb47ba362784a40fa5b32a8ac723f2553647a",
+    "check_production_inventory": "8d613cfe2708d2e6d5549b49ad6774d37aacf008eec65bf1c69be9fbbec0a608",
+    "check_sources": "6792c642c58eb9742d5376334d7802f5b9d5c0ee688ff2c71d53ebd8cc5f19de",
+    "visible_sequence": "99920272557fad527dd139ff6050dbb459ff2b99bf7a83a190cfaf1e9d25359b",
+    "audit_ui": "8f45331883a1f68ad9aba51d9ec1d53289fecde2739b98be6e0a2aa8889f934c",
+    "play_windows": "898a6c7aa5958193ba41482b91cae964d749a452c7645105705040ebccea3e3c",
+    "audit_adc": "bbead207654b319511a982da40a6a47c93ad830014f83fa18924beafd34443a0",
+    "check_native_observations": "443796030be81a7f65242b77618e9e3650d995574fd89343d4189f0db7dd6df2",
+    "audit_ready_witnesses": "b48ff3cc1b7d43d6ea87a63d5e14027af3f18547d9c22421487246bbf0f32458",
+    "doctor_tooltip_matches": "4a8f8fe4fa9d2e14de47b70bd241821b25c7558634251b30cc1ef2f041f4211e",
+    "audit_report": "527180037da87259f2ed88981cdb5281e37831890e0d30fb7b2a191aa979644d",
+    "audit_fixture": "aed9a45dc3d70371fb2267ed9c6229e3b4a1ce3c39591aade713eba428b23530",
+    "audit_qualification": "1c5e6cdbd619781c71f7178ece844d59921317bb58773c8c016077681b73828b",
+    "main": "da4a19b8e7719b3e6ca4449e4e639c74521e956a3c587e8c43be1f09317261ab"
+  },
+  "strict_invariants": {
+    "release_required": true,
+    "musical_packet_count": "exactly 2 * observed attacks",
+    "shortened_final_gate": "only exact native public Stop release",
+    "stop_grid_native_coordinates": [
+      0,
+      7,
+      1
+    ],
+    "controlled_stop_clock": "sum preceding actual native advances",
+    "controlled_tolerance_seconds": 2e-09,
+    "real_tolerance_seconds": 0.01,
+    "production_inventory": "all current runtime sources, maps, backend and templates; excludes generated manual artifacts",
+    "startup_spec_required": "docs/ui-reimplementation/spec.json"
+  },
+  "red_evidence": {
+    "missing_APIs": "Parent preserved four red API failures before exact approved patch application",
+    "shortened_gate": "15-test baseline: one failure (unbound short gate accepted), two errors (missing bind_public_stop); preserved source in approved-proposal.patch",
+    "source_inventory": "source-inventory-red.log: three expected missing-helper errors before production inventory integration"
+  },
+  "cli_roles": [
+    "manual-stereo",
+    "auto-left",
+    "manual-right",
+    "setup-real",
+    "setup-controlled",
+    "ready-real",
+    "ready-controlled"
+  ],
+  "fixture_flags": [
+    "--fixture",
+    "--fixture-sha256"
+  ]
+}

@@ -28,7 +28,13 @@ def pulse_plan(feel,basis,amount,count):
     return pulses
 
 
-def shuffle_matrix(c,feel):
+# Smooth also shows the amount steps at Basis 6, where the notes move 8 pulses, not the 2-3 of Basis 9
+# (README Clocks, Swing and Shuffle: Amount scales how far the feel moves the notes).
+SMOOTH_BASIS_6_AMOUNTS=[(4,0),(4,50),(4,100)]
+
+
+def shuffle_matrix(c,feel,extra_stages=None):
+    if extra_stages is None:extra_stages=SMOOTH_BASIS_6_AMOUNTS if feel=='Smooth' else []
     from note_accounting import note_pairs
     ui = c.ui
     ui.configure()
@@ -43,7 +49,7 @@ def shuffle_matrix(c,feel):
     current_basis=0;current_amount=0
     # All bases at full amount, then a fractional basis at amount boundaries
     # and midpoint, followed by restoration. Amount0 must be straight timing.
-    stages=[(basis,100) for basis in range(1,7)]+[(1,a) for a in (1,50,99,0,100)]
+    stages=[(basis,100) for basis in range(1,7)]+[(1,a) for a in (1,50,99,0,100)]+list(extra_stages)
     for basis,amount in stages:
         ui.select_field('shuffle_basis', offset=1)
         ui.set_value(basis-current_basis)

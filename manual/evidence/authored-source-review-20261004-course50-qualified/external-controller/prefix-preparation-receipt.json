@@ -1,0 +1,42 @@
+{
+  "active_source_modified": false,
+  "change": "Versioned current-stage operator prefixes; controller behavior unchanged",
+  "files": [
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/controller.py",
+      "sha256": "d12d98fc1741cedcf7eef03c3d4f22a0e74ab2f733f54018963dd260a199bfc4"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/test_controller.py",
+      "sha256": "ca82986257a8848259ade9d2687fa4de0d0592f272eaa2539e1d9b42f87e7646"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/prefix_plan.py",
+      "sha256": "58a957da6d0c83941d5eb3c88241cdf3bee6c125c30056eca921489a7827b992"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/test_prefix_plan.py",
+      "sha256": "528d0b5b18f821bcc25c5014df8adf711e34fc6bf7764f168041f615f333ca38"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/README.md",
+      "sha256": "1f7b7252f42c23b839bb5cc57a4d20630587f09ceafac3f588318f342c2174d9"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/prefix-synthetic-green.log",
+      "sha256": "257ee3ed597a97d2fd84a61f350119918f0cf97a12b0eb50e26792023d2ca4ea"
+    }
+  ],
+  "native_actions": false,
+  "original_plan_stage_count": 72,
+  "prepared_utc": "2026-10-04T03:22:43.231746+00:00",
+  "prior_preparation_receipt_sha256": "c83d8f838812e84ef63f77c806446e3388ecc075bcc4f6682a89bda80af48a22",
+  "prior_readme_archive": "/tmp/mosaic-build-stage-gate-preparation/controller/preparation-v1/README.md",
+  "schema_version": 1,
+  "tests": {
+    "controller": 31,
+    "count": 42,
+    "passed": true,
+    "prefix": 11
+  }
+}

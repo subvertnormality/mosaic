@@ -1,0 +1,11 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+F
+Failed tests:
+-------------
+1) test_ui_live_trig_options_footer_names_only_its_effective_control
+.///lib/ui_live_tests.lua:1240: expected: "E3 SET"
+actual: "E3 SET K3 APPLY"
+stack traceback:
+
+Ran 1 tests in 0.052 seconds, 0 successes, 1 failure, 2444 non-selected
+find: ‘/home/we/norns/lua/core’: No such file or directory

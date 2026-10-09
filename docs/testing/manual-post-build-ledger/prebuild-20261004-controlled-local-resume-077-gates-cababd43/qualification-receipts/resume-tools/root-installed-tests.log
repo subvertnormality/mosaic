@@ -1,0 +1,12 @@
+test_adopted_row_without_lineage_fails_closed (test_manual_resume_adoption.PortableResumeTests) ... ok
+test_current_plan_keeps_full_inventory_and_safe_inventory_order (test_manual_resume_adoption.PortableResumeTests) ... ok
+test_doctor_adoption_keeps_immutable_parent_report_and_rehashes_entire_tree (test_manual_resume_adoption.PortableResumeTests) ... ok
+test_final_inventory_hashes_match_current_exact_source_set (test_manual_resume_adoption.PortableResumeTests) ... ok
+test_inventory_source_map_cannot_omit_a_required_file (test_manual_resume_adoption.PortableResumeTests) ... ok
+test_merge_witness_resolves_only_unique_exact_linked_frame (test_manual_resume_adoption.PortableResumeTests) ... ok
+test_repository_reconciler_matches_approved_source_pin (test_manual_resume_adoption.PortableResumeTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.479s
+
+OK

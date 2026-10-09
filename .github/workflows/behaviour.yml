@@ -75,7 +75,7 @@ jobs:
         name: Install native runtime dependencies
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+          apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 python3-yaml python3-jsonschema libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
       - &checkout
         uses: actions/checkout@v4
         with:
@@ -100,7 +100,7 @@ jobs:
       - name: Verify CI partition and aggregation contracts
         if: matrix.shard == 0
         working-directory: tests/behaviour
-        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import ci.test_ui_migration_drift_runner ci.test_workflow_counts
+        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import ci.test_ui_migration_drift_runner ci.test_workflow_counts ci.test_rhythm_doctor_options_ci
       - name: Fetch output-profile fixtures for fast layers
         if: matrix.shard == 0
         run: |
@@ -279,6 +279,34 @@ jobs:
         run: |
           pattern="^(?:M-XA-002-AUDIO|M-XA-005-NB-LOCK|M-XA-006-NB-CHORD-ACCEL|M-XA-001-JF|M-XA-003-JF-OWNERSHIP|M-XA-004-JF-OVERLAP|M-XA-007-NB-SWITCH-SLOTS)$"
           python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-output --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install /tmp/ci-audio-crow-tools/installation.json             --lanes real-time --profiles nb-audio,crow-jf             --mod-code-root nb-audio=/tmp/mosaic-output-mods             --mod-code-root crow-jf=/tmp/mosaic-output-mods             --case-pattern "$pattern" --skip-fast-layers
+      - name: Install source validator for Doctor options
+        run: apt-get install -y --no-install-recommends python3-jsonschema
+      - name: Run Rhythm Doctor option matrix
+        run: |
+          python3 tests/behaviour/ci/rhythm_doctor_options_ci.py \
+            --app-root "$GITHUB_WORKSPACE" \
+            --audio-install /tmp/ci-audio-crow-tools/installation.json \
+            --controlled-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
+            --output /tmp/rd-options
+      - name: Upload Rhythm Doctor option qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rhythm-doctor-options
+          path: |
+            /tmp/rd-options/doctor-options-ci-summary.json
+            /tmp/rd-options/**/report.json
+            /tmp/rd-options/**/results.json
+            /tmp/rd-options/**/observations.json
+            /tmp/rd-options/**/source.json
+            /tmp/rd-options/**/orchestrator.log
+            /tmp/rd-options/**/native/identity.json
+            /tmp/rd-options/**/native/cleanup.json
+            /tmp/rd-options/**/native/native-events.jsonl
+            !/tmp/rd-options/**/code/**
+            !/tmp/rd-options/**/data/**
+          retention-days: 7
+          compression-level: 9
       - name: Upload output-profile report
         if: always()
         uses: actions/upload-artifact@v4
@@ -451,7 +479,7 @@ jobs:
       - name: Install native runtime dependencies
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+          apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 python3-yaml python3-jsonschema libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
       - name: Check out pinned emulator
         run: |
           git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git "$EMULATOR_ROOT"

@@ -1,0 +1,39 @@
+{
+  "operator": "/home/andy/mosaic-manual-build-operators/lead-zero-controlled-capture-b851a803a2c9413992389aab7ddee542",
+  "evidence_token": "c7bf31d19eaa43acb5c433175fb672c7",
+  "expected_evidence_parent": "/home/andy/mosaic-manual-runs",
+  "argv": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "manual/scene-plans-lead-panic.yaml",
+    "--scene",
+    "lock-lead-menu-values",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--profile",
+    "base-midi",
+    "--controlled-local"
+  ],
+  "argv_file": "/home/andy/mosaic-manual-build-operators/lead-zero-controlled-capture-b851a803a2c9413992389aab7ddee542/actual-focused-argv.json",
+  "argv_file_sha256": "f8d7ceecc30751ac2e001a27d8840a237597781f17bb4a00dcf5ff1b585db589",
+  "argv_canonical_sha256": "015c77d6b3bdfbec56ae7475e70b0967ec9cc0016d119ebc041c3c9e8f4f16ac",
+  "pid": 23275,
+  "proc_start_ticks": 48916274,
+  "proc_cmdline_sha256": "beca4bce81587cb145b03d95fdefda5cdb40d12213572dc182b51240b420a674",
+  "executable": "/usr/bin/python3.8",
+  "executable_sha256": "374040b051456da197f296e774b1604d9fec8eef4910f90b90a92d83a0022e52",
+  "source_sha256": {
+    "tools/manual_case_capture.py": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+    "tools/manual_capture.py": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+    "tools/manual_model.py": "22be5eaf517c5d00080c98a56638945d940eaba95a2dd6f4153364262d728f89",
+    "tests/behaviour/contract/lock_lead_clock_matrix.py": "1f8f7f65f59e776f69aadc6c9becfa51a72f24a205407b0f83088539be3e3ba4",
+    "tests/behaviour/test_lock_lead_owner.py": "290b62792c695b64c2682794941559bf3ee2d2ce36fb32b115257394c7a7f84c",
+    "manual/scene-plans-lead-panic.yaml": "f5dbd3190f685c664308194a271ef3336e681075277a296534525dc011434170"
+  },
+  "log": "/home/andy/mosaic-manual-build-operators/lead-zero-controlled-capture-b851a803a2c9413992389aab7ddee542/capture.stdout.log",
+  "launch_time_ns": 1791106319506968399,
+  "human_approval": "Yes approved; exactly one fresh controlled no-publish lock-lead-menu-values capture"
+}

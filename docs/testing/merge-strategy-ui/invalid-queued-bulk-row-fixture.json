@@ -1,0 +1,19 @@
+{
+  "kind": "invalid-fixture-not-production-red",
+  "run": "c5601ce57a3c4c488dc965fcbb47bafc",
+  "stage_identity": "d4242954bf6b6703a2162f26f6b3b47286947d456f493dc48375ad043617f0bf",
+  "actual": "Pending FOUNDATION passed; following raw E2 delta8 selected Request rather than Boundary",
+  "correction": "Established Ui.turn(2,2) then Ui.turn(2,4), uses each raw delta2 with 50ms pacing and 150ms final settling. Direct E3 delta2 retained.",
+  "timing_budget_seconds": {
+    "two_detents": 0.25,
+    "four_detents": 0.35,
+    "play_setup": 0.06,
+    "controlled_pending_poll": 0.01,
+    "total_to_boundary": 0.67,
+    "eight_step_cycle": 1.3333333333333333
+  },
+  "oracle_preservation": "Exact Pending FOUNDATION, Boundary NEXT CYCLE, 13 queued musical notes and original tolerances unchanged. No boundary delay or timeout widened.",
+  "original_helper_sha256": "e587fd7426ee208b649a952e8dac4664eb4433b46bb72f34011ac134d6de56fe",
+  "corrected_helper_sha256": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+  "cleanup": "all four native services exited; readability/real not launched"
+}

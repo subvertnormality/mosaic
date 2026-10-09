@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "roots": [
+    "/home/andy/mosaic-manual-1.4.0",
+    "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout"
+  ],
+  "archive_relative_path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01",
+  "payload_files": 253,
+  "payload_bytes": 33564705,
+  "both_roots_byte_identical": true,
+  "closed_inventory_path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/ADOPTION-CLOSED-INVENTORY.json",
+  "closed_inventory_sha256": "195f94a86ad536bb6fc6649963289f9dd88579e92da12696c9414d92d3ec0fa9",
+  "closed_inventory_bytes": 62187,
+  "final_review_sha256": "3684a17a5a7d027a409a291535855f059bdc9338c84a5e85dc6a224690929030",
+  "final_review_json_sha256": "fd3228b6f54aa176a6164ff9cb7f4c94243cc47c05c99cff298d11db5c8e0bf7",
+  "genuine_candidate07_index_sha256": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca",
+  "duplicate_current_index_bytes_avoided_per_root": 55609220,
+  "all_referenced_retained_report_paths_resolved": true,
+  "source_pins_unchanged": true,
+  "staged": false,
+  "committed": false
+}

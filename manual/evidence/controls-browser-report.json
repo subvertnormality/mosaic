@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "checks": [
+    "Recorded hold cue: wrong encoder and wrong pad are rejected; the matching keyboard hold shows held and the exact held result appears only on View next result",
+    "Recorded encoder cue rejects the wrong direction and accepts the recorded clockwise turn, with the result shown only on View next result",
+    "Keyboard release of the recorded held pad completes the release cue, then exact released result",
+    "Grouped select-value cue needs field encoder, held pad, value encoder, release and play before the exact quiet-step result; out-of-order controls are rejected without revealing it",
+    "Held grid (keyboard) plus clicked norns key plus release advance only through the recorded cue order to the exact clear result",
+    "Grouped norns key hold, grid tap and release are all required; no fabricated intermediate frames",
+    "First-loop authored encoder sequence selects exact defaults result",
+    "Large reference bundles without a recorded cue say so and advance only through View next result"
+  ],
+  "book_sha256": "5777d5c4a8b78ad9cb81a4c1c70b8d024ee6960e572e2fd0bc89a30957caad88",
+  "player_sha256": "525f626459d3e2c4de0614dde12e7db65860f21c73f470fd5d7988c1fe150908",
+  "reader_index_contract_ids": [
+    "masks-hold",
+    "masks-edit",
+    "masks-release",
+    "masks-quiet",
+    "masks-clear",
+    "keep-your-work-temporary-edit",
+    "first-sound-defaults"
+  ]
+}

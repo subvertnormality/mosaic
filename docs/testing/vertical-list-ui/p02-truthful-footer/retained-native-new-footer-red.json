@@ -1,0 +1,21 @@
+{
+  "status": "expected new-footer red on immutable native observations; no new session",
+  "run": "/home/andy/mosaic-manual-runs/8f3610520c1d44e785436eb431767b4d/M-LIVEUI-DASH-001-base-midi",
+  "observations_sha256": "afe2d0d7abca93e6365f305092f7434d13697d9c0ac9b0911ed32d48abf9dc42",
+  "new_exact_footer": "E3 SET",
+  "rows": [
+    {
+      "observation": 45,
+      "sha256": "8927a2cb720721f2f5b94a17d63b409e08898f63b21a577459bbe75002d5bf2c",
+      "old_footer_matches": true,
+      "new_footer_matches": false
+    },
+    {
+      "observation": 46,
+      "sha256": "3806dfcafd0ab51e134a0384428e5ee24239813ff9c9853d5481af0b2c25f311",
+      "old_footer_matches": true,
+      "new_footer_matches": false
+    }
+  ],
+  "real_time_qualification": "CI only per user instructions"
+}

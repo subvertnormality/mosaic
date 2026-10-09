@@ -1,0 +1,151 @@
+{
+  "schema": "reader-source-review-supplement-v1",
+  "review_id": "locks-c07-1-followup-20261008-01-independent-scalar-review-v01",
+  "candidate": "locks-c07-1-followup-20261008-01",
+  "manifest_sha256": "7c47faeea25788afcd2afc924352488b2b5fdfb9ae62b7b44e3e81d682644392",
+  "patch_sha256": "19214520c9662803b9aee51eccbff8c336f15442aa346b9eb77d5c0fb17efe84",
+  "candidate_files": [
+    {
+      "path": "manual/features/reference-locks.yaml",
+      "before_sha256": "54dae03014a823c2c68965849b2a9c97d85927c86c2dc106e5a195f22fb22189",
+      "after_sha256": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074"
+    },
+    {
+      "path": "manual/features/cookbook.yaml",
+      "before_sha256": "40e2bc5823c8f256c46ed66d039bbb496962e4285ff1832b30ac8c1a0d4cdc26",
+      "after_sha256": "f2d9bcf4c5bf824f9e809c8a9ae83772a87455cdc97c1b1db7c7fd44d6469ba6"
+    }
+  ],
+  "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+  "baseline_report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+  "ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+  "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+  "rubric": [
+    "coherence",
+    "usefulness",
+    "understandability",
+    "representation",
+    "granularity",
+    "flow",
+    "integration",
+    "vocabulary",
+    "naming",
+    "canonical_home"
+  ],
+  "threshold": 8,
+  "units": [
+    {
+      "unit_id": "doc-language-cleanup:feature:locks:recipes[4]",
+      "source": "manual/features/reference-locks.yaml#feature.locks.recipes[4].text",
+      "old_v07_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "The new endpoint sequence reselects the destination Song slot after copying and explicitly assigns Decay to parameter slot 1 after the copy, before editing steps. This closes the real per-song-slot assignment loss. The relative-turn exercise already assigns Decay in the selected destination. The recipe remains long, so granularity stays 8; the older relative sentence “assign Decay to slot 1” is slightly less explicit than the new endpoint phrasing, but its Trig params context disambiguates it.",
+      "hold": "none"
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[1]",
+      "source": "manual/features/cookbook.yaml#small-hours.recipes[1].text",
+      "old_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "The edit distinguishes the bass part’s silence in bars 2–4 from the continuing four-bar drums, matching the recipe’s partial build and making the listening check usable. It changes no notes or setup; the recipe’s existing granularity is unchanged.",
+      "hold": "none"
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[2]",
+      "source": "manual/features/cookbook.yaml#small-hours.recipes[2].text",
+      "old_v07_scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "The edit distinguishes the chord part’s silence in bars 2–4 from the continuing drums and bass, matching the preceding completed parts and clarifying the audition. It changes no notes or setup; the recipe’s existing granularity is unchanged.",
+      "hold": "none"
+    }
+  ],
+  "all_scores_at_or_above_threshold": true,
+  "old_scores_preserved": true,
+  "old_scores_status": "Prior source-review scores remain historical in the v07 report; this supplement does not overwrite them.",
+  "decay_hold": {
+    "status": "closed_source_only",
+    "rationale": "After copying Song slot 1 over slot 2, the endpoint exercise now reassigns Decay to parameter slot 1 before editing. Per-slot storage/copy evidence is pinned in the proposal manifest.",
+    "evidence": [
+      {
+        "path": "lib/devices/param_lock_assignments.lua",
+        "sha256": "ae58d470aae22ccbb99ed083464aa7ec96878473d393298dd8cb4c3565147770",
+        "lines": "6-25"
+      },
+      {
+        "path": "lib/models/program.lua",
+        "sha256": "9e187a966253c69f154092f6a0585c15d3b2e9c14bddcf74c82292bd9cbd274c",
+        "lines": "84-100"
+      }
+    ]
+  },
+  "rendered_qualification": "not run; wait for root install and new pins",
+  "compiled_projection": "not run",
+  "native_audio": "not run",
+  "decision": "SOURCE_REVIEW_PASS_FOR_THREE_SCALARS_PENDING_INSTALL"
+}

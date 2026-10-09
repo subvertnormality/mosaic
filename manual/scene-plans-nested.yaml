@@ -1,0 +1,255 @@
+schema_version: 1
+status: proposed-child-session-extension-not-runnable-by-parent-only-adapter
+required_adapter_extension: child-session-checkpoints-v1
+session_ordinal_contract: The outer Driver is ordinal 0; the first nested Driver constructor belonging
+  to this case is ordinal 1. Each step binds explicitly to its live owning session. Bind identity and
+  results path separately for each session; do not inherit parent application_identity.
+scope: Saved PMAP fixture loading and its mapped response are covered, not native PMAP menu entry or a
+  save/reload cycle. Elektron scenes use the seeded Digitakt configuration. All selected rows append while
+  child ordinal 1 is live and after successful observable semantic or menu-row assertions. No scene uses
+  outer session summaries appended after child finish.
+scenes:
+- id: mapping-child-selected-and-fixed
+  feature_id: midi-controller-mapping
+  title: A loaded map follows the selected or fixed channel
+  behaviour_case: M-MAP-001
+  citation: README.md#midi-controller-mapping
+  source: tests/behaviour/midi_mapping.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four notes C, D, E and F (MIDI 60, 62,
+      64, 65) at velocities 127, 117, 107 and 97 on steps 1 to 4. Channel 2 does not play yet; in the next
+      step you set it up on MIDI port 2, channel 2 with the same pattern. A saved MIDI map is loaded with
+      two relative controls that both accumulate: CC 20 edits the velocity mask of the selected channel and
+      CC 21 edits the velocity mask of channel 2. Both velocity masks are Off (X) and the norns shows channel
+      1''s Device page.'
+    session_ordinal: 1
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: raw
+    title: Hear both channels before any CC
+    caption: 'Set up channel 2: select it (2,1), open its Device page and set its output to port 2, MIDI channel
+      2 with E2 and E3, press K3, give it pattern 1 with (1,2) and hold step 1 then tap step 4 to loop four
+      steps. Select channel 1 (1,1), tap Play (1,8) and listen, then tap Play to stop. Channel 1 (port 1)
+      and channel 2 (port 2) both play velocities 127, 117, 107 and 97: no control has been moved yet.'
+    session_ordinal: 1
+    assertion:
+      kind: midi-mapping
+      stage: unmapped
+      passed: true
+  - id: selected-one-mask
+    title: CC 20 on the selected channel 1
+    caption: 'Open Channel tasks > Masks for channel 1 and select the Velocity cell, which reads X. Channel
+      1 is selected. Send CC 20 with value 65 eleven times (the strip shows eleven control changes). For a
+      relative (binary offset) control, 65 means one step up, 63 means one step down and 0 also counts as
+      down. The velocity mask starts at X, so the first step reaches 0 and the eleventh reaches 10: the
+      Velocity cell now reads 10.'
+    session_ordinal: 1
+    assertion:
+      kind: selected-mask
+      field: velocity
+      value: '10'
+      passed: true
+  - id: selected-one
+    title: Hear channel 1 at velocity 10
+    caption: Tap Play. Channel 1 now plays every note at velocity 10. Channel 2 is unchanged.
+    session_ordinal: 1
+    assertion:
+      kind: midi-mapping
+      stage: selected-ch1-plus-11
+      passed: true
+  - id: selected-down
+    title: CC 20 down twice
+    caption: 'Send CC 20 with value 63 twice and tap Play: channel 1 comes down from 10 to 8 and plays every
+      note at velocity 8. Channel 2 is still unchanged.'
+    session_ordinal: 1
+    assertion:
+      kind: midi-mapping
+      stage: selected-ch1-minus-2
+      passed: true
+  - id: selected-two-mask
+    title: Select channel 2, CC 20 follows
+    caption: 'Tap channel 2 at (2,1). The Masks screen stays open and its Velocity cell reads X for channel
+      2. Send CC 20 with value 65 three times: the cell reads 2. A selected-channel control follows the
+      channel you select.'
+    session_ordinal: 1
+    assertion:
+      kind: selected-mask
+      field: velocity
+      value: '2'
+      passed: true
+  - id: selected-two
+    title: Hear channel 2 at velocity 2
+    caption: 'Tap Play. Channel 2 now plays at velocity 2 and channel 1 stays at 8.'
+    session_ordinal: 1
+    assertion:
+      kind: midi-mapping
+      stage: selected-ch2-plus-3
+      passed: true
+  - id: fixed-two-mask
+    title: CC 21 ignores the selection
+    caption: 'Tap channel 1 at (1,1) to select it. Its Velocity cell still reads 8. Send CC 21 with value
+      65 twice, then tap channel 2 at (2,1) to look: its Velocity cell reads 4, up from 2. CC 21 is mapped
+      to channel 2 itself, so it ignores which channel is selected.'
+    session_ordinal: 1
+    assertion:
+      kind: selected-mask
+      field: velocity
+      value: '4'
+      passed: true
+  - id: fixed-two
+    title: Hear channel 2 at velocity 4
+    caption: 'Tap channel 1 at (1,1) again and tap Play. Channel 2 plays at velocity 4 and channel 1 stays
+      at 8.'
+    session_ordinal: 1
+    assertion:
+      kind: midi-mapping
+      stage: fixed-ch2-plus-2
+      passed: true
+  - id: relative-zero-mask
+    title: CC 21 value 0 steps down
+    caption: 'Send CC 21 with value 0, then tap channel 2 at (2,1) to look. Any value below 64 is a decrease,
+      so its Velocity cell drops from 4 to 3.'
+    session_ordinal: 1
+    assertion:
+      kind: selected-mask
+      field: velocity
+      value: '3'
+      passed: true
+  - id: relative-zero
+    title: Hear channel 2 at velocity 3
+    caption: 'Tap channel 1 at (1,1) again and tap Play. Channel 2 plays at velocity 3 and channel 1 stays
+      at 8.'
+    session_ordinal: 1
+    assertion:
+      kind: midi-mapping
+      stage: fixed-ch2-value-0-decreases
+      passed: true
+- id: elektron-child-enable-and-announce
+  feature_id: elektron-program-changes
+  title: Announce song patterns to an Elektron receiver
+  behaviour_case: M-OPT-ELEK-001
+  citation: README.md#elektron-program-changes
+  source: tests/behaviour/elektron_program_changes.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4 with
+      notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) and velocities 127, 117, 107 and 97. The channel range
+      is steps 1 to 4, tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second
+      each) and every Mosaic option is at its default. The sequencer is stopped. The Digitakt device configuration
+      is installed next to the test device and Elektron program changes is Off. The norns shows channel 1''s
+      Device screen.'
+    session_ordinal: 1
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: pick-digitakt
+    title: Choose the Digitakt device
+    caption: 'On channel 1''s Device screen turn E3 to the Digitakt configuration and press K3. The picker
+      shows Digitakt: this device accepts program changes.'
+    session_ordinal: 1
+    assertion:
+      kind: device-picker-frame
+      label: Digitakt
+      matched: true
+  - id: song-ready
+    title: Build a two-slot song
+    caption: 'In the Song editor (grid (6,8)) set Global length to 4 steps, copy slot 1 into slot 2 (hold slot
+      1, press slot 2) and, with slot 2 selected, raise the channel octave by one (11,8) so slot 2 sounds an
+      octave above slot 1. Return to the Song editor and select slot 1 (1,1): slot 1 is bright and slot 2
+      is lit.'
+    session_ordinal: 1
+    assertion:
+      kind: elektron-song-setup
+      passed: true
+  - id: 'off'
+    title: 'Play with the option Off: nothing is sent'
+    caption: 'Tap Play (1,8), let it run about a second, tap Play to stop, and tap slot 2 and slot 1. With
+      Elektron program changes at its default Off, the strip below shows notes but no program change at
+      any point.'
+    session_ordinal: 1
+    assertion:
+      kind: elektron-program-change
+      stage: default-off
+      sent: []
+      passed: true
+  - id: enable
+    title: Enable the option in PARAMS
+    caption: Tap K1 and open PARAMS > MOSAIC, select Elektron program changes and turn E3 right to On. The
+      row shows On. From now on Mosaic sends a program change whenever it selects or moves to a song slot;
+      set your receiver to accept program changes.
+    session_ordinal: 1
+    assertion:
+      kind: mosaic-option-input
+      label: Elektron program changes
+      enabled: true
+  - id: stopped
+    title: Select slots while stopped
+    caption: 'Close the menu (K2, then K1). While stopped, press song slot 2 at grid (2,1), then slot 1 at
+      (1,1). The strip below lists two program changes, C9 01 and then C9 00 (program values 1 and 0 on MIDI
+      channel 10). The wire values count from 0, so the receiver selects the patterns it labels 2 and 1: receiver
+      pattern number = Mosaic slot number.'
+    session_ordinal: 1
+    assertion:
+      kind: elektron-program-change
+      stage: stopped-selection
+      passed: true
+  - id: ahead
+    title: Hear the slot announced early
+    caption: 'With slot 1 selected, tap Play (1,8), let the two four-step slots alternate for about three
+      seconds, then tap Play again. Play first sends the program change for the slot about to sound. After
+      that each slot change is announced once, at least half a step (about 83 ms at 90 BPM) before the new
+      slot''s first note, so the receiver has time to queue its pattern: compare the program-change times
+      with the note times in the strip.'
+    session_ordinal: 1
+    assertion:
+      kind: elektron-program-change
+      stage: playing-transitions
+      global_length: 4
+      passed: true
+- id: elektron-child-program-channel
+  feature_id: elektron-program-change-channel
+  title: Match the receiver’s program-change channel
+  behaviour_case: M-OPT-ELEK-001
+  citation: README.md#elektron-program-change-channel
+  source: tests/behaviour/elektron_program_changes.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4
+      with notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) and velocities 127, 117, 107 and 97. Tempo is
+      the default 90 BPM, Rate is /1 and the sequencer is stopped. Channel 1''s Device is the Digitakt
+      configuration and Elektron program changes is On. Song slots 1 and 2 are four steps long and slot
+      2 plays an octave higher. Program changes are sent on the default channel 10.'
+    session_ordinal: 1
+    assertion:
+      kind: elektron-program-change
+      stage: playing-transitions
+      global_length: 4
+      passed: true
+  - id: channel-row
+    title: Set the program-change channel to 1
+    caption: Tap K1 and open PARAMS > MOSAIC, select Elektron p.change channel and turn E3 left nine detents
+      from the default 10 to 1. The row shows 1.
+    session_ordinal: 1
+    assertion:
+      kind: mosaic-number-input
+      label: Elektron p.change channel
+      value: '1'
+  - id: channel-output
+    title: The next selection uses channel 1
+    caption: 'Close the menu (K2, then K1). While stopped, press song slot 2 at grid (2,1). Mosaic sends program
+      change C0 01 (the strip shows it): program value 1 on MIDI channel 1 instead of channel 10. Set this
+      channel to the one your receiver listens on for program changes; the default 10 suits an Elektron device
+      left at its default.'
+    session_ordinal: 1
+    assertion:
+      kind: elektron-program-change
+      stage: channel-1
+      passed: true

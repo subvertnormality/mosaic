@@ -1,0 +1,54 @@
+{
+  "status": "External endpoint candidate qualified; not installed",
+  "canonical_paths": [
+    "tools/manual_reconcile_build.py",
+    "tools/test_manual_reconcile_build.py"
+  ],
+  "candidate_files": {
+    "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/candidate/tools/manual_reconcile_build.py": "c52cffddd8fd64a54b9f3043b2aaed0d96886a05d681dbb8dedc422aa168b404",
+    "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/candidate/tools/test_manual_reconcile_build.py": "497e02078d59b54c8d48cc9287fba479f1facb4d729a2f115fec8870e654e954"
+  },
+  "adaptation": "Only ROOT parents1 and explicit documentary-helper sys.path; portable tests import new endpoint through repo-relative paths",
+  "function_and_test_class_AST_identical_to_qualified_alias_candidate": true,
+  "parent_qualification": {
+    "path": "/home/andy/mosaic-manual-build-operators/reconciler-shared-selector-candidate-c700b9ab00604eafbc575fb9779e7036/qualification-receipt.json",
+    "sha256": "e900b67acab94728a592c6091ad6dca36357e1ba9b89f80fe87e0d9c1c5d3370",
+    "exact_reference_reproductions": 19
+  },
+  "red": {
+    "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/adapter-red.log",
+    "sha256": "44ef10f3075bec7afccc4768790ae6c583d6cfad6783887dcfff8fa563ba01f5",
+    "expected_failures": 2,
+    "reason": "Missing explicit documentary helper import at root-tools location"
+  },
+  "green": {
+    "adapter_tests": 2,
+    "adapter_log_sha256": "c33da458566e46279ad1290fa79d90dd1b1dc19d3678511374c9af9ccb7fc774",
+    "portable_tests": 63,
+    "portable_log_sha256": "3bc05f7cda5115d24aa1e42646d7629dfbde2b7e82dc6381d5c14aaa82bf19a9"
+  },
+  "actual_workflow_reproduction": {
+    "native_report": "/home/andy/mosaic-manual-runs/8c231972322f4cdeb31e4bfa772961f0/reference-scenes.json",
+    "native_report_sha256": "f6f0ed80912dd8256935afd6f42333410de164f08c906153a24a923f1a538d1b",
+    "exact_yaml_sha256": "a6d493556c663cc294db9f7ae6035dd8113d3052825d07b9505c9fe6e4fafa1a"
+  },
+  "native_source_exclusion": {
+    "identity": "/home/andy/mosaic-manual-runs/8c231972322f4cdeb31e4bfa772961f0/M-WORKFLOW-001-base-midi/native/identity.json",
+    "sha256": "7382e1d55fc55c19c68343070f6fb89ad52cc0716ae63f89471f422a829e0be7",
+    "root_tools_entries": 0,
+    "pinned_documentary_tool_entries": 14
+  },
+  "preserved_native_tools": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": "387f549f69147003be47d17ddef9cc2085c3665a91ebc61daa840dea9f140b95",
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": "3c4b7069967eb64bc0f3b001212658391ee240e0da9143a9e66d861f965dbe65"
+  },
+  "restoration_receipt": {
+    "path": "/home/andy/mosaic-manual-build-operators/reconciler-shared-selector-candidate-c700b9ab00604eafbc575fb9779e7036/root-native-pin-restoration.json",
+    "sha256": "0155bf6d967adffb8fb8836a5bb6b2c0e7a962ab36bc94f2988101803295ecf1"
+  },
+  "native_launched": false,
+  "checkout_source_edits": false,
+  "source_ledger_edits": false,
+  "complete_regression_run": false,
+  "manual_generation_complete": false
+}

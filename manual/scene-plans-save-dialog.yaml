@@ -1,0 +1,74 @@
+schema_version: 1
+scenes:
+- id: course-save-dialog
+  feature_id: save-and-load
+  title: Save the same arrangement under a name
+  behaviour_case: M-MANUAL-SAVE-DIALOG-001
+  citation: manual:save-and-load
+  session_ordinal: 0
+  screen_format: gray8-rle
+  steps:
+  - id: cancel
+    title: Cancel the first save
+    caption: Press K2 in name entry. The Save project menu returns and neither named project file is created.
+    assertion:
+      kind: manual-save-dialog-cancel
+      stage: cancel
+      passed: true
+  - id: entry
+    title: Open name entry
+    caption: Press K3 on Save project. The suggested name is new and OK is selected.
+    assertion:
+      kind: manual-save-dialog-frame
+      stage: entry
+      passed: true
+  - id: delete
+    title: Select DEL
+    caption: Turn E2 left. DEL becomes bright and OK dims.
+    assertion:
+      kind: manual-save-dialog-frame
+      stage: delete
+      passed: true
+  - id: empty
+    title: Remove the suggested name
+    caption: Press K3 three times. The name is empty.
+    assertion:
+      kind: manual-save-dialog-frame
+      stage: empty
+      passed: true
+  - id: first-character
+    title: Enter F
+    caption: Turn E3 left to the character row, turn E2 to F, then press K3. F appears in the name.
+    assertion:
+      kind: manual-save-dialog-frame
+      stage: first-character
+      passed: true
+  - id: name-entered
+    title: Complete Four notes
+    caption: Select and enter o, u, r, space, n, o, t, e and s with E2 and K3. The name reads Four notes.
+    assertion:
+      kind: manual-save-dialog-frame
+      stage: name-entered
+      passed: true
+  - id: confirm
+    title: Select OK
+    caption: Turn E3 right, then E2 right. OK becomes bright with Four notes still visible.
+    assertion:
+      kind: manual-save-dialog-frame
+      stage: confirm
+      passed: true
+  - id: returned
+    title: Confirm the save
+    caption: Press and release K3, then K1. The arrangement returns on SLOT SETUP SONG01.
+    assertion:
+      kind: manual-save-dialog-return
+      stage: returned
+      passed: true
+  - id: saved
+    title: Find the named project
+    caption: Open Load project and select Four notes.ptn, then cancel the picker and return to Mosaic.
+      Both named files match the retained arrangement and no input remains held.
+    assertion:
+      kind: manual-save-dialog-persistence
+      stage: saved
+      passed: true

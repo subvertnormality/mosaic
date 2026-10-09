@@ -1,0 +1,141 @@
+...........................E
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='good')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 223, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    if variant=='good':audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='missing_manifest')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='wrong_hash')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='missing_harness')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='frozen_changed')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='procedure')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='checkpoint')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='controlled')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='backend')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='global')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 225, in test_current_manifest_hash_frozen_source_membership_and_exact_procedure_are_mandatory
+    with self.assertRaises(ValueError):audit.check_qualification_registration(out,report,source,rows)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 238, in test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity
+    with self.subTest(variant=variant),self.assertRaises(ValueError):audit.check_qualification_registration(out,r,s,values)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='citation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 238, in test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity
+    with self.subTest(variant=variant),self.assertRaises(ValueError):audit.check_qualification_registration(out,r,s,values)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='case_id')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 238, in test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity
+    with self.subTest(variant=variant),self.assertRaises(ValueError):audit.check_qualification_registration(out,r,s,values)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='checkpoint')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 238, in test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity
+    with self.subTest(variant=variant),self.assertRaises(ValueError):audit.check_qualification_registration(out,r,s,values)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='duplicate')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 238, in test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity
+    with self.subTest(variant=variant),self.assertRaises(ValueError):audit.check_qualification_registration(out,r,s,values)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity) (variant='other_role')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 238, in test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity
+    with self.subTest(variant=variant),self.assertRaises(ValueError):audit.check_qualification_registration(out,r,s,values)
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+======================================================================
+ERROR: test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity (test_doctor_options_audit.DoctorSpecializedRegistrationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 239, in test_report_role_and_all_existing_subprocedure_rows_need_stable_registered_identity
+    report['case']='auto_left';report['specialized_qualifications']=[];audit.check_qualification_registration(out,report,source,[])
+AttributeError: module 'doctor_options_audit' has no attribute 'check_qualification_registration'
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.092s
+
+FAILED (errors=17)

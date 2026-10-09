@@ -1,0 +1,14 @@
+{
+  "command": [
+    "lua",
+    "run_tests.lua",
+    "-p",
+    "test_ui_adapters_read_only_c09_strategy_names_effective"
+  ],
+  "exit_code": 1,
+  "files": {
+    "lib/ui_adapters/read_only.lua": "b6188bc95ec9275821ce2a9abe75c383fd6cd54f84ef8f1feedb5b178be78f9e",
+    "lib/pages/channel_edit_page/channel_edit_page.lua": "31616a8f7b5490c6b8f469d1a4e4c3230a9fe15fe802bd073100f3e30a49ffee",
+    "lib/tests/lib/ui_adapters_read_only_tests.lua": "9c090658c87ffef64b46acdeb61e7562a6f88898d3159574428bbb2f6da68d34"
+  }
+}

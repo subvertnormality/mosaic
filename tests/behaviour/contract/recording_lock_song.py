@@ -31,7 +31,7 @@ def recording_lock_song(c, persist=False):
     for _ in range(3): c.tap(8, 7)                               # global length 4
     # Song editor page 2: tempo 90 -> 30 (its minimum), before the copy.
     c.ui.turn(1, 1); c.enc(3, -60); c.key(3)
-    c.ui.expect_selected_field('focused', 'Tempo', '30')          # Global feel (A02) shows the applied tempo
+    c.ui.expect_selected_field('vertical_list', 'Tempo', '30')          # Global feel (A02) shows the applied tempo
     assert c.snapshot()['diagnostics']['tempo'] == 30
     c.ui.turn(1, -1)
     c.hold_tap((1, 1), (2, 1)); c.tap(1, 1); c.tap(3, 8)         # slot 2 = copy of slot 1; play from slot 1

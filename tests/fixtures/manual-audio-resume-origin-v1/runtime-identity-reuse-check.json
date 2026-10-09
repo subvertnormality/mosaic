@@ -1,0 +1,3753 @@
+{
+  "campaign_uuid": "57d9c7f4ab5d4ee8a0228b15aaacbc8d",
+  "checked_at_utc": "2026-10-05T22:14:25.032766+00:00",
+  "conclusion": "For every 22 completed and one failed campaign session, the archived Mosaic+voice application file manifest exactly matches the current composed source tree; emulator source identity manifest equals current; recorded runtime identity equals current installation JSON; all runtime binary files match current hashes; three voice repos are clean at the reported commits. These source/runtime findings do not turn the failed partial campaign into a passed publication.",
+  "current_composed_application": {
+    "digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+    "file_count": 228,
+    "file_manifest": [
+      {
+        "path": "doubledecker/.gitmodules",
+        "sha256": "67b0d54ee69a66f913ed9c0d8bcce34bc92d22889b17989c49af9dcd5091317e",
+        "size": 176
+      },
+      {
+        "path": "doubledecker/doubledecker.lua",
+        "sha256": "750cc565236930e54aa789e57c03b7776085df15cd9356b8b9a5993c600b6af7",
+        "size": 12047
+      },
+      {
+        "path": "doubledecker/lib/binding.lua",
+        "sha256": "9509761966e713f5ccbd261b6646a4541d3a95f39de57391c6618bc919fd502b",
+        "size": 2147
+      },
+      {
+        "path": "doubledecker/lib/dd.mfs",
+        "sha256": "cbd900629df8909af296ae9ba68f707560677de9b562146e9ff721d3e01f42f4",
+        "size": 2290
+      },
+      {
+        "path": "doubledecker/lib/ddrm.lua",
+        "sha256": "7c184dcbf7111211583ec2eaa9a6be5b61b346cbcd1b74dd5b771ff75668ceb9",
+        "size": 13334
+      },
+      {
+        "path": "doubledecker/lib/doubledecker.sc",
+        "sha256": "a93b1dd4c3db5538f4503e158186e1eef41633dcf3930d6585ce136f61329a25",
+        "size": 20561
+      },
+      {
+        "path": "doubledecker/lib/mft.lua",
+        "sha256": "0fb7c702e776ea8e9a6801565c9f5129719110e2f1073ea3578b9d1b4d29f56a",
+        "size": 2043
+      },
+      {
+        "path": "doubledecker/lib/mod.lua",
+        "sha256": "f2473817d457b0618a57b2024c04f8224bfe0a8c92699d557ed38727871cee49",
+        "size": 19659
+      },
+      {
+        "path": "doubledecker/lib/preset.lua",
+        "sha256": "706f828d0228003a928c4837ddda2c3b4637ec30445f6e8920c7f16ffa994e62",
+        "size": 19127
+      },
+      {
+        "path": "doubledecker/lib/preset/dd_f.p",
+        "sha256": "f5de43d17a74942718e0d2ebde3a7778ef5131557e1ce375632af5a69638b572",
+        "size": 12544
+      },
+      {
+        "path": "doubledecker/lib/preset/fanfare.pset",
+        "sha256": "46fd19a48f4add85f2a1b33e6b6620ae89abbb5820fcb199067a06e8d3857cd5",
+        "size": 31564
+      },
+      {
+        "path": "doubledecker/lib/preset/mystery-flute-pres.pset",
+        "sha256": "d15fa44080c9cac7376f2798c4ae27244e7d1fc7c63c08e4f4b9ed3b77760294",
+        "size": 31438
+      },
+      {
+        "path": "doubledecker/lib/preset/overblow.pset",
+        "sha256": "087077afa6d97b7a4de7dc14063c156c0290dfee5df8f9141807dc99b0b07594",
+        "size": 31353
+      },
+      {
+        "path": "mosaic/docs/ui-reimplementation/code/atlas.lua",
+        "sha256": "fbc6b00b651d41efc902a7c1e6168894ccd974a4db9bcb97e41f360b57a7bf8c",
+        "size": 8194
+      },
+      {
+        "path": "mosaic/docs/ui-reimplementation/code/characters.lua",
+        "sha256": "4e9caa8f9f0731fcd8b014f0aea79a0f893f86025c48d377c9bdc407c15a549f",
+        "size": 6178
+      },
+      {
+        "path": "mosaic/docs/ui-reimplementation/code/mini.lua",
+        "sha256": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+        "size": 2777
+      },
+      {
+        "path": "mosaic/docs/ui-reimplementation/code/mini_atlas.lua",
+        "sha256": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+        "size": 167266
+      },
+      {
+        "path": "mosaic/docs/ui-reimplementation/code/screen.lua",
+        "sha256": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+        "size": 13278
+      },
+      {
+        "path": "mosaic/docs/ui-reimplementation/code/visuals.lua",
+        "sha256": "322e5db1e0ed2280c1e6177037602666b2a2e2bea163ffc516c10bcd08dcbc34",
+        "size": 3698
+      },
+      {
+        "path": "mosaic/lib/application_parameters.lua",
+        "sha256": "19de1bd408a242305b20975629facee550b571d157315e12575a74114d4f6290",
+        "size": 5857
+      },
+      {
+        "path": "mosaic/lib/clock/arp_lifetime.lua",
+        "sha256": "2abc29432c900642f0eae41a5af03dc1c93bcdfeadeed236f9c486ce18fd1f79",
+        "size": 4483
+      },
+      {
+        "path": "mosaic/lib/clock/chord_timing.lua",
+        "sha256": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+        "size": 674
+      },
+      {
+        "path": "mosaic/lib/clock/divisions.lua",
+        "sha256": "600e905986d25abc5487b47ef5b69474a849d3b8d7199750b51a4e0fe0d68116",
+        "size": 8996
+      },
+      {
+        "path": "mosaic/lib/clock/lock_lookahead.lua",
+        "sha256": "224061ca9cd4f4110eda4f4cbfeea282e27486ba136faa975f8ce13e2161f2bb",
+        "size": 13078
+      },
+      {
+        "path": "mosaic/lib/clock/m_clock.lua",
+        "sha256": "99483290e1736a811e5cde7437a14c8e209a0e423d5559b17eefa713d455fe09",
+        "size": 45118
+      },
+      {
+        "path": "mosaic/lib/clock/m_lattice.lua",
+        "sha256": "f113c4e281157af2805aa63d8021042eafb7fc539d9d815f54f51d0b45c4163d",
+        "size": 37853
+      },
+      {
+        "path": "mosaic/lib/clock/midi_delay_line.lua",
+        "sha256": "0cc7ae98594d5e9be16d263a1fcb5473d0f0a2341ce508a24581eb4de749a9ae",
+        "size": 8803
+      },
+      {
+        "path": "mosaic/lib/clock/midi_output_transport.lua",
+        "sha256": "47f4a53ecb5cb151e065832b4afcdb879e686b6cfab55e5268f4560b459a27bc",
+        "size": 2818
+      },
+      {
+        "path": "mosaic/lib/clock/onset_projection.lua",
+        "sha256": "f24e67cdc6dcf9a39d566ee98b9e03be240d964a12d5f6a68cea5a8b2835df79",
+        "size": 3805
+      },
+      {
+        "path": "mosaic/lib/clock/parameter_preview.lua",
+        "sha256": "34a70d43e8b726811c60f469c7da77e70fdebd28ac6a582345ac0dfd3a8f9ad0",
+        "size": 7739
+      },
+      {
+        "path": "mosaic/lib/clock/redraw_guard.lua",
+        "sha256": "a1e9bc67819d7bfedc2f98ce0a51418102527a0c6213e3a3132c6337a059091b",
+        "size": 1432
+      },
+      {
+        "path": "mosaic/lib/clock/slide_lifetime.lua",
+        "sha256": "f1719ebce1fc06e63ed057a6fbe02075a6395d0b04de5153faea62432a4c0ff4",
+        "size": 10331
+      },
+      {
+        "path": "mosaic/lib/clock/step_cursor.lua",
+        "sha256": "ed7d5c0892a838aa9245426777b475a82a523482a7f46e4255aae2e9da361142",
+        "size": 597
+      },
+      {
+        "path": "mosaic/lib/clock/timing_probe.lua",
+        "sha256": "538104e87efae76f0b47abf8b90d0b01a949b351c68a4b7adece7ea8fcefd7b7",
+        "size": 2205
+      },
+      {
+        "path": "mosaic/lib/clock/transport_lifecycle.lua",
+        "sha256": "7061188282da487f34506e613a7a11bfd6155119444fd26dbf442462cc9146a4",
+        "size": 4268
+      },
+      {
+        "path": "mosaic/lib/clock/voice_lifetime.lua",
+        "sha256": "1a970c197292cae3d651a5c64f6fc8044d1e18a4e6561dba7e2c985d3e759f4c",
+        "size": 2283
+      },
+      {
+        "path": "mosaic/lib/config/dt_m_sample.json",
+        "sha256": "61a7f68c56f51a15218cfd7848a1df46838d1b13f38ffdaaca43958099f93c98",
+        "size": 2007
+      },
+      {
+        "path": "mosaic/lib/config/dt_poly_cv.json",
+        "sha256": "1563cacc770abdacf06506fcddb7991c6ba1d7c97b58fbb9f3575995a08b67f7",
+        "size": 161
+      },
+      {
+        "path": "mosaic/lib/config/elektron_digitakt.json",
+        "sha256": "e8a9ccfa9babd67aa318c4a92f71a98c1a33fdd3d9f11374a63ee0b235244cec",
+        "size": 20436
+      },
+      {
+        "path": "mosaic/lib/config/elektron_digitakt_2.json",
+        "sha256": "aa1b73bada6b09f9166dbefaa4a752bfd9afa6f09e94a497674c482fbaf2e8a2",
+        "size": 26668
+      },
+      {
+        "path": "mosaic/lib/config/elektron_digitone.json",
+        "sha256": "aca5cc75521a67957e4a196e6b62f1ff4f18993bb98bc33eee99e5bbfb533080",
+        "size": 37178
+      },
+      {
+        "path": "mosaic/lib/config/elektron_syntakt.json",
+        "sha256": "62c57b65bf18a65525ed056304950f6ffd98a077ca2a8369ff83b95204cf5332",
+        "size": 30189
+      },
+      {
+        "path": "mosaic/lib/config/ex_braids.json",
+        "sha256": "d802f716702aabd54dd31255eb989edafcddb7f0e60b0f19d5797a88786b9ed6",
+        "size": 12420
+      },
+      {
+        "path": "mosaic/lib/config/ex_m_mixer.json",
+        "sha256": "01fe32f2ca1357ec0a09e044dae1a839150e76938576d61b6b2379c7dad7fc42",
+        "size": 10660
+      },
+      {
+        "path": "mosaic/lib/config/ex_m_sample.json",
+        "sha256": "195de1a0db103d1a2ecbc53b0e268789fd0c53778450244ff7e0cbd7a0f5d406",
+        "size": 3659
+      },
+      {
+        "path": "mosaic/lib/config/ex_plaits.json",
+        "sha256": "af5172ae3c60c5a4801c096395b51f70e17cced9b9e7cd6cd8adc681adc404c9",
+        "size": 10411
+      },
+      {
+        "path": "mosaic/lib/config/midisid.json",
+        "sha256": "40f681ab77273d649df19f989a3b2100c68a20f5fbc3c2db4c61cc1fb3d1262f",
+        "size": 10561
+      },
+      {
+        "path": "mosaic/lib/config/nord_drum_2.json",
+        "sha256": "289f9f363e0ecc7d71c4b49e5a8a6c5d3a4e90c53b51a25ff85773616c9b340e",
+        "size": 38291
+      },
+      {
+        "path": "mosaic/lib/config/te_op_1.json",
+        "sha256": "6fa35546ec131dab134ab9c403f3f198f60cabbfea836bcf5cc393abaa02ce13",
+        "size": 1062
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_bd.json",
+        "sha256": "67f64c5816194674ae6cc3ca9cdc4f590fe506b6a6f9c6de53247c1d25b2832c",
+        "size": 209
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_clap.json",
+        "sha256": "1c0140dc275f954573a92dff77a145a6522fdee0942a6fe4a5fc87526cd8292d",
+        "size": 217
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_drum_1.json",
+        "sha256": "e03829e22791a903b4f3798a8821499b458dde04c1e2c734e8845aac4a5f8aff",
+        "size": 219
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_drum_2.json",
+        "sha256": "37be7991eaf468dbc22e8748ec23bef1902822aee3f027d5bf8d17c07b8cbe87",
+        "size": 220
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_hh_1.json",
+        "sha256": "9aef36dc5adf3b7922363bfd9bd99df11e937910581537b2b785d171b47f3759",
+        "size": 216
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_hh_2.json",
+        "sha256": "ebc3c21c42c34c2c014e22e23f5b2c8e3c63f430f93462673b40a6cc15a063c4",
+        "size": 216
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_multi.json",
+        "sha256": "c5de2f382ad3f2f66fae58c1480876e05dcfcea24f823e70b79b13069da735e1",
+        "size": 219
+      },
+      {
+        "path": "mosaic/lib/config/vermona_drm_sd.json",
+        "sha256": "d599a89310e34ec432b1a92caeff74b461642e9c7754c3c42edabf921a34d078",
+        "size": 216
+      },
+      {
+        "path": "mosaic/lib/controls/button.lua",
+        "sha256": "e5b20bdcb98591dc7fe5cf38d8db16aa7e782628ee53e4d5dc2f86f23c3603c8",
+        "size": 1227
+      },
+      {
+        "path": "mosaic/lib/controls/fade_button.lua",
+        "sha256": "3a399e8917756c518bd4bf3fec80dbc2ab4e9a006803dcad7bd7897c5c95984d",
+        "size": 1922
+      },
+      {
+        "path": "mosaic/lib/controls/fader.lua",
+        "sha256": "3d3311970d45bc0aed719f782c5727963e64ebe92c1b44991ee9c25bc77fd797",
+        "size": 4861
+      },
+      {
+        "path": "mosaic/lib/controls/paint_button.lua",
+        "sha256": "c7c549cfe2444102f976eadf1d79e2529c8b26324da81a1dbc80b292a1e4770e",
+        "size": 748
+      },
+      {
+        "path": "mosaic/lib/controls/sequencer.lua",
+        "sha256": "d19918e60f5bc63f7adb16077e63618710eff700ccd2249aecbd36edbee34615",
+        "size": 8456
+      },
+      {
+        "path": "mosaic/lib/controls/vertical_fader.lua",
+        "sha256": "6e725bebb2bbd5e98c9b302caf6557e398b71453afbb4ee05eaad2f0b0c26923",
+        "size": 2904
+      },
+      {
+        "path": "mosaic/lib/devices/device_descriptors.lua",
+        "sha256": "f14e346cb5c8fde8fc5932f681d69f585aef4e7256c0435481ec83684253e187",
+        "size": 5587
+      },
+      {
+        "path": "mosaic/lib/devices/device_map.lua",
+        "sha256": "5684696da4360724b623ebf31f42b91be3b927635bff1db057d041247215f3a3",
+        "size": 8934
+      },
+      {
+        "path": "mosaic/lib/devices/midi_input.lua",
+        "sha256": "34e405e8ef33b00a5da34e3b559f1dac101ff7ae1f7a45547302bceef9cb52b0",
+        "size": 9316
+      },
+      {
+        "path": "mosaic/lib/devices/midi_mapping_params.lua",
+        "sha256": "7daa9823888f834f002ff2b882280d171d41e4710a0850e8af5ca8f3e6234acd",
+        "size": 11888
+      },
+      {
+        "path": "mosaic/lib/devices/midi_patch_recall.lua",
+        "sha256": "4d6116e9f5fe87d75fdc26b28b91156983893f4d53628d71ddc038e35487c44a",
+        "size": 1418
+      },
+      {
+        "path": "mosaic/lib/devices/midi_value_domain.lua",
+        "sha256": "b80c79941195e1d7eb387881675fa23aa7f9fbfbf250f5e7785439a582e5cfa4",
+        "size": 1809
+      },
+      {
+        "path": "mosaic/lib/devices/midi_wire_output.lua",
+        "sha256": "3a42423e23a6b0218f726904b55c3b024a137de362fcc2c97325e7f429bd1894",
+        "size": 3025
+      },
+      {
+        "path": "mosaic/lib/devices/nb_device_param_maps.lua",
+        "sha256": "d7d28b52bf371a595e76821946bf2f8f167d99d145685364475df55c9f2f9607",
+        "size": 5878
+      },
+      {
+        "path": "mosaic/lib/devices/norns_param_state_handler.lua",
+        "sha256": "def909bf3325358b2d249edce4465866991094f2c57dabc82d5f8302e15359b2",
+        "size": 1805
+      },
+      {
+        "path": "mosaic/lib/devices/nrpn_codec.lua",
+        "sha256": "dcbe0fa572892197f777fa4240960102d60faba4230a87e8c43b09e358278c4e",
+        "size": 5002
+      },
+      {
+        "path": "mosaic/lib/devices/param_lock_assignments.lua",
+        "sha256": "ae58d470aae22ccbb99ed083464aa7ec96878473d393298dd8cb4c3565147770",
+        "size": 4395
+      },
+      {
+        "path": "mosaic/lib/devices/param_manager.lua",
+        "sha256": "a685409220e194f430976ae87839e6a42c52ebb5ed8e8e3982907f9cb6ded6a8",
+        "size": 7063
+      },
+      {
+        "path": "mosaic/lib/devices/param_slots.lua",
+        "sha256": "9e0064a7cd5b973c613a95ea374e7694565e16913cf59aa11d170618e734b15b",
+        "size": 530
+      },
+      {
+        "path": "mosaic/lib/draw.lua",
+        "sha256": "6f35b4c4e2e068bbac3313ecaa49e04b9e954774f5cfa26b610600f744635ddb",
+        "size": 1891
+      },
+      {
+        "path": "mosaic/lib/gc_pacer.lua",
+        "sha256": "12df100c90d9c74410597f7250e275658a9c36dfc1e079c293a3b0811fd54643",
+        "size": 2744
+      },
+      {
+        "path": "mosaic/lib/grid_abstraction.lua",
+        "sha256": "fe24f2663c5244a4898da3e13e6b9daea5cad92a45554f6c5690ca4a6dd85ee8",
+        "size": 950
+      },
+      {
+        "path": "mosaic/lib/harmony/config.lua",
+        "sha256": "234f4bb5d508801824f2555dba06b2b63f70aae694af37a74093085096a20a56",
+        "size": 11981
+      },
+      {
+        "path": "mosaic/lib/harmony/config_state.lua",
+        "sha256": "3d8410fafdbb6522712bf5637be9837d7d2b2a0bd67965375b60100fa7769664",
+        "size": 4032
+      },
+      {
+        "path": "mosaic/lib/harmony/context.lua",
+        "sha256": "780ad62c05a94b90ddbddca923d24e5a6b8eff036b3e8020792ee623f050222a",
+        "size": 5715
+      },
+      {
+        "path": "mosaic/lib/harmony/grid_projection.lua",
+        "sha256": "8a731b13269e1084ba134168d93732d48ebb0f85dbc8cab97c46503a9196175d",
+        "size": 2767
+      },
+      {
+        "path": "mosaic/lib/harmony/inspection.lua",
+        "sha256": "6c9e2cf656273ef1082da13e65e2b397fd3696a6266c093b2dea3ae6da1d0864",
+        "size": 2509
+      },
+      {
+        "path": "mosaic/lib/harmony/pattern.lua",
+        "sha256": "ae1c8cc82317d231e9c13b7a05dceb0860217ff4d65680e17e42a4c5d83b4ad7",
+        "size": 4390
+      },
+      {
+        "path": "mosaic/lib/harmony/state.lua",
+        "sha256": "5a51b423299b88c393a35059f2df43ab69c59e3add3b9f27097b3ff16dacd182",
+        "size": 7891
+      },
+      {
+        "path": "mosaic/lib/harmony/voicing.lua",
+        "sha256": "91929486cc16692a9b61c4bb62e0b0f2e2bf50c7984217a53bf9a3eeb562672e",
+        "size": 11438
+      },
+      {
+        "path": "mosaic/lib/helpers/drum_ops.lua",
+        "sha256": "aa5be5e8d5ac70e7bd532319ee1183b996b5cb2ccf4c8af005aa1f9913804322",
+        "size": 3737
+      },
+      {
+        "path": "mosaic/lib/helpers/drum_ops_tables.lua",
+        "sha256": "d39bd74850eec1c76071c8450c7f77f0fed402080f36528feba4a79174c67389",
+        "size": 57113
+      },
+      {
+        "path": "mosaic/lib/helpers/functions.lua",
+        "sha256": "012b0a5075c35530cf92a573a78b974054ca42c599913e90121bef68e1ad167a",
+        "size": 12274
+      },
+      {
+        "path": "mosaic/lib/helpers/json.lua",
+        "sha256": "0eaccda57fabc0330736de25f45cf589821a42b5e0fe02e4e3125f7dc0bf2b7e",
+        "size": 9638
+      },
+      {
+        "path": "mosaic/lib/helpers/profiler.lua",
+        "sha256": "810062d33e8f47211725dbdff0f99e1bf5d738c72db5e4e4c361a2b94ed29d47",
+        "size": 19914
+      },
+      {
+        "path": "mosaic/lib/history_ring.lua",
+        "sha256": "cab03a2b8eed7cd6a20ddd895a820c04be534a4d49a4beed6d0c525915ec6e97",
+        "size": 1631
+      },
+      {
+        "path": "mosaic/lib/m_grid.lua",
+        "sha256": "3abd77f7360344bb799525614e0b6f74d8b8a3c2ec696ee6776dfe2cf2691386",
+        "size": 17267
+      },
+      {
+        "path": "mosaic/lib/m_midi.lua",
+        "sha256": "b16607e50ee7e50ffe4a56db1b4d0ef5cf8a480bbee94755324b9fb151615e75",
+        "size": 18624
+      },
+      {
+        "path": "mosaic/lib/memory.lua",
+        "sha256": "41d8d3c1f520a3edcda3370d8837184aa3c0dc3996af510615a5fe5f3ed518c2",
+        "size": 19289
+      },
+      {
+        "path": "mosaic/lib/memory/event_handlers.lua",
+        "sha256": "226a5408893f2c2137dc6a8a9d142341e8dc2366b691a7f551cd31910cb954c1",
+        "size": 7924
+      },
+      {
+        "path": "mosaic/lib/models/model_defaults.lua",
+        "sha256": "ddaee5c4acd1385d038b880f6bfa3a2e5faf742be8967983289dd9c7797eca9c",
+        "size": 4195
+      },
+      {
+        "path": "mosaic/lib/models/program.lua",
+        "sha256": "9e187a966253c69f154092f6a0585c15d3b2e9c14bddcf74c82292bd9cbd274c",
+        "size": 32754
+      },
+      {
+        "path": "mosaic/lib/musical_merge/common_time.lua",
+        "sha256": "dba02171be14127719ff4ff1092e9beedbf3b83bc07298c1e914a40b842f5067",
+        "size": 6905
+      },
+      {
+        "path": "mosaic/lib/musical_merge/config.lua",
+        "sha256": "cf85513ea39642020be959c7f42514cce91cae555d0de740a6b518efb8c21ed0",
+        "size": 9442
+      },
+      {
+        "path": "mosaic/lib/musical_merge/dependency.lua",
+        "sha256": "070508eb7d902353d3f0f6da6eb156803c539901de0e93c62152402c46c8c8c7",
+        "size": 2199
+      },
+      {
+        "path": "mosaic/lib/musical_merge/display.lua",
+        "sha256": "a8e9f9f09e26514d8d4dcd55803e8aab602a176869a5e9f520ad363df108378b",
+        "size": 4075
+      },
+      {
+        "path": "mosaic/lib/musical_merge/foundation.lua",
+        "sha256": "1c01e7264b91e114f9d51c8313fa190a98aba486d8c3fe0d8db7b732d377da7e",
+        "size": 6034
+      },
+      {
+        "path": "mosaic/lib/musical_merge/fragments.lua",
+        "sha256": "d72460c848e76e0f042417ad606b0b2b68c8358a010e37cafc30e7d978168da9",
+        "size": 4795
+      },
+      {
+        "path": "mosaic/lib/musical_merge/interlock.lua",
+        "sha256": "6cd000df07ebcf16d6dfccf903bff18ee794c19673c32a8df96c269f750b7839",
+        "size": 9329
+      },
+      {
+        "path": "mosaic/lib/musical_merge/leader_query.lua",
+        "sha256": "90fcb8088478febd4b18c3c184c83ab4fd825e2848bca093acb90e1b8567358a",
+        "size": 11198
+      },
+      {
+        "path": "mosaic/lib/musical_merge/pitch_target.lua",
+        "sha256": "9e6deebc21e87574aa1cd70a7d2534f612b58e307290bcabf1a45c2eec34d44a",
+        "size": 1469
+      },
+      {
+        "path": "mosaic/lib/musical_merge/state.lua",
+        "sha256": "b94e3af9448b5db29b587afb81d649f80675af2d3ef4b20728498ea193e36dd6",
+        "size": 13036
+      },
+      {
+        "path": "mosaic/lib/musical_merge/strategy.lua",
+        "sha256": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "size": 2716
+      },
+      {
+        "path": "mosaic/lib/musical_merge/structure.lua",
+        "sha256": "62e31b90bb24841d6545207f663269bab387192e3d6f2a97401f1c58a79c40a1",
+        "size": 5477
+      },
+      {
+        "path": "mosaic/lib/musical_merge/timeline.lua",
+        "sha256": "3b2e62461576e232a61554d862ff35be679e5b04a5e8c8c58a2c3271d87c59f1",
+        "size": 7813
+      },
+      {
+        "path": "mosaic/lib/musical_resolution/arp_descriptor.lua",
+        "sha256": "62d44e581e3270261bcb850dc825913ba749d31dbc3e34684f4756752b4b04da",
+        "size": 1300
+      },
+      {
+        "path": "mosaic/lib/musical_resolution/articulation.lua",
+        "sha256": "452bdb6a7ec1cb7a7b1eda5eacba52edb90f6c9273a525e659e30280acf99dc1",
+        "size": 3075
+      },
+      {
+        "path": "mosaic/lib/musical_resolution/chord_order.lua",
+        "sha256": "84c6a204cffd0eb141713fd5be0fa18b74c5f3dfafe169b851677c55029c7b46",
+        "size": 460
+      },
+      {
+        "path": "mosaic/lib/musical_resolution/pitch_resolution.lua",
+        "sha256": "55d5bb847470940b79a269ff95b658dea996faaa6c0966d90a16b07f17c288a4",
+        "size": 1510
+      },
+      {
+        "path": "mosaic/lib/musical_resolution/stock_parameter.lua",
+        "sha256": "5f60d4ca9a45d00b1daabce195c5fba8747907d0d2298df617b476888325e94d",
+        "size": 3722
+      },
+      {
+        "path": "mosaic/lib/musical_resolution/strum_descriptor.lua",
+        "sha256": "e47f1ddf8e1163eae06dc20275da8ac640fd4a7b9ec958a3831b1de19809f04d",
+        "size": 1483
+      },
+      {
+        "path": "mosaic/lib/nb/README.md",
+        "sha256": "ca9604de188dbba426ac76d214ea9c1cc818dda41ddd851935684fc8252b5b69",
+        "size": 1399
+      },
+      {
+        "path": "mosaic/lib/nb/lib/nb.lua",
+        "sha256": "4a28e942fc745d321faf9b57035e439c98c01a2f59a5006cbf62f9f8d835fdcf",
+        "size": 7536
+      },
+      {
+        "path": "mosaic/lib/nb/lib/player.lua",
+        "sha256": "82dc18e456d3b18577002a124ae43deb765e1c98933f5b3734a711c1c6bbc2a3",
+        "size": 4676
+      },
+      {
+        "path": "mosaic/lib/nb/nb.lua",
+        "sha256": "d6d27962537461da4952b9d73105ba4d377d5967b930af7f1300d67af99ffe9e",
+        "size": 1118
+      },
+      {
+        "path": "mosaic/lib/optional_config_transaction.lua",
+        "sha256": "052f6b2190074be53ca0faec2b2a25a76ac93dee0326d02fadadc17623b0fd02",
+        "size": 11402
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_clock_controls.lua",
+        "sha256": "4c76afe36435bf16b161e528414684beb5bfbe0b711c35f8cf5dae15ce9b8132",
+        "size": 13175
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_history.lua",
+        "sha256": "4c83ed3ea18e21bc11151a95315fb39a39c17aaedca19884edb70166a15dbdd3",
+        "size": 1987
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_masks.lua",
+        "sha256": "020dcc2693ec16e6f49b204bdd8d34d471eacaeb1388cacb42d3e4e8d13f8627",
+        "size": 21159
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_navigation.lua",
+        "sha256": "158fc5a26c68e0ac6da4b86e5e2b848d803bcfb5f6828b6719ce0be9f92ea54e",
+        "size": 15309
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_page.lua",
+        "sha256": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "size": 25408
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+        "sha256": "5ecd63e70de462af8e94db01143835dc5bebb3f9f0cf3b445c2c252bc4cc2228",
+        "size": 35703
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua",
+        "sha256": "f5e2035cec55c7ab568802dd595e6b9ac779384305c70de4fb2551a64a96dde6",
+        "size": 6745
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua",
+        "sha256": "4d29c5aafc271747c7f46abc25465e5d25a69954cdc3806ae481efb3c706b3ae",
+        "size": 8377
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_edit_parameters.lua",
+        "sha256": "435fe1841f32efc06cf8a09bfadddb9ca8c366f106d02d5b0105f69cf6a911f5",
+        "size": 16466
+      },
+      {
+        "path": "mosaic/lib/pages/channel_edit_page/channel_feature_editor.lua",
+        "sha256": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+        "size": 46307
+      },
+      {
+        "path": "mosaic/lib/pages/note_edit_page/note_edit_page.lua",
+        "sha256": "d4658759c6ee301ebf301f2219d22b4a00f4f0b12405f367800896199e5b03b0",
+        "size": 11573
+      },
+      {
+        "path": "mosaic/lib/pages/note_edit_page/note_edit_page_ui.lua",
+        "sha256": "d9718ed3b571d9338a81dc088d6113dd15066b93071ead60cdc619778d726e9f",
+        "size": 979
+      },
+      {
+        "path": "mosaic/lib/pages/pages.lua",
+        "sha256": "6eb2f6d17847e28bd2b3aed2210820bb24b05c5696b1f368ed8555e5c1574e8f",
+        "size": 2285
+      },
+      {
+        "path": "mosaic/lib/pages/scale_edit_page/scale_edit_page.lua",
+        "sha256": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc",
+        "size": 6264
+      },
+      {
+        "path": "mosaic/lib/pages/scale_edit_page/scale_edit_page_ui.lua",
+        "sha256": "7c6c6a50a187cc42d8526c927478718ca1bbbd96906adf993f368cc7e2ab3e23",
+        "size": 14603
+      },
+      {
+        "path": "mosaic/lib/pages/song_edit_page/song_edit_page.lua",
+        "sha256": "b29f4cad158991688d0d835272d7f4ec676aeb4b71088e3a2828811096a0e7f9",
+        "size": 8118
+      },
+      {
+        "path": "mosaic/lib/pages/song_edit_page/song_edit_page_ui.lua",
+        "sha256": "9228f92c828d709f6f26e63e323018bcacbb9b2bdab7d1b6c8105048edad6755",
+        "size": 13166
+      },
+      {
+        "path": "mosaic/lib/pages/trigger_edit_page/trigger_edit_page.lua",
+        "sha256": "45f3b115dafc5d4977d9d0a754620042c1bb7f52e30ab76bf8a28bea26d8dde9",
+        "size": 31665
+      },
+      {
+        "path": "mosaic/lib/pages/trigger_edit_page/trigger_edit_page_ui.lua",
+        "sha256": "a87469638ecbdfce617a5749bb4ff6091b2f9b38fa5431d467d288b3ad87e78d",
+        "size": 8097
+      },
+      {
+        "path": "mosaic/lib/pages/velocity_edit_page/velocity_edit_page.lua",
+        "sha256": "c295bd601c907350f57252eedf6f2a3d7567e0277e78f17676ea74a68e99d207",
+        "size": 11180
+      },
+      {
+        "path": "mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui.lua",
+        "sha256": "d06d53fbb4f6e47e7882a75cd53608927ad5a2b012836f63a50959da958fc3dd",
+        "size": 865
+      },
+      {
+        "path": "mosaic/lib/pattern.lua",
+        "sha256": "21d912a0c676505b13b85e952844854ae24db43b4bab6689abe5a813f8dacf93",
+        "size": 44564
+      },
+      {
+        "path": "mosaic/lib/press.lua",
+        "sha256": "1a96e57271dd0b7aedcb1496e20cece6b898cabaeefd57b46707e183e9777360",
+        "size": 4161
+      },
+      {
+        "path": "mosaic/lib/project_lifecycle.lua",
+        "sha256": "c5e33aab761a2bd992244933605ede663c4045cc4a6ee19f1c51cd035a189997",
+        "size": 9352
+      },
+      {
+        "path": "mosaic/lib/project_validation.lua",
+        "sha256": "7b22bd8d66fcffca20a5e087cd18c6b286d454a6715825c39eb4683ffab07dfc",
+        "size": 4859
+      },
+      {
+        "path": "mosaic/lib/quantiser.lua",
+        "sha256": "bd94e4fa56b880ffd4b799b118f05b8373e37154cbf11d95d5eb3894badb8466",
+        "size": 16328
+      },
+      {
+        "path": "mosaic/lib/recorder.lua",
+        "sha256": "b53e3767b973d6636b94789e605ad13a9e8c331ccace362bc1ff36f8f2dff44f",
+        "size": 5616
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/README.md",
+        "sha256": "12ae4a6328a48dde4cf3dd22d780a91e72a5609e9cc98eb9db99ccaa57d00d30",
+        "size": 4521
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/analysis_controller.lua",
+        "sha256": "9dfa32ee23ccc9bc46a5635c4b0e04ffff4659d11427ee3902f4423b7e53417c",
+        "size": 8184
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/analysis_transport.lua",
+        "sha256": "02b850771a34f43756930caa075ec34d4ca3e97da4700f4eaf37a28e3c4d9d5c",
+        "size": 11008
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/analysis_worker_host.lua",
+        "sha256": "e8d33aaa08fb2fb42542142fcde3b7b8ee5019b11747fcd84e40bb329a2af031",
+        "size": 7259
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/assets.lua",
+        "sha256": "65a122350c95caaace1834b7a45fd124c2a765aa53beee5fd1b39801db31da55",
+        "size": 14646
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/bank.lua",
+        "sha256": "1ec45c534d078d4bc1acef444c05d3d6173906fec80c9b78734d4161004d0280",
+        "size": 20419
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/bank_persistence.lua",
+        "sha256": "b5ebf4f510bd6217f740341b1780501fe21f00028b01d8fa0f1586f9d2451104",
+        "size": 1975
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/capture_controller.lua",
+        "sha256": "8d9fba25659f80f021fcb1633205f252d6658c3858b110dbb612cc5b14496203",
+        "size": 14802
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/dancing_doctor.lua",
+        "sha256": "e3d79bc64d54978f043e919e47e88a29590f2bf93fb906bd734e27caa010e6ea",
+        "size": 9934
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/file_mailbox.lua",
+        "sha256": "c580c40f9b562da4c471b19297a5968dcce0d5207a9f6ae2a3dd52720f256b89",
+        "size": 5830
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/paint.lua",
+        "sha256": "6b356b35f178aba8222f3ae0e35fe107bc670aa34b5eb21edd4016733dc9c986",
+        "size": 5763
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/paint_journal.lua",
+        "sha256": "163f6abc3dbfe70cfe6031a8e08bc66a6450b158710be4fc7833edf381b296fa",
+        "size": 4822
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/paint_transactions.lua",
+        "sha256": "9d8fc8c5ef13e627fe24d49dfe9a1f2f2abacbd51917fdb8d0d533d6aa9b1edd",
+        "size": 10446
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/runtime.lua",
+        "sha256": "c19a660b367c6f260837a10f619f3975acda1d3e9deb7a89689a9136669f51ca",
+        "size": 25499
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/softcut_recorder.lua",
+        "sha256": "46e36d8d4bdbef00e43323ff460c2940b9f351e99b75a9bcd807724bfdd1ba95",
+        "size": 15827
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/state_machine.lua",
+        "sha256": "5ae3df0665c1b810c3e468e76674025a889b12d40c8edf866ac5a129b0c2a93f",
+        "size": 14377
+      },
+      {
+        "path": "mosaic/lib/rhythm_doctor/ui_adapter.lua",
+        "sha256": "ec03592c858ecefb448f9c649e3f711ecefee3539ffd68717a0eb0bcad9eb06e",
+        "size": 36079
+      },
+      {
+        "path": "mosaic/lib/scheduler.lua",
+        "sha256": "5ac33c5e30eb93713492ec1d5858b32f0f3ecf711d134bf85c8092e7cf28e739",
+        "size": 3259
+      },
+      {
+        "path": "mosaic/lib/sinfonion_harmonic_sync.lua",
+        "sha256": "446d1d0059f7970437f13e4a5c14790d6bcf03ca9458f01c2991708a6203fe39",
+        "size": 1512
+      },
+      {
+        "path": "mosaic/lib/song_slot_params.lua",
+        "sha256": "e13facc2467a49a018d0ad4346c39e4e2606d497b39c8065e6a4ccd892c68bca",
+        "size": 2734
+      },
+      {
+        "path": "mosaic/lib/song_transition.lua",
+        "sha256": "5140cbeb78b729cf667048cd4aa9b2919e6ccb491909ec5447c922960d98966e",
+        "size": 13607
+      },
+      {
+        "path": "mosaic/lib/source_pattern_revision.lua",
+        "sha256": "f745f986311375128879ab2c61f6430876ea6f524dc32a94d93e925433e106b4",
+        "size": 1247
+      },
+      {
+        "path": "mosaic/lib/step.lua",
+        "sha256": "f0ef9bbf20d7efec293bb8ad942174bbae6ea9359ae152dc5dfa164494b7d08f",
+        "size": 74891
+      },
+      {
+        "path": "mosaic/lib/ui.lua",
+        "sha256": "64870c05585fa02615d1ad6e6e95963153b47687ae4ef1155fd1f2864da5ab28",
+        "size": 2059
+      },
+      {
+        "path": "mosaic/lib/ui_adapters.lua",
+        "sha256": "a959ac150020f71fc4d756163fcd68650a1b54798d311426462ae4ff0471fd2c",
+        "size": 11822
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/assignment.lua",
+        "sha256": "b67c7959d83d96f3e18eccfd2276ac9b225641dc1894872edb500d91adb515a5",
+        "size": 3829
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/channel_target.lua",
+        "sha256": "ffa355515af4ba8671c561b0ddd1a1e267b5c91521d23139a27d146209104fac",
+        "size": 3291
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/clock.lua",
+        "sha256": "c1abc36b1f632881b5d94a314e35c445e30987350718e781f8006451883d646a",
+        "size": 6455
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/confirmation.lua",
+        "sha256": "3e645bd6af11c0ae540dc654fcd8cbc0537c4c26ab6c5cb26b1a61d23a847e8a",
+        "size": 12329
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/device.lua",
+        "sha256": "a9a8cb03578bac86a08d97c27aca533ab144f04c78486c59b66f11af43e8d363",
+        "size": 6090
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/doctor.lua",
+        "sha256": "bc3c0f4c854cce3cb63917cf505bc895bbe6898483a97158847a99ead881bcea",
+        "size": 22224
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/feature_editor.lua",
+        "sha256": "ca5110c3353cee4cb85e25d8d382a4ac31f8da00ee5448e257ede5cd37b944e3",
+        "size": 11885
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/harmony.lua",
+        "sha256": "4e899afd3724f36206dd63e6fedd8a47468228cc9398f75066c265c74d729332",
+        "size": 4771
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/history.lua",
+        "sha256": "2f6b763dd96d4aaf5f4356ad3e4d927aa44933d5dcce539551b182b81bbaaae1",
+        "size": 2901
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/masks.lua",
+        "sha256": "c19c069f135f9b24889bc6d6acd8eba74cb96225aebdf25de36a26fccabc1af9",
+        "size": 3262
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/merge.lua",
+        "sha256": "2c90cd24db23bbb299246d23d7ab3e5e76804b62f9fcd63eb9ecc3a11140dc01",
+        "size": 4306
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/native.lua",
+        "sha256": "812a46b25a62dc9e7bb34c4bcbad593efd53cde46fb20053d929ee9286c671c2",
+        "size": 15238
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/parameters.lua",
+        "sha256": "53223f428366e735e12091ef2ffe489eadcfd70fd385568b23ac13be89e7895e",
+        "size": 7105
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/read_only.lua",
+        "sha256": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+        "size": 30007
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/scale.lua",
+        "sha256": "9d9f06b783d3459e26948d5d01393b86473cd1953894bd103ec6613f869c6c07",
+        "size": 7567
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/scale_clock.lua",
+        "sha256": "0536a2821484bee22974ca67ab946e4d826f1272d1b4ef11f18f4aade32df654",
+        "size": 5838
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/song.lua",
+        "sha256": "f49e65da41c2ee0c6432b45a776da16d2890df515804d330a731809966c2ea56",
+        "size": 4506
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/song_clock.lua",
+        "sha256": "734350f3e9f811b32b538cf0877d1c6b6908d7d010b85b5158b0d3ee7ec25382",
+        "size": 4615
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/tasks.lua",
+        "sha256": "05cf1e4966faaa08daa03726603a9a8cf2f62c35032a39f07f79cd681a2fa231",
+        "size": 4282
+      },
+      {
+        "path": "mosaic/lib/ui_adapters/trig_options.lua",
+        "sha256": "a042cd23e796baa5bacf1ee876d2d959cc6915ad95527e73178bc3bb07376f85",
+        "size": 2689
+      },
+      {
+        "path": "mosaic/lib/ui_characters.lua",
+        "sha256": "f304c5cf7b710735979a2157256f1afc1dd06e505968e386697c2cda4d6bd686",
+        "size": 7822
+      },
+      {
+        "path": "mosaic/lib/ui_components/control_scroll_selector.lua",
+        "sha256": "7ad8e5b1e8e646cbd11e88f836335a7b7690c9e9c2275f12ab32aca6217c3b9e",
+        "size": 1555
+      },
+      {
+        "path": "mosaic/lib/ui_components/dial.lua",
+        "sha256": "6744db7d3c9c468300603af316a43c14064a569bba6965cea0265e736fe97f41",
+        "size": 7351
+      },
+      {
+        "path": "mosaic/lib/ui_components/grid_viewer.lua",
+        "sha256": "4534d04b3c3d6c83b97855c06abef9b0926d2f285bab14d06ec5173081bb1800",
+        "size": 2753
+      },
+      {
+        "path": "mosaic/lib/ui_components/list_selector.lua",
+        "sha256": "182966341b4830ab69cf2698f9d19f28d0a391b3e6979cfea81d63fe73792685",
+        "size": 1601
+      },
+      {
+        "path": "mosaic/lib/ui_components/memory_history_navigator.lua",
+        "sha256": "9a4a5b9fd19b190ed91c19c541f0b70e871f6bbc4084b8d56bd7a210b57ee8af",
+        "size": 3801
+      },
+      {
+        "path": "mosaic/lib/ui_components/page.lua",
+        "sha256": "c77691d8dd4c094b6fe27ea64d2c7161fd28ea02f8866cf8f9175d1fbf6aa6e9",
+        "size": 1121
+      },
+      {
+        "path": "mosaic/lib/ui_components/pages.lua",
+        "sha256": "a76620fbb28412b8cb058a218031ba7c8b66b206b6cbc3ebacc7819c01325b1d",
+        "size": 1203
+      },
+      {
+        "path": "mosaic/lib/ui_components/save_confirm.lua",
+        "sha256": "4cae955b06315a615861f084c03f727f1bb49615c64be27606818532a65c8f3e",
+        "size": 1651
+      },
+      {
+        "path": "mosaic/lib/ui_components/tooltip.lua",
+        "sha256": "8aa8eb58660a386dfed8d5acdab5d2156bd91dc328a1929e563e932982e5663a",
+        "size": 1075
+      },
+      {
+        "path": "mosaic/lib/ui_components/value_selector.lua",
+        "sha256": "0b0f19f3bfb1dc6bc1f95b44849730914bfbf03319c3c51f8bfd9ba8d74f302a",
+        "size": 1604
+      },
+      {
+        "path": "mosaic/lib/ui_components/vertical_scroll_selector.lua",
+        "sha256": "40465e2d6b9b3b23942a4ee056cf6c500f939de526fb47802c8b62d1319ad5f0",
+        "size": 2971
+      },
+      {
+        "path": "mosaic/lib/ui_grid_outcomes.lua",
+        "sha256": "455f882b35d15dcf0da1b2295e0e14d6ecbafb992106478530402620f0397f93",
+        "size": 32101
+      },
+      {
+        "path": "mosaic/lib/ui_live.lua",
+        "sha256": "bbdee8cf4cef9eedac03bf435095b0324fee31d6fcb81714bc6d7a06e54242ab",
+        "size": 43073
+      },
+      {
+        "path": "mosaic/lib/ui_mini.lua",
+        "sha256": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+        "size": 2777
+      },
+      {
+        "path": "mosaic/lib/ui_mini_atlas.lua",
+        "sha256": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+        "size": 167266
+      },
+      {
+        "path": "mosaic/lib/ui_motion.lua",
+        "sha256": "e8710327daa4a73dec1f7cf45e508fbbf2d581d493e2dc43a65765ec905241d6",
+        "size": 9345
+      },
+      {
+        "path": "mosaic/lib/ui_render.lua",
+        "sha256": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+        "size": 13278
+      },
+      {
+        "path": "mosaic/lib/ui_router.lua",
+        "sha256": "cc505296ba7b701f3bab84cac0e1f419170d227db166786c1c3f1f7c57382541",
+        "size": 10856
+      },
+      {
+        "path": "mosaic/lib/ui_spec_data.lua",
+        "sha256": "65b26e5ba2838bbce449d213191d9d881cf11be6c1e1d69c45e9544bae34932e",
+        "size": 406448
+      },
+      {
+        "path": "mosaic/lib/ui_splash.lua",
+        "sha256": "bc668663340260320ec34082eeea8a8470abf9e2a8b8c47047834e297e8eb5de",
+        "size": 6213
+      },
+      {
+        "path": "mosaic/lib/ui_splash_logo.lua",
+        "sha256": "8ea0d3f1a9f42c67f74660a4b7f9b0126407999c915d86487203be22b6c154c5",
+        "size": 18997
+      },
+      {
+        "path": "mosaic/mosaic.lua",
+        "sha256": "2a7434f627ec5f7e20ce6a974757683f8f52286d3b9857cbba83f044b1d5ddca",
+        "size": 14389
+      },
+      {
+        "path": "nb_polyperc/.gitignore",
+        "sha256": "0d34cfbbdf4cb7efa2829c724533314f9a01eb3783ba72eaf65ae862085da5af",
+        "size": 26
+      },
+      {
+        "path": "nb_polyperc/README.md",
+        "sha256": "7d026ffcc361cefb4beb9d05106612e4270a59044993d58c4af6d2d74ae5e30b",
+        "size": 175
+      },
+      {
+        "path": "nb_polyperc/lib/mod.lua",
+        "sha256": "3eb6e47ffc3443fcf29faf6994707f30fae4e104b59ead5e166954abacb7f70a",
+        "size": 4462
+      },
+      {
+        "path": "nb_polyperc/lib/nb_polyperc.sc",
+        "sha256": "3b57d179c784dc18819db8ae280a3d944e9e79c088c05688eee444ccbbb90fe6",
+        "size": 1436
+      },
+      {
+        "path": "oilcan/README.md",
+        "sha256": "37d1a5968ae83b8d18dfa6ab81fc3a8fc92de2b048546a2b7a90d8e58ff37279",
+        "size": 2419
+      },
+      {
+        "path": "oilcan/lib/default-1.oilkit",
+        "sha256": "494a0500edec1331665e5d5caf1223723c70480e1621c1c2c1331258fcd2812a",
+        "size": 1696
+      },
+      {
+        "path": "oilcan/lib/default-2.oilkit",
+        "sha256": "0b60f687d39a300cf01c1a653eec3b80b3d257e3d7536d3f1211d2918fb08497",
+        "size": 1773
+      },
+      {
+        "path": "oilcan/lib/default-3.oilkit",
+        "sha256": "f1907255d795952def19952eace92b5d7cec3457aba86662728b72ffd9de2662",
+        "size": 1646
+      },
+      {
+        "path": "oilcan/lib/mod.lua",
+        "sha256": "afd54c04556624f7d05608b5cbc5b5f4d47c5c8e32c86f3d7d20c53192cf067b",
+        "size": 8301
+      },
+      {
+        "path": "oilcan/lib/oilcan.sc",
+        "sha256": "ff70a35681c832e8d21e9e86acfd3477e44334ea637811d6c2c5b31b9f6f3e36",
+        "size": 1626
+      }
+    ]
+  },
+  "current_emulator_source_identity": {
+    "digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+    "file_count": 331,
+    "file_manifest": [
+      {
+        "path": "compatibility/apis.json",
+        "sha256": "dacc4af5df33a929b5b7e16323bb160757f365930fcc4eb47306c883d6aa035b",
+        "size": 28454
+      },
+      {
+        "path": "compatibility/conformance.json",
+        "sha256": "787a629ef50efc51b717f023f549580daa384f767f77f149096b8864a3d89aef",
+        "size": 18954
+      },
+      {
+        "path": "compatibility/controlled-admission.json",
+        "sha256": "18c23dec069e67e9ea66d59c451696723f0a55512fa4a80a1def138e99fa15f4",
+        "size": 1359
+      },
+      {
+        "path": "compatibility/controlled-probes.json",
+        "sha256": "248734f1244328351b0ad02a27a0e4fdf71bf1f115f062e20cb2b2eb63c7309f",
+        "size": 490
+      },
+      {
+        "path": "compatibility/packages.json",
+        "sha256": "a66acd6d5918ee3192eb3dbc6448ade2527f91839fa51a5ab438575ff765c44f",
+        "size": 14178
+      },
+      {
+        "path": "compatibility/workflows.json",
+        "sha256": "994fed60d4dac19ede1ce789e10312b2b71cd5b02f507abeab9147a6b3dfd1f8",
+        "size": 114852
+      },
+      {
+        "path": "dependencies.lock.json",
+        "sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+        "size": 5997
+      },
+      {
+        "path": "dev/emu",
+        "sha256": "233566026d1b039bc2671e5dc83e43618db85e7cea8f133e5778e7d687e25eae",
+        "size": 269
+      },
+      {
+        "path": "fixtures/apps/cheat-codes-2.lock.json",
+        "sha256": "668b20591fabcceeb5a1d34ba3dbb8e3dba4467ee2c0339cf1b0331a954d642e",
+        "size": 755
+      },
+      {
+        "path": "fixtures/apps/mosaic-config/malformed/invalid.json",
+        "sha256": "913a91a5fc7934991a508160055a1a2926ab4d987a3d7d5b9d8d8ebf4c5a43ab",
+        "size": 25
+      },
+      {
+        "path": "fixtures/apps/mosaic-config/minimal/emu-midi.json",
+        "sha256": "c08d72237c6560f51982643932a540436a35292b9ba2f62f1dac0ccb3617e035",
+        "size": 294
+      },
+      {
+        "path": "fixtures/apps/mosaic-controlled-admission.json",
+        "sha256": "41eb13c51fd5bb12012d377355f75743b290df6096964eae3db887f18101786b",
+        "size": 385
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/0001-memory-preserve-pattern.patch",
+        "sha256": "06ff10d638bda3a6e3ac2e5aac78e9380c19e51a13d7ff1bb20059b5bad8b6bf",
+        "size": 1061
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/0002-midi-balanced-note-offs.patch",
+        "sha256": "ded658be2df94c6abbb22634030a8d5bbaf6fceb57bcae220c3df233dfed83b2",
+        "size": 922
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/0003-clear-channel-mask-defaults.patch",
+        "sha256": "0575c3ddc52cdaddd9fa530a7752d5ea7e2ca731ffc06ab552c711fe16319bcb",
+        "size": 475
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/0004-tresillo-repeat-bank-bits.patch",
+        "sha256": "cb8c2693769220f226c2d4bb411121f681178626ff2dbfaf7b0b3d6ca02de025",
+        "size": 423
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/0005-pattern-length-cutoff.patch",
+        "sha256": "24085f213aa56adc5e9fd8c57bcda8fd3ea9b5a3440167c1dd215183797066a5",
+        "size": 2715
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/channel-mask-clearing-tests.lua",
+        "sha256": "5a4c68ba7050585a0a559a95bc6b5aad870035a13264ade34dd76f9e91e9129c",
+        "size": 834
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/manifest.json",
+        "sha256": "edb7c24ae30cf66a339c585495cdb2c9eca39b74a8968873443f0ebf5922adeb",
+        "size": 657
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/memory-preservation-tests.lua",
+        "sha256": "84756359db0b22489b726ce9973e7c16f90c4e3d704c396576c0bac5555b62b7",
+        "size": 1266
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/midi-counts.json",
+        "sha256": "e10211ff3b4f1f1f16a2355dab0cc3a9182fc163a3ab20b9a1433d79188d09fa",
+        "size": 1062
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/pattern-lengths.json",
+        "sha256": "41ce13bfe5388741f69d111cffbcdbca9f1c6a66eaf7f8e0fe9d300853de054d",
+        "size": 459
+      },
+      {
+        "path": "fixtures/apps/mosaic-patches/tresillo.json",
+        "sha256": "e0d76915b81d910c6b2b38131e2ef0275d50eba117ab294bca956ce0c28456e0",
+        "size": 467
+      },
+      {
+        "path": "fixtures/apps/mosaic.lock.json",
+        "sha256": "ff54b5d42d37ba7a3d266ad0dd780578017d3aa6bdf8748fdbf8c2bfb81a88dc",
+        "size": 2132
+      },
+      {
+        "path": "fixtures/apps/nb-audio.lock.json",
+        "sha256": "e68c0d43148aea0983b6f40e57b193eb0d6fe613a3cc6febdb0a6e48d92184ff",
+        "size": 1021
+      },
+      {
+        "path": "fixtures/apps/nb-jf.lock.json",
+        "sha256": "4ea3b1cbb1b379e6c331f322bce53efa97ee58c501d1ebc48af84484087f17ed",
+        "size": 367
+      },
+      {
+        "path": "fixtures/audio-code/voice-probe/lib/Engine_EmulatorVoiceProbe.sc",
+        "sha256": "8ab3bf4ef899d7ea4c25842e355706dd9c671a2a6bdbca66579e68d2e3d589bd",
+        "size": 803
+      },
+      {
+        "path": "fixtures/audio-code/voice-probe/voice-probe.lua",
+        "sha256": "d021b24919acb480e1e7ac01f8a11139e1b58d2b2afc7f7dc285ef43adb4cbab",
+        "size": 480
+      },
+      {
+        "path": "fixtures/crow-code/callback-probe/callback-probe.lua",
+        "sha256": "edea53d8576aa9dc055518865028307d0b2c19f387bd83e6c45be74a2769c647",
+        "size": 538
+      },
+      {
+        "path": "fixtures/crow-code/clock-probe/clock-probe.lua",
+        "sha256": "78714617e6c5af3dc74b891ac54f12d092cffd46703bab26cbfceb689a3ea61b",
+        "size": 672
+      },
+      {
+        "path": "fixtures/crow-code/cv-probe/cv-probe.lua",
+        "sha256": "f0f78203512c0029bcf048285cf6ba33b1e0ef1cb923a848fb0480bf0f2b929d",
+        "size": 1293
+      },
+      {
+        "path": "fixtures/crow-code/ii-probe/ii-probe.lua",
+        "sha256": "1c209d0c6c187638b24005468de481c8fafe7f2e8d93b718a5fca26f22a29b87",
+        "size": 519
+      },
+      {
+        "path": "fixtures/crow-code/input-probe/input-probe.lua",
+        "sha256": "d4acf21818d2c0cf2739892daf7d61cb00e798e58d88ea6f138e848864d51978",
+        "size": 682
+      },
+      {
+        "path": "fixtures/faults/error-interaction/error-interaction.lua",
+        "sha256": "09ce5d63a739ee7433f050cd9c35e119c0d363a4ffb1bdec38941cce17813483",
+        "size": 236
+      },
+      {
+        "path": "fixtures/midi/three-ports.json",
+        "sha256": "70159ea0179d1e7acb34dd52b5dc2c6db08e07ff45470ad6fd3c7cc111110466",
+        "size": 60
+      },
+      {
+        "path": "fixtures/nb-code/nb-probe/nb-probe.lua",
+        "sha256": "ecde469f97ac9cc022eeec3712af379a21c273731bc73df21515d77bf76c86d6",
+        "size": 2058
+      },
+      {
+        "path": "fixtures/oracles/harmony.json",
+        "sha256": "96259260dcad740023b40c05cbe5433b84d7a22d27ff07d647a09b9446694405",
+        "size": 660
+      },
+      {
+        "path": "fixtures/oracles/rhythm-banks.json",
+        "sha256": "83be89b7e7509e6cf4449b0150250e6b9011e4878024485290e5d9a291a5c201",
+        "size": 386
+      },
+      {
+        "path": "fixtures/oracles/scales.json",
+        "sha256": "e1cfeff6440b612338c2e5905f94356112d5122b4f73a6a23c7ba96661b3bd63",
+        "size": 671
+      },
+      {
+        "path": "fixtures/probes/README.md",
+        "sha256": "75ffb4e64e4071760ad3ce04945a3230a3b6a752d8c05039f3f39672d52b4ad4",
+        "size": 898
+      },
+      {
+        "path": "fixtures/probes/audio-init/audio-init.lua",
+        "sha256": "354bbbf30be394334c75e252d0502404c41f98cec99fa6efaf0b8017c2e7a468",
+        "size": 330
+      },
+      {
+        "path": "fixtures/probes/audio-softcut/audio-softcut.lua",
+        "sha256": "ac659bdd67e78e23161a2c9d30720ee5e601922e08bd63ed3adb341767b4e4ba",
+        "size": 1722
+      },
+      {
+        "path": "fixtures/probes/audio-tone/audio-tone.lua",
+        "sha256": "844f1bbc2654d4eee517ecf354bb27b730c046e2fc4520545947366c680a6100",
+        "size": 553
+      },
+      {
+        "path": "fixtures/probes/capture-cost/capture-cost.lua",
+        "sha256": "cb7cb2ca98e8a6dd2bc974b34331f3fb23ca66c450d8c651c7c7abf63a420b13",
+        "size": 603
+      },
+      {
+        "path": "fixtures/probes/clock-cancel-race/clock-cancel-race.lua",
+        "sha256": "f80b7cba6e8508610f8cfdef1fcbe7deb397c8370d4145ff9c46ae5f58bceedf",
+        "size": 673
+      },
+      {
+        "path": "fixtures/probes/clock-probe/clock-probe.lua",
+        "sha256": "5e6aa0c63bc17088c338a38228fde85709bafc8d799f4bd68df721a48d26fe77",
+        "size": 2076
+      },
+      {
+        "path": "fixtures/probes/controlled-boundaries/controlled-boundaries.lua",
+        "sha256": "3fe8ee859e37a22daa3cc7df007988b78615bafbc04c9fcd8a53b31179a14e72",
+        "size": 979
+      },
+      {
+        "path": "fixtures/probes/controlled-clock/controlled-clock.lua",
+        "sha256": "f9d1aeee8349bd52ff4d280d2d4faa3482c68fa41155f4f8916e27034a34610b",
+        "size": 1305
+      },
+      {
+        "path": "fixtures/probes/controlled-midi-clock/controlled-midi-clock.lua",
+        "sha256": "6429b71857f9c1a715351f0b2377d9245ea014938568e575af4df1fca16bbe16",
+        "size": 890
+      },
+      {
+        "path": "fixtures/probes/controlled-phase-boundary/controlled-phase-boundary.lua",
+        "sha256": "15e6dd0e86ac21b2a62ff8be43e959994abdb4136483b1f493f424427a6b3af8",
+        "size": 529
+      },
+      {
+        "path": "fixtures/probes/controlled-phase/controlled-phase.lua",
+        "sha256": "01c485f7562c4b56fba77ed099e7540e17c83491a8a088e5e10f89002064c138",
+        "size": 447
+      },
+      {
+        "path": "fixtures/probes/controlled-transition/controlled-transition.lua",
+        "sha256": "93b685f299cf25890073fa5a36c00dcbe76f7bf368b3f8a045af7cccbdb8ed8e",
+        "size": 993
+      },
+      {
+        "path": "fixtures/probes/controlled-wall-timer/controlled-wall-timer.lua",
+        "sha256": "65a27c72e051b2b45225947b3caac68f18b98182ae160d8127cfa8d7ba4c3ead",
+        "size": 499
+      },
+      {
+        "path": "fixtures/probes/error-coroutine/error-coroutine.lua",
+        "sha256": "6acb65213d60defef302ea651a1b5516f8f8e5351975a040930acb5bc6849995",
+        "size": 218
+      },
+      {
+        "path": "fixtures/probes/error-hook/error-hook.lua",
+        "sha256": "e3ab32b5dac6fe094865b1beb74c3877c0ed2e18531f181bdc1dac34b944e541",
+        "size": 219
+      },
+      {
+        "path": "fixtures/probes/error-init/error-init.lua",
+        "sha256": "418bd3e5fd7c47ce25f46bed2b13b82769b762c7dbda3253f4efe9225ae29b01",
+        "size": 61
+      },
+      {
+        "path": "fixtures/probes/grid-level-probe/grid-level-probe.lua",
+        "sha256": "bedd4510b0cd5e8185e3ed153037c5c55f4e4f8f5d98438ee9cfb45c126759ec",
+        "size": 183
+      },
+      {
+        "path": "fixtures/probes/grid-probe/grid-probe.lua",
+        "sha256": "bb32cc9ce399362322ab3126b8e19d2f689e941f61a1eef4911965bc4dc2e0a2",
+        "size": 1043
+      },
+      {
+        "path": "fixtures/probes/input-deadline/input-deadline.lua",
+        "sha256": "14e4a63cfa8ffd114aa9b21ce752900eca648ab20486da09255cdb26939ec1e1",
+        "size": 1439
+      },
+      {
+        "path": "fixtures/probes/midi-hotplug/midi-hotplug.lua",
+        "sha256": "2783e019f363511dbccd437843c1de706d58fab904a3685af7ca7b8dcf46d59f",
+        "size": 919
+      },
+      {
+        "path": "fixtures/probes/midi-probe/midi-probe.lua",
+        "sha256": "6211ece367f198ee2695b1c2dbd27232080e81b59c564b81048d37cf7e3ff60e",
+        "size": 705
+      },
+      {
+        "path": "fixtures/probes/midi-send-race/midi-send-race.lua",
+        "sha256": "60b86e369520246ddaf26bebbfc56167e6e4a5b348cc4f7b3c8f04371824f746",
+        "size": 462
+      },
+      {
+        "path": "fixtures/probes/probe-a/probe-a.lua",
+        "sha256": "235046f268e1d168c9f16c2821801f5cc62f937094f68fa39a0965abae251281",
+        "size": 1201
+      },
+      {
+        "path": "fixtures/probes/probe-b/probe-b.lua",
+        "sha256": "9d1ba673d7c033730679d90387979dcc6e974f7b8afc650eed01c2d8cc221769",
+        "size": 915
+      },
+      {
+        "path": "fixtures/probes/probe-support/math_probe.lua",
+        "sha256": "ea6a6c83a575dbef72c862e5f7a5c933138a9355c98b3c1f54d9dfc487cacc80",
+        "size": 50
+      },
+      {
+        "path": "fixtures/probes/random-probe/random-probe.lua",
+        "sha256": "cbeb87158c2380d3749127a556a7bbd6b15daafc4182d5f5c502c9f0caef3fd8",
+        "size": 374
+      },
+      {
+        "path": "fixtures/probes/scheduled-midi/scheduled-midi.lua",
+        "sha256": "5949cafa07b678b6f2787cd283cdb235fe85e0971a7dfc2e4c105198582f7a0d",
+        "size": 558
+      },
+      {
+        "path": "fixtures/scenarios/contract-counter.json",
+        "sha256": "562f4ce78f849d4521aeceec41ae88815afe8960f1d3dd30a0ab4c4a6d398632",
+        "size": 388
+      },
+      {
+        "path": "fixtures/scenarios/mosaic-boot.json",
+        "sha256": "7ed71f6393626aa2505361a2d632f9bd825127315e523cea132ce9dd64f37497",
+        "size": 412
+      },
+      {
+        "path": "fixtures/scenarios/mosaic-grid-navigation.json",
+        "sha256": "8c4cd035021cd0c1f0905ff27821f6cf625a8aa7e1abe5b4f770541c44a622c2",
+        "size": 4976
+      },
+      {
+        "path": "fixtures/scenarios/mosaic-midi-init.json",
+        "sha256": "2ed3654b3d103f59773734e42326bc9510f27d9b780efa91c999e50ecb0f7980",
+        "size": 1400
+      },
+      {
+        "path": "fixtures/scenarios/mosaic-mod-boot.json",
+        "sha256": "0eb8fe23c29dc9e92d7e1f13dc47686068854e469385daad4839ae76c40f1c02",
+        "size": 499
+      },
+      {
+        "path": "fixtures/scenarios/native-beat-replay.json",
+        "sha256": "709136a2bf7dd175e8a233beb7866678e9b7cdae7e7e9b4287a8affe37a784c3",
+        "size": 635
+      },
+      {
+        "path": "fixtures/scenarios/native-capture-cost.json",
+        "sha256": "4c74797a8c07b4b705d95f0f50406977bcdcf66a18abd24e9c3e37027e8433a1",
+        "size": 601
+      },
+      {
+        "path": "fixtures/scenarios/native-clock-cancel-race.json",
+        "sha256": "1dce4d74c8f6fcc014a96fb71922e7bbb837e1bfe555340dd7f068cfb7c7f498",
+        "size": 511
+      },
+      {
+        "path": "fixtures/scenarios/native-clock-contract.json",
+        "sha256": "bc027f31571a55ef0da92ae4727b10384c048d1756ab9022bfa4972c358e1175",
+        "size": 768
+      },
+      {
+        "path": "fixtures/scenarios/native-grid-contract.json",
+        "sha256": "7925a9db781025e9a603804fb7a7455feeb23150eac8c7e0595d726353635674",
+        "size": 3942
+      },
+      {
+        "path": "fixtures/scenarios/native-grid-level-conversion.json",
+        "sha256": "c2d2d83824bbe4149ab7bf0cb13b059cef9a05fe47b4f90580303f1403d5cb44",
+        "size": 485
+      },
+      {
+        "path": "fixtures/scenarios/native-midi-stream.json",
+        "sha256": "27b416f4144970a2c00d5fa3cbeb1e607ffc6241a126b284484e1b14f242d24b",
+        "size": 1056
+      },
+      {
+        "path": "fixtures/scenarios/native-probe-a.json",
+        "sha256": "64de2003dd86b523f3aa5e65a7ca922c4696acbc4df14f5e5b94ecb1dba8a6b7",
+        "size": 816
+      },
+      {
+        "path": "fixtures/scenarios/native-probe-b.json",
+        "sha256": "7a61bd7320e84449c2ec704a176fe8c1429e1f108b60249864e8f617aa13dbd8",
+        "size": 754
+      },
+      {
+        "path": "fixtures/scenarios/native-seeded-random.json",
+        "sha256": "dd6657bbc725331a985e6597e96146283d4111c55fc56e2dbb7eb6bf1400c161",
+        "size": 959
+      },
+      {
+        "path": "patches/norns/0001-desktop-architecture.patch",
+        "sha256": "1945a65e586446e5ae6a75cac646fc468aace34914c8f19a5d192925ad314e78",
+        "size": 472
+      },
+      {
+        "path": "patches/norns/0002-platform-read.patch",
+        "sha256": "745d47530e0769f8edceee525fa2e5cf35fa75cd9f180a3866bccffa35bd9a63",
+        "size": 615
+      },
+      {
+        "path": "patches/norns/0003-portable-display-conversion.patch",
+        "sha256": "a6f14a5cb4bba9203f3738b605a5d6902a8612b73c45c07a998a73fcad322ba9",
+        "size": 1504
+      },
+      {
+        "path": "patches/norns/0004-virtual-device-spike.patch",
+        "sha256": "0b7fc1089332629f9cbd64933d04136974c978f347af5376eb22009925dcb173",
+        "size": 9889
+      },
+      {
+        "path": "patches/norns/0005-native-session-hooks.patch",
+        "sha256": "f418d02d9e2ce1756b35348f432421cd0888a905c28b3740736a5459a45c0278",
+        "size": 8514
+      },
+      {
+        "path": "patches/norns/0006-hook-error-reporting.patch",
+        "sha256": "fa5233c3adbadb62ec5bbe17dd41fd4e670d6a34a07ee3e1d2af2875b8143ea2",
+        "size": 321
+      },
+      {
+        "path": "patches/norns/0007-crone-thread-shutdown.patch",
+        "sha256": "a733a8b3daf2834f9193c38fb33e00c4b3dd817041236385b43974f37a32719f",
+        "size": 2901
+      },
+      {
+        "path": "patches/norns/0008-grid-device-contract.patch",
+        "sha256": "647f46a6619fd36d968dff2e2990ca46ad373dae023773f65595bad26ba7c247",
+        "size": 7851
+      },
+      {
+        "path": "patches/norns/0009-midi-device-contract.patch",
+        "sha256": "6233f827a3bbf090d3a6b7470569b3f232fe551bea7a94a5e24168c521955cc0",
+        "size": 5657
+      },
+      {
+        "path": "patches/norns/0010-grid-native-level-conversion.patch",
+        "sha256": "fc079402b99feca9a878f2c97f02334ee75f6c06d7c4cc7d667a168935d7ad84",
+        "size": 1549
+      },
+      {
+        "path": "patches/norns/0011-clock-cancel-queued-resume.patch",
+        "sha256": "40bb49162614d014a4b56f1189dcb9345991d0c1548a48fdf2518cdfea614499",
+        "size": 613
+      },
+      {
+        "path": "patches/norns/0012-scheduled-midi-input.patch",
+        "sha256": "fb94e9ed062d52b2dfec48a42db9f3690015d4e16116e6cfb6ef895c52230bcd",
+        "size": 10717
+      },
+      {
+        "path": "patches/norns/0013-midi-connection-lifecycle.patch",
+        "sha256": "ca253b43694e9527bca030b890d60771b4a20a5a82ddc94c4859d5dcfdc09676",
+        "size": 7399
+      },
+      {
+        "path": "patches/norns/README.md",
+        "sha256": "5e40a81fe27691ac63613c1f104cab2904566a581a4a414d92931e0afdd7edc8",
+        "size": 9680
+      },
+      {
+        "path": "patches/norns/experimental-engine-ready.patch",
+        "sha256": "0eebf5bef806b520e204265b5a990f804174407fc1bcb9028aefc8414cd6d884",
+        "size": 184
+      },
+      {
+        "path": "patches/norns/experimental-screen-worker-shutdown.patch",
+        "sha256": "c1c37479f6f9b37a0faab389e5366e4320a631939e8a93dcbf9545bde4caf2c9",
+        "size": 3112
+      },
+      {
+        "path": "patches/norns/experimental-sdl-ownership.patch",
+        "sha256": "ecf6a8bb238338ee1c6d829112726c5eb09939f27bf00c08b3940ad380b31e47",
+        "size": 356
+      },
+      {
+        "path": "schemas/ack.schema.json",
+        "sha256": "1f50ac23f2bbc726bbf2ca1012e4287a3a1ee519850d448d81a2ddb671b970da",
+        "size": 1256
+      },
+      {
+        "path": "schemas/action.schema.json",
+        "sha256": "db37a67b568f30ff55b6c62016636a7acf01315212950e57f935bd579985e2ec",
+        "size": 8531
+      },
+      {
+        "path": "schemas/browser-run.schema.json",
+        "sha256": "99e9b44bbe06c27a5af4ba17c71a6f48c34d9e5c70b7df566efb8ef5ccb4835d",
+        "size": 3995
+      },
+      {
+        "path": "schemas/capability.schema.json",
+        "sha256": "a66d758dee962b51c872b4d7fafc9daa7b1d62701a68f70aace73d42187eb514",
+        "size": 1111
+      },
+      {
+        "path": "schemas/error.schema.json",
+        "sha256": "59741c3d859f1696da8f57f3534a0a61ff5389b99b476e8b9a281e3876f7f398",
+        "size": 594
+      },
+      {
+        "path": "schemas/manifest.schema.json",
+        "sha256": "fa613bc3c5b1d1ce011b8768a831cdf1f2a6d966fd9545aa493cbae7e7b7ccbc",
+        "size": 5541
+      },
+      {
+        "path": "schemas/observation.schema.json",
+        "sha256": "8b586d7f0d90800287a6b5c08b115223525add426522f1b85ae54d3cb411da3d",
+        "size": 1576
+      },
+      {
+        "path": "schemas/package-run.schema.json",
+        "sha256": "4fbe8418104d573dccf8cf2930bdca8403fbe53187a1781339969070bd88e634",
+        "size": 4627
+      },
+      {
+        "path": "schemas/scenario.schema.json",
+        "sha256": "d9913e709e4a2873b62a822dcca4b826ef50c011f4b5b6f254a7c9f733ce7fe3",
+        "size": 11873
+      },
+      {
+        "path": "schemas/timing-report.schema.json",
+        "sha256": "09f0f0bfbc84f87bba6a2b84ba77a915549230b0bcc2637fc685040821824684",
+        "size": 2200
+      },
+      {
+        "path": "scripts/assemble_clock_admission.py",
+        "sha256": "d038ad0fe5dcfd516332b774a513384a333d24f6bf2adf43039b4301f3c2a6c1",
+        "size": 2085
+      },
+      {
+        "path": "scripts/build_audio_candidate.py",
+        "sha256": "94e0fb779aceb18be3918e499b26fc496fcc9ed040a3ea5054f84d10d78e0375",
+        "size": 6583
+      },
+      {
+        "path": "scripts/build_controlled_candidate.py",
+        "sha256": "f0b5b09942bed7aafd0661f7959a832e83ac3e3e07ed4d869b60d20c3706b6da",
+        "size": 2624
+      },
+      {
+        "path": "scripts/build_crow_host.py",
+        "sha256": "ccac8b09a15654f12f18b26914bf37029df076365323f29926f9a09f7bbd9b24",
+        "size": 4018
+      },
+      {
+        "path": "scripts/build_crow_ii_host.py",
+        "sha256": "400c8a5e24624260ad7770986a2ab8c400bf13863747094e676bb5ef1844293c",
+        "size": 3139
+      },
+      {
+        "path": "scripts/build_locked_candidate.py",
+        "sha256": "f47c711436e586761bcef591e8bef10a493b4994e56e6e7c78a043f6b01ef8d3",
+        "size": 2514
+      },
+      {
+        "path": "scripts/collect_clock_check.py",
+        "sha256": "062cacf9c2fbe9942c4069c6a96084a082d9df6280eace82c8ff9127c0149105",
+        "size": 5282
+      },
+      {
+        "path": "scripts/collect_midi_schedule_check.py",
+        "sha256": "30a92e05b56013905bded86ea1b91473fe46d2f92d8c13c8d150bc01cbc2ab41",
+        "size": 2886
+      },
+      {
+        "path": "scripts/create_grid_scenarios.py",
+        "sha256": "826b9ca7a95b8e03a6cbfdd49163ecda1266eb6161a1cd31e97873c77add130a",
+        "size": 1815
+      },
+      {
+        "path": "scripts/create_schemas.py",
+        "sha256": "084d6622b2fa8a1ef2392d838ddc40a103fe57b6af1297d1008d4bdd8080c860",
+        "size": 6186
+      },
+      {
+        "path": "scripts/crow_native_patch.py",
+        "sha256": "b2da11c5a56042969f839fb6e03fd81077bbb44740789937edbda955c23c0274",
+        "size": 3191
+      },
+      {
+        "path": "scripts/crow_source.py",
+        "sha256": "bf189a9eb771552d48299d0efa911cc017f3fcd55ae5d7c9d29db3cfe41b144a",
+        "size": 1065
+      },
+      {
+        "path": "scripts/debug_crone_shutdown.py",
+        "sha256": "2edd33983ae3efdffaef2431f273e7701342ccb0010d84e42671564b42acc4dd",
+        "size": 847
+      },
+      {
+        "path": "scripts/diagnose_host_timing.py",
+        "sha256": "eccb6f501e231072b4be6b4758fcfbd7e306579ebac898eb0769390831ed406d",
+        "size": 2487
+      },
+      {
+        "path": "scripts/locked_native_source.py",
+        "sha256": "dde0469bee3cea61fbae85c0b13cdcea07df5b4e57f1a039004edca2c960934a",
+        "size": 3041
+      },
+      {
+        "path": "scripts/patch_clock_cancel_race.py",
+        "sha256": "90255ec1448713b245a22c686284102e913df979ab70ae0bffc129b9f92ebd29",
+        "size": 1450
+      },
+      {
+        "path": "scripts/patch_crone_shutdown.py",
+        "sha256": "ec8ca60f1ddccb69004d57dd5a347959b44d08ce2246e4d9f520eaf64a396d51",
+        "size": 2683
+      },
+      {
+        "path": "scripts/patch_grid_contract.py",
+        "sha256": "c9689306052660bf89ec2b5e6443e3050daac60eccdf25f6f15f1a2ba149c007",
+        "size": 5541
+      },
+      {
+        "path": "scripts/patch_grid_level_conversion.py",
+        "sha256": "2557104b5187b6e6d2de33cd7e1bac7f49843496f930cda75091c8ed3298978b",
+        "size": 1457
+      },
+      {
+        "path": "scripts/patch_hook_errors.py",
+        "sha256": "5b63c6741c6b38a593250e8a4c9c27962c251e1a310fb2dd3753c0b63d180a37",
+        "size": 1096
+      },
+      {
+        "path": "scripts/patch_midi_contract.py",
+        "sha256": "e74dbb106c763016c3d1557f6cbdb00dcda35a656bad38672167eb9b306d67e0",
+        "size": 4639
+      },
+      {
+        "path": "scripts/pin_midi_adapter.py",
+        "sha256": "86a4db1977c90ab536b1b0201a53c651012667e8c93bf4daa76339227c30951c",
+        "size": 3987
+      },
+      {
+        "path": "scripts/prepare_audio_mod_runtime.py",
+        "sha256": "f30bd67da55f178e929624bcb911f9b246ca44e64b1de53e0db5c3669a5f2245",
+        "size": 1961
+      },
+      {
+        "path": "scripts/prepare_audio_monitor.py",
+        "sha256": "323e5f8492e536384b4e7599c2bb42b92d6e6208d3c23d4f9fc94eecca0a9749",
+        "size": 1845
+      },
+      {
+        "path": "scripts/prepare_clock_step.py",
+        "sha256": "5aee57d1839c0a2abb64df5bc5cfb4332848aa3df9c05695c1255e8e5a93e332",
+        "size": 3822
+      },
+      {
+        "path": "scripts/prepare_controlled_runtime.py",
+        "sha256": "6ec97290761fff93db65a5543ea1fcea33beedbd183eb36d3416a79c75f1c1e0",
+        "size": 8245
+      },
+      {
+        "path": "scripts/prepare_crow_runtime.py",
+        "sha256": "fdc73fe43059dbf3f2165d98318890503106014796d24766ab092730b3cd022a",
+        "size": 1782
+      },
+      {
+        "path": "scripts/prepare_engine_ready.py",
+        "sha256": "00f2041602b8109f091e0bbbce2e79a9efd0eec38e7cae51155f7a57ef5198c9",
+        "size": 1928
+      },
+      {
+        "path": "scripts/prepare_internal_clock_step.py",
+        "sha256": "a99f5a72603cb96e24dcc12e1358f45fecb1d7f19db070c7eb828b198be54c34",
+        "size": 2529
+      },
+      {
+        "path": "scripts/prepare_metro_step.py",
+        "sha256": "445133e831be485862498997004a6139a4f22f70a00bceff1ff2c02bd8190169",
+        "size": 3084
+      },
+      {
+        "path": "scripts/prepare_midi_hotplug.py",
+        "sha256": "3432a4c9ef42a54d1e9db6e15b57ed21000d074702d699b015ea7737360e22b3",
+        "size": 7810
+      },
+      {
+        "path": "scripts/prepare_midi_runtime.py",
+        "sha256": "0ea195576efd2858beba2245104fca3ac611a1740fbf9cca7b053c2ce1af255f",
+        "size": 2120
+      },
+      {
+        "path": "scripts/prepare_midi_schedule.py",
+        "sha256": "f5c28130025bd49cab9897b9d3cf06912f473cf178fcccbe89314d687fa7384a",
+        "size": 4936
+      },
+      {
+        "path": "scripts/prepare_midi_send_race_probe.py",
+        "sha256": "5b0f48f7240dfe6e15ca80e6fd0a87e8e61bc27c80ee6472aa8d12adbdc68b45",
+        "size": 2091
+      },
+      {
+        "path": "scripts/prepare_native_patch.py",
+        "sha256": "8267f9dea201ab4192982d54162fc99af9762f1ab1f2669a506883a145d27c73",
+        "size": 6140
+      },
+      {
+        "path": "scripts/probe_logical_midi.py",
+        "sha256": "cfb5c1a3e9ea9c3cf4133b58582ea60442d1402d3a9eb09478be618034926d91",
+        "size": 4990
+      },
+      {
+        "path": "scripts/probe_scheduled_midi.py",
+        "sha256": "88d4358f8c0d29f72bb97241c13098469952b90b8df7d0f498d7b543af3c991f",
+        "size": 6010
+      },
+      {
+        "path": "scripts/proc_thread_sampler.py",
+        "sha256": "6275fa225c31841033e4662b5febe3f3754028910e145cafedfcedf0e54f06fd",
+        "size": 2883
+      },
+      {
+        "path": "scripts/recover_jack_probe.py",
+        "sha256": "d0eb816d6a83c0e9723a52bc690b6767e0a90ef17f3615e88ae3b9e3f97d1fdb",
+        "size": 1418
+      },
+      {
+        "path": "scripts/repeat_controlled_probe.py",
+        "sha256": "c6d693d4c6c13df9ab6729eb5f097f359a4069f067d5768ae29fa85d9619ca21",
+        "size": 4377
+      },
+      {
+        "path": "scripts/review_plan.py",
+        "sha256": "8977e9db43deb5ce0d5815e4c0fd04e8d09fd2cc6fb51b0b44afa4727a914e5b",
+        "size": 8130
+      },
+      {
+        "path": "scripts/validate_midi_adapter.py",
+        "sha256": "4eb7ea4f819ef8aaceaf3daac25a2b044b76bd023437cebc7ba815fc6d814276",
+        "size": 3029
+      },
+      {
+        "path": "src/app_fixtures.py",
+        "sha256": "cb844fd7a246c4603d78c66b14da87a1275226266d4e5fb77787ee9b3dd6b6b2",
+        "size": 1829
+      },
+      {
+        "path": "src/automation/__init__.py",
+        "sha256": "9ae95d342ef96abaf86230d056156b65e4218258895d252ca9eb2f1a03d927e6",
+        "size": 67
+      },
+      {
+        "path": "src/automation/cli.py",
+        "sha256": "ad0f9113d792738861b1153d6781e278d479a286e50dddc49e9a07102f1703db",
+        "size": 7005
+      },
+      {
+        "path": "src/automation/client.py",
+        "sha256": "24ec6d05bc5d0cfa21e669e223228386d1edd05f2b6514f0f3dbccaaaf379eb4",
+        "size": 3774
+      },
+      {
+        "path": "src/automation/clock_admission.py",
+        "sha256": "4debfe5525b8c2001a180054f1aaf9b5ed538cb1ebc3cbe16e509f68f797949f",
+        "size": 17216
+      },
+      {
+        "path": "src/automation/controlled_evidence.py",
+        "sha256": "d9d5efdb5fc7abd11ae2f3484e8ddd265b59dfb0687fdd8f1c8e85c7d5247d3d",
+        "size": 8223
+      },
+      {
+        "path": "src/automation/evidence.py",
+        "sha256": "5787859cb580bb2d06e33d5f7eff5659514adb3adf79c8e6ef6fed307a44bfef",
+        "size": 14486
+      },
+      {
+        "path": "src/automation/fixture_backend.py",
+        "sha256": "119ef4cb2af366152e368b3f2f1782046ec1543a2c1faef3ec633450517e36f5",
+        "size": 1274
+      },
+      {
+        "path": "src/automation/identity.py",
+        "sha256": "2b4ed23ce6b75179ab38ae548d60989e4f8981cd067908eb46ca03000761b520",
+        "size": 2400
+      },
+      {
+        "path": "src/automation/input_origin.py",
+        "sha256": "d628ebf3d5d52d8df306b41a95653188ae0abf46651b90dd50e2cd7e8b04d647",
+        "size": 4858
+      },
+      {
+        "path": "src/automation/midi_connection_evidence.py",
+        "sha256": "e5616f49f63792513edfa6d3f6c4fa94d731b3b3e2accfd18e03a01ed766fe60",
+        "size": 2971
+      },
+      {
+        "path": "src/automation/midi_schedule_admission.py",
+        "sha256": "8ea5c37984614692621ee07e5da84122474931f58681bb82284e9e2eaffcd4c8",
+        "size": 9529
+      },
+      {
+        "path": "src/automation/midi_schedule_evidence.py",
+        "sha256": "6c23b189190267870bf12d7cdfe03ed699e68eb21488ccb74dc7e0a6cbf27367",
+        "size": 3851
+      },
+      {
+        "path": "src/automation/protocol.py",
+        "sha256": "48fe52a70372aec6dcd9deff54faa7bf8f0ed670ab26ea248a22c3e190f226c2",
+        "size": 4295
+      },
+      {
+        "path": "src/automation/runner.py",
+        "sha256": "02394b1695f52126e4b08b7182350bcf51e772ffdcebe7a420f6ed92ec90e66d",
+        "size": 8254
+      },
+      {
+        "path": "src/automation/scheduling_metrics.py",
+        "sha256": "9e272a2027fd4d219dae3a9eafdae8f11e63800a435dac7c3e1d4989fc1e05b9",
+        "size": 3295
+      },
+      {
+        "path": "src/automation/server.py",
+        "sha256": "88495dff2bbd8700f79c3e98a279365b7963ac7127a2c0762fdef20c6c9192fb",
+        "size": 24516
+      },
+      {
+        "path": "src/automation/session.py",
+        "sha256": "50a809aa441a6fcc8fd411d0304cb906e4ce66df3a72f893d0087bdebad5613e",
+        "size": 5844
+      },
+      {
+        "path": "src/automation/timeline.py",
+        "sha256": "6a5f01708a1194cac8812fc02934e98f86e57460dcea0c46543b84992d2e3fea",
+        "size": 1983
+      },
+      {
+        "path": "src/devices/__init__.py",
+        "sha256": "01e2a93219fa438faf8f4b39cc70590df839e9947769ec8beb7e03f83c31fdb2",
+        "size": 75
+      },
+      {
+        "path": "src/devices/crow_clock_frames.h",
+        "sha256": "cc474eb3cd0c1b738540cf13ba1f6ce587a0c6c4d66ebe0690170c1653bde321",
+        "size": 794
+      },
+      {
+        "path": "src/devices/crow_host/capture.h",
+        "sha256": "834db573acdcdb693bb523c7b31eda71b1432f63b1e1ed341f61c410c1dde722",
+        "size": 3520
+      },
+      {
+        "path": "src/devices/crow_host/ftrack.h",
+        "sha256": "d9684de951731b6f5b820363fa5fd2450a4bc73f7292fd05b5126cf90baaf105",
+        "size": 190
+      },
+      {
+        "path": "src/devices/crow_host/input.h",
+        "sha256": "59c6abe5c165c489497418a1fe920f238789421b53bbb02536e2add635968ed6",
+        "size": 2653
+      },
+      {
+        "path": "src/devices/crow_host/main.c",
+        "sha256": "06bd0dfb794b2ee840e569c73bbc002a20284b0c5a9cef9ac8f00c08fa3f64d1",
+        "size": 7245
+      },
+      {
+        "path": "src/devices/crow_host/serial.lua",
+        "sha256": "cedc9b5be904904d3e2760083420db10fe149947c0b926105cab828abae0d771",
+        "size": 1732
+      },
+      {
+        "path": "src/devices/crow_host/stm32f7xx.h",
+        "sha256": "d6032ff170eb2c1522e1df97d036265589c69cc54d1e6d891a403f5c3861acea",
+        "size": 189
+      },
+      {
+        "path": "src/devices/crow_ii_host/i2c.h",
+        "sha256": "8f5720281d719dd35187635254099810f2a4c4f7737379ab7d5839368902c3d9",
+        "size": 587
+      },
+      {
+        "path": "src/devices/crow_ii_host/i2c_pullups.h",
+        "sha256": "c62dcce68c16f313cd0070e22ee6909eaf5e554f0edc8da5297be323be15af31",
+        "size": 63
+      },
+      {
+        "path": "src/devices/crow_ii_host/main.c",
+        "sha256": "ae2f2723b12c036b6fd2889d5e66fb708287e5f203da4a7ff476f3a27091546d",
+        "size": 4752
+      },
+      {
+        "path": "src/devices/grid/__init__.py",
+        "sha256": "19d67aadf325e8c29beaeca51c68370bff25c3ba7ff9e0c10ec0d50516f1a59c",
+        "size": 737
+      },
+      {
+        "path": "src/devices/midi/__init__.py",
+        "sha256": "e513ca7f1acadbb2a8279fa1a97036fb28069ba51bc5485c83687d7849eb06c3",
+        "size": 5406
+      },
+      {
+        "path": "src/runtime/__init__.py",
+        "sha256": "1a4e4182a8010c2da2e85bc47aa1bd921043444e54fa71a0afb2bfbfae5f0dde",
+        "size": 84
+      },
+      {
+        "path": "src/runtime/audio/jack_capture.c",
+        "sha256": "b06a7a8fb6ff9a04899d16b189b42499139447a16adece20a865c852a6e726d5",
+        "size": 4999
+      },
+      {
+        "path": "src/runtime/audio/jack_monitor.c",
+        "sha256": "af8433c8e4e0a08e00aa1fbedbfd2320474a66df84426ba7d61be3db410a4f00",
+        "size": 3343
+      },
+      {
+        "path": "src/runtime/audio_capture.py",
+        "sha256": "ace0ec66fd62d3144c864eba8ad4cb83ee1a8fc42c91ba1bc35935954f6fcf19",
+        "size": 5231
+      },
+      {
+        "path": "src/runtime/audio_monitor.py",
+        "sha256": "6476c8bd595454c2509a810c3c4602ad032cbfb7519046691a0855431e59d063",
+        "size": 3811
+      },
+      {
+        "path": "src/runtime/crow_capture.py",
+        "sha256": "4abe5f40e75a51dfeb21737ecb22660a63f8ef9210596ddf8dad0a3bc2471811",
+        "size": 4655
+      },
+      {
+        "path": "src/runtime/crow_ii.py",
+        "sha256": "f488297bc4f6d10fc615e05950ceb4dbd3489c290149fe8697064418ed97f888",
+        "size": 1261
+      },
+      {
+        "path": "src/runtime/dependencies.py",
+        "sha256": "1f68def75f26d3467b1dacda839670810a98398aa05396da3d488ce167e20470",
+        "size": 7765
+      },
+      {
+        "path": "src/runtime/host.lua",
+        "sha256": "eb397bc5077d04919e3b7769280fcd28d7a9426130fd9008d1c01e11a949e31b",
+        "size": 5690
+      },
+      {
+        "path": "src/runtime/native.py",
+        "sha256": "0cc5c7fbc2b665d074caa44a703c15dfdee42a9afb9be4663dd458aed65b1bcb",
+        "size": 38135
+      },
+      {
+        "path": "src/runtime/native_clock/emu_clock.c",
+        "sha256": "75432fcfd4f6bb130fcfd353da29e8fe5f3ce1f1f36b50437026e3fd921721a1",
+        "size": 3722
+      },
+      {
+        "path": "src/runtime/native_clock/emu_clock.h",
+        "sha256": "eed31d7b30148d5f11fbaee4c00e02f70078f9f0cfc000563411739d4380c17f",
+        "size": 235
+      },
+      {
+        "path": "src/runtime/native_clock/emu_midi_schedule.c",
+        "sha256": "66a48fc912b8a2c2684cd5939565782ee0656fad7d4d48c524fbb06451ec83c9",
+        "size": 2763
+      },
+      {
+        "path": "src/runtime/native_clock/emu_midi_schedule.h",
+        "sha256": "93cfccc9d9b8cce097d8dc3d37fe7468ba7cfda7fe063ad4fbc8a50f0eda4322",
+        "size": 2218
+      },
+      {
+        "path": "tests/audio_capture_api.py",
+        "sha256": "5498b4741201c4119c7bc345391c7915c8f63b8f33e8ab00bac2288ec04d75ee",
+        "size": 4052
+      },
+      {
+        "path": "tests/audio_external_engine.py",
+        "sha256": "0935bd072c4c5a70bda952d27121683c3013c8077f774b70dca9f9ba88df4619",
+        "size": 4011
+      },
+      {
+        "path": "tests/audio_feasibility.py",
+        "sha256": "b3b081a43625873c676aebe3a3bacfec5deb680bb6629752672343cd8940c1fd",
+        "size": 11151
+      },
+      {
+        "path": "tests/audio_generic.py",
+        "sha256": "208e83f7fb715945e6acd9975eb1d523017440a9840e44f661c059127980ebf9",
+        "size": 3348
+      },
+      {
+        "path": "tests/audio_init.py",
+        "sha256": "f47a585b26462c39bee9ca987e967d91813aa85474141802dd82e65627a7d1c2",
+        "size": 1607
+      },
+      {
+        "path": "tests/audio_jack_probe.c",
+        "sha256": "62a3959a5d952c4258e03d91b2401c7e16b47def5cca8432e20d024670bfd9b3",
+        "size": 47
+      },
+      {
+        "path": "tests/audio_monitor_native.py",
+        "sha256": "70bc10d3834c9001dc1968f69a97df4be3773964ecdeea3ce453707026b8f048",
+        "size": 2094
+      },
+      {
+        "path": "tests/audio_oracle_contracts.py",
+        "sha256": "c0689d1a1c23bac6a610ac02e75e3950c660fd585fa67a484781b2e91d5cdeba",
+        "size": 1425
+      },
+      {
+        "path": "tests/audio_osc_isolation.py",
+        "sha256": "fcb46a916bd798518d88c08ca1037fb232b5283c8ce31e743a91c125e54b147e",
+        "size": 3126
+      },
+      {
+        "path": "tests/audio_stream.cjs",
+        "sha256": "0a776c597a8234daa1f7b0dadd120232f400d1d83439f074176a781fdbfae4ba",
+        "size": 2331
+      },
+      {
+        "path": "tests/browser_application.cjs",
+        "sha256": "e38f631d711275d506c1a2dbb7f284cb9c56861ca3152792fb883f47cbf90215",
+        "size": 3827
+      },
+      {
+        "path": "tests/browser_audio.cjs",
+        "sha256": "5ab1e84c544d91f689eeda01ca7691a872c94d8be4fc0b3f8fd4f53c30ebc4c9",
+        "size": 5379
+      },
+      {
+        "path": "tests/browser_client.py",
+        "sha256": "640d5574b199b7570c68f19e36751652ca07067d19bbb7342101cede82fa8749",
+        "size": 1792
+      },
+      {
+        "path": "tests/browser_driver.cjs",
+        "sha256": "d3f03324fbca64ee146e05de307ff7e14547b743eecd1622a8246c40ac296be9",
+        "size": 3786
+      },
+      {
+        "path": "tests/browser_isolated.sh",
+        "sha256": "b0527bd0ea83a10cbb103223cf7f1353b1f5d7128f0e144b81623fe4d16287cd",
+        "size": 580
+      },
+      {
+        "path": "tests/browser_native.cjs",
+        "sha256": "ec6113a0b230db3d197e86909212fa3964667211c86a8a82e686c7559a5c6565",
+        "size": 11221
+      },
+      {
+        "path": "tests/browser_package.ps1",
+        "sha256": "6f6f98102302ec9ce10fe98ee86ed05b6c4adc03fb849996cb62dcaa17566fe0",
+        "size": 2072
+      },
+      {
+        "path": "tests/c07_scenarios.py",
+        "sha256": "38534ca39b806535281a0b9222ec0bbaa055022ab97e5255b350a8a3f361efcd",
+        "size": 1104
+      },
+      {
+        "path": "tests/candidate_evidence.py",
+        "sha256": "817bdf581acfb6b8963b9d5edd0d26d479204cfbf613d7e55f01a7d8f4edd3da",
+        "size": 1845
+      },
+      {
+        "path": "tests/cheat_codes_boot.py",
+        "sha256": "29a3b88dcd77709f7e9f150b2cee57d5ce8930b81aa708d06c5d246a65660763",
+        "size": 3272
+      },
+      {
+        "path": "tests/clock_native.py",
+        "sha256": "3c2e2d37cacc3e5d31772076a35c588d927fa74028ebbde90d8bc014b94af756",
+        "size": 6713
+      },
+      {
+        "path": "tests/contracts/test_audio_monitor.py",
+        "sha256": "a7f71d0493df445ad402fe9a886ef18a40827baa624a0b5fe08047bb3b44bda6",
+        "size": 1830
+      },
+      {
+        "path": "tests/contracts/test_clients.py",
+        "sha256": "fa8d3aa4d6302d1da9e7d9e5050644a65b7eea42d234d7fdaccf7d3118389743",
+        "size": 1499
+      },
+      {
+        "path": "tests/contracts/test_clock_admission.py",
+        "sha256": "494617cd5d98a10a8a590fde2f9b1e0ee4c5d3363c12a2ff0a0f172c88f6022a",
+        "size": 12998
+      },
+      {
+        "path": "tests/contracts/test_contracts.py",
+        "sha256": "684b8f86b119d1726b69ff74abeffbf637aedd947446b2c5b37a05bf89c6a993",
+        "size": 11993
+      },
+      {
+        "path": "tests/contracts/test_controlled_admission.py",
+        "sha256": "287240b39706d3ea3a185a3b9e4f09ea7a152f5f1cf61d75eac48ce89fb4b237",
+        "size": 1335
+      },
+      {
+        "path": "tests/contracts/test_controlled_evidence.py",
+        "sha256": "78ed5e6676117097a6ef3cf201dfd2bb4ffe36bc9ab120cf24b3c418805fc94a",
+        "size": 5756
+      },
+      {
+        "path": "tests/contracts/test_controlled_repeats.py",
+        "sha256": "161b0ffb7adcccb6b8fe1866074ccafdf5375c67b46494a5a0f0586c703c88c4",
+        "size": 4559
+      },
+      {
+        "path": "tests/contracts/test_locked_native_source.py",
+        "sha256": "c6961f056dab32467838f77bbd1c0fb2ed2f1cdd61c8eb42fa91fb7653f842a0",
+        "size": 1455
+      },
+      {
+        "path": "tests/contracts/test_midi.py",
+        "sha256": "02642740ce24a6bdfbbeb3a7d1f4f214de8b5a3dff85fa3cfaa20594e2503b37",
+        "size": 1945
+      },
+      {
+        "path": "tests/contracts/test_midi_schedule_evidence.py",
+        "sha256": "856f0352358228c49e4a309225894ab46c897b3481e4a9f963f128fe113dff42",
+        "size": 3184
+      },
+      {
+        "path": "tests/contracts/test_native_identity.py",
+        "sha256": "2a16e9b7349ccb23dc950f24886de58706e98d5dbf361cd756856001fc2853d1",
+        "size": 1665
+      },
+      {
+        "path": "tests/contracts/test_native_midi_schedule.py",
+        "sha256": "83471dd28a5b8805439a127502bf98cb225374ed1a0a85b21bf572dc9598e5cd",
+        "size": 6058
+      },
+      {
+        "path": "tests/contracts/test_packages.py",
+        "sha256": "18bf6f8c46bb3dd4d7bca6fe1ec3056cc1d0bd1b0beacdf4fa64d4dfa91e8368",
+        "size": 1247
+      },
+      {
+        "path": "tests/contracts/test_thread_sampler.py",
+        "sha256": "25c74acab3092976453caddbde5b1cc6f0b8b5f8534f96771079a75bd1e7875c",
+        "size": 1641
+      },
+      {
+        "path": "tests/contracts/test_timeline.py",
+        "sha256": "68a8dd27509123235f57020bc2cb7e2de31ad5837f59e5d01f38d2588464b018",
+        "size": 1656
+      },
+      {
+        "path": "tests/controlled_boundaries_native.py",
+        "sha256": "de6b82672a257e46447e20e93050d0e754c7b52fb89ea0eb167488a170a6183a",
+        "size": 2409
+      },
+      {
+        "path": "tests/controlled_clock_native.py",
+        "sha256": "1bd9ac0627b300f9a98e1379151670faeb8306d54dcd39d2a2d7477f6af0bd24",
+        "size": 2808
+      },
+      {
+        "path": "tests/controlled_midi_native.py",
+        "sha256": "e297f36be58aff0f78eeebc1e6d2751d7e99729994cd889a19452d6adac72b87",
+        "size": 3021
+      },
+      {
+        "path": "tests/controlled_phase_boundary_native.py",
+        "sha256": "0f63184d3ced1da74ec2b900cbb371e11272caa22552febd9ae6c07d66c05bc1",
+        "size": 3087
+      },
+      {
+        "path": "tests/controlled_phase_native.py",
+        "sha256": "0b01b61c54f33da950ab0f725900d9a5b86de42be680182de161161f80d98e5a",
+        "size": 2272
+      },
+      {
+        "path": "tests/controlled_source_faults.py",
+        "sha256": "912c5c49c5484c429d29c3eac10f096ede5645b97a1ef99139d1e04abf2c3829",
+        "size": 3296
+      },
+      {
+        "path": "tests/controlled_tempo_native.py",
+        "sha256": "5a4491e4d4794b37532835592fa7641b03744901f5d567de25442d79db5ca493",
+        "size": 3152
+      },
+      {
+        "path": "tests/controlled_transition_native.py",
+        "sha256": "d7c690c0ec76c629718da632c56c6c195ad6c739da00564f35572ab1a8786cd1",
+        "size": 3130
+      },
+      {
+        "path": "tests/controlled_wall_timer_native.py",
+        "sha256": "f33263dacc0241c7b266077d4ed4afe734d760a261fc63f37b53f39e3aa225c9",
+        "size": 2939
+      },
+      {
+        "path": "tests/crow_callbacks.py",
+        "sha256": "de85e04de30181f2275b07b392378a72497251714f3c853450902179524f12cc",
+        "size": 2734
+      },
+      {
+        "path": "tests/crow_callbacks_native.py",
+        "sha256": "c516fcd2fdc7684e1a886c52fd8def9301b112fd98923ab45dbfb679a4fbc0b8",
+        "size": 2236
+      },
+      {
+        "path": "tests/crow_capture_api.py",
+        "sha256": "2e1c79b98d160f3efb22d732c1ad47e59e81ab4885293648b759b97f2a0fc64a",
+        "size": 4074
+      },
+      {
+        "path": "tests/crow_capture_host.py",
+        "sha256": "9d4a7b6802ad5a4d7c8ce1c91af578847743c9f52aa1b5c814aa336c655cc47f",
+        "size": 3422
+      },
+      {
+        "path": "tests/crow_clock_frames.c",
+        "sha256": "a2d13a00e7e23e897b0d32bc48b15d47c690dab364b33ff4857d46cbbf92124a",
+        "size": 1178
+      },
+      {
+        "path": "tests/crow_clock_frames.py",
+        "sha256": "f68280a7cc7a5b84f03ebe731dce95b41b842390b8d27d1dbbf2d1b5aac48fa5",
+        "size": 908
+      },
+      {
+        "path": "tests/crow_clock_native.py",
+        "sha256": "c990bc8e376d427e21ea846e64c551de4804ebc7b927d60fb7929e6485259aff",
+        "size": 3273
+      },
+      {
+        "path": "tests/crow_core.lua",
+        "sha256": "e40cd50c92f8d8de384340ab10b852df38d79008508b218ea93222d468fe04c2",
+        "size": 1676
+      },
+      {
+        "path": "tests/crow_core.py",
+        "sha256": "ea1030748c676614ab412a7068e3c1c3ee2ddfadd317caf844a78e715f1beb92",
+        "size": 1891
+      },
+      {
+        "path": "tests/crow_identity.py",
+        "sha256": "dd7ca96382aa3942d743f69284306317448e507fe43f50afe84cab7ac8f9c7f2",
+        "size": 2130
+      },
+      {
+        "path": "tests/crow_ii_core.py",
+        "sha256": "cab1ca1ebd96f5b5403442a21e2cf43a91b4d28e81c9ee14709ec7d0286b2914",
+        "size": 3494
+      },
+      {
+        "path": "tests/crow_ii_isolation.py",
+        "sha256": "bab65b8dd9085775aa7d0adc493b7fda44655d0224f94cad9a26d10e78301723",
+        "size": 3066
+      },
+      {
+        "path": "tests/crow_ii_limits.py",
+        "sha256": "2d403b82f064ff359188ac53efc2567c7647b81ce36e8cf3d0828905067dbbfc",
+        "size": 2831
+      },
+      {
+        "path": "tests/crow_ii_native.py",
+        "sha256": "74b434a85e439e44ab1348feff7d11f73dabd090d84b3ec9aca6111c13abf083",
+        "size": 3702
+      },
+      {
+        "path": "tests/crow_ii_trace.py",
+        "sha256": "ad2abc5f77baf69f6487c9a63b5b23346f4447bff1dbfeddc2e3a30d81b6ceac",
+        "size": 1431
+      },
+      {
+        "path": "tests/crow_input_api.py",
+        "sha256": "670acc4a3f07172ed6ebe276993064fbfa9da9517fde5cd0c6445f2f5c53639f",
+        "size": 3761
+      },
+      {
+        "path": "tests/crow_input_core.lua",
+        "sha256": "03bfb7e6300af0d32dbff1a8470cb7457fbcdcbb594204d5fabbc3f6df815ac7",
+        "size": 1480
+      },
+      {
+        "path": "tests/crow_input_core.py",
+        "sha256": "faef495b31880991eb16fb1ec8f59714539c8a542f83cb75944803d22af21797",
+        "size": 1666
+      },
+      {
+        "path": "tests/crow_native.py",
+        "sha256": "9df3b50a5a3ca41189ca0790e87e3f047884d7aabdf46329f4f448e0edfc7f19",
+        "size": 4550
+      },
+      {
+        "path": "tests/crow_serial.py",
+        "sha256": "ba1ee0c2547d7afd74281fa91f8a6467e8f4a34290afb0c643c9c17ef01f1f43",
+        "size": 4744
+      },
+      {
+        "path": "tests/crow_source_identity.py",
+        "sha256": "b051d5b5b9549d5e6b84f17f69ab054bd22c870ad32d8e4447d24f9e8629ae74",
+        "size": 2743
+      },
+      {
+        "path": "tests/frame_io_native.py",
+        "sha256": "65a992096c55f7c007c967438dc53dc35fdd1cf4bfb899e206a546055747d66d",
+        "size": 2865
+      },
+      {
+        "path": "tests/frame_oracle.py",
+        "sha256": "3186685ce8576a43a20404fac00f3fe94e0066e1dc8b7e750c03e1fe670403a7",
+        "size": 3131
+      },
+      {
+        "path": "tests/grid_native.py",
+        "sha256": "b01daf3dbb09475ba97072af8fd712d9417f5b8edf05eecb662bebbd4be47cb4",
+        "size": 8831
+      },
+      {
+        "path": "tests/input_deadline_native.py",
+        "sha256": "b9dfac0255ff1738ef037433cb9030f5d8d517943b8ae24c31e972e8dfb1f8a7",
+        "size": 6022
+      },
+      {
+        "path": "tests/internal_clock_step_contract.py",
+        "sha256": "e35a6aeab68d3fdf5793a3bda3830fc9a77917abbf137f4513307eeba63cab7f",
+        "size": 2481
+      },
+      {
+        "path": "tests/isolated_generic.sh",
+        "sha256": "6230e68f4146338cc520c37696f47c0c855fcd56988497450a146131bc6d1566",
+        "size": 670
+      },
+      {
+        "path": "tests/metro_step_contract.py",
+        "sha256": "f2984b138eb816e44be801b1c28cf9a922b830bb5f7f4a26d54169281192614f",
+        "size": 2329
+      },
+      {
+        "path": "tests/midi_connection_contracts.py",
+        "sha256": "e0607acd006a731f1e86d14f781da097fdad78ab3456d6d9293e6f726d493628",
+        "size": 3844
+      },
+      {
+        "path": "tests/midi_hotplug_native.py",
+        "sha256": "8c176495d7c2ae8bc9dbb05945222db6ac46427a4f2f67c9af72f91ec162c238",
+        "size": 9528
+      },
+      {
+        "path": "tests/midi_native.py",
+        "sha256": "9295ed93238fc451a134312768a50bc849ef038a34014c4c2d1b6fe7d0bbf3e5",
+        "size": 9645
+      },
+      {
+        "path": "tests/midi_send_race_native.py",
+        "sha256": "efaeb52d785ae566eb098353a67302ef9e8453a875998b712880534d1788ea85",
+        "size": 4008
+      },
+      {
+        "path": "tests/mosaic_audio.py",
+        "sha256": "fd7406092f962030f319e5656a0cbf65bccfe7b52c8e58a17ba5192220814ec5",
+        "size": 4008
+      },
+      {
+        "path": "tests/mosaic_candidate.py",
+        "sha256": "d66f05d87e272000ff2b582ee8ecd0a578aa9d5a0152503fc3f4817cf11cec7a",
+        "size": 3215
+      },
+      {
+        "path": "tests/mosaic_candidate_regressions.py",
+        "sha256": "c4dc5944e273567657e272573a9b32fd49e773731d6dce43135ad4a03b6b4eb5",
+        "size": 289
+      },
+      {
+        "path": "tests/mosaic_candidate_units.py",
+        "sha256": "16d5191bb55308c078cc8b86f57fdd227b1f04c610243b69196aaf8fdcc3983e",
+        "size": 2294
+      },
+      {
+        "path": "tests/mosaic_channels.py",
+        "sha256": "0ca0a8d8b48323259f7a1261801b8f4ba3c15aed33769458bc5587ffa69e864b",
+        "size": 2219
+      },
+      {
+        "path": "tests/mosaic_chords.py",
+        "sha256": "56c883b3b83a8e863a75692c0bccba9cee2af197ef6e364014ab21a38209aa87",
+        "size": 1259
+      },
+      {
+        "path": "tests/mosaic_editing.py",
+        "sha256": "7cf11510d686a97038195ac426fedadd1dbee51664c606a473f2cf6a1d3b0339",
+        "size": 4070
+      },
+      {
+        "path": "tests/mosaic_editor_ranges.py",
+        "sha256": "067c0509caf240dd5adcd40c3878098ed46cdb4aec1c9c2030b4ab754d674f64",
+        "size": 2974
+      },
+      {
+        "path": "tests/mosaic_euclidean.py",
+        "sha256": "bce91e14281e7b735af97a21591c68260b7e285a722a6b444f9aa323823daa46",
+        "size": 2019
+      },
+      {
+        "path": "tests/mosaic_global_masks.py",
+        "sha256": "52abbb9bec87d77548a7ec6b8de9d415131e44a2c8f61b3d6c8543811632ed0c",
+        "size": 1820
+      },
+      {
+        "path": "tests/mosaic_harmony.py",
+        "sha256": "cfa9050807b7460f0d7c84f56c6ede00046c588526565d5c72f9f820b5a03688",
+        "size": 1866
+      },
+      {
+        "path": "tests/mosaic_harmony_axes.py",
+        "sha256": "75eafc9d3a2f8989724ea54483bafb41cb78eb056ae195f401a3b2db56d7f96a",
+        "size": 1781
+      },
+      {
+        "path": "tests/mosaic_jf.py",
+        "sha256": "d94883559f2e3be2b861c17d412e6d3c785c3c3b011bcf003026508a3994f8a9",
+        "size": 3989
+      },
+      {
+        "path": "tests/mosaic_lengths.py",
+        "sha256": "869985b27f37c95fc0dbc7997bffea04f4b1c83a2ff6ba37cf2d5f65e7e20d7d",
+        "size": 1624
+      },
+      {
+        "path": "tests/mosaic_mask_candidate_units.py",
+        "sha256": "63ed3345b09753b5dffa4bdde87f5ed683e3da7dc3ca4e84a778a312cd717067",
+        "size": 2343
+      },
+      {
+        "path": "tests/mosaic_masks.py",
+        "sha256": "6e7a440a2728842d0f87dc379aa55f50103ea1e6381496fdd522ebdbb65c24b9",
+        "size": 1379
+      },
+      {
+        "path": "tests/mosaic_memory.py",
+        "sha256": "50fc499b2c7371cc23adbf392f646ac50031d23f856571a67ce9470407be747b",
+        "size": 1812
+      },
+      {
+        "path": "tests/mosaic_merging.py",
+        "sha256": "a8277f69410aaa503ed5e2e5335ee13188ea25af996f6f92b53ad57422645c4d",
+        "size": 2192
+      },
+      {
+        "path": "tests/mosaic_midi_candidate_regressions.py",
+        "sha256": "2077ef0acce97e277ed0ae38cdca262e853cbae95f08fa6908754ac638473168",
+        "size": 369
+      },
+      {
+        "path": "tests/mosaic_patch_units.py",
+        "sha256": "9674b3b5fa3bd27024daca9fdaa0fd2957a3475f5896d0694c058227d971947a",
+        "size": 2006
+      },
+      {
+        "path": "tests/mosaic_pattern_lengths.py",
+        "sha256": "6666baa53b99277e6c3566f578bf77e2228bbea2de6c543dc5ffc14950165003",
+        "size": 2424
+      },
+      {
+        "path": "tests/mosaic_pattern_slots.py",
+        "sha256": "6faaa5d719deca9c3fa8b66f33e57a5f3573e453a4856e0452ce261e5c359b2a",
+        "size": 2054
+      },
+      {
+        "path": "tests/mosaic_quantiser_options.py",
+        "sha256": "0b0aa6e16ae1370a1829c2a5800079b26acfd7962ac72ec17ac8b2b497887842",
+        "size": 1879
+      },
+      {
+        "path": "tests/mosaic_rhythm_banks.py",
+        "sha256": "eabb930d4831a554bf1ab6d29a7aeae6d7a794d44768d708e7a934e992ac4386",
+        "size": 1797
+      },
+      {
+        "path": "tests/mosaic_scale_slots.py",
+        "sha256": "3ec040ca02932c38aa1a37af9fb2cdce59a8954b9dbe25315ab2b558de6a96d9",
+        "size": 2342
+      },
+      {
+        "path": "tests/mosaic_scales.py",
+        "sha256": "afa2ccb5957baed104afba25aa7b8d1f8cf1f8688e3cbe61da1c5d80584e8dba",
+        "size": 1008
+      },
+      {
+        "path": "tests/mosaic_slice.py",
+        "sha256": "66cd481a2929fc1092b94f840e0992317be169e688b3694c5b13c4f9cdbadb19",
+        "size": 10332
+      },
+      {
+        "path": "tests/mosaic_timing.py",
+        "sha256": "054f894a9803df8ffa02752bb282acc6346435d44d6e2fdb9df05bea8eb333c1",
+        "size": 6257
+      },
+      {
+        "path": "tests/mosaic_tresillo.py",
+        "sha256": "63d650e04ad7040b6e5121a84764ebc6533d6bf4618de95a69c62506770567eb",
+        "size": 2174
+      },
+      {
+        "path": "tests/mosaic_two_channels.py",
+        "sha256": "bd8e172fa03ebb16c02d758641e5cb9de495555be51f173b0f09f83d5ce27451",
+        "size": 1753
+      },
+      {
+        "path": "tests/mosaic_workflows.py",
+        "sha256": "6e6d21e4c8aee431c0999462410237c4beab0bf69ceba204d7ae3baf63f085ae",
+        "size": 6264
+      },
+      {
+        "path": "tests/native_internal_clock_step.c",
+        "sha256": "840af927c9651c4268e57472bf038a963bba6cee9a82b2e0ebcb5280ac7d8cee",
+        "size": 3302
+      },
+      {
+        "path": "tests/native_loader.py",
+        "sha256": "59e24e765d264a3acb300ec2f0492809c47b0ee2340474a616ed46034b71b639",
+        "size": 5177
+      },
+      {
+        "path": "tests/native_metro_step.c",
+        "sha256": "03fa530cfe9609057512679855d8b78f313e2fd4706fc72a3abe0efe93bd00c2",
+        "size": 3131
+      },
+      {
+        "path": "tests/native_scheduler_step.c",
+        "sha256": "8bbe318fe45f6cadd02c886d37ebac04c876e9c6ddfefb91d3ff2c6d3ed76f58",
+        "size": 4384
+      },
+      {
+        "path": "tests/native_sdl_ownership.c",
+        "sha256": "31de068741b8a55fb8ec6a6c538b2622c568349732cd65045db94c22906a55bf",
+        "size": 929
+      },
+      {
+        "path": "tests/native_sdl_ownership.py",
+        "sha256": "c4164787533d068363527e49ca45d2f6a7b0a5ca2a6395783a4dd3054b11d6c1",
+        "size": 2660
+      },
+      {
+        "path": "tests/native_smoke.py",
+        "sha256": "ba2c360d8752540755892ec0086efa8c2efabe99edff005f76a3b3bf7f3664df",
+        "size": 2031
+      },
+      {
+        "path": "tests/nb_audio.py",
+        "sha256": "9c7436b20fa704eb3e70a5e029a4d6697663ab36e4692b1678c606b09340c56f",
+        "size": 4311
+      },
+      {
+        "path": "tests/public_client_native.py",
+        "sha256": "319e715d6c0e9ac49b35e025c85b6e98ef2a9321cefb24c127b48ae9f195be55",
+        "size": 1552
+      },
+      {
+        "path": "tests/record_browser.py",
+        "sha256": "29a008dd98eeb902a3ab54c2d84f7137755c2dc199683613437733b59e6beeec",
+        "size": 1535
+      },
+      {
+        "path": "tests/schedule_admission_faults.py",
+        "sha256": "df9f58037d3835f4ead7a36d38bbbdb34b8abecc772da7fe156c793ebccd98da",
+        "size": 3660
+      },
+      {
+        "path": "tests/scheduler_step_contract.py",
+        "sha256": "69a8fc234033dd19ab4b2aeed98411f6c2254aad477e7dac356af43b1e29fa40",
+        "size": 2814
+      },
+      {
+        "path": "tests/screen_shutdown_barrier.c",
+        "sha256": "81f26fad5ca97502321506cbd76b4860c9ddd12b2171342f34a2146ef7570f58",
+        "size": 2141
+      },
+      {
+        "path": "tests/screen_shutdown_native.py",
+        "sha256": "f31aa1745ec922dde798c11688cbc1ee7ccdc977d8fe1d57b0c1a685e7899dc0",
+        "size": 4763
+      },
+      {
+        "path": "tests/startup_cleanup.py",
+        "sha256": "0db9056c38b5ecb4aadc870b286027d036e8141fa04a62f3ea9b0dce62a414f4",
+        "size": 3323
+      },
+      {
+        "path": "tests/test_input_origin.py",
+        "sha256": "1a861d84d8fb77e09cbf4a1d4b192520d5295022d8728f0f250c0e29336b1abb",
+        "size": 4144
+      },
+      {
+        "path": "tests/test_native_startup_errors.py",
+        "sha256": "bb85a382c91648744eb98526e9aa1d4cba2936051c349a2cec6a3d853b30d46f",
+        "size": 2801
+      },
+      {
+        "path": "tests/test_scheduling_metrics.py",
+        "sha256": "7eef46d0afc3e0ca416dccc8fbefb920a734b679d3d39f59bc0a97492ff83d94",
+        "size": 2952
+      },
+      {
+        "path": "tests/test_workflow_retention.py",
+        "sha256": "f11c348c10c161a2e725e6db45a0138387b82093999b15a1e5332de347c96643",
+        "size": 2402
+      },
+      {
+        "path": "tests/transition_realtime_native.py",
+        "sha256": "ae79a00f7304dea3a25317a19adf75ce48f1fbd7631068b1be6649635593f5cc",
+        "size": 4509
+      },
+      {
+        "path": "ui/app.js",
+        "sha256": "c2b2bbfdcbdfc396c5a4a139cf1ba8cec90a2b28396043ed236e081285a6d825",
+        "size": 7176
+      },
+      {
+        "path": "ui/audio-stream.js",
+        "sha256": "86ebe762ffdba7d0e2fb0066266c9e879c83f2f3084ec0a6d1718ca5a29f3fea",
+        "size": 1960
+      },
+      {
+        "path": "ui/audio.css",
+        "sha256": "fd0c1b430202a565b40d461e38ffe966fd555149e4968f549d0f14285769c5a6",
+        "size": 399
+      },
+      {
+        "path": "ui/audio.js",
+        "sha256": "ca0bfbcc8ae4dbd8b07cfa88d71fca0a22cbc10fb430faf5a6351545b062337c",
+        "size": 4019
+      },
+      {
+        "path": "ui/index.html",
+        "sha256": "de2b5af0a26990643c8ce818f8cff4f1a7aace4f99a936a06e0f666ed3ae488f",
+        "size": 1812
+      },
+      {
+        "path": "ui/style.css",
+        "sha256": "dec662d771dbb0f2ab3754c91a57fd899dd393d70ae6958fb56e0b2851105a7d",
+        "size": 2887
+      }
+    ],
+    "revision": "801fcdcb9711e1054d898971942982862a30daf6",
+    "root": "/home/andy/projects/monome-emulator-behaviour-audio-crow"
+  },
+  "current_runtime_installation": {
+    "binaries": [
+      {
+        "current_sha256": "2599ded0dd351119691373bf604357465d01ce9193a060c6905e2bf26a2aa262",
+        "exists": true,
+        "expected_sha256": "2599ded0dd351119691373bf604357465d01ce9193a060c6905e2bf26a2aa262",
+        "matches": true,
+        "name": "matron",
+        "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-01/norns/build/matron/matron"
+      },
+      {
+        "current_sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f",
+        "exists": true,
+        "expected_sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f",
+        "matches": true,
+        "name": "crone",
+        "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-01/norns/build/crone/crone"
+      },
+      {
+        "current_sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f",
+        "exists": true,
+        "expected_sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f",
+        "matches": true,
+        "name": "libmonome",
+        "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix/lib/libmonome.so"
+      },
+      {
+        "current_sha256": "3fb4185eeabd278d5ff0caf3dcbe501ebc65770994601ccad1a1362f13610e69",
+        "exists": true,
+        "expected_sha256": "3fb4185eeabd278d5ff0caf3dcbe501ebc65770994601ccad1a1362f13610e69",
+        "matches": true,
+        "name": "crow_host",
+        "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/crow-host"
+      },
+      {
+        "current_sha256": "3da5a2264317fd445361de2988b729650da8066ec3c07d2f3c07196d69316c17",
+        "exists": true,
+        "expected_sha256": "3da5a2264317fd445361de2988b729650da8066ec3c07d2f3c07196d69316c17",
+        "matches": true,
+        "name": "audio_monitor",
+        "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/jack-monitor"
+      },
+      {
+        "current_sha256": "f87fe874be36def25b85c96adaafd7886d36124d33959939ed939653a064e380",
+        "exists": true,
+        "expected_sha256": "f87fe874be36def25b85c96adaafd7886d36124d33959939ed939653a064e380",
+        "matches": true,
+        "name": "audio_capture",
+        "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/jack-capture"
+      }
+    ],
+    "identity": {
+      "binaries": {
+        "audio_capture": {
+          "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/jack-capture",
+          "sha256": "f87fe874be36def25b85c96adaafd7886d36124d33959939ed939653a064e380"
+        },
+        "audio_monitor": {
+          "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/jack-monitor",
+          "sha256": "3da5a2264317fd445361de2988b729650da8066ec3c07d2f3c07196d69316c17"
+        },
+        "crone": {
+          "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-01/norns/build/crone/crone",
+          "sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f"
+        },
+        "crow_host": {
+          "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/crow-host",
+          "sha256": "3fb4185eeabd278d5ff0caf3dcbe501ebc65770994601ccad1a1362f13610e69"
+        },
+        "libmonome": {
+          "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix/lib/libmonome.so",
+          "sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f"
+        },
+        "matron": {
+          "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-01/norns/build/matron/matron",
+          "sha256": "2599ded0dd351119691373bf604357465d01ce9193a060c6905e2bf26a2aa262"
+        }
+      },
+      "build_inputs_sha256": "3409118c963d18c554f6ff0a89c9c829e6f17a738671905bcb2be6025e31b93a",
+      "experimental": {
+        "audio_capture_source_sha256": "b06a7a8fb6ff9a04899d16b189b42499139447a16adece20a865c852a6e726d5",
+        "audio_monitor_source_sha256": "af8433c8e4e0a08e00aa1fbedbfd2320474a66df84426ba7d61be3db410a4f00",
+        "crow": {
+          "lua_files": {
+            "lua/First.lua": "310d098c4c946c45956231eda627800a107bcdd031fdb67af5a41864568eabea",
+            "lua/asl.lua": "0d707317a7e1a49a0e3f33692665d8559847bbfb1e97642dbf7cfb9d779e7f7d",
+            "lua/asllib.lua": "53f0eb5e79128e96b696c4c44960b33c5f0820717d595c6f14764de98a1bf290",
+            "lua/aslsequins.lua": "e4b18af2d4413fcf3388db39dd486cc9890cc629a8ca80b213f26dc1f95827e8",
+            "lua/bootstrap.lua": "b576ceb90aee8183ff2933cc584f962770885e08fb71eb38e62dc5137c7f3c70",
+            "lua/calibrate.lua": "04a2de2fefd80f0db68135ec647d2cc2b956d99ef5778d5ac1c4b2bec15e93ff",
+            "lua/clock.lua": "8d9a2c6523b6c495dc6d1d38c684d8135279a6e01b18613665e9922f2d042609",
+            "lua/crowlib.lua": "2848c70cea97e3eb1fe7b674be1e393f65aa52fd60634ee27ccaef24b0d943de",
+            "lua/hotswap.lua": "c2161ed0f1574099e7dc7c481e90ff42c499bc447dc337997fd2dc1ce14d09bb",
+            "lua/ii.lua": "d2faf0e18609c21b3dfca3f0aefca6e333c95867dee127ce495eb2e9a37453a3",
+            "lua/ii/ansible.lua": "e6e9dbd9f705cc2fbbe3b36581b04eb648ecc558ebc2c04b3eaf32039b03c3b8",
+            "lua/ii/crow.lua": "2b6a3e94a6d903671e54525cd853af1a890d2e0e7927b038c6993ac1e5ff6bd2",
+            "lua/ii/disting.lua": "8475c23bb6695caed43d59003c0568068963e48520cb427411c5222e0c7ddc08",
+            "lua/ii/er301.lua": "f3f1ebe1cd35a12bd02173f41af1196d6ddd6dce3d3284ded52c48bb6027ebaf",
+            "lua/ii/faders.lua": "e72e7d08526d7ea4d9a8be67b0c2e172b3734d631ef1b1e9935216b649b07e8e",
+            "lua/ii/jf.lua": "35e3f98c330982364f2dae0a304c0b0ef61eb07d50e36eea184ce28a38ce114a",
+            "lua/ii/kria.lua": "05089fc1285fb4df5202d11ba7d21535b6e50e4ec8ed46a19ec9fc1b3b0687b3",
+            "lua/ii/levels.lua": "f92623211946eb30e2d8e7706fb1b819a1449949f187c583e650a2e7dccbd4d2",
+            "lua/ii/meadowphysics.lua": "47443c59a7f709cfc028c047864d5e93389f31e85d542ca5d25ca6835d071e22",
+            "lua/ii/txi.lua": "954fadbe1b73e5a0681c021ef685727ae203e995673b5661f3b59c573a5c5766",
+            "lua/ii/txo.lua": "b2777f22a857f4c04053ca82e07cb4ecd912d8abc9f0f5a3d0408989be268d74",
+            "lua/ii/wdel.lua": "cd658adde29d2a418ae06a99997ae374a7d8b6957a66fdb387b764a9861b50d3",
+            "lua/ii/wsyn.lua": "7711209d4eef1e365364250a26d5c803856ae805d29bd9cb07242f2800e938a6",
+            "lua/ii/wtape.lua": "b0c696943b0c711b70816c9ea2cd31de400f36690c2ee9d482ebee535c438a02",
+            "lua/input.lua": "259e2dc633851d90899621e781a80145dfbed7974e013ec4e9d09852976c1eab",
+            "lua/metro.lua": "2739fa5cba7252e027bbea0473357f0f4cd186a557bfc3548dc143034306bd52",
+            "lua/output.lua": "d3f5dc47f471db50fc00e8cf4f3f102f1175f6e12e5543d7e840cf762c869a5c",
+            "lua/public.lua": "b1ad20ff7c7859e3998a4172b7705e61e8e251e7f55451b22eccde166f054486",
+            "lua/quote.lua": "b028c457eb2caeb675c14e0199f2fd334bfece2fd10be54607613ecc1c219eba",
+            "lua/sequins.lua": "1286461cd2e917a3729f2fce4dfd8dc27e6c1f06ccd84bdbf11feb5a18c53722",
+            "lua/timeline.lua": "11fb234400577ab1fbbdec1313329dfd5af16537ca75881d83d37ec3001d88a0"
+          },
+          "manifest": {
+            "adapter": {
+              "capture.h": "834db573acdcdb693bb523c7b31eda71b1432f63b1e1ed341f61c410c1dde722",
+              "ftrack.h": "d9684de951731b6f5b820363fa5fd2450a4bc73f7292fd05b5126cf90baaf105",
+              "input.h": "59c6abe5c165c489497418a1fe920f238789421b53bbb02536e2add635968ed6",
+              "main.c": "06bd0dfb794b2ee840e569c73bbc002a20284b0c5a9cef9ac8f00c08fa3f64d1",
+              "serial.lua": "cedc9b5be904904d3e2760083420db10fe149947c0b926105cab828abae0d771",
+              "stm32f7xx.h": "d6032ff170eb2c1522e1df97d036265589c69cc54d1e6d891a403f5c3861acea"
+            },
+            "binary_sha256": "3fb4185eeabd278d5ff0caf3dcbe501ebc65770994601ccad1a1362f13610e69",
+            "capture_protocol": 1,
+            "command": [
+              "gcc",
+              "-DCROW_HOST_II",
+              "-Wl,--wrap=printf",
+              "-Wl,--wrap=puts",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/lib",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/src/devices/crow_ii_host",
+              "-std=gnu11",
+              "-O2",
+              "-DLUA_USE_LINUX",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/src/devices/crow_host",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/core",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrLib",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrDsp",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/lib",
+              "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/src/devices/crow_host/main.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/lib/casl.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/lib/slopes.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/lib/shapes.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrDsp/wrBlocks.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/core/detect.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrLib/wrMeters.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrDsp/wrFilter.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrLib/wrMath.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lapi.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lauxlib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lbaselib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lbitlib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lcode.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lcorolib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lctype.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldblib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldebug.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldo.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldump.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lfunc.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lgc.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/linit.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/liolib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/llex.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lmathlib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lmem.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/loadlib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lobject.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lopcodes.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/loslib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lparser.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lstate.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lstring.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lstrlib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ltable.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ltablib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ltm.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lundump.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lutf8lib.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lvm.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lzio.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/lib/ii.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/lib/l_ii_mod.c",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrLib/wrQueue.c",
+              "-lm",
+              "-ldl",
+              "-o",
+              "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/crow-host"
+            ],
+            "ii_adapter": {
+              "i2c.h": "8f5720281d719dd35187635254099810f2a4c4f7737379ab7d5839368902c3d9",
+              "i2c_pullups.h": "c62dcce68c16f313cd0070e22ee6909eaf5e554f0edc8da5297be323be15af31",
+              "main.c": "ae2f2723b12c036b6fd2889d5e66fb708287e5f203da4a7ff476f3a27091546d"
+            },
+            "ii_build": {
+              "adapter": {
+                "i2c.h": "8f5720281d719dd35187635254099810f2a4c4f7737379ab7d5839368902c3d9",
+                "i2c_pullups.h": "c62dcce68c16f313cd0070e22ee6909eaf5e554f0edc8da5297be323be15af31",
+                "main.c": "0600962a2dcb15d4607c9b93b89fc08647ed6f8b45837f19429e8bf5a3fc9c8a"
+              },
+              "binary_sha256": "2d347184b8c47bdba2abf9a2594c7089d32c267f518eeeade8bf789a81e614cf",
+              "command": [
+                "gcc",
+                "-std=gnu11",
+                "-O2",
+                "-DLUA_USE_LINUX",
+                "-Wl,--wrap=printf",
+                "-Wl,--wrap=puts",
+                "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/src/devices/crow_ii_host",
+                "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/src/devices/crow_host",
+                "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-ii-host-02/lib",
+                "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/lib",
+                "-I/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrLib",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/src/devices/crow_ii_host/main.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-ii-host-02/lib/ii.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-ii-host-02/lib/l_ii_mod.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrLib/wrQueue.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/wrLib/wrMath.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lapi.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lauxlib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lbaselib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lbitlib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lcode.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lcorolib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lctype.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldblib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldebug.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldo.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ldump.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lfunc.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lgc.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/linit.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/liolib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/llex.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lmathlib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lmem.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/loadlib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lobject.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lopcodes.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/loslib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lparser.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lstate.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lstring.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lstrlib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ltable.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ltablib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/ltm.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lundump.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lutf8lib.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lvm.c",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow/submodules/lua/src/lzio.c",
+                "-lm",
+                "-ldl",
+                "-o",
+                "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-ii-host-02/crow-ii-host"
+              ],
+              "copied_sources": {
+                "ii.c": "f79de3908bfc56228b6adc23dd209df1554dbd5e41735afdc5c323db2db4c31a",
+                "ii.h": "26bff851a140a478674ee9bdbad5dad12b0cbf27ecc429f3c971123359899b25",
+                "l_ii_mod.c": "d3c46debed29bc0044baef062aabfabd143a5ce30973594a74bbefa68a59fd01",
+                "l_ii_mod.h": "425c1c73dd35df4786f17658498e91733ec0d07e2267fbde42487fe841903fb8"
+              },
+              "descriptors": {
+                "ansible.lua": "e6e9dbd9f705cc2fbbe3b36581b04eb648ecc558ebc2c04b3eaf32039b03c3b8",
+                "crow.lua": "2b6a3e94a6d903671e54525cd853af1a890d2e0e7927b038c6993ac1e5ff6bd2",
+                "disting.lua": "8475c23bb6695caed43d59003c0568068963e48520cb427411c5222e0c7ddc08",
+                "er301.lua": "f3f1ebe1cd35a12bd02173f41af1196d6ddd6dce3d3284ded52c48bb6027ebaf",
+                "faders.lua": "e72e7d08526d7ea4d9a8be67b0c2e172b3734d631ef1b1e9935216b649b07e8e",
+                "jf.lua": "35e3f98c330982364f2dae0a304c0b0ef61eb07d50e36eea184ce28a38ce114a",
+                "kria.lua": "05089fc1285fb4df5202d11ba7d21535b6e50e4ec8ed46a19ec9fc1b3b0687b3",
+                "levels.lua": "f92623211946eb30e2d8e7706fb1b819a1449949f187c583e650a2e7dccbd4d2",
+                "meadowphysics.lua": "47443c59a7f709cfc028c047864d5e93389f31e85d542ca5d25ca6835d071e22",
+                "txi.lua": "954fadbe1b73e5a0681c021ef685727ae203e995673b5661f3b59c573a5c5766",
+                "txo.lua": "b2777f22a857f4c04053ca82e07cb4ecd912d8abc9f0f5a3d0408989be268d74",
+                "wdel.lua": "cd658adde29d2a418ae06a99997ae374a7d8b6957a66fdb387b764a9861b50d3",
+                "wsyn.lua": "7711209d4eef1e365364250a26d5c803856ae805d29bd9cb07242f2800e938a6",
+                "wtape.lua": "b0c696943b0c711b70816c9ea2cd31de400f36690c2ee9d482ebee535c438a02"
+              },
+              "generated": {
+                "ii_c_layer.h": "ee0a1d86718306285ac4c60cac92e83d4386d0b8ed33f6335fe33415cd00dbe5",
+                "ii_mod_gen.h": "2c29f6409fa5cd53b1b1b84ee41acd628c312ff31a2b7f4ad4c2e37509b0304f"
+              },
+              "generator_sha256": "19adb2ca0a7640a6a6a0f2821961d5fdae95dea1ddf013811fec2856a058203b",
+              "pins": {
+                ".": "b340579d94e57e2b43336611b2c4037cff74bb80",
+                "submodules/lua": "32ffee2104c3a19ad2122dbfc5d4a018c273afc7",
+                "submodules/wrDsp": "e1eb9c533fbdec9d68438b22b5cdf179247fd02b",
+                "submodules/wrLib": "c44e6b0ff9846ddf69e6f15f3357e2df638fb0f6"
+              },
+              "source": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow"
+            },
+            "ii_protocol": 1,
+            "input_protocol": 1,
+            "lua_files": {
+              "lua/First.lua": "310d098c4c946c45956231eda627800a107bcdd031fdb67af5a41864568eabea",
+              "lua/asl.lua": "0d707317a7e1a49a0e3f33692665d8559847bbfb1e97642dbf7cfb9d779e7f7d",
+              "lua/asllib.lua": "53f0eb5e79128e96b696c4c44960b33c5f0820717d595c6f14764de98a1bf290",
+              "lua/aslsequins.lua": "e4b18af2d4413fcf3388db39dd486cc9890cc629a8ca80b213f26dc1f95827e8",
+              "lua/bootstrap.lua": "b576ceb90aee8183ff2933cc584f962770885e08fb71eb38e62dc5137c7f3c70",
+              "lua/calibrate.lua": "04a2de2fefd80f0db68135ec647d2cc2b956d99ef5778d5ac1c4b2bec15e93ff",
+              "lua/clock.lua": "8d9a2c6523b6c495dc6d1d38c684d8135279a6e01b18613665e9922f2d042609",
+              "lua/crowlib.lua": "2848c70cea97e3eb1fe7b674be1e393f65aa52fd60634ee27ccaef24b0d943de",
+              "lua/hotswap.lua": "c2161ed0f1574099e7dc7c481e90ff42c499bc447dc337997fd2dc1ce14d09bb",
+              "lua/ii.lua": "d2faf0e18609c21b3dfca3f0aefca6e333c95867dee127ce495eb2e9a37453a3",
+              "lua/ii/ansible.lua": "e6e9dbd9f705cc2fbbe3b36581b04eb648ecc558ebc2c04b3eaf32039b03c3b8",
+              "lua/ii/crow.lua": "2b6a3e94a6d903671e54525cd853af1a890d2e0e7927b038c6993ac1e5ff6bd2",
+              "lua/ii/disting.lua": "8475c23bb6695caed43d59003c0568068963e48520cb427411c5222e0c7ddc08",
+              "lua/ii/er301.lua": "f3f1ebe1cd35a12bd02173f41af1196d6ddd6dce3d3284ded52c48bb6027ebaf",
+              "lua/ii/faders.lua": "e72e7d08526d7ea4d9a8be67b0c2e172b3734d631ef1b1e9935216b649b07e8e",
+              "lua/ii/jf.lua": "35e3f98c330982364f2dae0a304c0b0ef61eb07d50e36eea184ce28a38ce114a",
+              "lua/ii/kria.lua": "05089fc1285fb4df5202d11ba7d21535b6e50e4ec8ed46a19ec9fc1b3b0687b3",
+              "lua/ii/levels.lua": "f92623211946eb30e2d8e7706fb1b819a1449949f187c583e650a2e7dccbd4d2",
+              "lua/ii/meadowphysics.lua": "47443c59a7f709cfc028c047864d5e93389f31e85d542ca5d25ca6835d071e22",
+              "lua/ii/txi.lua": "954fadbe1b73e5a0681c021ef685727ae203e995673b5661f3b59c573a5c5766",
+              "lua/ii/txo.lua": "b2777f22a857f4c04053ca82e07cb4ecd912d8abc9f0f5a3d0408989be268d74",
+              "lua/ii/wdel.lua": "cd658adde29d2a418ae06a99997ae374a7d8b6957a66fdb387b764a9861b50d3",
+              "lua/ii/wsyn.lua": "7711209d4eef1e365364250a26d5c803856ae805d29bd9cb07242f2800e938a6",
+              "lua/ii/wtape.lua": "b0c696943b0c711b70816c9ea2cd31de400f36690c2ee9d482ebee535c438a02",
+              "lua/input.lua": "259e2dc633851d90899621e781a80145dfbed7974e013ec4e9d09852976c1eab",
+              "lua/metro.lua": "2739fa5cba7252e027bbea0473357f0f4cd186a557bfc3548dc143034306bd52",
+              "lua/output.lua": "d3f5dc47f471db50fc00e8cf4f3f102f1175f6e12e5543d7e840cf762c869a5c",
+              "lua/public.lua": "b1ad20ff7c7859e3998a4172b7705e61e8e251e7f55451b22eccde166f054486",
+              "lua/quote.lua": "b028c457eb2caeb675c14e0199f2fd334bfece2fd10be54607613ecc1c219eba",
+              "lua/sequins.lua": "1286461cd2e917a3729f2fce4dfd8dc27e6c1f06ccd84bdbf11feb5a18c53722",
+              "lua/timeline.lua": "11fb234400577ab1fbbdec1313329dfd5af16537ca75881d83d37ec3001d88a0"
+            },
+            "pins": {
+              ".": "b340579d94e57e2b43336611b2c4037cff74bb80",
+              "submodules/lua": "32ffee2104c3a19ad2122dbfc5d4a018c273afc7",
+              "submodules/wrDsp": "e1eb9c533fbdec9d68438b22b5cdf179247fd02b",
+              "submodules/wrLib": "c44e6b0ff9846ddf69e6f15f3357e2df638fb0f6"
+            },
+            "portable_sources": {
+              "detect.c": "fdee5e90acffcf57cc6adce1d9e82df7c66a74fd604c000b8a20b9fee30ed31c",
+              "detect.h": "9b9dccbdb4c7027ec16ac5ad450a28abac9d64d8799827eabf1cec18e31abcb3"
+            },
+            "serial_path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-host-16/serial.lua",
+            "source": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow"
+          },
+          "source": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/worktrees/audio-monitor/.runtime/crow-feasibility/crow"
+        },
+        "default_server_patch_sha256": "2f343d635a6111d40bbc7131e846571c3c180b1aed87d04937559026971a1c5f",
+        "engine_ready_patch_sha256": "0eebf5bef806b520e204265b5a990f804174407fc1bcb9028aefc8414cd6d884",
+        "engine_sources": "Pinned official sc/engines copied unchanged into sc/core/engines",
+        "patch_sha256": "8aec73eb47c8c1572f67e04830b3b76e73d4dd9f3f191b3cfa633d7dd7b491c5",
+        "status": "audio-feasibility-only"
+      },
+      "interpreted_files": {
+        "lua/core/arc.lua": "f242495cc84de0a0454945dbfd189c75bde0f8e1114890ea92e48a8498dd05c7",
+        "lua/core/audio.lua": "eaf8f99fe3403e0d5ce3e2300670381a2c661339eb066be355e1ecc13c450cff",
+        "lua/core/clock.lua": "e39411ea122b3e9110e98500ebf7ff8bc982617472ba88582446eb68b8db9f54",
+        "lua/core/config.lua": "cbe963e9a2267bad92ac434c3baf78d36bdc7935f5f2dddfd4ecc491fe2074fa",
+        "lua/core/controlspec.lua": "4c5c3288957d14082a54a61cd82ce55a3913fe93deb471835fc22eb0c0889ece",
+        "lua/core/crow.lua": "311a8de9cb131953c75fa2031dd4d40dcb59885f19db6d339e143457d84671de",
+        "lua/core/crow/public.lua": "55dbd0f5e2f392f8d631bf8d300cf951b44e759cb099abcbbe57a0fa546b2cfa",
+        "lua/core/crow/quote.lua": "4aa2e47149346f35b79e6aa7dd417ad108f01194adfbfd5500f4850ea6155a90",
+        "lua/core/encoders.lua": "3e506a1d76e0e7d717348f4612526314db2f392546ed13a64e5b788985cc5adb",
+        "lua/core/engine.lua": "98d60c79bff98d6bc481dc96a197ac267109d0db7ab05940d3b3a84b709c64e2",
+        "lua/core/gamepad.lua": "430ef0ab6b97fa6ca7131e5c8fc87951e72ced0630208e4850a36efc525cd6a8",
+        "lua/core/gamepad_model/ibufalo_classic_usb.lua": "dd8225d8d2db68575d1e1349e3b8e52a0c86f1e20e51e50649ab6cc6804855cf",
+        "lua/core/gamepad_model/index.lua": "379873e8bac8e22ece145e90315fb2591a1db31cb5aaa0b0298f5f66af924a52",
+        "lua/core/gamepad_model/retro_controller.lua": "4e98f4b5ffe4eccf25f193e9206020ed4ef4dafd097c8e4a1e2a91df06e50bf0",
+        "lua/core/gamepad_model/xbox_360.lua": "a14a3955fe2056c9e73aea09976d50acdc7c57dac2ed6a55e7b13142526006f0",
+        "lua/core/grid.lua": "4a0ba6d64d3a1f8db5f3063f4334ce030ded4277f831f950398a6d9df28bfaaa",
+        "lua/core/help.lua": "9ebdba9352194a5d8793f3897ef12ede43d1444ec3032a0e3f54a457d3e6a982",
+        "lua/core/hid.lua": "abc45726d1c4ce2865db51b0ab5601eed3579390cdd66bed2bf454e572260129",
+        "lua/core/hid_device_class.lua": "3b26cb39ebdd6621672b108da79112b87b9b59140de102b0b1dddefa7f07c8c9",
+        "lua/core/hid_events.lua": "b13224c68ed1f2bdfaba651c02e614d7f10c4931835f539bb7b1b588c3ed6f5c",
+        "lua/core/hook.lua": "cae1a3367f1e0a7760c8da692f5a6edbc40b486203d0cdf1e08df958761389d8",
+        "lua/core/keyboard.lua": "4eba5075400e2e7ac67bc94b8c057d10b83b9348b998096b737c225f105e70ed",
+        "lua/core/keymap/be.lua": "899d8478cd28ddd6bb2b6c16cf92891041a48c2040ecb5dce23c37c4ae6c1b16",
+        "lua/core/keymap/char_modifier.lua": "27dcb40103fc85ffd2cfec5c2e40016839b7e86f0485fafaceb9ea1edb4ecda7",
+        "lua/core/keymap/cz.lua": "00bef6edead77a744c0acc2b80fdfde1e5fb4d82d5e974a8ea38c05e7f77c8fd",
+        "lua/core/keymap/de.lua": "f86218837a50f03e119fefe9c19e69f16134b27aa97734c99d341050dffc5cb6",
+        "lua/core/keymap/dk.lua": "09b946e206d24011fa1c4c04921bc4010bace2c4ae906cf3a3dd653631bb6875",
+        "lua/core/keymap/ee.lua": "c8966d504844438afcf61732f123953b572519ac502cb4bdf2383682d5fbbdae",
+        "lua/core/keymap/es.lua": "5252f10932c37a7cdd41f7f904f21d79818bfbae70d9673f879031de7cc35a5c",
+        "lua/core/keymap/fi.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+        "lua/core/keymap/fr.lua": "44e6c2a1876717ebc256c061239f5807941c1227fed090187be91cea8eb3f6cd",
+        "lua/core/keymap/gr.lua": "1578e8cf423ef9d639494bf756a0322fd82ee87127c7e3e9f9390d396b0338bd",
+        "lua/core/keymap/hr.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+        "lua/core/keymap/hu.lua": "d834842e9e99fa01d9e89f50e4b249d36b2ccb8f7730a7489c677a6a78dad710",
+        "lua/core/keymap/ie.lua": "f31bbd078acc5194850cf0a09558d53bd65ef7f5a9530c2fe037a2526f97249d",
+        "lua/core/keymap/is.lua": "4dddd7fd599036ead6b5787996da55ed3d1669c58b1f642d5c59ded8569f55e0",
+        "lua/core/keymap/it.lua": "90df2d7baeb0f40e51baabd5ef6ecebc4793a03b917f68bd3f88a3fc6608e4f1",
+        "lua/core/keymap/jp.lua": "ad401b8cc5de8453be928975fae8b448a314641724942a095b20cd8d01d9a33d",
+        "lua/core/keymap/kp.lua": "080c4b6afcb7d637e07aa79ee53094c6fa4645b1ff51e6519545066e412be692",
+        "lua/core/keymap/lv.lua": "64e70d30c7add3eb7a7ba06348102815486a8dc7b36d8eafb98d08518181044b",
+        "lua/core/keymap/no.lua": "c2d13a88d26e23fe4b1beeb25e73966bb6c18d335af435ba690e3286d2c01299",
+        "lua/core/keymap/pl.lua": "b0b5c68e1e22394816ec81a192bf8b5282919e8ab16abbec46178074755f0d85",
+        "lua/core/keymap/pt.lua": "2c6aa619edd75af84ea8a4e066cd9ee1e5dda748f0f4a534f8de095faea394c7",
+        "lua/core/keymap/ro.lua": "6886805c50f86bcd9e0022a5ddb8e076c286650f61c11445d337ae08d1e4a68b",
+        "lua/core/keymap/rs.lua": "2b085e36ae288802998e315365a5aa7121817b17c1724bb93f37f7400f7963b7",
+        "lua/core/keymap/ru.lua": "24b85071ec4c1788e12a630569b50ef412da02709811a8d5d747478a27fa44c2",
+        "lua/core/keymap/se.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+        "lua/core/keymap/si.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+        "lua/core/keymap/sk.lua": "6d0819e2d729989588e5805162a3408cbc873b04a2e902c725972222d9a96188",
+        "lua/core/keymap/uk.lua": "7f66705b546db4a9401bcec96593fe1b53bd8dc5ebe4b833c45385a5d2fb15eb",
+        "lua/core/keymap/us.lua": "14360c91202592ea3e06dad70450460080e8fe9cb00805005085c289cc317e24",
+        "lua/core/menu.lua": "d4429657fca43c2fbc5093a42d819e49fa778f0a110c80d8f74961e2166b72f3",
+        "lua/core/menu/devices.lua": "fa141e7150fa8cedb28ae405ea12437cc942cacc28da77fa01d48a50dc2a99e7",
+        "lua/core/menu/display.lua": "11ac274cefac8ed50c71f1b13dd0d26a4f8b32895f5f91bb26649bb99d0e8ae2",
+        "lua/core/menu/home.lua": "decea467b269c60cbe21f8c88058e3eb97d93bdfaaa97a58778def12eaa60341",
+        "lua/core/menu/mix.lua": "ed559e3387cb787c42e5919f0c38a3308810b23e3c718e544fa478e1bcf79b0d",
+        "lua/core/menu/mods.lua": "a4d035d3535988db73e8cf45b41117f54278fc3074237b3883fdc26dc7a38c02",
+        "lua/core/menu/params.lua": "44cd5c78b9ead6b6133cd053a6043bbda207b5be8623e42a835a112d02f9c88b",
+        "lua/core/menu/preview.lua": "c54079102331bc2365253b3b9044e9986889cce75c0fbaffd4485cf188784cd0",
+        "lua/core/menu/reset.lua": "327eab6ca7c2585fea4fe6a18151958f31f8a115c8429c869fe7bdbcc2852c8c",
+        "lua/core/menu/restart.lua": "c028bbc34b385a1f67f2d49c962288fe2fa12d4c32b86cde37b897b8b6c3d8d0",
+        "lua/core/menu/select.lua": "47f11486c115336238829d88fdb8fa494d7935d605a3e85128138c0befddcac1",
+        "lua/core/menu/settings.lua": "5d4afaf805a55e3e6351aef027ac2d8ce6e12e3b216be9bf0ce51b17e6d0350d",
+        "lua/core/menu/sleep.lua": "5d1235cd51b48e615238e3bb6ecdfc931236ec17bb9cc86ddfa1d56f38f6dd11",
+        "lua/core/menu/system.lua": "0ae21deb50981f8596b20156adb1365ac047d06b1df54f0dbe49fe02c2c27c0b",
+        "lua/core/menu/tape.lua": "3c51a61ea86a4ec264a1809e895539154ed94b2e71bf337100d3ed3358045fb0",
+        "lua/core/menu/update.lua": "ea60d6e071e2543158daa51ee984ecdeafd2f1a7d956fbbf34482f1879c6a9d6",
+        "lua/core/menu/wifi.lua": "055a8127970b0f5c5c7bfd282656c0322858b090b8baa50e29f18dd3bef8f829",
+        "lua/core/metro.lua": "f0428b08121f0d8faeef6aa1b22baba474c25d658bebb39efd2a2520e236fa04",
+        "lua/core/midi.lua": "de4d9e26f39b0de1ffc76d24b094af86f5ce4416860c56bfdb017e914e1f6ab8",
+        "lua/core/mods.lua": "d9bf914902c0167be6a74124216de399ead2c8981de27f4c84223dd8e1098802",
+        "lua/core/norns.lua": "8d347b84c7e5ae14ba71866f54fd21334a0a700be2de08043b17c6a2e4141708",
+        "lua/core/osc.lua": "09e330bacc3830a87ae6763f893f42fbe130083e10517e4708bc33adc101a525",
+        "lua/core/params/binary.lua": "dc04eebeb78e624a028b1bde952e4c54b0ed15fd754bb16319bb9b821d35e6fa",
+        "lua/core/params/control.lua": "c08039f8219ec337a5096d145a8520bfd1fd75199eb603cd329bda6a780e3f19",
+        "lua/core/params/file.lua": "5fc39c476346972e5b62de529f4e905e492a72445cb18feb4a1019214ab7d11c",
+        "lua/core/params/group.lua": "ad50e9d9a383714201cb1a8390db766ff9079ba827b9227ac016f5f6ab0ca394",
+        "lua/core/params/number.lua": "46e82744708c4637fb000abff4ab28bce723a98b130a5e44a15fa4628bfb58dc",
+        "lua/core/params/option.lua": "09dc6e68890a8b6497242dc61135a1fddfc7fe9f52c71ff94535c0c60d3ce49e",
+        "lua/core/params/separator.lua": "53688e97ebc68b2d92b7c732c8ff58ae1adcea0302b152f6f623c1f7ea9a74a8",
+        "lua/core/params/taper.lua": "099a52e84f18295da0e9991f6a213de899e79dd86f72d1ea77ffca4a97ff3a5c",
+        "lua/core/params/text.lua": "e6175cc05eeea9f99079633dfbb289f5835d66071b84815ba03b896723f3c93f",
+        "lua/core/params/trigger.lua": "b2e5647ab52b87f72a9937f88c0d4141d37725a2fe01c7ee39b36f258f1f38d7",
+        "lua/core/paramset.lua": "1cded541234610937b2118464ec7318c5d6034c0fac8966c11e533d4e5e94e4a",
+        "lua/core/pmap.lua": "eea56045659c4498b1747f297dd7e174ff3fa809dc545b95ba5870993495e375",
+        "lua/core/poll.lua": "feced9cde17ff9592c654e5c62282ed888c222a91c7fff62aa12e1ec125abb5b",
+        "lua/core/screen.lua": "59cf7b3ba1712f0426681c7d8cc93bb29dc9047af08071ee8421b440c5ed6251",
+        "lua/core/script.lua": "1a17573064202573a2090ae15ec9aaca681bb0120518331c3a8bc773c3eff806",
+        "lua/core/serial.lua": "15012b5a54b049cae2d85cf4f20013c929ce09a24ec60f972b39e00a16790877",
+        "lua/core/softcut.lua": "a961139fbc4a9e4f00d4df3d10128cc21e112d3b35b02be5674e2e5f8043c7b4",
+        "lua/core/startup.lua": "9f84bfb46ff4c5e4a0c0ce5e43168f301fb5dd957561ba5241a476ca258f36fa",
+        "lua/core/state.lua": "adfb5996ff8e9506f3cd73b84b94530fc34e47b22ae615129a9bfb6bbe04338c",
+        "lua/core/vport.lua": "a84bff4751120057bc6b1e686c89f2d5eebbf4a5b73e508ab6ef1f92939601ea",
+        "lua/core/wifi.lua": "7a9ef8a8a49190aae3bb7cc64668c39bdb30aaf2a62cc9b6fe0d6f4c406b49f4",
+        "lua/engine/polyperc.lua": "acf896ca1e00159bf77659d10b1c5895c691263e87f2a128bc3d26032cf8b546",
+        "lua/engine/polysub.lua": "9a61404b824401fe9a522376e5bc1cd160a56d05e3a2b2594ca4696864693fd2",
+        "lua/extn/sky/core/object.lua": "3326c1c5e806cc3f5056457ba5f77e341ee50096f0e460de224101a9e53f5d64",
+        "lua/extn/sky/prelude.lua": "76507e18513b4825621c421dc12d5f433ec12507b8634f36685f75fa96b47937",
+        "lua/extn/sky/unstable.lua": "7e5e8c04e8c49eef45061167fb181b131ad2eda4e5346942721c76ca44daff33",
+        "lua/extn/sky/unstable/core/page.lua": "b769a686e299c67fc47d39536dd80fb1993687379d7687d2a51676ecc9066d87",
+        "lua/extn/sky/unstable/device/es.lua": "93e59548e3aae96310a44bae77da23ee9cdefff48d84c70e3afe153324de684e",
+        "lua/extn/sky/unstable/device/linn.lua": "250d7e673a3639b126bab062e28b0d92583bccbfc69a7738c524e174f8d77209",
+        "lua/extn/sky/unstable/engine/polyperc.lua": "d91be322a6a7ccd288156a3b488d00fd25d5f6b9ec6c620520d8d36c7d2fafdc",
+        "lua/extn/sky/unstable/engine/polysub.lua": "769ec85986134820fbafb075fe2e2098b5c754e94fa5ae1f321885836298b128",
+        "lua/extn/sky/unstable/io/arc.lua": "4a461c98c64371ee8dcaceceff7e53cc250f7790985bd19e7cb645e7b8e82e5b",
+        "lua/extn/sky/unstable/io/grid.lua": "dafd01d339ae3f438216d0e0052e3b60711006c3389d6f6fcbb81f4d5c8b507c",
+        "lua/extn/sky/unstable/io/norns.lua": "b65591a864bae0e27b708abb96ced2bfdc8fa9e6d7529706cf39b157ec70ace3",
+        "lua/extn/sky/v1.lua": "d0535669d932031c308f9907bba2449add01201d51062a304fde090e91f1d4c0",
+        "lua/extn/sky/v1/core/event.lua": "caa5ec82352d2d3cf55d2b7844d68f71bbe370a3d9f84b02a64848c613a26b91",
+        "lua/extn/sky/v1/core/process.lua": "ec2e39c51164bb4f7fd210671d2a4fcfb6f81e48e92e3014286c0902c7c5907c",
+        "lua/extn/sky/v1/device/arp.lua": "3d55ef27854d47c088aaaf92a83c1cfcdc6638463b0c1cbf29c8b2ada2a24ed4",
+        "lua/extn/sky/v1/device/behavior.lua": "a474f8fd301283cbe94d14a9253d9b407d88e5ee75e1334dd08df75354e3cb9e",
+        "lua/extn/sky/v1/device/filter.lua": "4445f9e9a720720a6fde97240597e8efe20d7dca0fea6d7286f3a522e0ba96ac",
+        "lua/extn/sky/v1/device/make_note.lua": "c55532084df6fe845bfcb3e41c38dc503637c8e5c98ba5b923157d493bd4c912",
+        "lua/extn/sky/v1/device/switcher.lua": "36e5d68538a4f267b47de753c0c5078ff14208acf7d0d53a869074c0db22edb7",
+        "lua/extn/sky/v1/device/transform.lua": "c8b198d76350495475280c6b9e9f2f12f5c6dd6e879c929cddb6040be0f4a16a",
+        "lua/extn/sky/v1/device/utility.lua": "9e1954cf840c01e5f7f188d13706d795c07f3661d58606c752d957adc8cccf56",
+        "lua/extn/sky/v1/device/virtual.lua": "b6de76dea64824c83ae47beaaecf54eb7ab2129fd5115336c1b19dc5aec1c675",
+        "lua/lib/asl.lua": "1b73cc2a5bd07fe28de84730c4857d433d041bb883bd3aa8995f165f0a1492e2",
+        "lua/lib/beatclock.lua": "9319d9c400c479591197393c4497ab1dd3a066c5ac110aa9e697a5c3f36f2237",
+        "lua/lib/container/defaulttable.lua": "00fa1658df56b14aa3178d3aa2fe194d1b2c85d69fb3c3a86688a4aa80b7f901",
+        "lua/lib/container/deque.lua": "0de4f516dd81e773d2015951443413f17007720a90277644f872a0575e137ae5",
+        "lua/lib/container/observable.lua": "d3fd1e2075b0784d2d01fa7e70d3b6b0a2fe131e2600f8af5ae1d0430cf4c3d9",
+        "lua/lib/container/watchtable.lua": "b246d604fd8361763a78ed87af4c251e3cb98927e1052e712cacc9da9a6fc3d9",
+        "lua/lib/container/weaktable.lua": "4e6fcccd7d8fb3396318a74817f944e461cce74835d420857702f833f0f6c12b",
+        "lua/lib/elca.lua": "336ad847149f5291f036ed023ac463b8d99eb5ec586126533696c4df14b8a173",
+        "lua/lib/envgraph.lua": "121ae97c5226cfb8f5dd4313f653a7d10cdbbedd426702e7a4a688859e2ce161",
+        "lua/lib/er.lua": "d0d719956c474f86cbedc7e8cea2dd70e042d950e47dcc9bf0dcd9f6fc1f80f3",
+        "lua/lib/fileselect.lua": "2b5a7af0f4aa51cbccdbd5c70db0dee8da434100cf9b8decd0973aedb212b806",
+        "lua/lib/filtergraph.lua": "d205434ea1f8441593ef5ab246a8b2373556e17e41f4e750fb755ee0b2379fea",
+        "lua/lib/filters.lua": "b5c6963d091f3ea75baab73cb39a0b3276b888dc49ad53b356aa97fe11367aba",
+        "lua/lib/formatters.lua": "5bdb3d3847b8037a7bd29199b8f4e20e1f2112b7e22a9b2c089f4a6dd95f25fa",
+        "lua/lib/graph.lua": "22a3ba02202b536af350e4124528a3c1d07074d856132a4fe4bde4ac62b80965",
+        "lua/lib/gridbuf.lua": "bd1bdff997d9d5f638bc69aa116eb791647d128c591b81c2080bf8e36f939508",
+        "lua/lib/hotswap.lua": "d81047cf503b769f7e253c2c7bfef012da4aa07e817a242fe9b504f0dc4fd30c",
+        "lua/lib/intonation.lua": "7c458d9cdfbec1e7c24dff22edfea1518f6d565315b4abdf775a91c4c2c31791",
+        "lua/lib/lattice.lua": "9c44ba4b8490c7d8b8b0250ee95611184ee12086624177b821b3012544102d83",
+        "lua/lib/lfo.lua": "9754a4d198f5e3638cc723dfd98e31555ba4cc6f256a7bd9d225eb6b2f3d7079",
+        "lua/lib/listselect.lua": "4c6d0c5a8af1a7827ca6947927d1c40606b404e9037dd9b982ddaf21638ed111",
+        "lua/lib/musicutil.lua": "89392bf3f6156d8e08b5fb0b0d3e0540102006ec964fab4058e70be1901e88aa",
+        "lua/lib/pattern_time.lua": "8a9cefd1f39930ee609b83dd291d9ae2ab3741e3f5045f4ec4142a3290115a39",
+        "lua/lib/reflection.lua": "0d2e7b3ca33321f0e6b3d7afb1896e6efbca004b41042c6b810be8897612dcda",
+        "lua/lib/sequins.lua": "85341f5e0db42ce7e400f995b284dae513a003a5be303216d2e86ef60cf64c82",
+        "lua/lib/tabutil.lua": "1e0c553bb30a924148566f76d2a8fdc2e3289f952029b5540f2505c6025fc57b",
+        "lua/lib/test/luaunit.lua": "5d63a80a2c9e30d9d2c852863c420f897e655f27e13a617def171a59091ddd62",
+        "lua/lib/test/mock.lua": "f7c21619c89d78bd48a702e5d2f87586fdf26241bc675d8f47fd36cca002c567",
+        "lua/lib/textentry.lua": "74f15d734ece2eeb401a069b9c44ebb7dda845b4c645b559afe05f8006366586",
+        "lua/lib/textentry_kbd.lua": "a577566eaa266bd06c8adb5faede19cf6b764ecfdad806095cc20ae16f473e2f",
+        "lua/lib/timeline.lua": "8b1790cdd1e5e73d9076da42cf956a65de3b944a928f83e4b158ec39b559b8f1",
+        "lua/lib/ui.lua": "faa2e8b1fe6e9b125bee685cad813d14c44e1a42b05f92bfaa423cb3740cbb9b",
+        "lua/lib/util.lua": "366a38ad6fdc6e58cdb4e522a13f89fb9be7a95e83fd5b59580d2cfd4adfc84a",
+        "lua/lib/voice.lua": "ca9191dba1bda14c2ed05530813d137f9af3d1e8852d9f6b11030f043dd8d8cb",
+        "lua/test/core/audio_test.lua": "208a1221d9273ea33686d0f1a40cc069b124dcf676a58e83c347a94cd2526d5c",
+        "lua/test/core/menu/tape_test.lua": "15f698ee61bfebc7d779c6665703e31a29fe08f0d10775543839019c42d83e6f",
+        "lua/test/lib/container/defaulttable_test.lua": "2c9c0b86b42aa40be5f915b34768d3ff14db609b6b2cdf1a70ee29343e013c7d",
+        "lua/test/lib/container/deque_test.lua": "4675f03cda3dd707a89f95d2f3b404217cf008fcec6d013e939f6254c01508de",
+        "lua/test/lib/container/observable_test.lua": "8d49be45f5437c982b193ceb9f2765f9687a5f591bbe9060191a82b9078411a8",
+        "lua/test/lib/container/watchtable_test.lua": "5c375e3ddae8fb82fefad612c39bf4f5d027b68307cee6bb41070085f2284692",
+        "lua/test/lib/container/weaktable_test.lua": "9844e9b117901b3e24ba230a05a8455f813a43b48403be3371d0a90f3de2caa8",
+        "lua/test/lib/test/mock_test.lua": "acee6731c1c6d40ddb4359a95744f430ee9e32a0c136a2bf10526cbaf351e81f",
+        "lua/test/test_runner.lua": "e49d61887a914e5a5483ea3ac5b0d02d9f4ed64df26197cee0caa143373f36a2",
+        "sc/core/Crone.sc": "2e49b93e51683fc76fed3a2cc9a2286ad9ad16be28a35751dd9fcd179ba36cc1",
+        "sc/core/CroneAudioContext.sc": "57e9b0318f1a7cdc2095625b5cc6b63dbb505a81807eba4681b4e24e3410e09a",
+        "sc/core/CroneDefs.sc": "f8b90295d86a55810f2c646a2c5117967dedf59cb94ce42e7bfb424130a5289f",
+        "sc/core/CroneEffects.sc": "b96a467f4cbf2492f364af4a49db58adb5745925a06e43e2641045785e83ce89",
+        "sc/core/CroneEngine.sc": "b8a6ec08acc69b2af3e147cbdf178240d1f71102c82f3880f32e5683987d0659",
+        "sc/core/CronePoll.sc": "7a20d39cdd0d604409b34e279220ac19e5ed66ad77463254316df50c8ac57fd2",
+        "sc/core/CroneTester.sc": "f6a1c16729129a01826cee1fa3640646eb83e8a24463c86d9edc1e135a246ce2",
+        "sc/core/engines/AudioTaper.sc": "27eeb13d31d65ed41d3d6802a0fef24f0d5732b7940b710c7c713bcc5ed35a5e",
+        "sc/core/engines/BufUtil.sc": "6d2356b097d4a45512faaebfb7b63e4da99b9d2101b5ae85db937585a8b98bee",
+        "sc/core/engines/CroneGenEngine.sc": "c0122595b3b9f982ddbbf8bc3c70a0e2ded8fd61105959549896ab199eca28ef",
+        "sc/core/engines/Engine_PolyPerc.sc": "c4cf167abb350b52692dfe14125a00d1c0a72c170367b52bbf4126391650fd9d",
+        "sc/core/engines/Engine_PolySub.sc": "8b7f8ad7ccd948edfa2f99022c68759de1eb334caba93b8d8b78cb4b517e097e",
+        "sc/core/engines/Engine_SimplePassThru.sc": "6e1717501c485fb98c54015c8b7d2e0f60a9a32e44cb6867e6e59f33bad4161b",
+        "sc/core/engines/Engine_TestSine.sc": "5d1f8b172e11a676476c86a67615b922ea81fe79eb9a7456b4865db6cb15eda6",
+        "sc/core/engines/PatchMatrix.sc": "d17ddf7ce1f3442418a66a7ce4417b0369b0dbd4890db298c93373d0655da673"
+      },
+      "lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "norns_revision": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+      "patches": [
+        {
+          "path": "patches/norns/0001-desktop-architecture.patch",
+          "sha256": "1945a65e586446e5ae6a75cac646fc468aace34914c8f19a5d192925ad314e78"
+        },
+        {
+          "path": "patches/norns/0002-platform-read.patch",
+          "sha256": "745d47530e0769f8edceee525fa2e5cf35fa75cd9f180a3866bccffa35bd9a63"
+        },
+        {
+          "path": "patches/norns/0003-portable-display-conversion.patch",
+          "sha256": "a6f14a5cb4bba9203f3738b605a5d6902a8612b73c45c07a998a73fcad322ba9"
+        },
+        {
+          "path": "patches/norns/0004-virtual-device-spike.patch",
+          "sha256": "0b7fc1089332629f9cbd64933d04136974c978f347af5376eb22009925dcb173"
+        },
+        {
+          "path": "patches/norns/0005-native-session-hooks.patch",
+          "sha256": "f418d02d9e2ce1756b35348f432421cd0888a905c28b3740736a5459a45c0278"
+        },
+        {
+          "path": "patches/norns/0006-hook-error-reporting.patch",
+          "sha256": "fa5233c3adbadb62ec5bbe17dd41fd4e670d6a34a07ee3e1d2af2875b8143ea2"
+        },
+        {
+          "path": "patches/norns/0007-crone-thread-shutdown.patch",
+          "sha256": "a733a8b3daf2834f9193c38fb33e00c4b3dd817041236385b43974f37a32719f"
+        },
+        {
+          "path": "patches/norns/0008-grid-device-contract.patch",
+          "sha256": "647f46a6619fd36d968dff2e2990ca46ad373dae023773f65595bad26ba7c247"
+        },
+        {
+          "path": "patches/norns/0009-midi-device-contract.patch",
+          "sha256": "6233f827a3bbf090d3a6b7470569b3f232fe551bea7a94a5e24168c521955cc0"
+        },
+        {
+          "path": "patches/norns/0010-grid-native-level-conversion.patch",
+          "sha256": "fc079402b99feca9a878f2c97f02334ee75f6c06d7c4cc7d667a168935d7ad84"
+        },
+        {
+          "path": "patches/norns/0011-clock-cancel-queued-resume.patch",
+          "sha256": "40bb49162614d014a4b56f1189dcb9345991d0c1548a48fdf2518cdfea614499"
+        },
+        {
+          "path": "patches/norns/0012-scheduled-midi-input.patch",
+          "sha256": "fb94e9ed062d52b2dfec48a42db9f3690015d4e16116e6cfb6ef895c52230bcd"
+        },
+        {
+          "path": "patches/norns/0013-midi-connection-lifecycle.patch",
+          "sha256": "ca253b43694e9527bca030b890d60771b4a20a5a82ddc94c4859d5dcfdc09676"
+        }
+      ],
+      "prefix": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix",
+      "source": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-01/norns"
+    },
+    "path": "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+    "sha256": "286929b1972428bce267aaaca59287f4397dceb1dd3cbfc24e9172ee7cc94b8f"
+  },
+  "original_report_sha256": "f36318c05f2ec7ed0abc8293a683f0867f8a2eb0f394e0092501d770325ee9d0",
+  "session_identity_checks": [
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "oilcan-pocket",
+      "identity_file_sha256": "70d55752b11175ee7a78eb7a9a436015a5c3048155a217e76ac72c853d1e458c",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/oilcan-pocket-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "5242733c5d6f442eb9152d5a5abae1a1"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "oilcan-pocket",
+      "identity_file_sha256": "bc8d3c652343a982d675f307fc4ebf6f7ea4c81e409acca1a44d68f36be47bf0",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/oilcan-pocket-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "2b67ede06a0344b7b295ef1981969984"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "bass-and-intervals",
+      "identity_file_sha256": "30fce86f930995f94726c12a288c9f1c7467f6ec066c2bd0b84c063834706f36",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/bass-and-intervals-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "cd94da0e69144ab69116c29ed1beb694"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "bass-and-intervals",
+      "identity_file_sha256": "f49f23f2fe87227ff9ab3ed7cd95de025e4a1d9e3ca08c0ee0c2d1fd68456ec2",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/bass-and-intervals-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "5bb8489e691c405ebb0e2df23eb0d5fa"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "bass-and-intervals",
+      "identity_file_sha256": "45321d7ad6d92cbf4c969f0f702ee61548d368e6ade3047ae50050965bdd0a49",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/bass-and-intervals-solo-2/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "c90c4da112364cc793264380eadb9716"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "three-voice-conversation",
+      "identity_file_sha256": "f493ffa550e8600e0652c4af9f16ff516b1cff0caa63f9c596fcad175ebe6f3c",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/three-voice-conversation-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "6e3f97da6a26406cb2b73dfea3bfc811"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "three-voice-conversation",
+      "identity_file_sha256": "732d63ec2ae8ba208a5cc7a7a4177a2093c70b3bcd879886ee1608f66594421a",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/three-voice-conversation-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "37828935a883456ca7ee1d2a7f1d6d8c"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "three-voice-conversation",
+      "identity_file_sha256": "a07dfa643b155777b8d51eee996be21c7a656a620400678f310da80ebb82359a",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/three-voice-conversation-solo-2/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "d0f94fa6f1544a8aab5118b9cf7dc7c8"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "three-voice-conversation",
+      "identity_file_sha256": "edeff5a5fd031495ce23024c1795c262102e1efcf6d20e4af58cde4c3ca4b9c4",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/three-voice-conversation-solo-3/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "f53e2f23361349eeb35c8509177e74ba"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "ghost-note-comparison",
+      "identity_file_sha256": "5cc7812dc5b26aca6e8de67d89f9216e841f002ca549e9131d1881456fc4591b",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/ghost-note-comparison-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "d7f214940e004eb6bc9b2f34ced9059f"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "ghost-note-comparison",
+      "identity_file_sha256": "9cd1d4def4f49ae5c22d94d0d00d620d7dda52a8ecab2beb8c5054781c3da444",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/ghost-note-comparison-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "b63a96d4c5734621a426eb1c82788f19"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "scale-slot-comparison",
+      "identity_file_sha256": "e737c16c701bbda2e1dcccae254dd7a1f3e9f17d4971ff72cd93fcdc3b5b378d",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/scale-slot-comparison-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "cd10a8a5f13c4b95b6e5a14f765e25cd"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "scale-slot-comparison",
+      "identity_file_sha256": "e1aaadc31a578a529b63aeab29fdf072ad6ab9acc25e58fc921d6e3cb365b9c4",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/scale-slot-comparison-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "84ff96e77ce740baab42e29eddf02952"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "scale-slot-comparison",
+      "identity_file_sha256": "397134465b58f3c551e6d1d8000554b90cd294dfa56c0aea31b102bef72d7d00",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/scale-slot-comparison-solo-2/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "7bfbadd7051c4d7ab2a09fccc4239aee"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "swing-comparison",
+      "identity_file_sha256": "5ab4795cc13723e295d1d6c748dd8a237f773ea5d2e65a60c35bc5154700c874",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/swing-comparison-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "596025039abb40199f896e1845eeb0c6"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "swing-comparison",
+      "identity_file_sha256": "691ba3e4716c7d86996cd9b056a4d6adb7b559cf63a06824ee4871963d9f3afc",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/swing-comparison-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "767b96080a1e4066b5f6d4ddf6339730"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "swing-comparison",
+      "identity_file_sha256": "877538d7abb9c83c61a5a2b0c83cb8a17595496cd1cc4234da9fe62d7cd5c9e7",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/swing-comparison-solo-2/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "3fe7079f09ca4fcf9decea1dc9d1d70f"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "note-merge-modes",
+      "identity_file_sha256": "4f00a22b5dc2b57fb586f094a956b1a84f11f0aae6aa2591c79108e765c2bf79",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/note-merge-modes-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "7e57d18e078545caaaadc4db8b4e5fd8"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "note-merge-modes",
+      "identity_file_sha256": "6dab5dda2e06d81ea647b5477fd93fc9de48d0f1ee6f77840e3879a40c3a02d8",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/note-merge-modes-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "e5e443ec88b44ad799889980575dea94"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "polymeter",
+      "identity_file_sha256": "7e3fcad370d4666fbc1be2f619a3c14ae3a5ad45ec427729c8ad9db70b119738",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/polymeter-mix/native/identity.json",
+      "lane": "main",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "c5ed6e5ce79a4ed6ab922a06f6cbe7b7"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "polymeter",
+      "identity_file_sha256": "6e9a63e20b8e7bf0a996bf5ea21233251ede6e34001a2b336c12a63304b86558",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/polymeter-solo-1/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "f51e18eda69f4ce4a49209dff8b54231"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "polymeter",
+      "identity_file_sha256": "839ae2cbbbb1df08bf4a8e32ebdce6375ea7ec90ab4ca7e26d837e8a950e9ec3",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/polymeter-solo-2/native/identity.json",
+      "lane": "solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "22d7fa573c2b4accb4c833d638b1d54a"
+    },
+    {
+      "application_digest": "5e1babd72fd1be2d7489264573321173e5462de30861d27a41022bff4af22810",
+      "application_files_equal_current": true,
+      "emulator_digest": "d1acf81b425fb367176b62a03f40a6a957be91c70d64cecd92f3584c78dd9682",
+      "emulator_files_equal_current": true,
+      "emulator_revision": "801fcdcb9711e1054d898971942982862a30daf6",
+      "example_id": "song-sections",
+      "identity_file_sha256": "b36fd66b20b7fb6c006ad04d4f9ea9947df49b1a2c1aab3566a3a96ccef0ffd0",
+      "identity_path": "/home/andy/mosaic-manual-audio-runs/57d9c7f4ab5d4ee8a0228b15aaacbc8d/song-sections-solo-1/native/identity.json",
+      "lane": "failed-first-solo",
+      "runtime_identity_equal_current_install": true,
+      "runtime_lock_sha256": "36358f8514490f2eff8f4527104cdd3388bafe0d882c8dbc8125be2b0c4488a0",
+      "session_id": "e2a0c31b62574ca4893ad3f35603884c"
+    }
+  ],
+  "voice_commit_checks": [
+    {
+      "clean": true,
+      "current_commit": "257915f433c7d2c32b2b09c4fe5eed5434a16de5",
+      "expected_commit": "257915f433c7d2c32b2b09c4fe5eed5434a16de5",
+      "matches_report_pin": true,
+      "name": "oilcan"
+    },
+    {
+      "clean": true,
+      "current_commit": "714bd0c5b811f7cb21b7a7b8340891ffee4b5670",
+      "expected_commit": "714bd0c5b811f7cb21b7a7b8340891ffee4b5670",
+      "matches_report_pin": true,
+      "name": "nb_polyperc"
+    },
+    {
+      "clean": true,
+      "current_commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89",
+      "expected_commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89",
+      "matches_report_pin": true,
+      "name": "doubledecker"
+    }
+  ]
+}

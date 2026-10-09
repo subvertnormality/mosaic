@@ -1,0 +1,44 @@
+{
+  "baseline_run": "/home/andy/mosaic-manual-runs/9792323a399740ff910c5d26c7eadfb8",
+  "baseline_helper_sha256": "27c4149db11c6469595dbe0321a99c5535d91e0be293c482ef5deb29314d37d3",
+  "candidate_helper_sha256": "d31360389d2a9eeb1d3fb3e9622092364e281454b78618e79d8ec21ea48defc8",
+  "test_sha256": "3825e74902a48806b052ebf72f3901735fde8e24c4c972c79ecfbb15b9e5f9c1",
+  "command": "python3 -m unittest discover -s tests/behaviour -p test_manual_course_bind.py",
+  "evidence": [
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-route-red.log",
+      "sha256": "f5164baf58f7972713d744119ba9358a9c79c138dd7ee1c72394c2a95b8c4ff0"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-route-green.log",
+      "sha256": "67c808b76309597b004af1c39ff146ab0583c4d513a0396471929573b9a9ed28"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-route-unfixed.py",
+      "sha256": "27c4149db11c6469595dbe0321a99c5535d91e0be293c482ef5deb29314d37d3"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-route-red-source.py",
+      "sha256": "3825e74902a48806b052ebf72f3901735fde8e24c4c972c79ecfbb15b9e5f9c1"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-route-helper.diff",
+      "sha256": "73b0f6d81f0f77b397e771a8ebeecdfe94e385ae25b25e1cc6915f2ff22185e4"
+    }
+  ],
+  "route_contract": "spec.json#/flows/G36/new/alternatives selected_stopped -> A01",
+  "selected_slot_led_source": {
+    "path": "lib/pages/song_edit_page/song_edit_page.lua",
+    "sha256": "006fcbbaf05510e0050f9b20a0335b0b9b0303d0b21e6230f5d392fafce0c2c6",
+    "lines": "15-18 active15;35-39 selected slot state3"
+  },
+  "selected_slot_cell": [
+    2,
+    1,
+    15
+  ],
+  "all19_musical_contracts_functions_periods_tolerances_ast_unchanged": true,
+  "production_changed": false,
+  "emulator_changed": false,
+  "native_qualification_pending": true
+}

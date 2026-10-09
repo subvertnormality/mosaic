@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "focused_tests": 53,
+  "native_launched": false,
+  "ledger_applied": false,
+  "complete_regression_run": false,
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci",
+  "source_after": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": "d3a9f98930fd52bd0cbbdfe6886a98ffa1a75fbcf2c60dd8a7fbfe784b83da96",
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": "c7ba63d4470b612342c1dbeb5712a8e250751000761b35b93dc7d7bf837239ac"
+  },
+  "red_log_sha256": "0f56edb64c0ec03d40da4ea8f0f6a71f600f0ae5201bd56100658426e5217d85",
+  "source_red_log_sha256": "b3a3ac413ced1b40f20aa18017a6c87fa6b2781ba14badc8d8648dd893938981",
+  "green_log_sha256": "f81a227971e634e5de9efaaf8face048e2aafe4526db602216dad646944010e4",
+  "integration_contract": {
+    "audit": "audit_controlled_manual_generation(build_evidence)",
+    "planner": "manual_build.plan(options, plans, controlled_local=True)",
+    "binder_receipts": "validation_scope + realtime_qualification + complete_regression_run false; exact snapshots/claims/history unchanged"
+  },
+  "source_review_sha256": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+  "snapshot_sha256": "7183c61792a1b17d8769a34e2876bed7e78e47bc49987ae5b229da4bb5152b18",
+  "prior_preparation_receipt": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/controlled-local-reconciler-preparation/preparation-receipt.json",
+    "sha256": "d4f0134074efd9931fc8316e2bac9c56d6ced059c64e4da3de39a3f9e48ac9fb"
+  },
+  "course_scope_red_log_sha256": "8f8cb65056b85fb8ea9678077b668df26c3deaac1bda595b1f4efbfde586873f",
+  "course_metadata_allowance": "Only project.validation_scope and realtime_qualification exact controlled/pending fields; explicit local branch only, full default unchanged"
+}

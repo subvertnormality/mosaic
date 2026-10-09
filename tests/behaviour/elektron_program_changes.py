@@ -55,6 +55,9 @@ def elektron_program_changes(c,length=4,settings=True):
         e.ui.tap_control('song_pattern_slot',2);e.ui.tap_control('channel_editor')
         e.ui.tap_control('channel_octave',1);e.ui.song_editor()
         e.ui.tap_control('song_pattern_slot',1)
+        # README.md#song-editor slot indicators: slot 1 selected, the used slot 2 lit.
+        e.ui.expect_leds({('song_pattern_slot',1):'selected',('song_pattern_slot',2):'alternate'})
+        e.results.append(dict(kind='elektron-song-setup',global_length=length,slots_filled=[1,2],octave_slot_2=1,passed=True))
         def run(seconds):
             marker=e.snapshot()['midi_count'];e.ui.play();e.elapse(seconds);e.ui.play()
             state=e.wait(lambda s:not s['midi_capture']['outstanding'])

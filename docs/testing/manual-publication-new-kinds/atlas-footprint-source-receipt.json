@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "scope": "strict independently verified authored mini sprite footprint in readability body comparison",
+  "prior_auditor_sha256": "7b01b8f5e165321ad019e08a715be0c5fadc89cbc870dbbfb38da3a0b4900be7",
+  "source_sha256": {
+    "tools/manual_publication_verify.py": "0b6964b935ce59cb08318580f9202589f4774856c0256805586ee3074582cb74",
+    "tests/behaviour/test_manual_publication_verify.py": "88816069741aa86fe620c5de6ca487c92bf3d1774224f8c374a81537243a3ba3",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tests/behaviour/test_mini_phase_oracle.py": "ab9ceda3204db3f0865f230802c71aa8b1ebcc3d3378a66554bda4344d15bf1c"
+  },
+  "focused_tests": 68,
+  "passed": true,
+  "red": "atlas-footprint-red.log",
+  "green": "atlas-footprint-green.log",
+  "native_reaudit": "readability-engineering-v10-controlled-reaudit.json",
+  "historical_rejection": "readability-engineering-v10-controlled-audit.json",
+  "literal_pages": [
+    "C07",
+    "C04",
+    "S01"
+  ],
+  "exclusion": "only exact sprite origin/width/height after exact frozen-atlas RGB membership verification; Off requires literal rest",
+  "negative_regressions": [
+    "mutated icon",
+    "arbitrary header",
+    "pixel immediately outside sprite",
+    "neighbor",
+    "footer",
+    "grid",
+    "MIDI",
+    "Off nonrest"
+  ],
+  "phase_source_unchanged": true,
+  "full_current_publication": false,
+  "hardware_timing_equivalent": false
+}

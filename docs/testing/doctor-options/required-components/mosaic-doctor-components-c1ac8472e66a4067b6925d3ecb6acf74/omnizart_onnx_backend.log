@@ -1,0 +1,8 @@
+test_executable_rejects_a_worker_drum_pin_that_differs_from_model (test_omnizart_onnx_backend.OmnizartOnnxBackendTests.test_executable_rejects_a_worker_drum_pin_that_differs_from_model) ... ok
+test_missing_model_configuration_is_a_safe_backend_error (test_omnizart_onnx_backend.OmnizartOnnxBackendTests.test_missing_model_configuration_is_a_safe_backend_error) ... ok
+test_verified_drum_component_refuses_to_publish_without_bass_component (test_omnizart_onnx_backend.OmnizartOnnxBackendTests.test_verified_drum_component_refuses_to_publish_without_bass_component) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.460s
+
+OK

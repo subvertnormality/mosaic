@@ -1,0 +1,32 @@
+{
+  "format": "mosaic-doctor-documentation-candidate-review-v1",
+  "status": "Authored instructions only; complete current native publications remain pending",
+  "source": "manual/features/reference-pattern.yaml",
+  "source_sha256": "e7be922bebe64deec0a0bfeb37b79ac8437988ef4e4c38a7f78fd3b8a048a6d7",
+  "current_readme_sha256": "11fff062bcb9a5f03480abc2e223702c779152c969b0f5ce4e9157d0d18103cb",
+  "claims": [
+    {
+      "before": "Manual BPM/input displayed but unused",
+      "after": "Record consumes confirmed Auto/Manual/BPM/Stereo-L-R settings for its take"
+    },
+    {
+      "before": "Analysis always estimates phrase start",
+      "after": "Auto estimates; Manual uses selected integer40\u2013240 BPM from capture start; explicitAlignment later overrides timing"
+    }
+  ],
+  "historical_bindings": "Unchanged, entry-only remains separate from newer qualification runs",
+  "matching_merge_recipe_corrections": [
+    {
+      "feature": "merge-shape",
+      "recipe": "Set a two-cycle Build phrase",
+      "before": "1. Assign a pattern with a few trigs and a second pattern with more trigs.\n2. Open Merge Shape. Set Mode to Foundation and Anchor to the first pattern.\n3. Open Phrase. Set Cycles to 2 and choose Build.\n4. Reduce Add accent in Rhythm. Press K3 on a value row to apply.\nThe first cycle admits fewer additions than the second.",
+      "after": "1. Assign a pattern with a few trigs and a second pattern with more trigs.\n2. Choose Foundation with Strategy on Merge modes or grid (14,8). Open Merge Shape and Anchor to the first pattern.\n3. Open Phrase. Set Cycles to 2 and choose Build.\n4. Reduce Add accent in Rhythm. Press K3 on a value row to apply.\nThe first cycle admits fewer additions than the second."
+    },
+    {
+      "feature": "fragments",
+      "recipe": "Set four-step fragments",
+      "before": "1. Assign two patterns to the channel.\n2. Open Merge Shape and set Mode to Fragments.\n3. Open Rhythm. Set Size to 4.\n4. Set Variation to Fixed in Phrase.\n5. Change Seed to select different fragment sources. Press K3 on a value row to apply.\nEnable Keep anchor if empty positions should play anchor trigs.",
+      "after": "1. Assign two patterns to the channel.\n2. Open Merge Shape and choose Fragments with Strategy on Merge modes or grid (14,8).\n3. Open Rhythm. Set Size to 4.\n4. Set Variation to Fixed in Phrase.\n5. Change Seed to select different fragment sources. Press K3 on a value row to apply.\nEnable Keep anchor if empty positions should play anchor trigs."
+    }
+  ]
+}

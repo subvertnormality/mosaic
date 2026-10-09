@@ -1,0 +1,12 @@
+{
+  "stage": "/home/andy/mosaic-pre-mini-header-20261003/mosaic",
+  "stage_identity_sha256": "fccfe004003cfba93460f643ff06346233f5c91b71ba911a3855b26699bb08ae",
+  "candidate_helper_sha256": "a416b4cbdeb69d1ee853e8d2433706602e2b806ae6d9a7f195312faf7b3d1f0f",
+  "baseline_helper_sha256": "62d47f23db7e17bad93553465e658d1c56cef7c11c936fb24d06a4d1e0da4ced",
+  "minimal_baseline_function_bodies_unchanged": {
+    "valid_anchor_fixture": true,
+    "foundation_selection": true
+  },
+  "candidate_scope": "same minimal public Foundation request plus appended canonical selector interaction coverage; pre-mini source, not final publication",
+  "complete_regression_run": false
+}

@@ -1,0 +1,15 @@
+F
+======================================================================
+FAIL: test_motion_first_row_preserves_glyphs_below_native_screen_separator (test_ui.MotionOptionBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3442, in test_motion_first_row_preserves_glyphs_below_native_screen_separator
+    ui.set_mosaic_options([("UI motion",False)])
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/ui.py", line 607, in set_mosaic_options
+    raise UiMapError("Required Mosaic option not reached: " + label)
+ui.UiMapError: Required Mosaic option not reached: UI motion
+
+----------------------------------------------------------------------
+Ran 1 test in 0.026s
+
+FAILED (failures=1)

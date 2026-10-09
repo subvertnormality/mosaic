@@ -1,0 +1,36 @@
+{
+  "scope": "Failed partial course, exact canonical UI header identities only",
+  "course_complete": false,
+  "observations": [
+    {
+      "index": 109,
+      "passed": true,
+      "expected": [
+        "DEVICE",
+        "CH02",
+        "detail"
+      ],
+      "selected_masks_led": 2
+    },
+    {
+      "index": 110,
+      "passed": true,
+      "expected": [
+        "NOTE MASKS",
+        "CH02 OCT-1",
+        "overview_masks"
+      ],
+      "selected_masks_led": 15
+    },
+    {
+      "index": 111,
+      "passed": true,
+      "expected": [
+        "NOTE MASKS",
+        "CH02 OCT-1",
+        "overview_masks"
+      ],
+      "selected_masks_led": 15
+    }
+  ]
+}

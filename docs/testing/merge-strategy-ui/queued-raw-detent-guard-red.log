@@ -1,0 +1,28 @@
+.F
+======================================================================
+FAIL: test_queue_request_uses_complete_public_detents_without_settling (test_merge_strategy_ui_routes.QueuedDetentGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 48, in test_queue_request_uses_complete_public_detents_without_settling
+    merge.queued_cycle(c)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/merge_strategy_ui.py", line 100, in queued_cycle
+    c.ui.expect_selected_field("detail","Pending","FOUNDATION")
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 41, in expect_selected_field
+    self_test.assertEqual(actions,[dict(type="enc",n=3,delta=2),dict(type="enc",n=2,delta=4)])
+AssertionError: Lists differ: [{'type': 'enc', 'n': 3, 'delta': 1}, {'type': 'enc', 'n': 2, 'delta': 2}] != [{'type': 'enc', 'n': 3, 'delta': 2}, {'type': 'enc', 'n': 2, 'delta': 4}]
+
+First differing element 0:
+{'type': 'enc', 'n': 3, 'delta': 1}
+{'type': 'enc', 'n': 3, 'delta': 2}
+
+- [{'delta': 1, 'n': 3, 'type': 'enc'}, {'delta': 2, 'n': 2, 'type': 'enc'}]
+?            ^                                    ^
+
++ [{'delta': 2, 'n': 3, 'type': 'enc'}, {'delta': 4, 'n': 2, 'type': 'enc'}]
+?            ^                                    ^
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (failures=1)

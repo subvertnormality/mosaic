@@ -37,10 +37,12 @@ class HarmonyPersistenceOracleTests(unittest.TestCase):
         # focused-screen field oracles; 25 September 2026 dashboard/detail rows,
         # channel-octave scope and one planned > sent row per voice; 27 September
         # 2026 the re-captured NO VOICING image, whose Failure details row shows OPEN >,
-        # and Voice leading drawn as a list of its rows).
+        # and Voice leading drawn as a list of its rows). Reviewed re-freeze, followup-cases:
+        # revoice_workflow adds one expectation, the Masks Chord 1 cell reads 2nd after the
+        # first E3 detent (README Adding Chords), before Harmony opens; nothing else changed.
         source_hashes = {
             'playback_note_messages': '15f8f3fc07b90038a1d8813e56b814975242f7b15d54ac9af2b4f249ed504218',
-            'revoice_workflow': 'c3d3c344b33ad56a5743d342578b8bb60993bd75052833639b0049f1e0eccae4',
+            'revoice_workflow': 'db78213502b15bf29b63f0ba0c0e349f24179e67c9d8dbaaffab51cca3985e20',
             'setup_pattern_harmony': '8925b4cce413ac9b432e5ef55bea29da14d6c853990bd879d8fc31659e1eebfc',
             'pattern_harmony_persistence_workflow': '4481ac7da164d5f3b2188aa42f8e4d665c347d279798da9158b2bc184ef1882f',
             'ensemble_polyrhythm_workflow': 'd07e29b5c09794797e29d774381465568373410294cdefedfffda1bb4d3b14a1',

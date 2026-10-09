@@ -1,0 +1,10 @@
+{
+  "units": 425,
+  "unit_objects_unchanged": true,
+  "historic_objects_exact": 387,
+  "source_files_pinned": 150,
+  "source_mismatches": [],
+  "threshold": "all 425 entries, all 10 criteria >= 8",
+  "publication": false,
+  "scope": "Root independent audit of aa02 candidate; current runtime gate superseded by fresh CG2 proof; no new scores assigned"
+}

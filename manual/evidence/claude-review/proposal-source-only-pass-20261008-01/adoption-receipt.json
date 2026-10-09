@@ -1,0 +1,93 @@
+{
+  "receipt_id": "source-only-review-adoption-20261008-01",
+  "status": "SOURCE_ONLY_PASS_ADOPTED; RENDERED_AND_PUBLICATION_QUALIFICATION_PENDING",
+  "decision": "Source-only review covers 52 units plus 2 performance scalar supplements; all 10 rubric criteria are >=8 for all 54 review units.",
+  "review_evidence": {
+    "combined-v06-source-review.json": {
+      "sha256": "d38e76b7c985e47014f3d7ff56c732435914aae0d93fe751139214cec046a60b"
+    },
+    "combined-v07-source-review.json": {
+      "sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170"
+    },
+    "v05-two-scalar-supplement.json": {
+      "sha256": "fbc9279e208456941b4d3c539f48dadead6369108f41acfed01b88eab00fedd7"
+    },
+    "v05-two-scalar-supplement.md": {
+      "sha256": "15c40d474ff0e652f9e52e1ddd225f1ed3c3c8e8c4348df9206f6ee4607bba7e"
+    },
+    "locks-v04-supplement.json": {
+      "sha256": "c6eafe717894da385d894b676c1fed146933700027425fd5176437029456d874"
+    },
+    "locks-v04-supplement.md": {
+      "sha256": "201a0ca4063cade975ce3826c4f1d4d1ce95df9a7c9169d019b5f97f06d09ab1"
+    },
+    "review.json": {
+      "sha256": "22e5ab006310a3dbd9ff883e3637490fb152dd3d6f15f161480e399e3b7e94dd"
+    },
+    "review.md": {
+      "sha256": "ba5bcdff13ffbdcbdc00a7208933694841dd592d17335396ba267a5c5d9aab58"
+    }
+  },
+  "v07_candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+  "current_425_ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+  "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+  "score_summary": {
+    "coherence": {
+      "min": 8,
+      "max": 9
+    },
+    "usefulness": {
+      "min": 8,
+      "max": 9
+    },
+    "understandability": {
+      "min": 8,
+      "max": 9
+    },
+    "representation": {
+      "min": 8,
+      "max": 9
+    },
+    "granularity": {
+      "min": 8,
+      "max": 9
+    },
+    "flow": {
+      "min": 8,
+      "max": 9
+    },
+    "integration": {
+      "min": 8,
+      "max": 9
+    },
+    "vocabulary": {
+      "min": 8,
+      "max": 9
+    },
+    "naming": {
+      "min": 8,
+      "max": 9
+    },
+    "canonical_home": {
+      "min": 8,
+      "max": 9
+    }
+  },
+  "v05_historical_supplement": "Preserved unchanged; its two scalar review remains HOLD and is not counted in the 52+2 source-only pass.",
+  "locks_and_performance_supplements": "The source package includes Locks v04 (HOLD) and the v07 additional performance review. No separately named final Locks6 or Performance7 supplement file was present in the searched package; no such file is inferred or fabricated.",
+  "root_gates": {
+    "terminal_preinstall_scene_parity": "PASS: 146 scenes",
+    "terminal_preinstall_projection_semantics": "PASS: 167 projections; audio/native semantics",
+    "derived_index_metadata_reconciliation": "PENDING",
+    "current_book_identity_pins": "PENDING final root confirmation",
+    "preview_verification": "PENDING",
+    "overall_astra_review": "NOT QUALIFIED",
+    "publication_qualification": "NOT QUALIFIED"
+  },
+  "root_identities": {
+    "authoritative_source_head": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+    "publication_snapshot_head": "9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0"
+  },
+  "installation": "Evidence copied into both roots under a new unique developer-evidence directory. No reader source, YAML, native data, audio, or current ledger was changed by this adoption.",
+  "ledger_candidate": "An updated 425-row candidate is prepared separately under the operator directory. It updates only the 38 distinct direct targets justified by the crosswalk; 11 review units remain standalone/projection-only, and the two performance supplements are not treated as 425 direct units."
+}

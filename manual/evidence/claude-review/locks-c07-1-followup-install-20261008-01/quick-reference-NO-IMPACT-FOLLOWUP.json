@@ -1,0 +1,61 @@
+{
+  "schema": "quick-reference-recipe-edit-no-impact-v1",
+  "candidate": "locks-c07-1-followup-20261008-01",
+  "candidate_manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41",
+  "installed_receipt_sha256": "dce74f584bde0054314c4147345f7c9856000e7ec4ef2b101d2d01c0f8f6d692",
+  "postinstall_authoring_identity_sha256": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+  "postinstall_book_sha256": "38beead5d88faa3a5aa1a5a0fc27c25796308c4d84bd831060035fe5085ef89f",
+  "postinstall_reader_index_sha256": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca",
+  "legacy_identity_count": 77,
+  "counts": {
+    "preserved": 51,
+    "total": 77,
+    "unresolved": 0,
+    "clarified": 26
+  },
+  "exact_changed_paths": [
+    {
+      "file": "manual/features/reference-locks.yaml",
+      "feature_id": "locks",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        4,
+        "text"
+      ]
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "feature_id": "small-hours",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        1,
+        "text"
+      ]
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "feature_id": "small-hours",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        2,
+        "text"
+      ]
+    }
+  ],
+  "quickref_rows_for_affected_features": [],
+  "quickref_evidence_fields": [
+    "prose",
+    "controls",
+    "details"
+  ],
+  "excerpt_hits_in_three_edited_recipe_texts": 0,
+  "conclusion": "No impact: all 77 installed authored-evidence excerpts are bound to prose, controls or details; none of the changed feature IDs occurs in the ledger, and none of the excerpts appears in any edited recipe text. No receipt refresh is needed.",
+  "test_rerun": "not run per bounded instruction; no excerpt impact",
+  "source_writes": 0
+}

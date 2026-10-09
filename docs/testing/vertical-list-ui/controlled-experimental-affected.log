@@ -1,0 +1,4 @@
+{"case": "M-UIACC-A01-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/18bf72591123441ea6429a88e8ffe3c2/manifest.json"}
+{"case": "M-UIACC-A02-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/58183e74eb4b442899695d3569c581af/manifest.json"}
+{"case": "M-UIACC-A03-001", "passed": true, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/8495b97318e24d79b1cb070f17c57c9e/manifest.json"}
+{"case": "M-UIACC-A18-001", "passed": false, "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/8a3011dd1e9142df95c3ef930bb0e1e7/manifest.json"}

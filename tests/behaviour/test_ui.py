@@ -271,16 +271,16 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual(header_text("trigger_editor_confirmation"),
                          "TRIG OPTIONS CH01")
         self.assertEqual(HEADERS["trigger_editor_confirmation"],
-                         {"title": "TRIG OPTIONS", "layout": "focused", "scope": "channel"})
+                         {"title": "TRIG OPTIONS", "layout": "vertical_list", "scope": "channel"})
         self.assertEqual(header_parts("trigger_editor_confirmation", channel=1),
-                         ("TRIG OPTIONS", "CH01", "focused"))
+                         ("TRIG OPTIONS", "CH01", "vertical_list"))
         self.assertEqual(header_parts("trigger_editor", channel=1),
                          ("PATTERN TRIG", "PAT01 CH01", "pattern64"))
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
         with patch("frame_oracle.live_header_matches", return_value=True) as live:
             Ui(driver).expect_header("trigger_editor_confirmation")
-        live.assert_called_once_with(state, "TRIG OPTIONS", "CH01", "focused")
+        live.assert_called_once_with(state, "TRIG OPTIONS", "CH01", "vertical_list")
         self.assertEqual(driver.results, [dict(
             kind="screen-header", expected="TRIG OPTIONS CH01", matched=True)])
 
@@ -886,20 +886,79 @@ class UiInputTests(unittest.TestCase):
         self.assertEqual(ui.control_cell("pattern_velocity_range_down"), (16, 8))
 
     def test_editor_hold_results_resolve_x_from_the_control_map(self):
-        source = (BEHAVIOUR / "cases.py").read_text()
+        source = (BEHAVIOUR / "contract" / "hold_input_bounds.py").read_text()
         module = ast.parse(source)
         function = next(node for node in module.body
                         if isinstance(node, ast.FunctionDef)
-                        and node.name == "editor_hold_boundaries")
-        hold = next(node for node in function.body
-                    if isinstance(node, ast.FunctionDef) and node.name == "hold")
-        assignment = next(node for node in hold.body
+                        and node.name == "hold_input_bounds_sample")
+        assignment = next(node for node in function.body
                           if isinstance(node, ast.Assign)
                           and any(isinstance(target, ast.Name) and target.id == "x"
                                   for target in node.targets))
         self.assertIsInstance(assignment.value, ast.Subscript)
-        self.assertIsInstance(assignment.value.value, ast.Call)
-        self.assertEqual(assignment.value.value.func.attr, "control_cell")
+        index = assignment.value.slice
+        if isinstance(index, ast.Index):
+            index = index.value
+        self.assertIsInstance(index, ast.Constant)
+        self.assertEqual(index.value, 0)
+        control_cell = assignment.value.value
+        self.assertIsInstance(control_cell, ast.Call)
+        self.assertEqual(control_cell.func.attr, "control_cell")
+        self.assertIsInstance(control_cell.func.value, ast.Attribute)
+        self.assertEqual(control_cell.func.value.attr, "ui")
+        self.assertIsInstance(control_cell.func.value.value, ast.Name)
+        self.assertEqual(control_cell.func.value.value.id, "c")
+        self.assertEqual(len(control_cell.args), 1)
+        self.assertIsInstance(control_cell.args[0], ast.Name)
+        self.assertEqual(control_cell.args[0].id, "control")
+
+        sample_assignment = next(node for node in function.body
+                                 if isinstance(node, ast.Assign)
+                                 and any(isinstance(target, ast.Name)
+                                         and target.id == "sample"
+                                         for target in node.targets))
+        self.assertIsInstance(sample_assignment.value, ast.Call)
+        self.assertEqual(sample_assignment.value.func.id, "dict")
+        self.assertIn("x", [keyword.arg for keyword in sample_assignment.value.keywords])
+        x_keyword = next(keyword for keyword in sample_assignment.value.keywords
+                         if keyword.arg == "x")
+        self.assertIsInstance(x_keyword.value, ast.Name)
+        self.assertEqual(x_keyword.value.id, "x")
+
+        evidence_source = (BEHAVIOUR / "editor_hold_evidence.py").read_text()
+        evidence_module = ast.parse(evidence_source)
+        record = next(node for node in evidence_module.body
+                      if isinstance(node, ast.FunctionDef)
+                      and node.name == "record_hold_input_bounds")
+        result = next(node.value for node in ast.walk(record)
+                      if isinstance(node, ast.Assign)
+                      and any(isinstance(target, ast.Name) and target.id == "result"
+                              for target in node.targets)
+                      and isinstance(node.value, ast.DictComp))
+        self.assertIsInstance(result, ast.DictComp)
+        self.assertEqual(result.key.id, "key")
+        self.assertEqual(result.value.value.id, "sample")
+        value_index = result.value.slice
+        if isinstance(value_index, ast.Index):
+            value_index = value_index.value
+        self.assertIsInstance(value_index, ast.Name)
+        self.assertEqual(value_index.id, "key")
+        retained = result.generators[0].iter
+        self.assertIsInstance(retained, ast.Tuple)
+        self.assertIn("x", [node.value for node in retained.elts
+                               if isinstance(node, ast.Constant)])
+        append_calls = {(call.func.value.attr, call.args[0].id)
+                        for call in ast.walk(record)
+                        if isinstance(call, ast.Call)
+                        and isinstance(call.func, ast.Attribute)
+                        and call.func.attr == "append"
+                        and isinstance(call.func.value, ast.Attribute)
+                        and isinstance(call.func.value.value, ast.Name)
+                        and call.func.value.value.id == "driver"
+                        and len(call.args) == 1
+                        and isinstance(call.args[0], ast.Name)}
+        self.assertIn(("observations", "observation"), append_calls)
+        self.assertIn(("results", "result"), append_calls)
 
     def test_arp_setup_semantic_inputs_match_legacy_driver_recipe(self):
         from ui import Ui
@@ -1667,7 +1726,7 @@ class UiInputTests(unittest.TestCase):
         from types import ModuleType, SimpleNamespace
         from trig_parameter_interactions import stock_pitch_lock_inheritance
 
-        def expected_trace():
+        def expected_trace(quantised):
             calls = [
                 ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 7), ("key", 3),
             ("enc", 3, 1), ("key", 3),
@@ -1685,7 +1744,8 @@ class UiInputTests(unittest.TestCase):
                 ("header", "midi_config", {"channel": 1}),
                 ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 1), ("key", 3),
                 ("key", 2), ("enc", 3, -50), ("key", 3), ("key", 2),
-                ("enc", 3, 61),
+                ("param", 1, "X", None),
+                ("enc", 3, 61), ("param", 1, "60" if quantised else "C5", None),
             ]
 
             def lock(step, value):
@@ -1739,6 +1799,9 @@ class UiInputTests(unittest.TestCase):
                 ui.expect_list_label = lambda label, wait=True: (
                     labels.append((label, wait)) or not wait
                 )
+                ui.expect_selected_param = lambda slot, value, marker=None: driver.calls.append(
+                    ("param", slot, value, marker)
+                )
                 pitches_by_phase = iter([
                     [60] * 4,
                     [60, 62 if quantised else 63, 60, 60],
@@ -1765,7 +1828,7 @@ class UiInputTests(unittest.TestCase):
                     ],
                 )
                 stock_pitch_lock_inheritance(case, quantised=quantised)
-                self.assertEqual(driver.calls, expected_trace())
+                self.assertEqual(driver.calls, expected_trace(quantised))
                 label = "Quantised Fixed Note" if quantised else "Fixed Note"
                 self.assertEqual(labels, [(label, False), (label, True)])
                 self.assertEqual(
@@ -2200,7 +2263,7 @@ class UiObservationTests(unittest.TestCase):
         driver = FakeDriver(states=[state])
         with patch("frame_oracle.live_header_matches", return_value=True) as live:
             Ui(driver).expect_scale_slot_header(13)
-        live.assert_called_once_with(state, "SCALE", "SLOT 13", "focused")
+        live.assert_called_once_with(state, "SCALE", "SLOT 13", "vertical_list")
         self.assertEqual(driver.calls, [("wait",)])
         self.assertEqual(driver.results, [])
         driver = FakeDriver(states=[state])
@@ -2770,14 +2833,14 @@ class ProjectActionUiVerbTests(unittest.TestCase):
             ui.expect_rhythm_doctor_screen("R05")
 
         self.assertEqual(headers, [
-            ("RHYTHM DR", "CH01", "focused"), ("WINDOW", "CH03", "focused"),
-            ("RHYTHM DR", "CH01", "focused"), ("ALIGNMENT", "CH01", "detail"),
-            ("WINDOW", "CH01", "focused"),
+            ("RHYTHM DR", "CH01", "vertical_list"), ("WINDOW", "CH03", "vertical_list"),
+            ("RHYTHM DR", "CH01", "vertical_list"), ("ALIGNMENT", "CH01", "detail"),
+            ("WINDOW", "CH01", "vertical_list"),
         ])
         self.assertEqual(fields, [
-            ("focused", "Manual BPM", "127", True),
+            ("vertical_list", "Manual BPM", "127", True),
             ("detail", "Refused", "CAPTURE AUDIO UNAVAILABLE", True),
-            ("focused", None, None, True),
+            ("vertical_list", None, None, True),
         ])
         self.assertEqual(observe.call_args_list[0].args[0](), [(1, 63, 9, "NOT_READY")])
         self.assertEqual(observe.call_args_list[0].args[1],
@@ -2996,6 +3059,84 @@ class OverviewCellMarkerOracleTests(unittest.TestCase):
         self.assertIsNone(overview_cell_marker(self.state([(17, 15, 9, "S")]), "overview_params", 1))
 
 
+class ExpectSelectedParamTests(unittest.TestCase):
+    """Ui.expect_selected_param: the C02 selected slot, its value and corner marker
+    (README.md#trig-param-locks; README.md#param-slides for the S marker)."""
+
+    @staticmethod
+    def state(commands, outline=None):
+        return OverviewCellOracleTests.state(commands, outline)
+
+    def ui(self, state):
+        from ui import Ui
+        driver = FakeDriver(states=[state])
+        driver.results = []
+        driver.wait = lambda predicate, *a, **k: self.assertTrue(predicate(state)) or state
+        return Ui(driver), driver
+
+    def test_slot_value_and_lock_marker_are_checked_and_recorded(self):
+        # Cell 1 of Trig params: value baseline 22, marker at (17,15).
+        drawn = self.state([(2, 15, 15, "CC1"), (17, 15, 15, "L"), (2, 22, 13, "24")], outline=("overview_params", 1))
+        ui, driver = self.ui(drawn)
+        ui.expect_selected_param(1, 24, marker="L")
+        self.assertEqual(driver.results, [dict(kind="selected-param", slot=1, value="24", marker="L", passed=True)])
+
+    def test_a_wrong_value_marker_or_slot_is_not_accepted(self):
+        drawn = self.state([(2, 15, 15, "CC1"), (17, 15, 15, "L"), (2, 22, 13, "24")], outline=("overview_params", 1))
+        for slot, value, marker in ((1, 25, "L"), (1, 24, "S"), (1, 24, None), (2, 24, "L")):
+            with self.subTest(slot=slot, value=value, marker=marker):
+                ui, driver = self.ui(drawn)
+                with self.assertRaises(AssertionError):
+                    ui.expect_selected_param(slot, value, marker=marker)
+                self.assertEqual(driver.results, [])
+
+
+class ExpectMapEditorTests(unittest.TestCase):
+    """Ui.expect_map_editor: the native norns MIDI map editor, drawn pixel for pixel
+    (README.md#midi-controller-mapping; layout characterised from the emulator framebuffer)."""
+
+    @staticmethod
+    def state(ui, selected, values=None, learning=False):
+        from frame_oracle import render
+        pixels = render(ui.map_editor_commands("sel_ch_vel", selected, values, learning))
+        return {"frame": {"pixels_base64": base64.b64encode(pixels).decode()}}
+
+    def ui(self, state):
+        from ui import Ui
+        driver = FakeDriver(states=[state])
+        driver.results = []
+        driver.wait = lambda predicate, *a, **k: self.assertTrue(predicate(state)) or state
+        return Ui(driver), driver
+
+    def test_the_editor_is_matched_whole_and_the_row_recorded(self):
+        from ui import Ui
+        values = dict(cc=20, in_lo=1, in_hi=2, accum="yes")
+        ui, driver = self.ui(self.state(Ui.__new__(Ui), "accum", values))
+        ui.expect_map_editor("sel_ch_vel", "accum", values)
+        self.assertEqual(driver.results[0]["kind"], "map-editor")
+        self.assertEqual(driver.results[0]["selected"], "accum")
+        self.assertEqual(driver.results[0]["values"]["out_lo"], "-1.0")
+        self.assertEqual(driver.results[0]["values"]["accum"], "yes")
+
+    def test_a_different_value_selection_or_learning_state_is_not_accepted(self):
+        from ui import Ui
+        drawn = self.state(Ui.__new__(Ui), "in_lo", dict(cc=20, in_lo=1))
+        for selected, values, learning in (("in_hi", dict(cc=20, in_lo=1), False),
+                                           ("in_lo", dict(cc=21, in_lo=1), False),
+                                           ("in_lo", dict(cc=20, in_lo=2), False),
+                                           ("learn", dict(cc=20, in_lo=1), True)):
+            with self.subTest(selected=selected, values=values, learning=learning):
+                ui, driver = self.ui(drawn)
+                with self.assertRaises(AssertionError):
+                    ui.expect_map_editor("sel_ch_vel", selected, values, learning)
+                self.assertEqual(driver.results, [])
+
+    def test_an_unknown_element_is_a_map_error(self):
+        from ui import Ui, UiMapError
+        with self.assertRaises(UiMapError):
+            Ui.__new__(Ui).map_editor_commands("sel_ch_vel", "volume")
+
+
 class OverviewCellOracleTests(unittest.TestCase):
     """Overview dial cells (frame_oracle.overview_cell_matches /
     overview_selected_cell_matches / selected_field_matches): three static
@@ -3060,6 +3201,27 @@ class OverviewCellOracleTests(unittest.TestCase):
 class DashboardOracleTests(unittest.TestCase):
     """The dashboard layout oracle (frame_oracle.dashboard_row_matches /
     dashboard_matches) and its verbs (Ui.expect_dashboard_row / expect_dashboard)."""
+
+    def test_dashboard_fixture_requires_exact_vertical_trig_options_footer(self):
+        # Characterisation: vertical P02 control spacing; the preserved native
+        # DASH failure shows these exact glyphs before and after E2.
+        from contract import live_ui_feedback
+        driver = Mock()
+        driver.results = []
+        driver.snapshot.return_value = {"grid": [0] * 128}
+        with patch.object(live_ui_feedback, "_expect_footer") as expect:
+            live_ui_feedback.live_ui_dashboards(driver)
+        self.assertEqual(expect.call_args_list,
+                         [unittest.mock.call(driver, "E3 SET")] * 4)
+        driver.ui.expect_selected_field.assert_has_calls(
+            [unittest.mock.call("vertical_list", "Tresillo amount", "x24"),
+             unittest.mock.call("vertical_list", "Tresillo amount", "x24"),
+             unittest.mock.call("vertical_list", "Tresillo amount", "x32"),
+             unittest.mock.call("vertical_list", "Tresillo amount", "x32")])
+        driver.ui.turn.assert_called_once_with(3, 1)
+        driver.ui.press_key.assert_called_once_with(3)
+        self.assertEqual(driver.results[-2]["pattern_grid_before"],
+                         driver.results[-2]["pattern_grid_after"])
 
     @staticmethod
     def state(commands):
@@ -3133,6 +3295,12 @@ class DashboardOracleTests(unittest.TestCase):
     def test_live_header_puts_a_dashboard_scope_on_the_title_row(self):
         from frame_oracle import live_header_matches
         state = self.screen([])
+        # The user-visible header now includes the separately frozen authored
+        # P07 rest sprite. Keep the title and right-aligned scope exact.
+        from contract.mini_header_animation_ui import atlas, overlay
+        spec = atlas()["P07"]
+        raw = base64.b64decode(state["frame"]["pixels_base64"])
+        state["frame"]["pixels_base64"] = base64.b64encode(overlay(raw, spec, spec["frames"][0])).decode()
         self.assertTrue(live_header_matches(state, "PAINT PREVIEW", "CH01", "dashboard"))
         self.assertFalse(live_header_matches(state, "PAINT PREVIEW", "CH01", "detail"))
 
@@ -3427,3 +3595,18 @@ class OwnerFeedback26SeptemberTests(unittest.TestCase):
         for bad in (0, 65, "54"):
             with self.assertRaises(UiMapError):
                 Ui(FakeDriver()).expect_outlined_step(bad)
+
+
+class MotionOptionBoundaryTests(unittest.TestCase):
+    def test_motion_first_row_preserves_glyphs_below_native_screen_separator(self):
+        from ui import Ui
+        states=[{"diagnostics":{"parameter_roots":[{"id":"mosaic"}]}}]+[{"frame":{}}]*40
+        driver=FakeDriver(states=states);ui=Ui(driver)
+        ui.expect_menu_label=lambda label:None
+        ui.expect_menu_option_row=lambda label,value,top=None:driver.calls.append(("option",label,value,top))
+        # Independent native capture proves row22 is the category separator;
+        # all UI motion glyph pixels exactly match at rows23..31.
+        with patch("frame_oracle.selected_line",side_effect=lambda state,label,top=None:top==23):
+            ui.set_mosaic_options([("UI motion",False)])
+        self.assertIn(("option","UI motion","Off",23),driver.calls)
+        self.assertEqual(driver.results[-1],dict(kind="mosaic-option-input",label="UI motion",enabled=False))

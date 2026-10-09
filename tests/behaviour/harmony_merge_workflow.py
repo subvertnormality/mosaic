@@ -16,12 +16,9 @@ def setup_foundation(c):
     c.ui.tap_control("pattern_editor"); c.ui.select_channel(2)
     c.ui.tap_step(5); c.ui.tap_step(7)
     c.ui.tap_control("channel_editor"); c.ui.tap_control("pattern_slot", 2)
-    # Device Config -> Merge Shape. Enable Foundation and explicitly select P01.
-    c.ui.channel_page("merge_shape", "midi_config", channel=1)
-    c.ui.expect_header("merge_shape", channel=1)
-    c.ui.turn(3, 1)       # Mode: Foundation (staged).
-    c.ui.turn(2, 1); c.ui.press_key(3)  # Rhythm -> M02.
-    c.ui.turn(3, 1); c.ui.press_key(3)  # Anchor: P01; apply the whole transaction.
+    # Select the one effective Strategy after saving the explicit P01 anchor.
+    from merge_strategy_routes import foundation_rhythm
+    foundation_rhythm(c,1)
     c.ui.expect_steps({step: "selected" for step in (1, 2, 3, 4, 5, 7)})
 
 
@@ -30,7 +27,10 @@ def phrase_build_workflow(c):
     # Return to M01, open Phrase, select two cycles and the Build curve (50%, 100%).
     # E1 returns to the clean root, which remembers its Rhythm focus.
     c.ui.feature_root(); c.ui.select_row("phrase", 2); c.ui.press_key(3)
-    c.ui.turn(3, 1); c.ui.turn(2, 1); c.ui.turn(3, 1); c.ui.press_key(3)
+    # README.md#merge-shape (Phrase): Cycles 1/2/4/8 and the Flat/Build/Answer/Fill shapes.
+    c.ui.turn(3, 1); c.ui.expect_selected_field("detail", "Cycles", "2")
+    c.ui.turn(2, 1); c.ui.turn(3, 1); c.ui.expect_selected_field("detail", "Shape", "BUILD")
+    c.ui.press_key(3); c.ui.expect_footer_text("APPLIED")
     anchor = [(1, [144, n, v]) for n, v in
               ((60, 127), (62, 117), (64, 107), (65, 97))]
     addition = (1, [144, 60, 70])
@@ -52,6 +52,13 @@ def phrase_build_workflow(c):
                     event['bytes'] = [143+message['channel']] + message['data']
                     result.append(event)
         return result
+    # README.md#merge-shape (Phrase, Build): loop 1 plays the anchors plus one addition, loop 2 both.
+    state = c.wait(lambda value: len(ons(value)) >= 5, timeout=8)
+    assert [(m['port'], m['bytes']) for m in ons(state)][:5] == expected[:5]
+    c.results.append(dict(kind='foundation-build-cycle', cycle=1, positions=positions[:5], passed=True))
+    state = c.wait(lambda value: len(ons(value)) >= 11, timeout=8)
+    assert [(m['port'], m['bytes']) for m in ons(state)][:11] == expected[:11]
+    c.results.append(dict(kind='foundation-build-cycle', cycle=2, positions=positions[5:11], passed=True))
     state = c.wait(lambda value: len(ons(value)) >= len(expected), timeout=8)
     actual = [(m['port'], m['bytes']) for m in ons(state)]
     assert actual == expected, dict(expected=expected, actual=actual)

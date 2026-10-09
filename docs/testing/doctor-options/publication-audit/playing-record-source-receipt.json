@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "purpose": "mandatory independently scoped READY playing Record refusal",
+  "passed": true,
+  "focused_tests": 30,
+  "red": "playing-record-red.log",
+  "green": "playing-record-green.log",
+  "source_sha256": {
+    "tools/doctor_options_audit.py": "7d368751d3dc67c3dbfe4bd060c17a0d340d1fbe59bcc05cb820052394435323",
+    "tests/behaviour/test_doctor_options_audit.py": "9e24f63a80bd450e757ac9c6b7409ef80be6dd0203e32c25bf4283c128589377",
+    "tests/behaviour/contract/rhythm_doctor_options.py": "baf935a163066dfb81f6160c5137ff6c695b0937fa71f11d24c47768cfdd761d"
+  },
+  "acceptance": [
+    "six ordered exact public/native Play Record Stop edges",
+    "actual held/released snapshots bracket Record down/up",
+    "own native R05 selected Alignment OPEN > both snapshots",
+    "actual scoped emitted musical output proves playing",
+    "postStop original painted mask and no held inputs/outstanding notes",
+    "fresh stopped R06 Half tempo equals genuine fixture bank BPM"
+  ],
+  "native_seven_role_qualification": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

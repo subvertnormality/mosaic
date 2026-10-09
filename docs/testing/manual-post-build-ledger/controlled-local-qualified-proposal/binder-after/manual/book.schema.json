@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mosaic complete field-guide authoring",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "edition",
+    "legacy_source",
+    "legacy_source_sha256",
+    "features",
+    "navigation",
+    "aliases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "features": {
+      "type": "array",
+      "minItems": 125,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "audience",
+          "summary",
+          "prose",
+          "musical_use",
+          "category",
+          "related",
+          "sources",
+          "controls",
+          "details",
+          "recipes",
+          "scene_refs",
+          "review",
+          "parent",
+          "level"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "audience": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "prose": {
+            "type": "string"
+          },
+          "musical_use": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "related": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sources": {
+            "type": "object",
+            "required": [
+              "readme",
+              "behaviour_cases",
+              "code"
+            ]
+          },
+          "controls": {
+            "type": "array"
+          },
+          "details": {
+            "type": "array"
+          },
+          "recipes": {
+            "type": "array"
+          },
+          "scene_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "review": {
+            "type": "object",
+            "required": [
+              "status",
+              "cases"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "pending",
+                  "pilot-reviewed",
+                  "verified",
+                  "controlled-verified"
+                ]
+              },
+              "cases": {
+                "type": "array"
+              },
+              "validation_scope": {
+                "const": "controlled-manual-generation"
+              },
+              "realtime_qualification": {
+                "const": "pending-ci"
+              }
+            }
+          },
+          "parent": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 6
+          }
+        }
+      }
+    },
+    "course_source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "course": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "course"
+        ]
+      },
+      "then": {
+        "required": [
+          "course_source"
+        ]
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "course_source"
+        ]
+      },
+      "then": {
+        "required": [
+          "course"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "width": 1440,
+    "visible": [
+      "Recordings"
+    ],
+    "original": {
+      "paused": true,
+      "connected": true,
+      "currentTime": 0
+    },
+    "playing": 0
+  },
+  {
+    "width": 390,
+    "visible": [
+      "Recordings"
+    ],
+    "original": {
+      "paused": true,
+      "connected": true,
+      "currentTime": 0.011918
+    },
+    "playing": 0
+  }
+]

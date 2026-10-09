@@ -1,0 +1,12 @@
+test_checkout_requires_the_exact_v042_commit (test_pretrained_runtime_factory.PretrainedRuntimeFactoryTests.test_checkout_requires_the_exact_v042_commit) ... ok
+test_drum_onnx_session_disables_arenas_and_threads_for_bounded_memory (test_pretrained_runtime_factory.PretrainedRuntimeFactoryTests.test_drum_onnx_session_disables_arenas_and_threads_for_bounded_memory) ... ok
+test_every_runtime_path_is_explicitly_required (test_pretrained_runtime_factory.PretrainedRuntimeFactoryTests.test_every_runtime_path_is_explicitly_required) ... ok
+test_exact_frontend_receives_a_temporary_pcm_wav_derives_bpm_from_eight_mini_beats_and_cleans_up (test_pretrained_runtime_factory.PretrainedRuntimeFactoryTests.test_exact_frontend_receives_a_temporary_pcm_wav_derives_bpm_from_eight_mini_beats_and_cleans_up) ... ok
+test_invalid_frontend_output_still_removes_temporary_wav (test_pretrained_runtime_factory.PretrainedRuntimeFactoryTests.test_invalid_frontend_output_still_removes_temporary_wav) ... ok
+test_make_builds_structural_composite_from_only_exact_pins (test_pretrained_runtime_factory.PretrainedRuntimeFactoryTests.test_make_builds_structural_composite_from_only_exact_pins) ... ok
+test_numpy_aliases_are_installed_only_when_absent_for_old_librosa (test_pretrained_runtime_factory.PretrainedRuntimeFactoryTests.test_numpy_aliases_are_installed_only_when_absent_for_old_librosa) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.010s
+
+OK

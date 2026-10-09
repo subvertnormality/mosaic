@@ -1,0 +1,20 @@
+test_every_lane_has_a_gate_and_every_melodic_lane_has_a_stem (test_onsets.LaneTableTests.test_every_lane_has_a_gate_and_every_melodic_lane_has_a_stem) ... ok
+test_the_lane_set_degrades_without_the_drum_splitter (test_onsets.LaneTableTests.test_the_lane_set_degrades_without_the_drum_splitter)
+LarsNet's checkpoints are CC BY-NC 4.0 and a separate 562MB ... ok
+test_the_server_offers_more_lanes_than_the_local_backend (test_onsets.LaneTableTests.test_the_server_offers_more_lanes_than_the_local_backend) ... ok
+test_a_broadband_stem_lands_on_its_attacks (test_onsets.OnsetPositionTests.test_a_broadband_stem_lands_on_its_attacks) ... ok
+test_a_low_pitched_stem_lands_on_its_attacks (test_onsets.OnsetPositionTests.test_a_low_pitched_stem_lands_on_its_attacks)
+A kick's rectified waveform swings 160 times a second. Refining the ... ok
+test_onsets_are_not_reported_systematically_early (test_onsets.OnsetPositionTests.test_onsets_are_not_reported_systematically_early)
+An analysis frame sees an attack before its centre reaches it, so a ... ok
+test_refinement_never_invents_an_onset_in_silence (test_onsets.OnsetPositionTests.test_refinement_never_invents_an_onset_in_silence) ... ok
+test_silence_and_short_stems_produce_nothing (test_onsets.OnsetPositionTests.test_silence_and_short_stems_produce_nothing) ... ok
+test_every_velocity_satisfies_the_bank_contract (test_onsets.VelocityTests.test_every_velocity_satisfies_the_bank_contract) ... ok
+test_velocity_follows_how_hard_the_stem_was_struck (test_onsets.VelocityTests.test_velocity_follows_how_hard_the_stem_was_struck) ... ok
+test_velocity_is_scaled_within_the_stem_not_across_stems (test_onsets.VelocityTests.test_velocity_is_scaled_within_the_stem_not_across_stems)
+A guitar stem's absolute level says nothing about how hard the ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.077s
+
+OK

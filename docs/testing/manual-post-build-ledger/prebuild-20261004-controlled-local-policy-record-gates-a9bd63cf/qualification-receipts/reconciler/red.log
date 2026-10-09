@@ -1,0 +1,39 @@
+FFFF
+======================================================================
+FAIL: test_reject_actual_inputs_differing_from_immutable_trace (test_reconcile_manual_build.ReferenceObjectReconstructionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 309, in test_reject_actual_inputs_differing_from_immutable_trace
+    with self.assertRaisesRegex(ValueError,'trace'):tool.reference_authoring(self.document)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_reject_actual_value_differing_from_pinned_selector (test_reconcile_manual_build.ReferenceObjectReconstructionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 306, in test_reject_actual_value_differing_from_pinned_selector
+    with self.assertRaisesRegex(ValueError,'selector'):tool.reference_authoring(self.document)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_source_shared_trace_and_requirements_reproduce_exact_alias_bytes (test_reconcile_manual_build.ReferenceObjectReconstructionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 303, in test_source_shared_trace_and_requirements_reproduce_exact_alias_bytes
+    self.assertEqual(yaml.safe_dump(tool.reference_authoring(self.document),sort_keys=False),yaml.safe_dump(expected,sort_keys=False))
+AssertionError: 'sche[294 chars]ents:\n  - R1\n  steps:\n  - id: one\n    inpu[436 chars]ue\n' != 'sche[294 chars]ents: &id001\n  - R1\n  steps:\n  - id: one\n [415 chars]ue\n'
+Diff is 1053 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_source_typed_integer_selector_keys_reproduce_exact_yaml (test_reconcile_manual_build.ReferenceObjectReconstructionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 296, in test_source_typed_integer_selector_keys_reproduce_exact_yaml
+    self.assertEqual(yaml.safe_dump(tool.reference_authoring(doc),sort_keys=False),yaml.safe_dump(expected,sort_keys=False))
+AssertionError: "schema_version: 1\nfixture_kind: behavio[515 chars]55\n" != 'schema_version: 1\nfixture_kind: behavio[511 chars]55\n'
+Diff is 652 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.018s
+
+FAILED (failures=4)

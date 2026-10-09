@@ -56,8 +56,6 @@ def _paint_preview(c, painting, algorithm, shift, stage):
             return True
         return False
     c.ui.expect_header('paint_preview')
-    row = dict(kind='paint-preview', stage=stage, painting=painting, algorithm=algorithm, shift=shift, passed=False)
-    c.results.append(row)
     # The preview is built by a debounced job: a frame taken before it lands agrees with
     # itself (no cell, Trigs 0). Accept only a state that still holds, with the same cells,
     # 0.6 s later (longer than the job's debounce).
@@ -70,7 +68,10 @@ def _paint_preview(c, painting, algorithm, shift, stage):
             break
     else:
         raise AssertionError(('paint preview never settled', stage))
-    row.update(passed=True, trigs=len(found[-1]), steps=sorted(found[-1]))
+    # Recorded once settled (a checkpoint is taken when the row is appended, and a plan step selects
+    # only a passed row), so the frame shows the finished preview, not the moment before it lands.
+    c.results.append(dict(kind='paint-preview', stage=stage, painting=painting, algorithm=algorithm, shift=shift,
+                          passed=True, trigs=len(found[-1]), steps=sorted(found[-1])))
     return found[-1]
 
 
@@ -119,6 +120,31 @@ def live_ui_algorithm(c):
                           passed=True))
     c.tap(14, 8)
     _paint_preview(c, False, 'Euclidean', '0', 'euclidean-cancel')
+    # Tresillo (button 2, README Adding Trigs): the grid key selects it and the next prime
+    # previews its 3-3-2 grouping, a sparse set that is neither Drum's empty default nor
+    # Euclidean's full row. Euclidean is put back for the Rhythm Doctor step below.
+    c.tap(13, 2)
+    _picker(c, 'Tresillo', True)
+    _algorithm_leds(c, 'Tresillo')
+    ui.tap_control('drum_bank', 1)
+    for control in ('rhythm_fill_minimum', 'rhythm_fill_maximum', 'rhythm_factor_minimum', 'rhythm_factor_maximum'):
+        ui.tap_control(control)
+    c.tap(16, 8)
+    tresillo = _paint_preview(c, True, 'Tresillo', '0', 'tresillo-prime')
+    assert tresillo and tresillo != euclidean and tresillo != drum, \
+        ('The prime after the Tresillo key did not preview its own pattern', sorted(tresillo))
+    # README Adding Trigs: tresillo is a 3-3-2 grouping; the gaps between its steps are the
+    # repeating 3, 3, 2 scaled by the same factor (Tresillo amount x24).
+    ordered = sorted(tresillo)
+    gaps = [b - a for a, b in zip(ordered, ordered[1:])]
+    unit = min(gaps) // 2
+    assert unit and any(all(gap == unit * (3, 3, 2)[(phase + k) % 3] for k, gap in enumerate(gaps))
+                        for phase in range(3)), ('Tresillo preview is not a 3-3-2 grouping', ordered)
+    c.tap(14, 8)
+    _paint_preview(c, False, 'Tresillo', '0', 'tresillo-cancel')
+    c.tap(14, 2)
+    _picker(c, 'Euclidean', True)
+    _algorithm_leds(c, 'Euclidean')
     # K3 on Rhythm Doctor selects it and opens the Doctor (R01), as its grid key does.
     ui.open_task('Trig', 'algorithm')
     _picker(c, 'Euclidean', True)
@@ -156,6 +182,17 @@ def live_ui_paint(c):
         c.results.append(dict(kind='paint-shift-cells', control=control, shift=shift, passed=True))
     ui.tap_control('cancel')
     _paint_preview(c, False, 'Numeric', '0', 'cancel')
+    # README Adding Trigs: pressing prime again re-primes, a move button shifts the preview and
+    # pressing prime once more paints it. The painted trigs are the shifted preview exactly.
+    ui.tap_control('paint')
+    assert _paint_preview(c, True, 'Numeric', '0', 'prime-2') == base
+    ui.tap_control('shift_right')
+    assert _paint_preview(c, True, 'Numeric', '+1', 'shift_right+1-2') == moved(base, 1)
+    ui.tap_control('paint')
+    expected = moved(base, 1)
+    state = c.wait(lambda s: _lit_steps(s) == expected)
+    c.results.append(dict(kind='paint-commit', algorithm='Numeric', shift='+1', steps=sorted(_lit_steps(state)),
+                          passed=True))
     c.results.append(dict(kind='live-ui-paint-summary', passed=True))
 
 
@@ -201,11 +238,27 @@ def live_ui_dashboards(c):
     # not neighbours, and E2 stays on it.
     ui.tap_control('pattern_editor')
     ui.trig_options()
-    ui.expect_selected_field('focused', 'Tresillo amount', 'x24')
-    _expect_footer(c, 'E3 SET  K3 APPLY')
+    ui.expect_selected_field('vertical_list', 'Tresillo amount', 'x24')
+    _expect_footer(c, 'E3 SET')
     c.enc(2, 3)
-    ui.expect_selected_field('focused', 'Tresillo amount', 'x24')
-    _expect_footer(c, 'E3 SET  K3 APPLY')
+    ui.expect_selected_field('vertical_list', 'Tresillo amount', 'x24')
+    _expect_footer(c, 'E3 SET')
+    # Authoritative manual: change the multiplier, then prime Tresillo again.
+    # E3 updates the setting immediately; K3 does not apply a generated pattern.
+    before = c.snapshot()
+    pattern_before = tuple(before['grid'][(y - 1) * 16 + x - 1] for x, y in STEP_CELLS)
+    ui.turn(3, 1)
+    ui.expect_selected_field('vertical_list', 'Tresillo amount', 'x32')
+    _expect_footer(c, 'E3 SET')
+    ui.press_key(3)
+    ui.expect_selected_field('vertical_list', 'Tresillo amount', 'x32')
+    _expect_footer(c, 'E3 SET')
+    after = c.snapshot()
+    pattern_after = tuple(after['grid'][(y - 1) * 16 + x - 1] for x, y in STEP_CELLS)
+    assert pattern_after == pattern_before, 'Trig options E3/K3 must not apply the stored grid pattern'
+    c.results.append(dict(kind='trig-options-immediate-setting-no-k3-apply', amount_before='x24',
+                          amount_after='x32', pattern_grid_before=pattern_before, pattern_grid_after=pattern_after,
+                          passed=True, citation='manual/features/reference-pattern.yaml#adding-trigs'))
     c.results.append(dict(kind='live-ui-dashboards-summary', passed=True))
 
 
@@ -249,8 +302,7 @@ def live_ui_view_channel(c):
 
 def live_ui_grid_focus(c):
     """README Norns Menu Navigation (a grid action brings up the screen that shows what it
-    changed, with that value chosen): a trig merge press on Masks shows Merge detail on Trig
-    mode, K2 returns to Masks; a Pattern Trig step tap lights that cell on the screen; the song
+    changed, with that value chosen): a strategy press on Masks shows Merge detail on Strategy, K2 returns to Masks; a Pattern Trig step tap lights that cell on the screen; the song
     length fader shows Song playback with the exact global length."""
     ui = c.ui
     c.configure()
@@ -258,13 +310,13 @@ def live_ui_grid_focus(c):
     ui.channel_page('masks')
     ui.tap_control('trig_merge_mode')
     ui.expect_header('merge_detail', channel=1)
-    ui.expect_selected_field('detail', 'Trig mode', 'ONLY')
-    _expect_footer(c, 'Only trig merge mode')
+    ui.expect_selected_field('detail', 'Strategy', 'ONLY')
+    _expect_footer(c, 'ONLY APPLIED')
     c.key(2)
     ui.expect_header('masks', channel=1)
     ui.tap_control('trig_merge_mode')
     ui.expect_header('merge_detail', channel=1)
-    ui.expect_selected_field('detail', 'Trig mode', 'ALL')
+    ui.expect_selected_field('detail', 'Strategy', 'ALL')
     c.key(2)
     ui.expect_header('masks', channel=1)
     # Pattern Trig: pattern 2 is empty over channel 1's steps 1-4 (context, capped at 3);
@@ -285,6 +337,21 @@ def live_ui_grid_focus(c):
             ('Song mode', 'AUTO')]
     ui.expect_dashboard('song', song)
     ui.tap_control('global_pattern_length', 8)
+    song[3] = ('Global length', '64')
+    ui.expect_dashboard('song', song)
+    # README Adjusting Song Sequence Length: the fader sets how many steps the song plays before
+    # it starts again. At 2 steps channel 1 (pattern 1, steps 1-4: C D E F) plays only its first
+    # two notes and repeats them; at 4 steps it plays all four; (7,7) returns to the full 64.
+    phrase = [(1, [144, 60, 127]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97])]
+    for length, taps in ((2, (2, 8)), (4, (8, 8))):
+        for control in taps:
+            ui.tap_control('global_pattern_length', control)
+        song[3] = ('Global length', str(length))
+        ui.expect_dashboard('song', song)
+        c.playback(phrase[:length], cycles=2)
+        c.results.append(dict(kind='song-length-playback', length=length,
+                              notes=[note[1][1] for note in phrase[:length]], passed=True))
+    ui.tap_control('global_pattern_length', 7)
     song[3] = ('Global length', '64')
     ui.expect_dashboard('song', song)
     c.results.append(dict(kind='live-ui-grid-focus-summary', passed=True))
@@ -320,7 +387,7 @@ _TRIG_LED = {'SKIP': 2, 'ONLY': 5, 'ALL': 8}  # trig merge button (14,8): off / 
 
 
 def live_ui_merge_modes(c):
-    """README Merge Modes: Merge modes opens from Channel tasks; E2 chooses Trig, Note,
+    """README Merge Modes: Merge modes opens from Channel tasks; E2 chooses Strategy, Note,
     Velocity or Length mode (Patterns stays grid-assigned); E3 steps a mode through what its
     grid button can set, clamped, exactly as the button does: the trig merge button LED
     follows SKIP -> ONLY -> ALL and the channel's MIDI follows the chosen modes."""
@@ -339,9 +406,9 @@ def live_ui_merge_modes(c):
 
     def trig_mode(value):
         ui.expect_header('merge_detail', channel=1)
-        ui.expect_selected_field('detail', 'Trig mode', value)
+        ui.expect_selected_field('detail', 'Strategy', value)
         c.led_values([(14, 8)], [_TRIG_LED[value]])
-        c.results.append(dict(kind='merge-mode', row='Trig mode', value=value, passed=True))
+        c.results.append(dict(kind='merge-mode', row='Strategy', value=value, passed=True))
 
     ui.open_channel_task('merge')
     _expect_footer(c, 'E2 MODE  E3 SET  K2 BACK')
@@ -354,12 +421,12 @@ def live_ui_merge_modes(c):
     c.playback(melody(_PHRASE_MERGE['skip']), cycles=2)
     c.enc(3, -1)
     trig_mode('SKIP')  # clamped at the first mode
-    for value in ('ONLY', 'ALL', 'ALL'):  # the last detent clamps at All
+    for value in ('ONLY', 'ALL'):  # legacy strategies are the first three choices
         c.enc(3, 1)
         trig_mode(value)
     c.playback(melody(_PHRASE_MERGE['all']), cycles=2)
     # Note mode: Average -> Up -> Down -> PAT 1 -> PAT 2 (pattern 2 supplies every note), then back.
-    c.enc(2, 1)
+    ui.select_row('note_mode',4)
     ui.expect_selected_field('detail', 'Note mode', 'AVERAGE')
     for value in ('UP', 'DOWN', 'PAT 1', 'PAT 2'):
         c.enc(3, 1)
@@ -371,10 +438,9 @@ def live_ui_merge_modes(c):
         c.enc(3, -1)
         ui.expect_selected_field('detail', 'Note mode', value)
     c.playback(melody(_PHRASE_MERGE['all']), cycles=2)
-    # The trig mode set here is the grid's: the next button press continues from All to Skip.
-    c.key(2)
-    ui.expect_header('masks', channel=1)
-    ui.tap_control('trig_merge_mode')
+    # Restore Skip through the shared selector; five-choice cycling has its own acceptance.
+    ui.select_row('trig_mode',1)
+    c.enc(3,-5)
     trig_mode('SKIP')
     c.results.append(dict(kind='live-ui-merge-modes-summary', passed=True))
 
@@ -411,20 +477,54 @@ def live_ui_channel_select(c):
     # Clock: set channel 2's rate from the Clock screen it stayed on, then each select shows
     # the selected channel's own rate on the same screen.
     ui.channel_page('clock_mods', channel=1)
-    ui.expect_selected_field('focused', 'Rate', '/1', art=True)
+    ui.expect_selected_field('vertical_list', 'Rate', '/1', art=True)
     ui.select_channel(2)
     ui.expect_header('clock_mods', channel=2)
-    ui.expect_selected_field('focused', 'Rate', '/1', art=True)
+    ui.expect_selected_field('vertical_list', 'Rate', '/1', art=True)
     ui.set_value(-2); ui.press_key(3)
-    ui.expect_selected_field('focused', 'Rate', '/2', art=True)
+    ui.expect_selected_field('vertical_list', 'Rate', '/2', art=True)
     ui.select_channel(1)
     ui.expect_header('clock_mods', channel=1)
-    ui.expect_selected_field('focused', 'Rate', '/1', art=True)
+    ui.expect_selected_field('vertical_list', 'Rate', '/1', art=True)
     _selected_channel_leds(c, 1)
     ui.select_channel(2)
     ui.expect_header('clock_mods', channel=2)
-    ui.expect_selected_field('focused', 'Rate', '/2', art=True)
+    ui.expect_selected_field('vertical_list', 'Rate', '/2', art=True)
     c.results.append(dict(kind='channel-select-keeps-clock', passed=True))
+    # README Clocks, Swing and Shuffle (per-channel clock division): channel 2 is given an output
+    # and pattern 1 on steps 1-4, then both channels play. Channel 1 at Rate /1 sounds one note
+    # per step; channel 2 at Rate /2 sounds one every second step, so its notes are twice as far
+    # apart. Measured from the MIDI both channels send to their own ports.
+    ui.select_channel_on_page(2, 'midi_config')
+    ui.turn(3, 1); ui.turn(2, 1); ui.turn(3, 1); ui.turn(2, 1); ui.turn(3, 1); ui.press_key(3)
+    ui.tap_control('pattern_slot', 1)
+    ui.set_range(1, 4)
+    ui.channel_page('clock_mods', channel=2)
+    ui.select_channel(1)
+    ui.expect_header('clock_mods', channel=1)
+    marker = c.snapshot()['midi_count']
+    ui.tap_control('play_stop')
+
+    def sounded(state, port):
+        return [m for m in state['midi'] if m['index'] > marker and m['port'] == port
+                and 144 <= m['bytes'][0] <= 159 and m['bytes'][2] > 0]
+    state = c.wait(lambda s: len(sounded(s, 1)) >= 9 and len(sounded(s, 2)) >= 5, 8)
+    field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
+    tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
+    gaps = {}
+    for port, step_spacing in ((1, 1), (2, 2)):
+        onsets = [m[field] for m in sounded(state, port)]
+        gaps[port] = [(b - a) / 1e9 for a, b in zip(onsets, onsets[1:])]
+        for gap in gaps[port]:
+            assert abs(gap - step_spacing / 6) <= tolerance, (port, gap, step_spacing / 6)
+    c.results.append(dict(kind='channel-rates-audible', ch1_rate='/1', ch2_rate='/2',
+                          ch1_onset_gap_s=gaps[1][0], ch2_onset_gap_s=gaps[2][0],
+                          ratio=round(gaps[2][0] / gaps[1][0], 6), passed=True))
+    ui.tap_control('play_stop')
+    c.wait(lambda s: not s['midi_capture']['outstanding'])
+    # Back on channel 2's Clock page, where the Harmony checks below begin.
+    ui.select_channel(2)
+    ui.expect_header('clock_mods', channel=2)
     # Harmony: from its Register child on channel 2, a select shows Voice leading (H01) for
     # channel 1; from the root the same.
     ui.channel_page('harmony', channel=2)
@@ -500,44 +600,68 @@ _ALL_PHRASE = [(1, [144, n, v]) for n, v in ((60, 127), (62, 117), (64, 107), (6
 
 
 def live_ui_merge_shape_trig_mode(c):
-    """README Merge Shape: while Foundation is on it decides the channel's trigs; Merge modes
-    shows the trig mode as SHAPE (<mode>) and the trig merge button's tooltip says Merge Shape
-    is in use; the saved trig mode applies again when Merge Shape is off."""
+    """The effective Foundation strategy owns trigs; selecting All restores
+    the unchanged literal legacy phrase. Old saved SHAPE(mode) UI is superseded."""
     from contract.foundation_workflow import setup_foundation
+    from merge_strategy_routes import select_strategy
+    ui=c.ui;setup_foundation(c)
+    ui.open_channel_task('merge');ui.expect_header('merge_detail',channel=1)
+    ui.select_row('trig_mode',1)
+    ui.expect_selected_field('detail','Strategy','FOUNDATION')
+    c.led_values([(14,8)],[11])
+    ui.select_row('active_strategy',2)
+    ui.expect_selected_field('detail','Active','FOUNDATION')
+    c.results.append(dict(kind='shape-trig-mode',value='FOUNDATION',passed=True))
+    # Preserve the exact native musical acceptance established before the UI change.
+    c.playback(_SHAPE_PHRASE,cycles=2)
+    select_strategy(c,'ALL')
+    c.led_values([(14,8)],[8])
+    ui.expect_selected_field('detail','Strategy','ALL')
+    c.results.append(dict(kind='shape-trig-mode',value='ALL',passed=True))
+    c.playback(_ALL_PHRASE,cycles=2)
+    select_strategy(c,'SKIP',after_edit=lambda:_expect_footer(c,'SKIP APPLIED'))
+    c.led_values([(14,8)],[2])
+    c.results.append(dict(kind='live-ui-merge-shape-trig-mode-summary',passed=True))
+
+
+# README.md#trig-merge-modes: Skip silences a step that trigs in more than one selected
+# pattern; All applies it. Pattern 2 trigs steps 3 and 7 here, so step 3 is shared with
+# pattern 1 (E, velocity 107) and step 7 belongs to pattern 2 alone (C, velocity 100).
+# All averages the contributors (README Note/Velocity Merge Modes, Average): degrees III and I
+# give II, D (62), already in the pentatonic selection; velocities 107 and 100 give 103.5,
+# rounded up at the half to 104.
+_SKIP_SHARED_PHRASE = [(1, [144, n, v]) for n, v in ((60, 127), (62, 117), (65, 97), (60, 100))]
+_ALL_SHARED_PHRASE = [(1, [144, n, v]) for n, v in ((60, 127), (62, 117), (62, 104), (65, 97), (60, 100))]
+
+
+def live_ui_merge_shape_skip_shared_step(c):
+    """With the saved trig merge handed back from Foundation, Skip silences the step both
+    patterns trig and All plays it, merged (README Trig/Note/Velocity Merge Modes)."""
+    from merge_strategy_routes import foundation_rhythm, select_strategy
     ui = c.ui
-    setup_foundation(c)  # Foundation applied through the Merge Shape editor (M02 -> M03 -> K3)
-    ui.tap_control('channel_editor')
-    ui.open_channel_task('merge')
-    ui.expect_header('merge_detail', channel=1)
-    c.enc(2, -6); c.enc(2, 1)
-    ui.expect_selected_field('detail', 'Trig mode', 'SHAPE (SKIP)')
-    c.key(2)
-    for mode, value, led in (('only', 'ONLY', 5), ('all', 'ALL', 8)):
-        ui.expect_header('masks', channel=1)
-        ui.tap_control('trig_merge_mode')
-        ui.expect_header('merge_detail', channel=1)
-        ui.expect_selected_field('detail', 'Trig mode', 'SHAPE (%s)' % value)
-        _expect_footer(c, 'Trig merge %s: Merge Shape in use' % mode)
-        c.led_values([(14, 8)], [led])
-        c.results.append(dict(kind='shape-trig-mode', value=value, passed=True))
-        c.key(2)
-    # Merge Shape still decides the trigs with the saved mode at All.
-    c.playback(_SHAPE_PHRASE, cycles=2)
-    # Mode Off on Merge Shape (applied): the saved All applies and reads plainly.
-    ui.channel_page('merge_shape', channel=1)
-    ui.select_row('mode', 0)
-    ui.set_value(-1)
-    ui.expect_selected_field('detail', 'Mode', 'OFF')  # Merge Shape is a list
-    ui.press_key(3)
-    ui.open_channel_task('merge')
-    ui.expect_header('merge_detail', channel=1)
-    c.enc(2, -6); c.enc(2, 1)
-    ui.expect_selected_field('detail', 'Trig mode', 'ALL')
-    c.playback(_ALL_PHRASE, cycles=2)
-    c.key(2)
-    ui.expect_header('masks', channel=1)
-    ui.tap_control('trig_merge_mode')
-    ui.expect_selected_field('detail', 'Trig mode', 'SKIP')
-    _expect_footer(c, 'Skip trig merge mode')
-    c.led_values([(14, 8)], [2])
-    c.results.append(dict(kind='live-ui-merge-shape-trig-mode-summary', passed=True))
+    c.configure()
+    # Extend the loop to 8 steps, author pattern 2 on steps 3 and 7, then assign it
+    # (contract.foundation_workflow.setup_foundation with pattern 2 moved to step 3).
+    ui.hold_control_tap("step", "step", held_index=1, target_index=8)
+    ui.tap_control("pattern_editor"); ui.select_channel(2)
+    ui.tap_step(3); ui.tap_step(7)
+    ui.tap_control("channel_editor"); ui.tap_control("pattern_slot", 2)
+    foundation_rhythm(c, 1)
+    ui.expect_steps({step: "selected" for step in (1, 2, 3, 4, 7)})
+    ui.open_channel_task('merge'); ui.expect_header('merge_detail', channel=1)
+    ui.select_row('trig_mode', 1)
+    ui.expect_selected_field('detail', 'Strategy', 'FOUNDATION')
+    c.results.append(dict(kind='shape-trig-mode', value='FOUNDATION', shared_step=3, passed=True))
+    select_strategy(c, 'SKIP', after_edit=lambda: _expect_footer(c, 'SKIP APPLIED'))
+    ui.expect_selected_field('detail', 'Strategy', 'SKIP')
+    c.results.append(dict(kind='shape-trig-mode', value='SKIP', shared_step=3, passed=True))
+    c.playback(_SKIP_SHARED_PHRASE, cycles=2)
+    c.results.append(dict(kind='shape-trig-playback', mode='SKIP', pitches=[60, 62, 65, 60],
+                          velocities=[127, 117, 97, 100], silent_step=3, passed=True))
+    select_strategy(c, 'ALL')
+    ui.expect_selected_field('detail', 'Strategy', 'ALL')
+    c.results.append(dict(kind='shape-trig-mode', value='ALL', shared_step=3, passed=True))
+    c.playback(_ALL_SHARED_PHRASE, cycles=2)
+    c.results.append(dict(kind='shape-trig-playback', mode='ALL', pitches=[60, 62, 62, 65, 60],
+                          velocities=[127, 117, 104, 97, 100], silent_step=None, passed=True))
+

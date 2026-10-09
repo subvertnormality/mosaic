@@ -20,7 +20,31 @@ def assert_immediate_cc_on_edit(control,receipt):
     return delay_ns
 
 
-def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False):
+def expect_record_button_state(c, armed):
+    """Characterise the Record LED for the arm-live-record public case."""
+    from ui_map import CHANNEL_COUNT, LED_LEVELS
+    if type(armed) is not bool:
+        raise ValueError("armed must be a boolean")
+    x, y = c.ui.control_cell("record")
+    index = (y - 1) * CHANNEL_COUNT + x - 1
+    expected = 12 if armed else LED_LEVELS["off"]
+    state = c.wait(lambda snapshot: snapshot["grid"][index] == expected, timeout=1)
+    actual = state["grid"][index]
+    if armed:
+        result = dict(kind="parameter-recording-arm-led", cell=[x, y],
+                      expected=expected, actual=actual, passed=True,
+                      citation="manual:arm-live-record",
+                      characterisation="The captured armed blink phase is grid level 12; the renderer test marks its blink output as -4.")
+    else:
+        result = dict(kind="parameter-recording-disarmed-led", cell=[x, y],
+                      expected=expected, actual=actual, passed=True,
+                      citation="manual:arm-live-record",
+                      characterisation="The disarmed Record cell is unlit at grid level 2.")
+    c.results.append(result)
+    return state
+
+
+def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False,visual_checkpoints=False):
     from cases import assign_trig_parameter,menu_label,menu_value
     from patch_params import open_patch_control,turn
     c.configure()
@@ -42,6 +66,11 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
         c.tap(5,8);c.tap(3,4);c.tap(3,8) # Remove note3 through pattern editor.
     c.ui.turn(1, 2);c.enc(3,-23);c.key(3);c.ui.turn(1, -2) # Four seconds per step.
     c.tap(2,8) # Native recording arm.
+    if visual_checkpoints:
+        expect_record_button_state(c, armed=True)
+        c.ui.expect_selected_param(1,63,marker=None)
+        c.results[-1].update(citation='manual:arm-live-record',
+                             characterisation='Current Trig Params screen shows the assigned channel default while armed.')
     before=c.snapshot()['midi_count'];c.tap(1,8)
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
     first=c.wait(lambda state:len(notes(state))==1)
@@ -118,6 +147,12 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     c.tap(2,8)
     remaining=origin_live+16_200_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
     c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+    if visual_checkpoints:
+        expect_record_button_state(c, armed=False)
+        with c.ui.hold_step(2):
+            c.ui.expect_selected_param(1,64,marker='L')
+            c.results[-1].update(citation='manual:arm-live-record',
+                                 characterisation='Current Trig Params screen marks the recorded step value with L.')
     live_events=[e for e in c.snapshot()['midi'] if e['index']>before]
     from note_accounting import note_pairs
     pairs=note_pairs(live_events);assert [on for on,off in pairs[:len(live_notes)]]==live_notes

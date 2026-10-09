@@ -22,7 +22,8 @@ def strum_reset_continuity(c):
             if (tick-origin)%216==0:
                 step=((tick-origin)//216)%3;velocity=[127,117,107][step]
                 expected.append((tick,[60,62,64][step],velocity,216))
-                if tick+108<=3456:expected.append((tick+108,[64,65,67][step],velocity,108))
+                # README.md#chord-spread: spacing modifiers move the strummed note's start but keep the selected one-step length.
+                if tick+108<=3456:expected.append((tick+108,[64,65,67][step],velocity,216))
         # Sort only the independently constructed musical table, never emissions.
         expected.sort(key=lambda row:row[0])
         field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes

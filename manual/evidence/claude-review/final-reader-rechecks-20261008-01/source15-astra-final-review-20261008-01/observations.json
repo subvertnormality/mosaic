@@ -1,0 +1,301 @@
+{
+  "data": [
+    {
+      "label": "lfo-prose-1440",
+      "text": "Mosaic supports Matrix mod and toolkit. Matrix routes modulation sources to device parameters; toolkit supplies LFOs and other rhythmic modulators.\n\nInstall and configure the mods using their documentation:\n\nMatrix\nToolkit\n\nStart with Make a small CC move with Macro 1, the complete recorded example: set depth 0.10, move CC 1 from 32 to 38 and back to 32 while the same phrase plays, then return Macro 1 to zero.\n\nAdvanced: Set up a clocked LFO at full depth starts from lfo 1 at depth 1.00 and changes the LFO clock.",
+      "step": "Set a small route"
+    },
+    {
+      "label": "lfo-result-1440",
+      "hash": "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock",
+      "step": "Clock the LFO to the tempo",
+      "counter": "Set the clock, period and shape · 1/3",
+      "caption": "",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "panic-1440-panic-from-song-channel",
+      "hash": "#midi-panic/panic-from-song-channel/hold-and-release",
+      "step": "Hold Channel for two seconds",
+      "counter": "03 / 03",
+      "caption": "From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "panic-1440-panic-from-song-pattern",
+      "hash": "#midi-panic/panic-from-song-pattern/hold-and-release",
+      "step": "Hold Pattern for two seconds",
+      "counter": "03 / 03",
+      "caption": "From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "keyboard-start-1440-keyboard-honour-degree",
+      "hash": "#midi-controller-options/keyboard-honour-degree",
+      "step": "Starting point",
+      "counter": "Map white keys and compare C major with natural minor · 1/5",
+      "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale Editor is on C major.",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "keyboard-all-1440-keyboard-honour-degree",
+      "steps": [
+        {
+          "title": "Starting point",
+          "counter": "Map white keys and compare C major with natural minor · 1/5",
+          "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale Editor is on C major."
+        },
+        {
+          "title": "Turn on Map scale to white keys",
+          "counter": "Map white keys and compare C major with natural minor · 2/5",
+          "caption": "Play some keys on the keyboard: each sounds the note you pressed, because nothing is mapped yet. Tap K1 and open PARAMS > MOSAIC > Midi control. Select Map scale to white keys and turn E3 right to On. The row reads On."
+        },
+        {
+          "title": "Play the white keys in C major",
+          "counter": "Map white keys and compare C major with natural minor · 3/5",
+          "caption": "Close the menu and play the white keys from C3 up to C4 on the keyboard. In C major they sound as written: 60, 62, 64, 65, 67, 69, 71, 72. The MIDI strip lists the notes Mosaic sent."
+        },
+        {
+          "title": "Choose natural minor in the Scale Editor",
+          "counter": "Map white keys and compare C major with natural minor · 4/5",
+          "caption": "Open the Scale Editor (grid (4,8)), turn E3 two detents and press K3. The Scale row reads Minor, natural minor."
+        },
+        {
+          "title": "Play the white keys in natural minor",
+          "counter": "Map white keys and compare C major with natural minor · 5/5",
+          "caption": "Return to the Channel editor (3,8) and play the white keys again: they now follow C natural minor, 60, 62, 63, 65, 67, 68, 70, 72 (C D E-flat F G A-flat B-flat C)."
+        },
+        {
+          "title": "Set degree II",
+          "counter": "Set degree II and verify only that option applies · 1/6",
+          "caption": "Open the Scale Editor (4,8) again, turn E2 one click to Degree, turn E3 one detent and press K3. Degree reads ii°. Degree picks which scale note the keyboard's C starts on."
+        },
+        {
+          "title": "Set rotation 2",
+          "counter": "Set degree II and verify only that option applies · 2/6",
+          "caption": "Turn E2 to the Rotation row, turn E3 two detents and press K3. Rotation reads r2. Rotation moves the top keys down an octave."
+        },
+        {
+          "title": "Set global transpose +2",
+          "counter": "Set degree II and verify only that option applies · 3/6",
+          "caption": "Tap the global transpose fader on the grid at its lowest value, then tap its increment button fourteen times, and return to the Channel editor (3,8). The Scale overview lists Transpose +2, which shifts everything."
+        },
+        {
+          "title": "Nothing applies yet",
+          "counter": "Set degree II and verify only that option applies · 4/6",
+          "caption": "The three Honour switches are still Off, so none of this is applied yet: the white keys still play 60, 62, 63, 65, 67, 68, 70, 72."
+        },
+        {
+          "title": "Turn on Honour scale degree",
+          "counter": "Set degree II and verify only that option applies · 5/6",
+          "caption": "Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale degree and turn E3 right to On. The row reads On."
+        },
+        {
+          "title": "Start from the chosen scale degree",
+          "counter": "Set degree II and verify only that option applies · 6/6",
+          "caption": "Close the menu and play C3 to C4 again. Key C now plays the scale's second note: 62, 63, 65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied, so you can start a phrase from degree II without changing the scale."
+        }
+      ]
+    },
+    {
+      "label": "keyboard-start-1440-keyboard-honour-degree-rotation",
+      "hash": "#midi-controller-options/keyboard-honour-degree-rotation",
+      "step": "Starting point",
+      "counter": "Start from degree II with rotation and transpose set · 1/2",
+      "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 70, 72, 74. Honour scale rotations and Honour scale transpose are Off.",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "keyboard-all-1440-keyboard-honour-degree-rotation",
+      "steps": [
+        {
+          "title": "Starting point",
+          "counter": "Start from degree II with rotation and transpose set · 1/2",
+          "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 70, 72, 74. Honour scale rotations and Honour scale transpose are Off."
+        },
+        {
+          "title": "Turn on Honour scale rotations",
+          "counter": "Start from degree II with rotation and transpose set · 2/2",
+          "caption": "Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale rotations and turn E3 right to On. The row reads On."
+        },
+        {
+          "title": "Rotate the keyboard voicing",
+          "counter": "Enable rotation and compare the keyboard notes · 1/1",
+          "caption": "Close the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down: the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to play a bass note or an inverted voicing of the same scale shape from the keys you already know."
+        }
+      ]
+    },
+    {
+      "label": "first-loop-milestones-1440",
+      "hash": "#first-sound/create-your-first-loop",
+      "step": "Create a four-step loop from an empty project",
+      "counter": "Choose the output and enter four attacks · 1/2",
+      "caption": "Starting point: a new, empty project, stopped, with Record off. No channel has an output, no pattern has trigs and no masks are set. Tap Channel (3,8): the header reads CH01. Turn E1 to open Channel tasks, choose Device with E2 and press K3. Turn E3 one detent to the first output in the list and press K3 to apply it. Whichever name the row shows is fine for this walk-through; in your own project pick the note-capable output you set up in Connect a sound. The Device page for CH01 stays on screen.",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "lfo-prose-390",
+      "text": "Mosaic supports Matrix mod and toolkit. Matrix routes modulation sources to device parameters; toolkit supplies LFOs and other rhythmic modulators.\n\nInstall and configure the mods using their documentation:\n\nMatrix\nToolkit\n\nStart with Make a small CC move with Macro 1, the complete recorded example: set depth 0.10, move CC 1 from 32 to 38 and back to 32 while the same phrase plays, then return Macro 1 to zero.\n\nAdvanced: Set up a clocked LFO at full depth starts from lfo 1 at depth 1.00 and changes the LFO clock.",
+      "step": "Set a small route"
+    },
+    {
+      "label": "lfo-result-390",
+      "hash": "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock",
+      "step": "Clock the LFO to the tempo",
+      "counter": "Set the clock, period and shape · 1/3",
+      "caption": "",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "panic-390-panic-from-song-channel",
+      "hash": "#midi-panic/panic-from-song-channel/hold-and-release",
+      "step": "Hold Channel for two seconds",
+      "counter": "03 / 03",
+      "caption": "From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "panic-390-panic-from-song-pattern",
+      "hash": "#midi-panic/panic-from-song-pattern/hold-and-release",
+      "step": "Hold Pattern for two seconds",
+      "counter": "03 / 03",
+      "caption": "From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "keyboard-start-390-keyboard-honour-degree",
+      "hash": "#midi-controller-options/keyboard-honour-degree",
+      "step": "Starting point",
+      "counter": "Map white keys and compare C major with natural minor · 1/5",
+      "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale Editor is on C major.",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "keyboard-all-390-keyboard-honour-degree",
+      "steps": [
+        {
+          "title": "Starting point",
+          "counter": "Map white keys and compare C major with natural minor · 1/5",
+          "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale Editor is on C major."
+        },
+        {
+          "title": "Turn on Map scale to white keys",
+          "counter": "Map white keys and compare C major with natural minor · 2/5",
+          "caption": "Play some keys on the keyboard: each sounds the note you pressed, because nothing is mapped yet. Tap K1 and open PARAMS > MOSAIC > Midi control. Select Map scale to white keys and turn E3 right to On. The row reads On."
+        },
+        {
+          "title": "Play the white keys in C major",
+          "counter": "Map white keys and compare C major with natural minor · 3/5",
+          "caption": "Close the menu and play the white keys from C3 up to C4 on the keyboard. In C major they sound as written: 60, 62, 64, 65, 67, 69, 71, 72. The MIDI strip lists the notes Mosaic sent."
+        },
+        {
+          "title": "Choose natural minor in the Scale Editor",
+          "counter": "Map white keys and compare C major with natural minor · 4/5",
+          "caption": "Open the Scale Editor (grid (4,8)), turn E3 two detents and press K3. The Scale row reads Minor, natural minor."
+        },
+        {
+          "title": "Play the white keys in natural minor",
+          "counter": "Map white keys and compare C major with natural minor · 5/5",
+          "caption": "Return to the Channel editor (3,8) and play the white keys again: they now follow C natural minor, 60, 62, 63, 65, 67, 68, 70, 72 (C D E-flat F G A-flat B-flat C)."
+        },
+        {
+          "title": "Set degree II",
+          "counter": "Set degree II and verify only that option applies · 1/6",
+          "caption": "Open the Scale Editor (4,8) again, turn E2 one click to Degree, turn E3 one detent and press K3. Degree reads ii°. Degree picks which scale note the keyboard's C starts on."
+        },
+        {
+          "title": "Set rotation 2",
+          "counter": "Set degree II and verify only that option applies · 2/6",
+          "caption": "Turn E2 to the Rotation row, turn E3 two detents and press K3. Rotation reads r2. Rotation moves the top keys down an octave."
+        },
+        {
+          "title": "Set global transpose +2",
+          "counter": "Set degree II and verify only that option applies · 3/6",
+          "caption": "Tap the global transpose fader on the grid at its lowest value, then tap its increment button fourteen times, and return to the Channel editor (3,8). The Scale overview lists Transpose +2, which shifts everything."
+        },
+        {
+          "title": "Nothing applies yet",
+          "counter": "Set degree II and verify only that option applies · 4/6",
+          "caption": "The three Honour switches are still Off, so none of this is applied yet: the white keys still play 60, 62, 63, 65, 67, 68, 70, 72."
+        },
+        {
+          "title": "Turn on Honour scale degree",
+          "counter": "Set degree II and verify only that option applies · 5/6",
+          "caption": "Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale degree and turn E3 right to On. The row reads On."
+        },
+        {
+          "title": "Start from the chosen scale degree",
+          "counter": "Set degree II and verify only that option applies · 6/6",
+          "caption": "Close the menu and play C3 to C4 again. Key C now plays the scale's second note: 62, 63, 65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied, so you can start a phrase from degree II without changing the scale."
+        }
+      ]
+    },
+    {
+      "label": "keyboard-start-390-keyboard-honour-degree-rotation",
+      "hash": "#midi-controller-options/keyboard-honour-degree-rotation",
+      "step": "Starting point",
+      "counter": "Start from degree II with rotation and transpose set · 1/2",
+      "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 70, 72, 74. Honour scale rotations and Honour scale transpose are Off.",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "keyboard-all-390-keyboard-honour-degree-rotation",
+      "steps": [
+        {
+          "title": "Starting point",
+          "counter": "Start from degree II with rotation and transpose set · 1/2",
+          "caption": "Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 70, 72, 74. Honour scale rotations and Honour scale transpose are Off."
+        },
+        {
+          "title": "Turn on Honour scale rotations",
+          "counter": "Start from degree II with rotation and transpose set · 2/2",
+          "caption": "Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale rotations and turn E3 right to On. The row reads On."
+        },
+        {
+          "title": "Rotate the keyboard voicing",
+          "counter": "Enable rotation and compare the keyboard notes · 1/1",
+          "caption": "Close the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down: the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to play a bass note or an inverted voicing of the same scale shape from the keys you already know."
+        }
+      ]
+    },
+    {
+      "label": "first-loop-milestones-390",
+      "hash": "#first-sound/create-your-first-loop",
+      "step": "Create a four-step loop from an empty project",
+      "counter": "Choose the output and enter four attacks · 1/2",
+      "caption": "Starting point: a new, empty project, stopped, with Record off. No channel has an output, no pattern has trigs and no masks are set. Tap Channel (3,8): the header reads CH01. Turn E1 to open Channel tasks, choose Device with E2 and press K3. Turn E3 one detent to the first output in the list and press K3 to apply it. Whichever name the row shows is fine for this walk-through; in your own project pick the note-capable output you set up in Connect a sound. The Device page for CH01 stays on screen.",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "private-guard",
+      "text": "Contributor material\n\nThis page is not available in the player guide.\n\nReturn to the manual\nMOSAIC / CONTRIBUTOR MATERIAL"
+    },
+    {
+      "label": "search",
+      "focus": "feature-title",
+      "query": "Harmony"
+    },
+    {
+      "label": "caption-link-preserved",
+      "hash": "#mods-and-software-devices/player-apply-oilcan",
+      "step": "Open the Device page",
+      "counter": "01 / 04",
+      "caption": "Starting point: Channel 1's Device page is open. Read the Device row before changing it.",
+      "width": 390,
+      "docWidth": 390
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,27 @@
+{
+  "status": "production_candidate_frozen_for_full_lua_and_native_qualification",
+  "files": {
+    "lib/ui_mini.lua": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+    "lib/ui_mini_atlas.lua": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+    "lib/ui_render.lua": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+    "lib/ui_live.lua": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+    "lib/ui_motion.lua": "e8710327daa4a73dec1f7cf45e508fbbf2d581d493e2dc43a65765ec905241d6",
+    "lib/ui_spec_data.lua": "65b26e5ba2838bbce449d213191d9d881cf11be6c1e1d69c45e9544bae34932e",
+    "lib/tests/lib/ui_mini_tests.lua": "33e1d6f9346869c5c02fd1965b0a762c98ae6d8503503938b49b00852bf1f583",
+    "docs/ui-reimplementation/spec.json": "56a9cf58e1da9a8bcef6cd468a10baaf79a476ae2e1d20c7ee42205eecb072a0",
+    "docs/ui-reimplementation/code/screen.lua": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+    "docs/ui-reimplementation/code/mini.lua": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+    "docs/ui-reimplementation/code/mini_atlas.lua": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+    "docs/ui-reimplementation/tools/replay.lua": "da3b3c7ea89a98e227e5e7d012db45990a1500de95eb0a6c7d5758a4e82228a9"
+  },
+  "design_atlas_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+  "component_tests": 8,
+  "affected_ui_tests": 297,
+  "native_expected_reds": [
+    "09ee2f0338724baabaed535d3050fd6a",
+    "78461cf653cd40d99dc349e74d9c0c52"
+  ],
+  "native_positive_pending": true,
+  "full_lua_pending": true,
+  "source_ledger_final_rebase_pending": "YAML authority migration and final full README archive; full source validator not claimed current yet"
+}
