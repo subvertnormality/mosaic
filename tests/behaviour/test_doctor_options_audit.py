@@ -182,8 +182,12 @@ class DoctorFrameApiIntegrity(unittest.TestCase):
   for call in calls:self.assertEqual(len(call.args),arity,'Native frame verification must use its actual case namespace')
 class DoctorInputDocumentationIntegrity(unittest.TestCase):
  def test_selected_input_frame_is_required_for_each_actual_adc_role(self):
-  for case,value,count in [('manual_stereo','STEREO',4),('auto_left','L',4),('manual_right','R',12)]:
+  for case,value,count in [('manual_stereo','STEREO',4),('manual_left','L',4),('manual_right','R',12),('auto_stereo','STEREO',4),('auto_left','L',4),('auto_right','R',4)]:
    contract=audit.adc_checkpoint_contract(case);self.assertEqual(len(contract),count);self.assertEqual(contract[1],('setup-input-source',dict(route='R01',label='Input',value=value)))
+   self.assertEqual(contract[0],('setup-manual-bpm',dict(route='R01',label='Manual BPM',value='100')))
+   self.assertEqual(contract[-1],('alignment-lower-row',dict(route='R06',label='Fine start',value='0ms')) if count==4 else ('start-beat-restored-ready',dict(route='R05',label=None,value=None)))
+  with self.assertRaisesRegex(ValueError,'Unsupported ADC documentation role'):
+   audit.adc_checkpoint_contract('setup_options')
 
 class DoctorManualStartBeatIntegrity(unittest.TestCase):
  def chain(self):

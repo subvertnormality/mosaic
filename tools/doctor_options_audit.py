@@ -366,8 +366,8 @@ def doctor_tooltip_matches(state,text,out):
  except ValueError:return False
 
 def adc_checkpoint_contract(case):
- require(case in ('manual_stereo','auto_left','manual_right'),'Unsupported ADC documentation role')
- selection={'manual_stereo':'STEREO','auto_left':'L','manual_right':'R'}[case]
+ require(case in ('manual_stereo','manual_left','manual_right','auto_stereo','auto_left','auto_right'),'Unsupported ADC documentation role')
+ selection={'manual_stereo':'STEREO','manual_left':'L','manual_right':'R','auto_stereo':'STEREO','auto_left':'L','auto_right':'R'}[case]
  expected=[('setup-manual-bpm',dict(route='R01',label='Manual BPM',value='100')),('setup-input-source',dict(route='R01',label='Input',value=selection)),('window-lower-row',dict(route='R05',label='Alignment',value='OPEN >')),('alignment-lower-row',dict(route='R06',label='Fine start',value='0ms'))]
  if case=='manual_right':expected +=[(key,dict(route='R06',label=label,value=value)) for key,label,value in [('alignment-edited-then-cancelled','Exact BPM','120'),('alignment-confirmed-draft','Exact BPM','120'),('alignment-reanalysis-ready','Half tempo','120')]]
  if case=='manual_right':expected +=[(key,dict(route=route,label=label,value=value)) for key,route,label,value in [('start-beat-original1','R06','Start beat','1'),('start-beat-next2','R06','Start beat','2'),('start-beat-next-ready','R05',None,None),('start-beat-restore1','R06','Start beat','1'),('start-beat-restored-ready','R05',None,None)]]
