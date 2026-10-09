@@ -136,7 +136,7 @@ def check_sources(out,report):
  check_harness_inventory(harness)
  for name,value in harness.items():require(digest(bounded(snapshot,name))==value and (ROOT/name).is_file() and digest(ROOT/name)==value,'Stale Doctor harness source '+name)
  require({str(p.relative_to(ROOT)) for p in (ROOT/'tests/behaviour').rglob('*.py')}<=set(harness),'Doctor harness omits current Python sources')
- native_source_identity(out);native=read(out/'native/identity.json');check_doctor_identity(report['source_identity'],native)
+ native_source_identity(out,application_root=app);native=read(out/'native/identity.json');check_doctor_identity(report['source_identity'],native)
  return source
 
 def visible_sequence(out,observations,contracts):
