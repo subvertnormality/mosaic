@@ -110,4 +110,75 @@ class CaptionRebindTests(unittest.TestCase):
         self.assertFalse(list(self.source.parent.glob(".scene-captions.rebind.*.tmp")))
         self.assertEqual((self.evidence/"source-before.yaml").read_bytes(),before)
         self.assertFalse((self.evidence/"source-after.yaml").exists())
+
+    def _prepare_pending_title_with_desired_caption(self, field):
+        self.scenes[0]["steps"][0]["title"]="Starting point"
+        original_scene=copy.deepcopy(self.scenes[0])
+        self.scenes[0]["steps"][0]["caption"]=self.entries[0]["caption"]
+        # A new audited native run changes run-specific provenance, not musical
+        # inputs/expectations/output. This is the exact contract drift seen in CI.
+        self.scenes[0]["evidence"]["results_sha256"]="new-audited-run"
+        self.native.write_text(json.dumps({"scenes":self.scenes}))
+        entry=dict(self.entries[0],contract_sha256=contract_sha256(
+            dict(original_scene,data_path="generated/reference-scenes.json")))
+        if field=="scene_title":
+            entry.update(scene_title="Phrase, revised",baseline_scene_title="Phrase")
+        else:
+            entry.update(step_title="Opening state",baseline_step_title="Starting point")
+        self.write_source([entry])
+        return entry
+
+    def test_desired_caption_with_pending_scene_title_refreshes_changed_run_contract(self):
+        entry=self._prepare_pending_title_with_desired_caption("scene_title")
+        native_before=self.native.read_bytes()
+        report=self.run_rebind()
+        updated=yaml.safe_load(self.source.read_text())["overlays"][0]
+        self.assertEqual(report["refreshed"],["phrase/a"])
+        self.assertEqual(report["fresh_wording"],[])
+        self.assertEqual(updated["contract_sha256"],contract_sha256(
+            dict(self.scenes[0],data_path="generated/reference-scenes.json")))
+        self.assertEqual(updated["scene_title"],entry["scene_title"])
+        self.assertEqual(self.native.read_bytes(),native_before)
+
+    def test_desired_caption_with_pending_step_title_refreshes_changed_run_contract(self):
+        entry=self._prepare_pending_title_with_desired_caption("step_title")
+        native_before=self.native.read_bytes()
+        report=self.run_rebind()
+        updated=yaml.safe_load(self.source.read_text())["overlays"][0]
+        self.assertEqual(report["refreshed"],["phrase/a"])
+        self.assertEqual(report["fresh_wording"],[])
+        self.assertEqual(updated["contract_sha256"],contract_sha256(
+            dict(self.scenes[0],data_path="generated/reference-scenes.json")))
+        self.assertEqual(updated["step_title"],entry["step_title"])
+        self.assertEqual(self.native.read_bytes(),native_before)
+
+    def test_fully_desired_title_and_caption_remain_a_noop_after_run_metadata_changes(self):
+        entry=self._prepare_pending_title_with_desired_caption("scene_title")
+        entry["baseline_scene_title"]="Phrase"
+        self.scenes[0]["title"]=entry["scene_title"]
+        self.native.write_text(json.dumps({"scenes":self.scenes}))
+        before=self.source.read_bytes()
+        report=self.run_rebind()
+        self.assertEqual(report["refreshed"],[])
+        self.assertEqual(report["fresh_wording"],["phrase/a"])
+        self.assertEqual(self.source.read_bytes(),before)
+        self.assertEqual(self.native.read_bytes(),json.dumps({"scenes":self.scenes}).encode())
+
+    def test_wrong_title_baseline_and_failed_audit_leave_source_and_evidence_untouched(self):
+        entry=self._prepare_pending_title_with_desired_caption("scene_title")
+        entry["baseline_scene_title"]="Wrong baseline"
+        self.write_source([entry])
+        before=self.source.read_bytes()
+        with self.assertRaisesRegex(ValueError,"Scene title baseline changed"):
+            self.run_rebind()
+        self.assertEqual(self.source.read_bytes(),before)
+        self.assertFalse(self.evidence.exists())
+        entry["baseline_scene_title"]="Phrase"
+        self.write_source([entry])
+        before=self.source.read_bytes()
+        with self.assertRaisesRegex(ValueError,"audit did not pass"):
+            self.run_rebind(lambda:{"passed":False})
+        self.assertEqual(self.source.read_bytes(),before)
+        self.assertFalse(self.evidence.exists())
+
 if __name__=="__main__":unittest.main()

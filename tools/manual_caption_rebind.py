@@ -70,9 +70,14 @@ def rebind(evidence,root=ROOT,auditor=None,controlled_local=False):
         steps=[step for step in scene.get("steps",[]) if step["id"]==entry["step_id"]]
         if len(steps)!=1:raise ValueError("Unknown step: "+entry["step_id"])
         step=steps[0];identifier=entry["scene_id"]+"/"+entry["step_id"]
-        if step.get("caption")==entry["caption"]:
+        caption_is_desired=step.get("caption")==entry["caption"]
+        title_requests_are_desired=(
+            ("scene_title" not in entry or scene.get("title")==entry["scene_title"])
+            and ("step_title" not in entry or step.get("title")==entry["step_title"])
+        )
+        if caption_is_desired and title_requests_are_desired:
             fresh_wording.append(identifier);continue
-        if step.get("caption")!=entry["baseline_caption"]:
+        if not caption_is_desired and step.get("caption")!=entry["baseline_caption"]:
             raise ValueError("Caption baseline changed: "+identifier)
         contract=contract_sha256(scene)
         if contract!=entry["contract_sha256"]:
