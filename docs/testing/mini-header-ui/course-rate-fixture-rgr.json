@@ -1,0 +1,30 @@
+{
+  "baseline_capture": "/home/andy/mosaic-manual-runs/efa21b877ccd4841ad7f97f72e0b194b",
+  "baseline_helper_sha256": "6059806a270c742560bb67df36742077f6fd0d2c0ca7f90621db487c851d18f2",
+  "candidate_helper_sha256": "9a7fcd3bd7b2d006cdf7be8fe9def7f21973451d290a5bb8fcc776a7eafdd524",
+  "test_module": "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py",
+  "test_sha256": "27cd54bfaf812f5daa41f01bad01c918370d3f37e3de1e8d01ca9b309892b6a6",
+  "red_log": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-rate-fixture-red.log",
+    "sha256": "cd520f532d8d094ef07255c3de39049720fa08bf10cf1bf73b2bfe7a5d2dedcf"
+  },
+  "green_log": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-rate-fixture-green.log",
+    "sha256": "46265403bfafa24cdb03d1c81da4c34add5752e19beb827475449c40a6fde3f5"
+  },
+  "red_source": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-rate-regression-red-source.py",
+    "sha256": "9fa0d5b29bfd5987728d18dfa221fd94b910a63ff2bb87b4a4356ac4c10eba51"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests/behaviour -p test_manual_course_rate.py",
+    "python3 -m unittest discover -s tests/behaviour -p test_manual_course_bind.py"
+  ],
+  "actual_owner": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua",
+  "baseline_final_rate_index": 30,
+  "candidate_final_rate_index": 13,
+  "all_non_course_functions_and_musical_contracts_ast_unchanged": true,
+  "production_changed": false,
+  "emulator_changed": false,
+  "native_qualification_pending": true
+}

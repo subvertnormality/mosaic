@@ -1,0 +1,18 @@
+{
+  "scope": "Specialized qualification metadata only; original controls and semantic oracles retained AST-exact.",
+  "functions": [
+    "regular_grid",
+    "correction",
+    "_checkpoint",
+    "_await",
+    "next_beat_apply_restore",
+    "draft_next_cancel"
+  ],
+  "normalization": "Only additive case_id dictionary keywords removed; no controls, expectations, numeric oracles or tolerances removed.",
+  "passed": true,
+  "before_source_sha256": "fb0a2f8f192a78413ecdc6ccb3415ad81442a4fcc5e58cb838b26007d111cfa1",
+  "after_source_sha256": "695f7b3254a246b87d0e011d9435e1b4ceb3cd145cc450c1746bc74f54670763",
+  "feature_review_status": "pending",
+  "global_cases_unchanged": true,
+  "complete_regression_run": false
+}

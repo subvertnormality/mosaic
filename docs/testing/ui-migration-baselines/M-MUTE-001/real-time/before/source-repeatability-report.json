@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "232a34a655cfb41a5ae3630172f144249355c863",
+  "after_sha": "4611d9c2992ea90d89f88ec29b33d0513cbe79e8",
+  "tooling_sha": "3e6943cd94c70d08fa052a7af9bb652512dfd036",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-MERGE-001",
+    "M-MUTE-001",
+    "M-PAT-002",
+    "M-RANGE-001",
+    "M-RANGE-002",
+    "M-SCALE-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/scale_memory.py": "M-MERGE-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/scale_memory.py",
+      "case": "M-MERGE-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-8ecc7b0a527c4f77b7dbfde4412a76a8/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-8ecc7b0a527c4f77b7dbfde4412a76a8/manifest.json",
+      "manifest_sha256": "bab187b687b4cd03f6bbfe0ea045a541935ead96fe0ad636403c0183e15efa51",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

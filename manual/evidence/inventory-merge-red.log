@@ -1,0 +1,29 @@
+EEE
+======================================================================
+ERROR: test_book_destinations_preserve_hierarchy_and_authored_controls (test_manual_inventory_merge.InventoryMergeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_inventory_merge.py", line 42, in test_book_destinations_preserve_hierarchy_and_authored_controls
+    result=inventory.book_entry(feature,{})
+AttributeError: module 'manual_inventory' has no attribute 'book_entry'
+
+======================================================================
+ERROR: test_regeneration_keeps_review_and_baseline_owner_identity (test_manual_inventory_merge.InventoryMergeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_inventory_merge.py", line 22, in test_regeneration_keeps_review_and_baseline_owner_identity
+    merged=inventory.merge_audit(new,old,root=Path(directory))
+AttributeError: module 'manual_inventory' has no attribute 'merge_audit'
+
+======================================================================
+ERROR: test_source_drift_marks_review_stale_without_relabelling_evidence (test_manual_inventory_merge.InventoryMergeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_inventory_merge.py", line 33, in test_source_drift_marks_review_stale_without_relabelling_evidence
+    merged=inventory.merge_audit(new,old)
+AttributeError: module 'manual_inventory' has no attribute 'merge_audit'
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (errors=3)

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "e4ad6b9783ef42e0a9b1e30280783c274d6c562d",
+  "selected_cases": [
+    "M-REC-008",
+    "M-REC-009",
+    "M-REC-010",
+    "M-REC-011",
+    "M-REC-012",
+    "M-REC-013",
+    "M-REC-014"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-REC-008"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-REC-008",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-c23e82d091c747fa96bad03cf469bbdd/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-c23e82d091c747fa96bad03cf469bbdd/manifest.json",
+      "manifest_sha256": "ac609e2213ffc96326d7f4fc40aeabf344212eed066e372cf96883f6ad40ca28",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

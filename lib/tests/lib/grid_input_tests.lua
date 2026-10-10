@@ -194,6 +194,7 @@ local function with_grid(opts, body)
     recorder = {clear_all_trig_lock_dirty = function(...) env.record("recorder.clear_all_trig_lock_dirty", ...) end}
     save_confirm = {cancel = function(...) env.record("save_confirm.cancel", ...) end}
     autosave_reset = function(...) env.record("autosave_reset", ...) end
+    transport_started_by_user = function(...) env.record("transport_started_by_user", ...) end
     print = function(...) env.record("print", ...) end
     is_key1_down = false
     grid_connected = nil
@@ -503,6 +504,21 @@ function test_grid_input_release_of_never_pressed_key_only_posts()
     luaunit.assert_equals(m.get_pressed_keys(), {{7, 1}})
     key(env, 7, 1, 0)
     luaunit.assert_equals(take_log(env), concat(cancel(1), short(TRIG, 7, 1), post(TRIG, 7, 1)))
+  end)
+end
+
+-- Rhythm Doctor cancels a capture when the sequencer starts, but it only hears
+-- about starts through clock.transport. The grid Play key called m_clock:start
+-- directly, so a capture went on recording underneath playback while Stop --
+-- which does go through clock.transport -- cancelled correctly.
+function test_grid_input_play_announces_transport_start_so_a_capture_is_cancelled()
+  with_grid({real_press = true}, function(env)
+    env.log = {}
+    env.m_grid.short_press(1, 8)
+    local joined = table.concat(env.log, "|")
+    luaunit.assertStrContains(joined, "m_clock:start", "Play must still start the sequencer")
+    luaunit.assertStrContains(joined, "transport_started_by_user",
+      "Play must announce the start, or a capture keeps running under playback")
   end)
 end
 
@@ -974,7 +990,10 @@ function test_grid_input_menu_play_starts_when_stopped()
   with_grid({}, function(env)
     env.blink = true
     transport(env)(1, 8)
-    luaunit.assert_equals(take_log(env), {"m_clock:start()", "tooltip:show(Starting playback)", "channel_edit_page.refresh_faders()"})
+    -- The start is announced before it happens, so a Rhythm Doctor capture is
+    -- cancelled rather than left recording underneath playback.
+    luaunit.assert_equals(take_log(env), {"transport_started_by_user()", "m_clock:start()",
+      "tooltip:show(Starting playback)", "channel_edit_page.refresh_faders()"})
     luaunit.assert_equals(menu_leds(env)[1], "led(1,8,-4)") -- menu state recomputed after start
   end)
 end
@@ -1094,6 +1113,33 @@ function test_grid_input_real_press_dispatches_tap_to_page_handlers_in_order()
   end)
 end
 
+function test_grid_input_claimed_key_down_owns_release_long_and_dual_gesture()
+  local function register_claim(env, name)
+    if name ~= "trigger_edit_page" then return end
+    local function rec(label) return function(...) env.record(label, ...) end end
+    press:register_pre("trigger_edit_page", function(x, y)
+      env.record("claim.pre", x, y)
+      return x == 1 and y == 2
+    end)
+    press:register("trigger_edit_page", rec("short"))
+    press:register_long("trigger_edit_page", rec("long"))
+    press:register_dual("trigger_edit_page", rec("dual"))
+    press:register_post("trigger_edit_page", rec("post"))
+  end
+  with_grid({real_press = true, on_register_press = register_claim}, function(env)
+    key(env, 1, 2, 1)
+    luaunit.assert_equals(take_log(env), {"claim.pre(1,2)", "fn.dirty_grid(true)", "fn.dirty_screen(true)"})
+    key(env, 1, 2, 1) -- held repeats cannot retrigger
+    luaunit.assert_equals(take_log(env), {})
+    key(env, 8, 2, 1); take_log(env)
+    key(env, 8, 2, 0)
+    luaunit.assert_equals(take_log(env), {"clock.cancel(1)", "short(8,2)", "save_confirm.cancel()", "autosave_reset()",
+      "fn.dirty_grid(true)", "fn.dirty_screen(true)", "post(8,2)", "fn.dirty_grid(true)", "fn.dirty_screen(true)"})
+    key(env, 1, 2, 0)
+    luaunit.assert_equals(take_log(env), {"post(1,2)", "fn.dirty_grid(true)", "fn.dirty_screen(true)"})
+  end)
+end
+
 function test_grid_input_real_press_dispatches_long_and_dual()
   with_grid({real_press = true, on_register_press = register_trig_handlers}, function(env)
     key(env, 3, 2, 1)
@@ -1184,6 +1230,7 @@ local function with_press(body)
     function env.record(...) env.log[#env.log + 1] = fmt(...) end
     save_confirm = {cancel = function(...) env.record("save_confirm.cancel", ...) end}
     autosave_reset = function(...) env.record("autosave_reset", ...) end
+    transport_started_by_user = function(...) env.record("transport_started_by_user", ...) end
     function env.rec(label) return function(...) env.record(label, ...) end end
     body(env, dofile(ROOT .. "press.lua"))
   end)

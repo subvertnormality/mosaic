@@ -1,0 +1,3312 @@
+{
+  "assets": {
+    "manual.css": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25",
+    "book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "screen": {
+        "x": 351.234375,
+        "y": 480.40625,
+        "width": 333.421875,
+        "height": 166.703125,
+        "right": 684.65625,
+        "bottom": 647.109375
+      },
+      "device": {
+        "x": 329.234375,
+        "y": 387.40625,
+        "width": 481.421875,
+        "height": 338.703125,
+        "right": 810.65625,
+        "bottom": 726.109375
+      },
+      "grid": {
+        "x": 826.65625,
+        "y": 400.359375,
+        "width": 532.109375,
+        "height": 271.625,
+        "right": 1358.765625,
+        "bottom": 671.984375
+      },
+      "pad": {
+        "x": 833.65625,
+        "y": 407.359375,
+        "width": 29.5625,
+        "height": 29.5625,
+        "right": 863.21875,
+        "bottom": 436.921875
+      },
+      "instructions": {
+        "x": 391.234375,
+        "y": 817.546875,
+        "width": 956.53125,
+        "height": 198.140625,
+        "right": 1347.765625,
+        "bottom": 1015.6875
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 826.65625,
+          "y": 353.671875,
+          "width": 532.109375,
+          "height": 349.15625,
+          "right": 1358.765625,
+          "bottom": 702.828125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 314.234375,
+          "y": 254.265625,
+          "width": 1059.53125,
+          "height": 1054.4375,
+          "right": 1373.765625,
+          "bottom": 1308.703125
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 1440,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "screen": {
+        "x": 351.234375,
+        "y": 480.40625,
+        "width": 437.421875,
+        "height": 218.703125,
+        "right": 788.65625,
+        "bottom": 699.109375
+      },
+      "device": {
+        "x": 329.234375,
+        "y": 387.40625,
+        "width": 481.421875,
+        "height": 418.5,
+        "right": 810.65625,
+        "bottom": 805.90625
+      },
+      "grid": {
+        "x": 826.65625,
+        "y": 440.265625,
+        "width": 532.109375,
+        "height": 271.625,
+        "right": 1358.765625,
+        "bottom": 711.890625
+      },
+      "pad": {
+        "x": 833.65625,
+        "y": 447.265625,
+        "width": 29.5625,
+        "height": 29.5625,
+        "right": 863.21875,
+        "bottom": 476.828125
+      },
+      "instructions": {
+        "x": 391.234375,
+        "y": 897.34375,
+        "width": 956.53125,
+        "height": 198.140625,
+        "right": 1347.765625,
+        "bottom": 1095.484375
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 826.65625,
+          "y": 393.578125,
+          "width": 532.109375,
+          "height": 349.15625,
+          "right": 1358.765625,
+          "bottom": 742.734375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 314.234375,
+          "y": 254.265625,
+          "width": 1059.53125,
+          "height": 1134.234375,
+          "right": 1373.765625,
+          "bottom": 1388.5
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 1440,
+      "route": "rhythm-doctor",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 586,
+        "y": 282.40625,
+        "width": 516,
+        "height": 258,
+        "right": 1102,
+        "bottom": 540.40625
+      },
+      "device": {
+        "x": 564,
+        "y": 189.40625,
+        "width": 560,
+        "height": 457.796875,
+        "right": 1124,
+        "bottom": 647.203125
+      },
+      "grid": {
+        "x": 340.234375,
+        "y": 729.890625,
+        "width": 1413,
+        "height": 717,
+        "right": 1753.234375,
+        "bottom": 1446.890625
+      },
+      "pad": {
+        "x": 354.234375,
+        "y": 743.890625,
+        "width": 80,
+        "height": 80,
+        "right": 434.234375,
+        "bottom": 823.890625
+      },
+      "instructions": {
+        "x": 391.234375,
+        "y": 1628.65625,
+        "width": 956.53125,
+        "height": 198.140625,
+        "right": 1347.765625,
+        "bottom": 1826.796875
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 340.234375,
+          "y": 683.203125,
+          "width": 1007.53125,
+          "height": 794.53125,
+          "right": 1347.765625,
+          "bottom": 1477.734375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 314.234375,
+          "y": 46.265625,
+          "width": 1059.53125,
+          "height": 2073.546875,
+          "right": 1373.765625,
+          "bottom": 2119.8125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 405,
+        "lastPadRight": 1334.234375,
+        "wrapRight": 1347.765625
+      }
+    },
+    {
+      "width": 1440,
+      "route": "rhythm-doctor",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 586,
+        "y": 282.40625,
+        "width": 412,
+        "height": 206,
+        "right": 998,
+        "bottom": 488.40625
+      },
+      "device": {
+        "x": 564,
+        "y": 189.40625,
+        "width": 560,
+        "height": 378,
+        "right": 1124,
+        "bottom": 567.40625
+      },
+      "grid": {
+        "x": -64.765625,
+        "y": 650.09375,
+        "width": 1413,
+        "height": 717,
+        "right": 1348.234375,
+        "bottom": 1367.09375
+      },
+      "pad": {
+        "x": -50.765625,
+        "y": 664.09375,
+        "width": 80,
+        "height": 80,
+        "right": 29.234375,
+        "bottom": 744.09375
+      },
+      "instructions": {
+        "x": 391.234375,
+        "y": 1548.859375,
+        "width": 956.53125,
+        "height": 198.140625,
+        "right": 1347.765625,
+        "bottom": 1747
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 340.234375,
+          "y": 603.40625,
+          "width": 1007.53125,
+          "height": 794.53125,
+          "right": 1347.765625,
+          "bottom": 1397.9375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 314.234375,
+          "y": 46.265625,
+          "width": 1059.53125,
+          "height": 1993.75,
+          "right": 1373.765625,
+          "bottom": 2040.015625
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 405,
+        "lastPadRight": 1334.234375,
+        "wrapRight": 1347.765625
+      }
+    },
+    {
+      "width": 1440,
+      "route": "first-sound/course",
+      "mode": "original",
+      "screen": {
+        "x": 654.8125,
+        "y": 714.78125,
+        "width": 282,
+        "height": 141,
+        "right": 936.8125,
+        "bottom": 855.78125
+      },
+      "device": {
+        "x": 632.8125,
+        "y": 621.78125,
+        "width": 430,
+        "height": 313,
+        "right": 1062.8125,
+        "bottom": 934.78125
+      },
+      "grid": {
+        "x": 1078.8125,
+        "y": 611.46875,
+        "width": 280,
+        "height": 145.5,
+        "right": 1358.8125,
+        "bottom": 756.96875
+      },
+      "pad": {
+        "x": 1085.8125,
+        "y": 618.46875,
+        "width": 13.8125,
+        "height": 13.8125,
+        "right": 1099.625,
+        "bottom": 632.28125
+      },
+      "instructions": {
+        "x": 680.40625,
+        "y": 1033.21875,
+        "width": 676.359375,
+        "height": 175.046875,
+        "right": 1356.765625,
+        "bottom": 1208.265625
+      },
+      "workspace": {
+        "x": 314.234375,
+        "y": 487.03125,
+        "width": 1059.53125,
+        "height": 738.234375,
+        "right": 1373.765625,
+        "bottom": 1225.265625
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 1078.8125,
+          "y": 564.78125,
+          "width": 280,
+          "height": 223.03125,
+          "right": 1358.8125,
+          "bottom": 787.8125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 617.8125,
+          "y": 487.03125,
+          "width": 755.953125,
+          "height": 738.234375,
+          "right": 1373.765625,
+          "bottom": 1225.265625
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 1440,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "screen": {
+        "x": 654.8125,
+        "y": 634.78125,
+        "width": 386,
+        "height": 193,
+        "right": 1040.8125,
+        "bottom": 827.78125
+      },
+      "device": {
+        "x": 632.8125,
+        "y": 541.78125,
+        "width": 430,
+        "height": 392.796875,
+        "right": 1062.8125,
+        "bottom": 934.578125
+      },
+      "grid": {
+        "x": 1078.8125,
+        "y": 531.46875,
+        "width": 280,
+        "height": 145.5,
+        "right": 1358.8125,
+        "bottom": 676.96875
+      },
+      "pad": {
+        "x": 1085.8125,
+        "y": 538.46875,
+        "width": 13.8125,
+        "height": 13.8125,
+        "right": 1099.625,
+        "bottom": 552.28125
+      },
+      "instructions": {
+        "x": 680.40625,
+        "y": 1033.015625,
+        "width": 676.359375,
+        "height": 175.046875,
+        "right": 1356.765625,
+        "bottom": 1208.0625
+      },
+      "workspace": {
+        "x": 314.234375,
+        "y": 407.03125,
+        "width": 1059.53125,
+        "height": 818.03125,
+        "right": 1373.765625,
+        "bottom": 1225.0625
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 1078.8125,
+          "y": 484.78125,
+          "width": 280,
+          "height": 223.03125,
+          "right": 1358.8125,
+          "bottom": 707.8125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 617.8125,
+          "y": 407.03125,
+          "width": 755.953125,
+          "height": 818.03125,
+          "right": 1373.765625,
+          "bottom": 1225.0625
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 1440,
+      "route": "first-sound/course",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 737.78125,
+        "y": 267.78125,
+        "width": 516,
+        "height": 258,
+        "right": 1253.78125,
+        "bottom": 525.78125
+      },
+      "device": {
+        "x": 715.78125,
+        "y": 174.78125,
+        "width": 560,
+        "height": 457.796875,
+        "right": 1275.78125,
+        "bottom": 632.578125
+      },
+      "grid": {
+        "x": 634.8125,
+        "y": 695.265625,
+        "width": 1413,
+        "height": 717,
+        "right": 2047.8125,
+        "bottom": 1412.265625
+      },
+      "pad": {
+        "x": 648.8125,
+        "y": 709.265625,
+        "width": 80,
+        "height": 80,
+        "right": 728.8125,
+        "bottom": 789.265625
+      },
+      "instructions": {
+        "x": 680.40625,
+        "y": 1567.03125,
+        "width": 676.359375,
+        "height": 175.046875,
+        "right": 1356.765625,
+        "bottom": 1742.078125
+      },
+      "workspace": {
+        "x": 314.234375,
+        "y": 44.03125,
+        "width": 1059.53125,
+        "height": 1715.046875,
+        "right": 1373.765625,
+        "bottom": 1759.078125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 634.8125,
+          "y": 648.578125,
+          "width": 721.953125,
+          "height": 794.53125,
+          "right": 1356.765625,
+          "bottom": 1443.109375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 617.8125,
+          "y": 44.03125,
+          "width": 755.953125,
+          "height": 1715.046875,
+          "right": 1373.765625,
+          "bottom": 1759.078125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 691,
+        "lastPadRight": 1342.8125,
+        "wrapRight": 1356.765625
+      }
+    },
+    {
+      "width": 1440,
+      "route": "first-sound/course",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 737.78125,
+        "y": 267.78125,
+        "width": 412,
+        "height": 206,
+        "right": 1149.78125,
+        "bottom": 473.78125
+      },
+      "device": {
+        "x": 715.78125,
+        "y": 174.78125,
+        "width": 560,
+        "height": 378,
+        "right": 1275.78125,
+        "bottom": 552.78125
+      },
+      "grid": {
+        "x": -56.1875,
+        "y": 615.46875,
+        "width": 1413,
+        "height": 717,
+        "right": 1356.8125,
+        "bottom": 1332.46875
+      },
+      "pad": {
+        "x": -42.1875,
+        "y": 629.46875,
+        "width": 80,
+        "height": 80,
+        "right": 37.8125,
+        "bottom": 709.46875
+      },
+      "instructions": {
+        "x": 680.40625,
+        "y": 1487.234375,
+        "width": 676.359375,
+        "height": 175.046875,
+        "right": 1356.765625,
+        "bottom": 1662.28125
+      },
+      "workspace": {
+        "x": 314.234375,
+        "y": 44.03125,
+        "width": 1059.53125,
+        "height": 1635.25,
+        "right": 1373.765625,
+        "bottom": 1679.28125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 634.8125,
+          "y": 568.78125,
+          "width": 721.953125,
+          "height": 794.53125,
+          "right": 1356.765625,
+          "bottom": 1363.3125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 617.8125,
+          "y": 44.03125,
+          "width": 755.953125,
+          "height": 1635.25,
+          "right": 1373.765625,
+          "bottom": 1679.28125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 691,
+        "lastPadRight": 1342.8125,
+        "wrapRight": 1356.765625
+      }
+    },
+    {
+      "width": 1280,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "screen": {
+        "x": 343.875,
+        "y": 493.265625,
+        "width": 282,
+        "height": 141,
+        "right": 625.875,
+        "bottom": 634.265625
+      },
+      "device": {
+        "x": 321.875,
+        "y": 400.265625,
+        "width": 430,
+        "height": 313,
+        "right": 751.875,
+        "bottom": 713.265625
+      },
+      "grid": {
+        "x": 767.875,
+        "y": 423.875,
+        "width": 438.25,
+        "height": 224.625,
+        "right": 1206.125,
+        "bottom": 648.5
+      },
+      "pad": {
+        "x": 774.875,
+        "y": 430.875,
+        "width": 23.703125,
+        "height": 23.703125,
+        "right": 798.578125,
+        "bottom": 454.578125
+      },
+      "instructions": {
+        "x": 383.875,
+        "y": 804.703125,
+        "width": 811.25,
+        "height": 198.140625,
+        "right": 1195.125,
+        "bottom": 1002.84375
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 767.875,
+          "y": 377.1875,
+          "width": 438.25,
+          "height": 302.15625,
+          "right": 1206.125,
+          "bottom": 679.34375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 267.125,
+          "width": 914.25,
+          "height": 1028.734375,
+          "right": 1221.125,
+          "bottom": 1295.859375
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 1280,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "screen": {
+        "x": 343.875,
+        "y": 493.265625,
+        "width": 386,
+        "height": 193,
+        "right": 729.875,
+        "bottom": 686.265625
+      },
+      "device": {
+        "x": 321.875,
+        "y": 400.265625,
+        "width": 430,
+        "height": 392.796875,
+        "right": 751.875,
+        "bottom": 793.0625
+      },
+      "grid": {
+        "x": 767.875,
+        "y": 463.765625,
+        "width": 438.25,
+        "height": 224.625,
+        "right": 1206.125,
+        "bottom": 688.390625
+      },
+      "pad": {
+        "x": 774.875,
+        "y": 470.765625,
+        "width": 23.703125,
+        "height": 23.703125,
+        "right": 798.578125,
+        "bottom": 494.46875
+      },
+      "instructions": {
+        "x": 383.875,
+        "y": 884.5,
+        "width": 811.25,
+        "height": 198.140625,
+        "right": 1195.125,
+        "bottom": 1082.640625
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 767.875,
+          "y": 417.078125,
+          "width": 438.25,
+          "height": 302.15625,
+          "right": 1206.125,
+          "bottom": 719.234375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 267.125,
+          "width": 914.25,
+          "height": 1108.53125,
+          "right": 1221.125,
+          "bottom": 1375.65625
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 1280,
+      "route": "rhythm-doctor",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 506,
+        "y": 282.265625,
+        "width": 516,
+        "height": 258,
+        "right": 1022,
+        "bottom": 540.265625
+      },
+      "device": {
+        "x": 484,
+        "y": 189.265625,
+        "width": 560,
+        "height": 457.796875,
+        "right": 1044,
+        "bottom": 647.0625
+      },
+      "grid": {
+        "x": 332.875,
+        "y": 723.75,
+        "width": 1378.109375,
+        "height": 699.859375,
+        "right": 1710.984375,
+        "bottom": 1423.609375
+      },
+      "pad": {
+        "x": 346.875,
+        "y": 737.75,
+        "width": 78.390625,
+        "height": 78.390625,
+        "right": 425.265625,
+        "bottom": 816.140625
+      },
+      "instructions": {
+        "x": 383.875,
+        "y": 1599.375,
+        "width": 811.25,
+        "height": 198.140625,
+        "right": 1195.125,
+        "bottom": 1797.515625
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 332.875,
+          "y": 677.0625,
+          "width": 862.25,
+          "height": 777.390625,
+          "right": 1195.125,
+          "bottom": 1454.453125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 46.125,
+          "width": 914.25,
+          "height": 2044.40625,
+          "right": 1221.125,
+          "bottom": 2090.53125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 516,
+        "lastPadRight": 1180.984375,
+        "wrapRight": 1195.125
+      }
+    },
+    {
+      "width": 1280,
+      "route": "rhythm-doctor",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 506,
+        "y": 282.265625,
+        "width": 412,
+        "height": 206,
+        "right": 918,
+        "bottom": 488.265625
+      },
+      "device": {
+        "x": 484,
+        "y": 189.265625,
+        "width": 560,
+        "height": 378,
+        "right": 1044,
+        "bottom": 567.265625
+      },
+      "grid": {
+        "x": -183.125,
+        "y": 643.953125,
+        "width": 1378.109375,
+        "height": 699.859375,
+        "right": 1194.984375,
+        "bottom": 1343.8125
+      },
+      "pad": {
+        "x": -169.125,
+        "y": 657.953125,
+        "width": 78.390625,
+        "height": 78.390625,
+        "right": -90.734375,
+        "bottom": 736.34375
+      },
+      "instructions": {
+        "x": 383.875,
+        "y": 1519.578125,
+        "width": 811.25,
+        "height": 198.140625,
+        "right": 1195.125,
+        "bottom": 1717.71875
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 332.875,
+          "y": 597.265625,
+          "width": 862.25,
+          "height": 777.390625,
+          "right": 1195.125,
+          "bottom": 1374.65625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 46.125,
+          "width": 914.25,
+          "height": 1964.609375,
+          "right": 1221.125,
+          "bottom": 2010.734375
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 516,
+        "lastPadRight": 1180.984375,
+        "wrapRight": 1195.125
+      }
+    },
+    {
+      "width": 1280,
+      "route": "first-sound/course",
+      "mode": "original",
+      "screen": {
+        "x": 343.875,
+        "y": 714.875,
+        "width": 282,
+        "height": 141,
+        "right": 625.875,
+        "bottom": 855.875
+      },
+      "device": {
+        "x": 321.875,
+        "y": 621.875,
+        "width": 430,
+        "height": 313,
+        "right": 751.875,
+        "bottom": 934.875
+      },
+      "grid": {
+        "x": 767.875,
+        "y": 611.5625,
+        "width": 438.25,
+        "height": 224.625,
+        "right": 1206.125,
+        "bottom": 836.1875
+      },
+      "pad": {
+        "x": 774.875,
+        "y": 618.5625,
+        "width": 23.703125,
+        "height": 23.703125,
+        "right": 798.578125,
+        "bottom": 642.265625
+      },
+      "instructions": {
+        "x": 369.46875,
+        "y": 1033.3125,
+        "width": 834.65625,
+        "height": 175.046875,
+        "right": 1204.125,
+        "bottom": 1208.359375
+      },
+      "workspace": {
+        "x": 306.875,
+        "y": 56.71875,
+        "width": 914.25,
+        "height": 1168.640625,
+        "right": 1221.125,
+        "bottom": 1225.359375
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 767.875,
+          "y": 564.875,
+          "width": 438.25,
+          "height": 302.15625,
+          "right": 1206.125,
+          "bottom": 867.03125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 487.125,
+          "width": 914.25,
+          "height": 738.234375,
+          "right": 1221.125,
+          "bottom": 1225.359375
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 1280,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "screen": {
+        "x": 343.875,
+        "y": 634.875,
+        "width": 386,
+        "height": 193,
+        "right": 729.875,
+        "bottom": 827.875
+      },
+      "device": {
+        "x": 321.875,
+        "y": 541.875,
+        "width": 430,
+        "height": 392.796875,
+        "right": 751.875,
+        "bottom": 934.671875
+      },
+      "grid": {
+        "x": 767.875,
+        "y": 531.5625,
+        "width": 438.25,
+        "height": 224.625,
+        "right": 1206.125,
+        "bottom": 756.1875
+      },
+      "pad": {
+        "x": 774.875,
+        "y": 538.5625,
+        "width": 23.703125,
+        "height": 23.703125,
+        "right": 798.578125,
+        "bottom": 562.265625
+      },
+      "instructions": {
+        "x": 369.46875,
+        "y": 1033.109375,
+        "width": 834.65625,
+        "height": 175.046875,
+        "right": 1204.125,
+        "bottom": 1208.15625
+      },
+      "workspace": {
+        "x": 306.875,
+        "y": -23.28125,
+        "width": 914.25,
+        "height": 1248.4375,
+        "right": 1221.125,
+        "bottom": 1225.15625
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 767.875,
+          "y": 484.875,
+          "width": 438.25,
+          "height": 302.15625,
+          "right": 1206.125,
+          "bottom": 787.03125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 407.125,
+          "width": 914.25,
+          "height": 818.03125,
+          "right": 1221.125,
+          "bottom": 1225.15625
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 1280,
+      "route": "first-sound/course",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 506,
+        "y": 267.875,
+        "width": 516,
+        "height": 258,
+        "right": 1022,
+        "bottom": 525.875
+      },
+      "device": {
+        "x": 484,
+        "y": 174.875,
+        "width": 560,
+        "height": 457.796875,
+        "right": 1044,
+        "bottom": 632.671875
+      },
+      "grid": {
+        "x": 323.875,
+        "y": 695.359375,
+        "width": 1378.109375,
+        "height": 699.859375,
+        "right": 1701.984375,
+        "bottom": 1395.21875
+      },
+      "pad": {
+        "x": 337.875,
+        "y": 709.359375,
+        "width": 78.390625,
+        "height": 78.390625,
+        "right": 416.265625,
+        "bottom": 787.75
+      },
+      "instructions": {
+        "x": 369.46875,
+        "y": 1549.984375,
+        "width": 834.65625,
+        "height": 175.046875,
+        "right": 1204.125,
+        "bottom": 1725.03125
+      },
+      "workspace": {
+        "x": 306.875,
+        "y": -386.28125,
+        "width": 914.25,
+        "height": 2128.3125,
+        "right": 1221.125,
+        "bottom": 1742.03125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 323.875,
+          "y": 648.671875,
+          "width": 880.25,
+          "height": 777.390625,
+          "right": 1204.125,
+          "bottom": 1426.0625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 44.125,
+          "width": 914.25,
+          "height": 1697.90625,
+          "right": 1221.125,
+          "bottom": 1742.03125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 498,
+        "lastPadRight": 1189.984375,
+        "wrapRight": 1204.125
+      }
+    },
+    {
+      "width": 1280,
+      "route": "first-sound/course",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 506,
+        "y": 267.875,
+        "width": 412,
+        "height": 206,
+        "right": 918,
+        "bottom": 473.875
+      },
+      "device": {
+        "x": 484,
+        "y": 174.875,
+        "width": 560,
+        "height": 378,
+        "right": 1044,
+        "bottom": 552.875
+      },
+      "grid": {
+        "x": -174.125,
+        "y": 615.5625,
+        "width": 1378.109375,
+        "height": 699.859375,
+        "right": 1203.984375,
+        "bottom": 1315.421875
+      },
+      "pad": {
+        "x": -160.125,
+        "y": 629.5625,
+        "width": 78.390625,
+        "height": 78.390625,
+        "right": -81.734375,
+        "bottom": 707.953125
+      },
+      "instructions": {
+        "x": 369.46875,
+        "y": 1470.1875,
+        "width": 834.65625,
+        "height": 175.046875,
+        "right": 1204.125,
+        "bottom": 1645.234375
+      },
+      "workspace": {
+        "x": 306.875,
+        "y": -386.28125,
+        "width": 914.25,
+        "height": 2048.515625,
+        "right": 1221.125,
+        "bottom": 1662.234375
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 323.875,
+          "y": 568.875,
+          "width": 880.25,
+          "height": 777.390625,
+          "right": 1204.125,
+          "bottom": 1346.265625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 306.875,
+          "y": 44.125,
+          "width": 914.25,
+          "height": 1618.109375,
+          "right": 1221.125,
+          "bottom": 1662.234375
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 498,
+        "lastPadRight": 1189.984375,
+        "wrapRight": 1204.125
+      }
+    },
+    {
+      "width": 1121,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "screen": {
+        "x": 336.5625,
+        "y": 493.015625,
+        "width": 282,
+        "height": 141,
+        "right": 618.5625,
+        "bottom": 634.015625
+      },
+      "device": {
+        "x": 314.5625,
+        "y": 400.015625,
+        "width": 430,
+        "height": 313,
+        "right": 744.5625,
+        "bottom": 713.015625
+      },
+      "grid": {
+        "x": 760.5625,
+        "y": 459.6875,
+        "width": 293.875,
+        "height": 152.5,
+        "right": 1054.4375,
+        "bottom": 612.1875
+      },
+      "pad": {
+        "x": 767.5625,
+        "y": 466.6875,
+        "width": 14.671875,
+        "height": 14.671875,
+        "right": 782.234375,
+        "bottom": 481.359375
+      },
+      "instructions": {
+        "x": 376.5625,
+        "y": 804.453125,
+        "width": 666.875,
+        "height": 221.234375,
+        "right": 1043.4375,
+        "bottom": 1025.6875
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 760.5625,
+          "y": 413,
+          "width": 293.875,
+          "height": 230.03125,
+          "right": 1054.4375,
+          "bottom": 643.03125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 266.875,
+          "width": 769.875,
+          "height": 1074.921875,
+          "right": 1069.4375,
+          "bottom": 1341.796875
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 1121,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "screen": {
+        "x": 336.5625,
+        "y": 493.015625,
+        "width": 386,
+        "height": 193,
+        "right": 722.5625,
+        "bottom": 686.015625
+      },
+      "device": {
+        "x": 314.5625,
+        "y": 400.015625,
+        "width": 430,
+        "height": 392.796875,
+        "right": 744.5625,
+        "bottom": 792.8125
+      },
+      "grid": {
+        "x": 760.5625,
+        "y": 499.578125,
+        "width": 293.875,
+        "height": 152.5,
+        "right": 1054.4375,
+        "bottom": 652.078125
+      },
+      "pad": {
+        "x": 767.5625,
+        "y": 506.578125,
+        "width": 14.671875,
+        "height": 14.671875,
+        "right": 782.234375,
+        "bottom": 521.25
+      },
+      "instructions": {
+        "x": 376.5625,
+        "y": 884.25,
+        "width": 666.875,
+        "height": 221.234375,
+        "right": 1043.4375,
+        "bottom": 1105.484375
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 760.5625,
+          "y": 452.890625,
+          "width": 293.875,
+          "height": 230.03125,
+          "right": 1054.4375,
+          "bottom": 682.921875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 266.875,
+          "width": 769.875,
+          "height": 1154.71875,
+          "right": 1069.4375,
+          "bottom": 1421.59375
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 1121,
+      "route": "rhythm-doctor",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 426.5,
+        "y": 282.015625,
+        "width": 516,
+        "height": 258,
+        "right": 942.5,
+        "bottom": 540.015625
+      },
+      "device": {
+        "x": 404.5,
+        "y": 189.015625,
+        "width": 560,
+        "height": 457.796875,
+        "right": 964.5,
+        "bottom": 646.8125
+      },
+      "grid": {
+        "x": 325.5625,
+        "y": 723.5,
+        "width": 1162.65625,
+        "height": 592.53125,
+        "right": 1488.21875,
+        "bottom": 1316.03125
+      },
+      "pad": {
+        "x": 339.5625,
+        "y": 737.5,
+        "width": 65.671875,
+        "height": 65.671875,
+        "right": 405.234375,
+        "bottom": 803.171875
+      },
+      "instructions": {
+        "x": 376.5625,
+        "y": 1491.796875,
+        "width": 666.875,
+        "height": 221.234375,
+        "right": 1043.4375,
+        "bottom": 1713.03125
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 325.5625,
+          "y": 676.8125,
+          "width": 717.875,
+          "height": 670.0625,
+          "right": 1043.4375,
+          "bottom": 1346.875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 45.875,
+          "width": 769.875,
+          "height": 1983.265625,
+          "right": 1069.4375,
+          "bottom": 2029.140625
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 401,
+        "lastPadRight": 1073.21875,
+        "wrapRight": 1043.4375
+      }
+    },
+    {
+      "width": 1121,
+      "route": "rhythm-doctor",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 426.5,
+        "y": 282.015625,
+        "width": 412,
+        "height": 206,
+        "right": 838.5,
+        "bottom": 488.015625
+      },
+      "device": {
+        "x": 404.5,
+        "y": 189.015625,
+        "width": 560,
+        "height": 378,
+        "right": 964.5,
+        "bottom": 567.015625
+      },
+      "grid": {
+        "x": -75.4375,
+        "y": 643.703125,
+        "width": 1162.65625,
+        "height": 592.53125,
+        "right": 1087.21875,
+        "bottom": 1236.234375
+      },
+      "pad": {
+        "x": -61.4375,
+        "y": 657.703125,
+        "width": 65.671875,
+        "height": 65.671875,
+        "right": 4.234375,
+        "bottom": 723.375
+      },
+      "instructions": {
+        "x": 376.5625,
+        "y": 1412,
+        "width": 666.875,
+        "height": 221.234375,
+        "right": 1043.4375,
+        "bottom": 1633.234375
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 325.5625,
+          "y": 597.015625,
+          "width": 717.875,
+          "height": 670.0625,
+          "right": 1043.4375,
+          "bottom": 1267.078125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 45.875,
+          "width": 769.875,
+          "height": 1903.46875,
+          "right": 1069.4375,
+          "bottom": 1949.34375
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 401,
+        "lastPadRight": 1073.21875,
+        "wrapRight": 1043.4375
+      }
+    },
+    {
+      "width": 1121,
+      "route": "first-sound/course",
+      "mode": "original",
+      "screen": {
+        "x": 336.5625,
+        "y": 493.75,
+        "width": 282,
+        "height": 141,
+        "right": 618.5625,
+        "bottom": 634.75
+      },
+      "device": {
+        "x": 314.5625,
+        "y": 400.75,
+        "width": 430,
+        "height": 313,
+        "right": 744.5625,
+        "bottom": 713.75
+      },
+      "grid": {
+        "x": 760.5625,
+        "y": 390.4375,
+        "width": 293.875,
+        "height": 152.5,
+        "right": 1054.4375,
+        "bottom": 542.9375
+      },
+      "pad": {
+        "x": 767.5625,
+        "y": 397.4375,
+        "width": 14.671875,
+        "height": 14.671875,
+        "right": 782.234375,
+        "bottom": 412.109375
+      },
+      "instructions": {
+        "x": 362.15625,
+        "y": 812.1875,
+        "width": 690.28125,
+        "height": 175.046875,
+        "right": 1052.4375,
+        "bottom": 987.234375
+      },
+      "workspace": {
+        "x": 299.5625,
+        "y": -212.78125,
+        "width": 769.875,
+        "height": 1217.015625,
+        "right": 1069.4375,
+        "bottom": 1004.234375
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 760.5625,
+          "y": 343.75,
+          "width": 293.875,
+          "height": 230.03125,
+          "right": 1054.4375,
+          "bottom": 573.78125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 266,
+          "width": 769.875,
+          "height": 738.234375,
+          "right": 1069.4375,
+          "bottom": 1004.234375
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 1121,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "screen": {
+        "x": 336.5625,
+        "y": 493.75,
+        "width": 386,
+        "height": 193,
+        "right": 722.5625,
+        "bottom": 686.75
+      },
+      "device": {
+        "x": 314.5625,
+        "y": 400.75,
+        "width": 430,
+        "height": 392.796875,
+        "right": 744.5625,
+        "bottom": 793.546875
+      },
+      "grid": {
+        "x": 760.5625,
+        "y": 390.4375,
+        "width": 293.875,
+        "height": 152.5,
+        "right": 1054.4375,
+        "bottom": 542.9375
+      },
+      "pad": {
+        "x": 767.5625,
+        "y": 397.4375,
+        "width": 14.671875,
+        "height": 14.671875,
+        "right": 782.234375,
+        "bottom": 412.109375
+      },
+      "instructions": {
+        "x": 362.15625,
+        "y": 891.984375,
+        "width": 690.28125,
+        "height": 175.046875,
+        "right": 1052.4375,
+        "bottom": 1067.03125
+      },
+      "workspace": {
+        "x": 299.5625,
+        "y": -212.78125,
+        "width": 769.875,
+        "height": 1296.8125,
+        "right": 1069.4375,
+        "bottom": 1084.03125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 760.5625,
+          "y": 343.75,
+          "width": 293.875,
+          "height": 230.03125,
+          "right": 1054.4375,
+          "bottom": 573.78125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 266,
+          "width": 769.875,
+          "height": 818.03125,
+          "right": 1069.4375,
+          "bottom": 1084.03125
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 1121,
+      "route": "first-sound/course",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 426.5,
+        "y": 267.75,
+        "width": 516,
+        "height": 258,
+        "right": 942.5,
+        "bottom": 525.75
+      },
+      "device": {
+        "x": 404.5,
+        "y": 174.75,
+        "width": 560,
+        "height": 457.796875,
+        "right": 964.5,
+        "bottom": 632.546875
+      },
+      "grid": {
+        "x": 316.5625,
+        "y": 695.234375,
+        "width": 1162.65625,
+        "height": 592.53125,
+        "right": 1479.21875,
+        "bottom": 1287.765625
+      },
+      "pad": {
+        "x": 330.5625,
+        "y": 709.234375,
+        "width": 65.671875,
+        "height": 65.671875,
+        "right": 396.234375,
+        "bottom": 774.90625
+      },
+      "instructions": {
+        "x": 362.15625,
+        "y": 1442.53125,
+        "width": 690.28125,
+        "height": 175.046875,
+        "right": 1052.4375,
+        "bottom": 1617.578125
+      },
+      "workspace": {
+        "x": 299.5625,
+        "y": -434.78125,
+        "width": 769.875,
+        "height": 2069.359375,
+        "right": 1069.4375,
+        "bottom": 1634.578125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 316.5625,
+          "y": 648.546875,
+          "width": 735.875,
+          "height": 670.0625,
+          "right": 1052.4375,
+          "bottom": 1318.609375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 44,
+          "width": 769.875,
+          "height": 1590.578125,
+          "right": 1069.4375,
+          "bottom": 1634.578125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 427,
+        "lastPadRight": 1038.21875,
+        "wrapRight": 1052.4375
+      }
+    },
+    {
+      "width": 1121,
+      "route": "first-sound/course",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 426.5,
+        "y": 267.75,
+        "width": 412,
+        "height": 206,
+        "right": 838.5,
+        "bottom": 473.75
+      },
+      "device": {
+        "x": 404.5,
+        "y": 174.75,
+        "width": 560,
+        "height": 378,
+        "right": 964.5,
+        "bottom": 552.75
+      },
+      "grid": {
+        "x": -110.4375,
+        "y": 615.4375,
+        "width": 1162.65625,
+        "height": 592.53125,
+        "right": 1052.21875,
+        "bottom": 1207.96875
+      },
+      "pad": {
+        "x": -96.4375,
+        "y": 629.4375,
+        "width": 65.671875,
+        "height": 65.671875,
+        "right": -30.765625,
+        "bottom": 695.109375
+      },
+      "instructions": {
+        "x": 362.15625,
+        "y": 1362.734375,
+        "width": 690.28125,
+        "height": 175.046875,
+        "right": 1052.4375,
+        "bottom": 1537.78125
+      },
+      "workspace": {
+        "x": 299.5625,
+        "y": -434.78125,
+        "width": 769.875,
+        "height": 1989.5625,
+        "right": 1069.4375,
+        "bottom": 1554.78125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 316.5625,
+          "y": 568.75,
+          "width": 735.875,
+          "height": 670.0625,
+          "right": 1052.4375,
+          "bottom": 1238.8125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 299.5625,
+          "y": 44,
+          "width": 769.875,
+          "height": 1510.78125,
+          "right": 1069.4375,
+          "bottom": 1554.78125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 427,
+        "lastPadRight": 1038.21875,
+        "wrapRight": 1052.4375
+      }
+    },
+    {
+      "width": 768,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "screen": {
+        "x": 121,
+        "y": 228.4375,
+        "width": 422,
+        "height": 211,
+        "right": 543,
+        "bottom": 439.4375
+      },
+      "device": {
+        "x": 104,
+        "y": 137.4375,
+        "width": 560,
+        "height": 379,
+        "right": 664,
+        "bottom": 516.4375
+      },
+      "grid": {
+        "x": 43,
+        "y": 583.125,
+        "width": 682,
+        "height": 346.5,
+        "right": 725,
+        "bottom": 929.625
+      },
+      "pad": {
+        "x": 50,
+        "y": 590.125,
+        "width": 38.9375,
+        "height": 38.9375,
+        "right": 88.9375,
+        "bottom": 629.0625
+      },
+      "instructions": {
+        "x": 101,
+        "y": 1059.90625,
+        "width": 617,
+        "height": 244.328125,
+        "right": 718,
+        "bottom": 1304.234375
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 43,
+          "y": 536.4375,
+          "width": 682,
+          "height": 424.03125,
+          "right": 725,
+          "bottom": 960.46875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": 0.296875,
+          "width": 720,
+          "height": 1620.046875,
+          "right": 744,
+          "bottom": 1620.34375
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 768,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "screen": {
+        "x": 121,
+        "y": 238.4375,
+        "width": 526,
+        "height": 263,
+        "right": 647,
+        "bottom": 501.4375
+      },
+      "device": {
+        "x": 104,
+        "y": 147.4375,
+        "width": 560,
+        "height": 458.796875,
+        "right": 664,
+        "bottom": 606.234375
+      },
+      "grid": {
+        "x": 43,
+        "y": 672.921875,
+        "width": 682,
+        "height": 346.5,
+        "right": 725,
+        "bottom": 1019.421875
+      },
+      "pad": {
+        "x": 50,
+        "y": 679.921875,
+        "width": 38.9375,
+        "height": 38.9375,
+        "right": 88.9375,
+        "bottom": 718.859375
+      },
+      "instructions": {
+        "x": 101,
+        "y": 1149.703125,
+        "width": 617,
+        "height": 244.328125,
+        "right": 718,
+        "bottom": 1394.03125
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 43,
+          "y": 626.234375,
+          "width": 682,
+          "height": 424.03125,
+          "right": 725,
+          "bottom": 1050.265625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": 10.296875,
+          "width": 720,
+          "height": 1699.84375,
+          "right": 744,
+          "bottom": 1710.140625
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 768,
+      "route": "rhythm-doctor",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 121,
+        "y": 25.4375,
+        "width": 526,
+        "height": 263,
+        "right": 647,
+        "bottom": 288.4375
+      },
+      "device": {
+        "x": 104,
+        "y": -65.5625,
+        "width": 560,
+        "height": 458.796875,
+        "right": 664,
+        "bottom": 393.234375
+      },
+      "grid": {
+        "x": 43,
+        "y": 459.921875,
+        "width": 789.421875,
+        "height": 406.796875,
+        "right": 832.421875,
+        "bottom": 866.71875
+      },
+      "pad": {
+        "x": 57,
+        "y": 473.921875,
+        "width": 44,
+        "height": 44,
+        "right": 101,
+        "bottom": 517.921875
+      },
+      "instructions": {
+        "x": 101,
+        "y": 1026.484375,
+        "width": 617,
+        "height": 244.328125,
+        "right": 718,
+        "bottom": 1270.8125
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 43,
+          "y": 413.234375,
+          "width": 682,
+          "height": 484.328125,
+          "right": 725,
+          "bottom": 897.5625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": -202.703125,
+          "width": 720,
+          "height": 1789.625,
+          "right": 744,
+          "bottom": 1586.921875
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 119,
+        "lastPadRight": 699.421875,
+        "wrapRight": 725
+      }
+    },
+    {
+      "width": 768,
+      "route": "rhythm-doctor",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 121,
+        "y": 262.4375,
+        "width": 422,
+        "height": 211,
+        "right": 543,
+        "bottom": 473.4375
+      },
+      "device": {
+        "x": 104,
+        "y": 171.4375,
+        "width": 560,
+        "height": 379,
+        "right": 664,
+        "bottom": 550.4375
+      },
+      "grid": {
+        "x": -76,
+        "y": 617.125,
+        "width": 789.421875,
+        "height": 406.796875,
+        "right": 713.421875,
+        "bottom": 1023.921875
+      },
+      "pad": {
+        "x": -62,
+        "y": 631.125,
+        "width": 44,
+        "height": 44,
+        "right": -18,
+        "bottom": 675.125
+      },
+      "instructions": {
+        "x": 101,
+        "y": 1183.6875,
+        "width": 617,
+        "height": 244.328125,
+        "right": 718,
+        "bottom": 1428.015625
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 43,
+          "y": 570.4375,
+          "width": 682,
+          "height": 484.328125,
+          "right": 725,
+          "bottom": 1054.765625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": 34.296875,
+          "width": 720,
+          "height": 1709.828125,
+          "right": 744,
+          "bottom": 1744.125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 119,
+        "lastPadRight": 699.421875,
+        "wrapRight": 725
+      }
+    },
+    {
+      "width": 768,
+      "route": "first-sound/course",
+      "mode": "original",
+      "screen": {
+        "x": 121,
+        "y": 227.015625,
+        "width": 422,
+        "height": 211,
+        "right": 543,
+        "bottom": 438.015625
+      },
+      "device": {
+        "x": 104,
+        "y": 136.015625,
+        "width": 560,
+        "height": 379,
+        "right": 664,
+        "bottom": 515.015625
+      },
+      "grid": {
+        "x": 41,
+        "y": 581.703125,
+        "width": 686,
+        "height": 348.5,
+        "right": 727,
+        "bottom": 930.203125
+      },
+      "pad": {
+        "x": 48,
+        "y": 588.703125,
+        "width": 39.1875,
+        "height": 39.1875,
+        "right": 87.1875,
+        "bottom": 627.890625
+      },
+      "instructions": {
+        "x": 86.59375,
+        "y": 1059.484375,
+        "width": 640.40625,
+        "height": 175.046875,
+        "right": 727,
+        "bottom": 1234.53125
+      },
+      "workspace": {
+        "x": 24,
+        "y": -463.34375,
+        "width": 720,
+        "height": 1714.875,
+        "right": 744,
+        "bottom": 1251.53125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 41,
+          "y": 535.015625,
+          "width": 686,
+          "height": 426.03125,
+          "right": 727,
+          "bottom": 961.046875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": 5.265625,
+          "width": 720,
+          "height": 1246.265625,
+          "right": 744,
+          "bottom": 1251.53125
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 768,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "screen": {
+        "x": 121,
+        "y": 238.015625,
+        "width": 526,
+        "height": 263,
+        "right": 647,
+        "bottom": 501.015625
+      },
+      "device": {
+        "x": 104,
+        "y": 147.015625,
+        "width": 560,
+        "height": 458.796875,
+        "right": 664,
+        "bottom": 605.8125
+      },
+      "grid": {
+        "x": 41,
+        "y": 672.5,
+        "width": 686,
+        "height": 348.5,
+        "right": 727,
+        "bottom": 1021
+      },
+      "pad": {
+        "x": 48,
+        "y": 679.5,
+        "width": 39.1875,
+        "height": 39.1875,
+        "right": 87.1875,
+        "bottom": 718.6875
+      },
+      "instructions": {
+        "x": 86.59375,
+        "y": 1150.28125,
+        "width": 640.40625,
+        "height": 175.046875,
+        "right": 727,
+        "bottom": 1325.328125
+      },
+      "workspace": {
+        "x": 24,
+        "y": -452.34375,
+        "width": 720,
+        "height": 1794.671875,
+        "right": 744,
+        "bottom": 1342.328125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 41,
+          "y": 625.8125,
+          "width": 686,
+          "height": 426.03125,
+          "right": 727,
+          "bottom": 1051.84375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": 16.265625,
+          "width": 720,
+          "height": 1326.0625,
+          "right": 744,
+          "bottom": 1342.328125
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 768,
+      "route": "first-sound/course",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 121,
+        "y": 41.015625,
+        "width": 526,
+        "height": 263,
+        "right": 647,
+        "bottom": 304.015625
+      },
+      "device": {
+        "x": 104,
+        "y": -49.984375,
+        "width": 560,
+        "height": 458.796875,
+        "right": 664,
+        "bottom": 408.8125
+      },
+      "grid": {
+        "x": 41,
+        "y": 471.5,
+        "width": 789.421875,
+        "height": 406.796875,
+        "right": 830.421875,
+        "bottom": 878.296875
+      },
+      "pad": {
+        "x": 55,
+        "y": 485.5,
+        "width": 44,
+        "height": 44,
+        "right": 99,
+        "bottom": 529.5
+      },
+      "instructions": {
+        "x": 86.59375,
+        "y": 1033.0625,
+        "width": 640.40625,
+        "height": 175.046875,
+        "right": 727,
+        "bottom": 1208.109375
+      },
+      "workspace": {
+        "x": 24,
+        "y": -649.34375,
+        "width": 720,
+        "height": 1874.453125,
+        "right": 744,
+        "bottom": 1225.109375
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 41,
+          "y": 424.8125,
+          "width": 686,
+          "height": 484.328125,
+          "right": 727,
+          "bottom": 909.140625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": -180.734375,
+          "width": 720,
+          "height": 1405.84375,
+          "right": 744,
+          "bottom": 1225.109375
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 115,
+        "lastPadRight": 701.421875,
+        "wrapRight": 727
+      }
+    },
+    {
+      "width": 768,
+      "route": "first-sound/course",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 121,
+        "y": 254.015625,
+        "width": 422,
+        "height": 211,
+        "right": 543,
+        "bottom": 465.015625
+      },
+      "device": {
+        "x": 104,
+        "y": 163.015625,
+        "width": 560,
+        "height": 379,
+        "right": 664,
+        "bottom": 542.015625
+      },
+      "grid": {
+        "x": -74,
+        "y": 604.703125,
+        "width": 789.421875,
+        "height": 406.796875,
+        "right": 715.421875,
+        "bottom": 1011.5
+      },
+      "pad": {
+        "x": -60,
+        "y": 618.703125,
+        "width": 44,
+        "height": 44,
+        "right": -16,
+        "bottom": 662.703125
+      },
+      "instructions": {
+        "x": 86.59375,
+        "y": 1166.265625,
+        "width": 640.40625,
+        "height": 175.046875,
+        "right": 727,
+        "bottom": 1341.3125
+      },
+      "workspace": {
+        "x": 24,
+        "y": -436.34375,
+        "width": 720,
+        "height": 1794.65625,
+        "right": 744,
+        "bottom": 1358.3125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 41,
+          "y": 558.015625,
+          "width": 686,
+          "height": 484.328125,
+          "right": 727,
+          "bottom": 1042.34375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 24,
+          "y": 32.265625,
+          "width": 720,
+          "height": 1326.046875,
+          "right": 744,
+          "bottom": 1358.3125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 115,
+        "lastPadRight": 701.421875,
+        "wrapRight": 727
+      }
+    },
+    {
+      "width": 390,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "screen": {
+        "x": 48,
+        "y": 374.328125,
+        "width": 190,
+        "height": 95,
+        "right": 238,
+        "bottom": 469.328125
+      },
+      "device": {
+        "x": 31,
+        "y": 270.828125,
+        "width": 328,
+        "height": 288,
+        "right": 359,
+        "bottom": 558.828125
+      },
+      "grid": {
+        "x": 31,
+        "y": 625.515625,
+        "width": 328,
+        "height": 169.5,
+        "right": 359,
+        "bottom": 795.015625
+      },
+      "pad": {
+        "x": 38,
+        "y": 632.515625,
+        "width": 16.8125,
+        "height": 16.8125,
+        "right": 54.8125,
+        "bottom": 649.328125
+      },
+      "instructions": {
+        "x": 85,
+        "y": 914.296875,
+        "width": 266,
+        "height": 404.125,
+        "right": 351,
+        "bottom": 1318.421875
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 578.828125,
+          "width": 328,
+          "height": 247.03125,
+          "right": 359,
+          "bottom": 825.859375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 139.6875,
+          "width": 354,
+          "height": 1567.46875,
+          "right": 372,
+          "bottom": 1707.15625
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 390,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "screen": {
+        "x": 48,
+        "y": 361.828125,
+        "width": 294,
+        "height": 147,
+        "right": 342,
+        "bottom": 508.828125
+      },
+      "device": {
+        "x": 31,
+        "y": 270.828125,
+        "width": 328,
+        "height": 342.796875,
+        "right": 359,
+        "bottom": 613.625
+      },
+      "grid": {
+        "x": 31,
+        "y": 680.3125,
+        "width": 328,
+        "height": 169.5,
+        "right": 359,
+        "bottom": 849.8125
+      },
+      "pad": {
+        "x": 38,
+        "y": 687.3125,
+        "width": 16.8125,
+        "height": 16.8125,
+        "right": 54.8125,
+        "bottom": 704.125
+      },
+      "instructions": {
+        "x": 85,
+        "y": 969.09375,
+        "width": 266,
+        "height": 404.125,
+        "right": 351,
+        "bottom": 1373.21875
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 633.625,
+          "width": 328,
+          "height": 247.03125,
+          "right": 359,
+          "bottom": 880.65625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 139.6875,
+          "width": 354,
+          "height": 1622.265625,
+          "right": 372,
+          "bottom": 1761.953125
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 390,
+      "route": "rhythm-doctor",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 48,
+        "y": 255.828125,
+        "width": 294,
+        "height": 147,
+        "right": 342,
+        "bottom": 402.828125
+      },
+      "device": {
+        "x": 31,
+        "y": 164.828125,
+        "width": 328,
+        "height": 342.796875,
+        "right": 359,
+        "bottom": 507.625
+      },
+      "grid": {
+        "x": 31,
+        "y": 588.8125,
+        "width": 801,
+        "height": 409,
+        "right": 832,
+        "bottom": 997.8125
+      },
+      "pad": {
+        "x": 42,
+        "y": 599.8125,
+        "width": 44,
+        "height": 44,
+        "right": 86,
+        "bottom": 643.8125
+      },
+      "instructions": {
+        "x": 85,
+        "y": 1190.765625,
+        "width": 266,
+        "height": 404.125,
+        "right": 351,
+        "bottom": 1594.890625
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 525.625,
+          "width": 328,
+          "height": 503.03125,
+          "right": 359,
+          "bottom": 1028.65625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 33.6875,
+          "width": 354,
+          "height": 1949.9375,
+          "right": 372,
+          "bottom": 1983.625
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 473,
+        "lastPadRight": 348,
+        "wrapRight": 359
+      }
+    },
+    {
+      "width": 390,
+      "route": "rhythm-doctor",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 48,
+        "y": 268.328125,
+        "width": 190,
+        "height": 95,
+        "right": 238,
+        "bottom": 363.328125
+      },
+      "device": {
+        "x": 31,
+        "y": 164.828125,
+        "width": 328,
+        "height": 288,
+        "right": 359,
+        "bottom": 452.828125
+      },
+      "grid": {
+        "x": -442,
+        "y": 534.015625,
+        "width": 801,
+        "height": 409,
+        "right": 359,
+        "bottom": 943.015625
+      },
+      "pad": {
+        "x": -431,
+        "y": 545.015625,
+        "width": 44,
+        "height": 44,
+        "right": -387,
+        "bottom": 589.015625
+      },
+      "instructions": {
+        "x": 85,
+        "y": 1135.96875,
+        "width": 266,
+        "height": 404.125,
+        "right": 351,
+        "bottom": 1540.09375
+      },
+      "workspace": null,
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 470.828125,
+          "width": 328,
+          "height": 503.03125,
+          "right": 359,
+          "bottom": 973.859375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 33.6875,
+          "width": 354,
+          "height": 1895.140625,
+          "right": 372,
+          "bottom": 1928.828125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 473,
+        "lastPadRight": 348,
+        "wrapRight": 359
+      }
+    },
+    {
+      "width": 390,
+      "route": "first-sound/course",
+      "mode": "original",
+      "screen": {
+        "x": 48,
+        "y": 380.453125,
+        "width": 190,
+        "height": 95,
+        "right": 238,
+        "bottom": 475.453125
+      },
+      "device": {
+        "x": 31,
+        "y": 276.953125,
+        "width": 328,
+        "height": 288,
+        "right": 359,
+        "bottom": 564.953125
+      },
+      "grid": {
+        "x": 31,
+        "y": 631.640625,
+        "width": 328,
+        "height": 169.5,
+        "right": 359,
+        "bottom": 801.140625
+      },
+      "pad": {
+        "x": 38,
+        "y": 638.640625,
+        "width": 16.8125,
+        "height": 16.8125,
+        "right": 54.8125,
+        "bottom": 655.453125
+      },
+      "instructions": {
+        "x": 80.59375,
+        "y": 914.765625,
+        "width": 274.40625,
+        "height": 332.515625,
+        "right": 355,
+        "bottom": 1247.28125
+      },
+      "workspace": {
+        "x": 18,
+        "y": -274.921875,
+        "width": 354,
+        "height": 1539.203125,
+        "right": 372,
+        "bottom": 1264.28125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 584.953125,
+          "width": 328,
+          "height": 235.375,
+          "right": 359,
+          "bottom": 820.328125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 150.203125,
+          "width": 354,
+          "height": 1114.078125,
+          "right": 372,
+          "bottom": 1264.28125
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16
+    },
+    {
+      "width": 390,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "screen": {
+        "x": 48,
+        "y": 367.953125,
+        "width": 294,
+        "height": 147,
+        "right": 342,
+        "bottom": 514.953125
+      },
+      "device": {
+        "x": 31,
+        "y": 276.953125,
+        "width": 328,
+        "height": 342.796875,
+        "right": 359,
+        "bottom": 619.75
+      },
+      "grid": {
+        "x": 31,
+        "y": 686.4375,
+        "width": 328,
+        "height": 169.5,
+        "right": 359,
+        "bottom": 855.9375
+      },
+      "pad": {
+        "x": 38,
+        "y": 693.4375,
+        "width": 16.8125,
+        "height": 16.8125,
+        "right": 54.8125,
+        "bottom": 710.25
+      },
+      "instructions": {
+        "x": 80.59375,
+        "y": 969.5625,
+        "width": 274.40625,
+        "height": 332.515625,
+        "right": 355,
+        "bottom": 1302.078125
+      },
+      "workspace": {
+        "x": 18,
+        "y": -274.921875,
+        "width": 354,
+        "height": 1594,
+        "right": 372,
+        "bottom": 1319.078125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 639.75,
+          "width": 328,
+          "height": 235.375,
+          "right": 359,
+          "bottom": 875.125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 150.203125,
+          "width": 354,
+          "height": 1168.875,
+          "right": 372,
+          "bottom": 1319.078125
+        }
+      ],
+      "compactClippedPads": [],
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16
+    },
+    {
+      "width": 390,
+      "route": "first-sound/course",
+      "mode": "shield-enlarged",
+      "screen": {
+        "x": 48,
+        "y": 249.953125,
+        "width": 294,
+        "height": 147,
+        "right": 342,
+        "bottom": 396.953125
+      },
+      "device": {
+        "x": 31,
+        "y": 158.953125,
+        "width": 328,
+        "height": 342.796875,
+        "right": 359,
+        "bottom": 501.75
+      },
+      "grid": {
+        "x": 31,
+        "y": 558.4375,
+        "width": 801,
+        "height": 409,
+        "right": 832,
+        "bottom": 967.4375
+      },
+      "pad": {
+        "x": 42,
+        "y": 569.4375,
+        "width": 44,
+        "height": 44,
+        "right": 86,
+        "bottom": 613.4375
+      },
+      "instructions": {
+        "x": 80.59375,
+        "y": 1146.734375,
+        "width": 274.40625,
+        "height": 332.515625,
+        "right": 355,
+        "bottom": 1479.25
+      },
+      "workspace": {
+        "x": 18,
+        "y": -392.921875,
+        "width": 354,
+        "height": 1889.171875,
+        "right": 372,
+        "bottom": 1496.25
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 511.75,
+          "width": 328,
+          "height": 474.875,
+          "right": 359,
+          "bottom": 986.625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 32.203125,
+          "width": 354,
+          "height": 1464.046875,
+          "right": 372,
+          "bottom": 1496.25
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "true",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 473,
+        "lastPadRight": 348,
+        "wrapRight": 359
+      }
+    },
+    {
+      "width": 390,
+      "route": "first-sound/course",
+      "mode": "original-enlarged",
+      "screen": {
+        "x": 48,
+        "y": 262.453125,
+        "width": 190,
+        "height": 95,
+        "right": 238,
+        "bottom": 357.453125
+      },
+      "device": {
+        "x": 31,
+        "y": 158.953125,
+        "width": 328,
+        "height": 288,
+        "right": 359,
+        "bottom": 446.953125
+      },
+      "grid": {
+        "x": -442,
+        "y": 503.640625,
+        "width": 801,
+        "height": 409,
+        "right": 359,
+        "bottom": 912.640625
+      },
+      "pad": {
+        "x": -431,
+        "y": 514.640625,
+        "width": 44,
+        "height": 44,
+        "right": -387,
+        "bottom": 558.640625
+      },
+      "instructions": {
+        "x": 80.59375,
+        "y": 1091.9375,
+        "width": 274.40625,
+        "height": 332.515625,
+        "right": 355,
+        "bottom": 1424.453125
+      },
+      "workspace": {
+        "x": 18,
+        "y": -392.921875,
+        "width": 354,
+        "height": 1834.375,
+        "right": 372,
+        "bottom": 1441.453125
+      },
+      "clips": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "grid-wrap",
+          "overflowX": "auto",
+          "x": 31,
+          "y": 456.953125,
+          "width": 328,
+          "height": 474.875,
+          "right": 359,
+          "bottom": 931.828125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player",
+          "overflowX": "hidden",
+          "x": 18,
+          "y": 32.203125,
+          "width": 354,
+          "height": 1409.25,
+          "right": 372,
+          "bottom": 1441.453125
+        }
+      ],
+      "compactClippedPads": null,
+      "overflow": false,
+      "layout": "false",
+      "gridColumns": 16,
+      "keyboard": {
+        "focused": "Grid column 16, row 1, brightness 2 of 15",
+        "scroll": 473,
+        "lastPadRight": 348,
+        "wrapRight": 359
+      }
+    }
+  ],
+  "errors": [],
+  "endCSS": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25"
+}

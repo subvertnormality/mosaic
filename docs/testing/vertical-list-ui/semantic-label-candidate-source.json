@@ -1,0 +1,15 @@
+{
+  "files": {
+    "lib/ui_render.lua": "d9c51098826b51f8d1d5a4a86289d9cf1361e38aa105a133e556a4f53a0798ee",
+    "lib/ui_live.lua": "7d344b84ce202d3efe99d2e9235a23064eb97d0c5edfd1ae4b2c28c7c0c8960d",
+    "lib/ui_spec_data.lua": "edb25047ecb0c9e7797af854433d81a5c5d18662888ae6a76a12821c4763a35c",
+    "docs/ui-reimplementation/spec.json": "84cff573a5f283515a2b64277ca716411e111aa0e7895107bdcd5e9c11e9a9e1",
+    "docs/ui-reimplementation/code/screen.lua": "d9c51098826b51f8d1d5a4a86289d9cf1361e38aa105a133e556a4f53a0798ee",
+    "docs/ui-reimplementation/source-inventory.json": "6545ce1e5dac3414b556db39f0ce81aa12bda213c7fc2e88812d50e416682d21",
+    "docs/ui-reimplementation/current-source-review.json": "4b9876ef511c11df6094e80b18d5421b7d58643c7eeddfee8637da1de4de34f8",
+    "lib/tests/lib/ui_vertical_list_tests.lua": "b4b91266ebc8e003f24d959d8edb8cad87351c350f503141266cd061f6dc2feb"
+  },
+  "unchanged_overview_branch_sha256": "03bb68777af5624b573df0a80efd5fe8f21c8dbf7747efdd88888a6be7a6ff7d",
+  "baseline_failure": "semantic-label-red.log",
+  "complete_regression_run": false
+}

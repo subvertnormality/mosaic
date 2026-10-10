@@ -1,0 +1,292 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "X",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/3",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/3",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "5/6",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/3",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "5/6",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/3",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.05555555555555555,
+        "actual_seconds": 0.055361378,
+        "error_ms": -0.19417755555554972
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.1388888888888889,
+        "actual_seconds": 0.138056584,
+        "error_ms": -0.8323048888888851
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.05555555555555555,
+        "actual_seconds": 0.055148645,
+        "error_ms": -0.4069105555555494
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.05555555555555555,
+        "actual_seconds": 0.055163405,
+        "error_ms": -0.3921505555555538
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.05555555555555555,
+        "actual_seconds": 0.056079467,
+        "error_ms": 0.5239114444444484
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.1388888888888889,
+        "actual_seconds": 0.137934331,
+        "error_ms": -0.9545578888889017
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.05555555555555555,
+        "actual_seconds": 0.054419824,
+        "error_ms": -1.1357315555555538
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.05555555555555555,
+        "actual_seconds": 0.055127924,
+        "error_ms": -0.4276315555555507
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-persistence",
+    "stage": "edited",
+    "lengths": [
+      "1/3",
+      "5/6",
+      "1/3",
+      "1/3"
+    ],
+    "passed": true
+  }
+]

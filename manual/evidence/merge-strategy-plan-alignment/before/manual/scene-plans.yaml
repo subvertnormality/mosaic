@@ -1,0 +1,732 @@
+schema_version: 1
+status: authoring-plan-not-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: 'Expansion scene plan derived from existing semantic behaviour assertions.
+
+  Every scene below needs a fresh native capture plus the cited oracle before publication.
+
+  Public semantic UI verbs resolve through tests/behaviour/ui_map.py; enc deltas are detents
+
+  through Driver.enc, not raw emulator deltas. No internal Lua state is an acceptance oracle.
+
+  Shortened phases must retain their prerequisite setup; full-case passing evidence remains separate.
+
+  '
+conventions:
+  initial_empty: Fresh actual Mosaic instance, seed 42; tap Pattern editor skips splash.
+  four_note_pattern: Ui.configure, implemented entirely with grid/key/encoder public input.
+  four_note_phrase:
+  - - 60
+    - 127
+  - - 62
+    - 117
+  - - 64
+    - 107
+  - - 65
+    - 97
+  midi_output: Port 1, status 144; public play_stop and balanced releases after stopping.
+  grid_tap: press state 1, release state 0, then settle
+  citations: Exact cited README headings; source assertions label these outside manual if needed.
+priority:
+- algorithm-choose-and-preview
+- paint-shift-and-cancel
+- merge-overlap-and-union
+- song-global-length
+- scale-edit-versus-apply
+- memory-rewind-and-branch
+- channel-routing-visible-scope
+research_plans:
+- id: algorithm-choose-and-preview
+  feature_id: adding-trigs
+  cases:
+  - M-LIVEUI-ALGO-001
+  - M-LIVEUI-PAINT-001
+  source: tests/behaviour/contract/live_ui_feedback.py
+  functions:
+  - live_ui_algorithm
+  - live_ui_paint
+  readme:
+  - README.md#adding-trigs
+  - README.md#rhythm-doctor
+  setup: initial_empty
+  phases:
+  - id: choose-euclidean
+    public_inputs:
+    - grid tap (14
+    - 2)
+    observe: Header trig_algorithm; selected detail Euclidean=SELECTED; row2 columns12..16 LEDs [2,2,15,2,2].
+  - id: focus-drum
+    public_inputs:
+    - E2 -2
+    observe: Selected detail Drum blank; Euclidean LED remains selected (focus does not apply).
+  - id: apply-drum
+    public_inputs:
+    - K3 tap
+    observe: Drum=SELECTED; footer Drum algorithm selected; fader LEDs [15,2,2,2,2].
+  - id: preview-drum
+    public_inputs:
+    - grid tap (16
+    - 8)
+    observe: paint_preview dashboard Preview=PAINTING, Algorithm=Drum, Shift=0; Trigs equals independently
+      counted lit step grid cells, stable across 0.6 seconds.
+  - id: cancel-preview
+    public_inputs:
+    - grid tap (14
+    - 8)
+    observe: Preview=OFF, Trigs=NONE; no preview step grid cells.
+  extension: Selecting Rhythm Doctor then K3 opens R01; include only if its destination is explained.
+- id: paint-shift-and-cancel
+  feature_id: adding-trigs
+  cases:
+  - M-LIVEUI-PAINT-001
+  source: tests/behaviour/contract/live_ui_feedback.py
+  function: live_ui_paint
+  readme:
+  - README.md#adding-trigs
+  setup: initial_empty
+  phases:
+  - id: numeric-preview
+    public_inputs:
+    - grid tap (15
+    - 2)
+    - grid tap (16
+    - 8)
+    observe: Numeric SELECTED then paint_preview PAINTING/Numeric/Shift0; nonempty sparse stable preview.
+  - id: shift-right
+    public_inputs:
+    - grid tap (12
+    - 8)
+    observe: Shift=+1; preview set is original set rotated +1 mod64; displayed Trigs exactly equals lit
+      cells.
+  - id: shift-left
+    public_inputs:
+    - grid tap (10
+    - 8)
+    observe: Shift=0; original preview restored.
+  - id: shift-before-start
+    public_inputs:
+    - grid tap (10
+    - 8)
+    observe: Shift=-1; original set rotated -1 mod64, including wrap at step1.
+  - id: reset-and-cancel
+    public_inputs:
+    - grid tap (11
+    - 8)
+    - grid tap (14
+    - 8)
+    observe: Reset Shift=0/original cells; then Preview=OFF/Trigs=NONE/no cells.
+- id: merge-overlap-and-union
+  feature_id: merge-modes
+  cases:
+  - M-LIVEUI-MERGEMODES-001
+  - M-MERGE-001
+  source: tests/behaviour/contract/live_ui_feedback.py
+  function: live_ui_merge_modes
+  readme:
+  - README.md#merge-modes
+  - README.md#trig-merge-modes
+  - README.md#note-merge-modes
+  setup: 'four_note_pattern; grid(5,8) Pattern; grid(2,1) choose pattern2; step1/step2 tap;
+
+    grid(3,8) Channel; grid(2,2) assign pattern2. Verify merge_detail Patterns=01 02.
+
+    K2 returns Masks; Ui.open_channel_task(''merge'') opens through E1 task picker.
+
+    '
+  phases:
+  - id: assigned-patterns
+    public_inputs:
+    - E2 -6
+    - E3 +1
+    observe: Patterns=01 02 remains read-only despite E3.
+  - id: skip
+    public_inputs:
+    - E2 +1
+    observe: Trig mode=SKIP; grid(14,8)=2; MIDI pairs [[64,107],[65,97]] with rests matching steps3/4.
+  - id: only
+    public_inputs:
+    - E3 +1
+    observe: Trig mode=ONLY; grid(14,8)=5. Audible acceptance must use M-MERGE-001 overlap positions,
+      not invented velocities.
+  - id: all
+    public_inputs:
+    - E3 +1
+    - E3 +1
+    observe: Trig mode=ALL clamped; grid(14,8)=8; MIDI pairs [[60,114],[62,109],[64,107],[65,97]].
+  - id: take-note-from-pattern2
+    public_inputs:
+    - E2 +1
+    - E3 +4
+    observe: Note mode traverses UP/DOWN/PAT1/PAT2; MIDI pairs [[60,114],[60,109],[60,107],[60,97]].
+  - id: restore-average
+    public_inputs:
+    - E3 -4
+    - E3 -1
+    observe: AVERAGE clamped; prior All phrase restored exactly; after K2 next grid(14,8) cycles saved
+      All to Skip.
+- id: mask-default-and-exception
+  feature_id: masks
+  cases:
+  - M-MASK-007
+  - M-MASK-008
+  - M-MASK-010
+  - M-MASK-005
+  authored_source: manual/features/masks.yaml
+  recommendation: Reuse the four existing authored scenes and captured semantic evidence; avoid duplicating
+    masks scenes.
+  readme:
+  - README.md#masks
+- id: song-global-length
+  feature_id: adjusting-song-sequence-length
+  cases:
+  - M-LIVEUI-FOCUS-001
+  - M-LIVEUI-DASH-001
+  source: tests/behaviour/contract/live_ui_feedback.py
+  functions:
+  - live_ui_grid_focus
+  - live_ui_dashboards
+  readme:
+  - README.md#adjusting-song-sequence-length
+  - README.md#song-editor
+  setup: four_note_pattern
+  phases:
+  - id: playback-overview
+    public_inputs:
+    - grid tap (6
+    - 8)
+    observe: song dashboard Playing=SONG01, Next=SONG01, Pass=1/1, Global length=64, Song mode=AUTO.
+  - id: shorten
+    public_inputs:
+    - grid tap (1
+    - 7)
+    observe: Same whole dashboard with Global length=63; action follows to Song playback.
+  - id: restore
+    public_inputs:
+    - grid tap (8
+    - 7)
+    observe: Same whole dashboard with Global length=64.
+  limitation: This scene demonstrates length controls, not arrangement transition/queue musical semantics.
+- id: scale-edit-versus-apply
+  feature_id: scale-editor
+  cases:
+  - M-SCALE-001
+  source: tests/behaviour/scale_memory.py
+  function: scale_edit_selection
+  readme:
+  - README.md#scale-editor
+  setup: four_note_pattern
+  phases:
+  - id: applied-scale1
+    public_inputs:
+    - grid tap (4
+    - 8)
+    observe: scale header slot1; scale_slot1 selected15; four-note baseline MIDI.
+  - id: edit-scale2
+    public_inputs:
+    - K1 down
+    - wait0.3s
+    - grid tap (2
+    - 3)
+    - K1 up
+    - E2 -1
+    - E3 +2
+    - K3 tap
+    observe: Header edit slot2; slot1 stays selected, slot2 blink-low; baseline MIDI [60,62,64,65] unchanged.
+  - id: apply-scale2
+    public_inputs:
+    - grid tap (2
+    - 3)
+    observe: Header slot2; slot2 selected; MIDI pitches [62,64,66,67], velocities [127,117,107,97].
+  - id: edit-other-slot
+    public_inputs:
+    - grid (3
+    - 3) down
+    - wait1.1s
+    - grid (3
+    - 3) up
+    - wait0.06s
+    observe: Header edit slot3; slot2 remains applied; MIDI remains D-major [62,64,66,67].
+  boundary: Saving an applied slot changes playback; double long-select disables global scale and yields
+    chromatic [60,61,62,63]. Optional extension needs full source sequence.
+- id: memory-rewind-and-branch
+  feature_id: memory-undo-and-redo
+  cases:
+  - M-MEMORY-001
+  - M-MEMORY-002
+  source: tests/behaviour/scale_memory.py
+  function: memory_navigation
+  readme:
+  - README.md#memory-undo-and-redo
+  setup: 'four_note_pattern; Ui.channel_page(''masks'') using public task navigation.
+
+    Ui.record_midi_mask_on_step(1,72,90); Ui.record_midi_mask_on_step(2,76,80).
+
+    MIDI helper holds absolute step, sends port1 [144,note,velocity], waits0.05,
+
+    sends [128,note,0], releases grid, waits0.1; no direct mask-state edits.
+
+    Open Memory through Channel tasks (do not reuse obsolete E1 +/-2 relative page-ring shortcuts).
+
+    '
+  phases:
+  - id: two-edits
+    public_inputs: []
+    observe: Memory counter2/2; exact MIDI [[72,90],[76,80],[64,107],[65,97]].
+  - id: undo-last
+    public_inputs:
+    - E3 -1
+    observe: Counter1/2; exact MIDI [[72,90],[62,117],[64,107],[65,97]].
+  - id: redo-last
+    public_inputs:
+    - E3 +1
+    observe: Counter2/2; two-edits MIDI restored.
+  - id: beginning-and-end
+    public_inputs:
+    - K2 tap
+    - K3 tap
+    observe: K2 counter0/2 baseline MIDI, K3 counter2/2 edited MIDI. Capture each edge separately.
+  extension: Undo once; record step3 note79 velocity70; counter2/2 replaces future. M-MEMORY-002 proves
+    other-channel history isolation.
+  caution: Existing source uses relative E1 shortcuts; verify current task map before actual capture.
+    Keep exact counter/phrase oracles.
+- id: channel-routing-visible-scope
+  feature_id: devices
+  cases:
+  - M-LIVEUI-CHSELECT-001
+  - M-CHANNEL-001
+  source: tests/behaviour/contract/live_ui_feedback.py
+  function: live_ui_channel_select
+  readme:
+  - README.md#devices
+  - README.md#norns-menu-navigation
+  setup: four_note_pattern
+  phases:
+  - id: device-channel1
+    public_inputs: []
+    observe: midi_config CH01; Device=CC Device.
+  - id: device-channel2
+    public_inputs:
+    - grid tap (2
+    - 1)
+    observe: Same midi_config family CH02; Device=None; channel row only2 at15 others2.
+  - id: return-channel1
+    public_inputs:
+    - grid tap (1
+    - 1)
+    observe: midi_config CH01; Device=CC Device; only1 selected.
+  - id: independent-clock
+    public_inputs:
+    - Ui.channel_page('clock_mods'
+    - channel=1)
+    - grid tap (2
+    - 1)
+    - E3 -2
+    - K3 tap
+    observe: CH02 clock_mods Rate=/2; channel1 remains/1 when selected; exact focused-art row oracle.
+  limitation: Visible scope scene alone cannot claim emitted MIDI routing. Full M-CHANNEL-001 covers all16
+    channels/two ports/mutes.
+  audible_extension: 'Shorten full routing setup to channels1/2 only, both assigned pattern1/range1..4.
+
+    Channel2 device CC Device, MIDI channel2, port2. Verify port1/status144 and
+
+    port2/status145 independently, literal four-note phrase, alignment within documented
+
+    lane tolerance, mute2 leaves1, unmute2 restores2, then Stop and no outstanding notes.
+
+    Add a separately identified manual acceptance case; do not relabel the full16-channel case.
+
+    '
+scenes:
+- id: algorithm-choose-and-preview
+  feature_id: adding-trigs
+  title: Choose a trig algorithm
+  behaviour_case: M-LIVEUI-ALGO-001
+  citation: README.md#adding-trigs
+  steps:
+  - id: euclidean
+    title: Choose Euclidean
+    caption: Tap grid (14,2). The row reads SELECTED and its algorithm fader lights.
+    assertion:
+      kind: selected-field
+      label: Euclidean
+      value: SELECTED
+      matched: true
+    occurrence: 1
+  - id: focus-drum
+    title: Browse without applying
+    caption: Turn E2 two detents left to Drum. A blank value means the focused algorithm has not been
+      applied.
+    assertion:
+      kind: selected-field
+      label: Drum
+      value: ''
+      matched: true
+    occurrence: 1
+  - id: apply-drum
+    title: Apply Drum
+    caption: Press K3. Drum now reads SELECTED; the grid uses the same algorithm.
+    assertion:
+      kind: selected-field
+      label: Drum
+      value: SELECTED
+      matched: true
+    occurrence: 1
+  - id: preview-differs
+    title: Compare the preview
+    caption: 'Cancel the Drum preview. Choose Euclidean from Pattern tasks and prime again: the independently
+      checked preview cells differ.'
+    assertion:
+      kind: prime-uses-selected-algorithm
+      passed: true
+- id: paint-shift-and-cancel
+  feature_id: adding-trigs
+  title: Move a rhythm before committing
+  behaviour_case: M-LIVEUI-PAINT-001
+  citation: README.md#adding-trigs
+  steps:
+  - id: numeric
+    title: Choose Numeric
+    caption: Tap grid (15,2). Numeric gives a sparse preview that makes shifts easy to see.
+    assertion:
+      kind: selected-field
+      label: Numeric
+      value: SELECTED
+      matched: true
+  - id: right
+    title: Shift right
+    caption: 'Prime then tap grid (12,8): Shift +1 rotates each preview cell one step right.'
+    assertion:
+      kind: paint-shift-cells
+      control: shift_right
+      shift: '+1'
+      passed: true
+  - id: left
+    title: Return to zero
+    caption: 'Tap grid (10,8): Shift 0 restores the original preview.'
+    assertion:
+      kind: paint-shift-cells
+      control: shift_left
+      shift: '0'
+      passed: true
+  - id: before
+    title: Shift left
+    caption: 'Tap grid (10,8) again: Shift -1 rotates each preview cell one step left.'
+    assertion:
+      kind: paint-shift-cells
+      control: shift_left
+      shift: '-1'
+      passed: true
+  - id: reset
+    title: Reset the shift
+    caption: Tap grid (11,8) to reset the preview to Shift 0.
+    assertion:
+      kind: paint-shift-cells
+      control: shift_reset
+      shift: '0'
+      passed: true
+  - id: cancel
+    title: Cancel the preview
+    caption: Tap grid (14,8). Preview is OFF, Trigs is NONE, and no preview cells remain.
+    assertion:
+      kind: live-ui-paint-summary
+      passed: true
+- id: merge-overlap-and-union
+  feature_id: merge-modes
+  title: Merge two patterns
+  behaviour_case: M-LIVEUI-MERGEMODES-001
+  citation: README.md#merge-modes
+  steps:
+  - id: patterns
+    title: Two source patterns
+    caption: The channel receives patterns 01 and 02. Assign them on the grid; this row is read-only.
+    assertion:
+      kind: selected-field
+      label: Patterns
+      value: 01 02
+      matched: true
+    occurrence: 2
+  - id: skip
+    title: Skip overlap
+    caption: SKIP keeps trigs present in exactly one source pattern.
+    assertion:
+      kind: merge-mode
+      row: Trig mode
+      value: SKIP
+      passed: true
+    occurrence: 1
+  - id: only
+    title: Keep overlap
+    caption: 'Turn E3: ONLY keeps trigs present in two or more patterns.'
+    assertion:
+      kind: merge-mode
+      row: Trig mode
+      value: ONLY
+      passed: true
+    occurrence: 1
+  - id: all
+    title: Play the union
+    caption: 'Turn E3 again: ALL includes every trig from either source.'
+    assertion:
+      kind: merge-mode
+      row: Trig mode
+      value: ALL
+      passed: true
+    occurrence: 1
+  - id: note-pat2
+    title: Choose a pitch source
+    caption: Select Note mode with E2 and turn E3 through UP, DOWN and PAT 1 to PAT 2. Rhythm still merges;
+      notes come from pattern 2.
+    assertion:
+      kind: selected-field
+      label: Note mode
+      value: PAT 2
+      matched: true
+  - id: average
+    title: Restore the average
+    caption: Turn E3 back to AVERAGE. Independent MIDI checks confirm the averaged phrase returns.
+    assertion:
+      kind: selected-field
+      label: Note mode
+      value: AVERAGE
+      matched: true
+    occurrence: 2
+- id: scale-edit-versus-apply
+  feature_id: scale-editor
+  title: Prepare a scale before applying it
+  behaviour_case: M-SCALE-001
+  citation: README.md#scale-editor
+  steps:
+  - id: save-unused
+    title: Save an unused scale
+    caption: Hold K1 and select scale 2, change its root to D and press K3. The verified MIDI phrase stays
+      in C while scale 1 remains applied.
+    assertion:
+      kind: midi
+      complete_cycles: 3
+    occurrence: 1
+  - id: apply-d
+    title: Apply D major
+    caption: Tap scale slot 2. The emitted phrase now reads D, E, F sharp and G; the applied slot indicator
+      follows.
+    assertion:
+      kind: midi
+      complete_cycles: 3
+    occurrence: 2
+  - id: browse-unused
+    title: Browse without changing playback
+    caption: Long-select scale slot 3. The editor changes but the verified phrase remains in D major.
+    assertion:
+      kind: midi
+      complete_cycles: 3
+    occurrence: 3
+  - id: turn-off
+    title: Return to chromatic notes
+    caption: Long-select the edit slot again to disable scale mapping. MIDI confirms the chromatic relative
+      intervals C, C sharp, D and D sharp.
+    assertion:
+      kind: midi
+      complete_cycles: 3
+    occurrence: 5
+- id: song-global-length
+  feature_id: adjusting-song-sequence-length
+  title: Set the global song length
+  behaviour_case: M-LIVEUI-FOCUS-001
+  citation: README.md#adjusting-song-sequence-length
+  steps:
+  - id: shorten
+    title: Shorten by one step
+    caption: Open Song with grid (6,8), then tap (1,7). Global length is 63 on the live dashboard.
+    assertion:
+      kind: dashboard
+      rows:
+      - - Playing
+        - SONG 01
+      - - Next
+        - SONG 01
+      - - Pass
+        - 1 / 1
+      - - Global length
+        - '63'
+      - - Song mode
+        - AUTO
+      passed: true
+  - id: restore
+    title: Return to 64 steps
+    caption: Tap grid (8,7). Global length returns to 64.
+    assertion:
+      kind: dashboard
+      rows:
+      - - Playing
+        - SONG 01
+      - - Next
+        - SONG 01
+      - - Pass
+        - 1 / 1
+      - - Global length
+        - '64'
+      - - Song mode
+        - AUTO
+      passed: true
+- id: channel-routing-visible-scope
+  feature_id: devices
+  title: Keep each channel independent
+  behaviour_case: M-LIVEUI-CHSELECT-001
+  citation: README.md#norns-menu-navigation
+  steps:
+  - id: device1
+    title: Channel 1 has its own output
+    caption: The configured channel shows CC Device on CH01.
+    assertion:
+      kind: selected-field
+      label: Device
+      value: CC Device
+      matched: true
+    occurrence: 1
+  - id: device2
+    title: An unused channel has no output
+    caption: Tap grid (2,1). Device stays open on CH02 and shows None.
+    assertion:
+      kind: selected-field
+      label: Device
+      value: None
+      matched: true
+  - id: device1-again
+    title: Return to channel 1
+    caption: Tap grid (1,1). Its CC Device returns.
+    assertion:
+      kind: selected-field
+      label: Device
+      value: CC Device
+      matched: true
+    occurrence: 2
+  - id: clock2
+    title: Give channel 2 a different rate
+    caption: Open Clock, select channel 2, turn E3 down two detents and K3 to apply /2.
+    assertion:
+      kind: selected-field
+      label: Rate
+      value: /2
+      matched: true
+    occurrence: 1
+  - id: clock1
+    title: Channel 1 keeps its rate
+    caption: Select channel 1. Its Clock page still reads /1.
+    assertion:
+      kind: selected-field
+      label: Rate
+      value: /1
+      matched: true
+    occurrence: 3
+  - id: clock2-again
+    title: Channel 2 remembers its rate
+    caption: Select channel 2 again. Its Clock page reads /2.
+    assertion:
+      kind: selected-field
+      label: Rate
+      value: /2
+      matched: true
+    occurrence: 2
+- id: pattern-note-range
+  feature_id: adding-notes
+  title: Shape notes across the grid range
+  behaviour_case: M-EDIT-001
+  citation: README.md#adding-notes
+  steps:
+  - id: initial-note-range
+    title: Choose a scale degree
+    caption: Tap the fourth column note fader. MIDI confirms the fourth note is 71 while the first three
+      notes stay unchanged.
+    assertion:
+      kind: workflow-check
+      name: initial-note-range
+      passed: true
+  - id: first-up-step
+    title: Move the note range up
+    caption: Tap the range-up control and choose the upper value. The fourth MIDI note becomes 72.
+    assertion:
+      kind: workflow-check
+      name: first-up-step
+      passed: true
+  - id: hold-to-highest-range
+    title: Reach the upper boundary
+    caption: Hold range up, then choose the upper value. The fourth MIDI note is 83; the next range-up
+      tap clamps here.
+    assertion:
+      kind: workflow-check
+      name: hold-to-highest-range
+      passed: true
+  - id: center-restores-root-page
+    title: Return to the central range
+    caption: Tap the central range control and choose the fourth value. The fourth MIDI note returns to
+      65.
+    assertion:
+      kind: workflow-check
+      name: center-restores-root-page
+      passed: true
+- id: pattern-velocity-range
+  feature_id: adding-velocity
+  title: Shape accents and rests
+  behaviour_case: M-EDIT-002
+  citation: README.md#adding-velocity
+  steps:
+  - id: velocity-127
+    title: Make a strong accent
+    caption: Choose the top velocity in column four. MIDI confirms velocity 127 on the fourth note.
+    assertion:
+      kind: workflow-check
+      name: velocity-127
+      passed: true
+  - id: velocity-68
+    title: Soften the accent
+    caption: Choose the lower visible velocity. MIDI confirms 68 while the other three notes keep their
+      velocities.
+    assertion:
+      kind: workflow-check
+      name: velocity-68
+      passed: true
+  - id: velocity-0
+    title: Turn an attack into a rest
+    caption: Hold the range-down control and choose the lowest value. The fourth note is absent from the
+      exact MIDI phrase.
+    assertion:
+      kind: workflow-check
+      name: velocity-0
+      passed: true
+  - id: hold-to-highest-velocity-range
+    title: Restore full velocity
+    caption: Hold the central range control and choose the top value. The fourth MIDI note returns at
+      velocity 127.
+    assertion:
+      kind: workflow-check
+      name: hold-to-highest-velocity-range
+      passed: true
+- id: pattern-copy-groups
+  feature_id: adding-notes
+  title: Copy notes and dynamics across all four pages
+  behaviour_case: M-EDIT-003
+  citation: README.md#adding-notes
+  steps:
+  - id: shift-copies-notes-to-four-groups
+    title: Copy the contour
+    caption: Hold K1 while entering the four note degrees. The semantic grid oracle verifies the same
+      four active degrees on all four pages.
+    assertion:
+      kind: workflow-check
+      name: shift-copies-notes-to-four-groups
+      passed: true
+  - id: shift-copies-velocities-to-four-groups
+    title: Copy the dynamics
+    caption: Hold K1 while setting velocities. Each of the four pages shows the corresponding active fader
+      cells.
+    assertion:
+      kind: workflow-check
+      name: shift-copies-velocities-to-four-groups
+      passed: true
+  - id: play-step-group-4
+    title: Hear the fourth page
+    caption: "Restrict the channel range to steps 49\u201352. The exact emitted phrase is C, D, E, F,\
+      \ each at velocity 117."
+    assertion:
+      kind: workflow-check
+      name: play-step-group-4
+      passed: true

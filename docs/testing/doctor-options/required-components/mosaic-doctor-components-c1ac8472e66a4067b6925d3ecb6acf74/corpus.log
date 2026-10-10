@@ -1,0 +1,19 @@
+test_acquisition_envelope_is_not_waived (test_corpus.CorpusManifestTests.test_acquisition_envelope_is_not_waived) ... ok
+test_additional_mixture_sources_must_be_distinct_and_known (test_corpus.CorpusManifestTests.test_additional_mixture_sources_must_be_distinct_and_known) ... ok
+test_adjacent_segments_of_one_recording_are_rejected (test_corpus.CorpusManifestTests.test_adjacent_segments_of_one_recording_are_rejected) ... ok
+test_complete_independent_corpus_proves_every_structural_gate (test_corpus.CorpusManifestTests.test_complete_independent_corpus_proves_every_structural_gate) ... ok
+test_duplicate_non_silence_held_pcm_cannot_pose_as_distinct_songs (test_corpus.CorpusManifestTests.test_duplicate_non_silence_held_pcm_cannot_pose_as_distinct_songs) ... ok
+test_event_at_exact_clip_endpoint_is_rejected (test_corpus.CorpusManifestTests.test_event_at_exact_clip_endpoint_is_rejected) ... ok
+test_general_midi_hat_notes_are_split_into_closed_and_open_lanes (test_corpus.CorpusManifestTests.test_general_midi_hat_notes_are_split_into_closed_and_open_lanes) ... ok
+test_hash_checked_annotations_cannot_be_replaced_after_manifest_freeze (test_corpus.CorpusManifestTests.test_hash_checked_annotations_cannot_be_replaced_after_manifest_freeze) ... ok
+test_legacy_schema_v1_manifest_is_rejected (test_corpus.CorpusManifestTests.test_legacy_schema_v1_manifest_is_rejected) ... ok
+test_missing_lane_stratum_negative_or_independence_is_rejected (test_corpus.CorpusManifestTests.test_missing_lane_stratum_negative_or_independence_is_rejected) ... ok
+test_pinned_gpl_source_is_licensed_corpus_evidence (test_corpus.CorpusManifestTests.test_pinned_gpl_source_is_licensed_corpus_evidence) ... ok
+test_song_and_kit_leakage_is_rejected (test_corpus.CorpusManifestTests.test_song_and_kit_leakage_is_rejected) ... ok
+test_timbre_names_require_pinned_matching_source_evidence (test_corpus.CorpusManifestTests.test_timbre_names_require_pinned_matching_source_evidence) ... ok
+test_windows_absolute_descriptor_cannot_escape_the_corpus_root (test_corpus.CorpusManifestTests.test_windows_absolute_descriptor_cannot_escape_the_corpus_root) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 2.254s
+
+OK

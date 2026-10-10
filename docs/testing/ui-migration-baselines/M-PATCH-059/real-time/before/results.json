@@ -1,0 +1,82 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "Control 1"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NRPN14"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "pre-policy-project-fixture",
+    "removed_fields": [
+      "nrpn_policy_version",
+      "nrpn_stored_modes"
+    ],
+    "sha256": "3ec223db73d0c8ed600c9e84530e65bb2687250f2f178fdd6e7bcafc25ced16e",
+    "numeric_values_unchanged": true
+  },
+  {
+    "kind": "explicit-nrpn-project-conversion",
+    "mode": "standard",
+    "source_unchanged": true,
+    "pset_identical": true,
+    "overwrite_refused": true
+  },
+  {
+    "kind": "nrpn-persisted-mode-native",
+    "legacy": true,
+    "passed": true
+  }
+]

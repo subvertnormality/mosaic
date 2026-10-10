@@ -33,10 +33,21 @@ for _,point in ipairs({{0,1},{1,1},{64,2},{128,2}}) do
   if path=='mosaic/lib/clock/voice_lifetime' then return dofile('lib/clock/voice_lifetime.lua') end
   if path=='mosaic/lib/clock/m_clock' then return clock end
   if path=='mosaic/lib/quantiser' then return {} end
+  -- This contract exercises only song-transition reset/realign decisions.
+  -- Optional pitch/merge collaborators are inert at that boundary but step.lua
+  -- still imports them at module load, so declare that isolation explicitly.
+  if path=='mosaic/lib/harmony/config_state'then return{on_pattern_boundary=function()end,enter_song=function()end}end
+  if path=='mosaic/lib/harmony/state'then return{enter_song=function()end}end
+  if path=='mosaic/lib/musical_merge/state'then return{on_pattern_boundary=function()return{}end,reset_song=function()end}end
+  if path=='mosaic/lib/musical_merge/structure' then return dofile('lib/musical_merge/structure.lua') end
+  if path=='mosaic/lib/musical_merge/timeline' then return {realign=function() end,resync_all=function() end} end
+  if path:match('^mosaic/lib/harmony/') or path:match('^mosaic/lib/musical_merge/') then return {} end
   assert(path=='mosaic/lib/clock/divisions',path);return {note_divisions={}}
  end
  channel_edit_page_ui={}
  for _,name in ipairs({'align_global_and_local_swing_shuffle_type_values','align_global_and_local_swing_values','align_global_and_local_shuffle_feel_values','align_global_and_local_shuffle_basis_values','align_global_and_local_shuffle_amount_values','refresh_clock_mods','refresh_swing','refresh_swing_shuffle_type','refresh_shuffle_feel','refresh_shuffle_basis','refresh_shuffle_amount'}) do channel_edit_page_ui[name]=function() end end
+ local trig_lock_refreshes=0
+ channel_edit_page_ui.refresh_trig_locks=function() trig_lock_refreshes=trig_lock_refreshes+1 end
  pattern={update_working_patterns=function() end};song_edit_page={refresh=function() end};channel_edit_page={refresh=function() end}
  local Step=dofile(arg[1] or 'lib/step.lua')
  Step.queue_next_song_pattern(changed and 2 or 1)
@@ -48,6 +59,7 @@ for _,point in ipairs({{0,1},{1,1},{64,2},{128,2}}) do
  for c=1,17 do assert(counters[c]==(should_reset and 99 or initial[c]),'Wrong channel reset') end
  assert(data.selected_song_pattern==((boundary and song_on and changed) and 2 or 1),'Unexpected song transition')
  assert(division_calls==((boundary and song_on and changed) and 17 or 0),'Unexpected division update')
+ assert(trig_lock_refreshes==((boundary and song_on and changed) and 1 or 0),'Trig-lock UI refresh must occur exactly when a song-pattern change is applied')
  assert(spread_cancels==((boundary and song_on and changed) and 1 or 0),'Slides must be cancelled exactly on a song-pattern change')
  checked=checked+1
 end end end end end

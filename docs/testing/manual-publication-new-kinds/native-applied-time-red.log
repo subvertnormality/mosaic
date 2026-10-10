@@ -1,0 +1,15 @@
+...........................................................E..........
+======================================================================
+ERROR: test_real_applied_time_binds_native_timing_not_received_input_time (test_manual_publication_verify.SongQueuedNativeIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 476, in test_real_applied_time_binds_native_timing_not_received_input_time
+    audit.check_song_queue_blink(row,obs,recipe,events,actions,'real-time')
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 531, in check_song_queue_blink
+    if action['request']['action']!=required or ack['status']!='applied' or len(actual)!=1 or actual[0]['type']!=3 or actual[0]['args']!=[0,0,required['state']] or actual[0]['monotonic_ns']!=native['monotonic_ns'] or native['monotonic_ns']>observations[indices[0]]['monotonic_ns']:raise ValueError('Missing exact applied native queue input edge')
+ValueError: Missing exact applied native queue input edge
+
+----------------------------------------------------------------------
+Ran 70 tests in 2.239s
+
+FAILED (errors=1)

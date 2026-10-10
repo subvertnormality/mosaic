@@ -1,0 +1,182 @@
+schema_version: 1
+status: external-case-source-authored-not-captured
+scenes:
+- id: player-apply-oilcan
+  feature_id: mods-and-software-devices
+  title: Apply Oilcan to the percussion channel
+  behaviour_case: M-MANUAL-PLAYER-APPLY-001
+  profile: manual-player-ui
+  citation: manual:mods-and-software-devices
+  requirements:
+  - CH-DEVICE
+  setup:
+    fixture: controlled-manual-case
+    case: M-MANUAL-PLAYER-APPLY-001
+    channel: 1
+    target_device: Oilcan 1
+  steps:
+  - id: device-start
+    title: Open the Device page
+    caption: "Starting point: Channel 1's Device page is open. Read the Device row before changing it."
+    assertion:
+      kind: manual-player-apply-start
+      citation: manual:mods-and-software-devices
+      channel: 1
+      page: midi_config
+      field: Device
+      passed: true
+  - id: oilcan-pending
+    title: Choose Oilcan 1
+    caption: "Turn E3 until the Device row reads Oilcan 1. The footer says “Press K3 to confirm”, so this is still a draft."
+    assertion:
+      kind: manual-player-apply-pending
+      citation: manual:mods-and-software-devices
+      channel: 1
+      field: Device
+      value: Oilcan 1
+      confirmation_prompt: Press K3 to confirm
+      passed: true
+  - id: oilcan-applied
+    title: Apply Oilcan 1
+    caption: "Press K3 to apply Oilcan 1. The Device row remains Oilcan 1 and the confirmation prompt clears."
+    assertion:
+      kind: manual-player-apply-applied
+      citation: manual:mods-and-software-devices
+      channel: 1
+      page: midi_config
+      field: Device
+      value: Oilcan 1
+      confirmation_prompt_absent: true
+      passed: true
+  - id: oilcan-reopened
+    title: Reopen and verify Oilcan 1
+    caption: "Open Channel tasks → Device again. The Device row still reads Oilcan 1 without a confirmation prompt."
+    assertion:
+      kind: manual-player-apply-reopened
+      citation: manual:mods-and-software-devices
+      channel: 1
+      page: midi_config
+      field: Device
+      value: Oilcan 1
+      confirmation_prompt_absent: true
+      passed: true
+- id: player-apply-polyperc
+  feature_id: mods-and-software-devices
+  title: Apply Polyperc to the bass channel
+  behaviour_case: M-MANUAL-PLAYER-APPLY-001
+  profile: manual-player-ui
+  citation: manual:mods-and-software-devices
+  requirements:
+  - CH-DEVICE
+  setup:
+    fixture: controlled-manual-case
+    case: M-MANUAL-PLAYER-APPLY-001
+    channel: 2
+    target_device: Polyperc 1
+  steps:
+  - id: device-start
+    title: Open the Device page
+    caption: "Starting point: Channel 2's Device page is open. Read the Device row before changing it."
+    assertion:
+      kind: manual-player-apply-start
+      citation: manual:mods-and-software-devices
+      channel: 2
+      page: midi_config
+      field: Device
+      passed: true
+  - id: polyperc-pending
+    title: Choose Polyperc 1
+    caption: "Turn E3 until the Device row reads Polyperc 1. The footer says “Press K3 to confirm”, so this is still a draft."
+    assertion:
+      kind: manual-player-apply-pending
+      citation: manual:mods-and-software-devices
+      channel: 2
+      field: Device
+      value: Polyperc 1
+      confirmation_prompt: Press K3 to confirm
+      passed: true
+  - id: polyperc-applied
+    title: Apply Polyperc 1
+    caption: "Press K3 to apply Polyperc 1. The Device row remains Polyperc 1 and the confirmation prompt clears."
+    assertion:
+      kind: manual-player-apply-applied
+      citation: manual:mods-and-software-devices
+      channel: 2
+      page: midi_config
+      field: Device
+      value: Polyperc 1
+      confirmation_prompt_absent: true
+      passed: true
+  - id: polyperc-reopened
+    title: Reopen and verify Polyperc 1
+    caption: "Open Channel tasks → Device again. The Device row still reads Polyperc 1 without a confirmation prompt."
+    assertion:
+      kind: manual-player-apply-reopened
+      citation: manual:mods-and-software-devices
+      channel: 2
+      page: midi_config
+      field: Device
+      value: Polyperc 1
+      confirmation_prompt_absent: true
+      passed: true
+- id: player-apply-doubledecker
+  feature_id: mods-and-software-devices
+  title: Apply Doubledecker to the chord channel
+  behaviour_case: M-MANUAL-PLAYER-APPLY-001
+  profile: manual-player-ui
+  citation: manual:mods-and-software-devices
+  requirements:
+  - CH-DEVICE
+  setup:
+    fixture: controlled-manual-case
+    case: M-MANUAL-PLAYER-APPLY-001
+    channel: 3
+    target_device: Doubledecker
+  steps:
+  - id: device-start
+    title: Open the Device page
+    caption: "Starting point: Channel 3's Device page is open. Read the Device row before changing it."
+    assertion:
+      kind: manual-player-apply-start
+      citation: manual:mods-and-software-devices
+      channel: 3
+      page: midi_config
+      field: Device
+      passed: true
+  - id: doubledecker-pending
+    title: Choose Doubledecker
+    caption: "Turn E3 until the Device row reads Doubledecker. The footer says “Press K3 to confirm”, so this is still a draft."
+    assertion:
+      kind: manual-player-apply-pending
+      citation: manual:mods-and-software-devices
+      channel: 3
+      field: Device
+      value: Doubledecker
+      confirmation_prompt: Press K3 to confirm
+      passed: true
+  - id: doubledecker-applied
+    title: Apply Doubledecker
+    caption: "Press K3 to apply Doubledecker. The Device row remains Doubledecker and the confirmation prompt clears."
+    assertion:
+      kind: manual-player-apply-applied
+      citation: manual:mods-and-software-devices
+      channel: 3
+      page: midi_config
+      field: Device
+      value: Doubledecker
+      confirmation_prompt_absent: true
+      passed: true
+  - id: doubledecker-reopened
+    title: Reopen and verify Doubledecker
+    caption: "Open Channel tasks → Device again. The Device row still reads Doubledecker without a confirmation prompt."
+    assertion:
+      kind: manual-player-apply-reopened
+      citation: manual:mods-and-software-devices
+      channel: 3
+      page: midi_config
+      field: Device
+      value: Doubledecker
+      confirmation_prompt_absent: true
+      passed: true
+
+

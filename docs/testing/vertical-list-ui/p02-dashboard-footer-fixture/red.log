@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_dashboard_fixture_requires_exact_vertical_trig_options_footer (test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3072, in test_dashboard_fixture_requires_exact_vertical_trig_options_footer
+    self.assertEqual(expect.call_args_list,
+AssertionError: [call[33 chars] SET  K3 APPLY'),
+ call(<Mock id='129622055489[22 chars]LY')] != [call[33 chars] SET K3 APPLY'), call(<Mock id='12962205548924[19 chars]LY')]
+
+----------------------------------------------------------------------
+Ran 1 test in 0.013s
+
+FAILED (failures=1)

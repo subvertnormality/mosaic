@@ -1,0 +1,96 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "song-slot-copy",
+    "stage": "copy-release-destination-first",
+    "slot": 2,
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-slot-copy",
+    "stage": "copy-release-source-first",
+    "slot": 3,
+    "notes": [
+      72,
+      74,
+      76,
+      77
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-slot-copy",
+    "stage": "source-unchanged",
+    "slot": 2,
+    "notes": [
+      72,
+      74,
+      76,
+      77
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-slot-copy",
+    "stage": "erase-release-source-first",
+    "slot": 3,
+    "notes": [],
+    "passed": true
+  },
+  {
+    "kind": "song-slot-copy",
+    "stage": "untouched",
+    "slot": 1,
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "passed": true
+  }
+]

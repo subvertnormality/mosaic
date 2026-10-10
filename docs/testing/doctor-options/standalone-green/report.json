@@ -1,0 +1,47 @@
+[
+  {
+    "name": "capture_controller",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "name": "softcut_recorder",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "name": "analysis_controller",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "name": "analysis_runtime",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "name": "runtime",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "name": "runtime_persistence",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "name": "project_lifecycle_runtime",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "name": "ui_adapter",
+    "passed": false,
+    "exit_code": 1
+  },
+  {
+    "name": "app_surface",
+    "passed": true,
+    "exit_code": 0
+  }
+]

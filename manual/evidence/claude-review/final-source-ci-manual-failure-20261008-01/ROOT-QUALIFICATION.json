@@ -1,0 +1,41 @@
+{
+  "scope": "Test-only correction plus preserved CI failure evidence",
+  "preimage_sha256": "4677ca7173629cab71aac8b5c7c3a7cba8b872903ffe524269d2b526e29d85f1",
+  "candidate_sha256": "a4faadcfe32b96336dd1fa655c9c948d16d149a52416179dd3685e24cca35d6e",
+  "source_ci_commit": "b624b474fa93417b472a721ba02a092723c1d5c7",
+  "ci_run": 37809731780,
+  "ci_result": "984 passed, 1 skipped, 1 failed before manual audio recording or full manual generation",
+  "root_focused_checks": {
+    "python311": "4 passed",
+    "python38": "4 passed",
+    "mutations": "6 rejected; benign prose paraphrase accepted"
+  },
+  "root_restored_original_guards": [
+    "E3 event 126 absent from reader recipe",
+    "at detent 126 absent from reader recipe"
+  ],
+  "protected_reader_and_authoring_hashes": {
+    "/home/andy/mosaic-manual-1.4.0": {
+      "manual/generated/book.json": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+      "manual/generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+      "manual/book.yaml": "8d45d9d748445d12488e8fc445ac05b6aaaa9c1213cc98677db183467b054508",
+      "manual/manual.css": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+      "manual/manual.js": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+      "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+      "manual/features/reference-locks.yaml": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074",
+      "manual/recordings.yaml": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585"
+    },
+    "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout": {
+      "manual/generated/book.json": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+      "manual/generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+      "manual/book.yaml": "8d45d9d748445d12488e8fc445ac05b6aaaa9c1213cc98677db183467b054508",
+      "manual/manual.css": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+      "manual/manual.js": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+      "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+      "manual/features/reference-locks.yaml": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074",
+      "manual/recordings.yaml": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585"
+    }
+  },
+  "production_or_authoring_changed": false,
+  "local_native_or_audio_runs": false
+}

@@ -1,0 +1,34 @@
+{
+  "scope": "Transfer test of the frozen pinned candidate against real-music full mixes. Drum lanes only; MDB-Drums has no bass annotations and no velocity annotations, so neither the BASS lane nor the velocity gate is measurable here.",
+  "date": "2026-09-19",
+  "method": {
+    "corpus": "MDB-Drums, 23 MedleyDB full-mix excerpts, 21.8 minutes of real bands with vocals, guitars, keys and real rooms",
+    "thresholds": "The v12 DEVELOPMENT thresholds applied VERBATIM: BD 0.9431, SD 0.9277, CHH 0.4004, OHH 0.8308. Nothing was tuned on MDB-Drums.",
+    "matching": "chronological one-to-one, 50 ms tolerance, identical to the v12 evaluator",
+    "taxonomy": "scored against the subclass annotations, not the 6-class files. KD to BD. SD, SDG, SDB, SDF, SDD and SDNS folded into SD, which is the generous reading and includes ghost notes and brushes. CHH excludes OHH and PHH."
+  },
+  "headline": "The rendered v12 corpus was misleading in BOTH directions. It understated BD and badly flattered CHH.",
+  "results": {
+    "BD":  {"onset_f1": 0.7973, "recall": 0.8434, "precision": 0.7560, "tp": 1298, "fp": 419,  "fn": 241,  "v12_full_mix_f1": 0.7017, "delta": 0.0956},
+    "SD":  {"onset_f1": 0.5688, "recall": 0.4246, "precision": 0.8610, "tp": 1127, "fp": 182,  "fn": 1527, "v12_full_mix_f1": 0.6871, "delta": -0.1183},
+    "CHH": {"onset_f1": 0.4590, "recall": 0.9762, "precision": 0.3000, "tp": 1803, "fp": 4206, "fn": 44,   "v12_full_mix_f1": 0.8874, "delta": -0.4284},
+    "OHH": {"onset_f1": 0.1693, "recall": 0.8550, "precision": 0.0940, "tp": 230,  "fp": 2218, "fn": 39,   "v12_full_mix_f1": 0.2574, "delta": -0.0881}
+  },
+  "genre_split_recall_only": {
+    "note": "Per-track false positives were not retained, so only recall can be split by genre. CHH's precision problem is present regardless of genre.",
+    "rock_pop_other": {"tracks": 15, "BD": 0.8901, "SD": 0.7639, "CHH": 0.9828},
+    "jazz": {"tracks": 8, "BD": 0.7790, "SD": 0.2900, "CHH": 0.9386}
+  },
+  "findings": [
+    "BD IMPROVES on real music, from 0.7017 to 0.7973, essentially at the 0.80 gate. Real records have consistent, well-produced kicks and the rendered corpus was understating the lane.",
+    "CHH COLLAPSES, from 0.8874 to 0.4590. Recall is near-perfect at 0.9762 but precision is 0.3000 on 4206 false positives. MDB-Drums contains 835 ride and 126 crash onsets that are not CHH references, and the hat head fires on cymbals generally. v12's sparse two-kit material never exposed this. Painting a ride into the closed-hat lane is a real product failure, not a scoring artefact.",
+    "SD is precision-strong at 0.8610 but recall-poor at 0.4246, and the deficit is almost entirely jazz brushwork. Jazz supplies 1900 of the 2654 SD references and scores 0.2900 recall against 0.7639 for rock, pop and the rest. Brushed and ghosted jazz snare behaves as a different instrument.",
+    "Performance is strongly genre-dependent. On rock, pop, funk and disco material the drum lanes reach BD 0.8901, SD 0.7639 and CHH 0.9828 recall."
+  ],
+  "caveats": [
+    "The thresholds are v12-selected, which is the honest transfer test but means CHH's precision failure is partly a badly calibrated gate for this domain. Whether CHH is recoverable with domain-appropriate gating or fundamentally confuses cymbals is a SEPARATE question, and answering it must not become tuning on the evaluation set.",
+    "Folding ghost notes and brushes into SD is the generous reading of the reference. A stricter SD definition would raise recall and change the comparison.",
+    "MDB-Drums is CC BY-NC-SA 4.0. Measuring distributes nothing, but weights trained on it could not be shipped.",
+    "This measures the candidate's transfer, not its viability. The architecture is separately refuted for standalone use on device throughput."
+  ]
+}

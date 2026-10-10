@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "case": "M-UI-VERTICAL-001",
+  "contract": "Final full semantic labels Rate, Feel source, Swing type simultaneously visible in stable27/36/45 rows; no carousel fallback.",
+  "characterisation": "new vertical presentation outside original frozen README",
+  "complete_regression_run": false,
+  "lanes": [
+    {
+      "run": "/home/andy/mosaic-manual-runs/37e2869a5c764b858f16cb24e990da4a",
+      "clock_mode": "controlled-experimental",
+      "expected_failure": "AssertionError('vertical-list acceptance: Clock must simultaneously show selected Rate, Feel source and Swing type in stable rows')",
+      "old_focused_rate_1_visible_observation_indices": [
+        23,
+        24,
+        25
+      ],
+      "original_application": "/home/andy/mosaic-manual-runs/feec37b4b9c84b269f981322c292f7bc/application",
+      "files": {
+        "failure.json": "b1e4dbfd0a1afe3db76a89c3695ac2e60f96e7d843ff871c6b3cc571bc0f88f6",
+        "start-source-identity.json": "4e30bba1bb7acf9da0931cef341b744f1227cedb5bd50e48220c9999ebb9d605",
+        "M-UI-VERTICAL-001-base-midi/native/identity.json": "4094da244392edb7d8f797455239562f92cfbf9a81bae9af94748b388214fe9c",
+        "M-UI-VERTICAL-001-base-midi/native/cleanup.json": "4c500f70e55be74f34cf68173bfc1fbb51b9b91aaa60bc5631bb859561801366",
+        "M-UI-VERTICAL-001-base-midi/recipe.json": "01ba2ddc37917ee3e494173de9a54c874a274043e7981eff1f128eeaddaf04fe",
+        "M-UI-VERTICAL-001-base-midi/observations.json": "2c993131c6f3a071ab9f1dcd18654f4933d2cad866ce0016e4bfb06aab81491a"
+      },
+      "cleanup_verified": true
+    },
+    {
+      "run": "/home/andy/mosaic-manual-runs/900050b869a744e493f08cc58a866e0a",
+      "clock_mode": "real-time",
+      "expected_failure": "AssertionError('vertical-list acceptance: Clock must simultaneously show selected Rate, Feel source and Swing type in stable rows')",
+      "old_focused_rate_1_visible_observation_indices": [
+        23,
+        24,
+        25
+      ],
+      "original_application": "/home/andy/mosaic-manual-runs/feec37b4b9c84b269f981322c292f7bc/application",
+      "files": {
+        "failure.json": "574a468da24190ec70a13be2b1ef7e1f54e70d4e769f7486af9e772da9f98666",
+        "start-source-identity.json": "fb4740cadfb8dfab0a24bdfd5590d6837ff58d312b8e00bb5a61b27b33506c42",
+        "M-UI-VERTICAL-001-base-midi/native/identity.json": "640e59f1db2c44cd91ce9cf22e55672dce43541bff534c5dbe1db6bac53a0344",
+        "M-UI-VERTICAL-001-base-midi/native/cleanup.json": "11182673a93e00587d923ea76ea67a327bb696d4acfcda5c00baecfc0975cadd",
+        "M-UI-VERTICAL-001-base-midi/recipe.json": "ac66ac8456fc6029e1ff4ab8a053e52849ded4e5fbd6ab5a2378e11da9fe0f47",
+        "M-UI-VERTICAL-001-base-midi/observations.json": "d0500c4a7f4e555b60fbc3dade2855c22fc2951223ffcd685d52c18e01f9009b"
+      },
+      "cleanup_verified": true
+    }
+  ],
+  "prior_fixture_history": [
+    "baseline-invalid-fixture.json",
+    "baseline-short-label-red.json"
+  ],
+  "original_sources_preserved": true
+}

@@ -1,0 +1,20 @@
+{
+  "format": "mosaic-doctor-manual-start-beat-documentary-v1",
+  "status": "Intended candidate contract, positive native acceptance pending",
+  "before_sha256": "e7be922bebe64deec0a0bfeb37b79ac8437988ef4e4c38a7f78fd3b8a048a6d7",
+  "before_archive": "docs/testing/doctor-manual-beat-grid/documentary-history/e7be922bebe64deec0a0bfeb37b79ac8437988ef4e4c38a7f78fd3b8a048a6d7-reference-pattern.yaml",
+  "after_sha256": "1c6518072108e73116c2dcc2d54113623859a8f2f4fb797b4f3aa51ccd12c529",
+  "previous_exact_excerpt": "Use the estimated phrase start as an initial position. A crash on the first\nbeat or a fill before the bar provides evidence for the bar boundary. Identical\nbars can make that boundary undecidable; check the reported confidence. To\nchange the position, open ALIGNMENT and step START BEAT through the detected\nbeat grid. The editor starts on the detected beat. Confirming without an edit\npreserves that position.",
+  "candidate_excerpt": "In Auto, use the estimated phrase start as an initial position. A crash on the first beat or a fill before the bar provides evidence for the boundary. Identical bars can make it undecidable; check the reported confidence.\n\nOpen Alignment to change Start beat. Auto browses the detected beat grid. Manual browses a regular beat grid spaced by the confirmed BPM from the confirmed phrase origin. The Manual grid covers the retained recording, including earlier beats before a later chosen phrase origin; choices stay inside the recording.\n\nTurn E2 to select Start beat and E3 to choose another beat. Press K3 to apply: Mosaic reanalyses the same retained recording using that phrase origin. No new recording is needed. Confirming without changing the beat preserves its position. Changing Exact BPM and applying rebuilds the regular beat spacing at the confirmed tempo. K2 cancels the draft and leaves the bank unchanged.\n\nA reloaded bank can still be browsed and painted, but alignment correction needs the retained capture audio. If that audio is unavailable, K3 refuses with CAPTURE AUDIO UNAVAILABLE instead of changing the bank.",
+  "unchanged_historical_bindings": true,
+  "new_canonical_case_id": null,
+  "contract_file": "tests/behaviour/contract/rhythm_doctor_start_beat.py",
+  "native_checkpoint_names": [
+    "start-beat-original1",
+    "start-beat-next2",
+    "start-beat-next-ready",
+    "start-beat-restore1",
+    "start-beat-restored-ready"
+  ],
+  "technical_bounds": "Confirmed regular-grid integer beats including valid pre-origin positions; sample positions inside half-open capture; no Auto estimate substituted for Manual"
+}

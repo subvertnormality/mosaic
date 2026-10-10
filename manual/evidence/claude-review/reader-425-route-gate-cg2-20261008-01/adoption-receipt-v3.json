@@ -1,0 +1,140 @@
+{
+  "schema": "mosaic-reader-425-cg2-evidence-adoption-v3",
+  "status": "PASS",
+  "source_gate_receipt_sha256": "9b4c2ac9dffe000f83e88760fa6b475e2c88a77ac6dd30529df29dad0fb25b2f",
+  "source_gate_report_sha256": "ecb71218e5376c4bb1b952ae58ed62a3b5053dc7528bf02f38eae371addca084",
+  "route_manifest_sha256": "d3bb5d410a86d9d71ef9353f581d2fd66cc81d9c2c1af2971cb662ec52a3583b",
+  "candidate_path": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/reader-425-route-gate-css-v3-20261008-01/final-425-ledger-closure-candidate-final.json",
+  "candidate_sha256": "22967f8bbef8842af47ae2cf500f2dceffdb2cbce80f860e44473d1f513b4372",
+  "candidate_summary_sha256": "2df5683c37122cbe4ab47a008b7cb4420c590b6969aefc7daa0f92dc4f26b455",
+  "independent_cg2_audit_sha256": "0b9d27dc3902d12353cd8c57abd7982b23501025820b531bc2ec3b0eb9a1e5e7",
+  "historical_aa02_audit_sha256": "6beebd2abdf3d4a802748cba330a25cca357f774627c8ef90224eae1ae1374f3",
+  "files": [
+    {
+      "path": "authoring-inputs/manual/course.yaml",
+      "sha256": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a",
+      "bytes": 130534
+    },
+    {
+      "path": "authoring-inputs/manual/features/cookbook.yaml",
+      "sha256": "f2d9bcf4c5bf824f9e809c8a9ae83772a87455cdc97c1b1db7c7fd44d6469ba6",
+      "bytes": 117687
+    },
+    {
+      "path": "authoring-inputs/manual/features/masks.yaml",
+      "sha256": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de",
+      "bytes": 60256
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-channel.yaml",
+      "sha256": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d",
+      "bytes": 1064984
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-learn.yaml",
+      "sha256": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7",
+      "bytes": 307439
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-locks.yaml",
+      "sha256": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074",
+      "bytes": 234386
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-musical.yaml",
+      "sha256": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7",
+      "bytes": 1106267
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-options.yaml",
+      "sha256": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff",
+      "bytes": 10133124
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-pattern.yaml",
+      "sha256": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+      "bytes": 161410
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-scale.yaml",
+      "sha256": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38",
+      "bytes": 168992
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-song.yaml",
+      "sha256": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9",
+      "bytes": 4096091
+    },
+    {
+      "path": "authoring-inputs/manual/features/reference-workflow.yaml",
+      "sha256": "ffc2fb674ab034d4608f301296fd6bb7cbe3ad1d22d3799ebc35db2525788055",
+      "bytes": 45969
+    },
+    {
+      "path": "authoring-inputs/manual/features/tutorials.yaml",
+      "sha256": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8",
+      "bytes": 90095
+    },
+    {
+      "path": "authoring-inputs/manual/recordings.yaml",
+      "sha256": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585",
+      "bytes": 32862
+    },
+    {
+      "path": "current-route-receipt.json",
+      "sha256": "9b4c2ac9dffe000f83e88760fa6b475e2c88a77ac6dd30529df29dad0fb25b2f",
+      "bytes": 2798
+    },
+    {
+      "path": "current-route-report.json",
+      "sha256": "ecb71218e5376c4bb1b952ae58ed62a3b5053dc7528bf02f38eae371addca084",
+      "bytes": 156170
+    },
+    {
+      "path": "previous-gate-reference.json",
+      "sha256": "9f750d5fa7d83e9c0ccb084ef2fc4c0c7cb820a64935756e82c6cb40a2004fc7",
+      "bytes": 416
+    },
+    {
+      "path": "root-independent-audit-aa02-result.json",
+      "sha256": "6beebd2abdf3d4a802748cba330a25cca357f774627c8ef90224eae1ae1374f3",
+      "bytes": 364
+    },
+    {
+      "path": "root-independent-audit-aa02.py",
+      "sha256": "ec8937361c0221d1fe41a002c5499e662dff4cbfca7857f9ce3cff175891c7ad",
+      "bytes": 2240
+    },
+    {
+      "path": "root-independent-audit-cg2-result.json",
+      "sha256": "0b9d27dc3902d12353cd8c57abd7982b23501025820b531bc2ec3b0eb9a1e5e7",
+      "bytes": 1490
+    },
+    {
+      "path": "root-independent-audit-cg2.py",
+      "sha256": "98b8bf3b8b1a74fb3f155e7a94d8abf5b531f329562c937b054f217dec714b34",
+      "bytes": 5202
+    },
+    {
+      "path": "route-gate-harness.cjs",
+      "sha256": "552e5295de5fee73a426c7e5ccba699cbf587403b2446639663ffafeee46c093",
+      "bytes": 22279
+    },
+    {
+      "path": "unit-route-manifest-v5-cg2.json",
+      "sha256": "d3bb5d410a86d9d71ef9353f581d2fd66cc81d9c2c1af2971cb662ec52a3583b",
+      "bytes": 1089174
+    }
+  ],
+  "qualification": {
+    "reader_routes": 425,
+    "passed": 425,
+    "scene_chunks": 146,
+    "scores_all_ten_at_least_8": true,
+    "historic_rows_equal_fe378": 387,
+    "style_CG1": "closed",
+    "style_CG2": "closed",
+    "publication": false
+  },
+  "note": "CG2 route and independent-audit evidence adopted. The closure ledger candidate remains external and uninstalled pending root review; prior v1/v2 adoption receipts and source route-gate diagnostics are preserved."
+}

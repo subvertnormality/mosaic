@@ -1,0 +1,40 @@
+{
+  "status": "independent read-only diagnosis; no production/test/oracle changes",
+  "run": "9803259897a641c4974d763872accf9f",
+  "observations_sha256": "0ae6caf1b252e0e22ed9d0c7dacbdfefcdc95e24db7d262e64805e09adc1e641",
+  "before": {
+    "observation": 231,
+    "revision": 644,
+    "sha256": "ed316009f98a764b6c6bf58192e75fa1931836cf8156ae994abaf46c788898d8",
+    "visible_footer": "Scale Editor"
+  },
+  "after": {
+    "observation": 245,
+    "revision": 646,
+    "sha256": "2ad430636d7abb891f2962574105d7ffb882da4fe6bb56add0046532288c95e2",
+    "visible_footer": "E3 SET K3 APPLY K2 CANCEL"
+  },
+  "outside_icon_differing_pixel_locations": 228,
+  "bounds": [
+    1,
+    58,
+    111,
+    62
+  ],
+  "by_y": {
+    "58": 50,
+    "59": 35,
+    "60": 46,
+    "61": 42,
+    "62": 55
+  },
+  "nonfooter_changes": 0,
+  "source_trace": {
+    "lib/ui_components/tooltip.lua:35": "metro.init(remove_tip,3,1) clears feedback; remove_tip dirties screen",
+    "lib/ui_live.lua:900": "Other status tips retain their lifetime; active tooltip overrides footer lines902\u2013903",
+    "tests/behaviour/contract/ui_readability.py:54": "Public Scale page selection then matching selected field; six0.08s samples occur before normal controls footer is required",
+    "tests/behaviour/contract/mini_header_animation_ui.py:63": "First outside-icon sample fixed before navigation feedback expires"
+  },
+  "conclusion": "Observed body delta is expiry of established page-selection feedback. Exact labels/title/scope/selection/value pixels outside footer unchanged. The sample lacks an observable stable normal-footer precondition; no production animation leak evidenced by these frames. Strict full-body/positive icon equality must remain unchanged after baseline starts on expected normal footer.",
+  "real_lane_production_red_required_if_new_production_defect": true
+}

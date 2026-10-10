@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "before_sha": "4dc8bd476dbe2206dd5663c2d6956c7947260e8d",
+  "after_sha": "1254e289731d54a06a5eed168bc363e9d8bd6cbf",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MAP-002"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/midi_mapping.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/midi_mapping.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MAP-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MAP-002/real-time/before/03301a54fdc247bc8035573b031330b6/manifest.json",
+              "manifest_sha256": "2dbbcdcf08bbef5141ba0ba939e33ba2bec562b1cdc80f57c48cc620bd4ea7d2"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MAP-002/real-time/after/e36b2f2605f9434fa2673e069cf2d2b9/manifest.json",
+              "manifest_sha256": "31d513c776af43c8df6cf9697bb0712d21a6d073a6d86d9965178dc98811cc44"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MAP-002/controlled-experimental/before/e489997c51614b8698221e2387feace2/manifest.json",
+              "manifest_sha256": "fd84abcb73090f1675b694ff379c4e5186907dc55c99f7fd232e52f55234f916"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MAP-002/controlled-experimental/after/44b18a96118144f68d34fb2a1917f05f/manifest.json",
+              "manifest_sha256": "b819ecce238b07ac2e98ca3b14eb9018c6647ae2af422312b6dfdeafbcb21151"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

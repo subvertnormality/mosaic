@@ -1,13 +1,9 @@
 """Absolute MIDI follower phase, anchored to the external source, not output."""
 def external_start_phase(c):
     import time
-    from cases import menu_label,menu_value
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
-    c.enc(3,1);menu_value(c,'midi')
+    c.ui.select_midi_clock_source()
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     # Upstream clock_midi_handle_start sets counter=-1; the next established
     # tick increments to0 and emits transport Start. Warm49 ticks establish

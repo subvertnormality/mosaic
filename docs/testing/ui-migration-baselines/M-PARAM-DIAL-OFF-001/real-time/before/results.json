@@ -1,0 +1,182 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Control 1",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Control 1 assigned at Off",
+    "actual": "X",
+    "expected": "X",
+    "cite": "README 546 + human decision S20",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Control 1 read-out at 0",
+    "actual": "0",
+    "expected": "0",
+    "cite": "characterisation, not manual text",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Control 1 settled at 0 (empty bar)",
+    "actual": "",
+    "expected": "",
+    "cite": "characterisation, not manual text",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Control 1 at 0 plays CC1 value 0",
+    "actual": [
+      true,
+      true
+    ],
+    "expected": [
+      true,
+      true
+    ],
+    "cite": "README 546",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Control 1 read-out after turning to Off",
+    "actual": "X",
+    "expected": "X",
+    "cite": "README 546 + human decision S20",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Control 1 settled at Off",
+    "actual": "X",
+    "expected": "X",
+    "cite": "README 546 + human decision S20",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Trig Probability",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Trig Probability at Off (control)",
+    "actual": "X",
+    "expected": "X",
+    "cite": "characterisation, not manual text",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CCdefault",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "CCdefault assigned at -1 (Off)",
+    "actual": "X",
+    "expected": "X",
+    "cite": "README 546 \"default -1\" + human decision S62",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "CCdefault read-out at 0",
+    "actual": "0",
+    "expected": "0",
+    "cite": "characterisation, not manual text",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "CCdefault read-out after turning to Off",
+    "actual": "X",
+    "expected": "X",
+    "cite": "README 546 \"default -1\" + human decision S62",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "CCdefault settled at Off",
+    "actual": "X",
+    "expected": "X",
+    "cite": "README 546 \"default -1\" + human decision S62",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Control 1 still Off when deselected",
+    "actual": "X",
+    "expected": "X",
+    "cite": "README 546 + human decision S20",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display",
+    "label": "Both Off: notes play and no CC1 is sent",
+    "actual": [
+      true,
+      []
+    ],
+    "expected": [
+      true,
+      []
+    ],
+    "cite": "README 546, 761",
+    "passed": true
+  },
+  {
+    "kind": "dial-off-display-summary",
+    "checks": 13,
+    "passed": true
+  }
+]

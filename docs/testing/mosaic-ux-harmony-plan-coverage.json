@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "subject": "HARMONY / Pattern Harmony plan acceptance coverage",
+  "scope": "H-01 through H-07 and PH-01 through PH-04; MM-08+ remains outside this delivery",
+  "layer_policy": "Player-visible controls, MIDI, screen, grid and persistence use the emulator public input/output path. Finite solver spaces and high-cardinality interaction products use independent unit or integration oracles where repeating the same state through thousands of UI gestures would add runtime rather than confidence.",
+  "solver": {
+    "independent_oracles": [
+      {
+        "test": "test_harmony_voicing_matches_independent_small_bruteforce_oracle",
+        "domain": "396 ordered two-voice frames: every distinct ordered pitch-class pair crossed with three prior-bass positions and multi-placement role ranges"
+      },
+      {
+        "test": "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
+        "domain": "3,170 frames: every one-through-five-voice subset of the twelve pitch classes (1,585 sets), each with empty and populated previous state; independent assignment enumeration"
+      },
+      {
+        "test": "test_harmony_voicing_matches_independent_oracle_across_small_multi_register_domains",
+        "domain": "372 independently enumerated frames: every one-through-five-voice subset of a bounded six-pitch-class universe, two distinct 25-semitone role layouts with two or three legal octave placements per identity, and empty/lower/upper previous states"
+      }
+    ],
+    "hard_constraints": [
+      "test_harmony_voicing_range_beats_common_tone_and_never_clamps",
+      "test_harmony_voicing_root_and_inversion_bass_are_hard_constraints",
+      "test_harmony_voicing_strict_direction_and_exact_unison_fail_closed",
+      "test_harmony_voicing_ensemble_covers_required_material_and_allows_doubling",
+      "test_harmony_voicing_pedal_is_exact_and_revoice_cannot_invent_its_pitch_class",
+      "test_harmony_voicing_absolute_pin_is_exact_or_fails_without_clamping"
+    ],
+    "budget_and_cost": [
+      "test_harmony_voicing_reports_budget_instead_of_partial_optimum",
+      "test_harmony_voicing_five_voice_preset_reports_measured_bounded_cost",
+      "tools/benchmark_harmony_solver.lua"
+    ]
+  },
+  "pattern_harmony": {
+    "public_behaviour": [
+      {
+        "case": "M-HARMONY-PATTERN-001",
+        "covers": [
+          "Harmony and Tone Map entry through norns encoders/keys",
+          "grid-authored A-B-C-B broken chord through a public C-major to C-minor scale progression with no chord masks",
+          "three stable mapped identities, constrained Bass/Inner movement and legal Top common-tone retention with literal MIDI",
+          "every final played Harmony position across the native lower and centred Note-grid banks",
+          "source-owned edit while the projection is visible without flattening played output into the pattern",
+          "literal one-sixth-second onset phase and one-sixth-second owned gates for all eight events in two complete A-B-C-B loops, with two-nanosecond controlled-time and ten-millisecond applicable real-time tolerances",
+          "the same exact onset/gate oracle while active, Off, re-enabled, after rest restoration, after output reconnection, after probability restoration and on copied/source song entry",
+          "public step-4 rest insertion with exact sparse wrap timing and frame recovery",
+          "public probability-zero rejection with no emitted or outstanding notes and exact probability-100 recovery",
+          "native output disconnect with no emitted or outstanding notes and exact reconnect recovery without a settings edit",
+          "eleven public Stop/Start cycles plus copied-song entry and source-song re-entry",
+          "exact ordinary merge/scale grid and MIDI recovery when Off becomes active",
+          "saved mapping recovery when Pattern is re-enabled",
+          "real-time and controlled-time pre-fix failures at the absent projection oracle"
+        ]
+      },
+      {
+        "case": "M-HARMONY-PATTERN-CLOCKS-001",
+        "covers": [
+          "two Pattern Harmony channels configured through public grid and norns inputs",
+          "unequal /1 and /2 channel clocks with independent C source frames in distinct registers",
+          "literal MIDI channels, pitches, onset intervals, gates and Stop cleanup in real-time and controlled-time lanes"
+        ]
+      },
+      {
+        "case": "M-HARMONY-PATTERN-BYPASS-001",
+        "covers": [
+          "public Pattern, Note Masks and Trig Locks authoring of a reverse arpeggio with leading empty chord slots",
+          "literal legacy third/root pitch order at the chord-mask bypass boundary",
+          "exact controlled-time leading delay plus exact event-relative inter-note spacing, gate duration, cycle spacing and release ownership in controlled and applicable real-time lanes"
+        ]
+      },
+      {
+        "case": "M-HARMONY-PERSIST-001",
+        "covers": [
+          "public Pattern map creation",
+          "native autosave",
+          "fresh-process reload",
+          "literal cold replay without serialized transient history"
+        ]
+      },
+      {
+        "case": "M-HARMONY-FAILURE-001",
+        "covers": [
+          "public range conflict",
+          "reason-specific NO VOICING",
+          "strict mapped-tone silence while Raw events continue",
+          "explicit reason-specific Legacy fallback",
+          "unrecorded selected-step NO EVENT"
+        ]
+      },
+      {
+        "case": "M-HARMONY-HELD-001",
+        "covers": [
+          "held-grid ownership while Harmony is active",
+          "draft cancellation and source-layer edit",
+          "unchanged Off replay"
+        ]
+      }
+    ],
+    "integration_products": [
+      {
+        "dimension": "identity, Raw passing tones including a wide leap, immutable sources and post-Foundation pitch",
+        "tests": [
+          "test_harmony_playback_pattern_reuses_mapped_identity_and_leaves_raw_exact",
+          "test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap",
+          "test_pattern_harmony_uses_post_foundation_structural_pitch_once",
+          "test_harmony_inspection_keeps_authored_source_distinct_from_note_mask_merge_pitch"
+        ]
+      },
+      {
+        "dimension": "source revisions, alias conflict, consumed-history preservation and automatic recovery",
+        "tests": [
+          "test_harmony_pattern_source_edit_invalidates_prepared_frame",
+          "test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit",
+          "test_harmony_pattern_same_identity_with_conflicting_upstream_pitch_fails_closed"
+        ]
+      },
+      {
+        "dimension": "binding identity, repeated values and merge configuration",
+        "tests": [
+          "test_harmony_pattern_binding_is_source_configuration_not_contents_or_ui",
+          "test_harmony_pattern_binding_includes_foundation_pitch_identity",
+          "test_harmony_tone_map_is_per_binding_staged_and_cancelled_without_source_mutation",
+          "musical_merge_pattern_integration_tests.lua"
+        ]
+      },
+      {
+        "dimension": "delayed scheduling, gates, swing, mute-root termination, Pattern chord-mask bypass and actual-onset history",
+        "tests": [
+          "test_harmony_playback_delayed_first_arp_voice_commits_at_first_reached_onset",
+          "test_harmony_playback_zero_gate_silent_arp_does_not_commit_history",
+          "test_harmony_playback_gate_before_first_voiced_arp_slot_does_not_commit_history",
+          "test_harmony_playback_terminating_interval_before_first_voiced_arp_slot_does_not_commit_history",
+          "test_harmony_playback_swung_gate_before_first_voiced_arp_slot_does_not_commit_history",
+          "test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset",
+          "test_harmony_pattern_delayed_strum_bypass_keeps_legacy_pitch_and_note_ownership"
+        ]
+      },
+      {
+        "dimension": "multiple independent Pattern channels at staggered ordinary-clock callbacks",
+        "tests": [
+          "test_harmony_pattern_channels_retain_independent_frames_at_staggered_clocks"
+        ]
+      }
+    ]
+  },
+  "ensemble_bypass_inventory": [
+    {"trigger": "absolute/fixed/random/pinned or chord-mask pitch", "result": "ordinary pitch path", "evidence": "test_harmony_ensemble_absolute_mask_is_visible_legacy_bypass"},
+    {"trigger": "conflicting local scale", "result": "LOCAL SCALE BYPASS plus literal ordinary MIDI", "evidence": "M-HARMONY-ENSEMBLE-001 in both lanes"},
+    {"trigger": "channel or step octave override", "result": "LOCAL OCTAVE BYPASS plus literal ordinary MIDI", "evidence": "test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch and M-HARMONY-ENSEMBLE-001 in both lanes"},
+    {"trigger": "missing output", "result": "visible missing_output bypass and no scheduled/emitted note", "evidence": "test_voice_lifetime_rejected_output_does_not_schedule_or_report_acceptance"}
+  ],
+  "grid_projection": {
+    "unit_integration": [
+      "test_harmony_grid_projection_uses_played_harmony_value_without_mutating_source",
+      "test_harmony_grid_projection_off_and_bypass_recover_ordinary_value_immediately",
+      "test_harmony_grid_projection_rejects_stale_events_and_names_out_of_range",
+      "test_harmony_grid_projection_inverts_only_exact_native_grid_positions"
+    ],
+    "public_behaviour": "M-HARMONY-PATTERN-001 asserts exact active, Off and re-enabled grid/MIDI results plus literal onset/gate timing, rests, probability rejection, output loss/recovery, repeated transport starts and song entry. M-HARMONY-PATTERN-CLOCKS-001 adds independent /1 and /2 public channels; M-HARMONY-PATTERN-BYPASS-001 adds the delayed reverse-arpeggio chord-mask bypass. All use public grid, key, encoder and native connection input in controlled and applicable real-time lanes."
+  },
+  "qualification": "The named Harmony/Musical Merge campaign is feature acceptance rather than the repository's exhaustive sharded behaviour campaign or physical-norns timing evidence. MM-08+ is intentionally outside the user-authorized first package; this matrix makes no claim to deliver those later designs."
+}

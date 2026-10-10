@@ -1,0 +1,288 @@
+schema_version: 1
+status: external-controlled-capture-proposal-not-captured
+base_revision: f36a766fd2e3d425f1f068d4338023d0d9e1e344
+scope: Three extra cases use public emulator inputs and public native observations; this proposal does not run captures.
+scenes:
+- id: repeat-reset-first-boundary-public
+  feature_id: reset-at-pattern-repeat
+  title: Compare phase at the first song boundary
+  behaviour_case: M-MANUAL-RESET-REPEAT-PUBLIC-001
+  citation: manual:reset-at-pattern-repeat
+  source: tools/manual_native_public_gap_cases.py
+  steps:
+  - id: off-row
+    title: Reset on pattern repeat Off
+    caption: With Song mode On and Reset on song seq change Off, the selected Reset on pattern repeat row reads Off.
+    assertion: {kind: selected-menu-option-row, citation: manual:reset-at-pattern-repeat, label: Reset on pattern repeat, value: 'Off', matched: true}
+  - id: off-through-boundary
+    title: Follow the slow channel through the first repeat
+    caption: With repeat reset Off, D3 sounds at 10.5 seconds; the normal three-note cycle has no new C3 at 10.667 seconds.
+    assertion:
+      kind: manual-repeat-reset-public-midi
+      citation: manual:reset-at-pattern-repeat
+      repeat_reset: false
+      expected_ticks: [0, 216, 432, 648, 864, 1080, 1296, 1512]
+      exact_note_ons:
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      expected_note_on_count: 8
+      note_on_count: 8
+      complete_channel_midi_count: 16
+      complete_note_pair_count: 8
+      complete_midi_stream: true
+      timing_tolerance_ns: 2
+      dropped: 0
+      passed: true
+  - id: on-row
+    title: Reset on pattern repeat On
+    caption: Turn Reset on pattern repeat On; the selected option row visibly reads On.
+    assertion: {kind: selected-menu-option-row, citation: manual:reset-at-pattern-repeat, label: Reset on pattern repeat, value: 'On', matched: true}
+  - id: on-through-boundary
+    title: Hear the normal note, then the repeat restart
+    caption: With repeat reset On, the normal D3 still sounds at 10.5 seconds; the song boundary then restarts the channel with C3 at 10.667 seconds.
+    assertion:
+      kind: manual-repeat-reset-public-midi
+      citation: manual:reset-at-pattern-repeat
+      repeat_reset: true
+      expected_ticks: [0, 216, 432, 648, 864, 1080, 1296, 1512, 1536]
+      exact_note_ons:
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 60, 127]}
+      expected_note_on_count: 9
+      note_on_count: 9
+      complete_channel_midi_count: 18
+      complete_note_pair_count: 9
+      complete_midi_stream: true
+      timing_tolerance_ns: 2
+      dropped: 0
+      passed: true
+- id: snap-note-masks-public-pair
+  feature_id: snap-note-masks-to-scale
+  title: Keep accidental masks or let them snap
+  behaviour_case: M-MANUAL-SNAP-MASK-PUBLIC-001
+  citation: manual:snap-note-masks-to-scale
+  source: tools/manual_native_public_gap_cases.py
+  steps:
+  - id: snap-on-row
+    title: Confirm Snap note masks to scale On
+    caption: The selected Snap note masks to scale row reads On.
+    assertion: {kind: selected-menu-option-row, citation: manual:snap-note-masks-to-scale, label: Snap note masks to scale, value: 'On', matched: true}
+  - id: authored-c-sharp-step-1
+    title: Author C-sharp on step 1
+    caption: Hold step 1 and set its Note mask to C-sharp; the selected Masks cell reads C#3 before the step is released.
+    assertion: {kind: selected-mask, citation: manual:snap-note-masks-to-scale, field: note, label: Note, value: C#3, held_step: 1, held_cell: [1, 4], passed: true}
+  - id: authored-d-sharp-step-2
+    title: Author D-sharp on step 2
+    caption: Hold step 2 and set its Note mask to D-sharp; the selected Masks cell reads D#3 before the step is released.
+    assertion: {kind: selected-mask, citation: manual:snap-note-masks-to-scale, field: note, label: Note, value: D#3, held_step: 2, held_cell: [2, 4], passed: true}
+  - id: authored-f-sharp-step-3
+    title: Author F-sharp on step 3
+    caption: Hold step 3 and set its Note mask to F-sharp; the selected Masks cell reads F#3 before the step is released.
+    assertion: {kind: selected-mask, citation: manual:snap-note-masks-to-scale, field: note, label: Note, value: F#3, held_step: 3, held_cell: [3, 4], passed: true}
+  - id: authored-a-sharp-step-4
+    title: Author A-sharp on step 4
+    caption: Hold step 4 and set its Note mask to A-sharp; the selected Masks cell reads A#3 before the step is released.
+    assertion: {kind: selected-mask, citation: manual:snap-note-masks-to-scale, field: note, label: Note, value: A#3, held_step: 4, held_cell: [4, 4], passed: true}
+  - id: snap-on-row-and-output
+    title: Snap the masks to C major
+    caption: With Snap note masks to scale On, they resolve to C3, D3, F3 and A3 (MIDI 60, 62, 65, 69).
+    assertion:
+      kind: manual-snap-mask-public-midi
+      citation: manual:snap-note-masks-to-scale
+      snap: true
+      option_label: Snap note masks to scale
+      option_value: 'On'
+      authored_masks: [C#3, D#3, F#3, A#3]
+      output_pitches: [60, 62, 65, 69]
+      passed: true
+  - id: snap-off-row
+    title: Confirm Snap note masks to scale Off
+    caption: The selected Snap note masks to scale row reads Off.
+    assertion: {kind: selected-menu-option-row, citation: manual:snap-note-masks-to-scale, label: Snap note masks to scale, value: 'Off', matched: true}
+  - id: snap-off-row-and-output
+    title: Keep the chromatic pitches
+    caption: 'With Snap note masks to scale Off, the same authored values play unchanged: MIDI 61, 63, 66 and 70.'
+    assertion:
+      kind: manual-snap-mask-public-midi
+      citation: manual:snap-note-masks-to-scale
+      snap: false
+      option_label: Snap note masks to scale
+      option_value: 'Off'
+      authored_masks: [C#3, D#3, F#3, A#3]
+      output_pitches: [61, 63, 66, 70]
+      passed: true
+- id: ui-motion-public-frames
+  feature_id: ui-motion
+  title: See screen motion in its pixels
+  behaviour_case: M-MANUAL-UI-MOTION-FRAME-001
+  citation: manual:ui-motion
+  source: tools/manual_native_public_gap_cases.py
+  steps:
+  - id: off-row
+    title: Turn motion Off
+    caption: The selected UI motion option row reads Off.
+    assertion: {kind: selected-menu-option-row, citation: manual:ui-motion, label: UI motion, value: 'Off', matched: true}
+  - id: off-frames
+    title: Observe the still CLOCK miniature
+    caption: With UI motion Off, all 19 native-frame samples match the exact C04 source default raster (pose 0); the source atlas has eight phase slots and five distinct pixel rasters.
+    assertion:
+      kind: manual-ui-motion-public-frames
+      citation: manual:ui-motion
+      enabled: false
+      default_pose_index: 0
+      source_default_pose_exact: true
+      screen: C04
+      feature: animated CLOCK mini-header
+      region: {x0: 108, y0: 0, x1: 128, y1: 8}
+      sample_hz: 12
+      sample_count: 19
+      sample_duration_seconds: 1.5
+      distinct_public_frames: 1
+      atlas_frame_count: 8
+      atlas_loop_beats: 2
+      atlas_unique_pose_count: 5
+      atlas_pose_raster_sha256: [c550a3c96e4cf04dd79bcacb2be83a8f127e509ca059d5359c5b63afdea64217, 093500d83a29d3ec9765290653a4ac3347a9c8e0a0f23d1dc21fb724bebdc462, 0fcf98c6373a1eb147224923345c542e8a401d7dae5b9a0b5b8e06af74a8e9ab, b75db2d22c9bf4fb3bd143ff6fdfbb9ef4519432281efb51b57604c11c424d88, 631b382184871eb3d7073b8d1c006ac6e8d6eccd71dbfd8ec3924925cd4270e3]
+      source_pose_coverage: [0]
+      source_clock_tempo_bpm: 90
+      clock_sample_period_ns: 83333333
+      source_clock_logical_ns_linked: true
+      frame_hashes_verified: true
+      frame_observations_linked: true
+      outside_roi_stable: true
+      passed: true
+  - id: off-same-music
+    title: Hear the same phrase with motion Off
+    caption: Motion Off produces the exact four-note phrase twice plus the first note, with eight natural sixteenth-note gates; Driver.playback deliberately stops the ninth note at the extra-onset boundary.
+    assertion:
+      kind: manual-ui-motion-public-midi
+      citation: manual:ui-motion
+      enabled: false
+      expected_note_on_ticks: [0, 24, 48, 72, 96, 120, 144, 168, 192]
+      exact_note_ons:
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 65, 97]}
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 65, 97]}
+      - {port: 1, bytes: [144, 60, 127]}
+      note_on_count: 9
+      complete_channel_midi_count: 18
+      complete_note_pair_count: 9
+      complete_midi_stream: true
+      natural_gate_count: 8
+      gate_ticks: [24, 24, 24, 24, 24, 24, 24, 24]
+      final_gate_policy: stopped-after-extra-onset
+      final_gate_truncated_by_stop: true
+      final_gate_stop_event_bytes: [252]
+      final_gate_matches_stop_logical_ns: true
+      final_gate_duration_less_than_one_tick: true
+      stop_grid_press_count: 2
+      timing_tolerance_ns: 2
+      dropped: 0
+      passed: true
+  - id: on-row
+    title: Turn motion On
+    caption: The selected UI motion option row reads On.
+    assertion: {kind: selected-menu-option-row, citation: manual:ui-motion, label: UI motion, value: 'On', matched: true}
+  - id: on-frames
+    title: Observe the moving CLOCK miniature
+    caption: With UI motion On, the 19 native-frame samples follow the eight source-clock phase slots across more than one two-beat loop and match all five distinct C04 pixel rasters exactly.
+    assertion:
+      kind: manual-ui-motion-public-frames
+      citation: manual:ui-motion
+      enabled: true
+      screen: C04
+      feature: animated CLOCK mini-header
+      region: {x0: 108, y0: 0, x1: 128, y1: 8}
+      sample_hz: 12
+      sample_count: 19
+      sample_duration_seconds: 1.5
+      distinct_public_frames: 5
+      atlas_frame_count: 8
+      atlas_loop_beats: 2
+      atlas_unique_pose_count: 5
+      atlas_pose_raster_sha256: [c550a3c96e4cf04dd79bcacb2be83a8f127e509ca059d5359c5b63afdea64217, 093500d83a29d3ec9765290653a4ac3347a9c8e0a0f23d1dc21fb724bebdc462, 0fcf98c6373a1eb147224923345c542e8a401d7dae5b9a0b5b8e06af74a8e9ab, b75db2d22c9bf4fb3bd143ff6fdfbb9ef4519432281efb51b57604c11c424d88, 631b382184871eb3d7073b8d1c006ac6e8d6eccd71dbfd8ec3924925cd4270e3]
+      source_pose_coverage: [0, 1, 2, 3, 4, 5, 6, 7]
+      source_phase_consistent: true
+      source_clock_tempo_bpm: 90
+      clock_sample_period_ns: 83333333
+      source_clock_logical_ns_linked: true
+      frame_hashes_verified: true
+      frame_observations_linked: true
+      outside_roi_stable: true
+      passed: true
+  - id: on-same-music
+    title: Hear the same phrase with motion On
+    caption: Motion Off produces the exact four-note phrase twice plus the first note, with eight natural sixteenth-note gates; Driver.playback deliberately stops the ninth note at the extra-onset boundary.
+    assertion:
+      kind: manual-ui-motion-public-midi
+      citation: manual:ui-motion
+      enabled: true
+      expected_note_on_ticks: [0, 24, 48, 72, 96, 120, 144, 168, 192]
+      exact_note_ons:
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 65, 97]}
+      - {port: 1, bytes: [144, 60, 127]}
+      - {port: 1, bytes: [144, 62, 117]}
+      - {port: 1, bytes: [144, 64, 107]}
+      - {port: 1, bytes: [144, 65, 97]}
+      - {port: 1, bytes: [144, 60, 127]}
+      note_on_count: 9
+      complete_channel_midi_count: 18
+      complete_note_pair_count: 9
+      complete_midi_stream: true
+      natural_gate_count: 8
+      gate_ticks: [24, 24, 24, 24, 24, 24, 24, 24]
+      final_gate_policy: stopped-after-extra-onset
+      final_gate_truncated_by_stop: true
+      final_gate_stop_event_bytes: [252]
+      final_gate_matches_stop_logical_ns: true
+      final_gate_duration_less_than_one_tick: true
+      stop_grid_press_count: 2
+      timing_tolerance_ns: 2
+      dropped: 0
+      passed: true
+  - id: off-on-same-music
+    title: Compare complete Off and On MIDI
+    caption: UI motion leaves every note-on, complete channel event, eight natural gates, stop-truncated ninth gate, and controlled tick unchanged between Off and On.
+    assertion:
+      kind: manual-ui-motion-midi-pair
+      citation: manual:ui-motion
+      option_values: ['Off', 'On']
+      same_exact_note_ons: true
+      same_complete_channel_midi: true
+      same_natural_gates: true
+      same_stop_truncated_gate: true
+      same_controlled_timing: true
+      note_on_count: 9
+      complete_channel_midi_count: 18
+      complete_note_pair_count: 9
+      natural_gate_count: 8
+      gate_ticks: [24, 24, 24, 24, 24, 24, 24, 24]
+      final_gate_policy: stopped-after-extra-onset
+      final_gate_truncated_by_stop: true
+      final_gate_stop_event_bytes: [252]
+      final_gate_matches_stop_logical_ns: true
+      final_gate_duration_less_than_one_tick: true
+      stop_grid_press_count: 2
+      timing_tolerance_ns: 2
+      passed: true
+

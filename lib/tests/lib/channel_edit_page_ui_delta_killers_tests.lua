@@ -697,7 +697,13 @@ function test_hardening_channel_step_releases_commit_individually_and_coalesce_o
     local refreshes, commits, rebuilds = {}, {}, 0
     local selected = {number = 1}
     scheduler = dofile("../../lib/scheduler.lua")
+    local real_strategy = saved.include("mosaic/lib/musical_merge/strategy")
     include = function(path)
+      if path == "mosaic/lib/musical_merge/strategy" then
+        -- The real strategy dependency is independent of step releases. Keep
+        -- its implementation rather than inventing a permissive empty stub.
+        return real_strategy
+      end
       luaunit.assert_equals(path, "mosaic/lib/quantiser")
       return {}
     end
@@ -747,7 +753,9 @@ function test_hardening_channel_step_releases_commit_individually_and_coalesce_o
       refreshes[#refreshes + 1] = {"faders", selected.number}
     end
     page.register_press()
-    luaunit.assert_equals(#_G.press.post, 1)
+    -- The first post handler commits step history; the second clears the
+    -- transient Merge gesture label after a merge selector is released.
+    luaunit.assert_equals(#_G.press.post, 2)
 
     -- Each ordinary release records history and asks for musical rebuild before
     -- the UI scheduler is allowed to run.

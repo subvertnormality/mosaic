@@ -1,0 +1,12 @@
+test_absent_controls_missing_velocity_or_nonmonotonic_fail (test_quality_report.QualityReportTests) ... ok
+test_all_fifteen_domains_must_pass (test_quality_report.QualityReportTests) ... ok
+test_invalid_numeric_evidence_is_rejected (test_quality_report.QualityReportTests) ... ok
+test_missing_domain_or_duplicate_cannot_pass (test_quality_report.QualityReportTests) ... ok
+test_no_positive_events_cannot_earn_perfect_f1 (test_quality_report.QualityReportTests) ... ok
+test_priority_profile_requires_all_four_lanes_and_names_scope (test_quality_report.QualityReportTests) ... ok
+test_unknown_profile_fails_closed (test_quality_report.QualityReportTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK

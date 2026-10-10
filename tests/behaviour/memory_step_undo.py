@@ -21,14 +21,14 @@ Every scenario runs before the case fails, so a baseline run reports each one.
 
 
 def memory_step_undo(c):
-    from cases import assign_trig_parameter
-    c.configure()
+    ui = c.ui
+    ui.configure()
     field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
     failures = []
 
     def heard(stage):
         # One pattern cycle (4 steps at 1/6 s): every voice sounding from the first onset.
-        marker = c.snapshot()['midi_count']; c.tap(1, 8); c.elapse(1.4); c.tap(1, 8)
+        marker = c.snapshot()['midi_count']; ui.play(); c.elapse(1.4); ui.stop()
         state = c.wait(lambda s: not s['midi_capture']['outstanding'])
         ons = [m for m in state['midi'] if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0]
         assert ons, ('Nothing heard', stage)
@@ -40,28 +40,25 @@ def memory_step_undo(c):
         c.results.append(dict(kind='memory-step-undo-check', scenario=scenario, passed=ok, detail=detail))
         if not ok: failures.append((scenario, detail))
 
-    def to_memory(back):
-        c.enc(1, back); c.screen_header('Ch. 1 Memory')
+    def to_memory(from_page):
+        ui.channel_page('memory', from_page, confirm=False); ui.expect_header('memory', channel=1)
 
     def held_mask(step, field_offset, turns):
         # From the Memory page: hold a step on Note Masks and turn E3 on one field.
-        c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
-        c.enc(2, -9); c.enc(2, field_offset)
-        c.action(type='grid', x=step, y=4, state=1); c.elapse(.05)
-        try: c.enc(3, turns)
-        finally: c.action(type='grid', x=step, y=4, state=0)
-        c.elapse(.1); to_memory(2)
+        ui.channel_page('masks', 'memory', confirm=False); ui.expect_header('masks', channel=1)
+        ui.select_field('mask_attribute', saturate=-9, then=field_offset)
+        with ui.hold_step(step):
+            c.elapse(.05); ui.turn(3, turns)
+        c.elapse(.1); to_memory('masks')
 
     def held_lock(step, value):
         # On Trig Locks: hold a step and lock the selected slot to an absolute value.
-        c.action(type='grid', x=step, y=4, state=1)
-        try:
-            c.elapse(.05); c.action(type='enc', n=3, delta=-126); c.elapse(.15)
-            c.enc(3, value + 1)
-        finally: c.action(type='grid', x=step, y=4, state=0)
+        with ui.hold_step(step):
+            c.elapse(.05); ui.encoder_event(3, -126); c.elapse(.15)
+            ui.turn(3, value + 1)
         c.elapse(.15)
 
-    to_memory(-2)
+    to_memory('midi_config')
     original = heard('original')
     # characterisation, not manual text: the configured phrase every scenario starts from.
     assert original == [[60, 127], [62, 117], [64, 107], [65, 97]], original
@@ -74,12 +71,12 @@ def memory_step_undo(c):
     held_mask(2, 1, 2); second_note = heard('s42-second-note')
     # characterisation, not manual text: precondition, the second note lock is audible.
     assert second_note[1][0] != first_note[1][0], ('Second note lock not heard', second_note)
-    c.enc(3, -1); undone = heard('s42-undone')
+    ui.turn(3, -1); undone = heard('s42-undone')
     # README 703: E3 left explores the past action, the step as it was before the note edit.
     check('S42-undo-restores-note-and-keeps-velocity', undone == with_velocity,
           dict(expected=with_velocity, actual=undone))
     # README 703: E3 right moves towards the more recent action.
-    c.enc(3, 1); redone = heard('s42-redone')
+    ui.turn(3, 1); redone = heard('s42-redone')
     check('S42-redo-returns-to-latest', redone == second_note, dict(expected=second_note, actual=redone))
 
     # S43: chord 1, note, note on step 3.
@@ -90,44 +87,44 @@ def memory_step_undo(c):
     held_mask(3, 1, 2); chord_second_note = heard('s43-second-note')
     # characterisation, not manual text: precondition, the second note lock is audible.
     assert chord_second_note != chord_first_note, ('Second note lock not heard', chord_second_note)
-    c.enc(3, -1); chord_undone = heard('s43-undone')
+    ui.turn(3, -1); chord_undone = heard('s43-undone')
     # README 703: stepping back one action keeps the chord made two actions earlier.
     check('S43-undo-keeps-earlier-chord', chord_undone == chord_first_note,
           dict(expected=chord_first_note, actual=chord_undone))
-    c.key(3); chord_latest = heard('s43-latest')
+    ui.press_key(3); chord_latest = heard('s43-latest')
     # README 704: K3 jumps to the latest action, which includes the chord.
     check('S43-latest-keeps-chord', chord_latest == chord_second_note,
           dict(expected=chord_second_note, actual=chord_latest))
 
     # S44a: a note lock, then a Fixed Note trig lock, on step 4.
     held_mask(4, 1, 5); note_locked = heard('s44a-note-lock')
-    c.enc(1, -1); c.screen_header('Ch. 1 Trig Locks', selected=2)
-    assign_trig_parameter(c, 'Fixed Note')
-    held_lock(4, 72); to_memory(1)
+    ui.channel_page('trig_locks', 'memory', confirm=False); ui.expect_header('trig_locks', channel=1)
+    ui.assign_trig_parameter_key('fixed_note')
+    held_lock(4, 72); to_memory('trig_locks')
     trig_locked = heard('s44a-trig-lock')
     # README 781 and 785: a Fixed Note lock sets the step's MIDI note and takes precedence.
     assert trig_locked[-1][0] == 72, ('Fixed Note lock not heard', trig_locked)
-    c.enc(3, -1); trig_undone = heard('s44a-undone')
+    ui.turn(3, -1); trig_undone = heard('s44a-undone')
     # README 703: stepping back over the trig lock returns to the note-locked step.
     check('S44a-undo-drops-trig-lock-after-note-lock', trig_undone == note_locked,
           dict(expected=note_locked, actual=trig_undone))
     # README 703: E3 right moves towards the more recent action.
-    c.enc(3, 1); trig_redone = heard('s44a-redone')
+    ui.turn(3, 1); trig_redone = heard('s44a-redone')
     check('S44a-redo-returns-to-latest', trig_redone == trig_locked, dict(expected=trig_locked, actual=trig_redone))
 
     # S44b: slot 2 Quantised Fixed Note lock, then slot 1 Fixed Note lock, on step 1.
-    c.enc(1, -1); c.screen_header('Ch. 1 Trig Locks', selected=2)
-    c.enc(2, 1); assign_trig_parameter(c, 'Quantised Fixed Note')
-    held_lock(1, 67); to_memory(1)
+    ui.channel_page('trig_locks', 'memory', confirm=False); ui.expect_header('trig_locks', channel=1)
+    ui.turn(2, 1); ui.assign_trig_parameter_key('quantised_fixed_note')
+    held_lock(1, 67); to_memory('trig_locks')
     quantised = heard('s44b-slot2-lock')
     # README 785: a Quantised Fixed Note lock replaces the step's pattern pitch.
     assert quantised[0][0] != 60, ('Quantised Fixed Note lock not heard', quantised)
-    c.enc(1, -1); c.screen_header('Ch. 1 Trig Locks', selected=2)
-    c.enc(2, -1); held_lock(1, 74); to_memory(1)
+    ui.channel_page('trig_locks', 'memory', confirm=False); ui.expect_header('trig_locks', channel=1)
+    ui.turn(2, -1); held_lock(1, 74); to_memory('trig_locks')
     fixed = heard('s44b-slot1-lock')
     # README 781 and 785: Fixed Note takes precedence over the Quantised Fixed Note lock.
     assert fixed[0][0] == 74, ('Fixed Note lock not heard', fixed)
-    c.enc(3, -1); fixed_undone = heard('s44b-undone')
+    ui.turn(3, -1); fixed_undone = heard('s44b-undone')
     # README 703, 781 and 785 (Fixed Note takes precedence): after stepping back, only the slot-2 lock remains.
     check('S44b-undo-drops-other-slot-lock', fixed_undone == quantised,
           dict(expected=quantised, actual=fixed_undone))

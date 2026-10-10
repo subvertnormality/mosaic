@@ -2090,3 +2090,93 @@ function test_signed_random_pentatonic_step_outcomes()
   random=original_random
   if not ok then error(err) end
 end
+
+-- README "Mute Root Note" (only that param silences a chord root), "Chord Shape
+-- Modifier" (the pattern orders chord masks) and "Default Parameter Values" (an
+-- off value is not a value): an assigned Chord Pattern left at X (off value 0),
+-- or step-locked to X, plays exactly as with the parameter unassigned.
+local function chord_pattern_events(configure, strum_division, masks)
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(song_pattern)
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 4
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  local channel = program.get_channel(song_pattern, 1)
+  channel.chord_one_mask = masks and masks[1] or nil
+  channel.chord_two_mask = masks and masks[2] or nil
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+  program.get().default_scale = 1
+  local scale = program.get_scale(1)
+  scale.root_note = 0
+  scale.number = 1
+  if strum_division then
+    channel.trig_lock_params[1] = {id = "chord_strum", param_id = "chord_strum_1", off_value = 0}
+    params:set("chord_strum_1", strum_division)
+  end
+  configure(channel)
+  midi_note_on_events = {}
+  step.handle(1, 1)
+  local events = {}
+  for pulse = 0, 96 do
+    if pulse > 0 then m_clock.get_clock_lattice():pulse() end
+    while #midi_note_on_events > 0 do
+      local event = table.remove(midi_note_on_events, 1)
+      table.insert(events, {pulse, event[1], event[2]})
+    end
+  end
+  return events
+end
+
+function test_chord_pattern_x_plays_like_unassigned_pattern()
+  local function unassigned() end
+  local function assigned_x(channel)
+    channel.trig_lock_params[2] = {id = "chord_strum_pattern", param_id = "chord_strum_pattern_1", off_value = 0}
+    params:set("chord_strum_pattern_1", 0)
+  end
+  local function step_locked_x(channel)
+    channel.trig_lock_params[2] = {id = "chord_strum_pattern", param_id = "chord_strum_pattern_1", off_value = 0}
+    params:set("chord_strum_pattern_1", 2)
+    program.add_step_param_trig_lock(1, 2, 0)
+  end
+  for _, scenario in ipairs({
+    {name = "single note"},
+    {name = "chord", masks = {2, 4}},
+    {name = "strummed chord", masks = {2, 4}, division = 14},
+  }) do
+    local expected = chord_pattern_events(unassigned, scenario.division, scenario.masks)
+    luaunit.assert_equals(expected[1], {0, 60, 100}, scenario.name .. ": unassigned root")
+    for label, configure in pairs({assigned_x = assigned_x, step_locked_x = step_locked_x}) do
+      luaunit.assert_equals(chord_pattern_events(configure, scenario.division, scenario.masks), expected,
+        scenario.name .. ": " .. label)
+    end
+  end
+end
+
+-- Sweep of the same off-value class (characterisation plus README "Default
+-- Parameter Values"): each other strum/arp parameter assigned and left at its
+-- off value 0 plays exactly as with that parameter unassigned.
+function test_chord_off_values_play_like_unassigned_parameters()
+  for _, id in ipairs({"chord_arp", "chord_spread", "chord_acceleration",
+      "chord_velocity_modifier", "mute_root_note"}) do
+    for _, scenario in ipairs({
+      {name = "single note"},
+      {name = "strummed chord", masks = {2, 4}, division = 14},
+    }) do
+      local expected = chord_pattern_events(function() end, scenario.division, scenario.masks)
+      local actual = chord_pattern_events(function(channel)
+        channel.trig_lock_params[2] = {id = id, param_id = id .. "_1", off_value = 0}
+        params:set(id .. "_1", 0)
+      end, scenario.division, scenario.masks)
+      luaunit.assert_equals(actual, expected, id .. " at 0: " .. scenario.name)
+    end
+  end
+  -- Chord Strum itself at 0 against an unassigned Chord Strum.
+  local expected = chord_pattern_events(function() end, nil, {2, 4})
+  luaunit.assert_equals(#expected, 3)
+  luaunit.assert_equals(chord_pattern_events(function() end, 0, {2, 4}), expected, "chord_strum at 0")
+end

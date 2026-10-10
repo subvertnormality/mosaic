@@ -1,0 +1,39 @@
+{
+  "verbatim_report_adoption": true,
+  "reports": [
+    {
+      "source": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source12-affected-review-20261008-01/reports/source12-affected-review.json",
+      "destination": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source12-affected-review-20261008-01/reports/source12-affected-review.json",
+      "sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469"
+    },
+    {
+      "source": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source13-lfo-review-20261008-01/reports/source13-lfo-review.json",
+      "destination": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source13-lfo-review-20261008-01/reports/source13-lfo-review.json",
+      "sha256": "e14e7491b8884ecbb0df89ced8d09e7ff7831a106197ead2c1643f0ca57c8adb"
+    },
+    {
+      "source": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source14-scene-review-20261008-01/reports/source14-scene-review.json",
+      "destination": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source14-scene-review-20261008-01/reports/source14-scene-review.json",
+      "sha256": "a62a20075f57d6eceda11d66ccfaa816cd6e58569c08ed8ef4b05f34ba3367a3"
+    },
+    {
+      "source": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source14-clocks-feature-review-20261008-01/reports/source14-clocks-feature-review.json",
+      "destination": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source14-clocks-feature-review-20261008-01/reports/source14-clocks-feature-review.json",
+      "sha256": "dd6c01163bea557a633abf587c97c1c68e6cf3cc5bab8032fdbfcaca732a22cd"
+    },
+    {
+      "source": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source14-clocks-coherence-recheck-20261008-01/reports/source14-clocks-coherence-recheck.json",
+      "destination": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source14-clocks-coherence-recheck-20261008-01/reports/source14-clocks-coherence-recheck.json",
+      "sha256": "90b7c2a7c58f6e7936a5d16a06585d508da159a13a894f05b2838677e0d5f2ae"
+    },
+    {
+      "source": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source14-astra-scoped-review-20261008-01/review.json",
+      "destination": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source14-astra-scoped-review-20261008-01/review.json",
+      "sha256": "4c5eb0bbb211155d244b821fc26705e09bbd2faf8ad0389e02ec68d73c54f8d7"
+    }
+  ],
+  "historical_failures_preserved": true,
+  "not_a_complete_425_unit_closure": true,
+  "final_compiled_wording_and_browser_validation_pending": true,
+  "publication_pending": true
+}

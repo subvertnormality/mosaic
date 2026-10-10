@@ -1,0 +1,17 @@
+{
+  "all_ten_criteria_at_least_8": true,
+  "astra_report_sha256": "ee05d9cd1fd6e445449b7ac2ddab962560c957577d2de0e8f09e9cdb6e1bc472",
+  "candidate": "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\source16-shared-reader-audit-20261008-01\\ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v06.json",
+  "candidate_sha256": "cd2e1f67a498e211c0524e432997b11acb1e02752d77b5c65844cd04f61cb990",
+  "carry_authorized": false,
+  "current_source18_pins_match": true,
+  "fresh_rows": 15,
+  "keyboard_report_sha256": "2d52a2b80669207ab9056d559e9a22c47430d56e1f1355db762eb9e33a358419",
+  "panic_report_sha256": "2ee26bfe829f6f5e28cceac0255eacddaf1e858a4de55746a8c63c14b397923f",
+  "panic_scene_chunks_match_source17": true,
+  "previous_candidate_sha256": "4b51fb1ec8285e7bcd286198f5e0515b3a12470fc867074c4f02558bbf5a3a58",
+  "public_ids": 425,
+  "publication_qualified": false,
+  "remaining_gate": "root browser/reconciliation",
+  "retained_rows": 410
+}

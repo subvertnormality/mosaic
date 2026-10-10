@@ -665,6 +665,39 @@ function test_step_killer_queued_switch_runs_at_the_first_boundary_not_at_zero()
   end)
 end
 
+-- README.md Voice leading lifecycle: a manual queued song-slot entry applies
+-- each destination channel's Anchor/Continue history policy at that boundary.
+function test_step_killer_queued_song_switch_transfers_only_continue_harmony_history()
+  with_env(function(env)
+    local harmony_state=include("mosaic/lib/harmony/state")
+    local harmony_config=include("mosaic/lib/harmony/config")
+    local merge_state=include("mosaic/lib/musical_merge/state")
+    local merge_config=include("mosaic/lib/musical_merge/config")
+    harmony_state.reset();env.set_param("song_mode",1)
+    program.get_song_pattern(1).global_pattern_length=1
+    local first,second=program.get_song_pattern(1),program.get_song_pattern(2)
+    for channel_number=1,2 do
+      local config=harmony_config.new_channel("revoice")
+      local frame=harmony_state.prepare_revoice(first,channel_number,"before",
+        {{id="root",pc=0,required=true}},config)
+      harmony_state.consume_revoice(first,channel_number,frame)
+      second.channels[channel_number].voicing=harmony_config.new_channel("revoice")
+    end
+    second.channels[1].voicing.transition="continue"
+    second.channels[2].voicing.transition="anchor"
+    local merge=merge_config.new();merge.mode="foundation";merge.anchor=1;merge.cycles=4;merge.percentages={100,100,100,100}
+    second.channels[3].musical_merge=merge;merge_state.on_cycle_boundary(second,3,merge);merge_state.on_cycle_boundary(second,3,merge)
+    luaunit.assert_equals(merge_state.effective(second,3,merge).cycle,3)
+    step_under_test.queue_switch_to_next_song_pattern_func(function()program.set_selected_song_pattern(2)end)
+    program.get().global_step_accumulator=1
+    step_under_test.process_song_song_patterns()
+    local snapshot=harmony_state.snapshot(second)
+    luaunit.assert_not_nil(snapshot.channels[1].consumed)
+    luaunit.assert_nil(snapshot.channels[2])
+    luaunit.assert_equals(merge_state.effective(second,3,merge).cycle,1)
+  end)
+end
+
 -- README.md:910: during playback a slot change "will queue your command and execute
 -- it after the current sequence completes", so with song mode on a boundary that does
 -- not complete the slot keeps the queued slot. characterisation (lib/step.lua:952-953

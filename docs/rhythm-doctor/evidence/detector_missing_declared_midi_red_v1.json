@@ -1,0 +1,16 @@
+{
+  "baseline_detector_source_sha256": "01f3b4f71c109db1a96728a78a1f28778fd517bf83b9e8afc3d05e92d7e3f12c",
+  "command": [
+    "tests/rhythm_doctor/artifacts/detector-venv/Scripts/python.exe",
+    "-m",
+    "unittest",
+    "tests/rhythm_doctor/test_detector.py",
+    "-v"
+  ],
+  "exit_code": 1,
+  "expected_failure": "AssertionError: [] is not None for declared Bass S04 missing MIDI; declared drum S07 was also silently skipped.",
+  "kind": "literal missing declared MIDI label regression",
+  "schema_version": 1,
+  "scope": "red evidence captured before the provenance fix; literal metadata declared present S01 Bass, missing S04 Bass, and missing S07 drum MIDI.",
+  "test_sha256": "e7c097e277b0723b44e24e87a78591cedf4b8ffbe1e8d70c9bf8d47804b38e69"
+}

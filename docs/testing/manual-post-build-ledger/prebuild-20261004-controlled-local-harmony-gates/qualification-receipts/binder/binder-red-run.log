@@ -1,0 +1,82 @@
+======================================================================
+ERROR: test_controlled_local_binds_all_fifty_checkpoints_with_pending_realtime (tests.behaviour.test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 136, in test_controlled_local_binds_all_fifty_checkpoints_with_pending_realtime
+    result=binder.bind(None,controlled,self.root/"controlled-proof",root=self.root,controlled_local=True)
+TypeError: bind() got an unexpected keyword argument 'controlled_local'
+
+======================================================================
+ERROR: test_controlled_local_binds_fresh_controlled_scene_without_claiming_realtime (tests.behaviour.test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 218, in test_controlled_local_binds_fresh_controlled_scene_without_claiming_realtime
+    result=binder.bind(self.build,self.root/'controlled-binding',root=self.root,mappings=self.mapping,controlled_local=True,audit_functions=(*self.functions,self.controlled_raw))
+TypeError: bind() got an unexpected keyword argument 'controlled_local'
+
+======================================================================
+ERROR: test_controlled_local_requires_complete_manifest (tests.behaviour.test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 236, in test_controlled_local_requires_complete_manifest
+    binder.bind(self.build,self.root/'bad-controlled-binding',root=self.root,mappings=self.mapping,controlled_local=True,audit_functions=(*self.functions,self.controlled_raw))
+TypeError: bind() got an unexpected keyword argument 'controlled_local'
+
+======================================================================
+ERROR: test_controlled_verified_content_can_complete_without_realtime_qualification_claim (tests.behaviour.test_manual_book.ManualBook)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_book.py", line 47, in validate
+    try:jsonschema.Draft7Validator(schema).validate(data)
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 353, in validate
+    raise error
+jsonschema.exceptions.ValidationError: 'controlled-verified' is not one of ['pending', 'pilot-reviewed', 'verified']
+
+Failed validating 'enum' in schema['properties']['features']['items']['properties']['review']['properties']['status']:
+    {'enum': ['pending', 'pilot-reviewed', 'verified']}
+
+On instance['features'][0]['review']['status']:
+    'controlled-verified'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_book.py", line 97, in test_controlled_verified_content_can_complete_without_realtime_qualification_claim
+    result=book.compile_book(data)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_book.py", line 97, in compile_book
+    validate(data)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_book.py", line 48, in validate
+    except jsonschema.ValidationError as error:raise ValueError(error.message) from error
+ValueError: 'controlled-verified' is not one of ['pending', 'pilot-reviewed', 'verified']
+
+======================================================================
+ERROR: test_controlled_verified_course_requires_bound_native_semantics (tests.behaviour.test_manual_book.ManualBook)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_book.py", line 47, in validate
+    try:jsonschema.Draft7Validator(schema).validate(data)
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 353, in validate
+    raise error
+jsonschema.exceptions.ValidationError: 'controlled-verified' is not one of ['pending', 'pilot-reviewed', 'verified']
+
+Failed validating 'enum' in schema['properties']['features']['items']['properties']['review']['properties']['status']:
+    {'enum': ['pending', 'pilot-reviewed', 'verified']}
+
+On instance['features'][0]['review']['status']:
+    'controlled-verified'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_book.py", line 111, in test_controlled_verified_course_requires_bound_native_semantics
+    result=book.compile_book(data)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_book.py", line 97, in compile_book
+    validate(data)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_book.py", line 48, in validate
+    except jsonschema.ValidationError as error:raise ValueError(error.message) from error
+ValueError: 'controlled-verified' is not one of ['pending', 'pilot-reviewed', 'verified']
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.878s
+
+FAILED (errors=5)

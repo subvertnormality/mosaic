@@ -1,0 +1,7 @@
+{
+  "report": "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa/reference-scenes.json",
+  "report_sha256": "47a04ed38573b10595fb1248936a3afbae0dfb5f3c3e28099b42ff250da02ffa",
+  "independent_audit": 1,
+  "passed": true,
+  "complete_regression_run": false
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "scope": "read-only immutable engineering v10 controlled evidence; strict raw audit rejects stale geometry",
+  "manifest": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261003/controlled/2af9e6e4e34c4ec09bcdb42a08ce4980/manifest.json",
+  "manifest_sha256": "e231422458a5ecd0b5b1aaa3b66ed966c1447c899b7daf8461f28a322ac5b6d4",
+  "source_stage": "/home/andy/mosaic-mini-header-engineering-v10-20261003/mosaic",
+  "passed_scoped_raw_acceptance": false,
+  "generic_publication_rejection": "Unsafe native application path",
+  "completed_positive_checks": [
+    "all manifest artifact hashes",
+    "entire staged behavior source SHA map",
+    "all17783 application identity file paths/SHA/sizes inside supplied stage",
+    "exact native public input trace",
+    "all ten stopped native clock-phase rows",
+    "actual playing F8 phase and exact notes/release summary",
+    "all four Off baseline rows"
+  ],
+  "playing_phase": {
+    "clock_ticks": 49,
+    "active_frames": 129,
+    "distinct_poses": 6
+  },
+  "failures": [
+    {
+      "row_index": 43,
+      "kind": "public-assignment-marquee",
+      "enabled": true,
+      "error": "Readability samples changed unaffected UI/grid/MIDI",
+      "diagnosis": "frozen checker excludes x>=120; actual v2 detail/vertical authored mini footprint starts x96; changed pixels outside allowed marquee confined to mini icon",
+      "grid_changed": false,
+      "midi_count_changed": false
+    },
+    {
+      "row_index": 48,
+      "kind": "public-fitting-vertical-text",
+      "enabled": true,
+      "error": "Readability samples changed unaffected UI/grid/MIDI",
+      "diagnosis": "frozen checker excludes x>=120; actual v2 detail/vertical authored mini footprint starts x96; changed pixels outside allowed marquee confined to mini icon",
+      "grid_changed": false,
+      "midi_count_changed": false
+    },
+    {
+      "row_index": 51,
+      "kind": "public-fitting-vertical-text",
+      "enabled": true,
+      "error": "Readability samples changed unaffected UI/grid/MIDI",
+      "diagnosis": "frozen checker excludes x>=120; actual v2 detail/vertical authored mini footprint starts x96; changed pixels outside allowed marquee confined to mini icon",
+      "grid_changed": false,
+      "midi_count_changed": false
+    }
+  ],
+  "full_current_publication": false,
+  "hardware_timing_equivalent": false,
+  "auditor_edits": false
+}

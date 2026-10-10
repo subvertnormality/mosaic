@@ -1,0 +1,96 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "song-queue-stop",
+    "stage": "baseline",
+    "notes": [
+      60,
+      62,
+      72,
+      74,
+      60,
+      62
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-queue-stop",
+    "stage": "queued-slot-discarded",
+    "notes": [
+      60,
+      62,
+      72,
+      74,
+      60,
+      62
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-queue-stop",
+    "stage": "queued-length-discarded",
+    "notes": [
+      60,
+      62,
+      72,
+      74,
+      60,
+      62
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-queue-stop",
+    "stage": "stopped-length-applies",
+    "notes": [
+      60,
+      62,
+      64,
+      72,
+      74,
+      60,
+      62,
+      64,
+      72
+    ],
+    "passed": true
+  }
+]

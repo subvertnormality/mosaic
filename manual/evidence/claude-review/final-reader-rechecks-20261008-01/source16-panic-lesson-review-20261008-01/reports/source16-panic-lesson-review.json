@@ -1,0 +1,268 @@
+{
+  "job_id": "source16-panic-lesson-review-20261008-01",
+  "reviewed_at_utc": "2026-10-08T09:24:13.979Z",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reader_url": "http://localhost:8926/manual/",
+  "source_pins": {
+    "source_sha256": "52d70cb543d38b1f155a0f5c4fa6fed510d0a44a161bed6ef0c8faffd518a9e3",
+    "book_sha256": "d49d8551e5a18334d23537974d16b18116cfd1a79122edd7a169452e53060202",
+    "reader_index_sha256": "1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654",
+    "book_js_sha256": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+    "manual_js_sha256": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+    "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309"
+  },
+  "units": [
+    {
+      "id": "lesson:midi-panic:panic-from-song-channel",
+      "scene_id": "panic-from-song-channel",
+      "title": "Panic by holding Channel while on Song",
+      "route": "#midi-panic/lesson/panic-from-song-channel",
+      "binding_index_path": "/features/18/teaching_bindings/1",
+      "chunk": "92b7daaaffdccff6a2e7bcaa492bb1604e92b7eb76f1612ba2ba6bb892c6394c",
+      "metadata": "b7463c54846e5b4ae07e7137d7d715b3a1038620b0ea0531ffe5635443ddd80b",
+      "criteria": {
+        "coherence": {
+          "score": 8,
+          "rationale": "The lesson begins on Song with Channel inactive, then demonstrates the same hold while keeping the selected page and playback unchanged. The final result summary matches the silent captured state. The surrounding user-visible action caption also gives the connected-output behavior, but its technical count is redundant with the shorter final summary.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "It names the starting page and inactive button, gives hold/release instructions, and describes the output and playback behavior.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "understandability": {
+          "score": 7,
+          "rationale": "The final result sentence is now direct, but the visible `human_outcome` action caption still says “Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the three connected ports, 6,144 messages.” This developer-level enumeration is unnecessary beside the simpler result summary and makes the lesson harder to scan.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "representation": {
+          "score": 8,
+          "rationale": "The rendered lesson pairs a Song screen/grid capture with the clear final sentence “Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.” The preceding caption repeats the explanation as a detailed 6,144-message count.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The lesson has focused hold/release actions, with separate starting and result states.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "It moves from the Song starting condition to the hold/release gesture and then the captured result.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "It sits on MIDI Panic beside the Pattern alternative and linked stuck-note/playback guidance.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Note Off and connected MIDI outputs are accurate terms and the summary explains the silent capture; the long count adds avoidable jargon.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The title identifies the exact button and page context.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical lesson route loads the expected title and interactive before/result states, with final state available through Show result.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        }
+      },
+      "rendered_evidence": {
+        "url": "http://localhost:8926/manual/#midi-panic/lesson/panic-from-song-channel",
+        "title": "MIDI Panic · Mosaic",
+        "route_ready": "1",
+        "final_summary": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+        "before_summary": "Recorded MIDI output: none.",
+        "action_caption_excerpt": "Before\nShow result\n\nHold the Channel button (3,8), a page you are not on, for about two seconds, then release it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are already on does nothing. Playback is not stopped by a panic.\n\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n",
+        "screenshot": "evidence/panic-from-song-channel.png"
+      },
+      "all_scores_at_least_8": false
+    },
+    {
+      "id": "lesson:midi-panic:panic-from-song-pattern",
+      "scene_id": "panic-from-song-pattern",
+      "title": "Panic by holding Pattern while on Song",
+      "route": "#midi-panic/lesson/panic-from-song-pattern",
+      "binding_index_path": "/features/18/teaching_bindings/2",
+      "chunk": "4b9ac1897334b95d03d1aa30432d8335b0725bc0ccd07c32b8c9a10b29839a9b",
+      "metadata": "67d8bb263d2319dc276eb4e8ebb8a5bee6587a37dc950fbf00e901bfb8d5e262",
+      "criteria": {
+        "coherence": {
+          "score": 8,
+          "rationale": "The lesson begins on Song with Pattern inactive, demonstrates its hold while keeping the page and playback unchanged, and shows a result consistent with the silent capture. The technical-count caption repeats information already stated more simply in the result summary.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "It explains how to select Song, hold the inactive Pattern button, release it, and interpret the captured output.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "understandability": {
+          "score": 7,
+          "rationale": "The final summary reads clearly, but the still-visible `human_outcome` caption says “Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the three connected ports, 6,144 messages.” This technical count is redundant with the concise result panel and makes the instructions harder to scan.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "representation": {
+          "score": 8,
+          "rationale": "The captured Song screen/grid is paired with “Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.” The action caption above still adds the detailed count.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The focused hold and release actions are shown as a compact lesson with a distinct before/result state.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The route supplies Song context, one gesture, and the result in order.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "It is presented as the Pattern alternative within MIDI Panic and links to the Channel version plus relevant troubleshooting.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "The result sentence uses clear Note Off and connected-output language; the repeated technical count is unnecessary.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The title clearly distinguishes Pattern from Channel and specifies Song context.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical lesson route opens the expected title and exposes the final captured result through Show result.",
+          "evidence": [
+            "../../source16-panic-summary-review-20261008-01/evidence/source16-panic-capture.json",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-channel.png",
+            "../../source16-panic-summary-review-20261008-01/evidence/panic-from-song-pattern.png"
+          ]
+        }
+      },
+      "rendered_evidence": {
+        "url": "http://localhost:8926/manual/#midi-panic/lesson/panic-from-song-pattern",
+        "title": "MIDI Panic · Mosaic",
+        "route_ready": "1",
+        "final_summary": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+        "before_summary": "Recorded MIDI output: none.",
+        "action_caption_excerpt": "Before\nShow result\n\nHold the Pattern button (5,8), a page you are not on, for about two seconds, then release it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are already on does nothing. Playback is not stopped by a panic.\n\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n",
+        "screenshot": "evidence/panic-from-song-pattern.png"
+      },
+      "all_scores_at_least_8": false
+    }
+  ],
+  "all_ten_criteria_independently_rated": true,
+  "all_units_meet_threshold": false,
+  "below_threshold_findings": [
+    {
+      "unit_id": "lesson:midi-panic:panic-from-song-channel",
+      "criterion": "understandability",
+      "score": 7,
+      "location": "/features/18/teaching_bindings/1/human_outcome and /features/18/teaching_bindings/1/presentation_metadata/human_outcome; rendered route #midi-panic/lesson/panic-from-song-channel",
+      "finding": "Before\nShow result\n\nHold the Channel button (3,8), a page you are not on, for about two seconds, then release it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are already on does nothing. Playback is not stopped by a panic.\n\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n",
+      "suggested_resolution": "Replace the authored human_outcome text in both mirrored fields with the direct connected-output and silent-capture wording, preserving any exact sweep count in a collapsed evidence detail only if needed."
+    },
+    {
+      "unit_id": "lesson:midi-panic:panic-from-song-pattern",
+      "criterion": "understandability",
+      "score": 7,
+      "location": "/features/18/teaching_bindings/2/human_outcome and /features/18/teaching_bindings/2/presentation_metadata/human_outcome; rendered route #midi-panic/lesson/panic-from-song-pattern",
+      "finding": "Before\nShow result\n\nHold the Pattern button (5,8), a page you are not on, for about two seconds, then release it. Mosaic sends Note Off for every one of the 128 notes on all 16 MIDI channels of each of the three connected ports, 6,144 messages. Nothing was sounding, so you hear no change and the screen stays on Song; the sweep only matters when a note is stuck. Holding the button of the page you are already on does nothing. Playback is not stopped by a panic.\n\nNORNS\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n",
+      "suggested_resolution": "Replace the authored human_outcome text in both mirrored fields with the direct connected-output and silent-capture wording, preserving any exact sweep count in a collapsed evidence detail only if needed."
+    }
+  ],
+  "source16_scene_report_preserved": {
+    "path": "../../source15-scenes-review-20261008-01/reports/source15-scenes-review.json",
+    "sha256": "639b729b99fad1e9387adcff8b3353a7fde9c0c38c5ab0ce6e07c492bda0ee64",
+    "source16_scene_report_path": "../source16-panic-summary-review-20261008-01/reports/source16-panic-summary-review.json",
+    "source16_scene_report_sha256": "2ee26bfe829f6f5e28cceac0255eacddaf1e858a4de55746a8c63c14b397923f",
+    "preserved_unchanged": true
+  },
+  "method": "Loaded each canonical lesson route as a full document, waited for route readiness, checked the before summary, clicked Show result, verified the final concise #midi-text, and read the visible teaching caption and links. No audio was played or listened to.",
+  "scope": "Fresh ratings of lesson:midi-panic:panic-from-song-channel and lesson:midi-panic:panic-from-song-pattern only. These are lesson units distinct from the previously reviewed scene units. No other report or source was modified.",
+  "capture_sha256": "317ddf9d918cffb4748e42e470e65ef335fd5955909857b7ebc81fd59e9e6894"
+}

@@ -1,0 +1,21 @@
+............EE....
+======================================================================
+ERROR: test_child_cannot_use_parent_assertion_or_frame_namespace (test_manual_publication_verify.NestedParticipantIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 140, in test_child_cannot_use_parent_assertion_or_frame_namespace
+    with self.assertRaisesRegex(ValueError,'participant namespace'):audit.check_participant_binding(scene,1)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_participant_binding'
+
+======================================================================
+ERROR: test_child_native_clock_and_source_identity_must_match_declared_context (test_manual_publication_verify.NestedParticipantIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 134, in test_child_native_clock_and_source_identity_must_match_declared_context
+    audit.check_participant_context(context,identity,config,'controlled-experimental','base-midi',1,'/capture/application')
+AttributeError: module 'manual_publication_verify' has no attribute 'check_participant_context'
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.034s
+
+FAILED (errors=2)

@@ -1,0 +1,13 @@
+.......E.............
+======================================================================
+ERROR: test_module_whitelist_requires_exact_origin_and_revision (test_manual_publication_verify.ExternalModulePinIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 158, in test_module_whitelist_requires_exact_origin_and_revision
+    audit.check_module_pin('toolkit',pins,'https://example/toolkit.git','pinned')
+AttributeError: module 'manual_publication_verify' has no attribute 'check_module_pin'
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.024s
+
+FAILED (errors=1)

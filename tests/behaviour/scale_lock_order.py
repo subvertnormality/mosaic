@@ -14,23 +14,31 @@ PHRASE_VELOCITY = [127, 117, 107, 97]
 
 
 def scale_lock_order(c):
-    c.configure()
-    c.tap(6, 8); c.tap(2, 7)
-    for _ in range(3): c.tap(8, 7)                                # global length 4 (scale track wraps too)
-    c.tap(4, 8)
-    c.tap(3, 3); c.enc(2, -1); c.enc(3, 4); c.key(3)              # slot 3: E major (root E)
-    c.tap(2, 3); c.enc(3, 7); c.key(3)                            # slot 2: G major (root G)
-    c.tap(1, 3)                                                   # slot 1 C major applied
+    ui = c.ui
+    ui.configure()
+    ui.song_editor()
+    ui.tap_control('global_pattern_length', 2)
+    for _ in range(3):
+        ui.tap_control('global_pattern_length', 8)                # global length 4 (scale track wraps too)
+    ui.scale_editor()
+    ui.tap_control('scale_slot', 3)
+    ui.select_field('root', offset=-1)
+    ui.set_value(4)
+    ui.press_key(3)                                               # slot 3: E major (root E)
+    ui.tap_control('scale_slot', 2)
+    ui.set_value(7)
+    ui.press_key(3)                                               # slot 2: G major (root G)
+    ui.tap_control('scale_slot', 1)                               # slot 1 C major applied
+
     def phrase(stage, notes):
         c.playback([(1, [144, n, v]) for n, v in zip(notes, PHRASE_VELOCITY)], cycles=2)
         c.results.append(dict(kind='scale-lock-order', stage=stage, notes=notes, passed=True))
+
     phrase('no-locks', [60, 62, 64, 65])
-    c.action(type='grid', x=3, y=4, state=1)                      # scale page: global lock at step 3
-    try: c.tap(3, 3)
-    finally: c.action(type='grid', x=3, y=4, state=0)
-    c.tap(3, 8)
+    with ui.hold_step(3):                                        # scale page: global lock at step 3
+        ui.tap_control('scale_slot', 3)
+    ui.menu('channel_editor')
     phrase('global-lock-step-3', [60, 62, 68, 69])
-    c.action(type='grid', x=3, y=4, state=1)                      # channel page: channel lock at step 3
-    try: c.tap(2, 3)
-    finally: c.action(type='grid', x=3, y=4, state=0)
+    with ui.hold_step(3):                                        # channel page: channel lock at step 3
+        ui.tap_control('channel_scale_slot', 2)
     phrase('channel-lock-overrides', [60, 62, 71, 72])

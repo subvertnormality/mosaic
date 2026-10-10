@@ -1,0 +1,31 @@
+FF
+======================================================================
+FAIL: test_endpoint_imports_without_documentation_helper_path_injection (test_endpoint_portability.EndpointPortabilityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/test_endpoint_portability.py", line 9, in test_endpoint_imports_without_documentation_helper_path_injection
+    self.assertEqual(p.returncode,0,p.stdout)
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/candidate/tools/manual_reconcile_build.py", line 12, in <module>
+    import refresh_source_inventory as refresher
+ModuleNotFoundError: No module named 'refresh_source_inventory'
+
+
+======================================================================
+FAIL: test_endpoint_root_is_parent_of_root_tools (test_endpoint_portability.EndpointPortabilityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/test_endpoint_portability.py", line 12, in test_endpoint_root_is_parent_of_root_tools
+    self.assertEqual(p.returncode,0,p.stdout)
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/candidate/tools/manual_reconcile_build.py", line 12, in <module>
+    import refresh_source_inventory as refresher
+ModuleNotFoundError: No module named 'refresh_source_inventory'
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.304s
+
+FAILED (failures=2)

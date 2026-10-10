@@ -1,0 +1,6155 @@
+features:
+- id: scale-editor
+  title: Scale Editor
+  audience: all
+  summary: Choose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose, Rotation) without changing playback until you apply it.
+  prose: 'The Scale Editor sets the harmony of the whole song and holds 16 scale slots. Changing the scale changes the pitches that pattern degrees produce; it does not change rhythm or pattern degrees.
+
+
+    Apply a scale:
+
+
+    1. Press Grid (4, 8) to open the Scale Editor. The scale slots are the 16 buttons on Grid row 3. The applied slot is brightly lit.
+
+    2. Short-press a slot. It is applied to every channel and selected for editing.
+
+    3. To turn global scale off, short-press the applied slot again. The slot stays selected for editing. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. Press the slot again to apply it.
+
+
+    A pattern uses the applied scale unless a global scale lock or a channel scale lock overrides it.
+
+
+    Edit a slot:
+
+
+    1. Turn E2 to select Root, Scale, Degree, Transpose or Rotation. Scale tasks are Scale, Scale clock and Overview.
+
+    2. Turn E3 to change the value of the selected row. The title row names the slot you are editing.
+
+    3. Release all grid keys, then press K3 to apply the changes or K2 to cancel. Tapping any grid key, including Play/Stop, cancels an unapplied edit, so press K3 first.
+
+
+    Edit a slot without playing it:
+
+
+    1. Hold K1 and press the slot, or long-press a slot that is not selected for editing.
+
+    2. Edit the slot as above and press K3. Playback does not change. A dim indicator marks the editing slot when it differs from the applied slot.
+
+    3. Long-press the slot already selected for editing to turn global scale off and clear the editing selection.
+
+
+    Applying changes to the slot that is playing changes the sound immediately.
+
+
+    Set a scale lock: hold a step and press a scale slot. On the Scale page the lock is global for channels without a channel scale lock; on a channel page it applies to that channel. See [Scale Locks](#scale-locks).
+
+
+    The global scale track has its own rate and length, so a chord progression can run over a different number of steps from the patterns. On the Scale clock task, E2 selects Rate and E3 changes it; K3 applies. The same screen shows the selected range, the global cap and the playable range as read-only values. To change the length, hold the first step of the range on the scale track and press its last step. The end must come after the start: a reversed selection is rejected with the tooltip End must follow start and the previous range stays, and ranges do not wrap from the last step back to the first.
+
+
+    Video: [Scale editor demo](https://youtu.be/J1ckUZvhFJ0?t=2741)'
+  musical_use: Change the harmony of a melody without changing its rhythm or pattern degrees. Prepare a different scale in an unused slot, then apply it when you want to hear it.
+  related:
+  - scale-locks
+  - dig-deeper
+  sources:
+    readme: manual/legacy/README-1.4.0.md#scale-editor
+    behaviour_cases:
+    - M-SCALE-001
+    - M-SCALE-002
+    - M-SCALE-003
+    - M-SCALE-004
+    - M-SCALE-DISPLAY-001
+    code:
+    - lib/pages/scale_edit_page/scale_edit_page.lua
+    - lib/pages/scale_edit_page/scale_edit_page_ui.lua
+    - lib/ui_adapters/scale.lua
+    - lib/models/program.lua
+    - lib/quantiser.lua
+    - lib/step.lua
+  controls:
+  - gesture: Press Grid (4, 8).
+    result: The Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.
+  - gesture: Short-press a scale slot on row 3.
+    result: Apply it globally and select it for editing. Press the applied slot again to turn global scale off while it stays selected for editing.
+  - gesture: Hold K1 and press a scale slot, or long-press a different editing slot.
+    result: Select the slot for editing without changing which scale playback uses.
+  - gesture: Long-press the slot already selected for editing.
+    result: Turn global scale off and clear the editing selection.
+  - gesture: On the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3 to change its value.
+    result: The value changes in the draft for the slot named in the title row. Nothing sounds different yet.
+  - gesture: Release all grid keys, then press K3 or K2.
+    result: K3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes its harmony immediately.
+  - gesture: On the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.
+    result: Set the rate of the global scale track. Selected range, Global cap and Playable range are shown for reference and cannot be edited there.
+  - gesture: On the Scale page, hold the first step of a range on the scale track and press its last step.
+    result: Set the length of the scale track independently of the channels. The tooltip reads Channel 17 length changed.
+  - gesture: Hold a sequencer step, then press a scale slot.
+    result: 'Set or toggle a scale lock at that step: global on the Scale page, channel-specific on a channel page.'
+  details:
+  - title: Editing selection and applied scale
+    text: The title row names the slot selected for editing. The editing indicator is dim when that slot differs from the applied scale. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. An active channel scale lock takes precedence over the global scale.
+  - title: Vertical list controls
+    text: Scale settings appear as vertical rows. Turn E2 to select a row and bring later fields into view. E3 edits the selected slot's draft; K3 applies it and K2 cancels it. Selecting another row does not apply a draft. Tapping a grid key, including Play/Stop, cancels an unapplied draft, so press K3 before using the grid to keep your edit. A long scale name uses a separate full-width value row.
+  - title: Scale lock lifetime
+    text: A global scale lock lasts until another global lock or until the global scale track wraps. A channel scale lock follows PARAMS > MOSAIC > Scales lock until ptn end, which is On by default. See Scale Locks.
+  - title: Scale clock and Overview
+    text: 'Scale clock sets the rate of the global scale track. Overview is a read-only dashboard: it lists the playing scale, the scale being edited, the step range, the transposition and any step lock. Both are Scale tasks beside Scale.'
+  recipes:
+  - title: Prepare and apply a second scale
+    text: 'Starting point: channel 1 has Pattern 1 assigned and plays a four-step melody in C major with Pattern Note degrees 0, 1, 2 and 3; its channel Note mask is X. It sounds MIDI 60, 62, 64 and 65 (C, D, E, F). To build it, follow [Dig Deeper](#dig-deeper): assign Pattern 1 to channel 1, add trigs on steps 1–4, set Pattern Note to degrees 0, 1, 2 and 3 in order, leave the channel Note mask at X, and apply C major in scale slot 1. The captured examples below start from the same setup: Save D major, then apply it follows steps 1 to 5, and Prepare a scale before applying it adds browsing a slot with a long press, editing the applied slot and turning the global scale Off.
+
+
+      1. Press Grid (4, 8) to open the Scale Editor. Slot 1, the left button on row 3, is bright.
+
+
+      2. Hold K1, press slot 2 at (2, 3), then release both. The title row names slot 2 and a dim indicator marks it. Playback is still in C major.
+
+
+      3. Prepare slot 2: turn E2 to Root and turn E3 two clicks to D. Release all grid keys and press K3 to save the draft. Checkpoint: tap Play (1,8), listen, then tap Stop. The melody still plays C, D, E, F because slot 1 remains applied.
+
+
+      4. Apply the draft: short-press slot 2 at (2, 3). It becomes the bright applied slot. Tap Play (1,8), listen, then tap Stop: the melody plays D, E, F sharp, G (MIDI 62, 64, 66, 67). The rhythm has not changed.
+
+
+      5. Restore the comparison: short-press slot 1 at (1, 3), tap Play and listen. C, D, E, F are restored.'
+  scene_refs:
+  - scale-save-d-and-apply
+  - scale-edit-versus-apply
+  scene_milestones:
+  - scene_id: scale-edit-versus-apply
+    groups:
+    - id: core-edit-then-apply
+      label: 'Core: edit slot 2, hear no change, apply it'
+      step_ids:
+      - start
+      - select-slot-2
+      - edit-root
+      - save-unused
+      - apply-slot-2
+      - apply-d
+    - id: optional-active-slot-and-global-off
+      label: 'Optional: edit the active slot, turn the global scale off, restore it'
+      step_ids:
+      - browse-slot-3
+      - select-applied
+      - edit-applied
+      - edit-slot-3
+      - global-off
+      - turn-off
+      - reapply
+  - scene_id: scale-save-d-and-apply
+    groups:
+    - id: scale-save-d-and-apply-checkpoint-1
+      label: Save D major in slot 2 without applying it
+      step_ids:
+      - start
+      - select-slot-2
+      - edit-root
+      - save-unused
+    - id: scale-save-d-and-apply-checkpoint-2
+      label: Apply slot 2 and hear the D-major phrase
+      step_ids:
+      - apply-slot-2
+      - apply-d
+  review:
+    status: controlled-verified
+    cases:
+    - M-SCALE-001
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: scale-edit-versus-apply
+      data: reference-scenes.json
+      data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+      clock_mode: controlled-experimental
+      case: M-SCALE-001
+      assertions:
+      - kind: scale-edit-header
+        slot: 1
+      - kind: scale-edit-header
+        slot: 2
+      - kind: scale-edit-header
+        slot: 2
+      - kind: midi
+        expected:
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        actual:
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        complete_cycles: 3
+      - kind: scale-edit-header
+        slot: 2
+      - kind: midi
+        expected:
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        actual:
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        complete_cycles: 3
+      - kind: scale-edit-header
+        slot: 3
+      - kind: scale-edit-header
+        slot: 2
+      - kind: midi
+        expected:
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        actual:
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        complete_cycles: 3
+      - kind: scale-edit-header
+        slot: 3
+      - kind: scale-edit-header
+        slot: 0
+      - kind: midi
+        expected:
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 61
+            - 117
+        - - 1
+          - - 144
+            - 62
+            - 107
+        - - 1
+          - - 144
+            - 63
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 61
+            - 117
+        - - 1
+          - - 144
+            - 62
+            - 107
+        - - 1
+          - - 144
+            - 63
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 61
+            - 117
+        - - 1
+          - - 144
+            - 62
+            - 107
+        - - 1
+          - - 144
+            - 63
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        actual:
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 61
+            - 117
+        - - 1
+          - - 144
+            - 62
+            - 107
+        - - 1
+          - - 144
+            - 63
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 61
+            - 117
+        - - 1
+          - - 144
+            - 62
+            - 107
+        - - 1
+          - - 144
+            - 63
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 61
+            - 117
+        - - 1
+          - - 144
+            - 62
+            - 107
+        - - 1
+          - - 144
+            - 63
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        complete_cycles: 3
+      - kind: midi
+        expected:
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        actual:
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        - - 1
+          - - 144
+            - 66
+            - 117
+        - - 1
+          - - 144
+            - 68
+            - 107
+        - - 1
+          - - 144
+            - 69
+            - 97
+        - - 1
+          - - 144
+            - 64
+            - 127
+        complete_cycles: 3
+      scope: Saved scale creation and the distinction between editing and applying a scale.
+      build_lane_proofs:
+      - &id011
+        stage: reference-controlled-scene-plans-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-base-midi.json
+        stage_sha256: 1ab813573fe15006b70b603517b2f6a16318f82ca52c87115da7e3d79a135fcf
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-base-midi.log
+        log_sha256: 49d17853d8a94701814957f35af0a2777f05dfe7571729d5832596283654bfc1
+        report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+        report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+          application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+    - scene: scale-save-d-and-apply
+      data: reference-scenes.json
+      data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+      clock_mode: controlled-experimental
+      case: M-SCALE-001
+      assertions:
+      - kind: scale-edit-header
+        slot: 1
+      - kind: scale-edit-header
+        slot: 2
+      - kind: scale-edit-header
+        slot: 2
+      - kind: midi
+        expected:
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        actual:
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        - - 1
+          - - 144
+            - 62
+            - 117
+        - - 1
+          - - 144
+            - 64
+            - 107
+        - - 1
+          - - 144
+            - 65
+            - 97
+        - - 1
+          - - 144
+            - 60
+            - 127
+        complete_cycles: 3
+      - kind: scale-edit-header
+        slot: 2
+      - kind: midi
+        expected:
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        actual:
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        - - 1
+          - - 144
+            - 64
+            - 117
+        - - 1
+          - - 144
+            - 66
+            - 107
+        - - 1
+          - - 144
+            - 67
+            - 97
+        - - 1
+          - - 144
+            - 62
+            - 127
+        complete_cycles: 3
+      scope: Saved scale creation and the distinction between editing and applying a scale.
+      build_lane_proofs:
+      - &id012
+        stage: reference-controlled-scene-plans-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-base-midi.json
+        stage_sha256: 1ab813573fe15006b70b603517b2f6a16318f82ca52c87115da7e3d79a135fcf
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-base-midi.log
+        log_sha256: 49d17853d8a94701814957f35af0a2777f05dfe7571729d5832596283654bfc1
+        report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+        report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+          application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+    applicability: native-ui
+    native_gap: null
+    historical_native_evidence:
+    - review:
+        status: verified
+        cases:
+        - M-SCALE-001
+        note: Source and case definitions reviewed. Published native assertions and their scope are listed separately; pending gaps are not acceptance evidence.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: scale-edit-versus-apply
+          data: reference-scenes.json
+          clock_mode: real-time
+          case: M-SCALE-001
+          assertions:
+          - kind: midi
+            complete_cycles: 3
+          - kind: midi
+            complete_cycles: 3
+          - kind: midi
+            complete_cycles: 3
+          - kind: midi
+            complete_cycles: 3
+          scope: The authored scene’s cited workflow and stated semantic outcomes.
+          run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+          data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+        applicability: native-ui
+        native_gap: null
+      scene_refs:
+      - scale-save-d-and-apply
+      - scale-edit-versus-apply
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: scale-edit-versus-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 0
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id001
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: f17e8e5a3cb4c05b0cf6462b61cea5f96d6c39912c0a2124b11c77946ef67868
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 5bbaa16fe919bbe4117040b730cccfee0d1ccf556508390c489f41ceef468160
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: scale-save-d-and-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id002
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: f17e8e5a3cb4c05b0cf6462b61cea5f96d6c39912c0a2124b11c77946ef67868
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 5bbaa16fe919bbe4117040b730cccfee0d1ccf556508390c489f41ceef468160
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Saved scale creation and the distinction between editing and applying a scale.
+        scope: Saved scale creation and the distinction between editing and applying a scale.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id001
+        - *id002
+      scene_refs:
+      - scale-save-d-and-apply
+      - scale-edit-versus-apply
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: scale-edit-versus-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 0
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id003
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: 4ce07c26ee726d6f7c077b76838b2bdd24b75ee25127ad4f87da9d610ac660b5
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-base-midi.log
+            log_sha256: dae0a981be7e5431fd72ea7735a9f7637656350761a76f8b27866736bff19c7c
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: scale-save-d-and-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id004
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: 4ce07c26ee726d6f7c077b76838b2bdd24b75ee25127ad4f87da9d610ac660b5
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-base-midi.log
+            log_sha256: dae0a981be7e5431fd72ea7735a9f7637656350761a76f8b27866736bff19c7c
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Saved scale creation and the distinction between editing and applying a scale.
+        scope: Saved scale creation and the distinction between editing and applying a scale.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id003
+        - *id004
+      scene_refs:
+      - scale-save-d-and-apply
+      - scale-edit-versus-apply
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: scale-edit-versus-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 0
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id005
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: bf85b1567b4e6af2e25a38ac08375f0278595a2b7ebdbd7d89cce75643a35043
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 8e572a7985d93d25d8ce75a9c8df0d5ee0d26a8072023d35adca0b57d004904f
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: scale-save-d-and-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id006
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: bf85b1567b4e6af2e25a38ac08375f0278595a2b7ebdbd7d89cce75643a35043
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 8e572a7985d93d25d8ce75a9c8df0d5ee0d26a8072023d35adca0b57d004904f
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Saved scale creation and the distinction between editing and applying a scale.
+        scope: Saved scale creation and the distinction between editing and applying a scale.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id005
+        - *id006
+      scene_refs:
+      - scale-save-d-and-apply
+      - scale-edit-versus-apply
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: scale-edit-versus-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 0
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id007
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: bf85b1567b4e6af2e25a38ac08375f0278595a2b7ebdbd7d89cce75643a35043
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 8e572a7985d93d25d8ce75a9c8df0d5ee0d26a8072023d35adca0b57d004904f
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: scale-save-d-and-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id008
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: bf85b1567b4e6af2e25a38ac08375f0278595a2b7ebdbd7d89cce75643a35043
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 8e572a7985d93d25d8ce75a9c8df0d5ee0d26a8072023d35adca0b57d004904f
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Saved scale creation and the distinction between editing and applying a scale.
+        scope: Saved scale creation and the distinction between editing and applying a scale.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id007
+        - *id008
+      scene_refs:
+      - scale-save-d-and-apply
+      - scale-edit-versus-apply
+    - review:
+        status: controlled-verified
+        cases:
+        - M-SCALE-001
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: scale-edit-versus-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 3
+          - kind: scale-edit-header
+            slot: 0
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 61
+                - 117
+            - - 1
+              - - 144
+                - 62
+                - 107
+            - - 1
+              - - 144
+                - 63
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            - - 1
+              - - 144
+                - 66
+                - 117
+            - - 1
+              - - 144
+                - 68
+                - 107
+            - - 1
+              - - 144
+                - 69
+                - 97
+            - - 1
+              - - 144
+                - 64
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id009
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: 2fd61769181b0fae696150ceddca5d4d8ee4eb69f00db8eccc9e593c2987254c
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 9451fa50c678adf01a7776f3584a2cdc8b55dda48baed0c945a6853f8d45bd82
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: scale-save-d-and-apply
+          data: reference-scenes.json
+          data_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+          clock_mode: controlled-experimental
+          case: M-SCALE-001
+          assertions:
+          - kind: scale-edit-header
+            slot: 1
+          - kind: scale-edit-header
+            slot: 2
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            - - 1
+              - - 144
+                - 62
+                - 117
+            - - 1
+              - - 144
+                - 64
+                - 107
+            - - 1
+              - - 144
+                - 65
+                - 97
+            - - 1
+              - - 144
+                - 60
+                - 127
+            complete_cycles: 3
+          - kind: scale-edit-header
+            slot: 2
+          - kind: midi
+            expected:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            actual:
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            - - 1
+              - - 144
+                - 64
+                - 117
+            - - 1
+              - - 144
+                - 66
+                - 107
+            - - 1
+              - - 144
+                - 67
+                - 97
+            - - 1
+              - - 144
+                - 62
+                - 127
+            complete_cycles: 3
+          scope: Saved scale creation and the distinction between editing and applying a scale.
+          build_lane_proofs:
+          - &id010
+            stage: reference-controlled-scene-plans-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-base-midi.json
+            stage_sha256: 2fd61769181b0fae696150ceddca5d4d8ee4eb69f00db8eccc9e593c2987254c
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-base-midi.log
+            log_sha256: 9451fa50c678adf01a7776f3584a2cdc8b55dda48baed0c945a6853f8d45bd82
+            report: /home/andy/mosaic-manual-runs/234b25b0619f4b7f85d964fa74394845/reference-scenes.json
+            report_sha256: 3925f8771113de863a5960324cac34ab32b4ffbd0175d00c451176eb912618a4
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 682bda14fe8b3f37f2cd075d5b3ea8212ad9214c0e039b935234b167e66bd27a
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Saved scale creation and the distinction between editing and applying a scale.
+        scope: Saved scale creation and the distinction between editing and applying a scale.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+        controlled_baselines:
+        - *id009
+        - *id010
+      scene_refs:
+      - scale-save-d-and-apply
+      - scale-edit-versus-apply
+    rationale: Saved scale creation and the distinction between editing and applying a scale.
+    scope: Saved scale creation and the distinction between editing and applying a scale.
+    binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/feature-bind/manifest.json
+    complete_regression_run: false
+    validation_scope: controlled-manual-generation
+    realtime_qualification: pending-ci
+    controlled_baselines:
+    - *id011
+    - *id012
+  category: scale
+  parent: dig-deeper
+  level: 3
+- id: transposition
+  title: Transposition
+  audience: all
+  summary: Transpose the whole selected Song Sequence by -12 to +12 semitones with one fader. Locks change it from chosen steps.
+  prose: 'Use the transposition fader on the Scale page to transpose every channel of the selected Song Sequence without editing any note. Rhythm and intervals stay the same.
+
+
+    Set global transposition:
+
+
+    1. Press Grid (4, 8) to open the Scale Editor.
+
+    2. Press a button on the transposition fader, Grid row 8, columns 8–16. The tooltip shows Transpose and the new value.
+
+
+    The fader buttons set these values: (9,8) is -12, (10,8) -8, (11,8) -4, (12,8) 0, (13,8) +4, (14,8) +8 and (15,8) +12. The end buttons, (8,8) and (16,8), lower or raise the value by one semitone each press.
+
+
+    The global value is added to the active scale slot''s Transpose value. With scale slot 1 as C major and the melody 60, 62, 64, 65, +2 plays 62, 64, 66, 67.
+
+
+    You can change transposition while playing. A note that is already sounding keeps its pitch and length. The next notes use the new value.
+
+
+    To change transposition from a certain step onwards, use [transposition locks](#transposition-locks).
+
+
+    Video: [Global transposition demo](https://youtu.be/J1ckUZvhFJ0?t=2905)'
+  musical_use: Move a section up or down while keeping its rhythm and intervals, for example repeat a verse a tone higher in a copied Song slot.
+  related:
+  - transposition-locks
+  - scale-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#transposition
+    behaviour_cases:
+    - M-TRANS-006
+    - M-TRANS-007
+    - M-TRANS-008
+    - M-TRANS-009
+    code:
+    - lib/pages/scale_edit_page/scale_edit_page.lua
+    - lib/controls/fader.lua
+    - lib/models/program.lua
+    - lib/step.lua
+  controls:
+  - gesture: On the Scale page, press a button on the transposition fader, Grid row 8, columns 8–16.
+    result: Set the selected Song Sequence's global transposition within -12 to +12 semitones.
+  - gesture: Press the left end button (8,8) or the right end button (16,8).
+    result: Lower or raise by one semitone. The centre button (12,8) returns to zero.
+  - gesture: Hold a scale-track step and press a fader button.
+    result: Set a transposition lock for that step. Repeating the same value removes the lock.
+  details:
+  - title: Transposition precedence
+    text: The current global value, or the persistent step-lock value, is added to the active scale slot's Transpose value. For its lifetime, a step lock replaces the global fader value.
+  - title: Each Song slot has its own transposition
+    text: Transposition belongs to the selected Song Sequence. Copying a Song slot copies its transposition, and changing the copy leaves the original as it was.
+  - title: Edits during playback
+    text: A change made while notes sound does not cut the sounding note or change its length. The next onset uses the new value. In the captured example, +1 and then -12 raise the following notes by one semitone and then drop them an octave from the written pitch.
+  recipes:
+  - title: Play a copied Song slot a tone higher
+    text: 'This recipe changes the transposition fader on a copy of a slot, so the copy plays a tone higher while the original stays put. It is a different workflow from the captured example below, which shows the fader being pressed while a note is sounding.
+
+
+      Start with Song slot 1 holding a finished sequence, such as a four-note melody on MIDI 60, 62, 64, 65, with playback stopped and Song mode at its default (On).
+
+
+      1. Press Grid (6, 8) to open the Song Editor. Slot 1 at (1, 1) is lit: it is the slot you are working on.
+
+
+      2. Hold slot 1 at (1, 1) and press slot 2 at (2, 1), then release both. Slot 2 now holds a copy of slot 1 (copying overwrites whatever slot 2 held).
+
+
+      3. Press slot 2 at (2, 1) to select it while stopped.
+
+
+      4. Press Grid (4, 8) to open the Scale Editor.
+
+
+      5. Press the right end of the transposition fader, (16, 8), twice. Each press adds one semitone and the tooltip shows Transpose: 2.
+
+
+      6. Press Play. Slot 2 plays 62, 64, 66, 67. With Song mode On, playback moves on to the next slot after the repeats set in Slot setup; to hold on one slot, open PARAMS > MOSAIC and turn Song mode Off (E3). Press Stop.
+
+
+      7. Press Grid (6, 8), then slot 1 at (1, 1), and press Play to hear the original at 60, 62, 64, 65, because slot 1 kept its transposition of 0.
+
+
+      Check that the raised notes are still inside the usable range of the sound you are playing.'
+  scene_refs:
+  - transpose-next-onset
+  - transpose-song-slot-copy
+  review:
+    status: controlled-verified
+    cases:
+    - M-TRANS-009
+    - M-TRANS-010
+    note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: transpose-next-onset
+      data: reference-extra-scenes.json
+      data_sha256: 14be4ff8c73702190b30a530316d53540c9494ca6cf9b756c9157505ab187dfc
+      clock_mode: controlled-experimental
+      case: M-TRANS-009
+      assertions:
+      - kind: screen-header
+        expected: DEVICE CH01
+        matched: true
+      - kind: dashboard-row
+        label: Transpose
+        value: '+1'
+        row: 4
+        passed: true
+      - kind: dashboard-row
+        label: Transpose
+        value: '-12'
+        row: 4
+        passed: true
+      - kind: dashboard-row
+        label: Transpose
+        value: '-12'
+        row: 4
+        passed: true
+      - kind: transpose-global-live-edit
+        onsets: 11
+        releases: 11
+        transposes:
+        - 0
+        - 1
+        - 1
+        - 1
+        - 1
+        - -12
+        - -12
+        - -12
+        - -12
+        - -12
+        - -12
+        second_edit_after_onsets: 5
+        maximum_phase_error_seconds: 6.66666721826914e-10
+        passed: true
+      scope: Next-onset transposition and song-slot copy behavior.
+      build_lane_proofs:
+      - &id013
+        stage: reference-controlled-scene-plans-extra-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-extra-base-midi.json
+        stage_sha256: b646bbb91229a83a4fa65f749c7cde101717f8214022b4b68cd73aa9e9acf045
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-extra-base-midi.log
+        log_sha256: fffb8bbcbee25647be49260b3f6c9d1065fac38c85f94381275bf0e02f81e425
+        report: /home/andy/mosaic-manual-runs/bbf032163ccf4cafa89b5d6547edc76b/reference-scenes.json
+        report_sha256: 14be4ff8c73702190b30a530316d53540c9494ca6cf9b756c9157505ab187dfc
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: 53c1be877fa764e10de56d41cd9d5b08712ca73ec6e6ab8c4a3b4671269d96b8
+          application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+    - scene: transpose-song-slot-copy
+      data: reference-extra-scenes.json
+      data_sha256: 14be4ff8c73702190b30a530316d53540c9494ca6cf9b756c9157505ab187dfc
+      clock_mode: controlled-experimental
+      case: M-TRANS-010
+      assertions:
+      - kind: screen-header
+        expected: DEVICE CH01
+        matched: true
+      - kind: grid
+        cells:
+        - - 1
+          - 1
+        - - 2
+          - 1
+        expected:
+        - 7
+        - 15
+        actual:
+        - 7
+        - 15
+      - kind: dashboard-row
+        label: Transpose
+        value: '+2'
+        row: 4
+        passed: true
+      - kind: song-slot-transpose
+        stage: slot2-plus-two
+        pitches:
+        - 62
+        - 64
+        - 66
+        - 67
+        passed: true
+      - kind: song-slot-transpose
+        stage: slot1-original
+        pitches:
+        - 60
+        - 62
+        - 64
+        - 65
+        passed: true
+      scope: Next-onset transposition and song-slot copy behavior.
+      build_lane_proofs:
+      - &id014
+        stage: reference-controlled-scene-plans-extra-base-midi
+        stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-extra-base-midi.json
+        stage_sha256: b646bbb91229a83a4fa65f749c7cde101717f8214022b4b68cd73aa9e9acf045
+        log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/reference-controlled-scene-plans-extra-base-midi.log
+        log_sha256: fffb8bbcbee25647be49260b3f6c9d1065fac38c85f94381275bf0e02f81e425
+        report: /home/andy/mosaic-manual-runs/bbf032163ccf4cafa89b5d6547edc76b/reference-scenes.json
+        report_sha256: 14be4ff8c73702190b30a530316d53540c9494ca6cf9b756c9157505ab187dfc
+        clock_mode: controlled-experimental
+        application_identity:
+          identity_sha256: a975d45e3d3a611f61913e42fffabcce0f4535cc8b1a09f23cd46f2171e9a102
+          application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+    applicability: native-ui
+    native_gap: null
+    rationale: Next-onset transposition and song-slot copy behavior.
+    controlled_baselines:
+    - *id013
+    - *id014
+    historical_native_evidence:
+    - review:
+        status: verified
+        cases:
+        - M-TRANS-009
+        - M-TRANS-010
+        note: Source and case definitions reviewed. Published native assertions and their scope are listed separately; pending gaps are not acceptance evidence.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: transpose-next-onset
+          data: reference-musical-scenes.json
+          clock_mode: real-time
+          run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+          data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+          case: M-TRANS-009
+          assertions:
+          - kind: transpose-global-live-edit
+            passed: true
+          scope: The cited public workflow and stated native semantic outcomes.
+        applicability: native-ui
+        native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+        rationale: Reference source audit and the cited public native workflow are complete for publication.
+        controlled_baselines:
+        - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+          data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+          scene: transpose-next-onset
+          clock_mode: controlled-experimental
+      scene_refs:
+      - transpose-next-onset
+      - transpose-song-slot-copy
+    - review:
+        status: controlled-verified
+        cases:
+        - M-TRANS-009
+        - M-TRANS-010
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: transpose-next-onset
+          data: reference-extra-scenes.json
+          data_sha256: 1250485c08f945dcbdfaa1d54012f41ef23c5a2f6d254c85f806b415460a2e31
+          clock_mode: controlled-experimental
+          case: M-TRANS-009
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '+1'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: transpose-global-live-edit
+            onsets: 11
+            releases: 11
+            transposes:
+            - 0
+            - 1
+            - 1
+            - 1
+            - 1
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            second_edit_after_onsets: 5
+            maximum_phase_error_seconds: 6.66666721826914e-10
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id015
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: da9f845d2101dc3fc8138f0ed630c36a437a03c3d1d2b69b2c8eb366a87471bd
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: e735cd430fa9e1811c8123d29caea926ccb6031e091444379f9d78cdc5ef8b7b
+            report: /home/andy/mosaic-manual-runs/36230b5a961f49e7b2d2cf9ca5e9a2c2/reference-scenes.json
+            report_sha256: 1250485c08f945dcbdfaa1d54012f41ef23c5a2f6d254c85f806b415460a2e31
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 12f7289faccd695cd9f4d1d43151e0d361e6eff96d3bb42f3e543dbd2df7f2dc
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: transpose-song-slot-copy
+          data: reference-extra-scenes.json
+          data_sha256: 1250485c08f945dcbdfaa1d54012f41ef23c5a2f6d254c85f806b415460a2e31
+          clock_mode: controlled-experimental
+          case: M-TRANS-010
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: grid
+            cells:
+            - - 1
+              - 1
+            - - 2
+              - 1
+            expected:
+            - 7
+            - 15
+            actual:
+            - 7
+            - 15
+          - kind: dashboard-row
+            label: Transpose
+            value: '+2'
+            row: 4
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot2-plus-two
+            pitches:
+            - 62
+            - 64
+            - 66
+            - 67
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot1-original
+            pitches:
+            - 60
+            - 62
+            - 64
+            - 65
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id016
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: da9f845d2101dc3fc8138f0ed630c36a437a03c3d1d2b69b2c8eb366a87471bd
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: e735cd430fa9e1811c8123d29caea926ccb6031e091444379f9d78cdc5ef8b7b
+            report: /home/andy/mosaic-manual-runs/36230b5a961f49e7b2d2cf9ca5e9a2c2/reference-scenes.json
+            report_sha256: 1250485c08f945dcbdfaa1d54012f41ef23c5a2f6d254c85f806b415460a2e31
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: faf967442aa83e806ec8276c819d03c1565f05ef84ec05b336bc444ab9da056b
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Next-onset transposition and song-slot copy behavior.
+        controlled_baselines:
+        - *id015
+        - *id016
+        scope: Next-onset transposition and song-slot copy behavior.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-15/83cddc850f8d4a60857f1abfef464a13/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+      scene_refs:
+      - transpose-next-onset
+      - transpose-song-slot-copy
+    - review:
+        status: controlled-verified
+        cases:
+        - M-TRANS-009
+        - M-TRANS-010
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: transpose-next-onset
+          data: reference-extra-scenes.json
+          data_sha256: 9833247b8b10026f2a9e815dfc9ae771d1987c7710d87e687c69af177848ad2e
+          clock_mode: controlled-experimental
+          case: M-TRANS-009
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '+1'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: transpose-global-live-edit
+            onsets: 11
+            releases: 11
+            transposes:
+            - 0
+            - 1
+            - 1
+            - 1
+            - 1
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            second_edit_after_onsets: 5
+            maximum_phase_error_seconds: 6.66666721826914e-10
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id017
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 5a42b8b4329b617dd7c883faeb6b8e44496a077e7ed20f52e248bc74db24cfa5
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: 7edddd40a08e5f0beeefbf1b7cbd1c4e563e12bc261de950b911f7ee3f680e59
+            report: /home/andy/mosaic-manual-runs/2aa5483b1bf049c3b38147d23acd9cbd/reference-scenes.json
+            report_sha256: 9833247b8b10026f2a9e815dfc9ae771d1987c7710d87e687c69af177848ad2e
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: a4540ec56b3a798b0ad4df9cbed246a7d0aef0be9f4d0a1282ed860d70c7596e
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: transpose-song-slot-copy
+          data: reference-extra-scenes.json
+          data_sha256: 9833247b8b10026f2a9e815dfc9ae771d1987c7710d87e687c69af177848ad2e
+          clock_mode: controlled-experimental
+          case: M-TRANS-010
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: grid
+            cells:
+            - - 1
+              - 1
+            - - 2
+              - 1
+            expected:
+            - 7
+            - 15
+            actual:
+            - 7
+            - 15
+          - kind: dashboard-row
+            label: Transpose
+            value: '+2'
+            row: 4
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot2-plus-two
+            pitches:
+            - 62
+            - 64
+            - 66
+            - 67
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot1-original
+            pitches:
+            - 60
+            - 62
+            - 64
+            - 65
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id018
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 5a42b8b4329b617dd7c883faeb6b8e44496a077e7ed20f52e248bc74db24cfa5
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: 7edddd40a08e5f0beeefbf1b7cbd1c4e563e12bc261de950b911f7ee3f680e59
+            report: /home/andy/mosaic-manual-runs/2aa5483b1bf049c3b38147d23acd9cbd/reference-scenes.json
+            report_sha256: 9833247b8b10026f2a9e815dfc9ae771d1987c7710d87e687c69af177848ad2e
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 58dc3a1be3128dc22f583929c9a86b61327a045591433b09f122063f5746a795
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Next-onset transposition and song-slot copy behavior.
+        controlled_baselines:
+        - *id017
+        - *id018
+        scope: Next-onset transposition and song-slot copy behavior.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-16/4bd1b9ce1b4e4cdfa6673dbaceabbf54/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+      scene_refs:
+      - transpose-next-onset
+      - transpose-song-slot-copy
+    - review:
+        status: controlled-verified
+        cases:
+        - M-TRANS-009
+        - M-TRANS-010
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: transpose-next-onset
+          data: reference-extra-scenes.json
+          data_sha256: cff3fb05b2c844f5fdb3e88842b82de33bd40ea93878bdadc00c773ff0bddab3
+          clock_mode: controlled-experimental
+          case: M-TRANS-009
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '+1'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: transpose-global-live-edit
+            onsets: 11
+            releases: 11
+            transposes:
+            - 0
+            - 1
+            - 1
+            - 1
+            - 1
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            second_edit_after_onsets: 5
+            maximum_phase_error_seconds: 6.66666721826914e-10
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id019
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 6ab7406a62bf16fcc3c9192d1ea3421d094723ed4e937da5b3ff4306efdb5232
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: 19c07d4ef5ce2c32cc719ace5dcf6048d28bc4b7d6cc12464798a7cc85f6345d
+            report: /home/andy/mosaic-manual-runs/8d72ed602ed64700b2c57dfd3b565ed3/reference-scenes.json
+            report_sha256: cff3fb05b2c844f5fdb3e88842b82de33bd40ea93878bdadc00c773ff0bddab3
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: d226944878fdfe85f89a76026fb4302b2b4a0f131c318cd00dab2a74e70d7fe9
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: transpose-song-slot-copy
+          data: reference-extra-scenes.json
+          data_sha256: cff3fb05b2c844f5fdb3e88842b82de33bd40ea93878bdadc00c773ff0bddab3
+          clock_mode: controlled-experimental
+          case: M-TRANS-010
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: grid
+            cells:
+            - - 1
+              - 1
+            - - 2
+              - 1
+            expected:
+            - 7
+            - 15
+            actual:
+            - 7
+            - 15
+          - kind: dashboard-row
+            label: Transpose
+            value: '+2'
+            row: 4
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot2-plus-two
+            pitches:
+            - 62
+            - 64
+            - 66
+            - 67
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot1-original
+            pitches:
+            - 60
+            - 62
+            - 64
+            - 65
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id020
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 6ab7406a62bf16fcc3c9192d1ea3421d094723ed4e937da5b3ff4306efdb5232
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: 19c07d4ef5ce2c32cc719ace5dcf6048d28bc4b7d6cc12464798a7cc85f6345d
+            report: /home/andy/mosaic-manual-runs/8d72ed602ed64700b2c57dfd3b565ed3/reference-scenes.json
+            report_sha256: cff3fb05b2c844f5fdb3e88842b82de33bd40ea93878bdadc00c773ff0bddab3
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 2dd4e413770d208996e3eb90979ab54883723d5ea02b58f6810036183c5fbb83
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Next-onset transposition and song-slot copy behavior.
+        controlled_baselines:
+        - *id019
+        - *id020
+        scope: Next-onset transposition and song-slot copy behavior.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-19/927cd032b6224fd68048c34387ab1308/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+      scene_refs:
+      - transpose-next-onset
+      - transpose-song-slot-copy
+    - review:
+        status: controlled-verified
+        cases:
+        - M-TRANS-009
+        - M-TRANS-010
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: transpose-next-onset
+          data: reference-extra-scenes.json
+          data_sha256: cd3bf156dee26507025ceecc12ff388a662db2072c6cc901dfca147f9ef94661
+          clock_mode: controlled-experimental
+          case: M-TRANS-009
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '+1'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: transpose-global-live-edit
+            onsets: 11
+            releases: 11
+            transposes:
+            - 0
+            - 1
+            - 1
+            - 1
+            - 1
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            second_edit_after_onsets: 5
+            maximum_phase_error_seconds: 6.66666721826914e-10
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id021
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 068f1d405e815ff55c4293d0e7ac7a12344111ac470350714f428bc924f55b61
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: e8e8c05fdf538310891209e67f51f4eba4d32594c265fd96c496d3b3615e4378
+            report: /home/andy/mosaic-manual-runs/d57ede789464436bb45761d2d8f0891e/reference-scenes.json
+            report_sha256: cd3bf156dee26507025ceecc12ff388a662db2072c6cc901dfca147f9ef94661
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 9ac8fa70f0bd95dedd69ff5579ebd3b9ca3635e9cecfa0c7f70718154dbb3a4d
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: transpose-song-slot-copy
+          data: reference-extra-scenes.json
+          data_sha256: cd3bf156dee26507025ceecc12ff388a662db2072c6cc901dfca147f9ef94661
+          clock_mode: controlled-experimental
+          case: M-TRANS-010
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: grid
+            cells:
+            - - 1
+              - 1
+            - - 2
+              - 1
+            expected:
+            - 7
+            - 15
+            actual:
+            - 7
+            - 15
+          - kind: dashboard-row
+            label: Transpose
+            value: '+2'
+            row: 4
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot2-plus-two
+            pitches:
+            - 62
+            - 64
+            - 66
+            - 67
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot1-original
+            pitches:
+            - 60
+            - 62
+            - 64
+            - 65
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id022
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 068f1d405e815ff55c4293d0e7ac7a12344111ac470350714f428bc924f55b61
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: e8e8c05fdf538310891209e67f51f4eba4d32594c265fd96c496d3b3615e4378
+            report: /home/andy/mosaic-manual-runs/d57ede789464436bb45761d2d8f0891e/reference-scenes.json
+            report_sha256: cd3bf156dee26507025ceecc12ff388a662db2072c6cc901dfca147f9ef94661
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 472e5161466d90110fef4ab3f433befcd3cc9aebaa571cd09e28707f91447346
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Next-onset transposition and song-slot copy behavior.
+        controlled_baselines:
+        - *id021
+        - *id022
+        scope: Next-onset transposition and song-slot copy behavior.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-20/4a04f799e48a45d585d3d34fa3a742ac/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+      scene_refs:
+      - transpose-next-onset
+      - transpose-song-slot-copy
+    - review:
+        status: controlled-verified
+        cases:
+        - M-TRANS-009
+        - M-TRANS-010
+        note: Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.
+        source_status: code-and-case-reviewed
+        native_evidence:
+        - scene: transpose-next-onset
+          data: reference-extra-scenes.json
+          data_sha256: 227e19ddec2b3ae05375908ffb43eae2ea4332577d5e6fc07a0b22c8cc553c53
+          clock_mode: controlled-experimental
+          case: M-TRANS-009
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '+1'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: dashboard-row
+            label: Transpose
+            value: '-12'
+            row: 4
+            passed: true
+          - kind: transpose-global-live-edit
+            onsets: 11
+            releases: 11
+            transposes:
+            - 0
+            - 1
+            - 1
+            - 1
+            - 1
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            - -12
+            second_edit_after_onsets: 5
+            maximum_phase_error_seconds: 6.66666721826914e-10
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id023
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 15ab4d699d447664bcb9234a1006db9fb87558a58441aa6f82da4c3fceda18a1
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: 40a5bf845f150fe999856fbe8f1ccfac55bf1842e46dd8d28b99d3c157825df7
+            report: /home/andy/mosaic-manual-runs/ea74c80347bc4fd58d05f22392ed73e3/reference-scenes.json
+            report_sha256: 227e19ddec2b3ae05375908ffb43eae2ea4332577d5e6fc07a0b22c8cc553c53
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: 2b63584603e4d9ca46aaf64aa7ebb650fee842919f27bdba938eabd0226200a0
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        - scene: transpose-song-slot-copy
+          data: reference-extra-scenes.json
+          data_sha256: 227e19ddec2b3ae05375908ffb43eae2ea4332577d5e6fc07a0b22c8cc553c53
+          clock_mode: controlled-experimental
+          case: M-TRANS-010
+          assertions:
+          - kind: screen-header
+            expected: DEVICE CH01
+            matched: true
+          - kind: grid
+            cells:
+            - - 1
+              - 1
+            - - 2
+              - 1
+            expected:
+            - 7
+            - 15
+            actual:
+            - 7
+            - 15
+          - kind: dashboard-row
+            label: Transpose
+            value: '+2'
+            row: 4
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot2-plus-two
+            pitches:
+            - 62
+            - 64
+            - 66
+            - 67
+            passed: true
+          - kind: song-slot-transpose
+            stage: slot1-original
+            pitches:
+            - 60
+            - 62
+            - 64
+            - 65
+            passed: true
+          scope: Next-onset transposition and song-slot copy behavior.
+          build_lane_proofs:
+          - &id024
+            stage: reference-controlled-scene-plans-extra-base-midi
+            stage_path: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-extra-base-midi.json
+            stage_sha256: 15ab4d699d447664bcb9234a1006db9fb87558a58441aa6f82da4c3fceda18a1
+            log: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/reference-controlled-scene-plans-extra-base-midi.log
+            log_sha256: 40a5bf845f150fe999856fbe8f1ccfac55bf1842e46dd8d28b99d3c157825df7
+            report: /home/andy/mosaic-manual-runs/ea74c80347bc4fd58d05f22392ed73e3/reference-scenes.json
+            report_sha256: 227e19ddec2b3ae05375908ffb43eae2ea4332577d5e6fc07a0b22c8cc553c53
+            clock_mode: controlled-experimental
+            application_identity:
+              identity_sha256: fd84f18f6d82ce9305378abc72ffebb8166369f5297b2211d3ccd802fc6425f4
+              application_digest: 6e0568df07d68b2aac35d0960a0a9ba93b16c64325b82ec7c628d6600de18a33
+        applicability: native-ui
+        native_gap: null
+        rationale: Next-onset transposition and song-slot copy behavior.
+        controlled_baselines:
+        - *id023
+        - *id024
+        scope: Next-onset transposition and song-slot copy behavior.
+        binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-22/d6ef0a64e15d48b8a2057813a97b6e71/feature-bind/manifest.json
+        complete_regression_run: false
+        validation_scope: controlled-manual-generation
+        realtime_qualification: pending-ci
+      scene_refs:
+      - transpose-next-onset
+      - transpose-song-slot-copy
+    scope: Next-onset transposition and song-slot copy behavior.
+    binding_receipt: /home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/feature-bind/manifest.json
+    complete_regression_run: false
+    validation_scope: controlled-manual-generation
+    realtime_qualification: pending-ci
+  category: scale
+  parent: scale-editor
+  level: 4

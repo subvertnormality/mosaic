@@ -3,6 +3,11 @@ local musicutil = require("musicutil")
 local quantiser = include("mosaic/lib/quantiser")
 
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+local merge_state = include("mosaic/lib/musical_merge/state")
+local harmony_config_state = include("mosaic/lib/harmony/config_state")
+local harmony_state = include("mosaic/lib/harmony/state")
+local harmony_inspection = include("mosaic/lib/harmony/inspection")
+local song_slot_params = include("mosaic/lib/song_slot_params")
 local model_defaults = include("mosaic/lib/models/model_defaults").new(quantiser, nrpn_codec)
 local program = {}
 local program_store = {}
@@ -45,6 +50,12 @@ function program.get_selected_song_pattern()
 end
 
 function program.set_selected_song_pattern(p)
+  -- Sequencer params are unique to a song pattern (README Trig Parameters):
+  -- the outgoing pattern keeps the values on screen and the incoming one's
+  -- values take their place.
+  local outgoing = program_store.selected_song_pattern
+  if outgoing ~= nil and outgoing ~= p then program.get_song_pattern(outgoing) end
+  song_slot_params.switch(program_store, outgoing, p)
   program_store.selected_song_pattern = p
 end
 
@@ -69,12 +80,20 @@ end
 local notify_lock_edit
 
 function program.set_song_pattern(p, pattern)
+  -- The selected pattern's values live in the paramset until it is left, so
+  -- a copy of it takes them from there, and a copy that replaces the selected
+  -- pattern puts its own values on screen.
+  if p == program_store.selected_song_pattern then song_slot_params.capture(program_store, p) end
   program_store.song_patterns[pattern] = fn.deep_copy(program.get_song_pattern(p))
+  local copied=program_store.song_patterns[pattern]
+  merge_state.reset_song(copied);harmony_config_state.reset_song(copied)
+  harmony_state.reset_song(copied);harmony_inspection.reset_song(copied)
   -- Copying over the sequence that is playing replaces every channel's locks
   -- and assignments at once. Each channel is reported as wholly edited, so a
   -- value resolved from the old sequence is not heard, and what the new
   -- sequence's assignments share is worked out afresh.
   if pattern == program_store.selected_song_pattern then
+    song_slot_params.restore(program_store, pattern)
     for _, channel in pairs(program_store.song_patterns[pattern].channels) do
       notify_lock_edit(channel, nil, nil)
     end

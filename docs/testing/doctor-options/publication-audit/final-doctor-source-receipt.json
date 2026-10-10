@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "tests": 23,
+  "native_qualification_passed": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "historical_native_frame_api_probe": {
+    "run": "e9e5f7294067432a82d05f3ea3706d09",
+    "frames": 3,
+    "shape_only": true
+  },
+  "ordinary_gate_invariant": "onset velocity note_off and exact1/6s;2ns/.01s",
+  "public_stop_endpoint": "last owned note_off zero velocity only at independently bound native Stop; exact2x packet count",
+  "current_sha256": {
+    "tools/doctor_options_audit.py": "b76853fce63f008cbf7f4d6f6d8952a0189ce258ffdfea12c244ee3b24d59878",
+    "tests/behaviour/test_doctor_options_audit.py": "a7918264e2873168673c9a1c6af1db8cb1c48bdb836d6aa11069d6b0a76ec312"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "tools/manual_build.py",
+      "before_sha256": "1332b0a497b1363058f6126af275650dc63f142c652a188596d4e6b5cb5448bf",
+      "after_sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8"
+    },
+    {
+      "path": "tests/behaviour/test_manual_build.py",
+      "before_sha256": "a31ff441ffaa7550d42697c372492d2ac13223379be928e63d4d6700f65b976b",
+      "after_sha256": "2dc2d988de7f28fd366808fc8ce05adb600277cef7b632ff1562740cecb16ddf"
+    }
+  ],
+  "original_tests_preserved": 38,
+  "gate_tests": 16,
+  "registered_module_count_changed": false,
+  "focused_tests_expected": 54,
+  "focused_returncode": 0,
+  "focused_log_sha256": "652a52ada7637c1c8a48de2176481094dfd899d94ac008582f350069bb7b9ccc",
+  "diff_sha256": "763fbb8ce4664b5a2347b3214e5881743a0734d0d2f48b581355ebd981ad93e3",
+  "prepared_patch_sha256": "869b07b8cbb407c1fef33c29ad38ec7288d6c5f4ea09efa769c4635cab271cf6",
+  "native_launched": false
+}

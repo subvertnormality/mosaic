@@ -1,0 +1,19 @@
+{
+  "scope": "suite-collection-factual-refresh-only; final qualification pending",
+  "before_sha256": "2e6e5a392c5b191c882a3769216e611aa99a32a80b7ab3d9abe34cb2b0fbc3e6",
+  "history": "manual/evidence/history/final-completion-checklist-2e6e5a392c5b191c882a3769216e611aa99a32a80b7ab3d9abe34cb2b0fbc3e6.md",
+  "after_sha256": "b59ae6b249e06e32ffe542cbe2ef6d1ca085cfb35acf3a0beff9e37e216dd80d",
+  "source_proofs": {
+    "docs/testing/suite-registration-order/collected-cli.json": "22b894281978cd5d8375caa814c91ea52f962832bbf253b4260020241392ff43",
+    "docs/testing/suite-registration-order/affected.log": "d6a50e9e8a608b7b6cac5c972d6a3ae14639fb67c13e0bc658c364e5ac07e84b",
+    "docs/testing/suite-registration-order/green.log": "dc91d78199051a581941a5e5524e0058e9f51a71cc16aae86738945fd7138c37",
+    "tests/behaviour/suite.py": "602b8c5dd3a8b18a9f7c6f9748bf004203540d1153ef99bb402ff603840813e2"
+  },
+  "cli_import_parity": true,
+  "lua_modules": 42,
+  "python_modules": 92,
+  "canonical_cases": 879,
+  "affected_tests_passed": 27,
+  "complete_regression_run": false,
+  "final_native_acceptance": false
+}

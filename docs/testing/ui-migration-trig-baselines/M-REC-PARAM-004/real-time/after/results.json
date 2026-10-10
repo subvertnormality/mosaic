@@ -1,0 +1,361 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "live-parameter-recording-dirty-value",
+    "expected": null,
+    "actual": [
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          96
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ]
+    ],
+    "meaning": "Active edited values emit immediately and on eligible steps; Off remains silent."
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999836069,
+        "error_ms": -0.16393099999989502
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999463129,
+        "error_ms": -0.5368709999999943
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000135376,
+        "error_ms": 0.1353760000002424
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.998780585,
+        "error_ms": -1.2194150000000015
+      }
+    ]
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "65"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000434009,
+        "error_ms": 0.434009000000124
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999917436,
+        "error_ms": -0.08256399999995168
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999376409,
+        "error_ms": -0.6235910000000899
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999369093,
+        "error_ms": -0.6309070000001249
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999600838,
+        "error_ms": -0.39916199999989743
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.99961461,
+        "error_ms": -0.38538999999992996
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999217504,
+        "error_ms": -0.7824959999997994
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999711992,
+        "error_ms": -0.28800800000006177
+      }
+    ]
+  },
+  {
+    "kind": "recorded-parameter-disarmed-replay",
+    "values": [
+      24,
+      65,
+      96,
+      64,
+      24,
+      65,
+      96,
+      64,
+      24
+    ],
+    "distinct_patch_default": 65,
+    "passed": true
+  },
+  {
+    "kind": "recording-switch-return-live-replay",
+    "live_step4_value": 64,
+    "recorded_step4_value": 64,
+    "passed": true
+  }
+]

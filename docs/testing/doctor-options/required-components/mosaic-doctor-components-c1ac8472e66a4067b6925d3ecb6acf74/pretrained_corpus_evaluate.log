@@ -1,0 +1,11 @@
+test_candidate_floor_sets_every_drum_lane_and_basic_pitch_before_inference (test_pretrained_corpus_evaluate.PretrainedCorpusEvaluateTests.test_candidate_floor_sets_every_drum_lane_and_basic_pitch_before_inference) ... ok
+test_corpus_root_is_explicit_when_manifest_lives_below_external_cache (test_pretrained_corpus_evaluate.PretrainedCorpusEvaluateTests.test_corpus_root_is_explicit_when_manifest_lives_below_external_cache) ... ok
+test_development_threshold_is_deterministic_and_never_reads_held_out (test_pretrained_corpus_evaluate.PretrainedCorpusEvaluateTests.test_development_threshold_is_deterministic_and_never_reads_held_out) ... ok
+test_held_rows_aggregate_one_to_one_onsets_cells_negatives_and_velocity (test_pretrained_corpus_evaluate.PretrainedCorpusEvaluateTests.test_held_rows_aggregate_one_to_one_onsets_cells_negatives_and_velocity) ... ok
+test_raw_predictions_cache_under_both_hashes_and_resumes_without_runtime (test_pretrained_corpus_evaluate.PretrainedCorpusEvaluateTests.test_raw_predictions_cache_under_both_hashes_and_resumes_without_runtime) ... ok
+test_run_loads_the_pinned_runtime_once_and_marks_the_report_quality_only (test_pretrained_corpus_evaluate.PretrainedCorpusEvaluateTests.test_run_loads_the_pinned_runtime_once_and_marks_the_report_quality_only) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.013s
+
+OK

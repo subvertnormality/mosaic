@@ -1,0 +1,15 @@
+{
+  "review_id":"hardware-grid-astra-recheck-20261008-01",
+  "reader":"http://localhost:8785/manual/",
+  "status":"scoped_hardware_grid_reader_pass",
+  "blocking_findings":[],
+  "retained_cumulative_scores":{"readability":8,"comprehensibility":8,"flow":8,"understandability":8,"user_friendliness":8,"usefulness_of_interactive_examples":8,"cohesion":8},
+  "viewports":[[1440,900],[390,844]],
+  "checks":{"original_control_placement":true,"shield_control_placement":true,"toggle_keyboard_and_pressed_state":true,"shield_persists_reload":true,"shield_persists_scene_change":true,"toggle_restores_original":true,"compact_all16_columns_fit":true,"enlargement_meaningful":true,"column16_keyboard_focus_and_scroll":true,"column_labels_align":true,"document_overflow":false,"compact_restored":true,"next_counter_and_caption_advance_after_toggles":true},
+  "pad_widths_px":{"desktop":{"compact":59.28125,"enlarged":80},"mobile":{"compact":16.8125,"enlarged":44}},
+  "coverage":{"initial_observations":2,"interaction_observations":20,"advance_observations":2,"browser_errors":0,"owned_browsers_closed":true},
+  "excluded":{"pending_polyperc_prose":true,"fresh_whole_manual_review":true,"physical_touchscreen_or_hardware_equivalence":true,"exhaustive_accessibility":true},
+  "pins":{"reader_index":"300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52","book_js":"5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf","manual_js":"49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4","css":"123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a","index_html":"93f9acf8b83257999a88d6db8974b70bd2eee10891cdd869082929ba275a6254"},
+  "prior_reports_preserved":true,
+  "production_mutations":false,"native_audio_work":false,"blanket_runtime_ci_closure":false
+}

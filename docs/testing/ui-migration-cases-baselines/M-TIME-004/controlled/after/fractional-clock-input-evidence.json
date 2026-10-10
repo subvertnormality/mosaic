@@ -1,0 +1,173 @@
+{
+  "clock_mode": "controlled-experimental",
+  "verified_inputs": [
+    {
+      "label": "x16",
+      "edge": "start",
+      "evidence": {
+        "action_id": "e841747a55484fb1a3378cc8d5a68934",
+        "native_sequence": 750,
+        "origin_ns": 1166146702206,
+        "applied_ns": 1166148599449,
+        "input_to_applied_ns": 1897243,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x16",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "d5533e0fd8fb4871baebe61b32995118",
+        "native_sequence": 933,
+        "origin_ns": 1173317350419,
+        "applied_ns": 1173335504069,
+        "input_to_applied_ns": 18153650,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "97fdbe8b7d24447f843c81b3131c80e4",
+        "native_sequence": 949,
+        "origin_ns": 1173634862313,
+        "applied_ns": 1173636802299,
+        "input_to_applied_ns": 1939986,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "7c028fcb4f364dfb9f4f8d843ce57bee",
+        "native_sequence": 1132,
+        "origin_ns": 1182000959986,
+        "applied_ns": 1182036308416,
+        "input_to_applied_ns": 35348430,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5",
+      "edge": "start",
+      "evidence": {
+        "action_id": "277abe88f82f42adae431a4cb558f7f9",
+        "native_sequence": 1142,
+        "origin_ns": 1182309333935,
+        "applied_ns": 1182311199647,
+        "input_to_applied_ns": 1865712,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "0c9643906c54487a81f0dece7614b156",
+        "native_sequence": 1325,
+        "origin_ns": 1191298769807,
+        "applied_ns": 1191331583281,
+        "input_to_applied_ns": 32813474,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x2.6",
+      "edge": "start",
+      "evidence": {
+        "action_id": "034d7b5170924aed99feaf4f0f4f4cb4",
+        "native_sequence": 1339,
+        "origin_ns": 1191558602477,
+        "applied_ns": 1191560415356,
+        "input_to_applied_ns": 1812879,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x2.6",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "59db3db829544cf0bcfe8e5367d531c5",
+        "native_sequence": 1522,
+        "origin_ns": 1199744185911,
+        "applied_ns": 1199766746747,
+        "input_to_applied_ns": 22560836,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x1.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "59dcc4fcb5d5466bb4f62ce70c6b6166",
+        "native_sequence": 1536,
+        "origin_ns": 1200163274456,
+        "applied_ns": 1200165141735,
+        "input_to_applied_ns": 1867279,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x1.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "f2a2a565008247fe816c2322dc2be0ac",
+        "native_sequence": 1719,
+        "origin_ns": 1207979243369,
+        "applied_ns": 1207993483527,
+        "input_to_applied_ns": 14240158,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/2.6",
+      "edge": "start",
+      "evidence": {
+        "action_id": "a252dd3ae3734e1ab07b0c874a6e1226",
+        "native_sequence": 1735,
+        "origin_ns": 1208431574929,
+        "applied_ns": 1208433388795,
+        "input_to_applied_ns": 1813866,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/2.6",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "22e1fdf1e36f44a495621714b6865e95",
+        "native_sequence": 1918,
+        "origin_ns": 1216119186418,
+        "applied_ns": 1216130743389,
+        "input_to_applied_ns": 11556971,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/5.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "7fc40478adce4b65a34252815ebbf3b8",
+        "native_sequence": 1934,
+        "origin_ns": 1216379793705,
+        "applied_ns": 1216381485360,
+        "input_to_applied_ns": 1691655,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/5.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "055c9d59cf8b40c7aafb3dec8bcc4ff7",
+        "native_sequence": 2117,
+        "origin_ns": 1223815169324,
+        "applied_ns": 1223825955323,
+        "input_to_applied_ns": 10785999,
+        "boundary": "backend-input-submission"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+test_a_good_server_result_is_used (test_remote_backend.RemoteBackendTests.test_a_good_server_result_is_used) ... ok
+test_a_result_that_would_poison_the_bank_falls_back (test_remote_backend.RemoteBackendTests.test_a_result_that_would_poison_the_bank_falls_back)
+The server is a separate program on a machine Mosaic does not ... ok
+test_a_server_error_falls_back (test_remote_backend.RemoteBackendTests.test_a_server_error_falls_back) ... ok
+test_a_timeout_falls_back (test_remote_backend.RemoteBackendTests.test_a_timeout_falls_back) ... ok
+test_an_unreachable_server_falls_back_instead_of_losing_the_capture (test_remote_backend.RemoteBackendTests.test_an_unreachable_server_falls_back_instead_of_losing_the_capture) ... ok
+test_no_endpoint_configured_uses_the_local_backend (test_remote_backend.RemoteBackendTests.test_no_endpoint_configured_uses_the_local_backend) ... ok
+test_rubbish_from_the_server_falls_back (test_remote_backend.RemoteBackendTests.test_rubbish_from_the_server_falls_back) ... ok
+test_transport_fields_are_stripped_before_the_worker_sees_them (test_remote_backend.RemoteBackendTests.test_transport_fields_are_stripped_before_the_worker_sees_them) ... ok
+test_without_a_fallback_a_dead_server_reports_failure (test_remote_backend.RemoteBackendTests.test_without_a_fallback_a_dead_server_reports_failure)
+The worker turns a non-zero exit into a reported error. Writing no ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 2.087s
+
+OK

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "446a00870f9489cc78d64342288b6fa28b8b1dc3",
+  "selected_cases": [
+    "M-REC-PARAM-002"
+  ],
+  "selected_modules": {
+    "tests/behaviour/trig_parameter_interactions.py": "M-REC-PARAM-002"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/trig_parameter_interactions.py",
+      "case": "M-REC-PARAM-002",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-db049ef01de54f19909d4f556642d9e7/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-db049ef01de54f19909d4f556642d9e7/manifest.json",
+      "manifest_sha256": "ebfcf01e00b702b25286f9e512a60c68616a7d5cc45d80760c669d46054f6cea",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

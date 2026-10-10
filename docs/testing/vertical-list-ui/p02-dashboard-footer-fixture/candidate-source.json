@@ -1,0 +1,15 @@
+{
+  "files": {
+    "tests/behaviour/contract/live_ui_feedback.py": "cd1b04e2a4bbbbc2404aa668853c574d4031da008a4f41b35e4c3f3e189e1372",
+    "tests/behaviour/test_ui.py": "80a1d18b352714923a7af0c84818568b3b132e0a3d0025e72b6685b48b524fe3",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7"
+  },
+  "production_changes": false,
+  "oracle_changes": false,
+  "emulator_changes": false,
+  "focused_regression": "1/1 green",
+  "dashboard_tests": "7/7 green",
+  "broad_ui_guard": "52/53 green; unrelated raw UI classifier flag mini_phase_oracle.py:13, not modified",
+  "native_rerun_pending": true,
+  "initial_dashboard_harness_error": "missing MONOME_EMULATOR path preserved; configured seven-test rerun passes"
+}

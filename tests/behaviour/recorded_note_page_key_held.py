@@ -14,8 +14,9 @@ released 500 ms later. Step 1 must replay 72 at the recorded velocity with a 0.5
 
 
 def recorded_note_page_key_held(c):
-    c.configure(); c.tap(2, 8)                          # arm recording through the grid
-    marker = c.snapshot()['midi_count']; c.tap(1, 8)
+    ui = c.ui
+    ui.configure(); ui.tap_control('record')             # arm recording through the grid
+    marker = c.snapshot()['midi_count']; ui.play()
     controlled = c.clock_mode == 'controlled-experimental'
     field = 'logical_ns' if controlled else 'monotonic_ns'
     state = c.wait(lambda state: any(m['index'] > marker and m['port'] == 1 and m['bytes'] == [144, 60, 127] for m in state['midi']))
@@ -24,18 +25,18 @@ def recorded_note_page_key_held(c):
     events = [dict(port=1, bytes=data, **{'at_' + field: origin + offset}) for offset, data in ((0, [144, 72, 90]), (500000000, [128, 72, 0]))]
     request = dict(type='midi_schedule', schedule_id=1, events=events)
     if controlled: request['time_domain'] = 'logical'
-    c.action(type='grid', x=3, y=8, state=1)            # hold the selected page key
+    ui.gesture([('channel_editor', None)], [])           # hold the selected page key
     try:
         c.action(**request)
         if controlled: c.elapse((origin + 510000000 - c.logical_ns) / 1e9)
         else: c.wait(lambda state: len(state['midi_input_schedule']['delivered']) == len(events), timeout=3)
     finally:
-        c.action(type='grid', x=3, y=8, state=0)
+        ui.gesture([], [('channel_editor', None)])
     state = c.snapshot()
     c.results.append(dict(kind='scheduled-note-with-page-key-held', events=events, delivered=state['midi_input_schedule']['delivered']))
-    c.tap(2, 8)                                         # disarm after the release
-    c.tap(1, 8); c.wait(lambda state: not state['midi_capture']['outstanding'])
-    marker = c.snapshot()['midi_count']; c.tap(1, 8)
+    ui.tap_control('record')                             # disarm after the release
+    ui.stop(); c.wait(lambda state: not state['midi_capture']['outstanding'])
+    marker = c.snapshot()['midi_count']; ui.play()
     def notes(state): return [m for m in state['midi'] if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0]
     phrase = [(72, 90), (62, 117), (64, 107), (65, 97)]
     state = c.wait(lambda state: len(notes(state)) >= 3 * len(phrase) + 1, timeout=5)
@@ -53,4 +54,4 @@ def recorded_note_page_key_held(c):
     c.results.append(dict(kind='page-key-held-length', expected=.5, actual=durations))
     # README 239: the note length is captured (0.5 s held -> three sixteenths).
     assert len(durations) == 3 and all(abs(value - .5) <= tolerance for value in durations), dict(expected=.5, durations=durations)
-    c.tap(1, 8); c.wait(lambda state: not state['midi_capture']['outstanding'])
+    ui.stop(); c.wait(lambda state: not state['midi_capture']['outstanding'])

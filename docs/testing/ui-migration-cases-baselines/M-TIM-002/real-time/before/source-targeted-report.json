@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "6a93b8861996f1ef65e29a644545a7262b7b0b73",
+  "after_sha": "612d1802ce461f7557a16380bfa1cc7b6bb11232",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TIM-001",
+    "M-TIM-002",
+    "M-TIM-003",
+    "M-TIM-004"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TIM-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-001/real-time/before/7f33cd7771f54e4abf89d0c849e870fa/manifest.json",
+              "manifest_sha256": "51e328e40cc67b2c7d871dcc89ede5deed7df05990cbcedfa50d636ff1c2a15c"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-001/real-time/after/69449095b0a940d5857a95eb4c275577/manifest.json",
+              "manifest_sha256": "e537c97b4a76477dcb968bfe22eb7230c5c4ded04c1e18fa7cd9eac38e8b9ab4"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-001/controlled-experimental/before/a81c25e61f774286bf32b1632b8223ac/manifest.json",
+              "manifest_sha256": "69c68a9b7c38db4ed003974b6412de08d3602f72d2018bbb3d266be9ea0a423b"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-001/controlled-experimental/after/894e2dc830a54d0eb3325e2c413dc15d/manifest.json",
+              "manifest_sha256": "9fa224984ed675644df6866f113f456fd1f6c2a75f7dd66365fb5b1c571d147b"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-TIM-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-002/real-time/before/51fe905c77a245efa254aaaf63af75c0/manifest.json",
+              "manifest_sha256": "69ff69fd6143dddf1cf125e0aafc3fb87aad889be264ab32430f6f5741e8726a"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-002/real-time/after/ffeb1477e9774cb4b8fef5310105622d/manifest.json",
+              "manifest_sha256": "cdecc9acaeb32e497dbb098dcaf906e6e86e21f0bfc20cd78e6fb36dc1a8966c"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-002/controlled-experimental/before/8ee6e390b1ed40088c97f9cf57cd0d3d/manifest.json",
+              "manifest_sha256": "368081589a2bf9ac391259ff05bb43d793cdd424a6051d7c748b524d18f246b1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-002/controlled-experimental/after/ceaa2d0b30b246ba9b7eed82ce2403eb/manifest.json",
+              "manifest_sha256": "9c7f5ae7cbf7ba460549dce06e321aab3a356b8ef09d2997099f32de284933cc"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-TIM-003",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-003/real-time/before/6441efdcf5b74c7c8ff4f4842d3defd4/manifest.json",
+              "manifest_sha256": "3729f8c624c2dd3289c8cdd0c509fcd45a50329420e01ae3d030a58ed486ae23"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-003/real-time/after/df26ef468b3a4c4f941754cb363c20ec/manifest.json",
+              "manifest_sha256": "fac9c3c8c5793e65a277605a641a60e15a8448c6baab09aaf3c0aa550eb5dd1d"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-003/controlled-experimental/before/a7086ce65c31495f9f156ee28b4aebee/manifest.json",
+              "manifest_sha256": "14ae77e82b5c88332744f64db39b571c31a42eab22f810492a7a6df41de2cf85"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-003/controlled-experimental/after/9782f9cf0bba420b9677164c35b4ec5e/manifest.json",
+              "manifest_sha256": "904f139f1c07bf25a9f3063a193284cc06e5bfcbc6969704bb31dafff4e447cf"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-TIM-004",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-004/real-time/before/abf390343cf14b6e84a55399af67664d/manifest.json",
+              "manifest_sha256": "89daae93eacedce893bb06ec584af8c4ca31d4e6da5d27a26e36eeadec305215"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-004/real-time/after/0c7df320f067461b8c6bcde7c8e88a87/manifest.json",
+              "manifest_sha256": "58baf7dc8567afa92a0408e8f3bcad19ec9fdbee52c37726f3a8f4f05ecece14"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIM-004/controlled-experimental/before/99db88eff8fe4342969a97bab81444e5/manifest.json",
+              "manifest_sha256": "a694e07b4cb70ce8564edde3e8b36970ca96c84a7d0cd47578197c31b024cd1d"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIM-004/controlled-experimental/after/875e52c97f314e3ba926446fa89a1f8b/manifest.json",
+              "manifest_sha256": "a44d732c644b4624d30fc2a612ab673e5cdd3e8cc15facc3c86d59cbc61bd32f"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

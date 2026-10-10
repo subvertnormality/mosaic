@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "case": "M-UI-VERTICAL-001",
+  "claim": "Simultaneously visible vertical Clock rows absent on focused UI; both applicable lanes fail expected new presentation assertion",
+  "characterisation": "new layout outside baseline README",
+  "complete_regression_run": false,
+  "lanes": [
+    {
+      "run": "/home/andy/mosaic-manual-runs/feec37b4b9c84b269f981322c292f7bc",
+      "clock_mode": "controlled-experimental",
+      "expected_failure": "AssertionError('vertical-list acceptance: Clock must simultaneously show selected Rate, Feel source and Swing type in stable rows')",
+      "files": {
+        "failure.json": "ab6aff3eaf060734fef6c25c22f7e16836e42240be9ab253827ec88b5f240747",
+        "start-source-identity.json": "353963e6077975037baa3c65bd333d52320ca09bff67829c91b849390e12d916",
+        "M-UI-VERTICAL-001-base-midi/native/identity.json": "d7fe41c57fbfe00a80ba74d88d0fbaa1edd31e163c59af78f7ab364a645f8e52",
+        "M-UI-VERTICAL-001-base-midi/native/cleanup.json": "ceffcd46b18bacd0587c292fae183878735180637952730faae1fd3278496e94",
+        "M-UI-VERTICAL-001-base-midi/recipe.json": "01ba2ddc37917ee3e494173de9a54c874a274043e7981eff1f128eeaddaf04fe",
+        "M-UI-VERTICAL-001-base-midi/results.json": "35df5836514bf67406d54412e82a575a2aedacae27c2d316d234ea5eaf7ab43e",
+        "M-UI-VERTICAL-001-base-midi/observations.json": "b9db3b5265fed8c03cd4a04aafe0c5b01797dafd3e1646ddd321b5eac7148944"
+      },
+      "cleanup_verified": true
+    },
+    {
+      "run": "/home/andy/mosaic-manual-runs/4f54d3f22bb64cf8966aef85fc74b5e7",
+      "clock_mode": "real-time",
+      "expected_failure": "AssertionError('vertical-list acceptance: Clock must simultaneously show selected Rate, Feel source and Swing type in stable rows')",
+      "files": {
+        "failure.json": "35cc80ec8f90e7ed7dcf096f6dd508278f0a7789083ac7e3b281e75fb4cb14c1",
+        "start-source-identity.json": "469b2d43dc25211f897d49b16d09afe8cd193f2f318d35a111d5119ecf6a8fc7",
+        "M-UI-VERTICAL-001-base-midi/native/identity.json": "ad6f76f3c6f7acc2eec321fbb1e3e2aba6723265d9f79a422576d02e8008c414",
+        "M-UI-VERTICAL-001-base-midi/native/cleanup.json": "d80f0338de21d6b1b1d921de22b036ae5fc30cc87e07f08a3a72ce1468ae9692",
+        "M-UI-VERTICAL-001-base-midi/recipe.json": "ac66ac8456fc6029e1ff4ab8a053e52849ded4e5fbd6ab5a2378e11da9fe0f47",
+        "M-UI-VERTICAL-001-base-midi/results.json": "35df5836514bf67406d54412e82a575a2aedacae27c2d316d234ea5eaf7ab43e",
+        "M-UI-VERTICAL-001-base-midi/observations.json": "9837191aeec407169160fbe828a503add6d955c1f76647c18f1b7e2275b05832"
+      },
+      "cleanup_verified": true
+    }
+  ]
+}

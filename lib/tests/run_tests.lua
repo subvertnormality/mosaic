@@ -26,16 +26,26 @@ else
   -- Ensure the test_artefacts directory exists
   os.execute("mkdir -p ./test_artefacts")
 
-  -- Fetch the latest release data from GitHub and save it to a file within test_artefacts
-  os.execute("curl -s https://api.github.com/repos/monome/norns/releases/latest > ./test_artefacts/latest_release.json")
-
-  -- Read the file and extract the download URL
-  local file = io.open("./test_artefacts/latest_release.json", "r")
-  local content = file:read("*all")
-  file:close()
-
-  -- Attempt to extract the zipball download URL using Lua pattern matching
-  local download_url = content:match('"zipball_url":%s*"([^"]+)"')
+  -- This calls the GitHub API unauthenticated, so it shares a 60-per-hour
+  -- budget with every other runner on the same address, and returns something
+  -- that is not a release when the service is degraded. A single attempt makes
+  -- the whole suite fail before it runs a test, so retry before giving up.
+  local download_url, last_response = nil, ""
+  for attempt = 1, 5 do
+    os.execute("curl -sS --fail --connect-timeout 10 --max-time 120 " ..
+      "https://api.github.com/repos/monome/norns/releases/latest " ..
+      "> ./test_artefacts/latest_release.json 2>/dev/null")
+    local file = io.open("./test_artefacts/latest_release.json", "r")
+    local content = ""
+    if file then content = file:read("*all") or ""; file:close() end
+    download_url = content:match('"zipball_url":%s*"([^"]+)"')
+    if download_url then break end
+    last_response = content:gsub("%s+", " "):sub(1, 300)
+    if attempt < 5 then
+      print(string.format("norns release lookup attempt %d failed; retrying", attempt))
+      os.execute("sleep " .. tostring(attempt * 3))
+    end
+  end
 
   if download_url then
       -- Download the latest release zip file into test_artefacts
@@ -60,7 +70,11 @@ else
           print("Failed to identify the top-level directory within the zip archive.")
       end
   else
-      print("Failed to extract the download URL from the JSON response.")
+      -- Carrying on here leaves the artefact missing, and the suite then fails
+      -- with "module 'util' not found", which says nothing about the cause.
+      print("Failed to extract the download URL from the JSON response after 5 attempts.")
+      print("Last response was: " .. last_response)
+      os.exit(1)
   end
 end
 

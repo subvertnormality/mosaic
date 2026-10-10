@@ -1,0 +1,15 @@
+Verified M-LIVEUI-TASKS-001 / channel-task-navigation
+Verified M-LIVEUI-FOLLOW-001 / hold-step-return
+Verified M-OPT-STOP-001 / protect-stop-gesture
+Verified M-SAVE-NAMED-001 / named-project-roundtrip
+Verified M-OPT-PENT-ALL-001 / pentatonic-snap-all
+Verified M-OPT-KEYS-001 / keyboard-honour-degree keyboard-honour-degree-rotation keyboard-honour-all
+Verified M-MAP-002 / native-relative-midi-map
+Verified M-SLIDE-STEP-001 / last-lock-slide-wrap
+Verified M-PARAM-022 / trigless-locks-on
+Verified M-PARAM-023 / trigless-locks-off
+Verified M-TIME-003 / repeat-reset-policies
+Verified M-TIME-005 / song-change-reset-policies
+Verified M-TIM-003 / external-midi-source-menu
+Verified M-REC-001 / record-keyboard-steps
+/home/andy/mosaic-manual-runs/b6814e295ba54a79b11d5408ba11ef03

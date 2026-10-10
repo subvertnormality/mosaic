@@ -21,29 +21,26 @@ TICK = 8                                    # slide samples every 1/48 (8 pulses
 
 def slide_reset_mid_step(c):
     import json
-    from cases import menu_value, assign_trig_parameter, set_mosaic_options
-    from frame_oracle import header, matches
-    from patch_params import open_patch_control, turn
-    c.configure()
-    c.tap(6, 8); c.tap(2, 7)
-    for _ in range(3): c.tap(8, 7)                                # global length 4
-    c.tap(3, 8)
-    set_mosaic_options(c, [('Song mode', True), ('Reset on pattern repeat', True)])
-    open_patch_control(c, setup=False); turn(c, 63); turn(c, 1); menu_value(c, '63'); c.key(1)
-    c.enc(1, -3); assign_trig_parameter(c, 'CC 1')
+    ui = c.ui
+    ui.configure()
+    ui.song_editor(); ui.tap_control('global_pattern_length', 2)
+    for _ in range(3): ui.tap_control('global_pattern_length', 8)                                # global length 4
+    ui.menu('channel_editor')
+    ui.set_mosaic_options([('Song mode', True), ('Reset on pattern repeat', True)])
+    ui.open_patch_control(setup=False); ui.turn_patch_control(63); ui.turn_patch_control(1); ui.expect_menu_value('63'); ui.press_key(1)
+    ui.channel_page('trig_locks', 'midi_config', confirm=False); ui.assign_trig_parameter('CC 1')
     for step, value in [(1, 0), (2, 127)]:
-        c.action(type='grid', x=step, y=4, state=1)
-        try: c.elapse(.05); c.action(type='enc', n=3, delta=-126); c.enc(3, value + 1)
-        finally: c.action(type='grid', x=step, y=4, state=0)
-    c.key(3)                                                      # global slide on
-    c.enc(1, 2); c.wait(lambda s: matches(s, header('Ch. 1 Clocks', selected=4)))
-    c.enc(3, -3); c.key(3)                                        # /1 -> /2.6 (index 13 -> 16)
+        with ui.hold_step(step):
+            c.elapse(.05); ui.encoder_event(3, -126); ui.set_value(value + 1)
+    ui.press_key(3)                                                      # global slide on
+    ui.channel_page('clock_mods', 'trig_locks', confirm=False); ui.wait_for_header('clock_mods', channel=1)
+    ui.set_value(-3); ui.press_key(3)                                        # /1 -> /2.6 (index 13 -> 16)
     before = c.snapshot()['midi_count']
-    c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
+    ui.gesture([('play_stop', None)], [('play_stop', None)])
     def onsets(s): return [e for e in s['midi'] if e['index'] > before and e['bytes'][0] == 144 and e['bytes'][2] > 0]
     c.wait(lambda s: len(onsets(s)) >= 9, timeout=6)
     after = c.snapshot()['midi_count']
-    c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
+    ui.gesture([('play_stop', None)], [('play_stop', None)])
     c.wait(lambda s: not s['midi_capture']['outstanding']); c.finish()
     checks = []
     try:

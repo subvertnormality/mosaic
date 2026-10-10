@@ -1,0 +1,30 @@
+{
+  "kind": "derived-retained-course-project-fixture-v1",
+  "original_files": {
+    "Four notes.ptn": "eae271198e0a439612dae3be8ee56035c181a73fc82f41a6e0a400844fc50c3e",
+    "Four notes.pset": "929b42d76afee564354f744cb89af3f753e3dd8d179108010eb5cf2e0d2252fd"
+  },
+  "derived_files": {
+    "Course seed.ptn": "dac3083bacfc6a1e69b32e443caf1d8f64b09f9d559c2e897e5b2bfbb312db73",
+    "Course seed.pset": "929b42d76afee564354f744cb89af3f753e3dd8d179108010eb5cf2e0d2252fd"
+  },
+  "origins": [
+    {
+      "path": "originals/Four notes.ptn",
+      "sha256": "eae271198e0a439612dae3be8ee56035c181a73fc82f41a6e0a400844fc50c3e",
+      "derived_name": "Course seed.ptn",
+      "original_name": "Four notes.ptn"
+    },
+    {
+      "path": "originals/Four notes.pset",
+      "sha256": "929b42d76afee564354f744cb89af3f753e3dd8d179108010eb5cf2e0d2252fd",
+      "derived_name": "Course seed.pset",
+      "original_name": "Four notes.pset"
+    }
+  ],
+  "operation": "ptn: replace the single saved-project name Four notes with Course seed; pset: identical bytes under matching seed basename. Musical project fields unchanged.",
+  "original_course_report": "originals/reference-scenes.json",
+  "original_course_report_sha256": "fc516f34e81342b70d00c88cbd2857941e93dfe4d93f155bb9b5d5ca1e1acc8c",
+  "original_course_results": "originals/course-results.json",
+  "original_course_results_sha256": "a68909fcfb6df4f4d88e78c367ddc15df14a2ce6005f563a6019de6efd12d9cd"
+}

@@ -40,17 +40,24 @@ MONOME_EMULATOR=$EMU python3 tests/behaviour/run.py --case M-SYNC-LEAD-002 \
 ### A.3 The device
 
 Address `we@10.42.0.1` over a wifi hotspot. **Password auth only — no SSH key.**
+The password is the public norns default, `sleep` (the owner confirmed it may be
+documented).
 
-**Credential handling is a hard rule.** Credentials must never appear in source,
-command-line arguments, logs or committed artifacts. The sanctioned method is a
-temporary askpass file for an SSH ControlMaster, deleted immediately:
+Still keep it off command lines and out of logs and artifacts, so it never lands in
+process listings or evidence. The sanctioned method is a temporary askpass file for
+an SSH ControlMaster, deleted immediately:
 
 ```
-A=$SCRATCH/.ap$$; umask 077; printf '#!/bin/sh\necho <secret>\n' > $A; chmod 700 $A
+A=$SCRATCH/.ap$$; umask 077; printf '#!/bin/sh\necho sleep\n' > $A; chmod 700 $A
 SSH_ASKPASS=$A SSH_ASKPASS_REQUIRE=force DISPLAY=:0 \
-  ssh -MNf -o StrictHostKeyChecking=no -o ControlPersist=yes -S $SOCK we@10.42.0.1
+  ssh -MNf -o StrictHostKeyChecking=no -o ControlPersist=yes -S $SOCK we@10.42.0.1 </dev/null
 rm -f $A
 ```
+
+- `$SOCK` must be a short path: a Unix socket path over 108 bytes fails silently
+  and the next command reports "Control socket connect ... No such file".
+- Do not pipe the master's output (e.g. into `grep`): the backgrounded master holds
+  the pipe open and the command never returns, so the `rm` never runs.
 
 All later commands reuse `-S $SOCK`. **The master dies periodically** (it did twice
 in one session) and every device operation fails with ssh exit 255 until it is
@@ -72,6 +79,13 @@ python3 tests/behaviour/real_norns.py performance \
 Case ids: `PERF-009-HW-16` locks, `PERF-002-HW-16` dense, `PERF-003-HW-16` slides,
 `PERF-010-HW-16` extreme. Results land in `<dir>/**/performance.json` under
 `oracle.gates`, `oracle.step_jitter`, `oracle.timing`, `resources`.
+
+The 8 s windows are too short to contain a Lua garbage collection cycle (one
+about every 20 s with a dense 16-channel pattern). `PERF-GC-HW-16` plays the dense
+workload for 120 s; run it after any change to allocation or collection, with
+`--lua-timing-trace` to record slow clock resumes and the Lua heap size. On
+29 September 2026, before `lib/gc_pacer.lua`, it measured a worst note 164 ms late
+(p99 72 ms); with the pacer, 9.3 ms and 9.9 ms (p99 5.9 ms and 7.6 ms).
 
 **A run exiting 0 does not mean the gates passed.** Exit 0 means the run completed.
 Always read `oracle.gates`. (This was misreported once in this project.)

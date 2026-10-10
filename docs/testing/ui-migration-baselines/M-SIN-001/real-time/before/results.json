@@ -1,0 +1,136 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "sinfonion",
+    "stage": "init",
+    "messages": [
+      [
+        192,
+        0
+      ],
+      [
+        193,
+        0
+      ],
+      [
+        194,
+        0
+      ],
+      [
+        195,
+        64
+      ],
+      [
+        196,
+        0
+      ],
+      [
+        197,
+        0
+      ],
+      [
+        198,
+        0
+      ],
+      [
+        199,
+        0
+      ],
+      [
+        200,
+        64
+      ],
+      [
+        201,
+        11
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "sinfonion",
+    "stage": "applied-D-major",
+    "settings": [
+      [
+        2,
+        0,
+        3,
+        64
+      ]
+    ],
+    "updates": 8,
+    "passed": true
+  },
+  {
+    "kind": "sinfonion",
+    "stage": "transpose-plus-2",
+    "settings": [
+      [
+        2,
+        0,
+        3,
+        66
+      ]
+    ],
+    "updates": 8,
+    "passed": true
+  },
+  {
+    "kind": "sinfonion",
+    "stage": "scale-track-lock-E-minor",
+    "settings": [
+      [
+        2,
+        0,
+        3,
+        66
+      ],
+      [
+        4,
+        0,
+        4,
+        66
+      ]
+    ],
+    "updates": 8,
+    "passed": true
+  }
+]

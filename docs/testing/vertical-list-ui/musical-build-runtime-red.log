@@ -1,0 +1,13 @@
+F
+======================================================================
+FAIL: test_musical_comparisons_receive_independent_midi_runtimes (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 54, in test_musical_comparisons_receive_independent_midi_runtimes
+    self.assertIn("--midi-emulator",command)
+AssertionError: '--midi-emulator' not found in ['/usr/bin/python3', '/home/andy/mosaic-manual-1.4.0/tools/manual_audio.py', '--mod-code-root', '/voices', '--audio-install', '/native/audio.json', '--ffmpeg', '/ffmpeg']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.029s
+
+FAILED (failures=1)

@@ -1,0 +1,57 @@
+{
+  "format": "mosaic-independent-miniature-source-rereview-v1",
+  "status": "source-semantics-reviewed; native-positive-pending",
+  "files": {
+    "lib/ui_mini.lua": {
+      "sha256": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+      "meaning": "Read-only musical clock sampling: playing uses (transport-1)/ppqn; stopped uses native beats after finite positive tempo validation; Off/errors/invalid samples select literal rest; eight poses use floor modulo loop. Region keeps essential title space and existing7px compact corner, yields if no room. Integer horizontal runs preserve literal pixel palette.",
+      "matches_owner_freeze": true
+    },
+    "lib/ui_mini_atlas.lua": {
+      "sha256": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+      "meaning": "93 registered literal screen identities match v2 exact all8frames,width,loop; all frame-zero drawings and footprints remain exact accepted v1. No generated application identity/data pixels.",
+      "matches_owner_freeze": true
+    },
+    "lib/ui_live.lua": {
+      "sha256": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+      "meaning": "Adds only header beat readout from mini.beat(m_clock,clock,ui_motion.enabled()) to view model; no tempo/transport/note setter added by miniature path.",
+      "matches_owner_freeze": true
+    },
+    "lib/ui_render.lua": {
+      "sha256": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+      "meaning": "Miniature draws after existing title/scope/rows/footer and yields on geometry; title room unchanged. Compact Masks/Params/dashboard retains7px corner. No control dispatch changed; return flags suppress duplicate mark.",
+      "matches_owner_freeze": true
+    },
+    "lib/ui_motion.lua": {
+      "sha256": "e8710327daa4a73dec1f7cf45e508fbbf2d581d493e2dc43a65765ec905241d6",
+      "meaning": "Off clears header beat/rest and avoids duplicate mark; active mini uses existing redraw tick only. Artwork phase samples musical clock, with no wall-clock fallback or random consumed. Geometry-unsafe fallback mark omitted.",
+      "matches_owner_freeze": true
+    }
+  },
+  "atlas_comparison": "docs/testing/mini-header-ui/independent-atlas-source-check.json",
+  "atlas_v2_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+  "reviewed_claims": [
+    "93literalidentities, eightposes each, exact v1 rest/footprint preserved",
+    "Musical loop phase: playing lattice/stopped nativeclock; Off invalid/errors rest; no wallfallback",
+    "Decoration yields to unchanged title/scope/rows/control geometry; compact7px corner retained",
+    "No musical setters/random/native acceptance claims from source review",
+    "Miniature replaces fourtilemark where it fits, safefallback otherwise"
+  ],
+  "source_archives": [
+    {
+      "path": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+      "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8"
+    },
+    {
+      "path": "manual/legacy/cheat-sheet-before-authority-6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed.html",
+      "sha256": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed"
+    }
+  ],
+  "original_reviews_preserved": true,
+  "native_acceptance": false,
+  "complete_regression_run": false,
+  "pending": [
+    "Fresh native positive and independent audit remain separate gates.",
+    "Final root overview replacement/doc authority inventory rebase reviewed by ledger owner; do not silently refresh previous normative source hashes."
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "adoption": "PR107 aggregate failure evidence; exact byte copy into both source roots; no CI/source behavior mutation",
+  "verified_pr_head": "e05cf0d7c8e9be44259c3dad5a7c66dcd5dc5bb3",
+  "base": "5384d0babb01fd5004bdcd6a95eaa8609aa72915",
+  "failed_run": "37778845187",
+  "fresh_dispatch_run": "37802862071",
+  "fresh_dispatch_state_at_parent_receipt": "in_progress; qualification pending",
+  "prior_report_v1": "preserved and labeled superseded because its textual PR head SHA was mistyped",
+  "report_correction": "verified using PR and run metadata; see REPORT-HEAD-CORRECTION.json",
+  "records": [
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/REPORT-v01-superseded.md",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-v01-superseded.md",
+      "size_bytes": 2418,
+      "sha256": "9118ba31b5d90571bad5619d3c3ca671fa3e394ad187ba85906646bd8226c345",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-v01-superseded.md",
+          "sha256": "9118ba31b5d90571bad5619d3c3ca671fa3e394ad187ba85906646bd8226c345",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-v01-superseded.md",
+          "sha256": "9118ba31b5d90571bad5619d3c3ca671fa3e394ad187ba85906646bd8226c345",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/REPORT-HEAD-CORRECTION.json",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-HEAD-CORRECTION.json",
+      "size_bytes": 818,
+      "sha256": "29c9b65fd0822a88b4732f1b1b8a6a0e12bf8433a80f86d55dea80971cf5617e",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-HEAD-CORRECTION.json",
+          "sha256": "29c9b65fd0822a88b4732f1b1b8a6a0e12bf8433a80f86d55dea80971cf5617e",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-HEAD-CORRECTION.json",
+          "sha256": "29c9b65fd0822a88b4732f1b1b8a6a0e12bf8433a80f86d55dea80971cf5617e",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/REPORT-v02.md",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-v02.md",
+      "size_bytes": 1718,
+      "sha256": "5d83affdce58b5e9b7509daffaf1690d83c46029a64ca646a3d053cb4a38e8c8",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-v02.md",
+          "sha256": "5d83affdce58b5e9b7509daffaf1690d83c46029a64ca646a3d053cb4a38e8c8",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/REPORT-v02.md",
+          "sha256": "5d83affdce58b5e9b7509daffaf1690d83c46029a64ca646a3d053cb4a38e8c8",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/behaviour-base-7-original.zip",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/behaviour-base-7-original.zip",
+      "size_bytes": 2529775,
+      "sha256": "d8e8d6e69ac3bab535899a09e7cdc33cf4b657da3d35515694f249368a50b575",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/behaviour-base-7-original.zip",
+          "sha256": "d8e8d6e69ac3bab535899a09e7cdc33cf4b657da3d35515694f249368a50b575",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/behaviour-base-7-original.zip",
+          "sha256": "d8e8d6e69ac3bab535899a09e7cdc33cf4b657da3d35515694f249368a50b575",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/job-113316510426-shard-7.log",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/job-113316510426-shard-7.log",
+      "size_bytes": 292814,
+      "sha256": "e9e3a2eedaf21c8ecdabe0fdb4fd986dabb7ffca83652f216c370b944ee37cf6",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/job-113316510426-shard-7.log",
+          "sha256": "e9e3a2eedaf21c8ecdabe0fdb4fd986dabb7ffca83652f216c370b944ee37cf6",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/job-113316510426-shard-7.log",
+          "sha256": "e9e3a2eedaf21c8ecdabe0fdb4fd986dabb7ffca83652f216c370b944ee37cf6",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/job-113368333661-aggregate.log",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/job-113368333661-aggregate.log",
+      "size_bytes": 30836,
+      "sha256": "0b7df9c6c41f2204d69406799cdcfafb8f303112d37b7499e253e3f14dd3668a",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/job-113368333661-aggregate.log",
+          "sha256": "0b7df9c6c41f2204d69406799cdcfafb8f303112d37b7499e253e3f14dd3668a",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/job-113368333661-aggregate.log",
+          "sha256": "0b7df9c6c41f2204d69406799cdcfafb8f303112d37b7499e253e3f14dd3668a",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/shard7-extracted/suite-effective.json",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/suite-effective.json",
+      "size_bytes": 260602,
+      "sha256": "a800f89cdbdd7a345a965fe0e2da593e32f7f1a6cda5d3281ce93551f927c004",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/suite-effective.json",
+          "sha256": "a800f89cdbdd7a345a965fe0e2da593e32f7f1a6cda5d3281ce93551f927c004",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/suite-effective.json",
+          "sha256": "a800f89cdbdd7a345a965fe0e2da593e32f7f1a6cda5d3281ce93551f927c004",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/shard7-extracted/runs/real-time/af5a71e1c4934d7aa745279d5bc9c8cb/manifest.json",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/runs/real-time/af5a71e1c4934d7aa745279d5bc9c8cb/manifest.json",
+      "size_bytes": 25537,
+      "sha256": "f3a2ad9f34c03eedd343c9d7e5ec9bec7f5d485717e21b40a90a46bb759078be",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/runs/real-time/af5a71e1c4934d7aa745279d5bc9c8cb/manifest.json",
+          "sha256": "f3a2ad9f34c03eedd343c9d7e5ec9bec7f5d485717e21b40a90a46bb759078be",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/runs/real-time/af5a71e1c4934d7aa745279d5bc9c8cb/manifest.json",
+          "sha256": "f3a2ad9f34c03eedd343c9d7e5ec9bec7f5d485717e21b40a90a46bb759078be",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/shard7-extracted/serial-rerun/b16216fffdbf4db6a285c54aecaca10f/manifest.json",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/serial-rerun/b16216fffdbf4db6a285c54aecaca10f/manifest.json",
+      "size_bytes": 29835,
+      "sha256": "ab91b4bad3c9a0e7057499975622fa513cd0cde4890d4388a65988a299aa6675",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/serial-rerun/b16216fffdbf4db6a285c54aecaca10f/manifest.json",
+          "sha256": "ab91b4bad3c9a0e7057499975622fa513cd0cde4890d4388a65988a299aa6675",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/serial-rerun/b16216fffdbf4db6a285c54aecaca10f/manifest.json",
+          "sha256": "ab91b4bad3c9a0e7057499975622fa513cd0cde4890d4388a65988a299aa6675",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    },
+    {
+      "source": "/home/andy/mosaic-manual-build-operators/pr107-coverage-failure-20261008-01/DISPATCH-RECEIPT.json",
+      "target_relative_path": "manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/DISPATCH-RECEIPT.json",
+      "size_bytes": 655,
+      "sha256": "af35ef5d5dba8fa585483b983b56a70a3c72103a04b17057acfef02ac06058f7",
+      "copies": {
+        "actual": {
+          "absolute_path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/DISPATCH-RECEIPT.json",
+          "sha256": "af35ef5d5dba8fa585483b983b56a70a3c72103a04b17057acfef02ac06058f7",
+          "byte_identical": true,
+          "mode": "0o644"
+        },
+        "publication": {
+          "absolute_path": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/pr107-aggregate-load-sensitive-20261008-01/DISPATCH-RECEIPT.json",
+          "sha256": "af35ef5d5dba8fa585483b983b56a70a3c72103a04b17057acfef02ac06058f7",
+          "byte_identical": true,
+          "mode": "0o644"
+        }
+      }
+    }
+  ]
+}

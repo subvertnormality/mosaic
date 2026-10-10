@@ -1,5 +1,5 @@
 """User-input driver using only the emulator's public external-suite client."""
-import hashlib,json,os,sys,time,uuid,subprocess,shutil
+import gc,hashlib,json,os,sys,time,uuid,subprocess,shutil
 from pathlib import Path
 REPO=Path(__file__).resolve().parents[2]
 EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve() if os.environ.get('MONOME_EMULATOR') else None
@@ -28,35 +28,54 @@ def startup_lock(timeout=300):
 def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
+MANUAL_PLAYER_UI_PROFILE = {
+    "controlled_ui_only": True,
+    "mods": {
+        "doubledecker": {"url": "https://github.com/sixolet/doubledecker.git", "commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89"},
+        "nb_polyperc": {"url": "https://github.com/dstroud/nb_polyperc.git", "commit": "714bd0c5b811f7cb21b7a7b8340891ffee4b5670"},
+        "oilcan": {"url": "https://github.com/zjb-s/oilcan.git", "commit": "257915f433c7d2c32b2b09c4fe5eed5434a16de5"},
+    },
+}
+
+def validate_profile_clock(profile, clock_mode, output_profiles):
+    if profile == "manual-player-ui":
+        if clock_mode != "controlled-experimental":
+            raise ValueError("manual-player-ui is controlled UI-only")
+    elif profile in output_profiles and clock_mode != "real-time":
+        raise ValueError("Audio/Crow profiles require real time; DSP and Crow are not controlled-time sources")
+
 class Driver:
     def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False,cost_profile=None,app_root=None,lua_profile_instructions=None,midi_lead_time_ms=0):
         if Session is None:raise RuntimeError('MONOME_EMULATOR is required for the local emulator Driver')
         self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches,cost_profile=cost_profile,midi_lead_time_ms=midi_lead_time_ms)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
+        from ui import Ui
+        self.ui=Ui(self)
         # app_root runs another Mosaic tree (e.g. a campaign baseline) with this harness.
         self.app_root=Path(app_root).resolve() if app_root else REPO
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(self.app_root,target_is_directory=True)
         output_profiles=json.loads((REPO/'tests/behaviour/output-profiles.json').read_text())['profiles']
-        if profile not in ('base-midi','midi-modulation') and profile not in output_profiles:raise ValueError('Unknown profile')
-        if profile in output_profiles and clock_mode!='real-time':raise ValueError('Audio/Crow profiles require real time; DSP and Crow are not controlled-time sources')
+        if profile not in ('base-midi','midi-modulation','manual-player-ui') and profile not in output_profiles:raise ValueError('Unknown profile')
+        validate_profile_clock(profile,clock_mode,output_profiles)
+        manual_player_ui = profile == 'manual-player-ui'
         self.profile=profile;self.mod_revisions={};self.applied_mod_patches={}
         if mod_patches and profile!="midi-modulation":raise ValueError("Mod patches require modulation profile")
         patches=json.loads((REPO/"tests/behaviour/mod-patches/manifest.json").read_text()) if mod_patches else {}
         if profile!='base-midi':
             if not mod_code_root:raise ValueError('Mod profile requires an explicit mod code root')
-            mods=(output_profiles[profile]['mods'] if profile in output_profiles else json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'])
+            mods=(MANUAL_PLAYER_UI_PROFILE['mods'] if manual_player_ui else output_profiles[profile]['mods'] if profile in output_profiles else json.loads((REPO/'tests/behaviour/mods.lock.json').read_text())['mods'])
             for name,entry in mods.items():
                 source=Path(mod_code_root).resolve()/name
                 if not source.is_dir():raise ValueError('Missing mod source: '+name)
-                if profile in output_profiles:
+                if profile in output_profiles or manual_player_ui:
                     origin=subprocess.check_output(['git','remote','get-url','origin'],cwd=source,text=True).strip()
                     if origin!=entry['url']:raise ValueError('Unexpected mod origin: '+name)
                 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
                 if revision!=entry['commit']:raise ValueError('Unexpected mod revision: '+name)
                 dirty=subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=source,text=True)
                 if dirty:raise ValueError('Mod source has uncommitted changes: '+name)
-                if profile in output_profiles:
+                if profile in output_profiles or manual_player_ui:
                     ignored=subprocess.check_output(['git','ls-files','--others','--ignored','--exclude-standard','--','*.lua','*.sc','*.so','*.scx'],cwd=source,text=True)
                     if ignored:raise ValueError('Ignored runtime source outside mod pin: '+name)
                 if name in patches:
@@ -102,13 +121,29 @@ class Driver:
             ns=round(seconds*1e9)
             self.action(type="advance",nanoseconds=ns);self.logical_ns+=ns
     def snapshot(self):
-        value=self.runtime.observe();self.observations.append(value);return value['state']
+        value=self.runtime.observe();self.observations.append(value)
+        # Observations keep every MIDI event for the evidence record and live
+        # for the whole run. Freezing them keeps Python's full collections
+        # small: over millions of retained objects one paused the harness for
+        # 1.1 s between a press and its release (see test_driver_wait).
+        gc.freeze()
+        return value['state']
     def wait(self,predicate,timeout=3):
-        start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else 180)
+        # Controlled observe/advance round trips can take 10x logical time on a
+        # loaded CI host. Keep the musical deadline in logical time; this wall
+        # watchdog only prevents a stalled emulator from hanging indefinitely.
+        start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else max(180,timeout*12))
         logical_end=self.logical_ns+round(timeout*1e9)
+        retained_limit=getattr(self,"wait_observation_limit",None)
+        if retained_limit is not None and (type(retained_limit)is not int or not 1<=retained_limit<=2048):
+            raise ValueError("Wait observation retention must be bounded to1..2048")
         while time.monotonic()<end:
             state=self.snapshot()
-            if len(self.observations)>start+2:del self.observations[start+1:-1]
+            if retained_limit is None:
+                if len(self.observations)>start+2:del self.observations[start+1:-1]
+            elif len(self.observations)>start+retained_limit:
+                del self.observations[start+retained_limit:]
+                raise AssertionError("Wait observation retention limit exceeded")
             if predicate(state):return state
             if self.clock_mode!="real-time" and self.logical_ns>=logical_end:break
             self.elapse(.03 if self.clock_mode=="real-time" else min(.01,(logical_end-self.logical_ns)/1e9))
@@ -118,9 +153,11 @@ class Driver:
     def key(self,n):
         self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);self.elapse(.06)
     def enc(self,n,steps):
+        receipt=None
         for _ in range(abs(steps)):
-            self.elapse(.05);self.action(type='enc',n=n,delta=2 if steps>0 else -2)
+            self.elapse(.05);receipt=self.action(type='enc',n=n,delta=2 if steps>0 else -2)
         self.elapse(.15)
+        return receipt
     def hold_tap(self,first,last):
         self.action(type='grid',x=first[0],y=first[1],state=1)
         try:self.tap(*last)
@@ -130,13 +167,15 @@ class Driver:
         state=self.wait(lambda s:[s['grid'][i] for i in indexes]==expected)
         self.results.append(dict(kind='grid',cells=cells,expected=expected,actual=[state['grid'][i] for i in indexes]))
     def screen_header(self,text,selected=None):
-        from frame_oracle import header,matches
-        expected=header(text,selected=selected);self.wait(lambda s:matches(s,expected))
-        self.results.append(dict(kind='screen-header',expected=text,matched=True))
+        """Wait for the live screen a historical header text names (ui_map.historical_header)."""
+        from ui_map import historical_header
+        page,params=historical_header(text,selected)
+        self.ui.wait_for_header(page,**params)
+        self.results.append(dict(kind='screen-header',expected=text,page=page,matched=True))
     def _set_midi_lead_time(self,value,expected=None,capture=False):
         from cases import menu_label,menu_option_row
         from frame_oracle import selected_line
-        self.key(1);self.enc(1,4);self.key(3);menu_label(self,'LEVELS >')
+        self.ui.open_native_parameters()
         position=next(i for i,row in enumerate(self.snapshot()['diagnostics']['parameter_roots']) if row['id']=='mosaic')
         self.enc(2,position);self.key(3)
         for _ in range(40):
@@ -153,17 +192,10 @@ class Driver:
         self.action(type='enc',n=3,delta=-100);self.elapse(.15);self.enc(3,value);menu_option_row(self,'Lock lead time (ms)',str(value),top=23)
         self.results.append(dict(kind='global-lock-lead-setting',value_ms=value,default_checked=expected))
         self.key(2);self.action(type='enc',n=2,delta=-120);self.elapse(.15);menu_label(self,'LEVELS >');self.key(2)
-        self.enc(1,-4);self.key(1)  # Restore startup HOME panel for existing recipes.
+        self.enc(1,-4);self.ui.leave_native_menu()  # Restore startup HOME panel for existing recipes.
 
     def configure(self):
-        self.tap(3,8);self.enc(1,4);self.enc(3,1);self.key(3);self.tap(5,8)
-        for x in range(1,5):self.tap(x,4)
-        self.tap(5,8)
-        for x,y in ((1,7),(2,6),(3,5),(4,4)):self.tap(x,y)
-        self.tap(5,8)
-        for x,y in ((1,1),(2,2),(3,3),(4,4)):self.tap(x,y)
-        self.tap(3,8);self.tap(1,2);self.hold_tap((1,4),(4,4))
-        self.led_values([(1,2)],[15]);self.screen_header('Ch. 1 Device Config')
+        self.ui.configure()
     def playback(self,expected,cycles=3,timeout=5,settle_seconds=0):
         assert expected and cycles>=2
         assert settle_seconds>=0

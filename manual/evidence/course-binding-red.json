@@ -1,0 +1,6 @@
+{
+  "scope": "Compiler evidence promotion characterisation outside instrument manual",
+  "acceptance_before_implementation": "test_manual_course_bind failed importing absent tools/manual_course_bind.py; expected missing new implementation",
+  "error": "FileNotFoundError: tools/manual_course_bind.py",
+  "native_acceptance_claimed": false
+}

@@ -17,6 +17,7 @@ Then an autosave restart must play the same phrase (save/reload), and one Memory
 is recorded as an observation (characterisation, not asserted). Every stage is observed
 before any assertion so one run reports them all.
 """
+
 BASELINE = [(60, 127), (62, 117), (64, 107), (65, 97)]
 
 
@@ -24,8 +25,9 @@ def heard(c, label, expected):
     """One cycle of note-ons (pitch, velocity) as heard, without asserting."""
     controlled = c.clock_mode == 'controlled-experimental'
     field = 'logical_ns' if controlled else 'monotonic_ns'
-    before = c.snapshot()['midi_count']; c.tap(1, 8); c.elapse(2 * 4 / 6 + .2)
-    state = c.snapshot(); c.tap(1, 8); c.wait(lambda s: not s['midi_capture']['outstanding'])
+    ui = c.ui
+    before = c.snapshot()['midi_count']; ui.play(); c.elapse(2 * 4 / 6 + .2)
+    state = c.snapshot(); ui.stop(); c.wait(lambda s: not s['midi_capture']['outstanding'])
     ons = [m for m in state['midi'] if m['index'] > before and m['bytes'][0] == 144 and m['bytes'][2] > 0]
     cycle = [(m['bytes'][1], m['bytes'][2]) for m in ons if ons and (m[field] - ons[0][field]) / 1e9 < 4 / 6 - .05]
     c.results.append(dict(kind='mask-off-probe', stage=label, expected=expected, heard=cycle))
@@ -33,22 +35,25 @@ def heard(c, label, expected):
 
 
 def hold_turn(c, step, turns):
-    c.action(type='grid', x=step, y=4, state=1)
-    try: c.enc(3, turns)
-    finally: c.action(type='grid', x=step, y=4, state=0)
+    ui = c.ui
+    with ui.hold_step(step):
+        ui.set_value(turns)
     c.elapse(.3)
 
 
 def mask_off_probe(c):
     from driver import Driver
     rows = []
-    c.configure(); c.enc(1, -4); c.enc(2, 1)                     # Masks page, Vel selector
-    c.enc(3, 51); rows.append(heard(c, 'A channel velocity 50', [(n, 50) for n, _ in BASELINE]))
-    c.enc(3, -51); rows.append(heard(c, 'A channel velocity back to X', BASELINE))
-    c.enc(2, -2)                                                 # Trig selector
+    ui = c.ui
+    ui.configure()
+    ui.channel_page('masks', 'midi_config', channel=1, confirm=False)
+    ui.select_field('velocity', offset=1)                         # Masks page, Vel selector
+    ui.set_value(51); rows.append(heard(c, 'A channel velocity 50', [(n, 50) for n, _ in BASELINE]))
+    ui.set_value(-51); rows.append(heard(c, 'A channel velocity back to X', BASELINE))
+    ui.select_field('trig', offset=-2)                            # Trig selector
     hold_turn(c, 2, 1); rows.append(heard(c, 'B step 2 trig N', [BASELINE[0]] + BASELINE[2:]))
     hold_turn(c, 2, -1); rows.append(heard(c, 'B step 2 trig back to X', BASELINE))
-    c.enc(2, 2)                                                  # Vel selector
+    ui.select_field('velocity', offset=2)                         # Vel selector
     hold_turn(c, 3, 51); rows.append(heard(c, 'C step 3 velocity 50', BASELINE[:2] + [(64, 50), BASELINE[3]]))
     hold_turn(c, 3, -51); rows.append(heard(c, 'C step 3 velocity back to X', BASELINE))
     final = rows[-1][2]
@@ -59,10 +64,15 @@ def mask_off_probe(c):
     c.finish()
     out = c.out/'restarted'; out.mkdir()
     d = Driver(out, project_seed=c.data_directory, **c.launch_options)
+    dui = d.ui
     try:
         rows.append(heard(d, 'after autosave restart (same as before restart)', final))
-        d.tap(3, 8); d.enc(1, -5); d.enc(1, 2); d.screen_header('Ch. 1 Memory')
-        d.enc(3, -1); undo = heard(d, 'Memory one step back (observation)', None)
+        dui.menu('channel_editor')
+        dui.turn(1, -5)
+        dui.turn(1, 2)
+        dui.expect_header('memory', channel=1)
+        dui.set_value(-1)
+        undo = heard(d, 'Memory one step back (observation)', None)
     except Exception:
         try: d.finish()
         except Exception: pass

@@ -1,0 +1,639 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Wrap param slides",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Wrap param slides",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "slide-musical-time",
+    "from_value": 24,
+    "to_value": 96,
+    "step_distance": 1,
+    "off_middle": false,
+    "step_local": false,
+    "swing": null,
+    "shuffle": "Heavy6-100",
+    "clock_ratio": "/1",
+    "planned_onsets": [
+      0.0,
+      0.1111111111111111,
+      0.2222222222222222,
+      0.3333333333333333,
+      0.6666666666666666,
+      0.7777777777777778,
+      0.8888888888888888,
+      1.0,
+      1.3333333333333333
+    ],
+    "checks": [
+      {
+        "cycle": 0,
+        "elapsed": 0.055621385,
+        "value": 60,
+        "ideal": 60.04265748000001,
+        "error": 0.042657480000009684
+      },
+      {
+        "cycle": 0,
+        "elapsed": 0.111264301,
+        "value": 96,
+        "ideal": 96,
+        "error": 0
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.055297119,
+        "value": 89,
+        "ideal": 88.8334933776,
+        "error": 0.16650662239999292
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.110674542,
+        "value": 82,
+        "ideal": 81.6565793568,
+        "error": 0.3434206432000053
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.165849777,
+        "value": 74,
+        "ideal": 74.5058689008,
+        "error": 0.5058689007999959
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.22177548,
+        "value": 67,
+        "ideal": 67.257897792,
+        "error": 0.2578977919999943
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.277760992,
+        "value": 60,
+        "ideal": 60.0021754368,
+        "error": 0.002175436800001762
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.333176908,
+        "value": 53,
+        "ideal": 52.820272723200006,
+        "error": 0.17972727679999423
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.388826465,
+        "value": 46,
+        "ideal": 45.608090136,
+        "error": 0.3919098639999987
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.443956187,
+        "value": 38,
+        "ideal": 38.4632781648,
+        "error": 0.46327816480000195
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.499336515,
+        "value": 31,
+        "ideal": 31.285987656000003,
+        "error": 0.2859876560000032
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.555219598,
+        "value": 24,
+        "ideal": 24.0435400992,
+        "error": 0.04354009920000124
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.054947203,
+        "value": 60,
+        "ideal": 59.60578754399998,
+        "error": 0.39421245600001953
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.110439704,
+        "value": 96,
+        "ideal": 95.56492819199997,
+        "error": 0.435071808000032
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.056470837,
+        "value": 89,
+        "ideal": 88.6813795248,
+        "error": 0.3186204752000066
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.111766423,
+        "value": 82,
+        "ideal": 81.5150715792,
+        "error": 0.48492842080000287
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.166881467,
+        "value": 74,
+        "ideal": 74.37216187679999,
+        "error": 0.3721618767999928
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.222714655,
+        "value": 67,
+        "ideal": 67.136180712,
+        "error": 0.13618071199999804
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.277567891,
+        "value": 60,
+        "ideal": 60.02720132639999,
+        "error": 0.02720132639998951
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.334022854,
+        "value": 53,
+        "ideal": 52.7106381216,
+        "error": 0.28936187840000116
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.389528586,
+        "value": 46,
+        "ideal": 45.5170952544,
+        "error": 0.4829047456000026
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.444755127,
+        "value": 38,
+        "ideal": 38.359735540799996,
+        "error": 0.3597355407999956
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.500098145,
+        "value": 31,
+        "ideal": 31.187280407999978,
+        "error": 0.18728040799997814
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.555852819,
+        "value": 24,
+        "ideal": 24,
+        "error": 0
+      }
+    ],
+    "passed": true
+  },
+  {
+    "kind": "slide-timing-samples",
+    "samples": [
+      {
+        "cycle": 0,
+        "elapsed": 0.055621385,
+        "value": 60,
+        "ideal": 60.04265748000001,
+        "error": 0.042657480000009684
+      },
+      {
+        "cycle": 0,
+        "elapsed": 0.111264301,
+        "value": 96,
+        "ideal": 96,
+        "error": 0
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.055297119,
+        "value": 89,
+        "ideal": 88.8334933776,
+        "error": 0.16650662239999292
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.110674542,
+        "value": 82,
+        "ideal": 81.6565793568,
+        "error": 0.3434206432000053
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.165849777,
+        "value": 74,
+        "ideal": 74.5058689008,
+        "error": 0.5058689007999959
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.22177548,
+        "value": 67,
+        "ideal": 67.257897792,
+        "error": 0.2578977919999943
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.277760992,
+        "value": 60,
+        "ideal": 60.0021754368,
+        "error": 0.002175436800001762
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.333176908,
+        "value": 53,
+        "ideal": 52.820272723200006,
+        "error": 0.17972727679999423
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.388826465,
+        "value": 46,
+        "ideal": 45.608090136,
+        "error": 0.3919098639999987
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.443956187,
+        "value": 38,
+        "ideal": 38.4632781648,
+        "error": 0.46327816480000195
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.499336515,
+        "value": 31,
+        "ideal": 31.285987656000003,
+        "error": 0.2859876560000032
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.555219598,
+        "value": 24,
+        "ideal": 24.0435400992,
+        "error": 0.04354009920000124
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.054947203,
+        "value": 60,
+        "ideal": 59.60578754399998,
+        "error": 0.39421245600001953
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.110439704,
+        "value": 96,
+        "ideal": 95.56492819199997,
+        "error": 0.435071808000032
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.056470837,
+        "value": 89,
+        "ideal": 88.6813795248,
+        "error": 0.3186204752000066
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.111766423,
+        "value": 82,
+        "ideal": 81.5150715792,
+        "error": 0.48492842080000287
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.166881467,
+        "value": 74,
+        "ideal": 74.37216187679999,
+        "error": 0.3721618767999928
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.222714655,
+        "value": 67,
+        "ideal": 67.136180712,
+        "error": 0.13618071199999804
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.277567891,
+        "value": 60,
+        "ideal": 60.02720132639999,
+        "error": 0.02720132639998951
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.334022854,
+        "value": 53,
+        "ideal": 52.7106381216,
+        "error": 0.28936187840000116
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.389528586,
+        "value": 46,
+        "ideal": 45.5170952544,
+        "error": 0.4829047456000026
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.444755127,
+        "value": 38,
+        "ideal": 38.359735540799996,
+        "error": 0.3597355407999956
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.500098145,
+        "value": 31,
+        "ideal": 31.187280407999978,
+        "error": 0.18728040799997814
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.555852819,
+        "value": 24,
+        "ideal": 24,
+        "error": 0
+      }
+    ]
+  }
+]

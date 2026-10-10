@@ -1,0 +1,7 @@
+page.waitForSelector: Timeout 5000ms exceeded.
+Call log:
+[2m  - waiting for locator('#book-home h1') to be visible[22m
+
+    at /home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_book_browser.cjs:3:240 {
+  name: 'TimeoutError'
+}

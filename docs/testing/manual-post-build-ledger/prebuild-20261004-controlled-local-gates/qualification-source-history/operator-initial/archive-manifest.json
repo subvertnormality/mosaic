@@ -1,0 +1,31 @@
+{
+  "created_utc": "2026-10-04T06:37:49.296804+00:00",
+  "files": {
+    "builder-argv.json": {
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/builder-argv.json",
+      "sha256": "599dc702c1ef55a65c9ea3ce2fca0123a82b5cf9221d5b05e5f6b547e953e444",
+      "source": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/builder-argv.json"
+    },
+    "builder-owner-launch.json": {
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/builder-owner-launch.json",
+      "sha256": "933cea26a2738c99457c9a093a554efedc27aead9cfbafc132ac0b959a436350",
+      "source": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/builder-owner-launch.json"
+    },
+    "manual_build.py": {
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/manual_build.py",
+      "sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8",
+      "source": "/home/andy/mosaic-manual-1.4.0/tools/manual_build.py"
+    },
+    "planned-launch.json": {
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/planned-launch.json",
+      "sha256": "0e9efbb40854e51845b43a248a6e1c9959a17126c52f9efa5b8963b319f082a4",
+      "source": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/planned-launch.json"
+    },
+    "user-directed-controlled-time-transition.json": {
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/user-directed-controlled-time-transition.json",
+      "sha256": "9120aeec2d365adb404be30a4591567f14b056f58851194287e4463d80b39855",
+      "source": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/user-directed-controlled-time-transition.json"
+    }
+  },
+  "reason": "immutable before-edit source and control-ledger archive"
+}

@@ -1,0 +1,15 @@
+--- manual/features/reference-learn.yaml (before)
++++ manual/features/reference-learn.yaml (after)
+@@ -619,8 +619,10 @@
+     4. Open Channel tasks → Device. Select the player and press K3.
+ 
+ 
+-    Supported, enabled players appear in the Device list. Examples in this manual use Doubledecker, Oilcan,
+-    Polyperc and Emplaitress. Availability depends on the installed player and its dependencies. Crow,
++    Supported, enabled players appear in the Device list. The researched and pinned voices are Doubledecker, Oilcan,
++    Polyperc and Emplaitress. Recorded examples use Doubledecker, Oilcan and Polyperc; Emplaitress has
++    no recording because the installed runtime lacks MiPlaits. Availability depends on the installed
++    player and its dependencies. Crow,
+     Just Friends and Ansible also require their corresponding hardware.'
+   musical_use: ''
+   related:

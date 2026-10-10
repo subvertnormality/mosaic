@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "frames": 50,
+  "scope": "Whole continuous-course controlled-time raw acceptance",
+  "report": "/home/andy/mosaic-manual-runs/439d9e93bfb0400e9eaaf4c1b7606cd9/reference-scenes.json",
+  "report_sha256": "90e2d766beaeca8da391389ee5dd0f1fad34d83addb135dbfdb8c73819b8ad2a",
+  "clock_mode": "controlled-experimental",
+  "scenes": 10,
+  "music_windows": 19,
+  "pictured_lengths": [
+    {
+      "stage": "song-composition-global-length-slot1",
+      "native_observation_index": 184,
+      "rows": [
+        {
+          "row": 4,
+          "label": "Global length",
+          "value": "16"
+        }
+      ]
+    },
+    {
+      "stage": "song-composition-global-length-slot2",
+      "native_observation_index": 191,
+      "rows": [
+        {
+          "row": 4,
+          "label": "Global length",
+          "value": "16"
+        }
+      ]
+    }
+  ],
+  "seconds": 74.8535776300123,
+  "auditor_sha256": "10b339ed62fd08b12926abffb67e72f2dce466a84f3b714e0d6b7a05703974a9",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

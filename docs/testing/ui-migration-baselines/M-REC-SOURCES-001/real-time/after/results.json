@@ -1,0 +1,355 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "scheduled-same-key-sources",
+    "scenario": "held",
+    "events": [
+      {
+        "port": 1,
+        "bytes": [
+          144,
+          72,
+          90
+        ],
+        "at_monotonic_ns": 217158961918687
+      },
+      {
+        "port": 2,
+        "bytes": [
+          144,
+          72,
+          80
+        ],
+        "at_monotonic_ns": 217159001918687
+      },
+      {
+        "port": 1,
+        "bytes": [
+          128,
+          72,
+          0
+        ],
+        "at_monotonic_ns": 217159161918687
+      },
+      {
+        "port": 2,
+        "bytes": [
+          128,
+          72,
+          0
+        ],
+        "at_monotonic_ns": 217159461918687
+      }
+    ],
+    "delivered": [
+      {
+        "index": 0,
+        "port": 1,
+        "bytes": [
+          144,
+          72,
+          90
+        ],
+        "intended_monotonic_ns": 217158961918687,
+        "actual_monotonic_ns": 217158962005362
+      },
+      {
+        "index": 1,
+        "port": 2,
+        "bytes": [
+          144,
+          72,
+          80
+        ],
+        "intended_monotonic_ns": 217159001918687,
+        "actual_monotonic_ns": 217159002019929
+      },
+      {
+        "index": 2,
+        "port": 1,
+        "bytes": [
+          128,
+          72,
+          0
+        ],
+        "intended_monotonic_ns": 217159161918687,
+        "actual_monotonic_ns": 217159162003470
+      },
+      {
+        "index": 3,
+        "port": 2,
+        "bytes": [
+          128,
+          72,
+          0
+        ],
+        "intended_monotonic_ns": 217159461918687,
+        "actual_monotonic_ns": 217159462040045
+      }
+    ]
+  },
+  {
+    "kind": "same-key-sources-replay",
+    "scenario": "held",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ]
+    ]
+  },
+  {
+    "kind": "same-key-sources-length",
+    "scenario": "held",
+    "expected": 0.5,
+    "actual": [
+      0.499301274,
+      0.498929469,
+      0.49982038
+    ]
+  }
+]

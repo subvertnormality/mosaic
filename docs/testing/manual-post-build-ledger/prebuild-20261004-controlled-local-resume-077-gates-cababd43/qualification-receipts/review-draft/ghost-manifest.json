@@ -1,0 +1,39 @@
+{
+  "baseline_sources": {
+    "manual/features/cookbook.yaml": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+    "mosaic.lua": "2a7434f627ec5f7e20ce6a974757683f8f52286d3b9857cbba83f044b1d5ddca",
+    "tests/behaviour/manual_audio_contract.py": "c716178137201fdc9bae4af26b0cd907c450fc49cee543740c21f59fed3e67fb",
+    "tools/manual_audio.py": "d1fb7cea325312f9b77ee002c7aa71d5f6b829e86f963d7f384ae60af73e17de",
+    "tools/manual_capture.py": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80"
+  },
+  "candidate_sha256": {
+    "candidate.diff": "c051a3eed8d04212752f69642d94668ea89e768c5cf889c89704e85a5efd78f2",
+    "candidate/manual/features/cookbook.yaml": "af43f4a5bda3c90e712e9ab9278f424d4ae9e9cacf92b4f63bafe20376f8df67",
+    "candidate/tools/manual_audio.py": "33c12d17c053452a891a8c047d0cb4dac60d85ca58466617d456a8c3e1d73f8a",
+    "candidate/tools/test_manual_audio_configuration.py": "54e8155f76cd6eb630108adc24f380756a7062701aba86e1ac91b7eb9030d02e",
+    "test_manual_audio_configuration.py": "54e8155f76cd6eb630108adc24f380756a7062701aba86e1ac91b7eb9030d02e"
+  },
+  "changed_test_policy": "All existing tests/behaviour/*.py remain byte-identical; the new regression is tools/test_manual_audio_configuration.py.",
+  "failure": {
+    "authored_vs_observed": "The contract alternates MIDI 36/37 with MIDI 38 velocity 35 on steps 43/59. Native output collapses all authored main MIDI 37 notes to 36; ghost notes remain 38/35. One note 36 at the cycle boundary is expected and retained.",
+    "native_events_sha256": "55b324ffc70ab2930d96d5bf6e7e3a74d26904b0538b42822fc75e99b2bbc0d7",
+    "parent_stage_manifest_sha256": "7a074c5e5de8eafd3d1191bfed1ded1911baca384f4378632761f3d79ed94f87",
+    "recipe_sha256": "a41994a7ba202fd6b3cfaf9c877aa295c154d8dac699464745f03fe3267938c9",
+    "report_sha256": "f8b8f500f32ba967edb1f4fa66fb4c4d4c5670f5d897654619c53e4a6b831bf0",
+    "run": "/home/andy/mosaic-manual-audio-runs/1ee18f1342ee4b8d8e6561db03306ed6",
+    "source_yaml_sha256": "c902240cc800186d9bd4dc235d6a0fb805bc2231966d52d8e549720672625963"
+  },
+  "green": {
+    "command": "MOSAIC_MANUAL_ROOT=/home/andy/mosaic-manual-1.4.0 MOSAIC_AUDIO_TOOLS=/home/andy/mosaic-manual-build-operators/ghost-note-snap-off-077b/candidate/tools python3 /home/andy/mosaic-manual-build-operators/ghost-note-snap-off-077b/test_manual_audio_configuration.py",
+    "exit_code": 0,
+    "native_midi_green": "pending parent review/release; no native worker run",
+    "summary": "2 tests pass against external candidate; absolute setup calls the public UI helper with Snap note masks to scale Off; relative-scale setup makes no option change."
+  },
+  "red": {
+    "command": "MOSAIC_MANUAL_ROOT=/home/andy/mosaic-manual-1.4.0 MOSAIC_AUDIO_TOOLS=/home/andy/mosaic-manual-1.4.0/tools python3 /home/andy/mosaic-manual-build-operators/ghost-note-snap-off-077b/test_manual_audio_configuration.py",
+    "exit_code": 1,
+    "summary": "2 tests run: absolute pitch setup fails because option_sets is [] instead of [[(\"Snap note masks to scale\", false)]]; relative scale remains unchanged."
+  },
+  "schema_version": 1,
+  "scope": "external candidate only; active repository unchanged; no native worker launched"
+}

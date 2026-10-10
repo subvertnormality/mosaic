@@ -1,0 +1,16 @@
+{
+  "head": "f36a766fd2e3d425f1f068d4338023d0d9e1e344",
+  "runner_sha256": "d6848185a1f5fba5546cf07cb8eb13fbf8c2d3cafaca9312498e72874c59cb9d",
+  "command": [
+    "/home/andy/.venvs/rd-ci/bin/python",
+    "/home/andy/mosaic-manual-1.4.0/tests/rhythm_doctor/run_components.py",
+    "--native",
+    "--detector",
+    "--analysis-python",
+    "/home/andy/.venvs/rd-ci/bin/python",
+    "--output",
+    "/tmp/mosaic-doctor-components-c1ac8472e66a4067b6925d3ecb6acf74"
+  ],
+  "output": "/tmp/mosaic-doctor-components-c1ac8472e66a4067b6925d3ecb6acf74",
+  "started_utc": "2026-10-03T23:02:21.119053+00:00"
+}

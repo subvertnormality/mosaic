@@ -1,0 +1,238 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "publication_kind",
+    "case",
+    "scene_id",
+    "title",
+    "fixture",
+    "controlled_time",
+    "steps"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "publication_kind": {
+      "const": "doctor-native-audio"
+    },
+    "case": {
+      "const": "MA-DOCTOR-AUDIO-001"
+    },
+    "scene_id": {
+      "enum": [
+        "doctor-local-capture-and-paint",
+        "doctor-local-auto-capture-and-paint"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fixture": {
+      "type": "object",
+      "required": [
+        "seed",
+        "bpm",
+        "input_seconds",
+        "input_rate",
+        "input_channels",
+        "pulse_hz",
+        "pulse_level",
+        "pulse_seconds",
+        "pulse_decay",
+        "capture_finish_seconds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "seed": {
+          "const": 42
+        },
+        "bpm": {
+          "const": 120
+        },
+        "input_seconds": {
+          "const": 29
+        },
+        "input_rate": {
+          "const": 48000
+        },
+        "input_channels": {
+          "const": 2
+        },
+        "pulse_hz": {
+          "type": "number",
+          "minimum": 40,
+          "maximum": 100
+        },
+        "pulse_level": {
+          "type": "integer",
+          "minimum": 10000,
+          "maximum": 20000
+        },
+        "pulse_seconds": {
+          "type": "number",
+          "minimum": 0.05,
+          "maximum": 0.2
+        },
+        "pulse_decay": {
+          "type": "number",
+          "minimum": 50,
+          "maximum": 200
+        },
+        "capture_finish_seconds": {
+          "const": 25
+        }
+      }
+    },
+    "controlled_time": {
+      "type": "object",
+      "required": [
+        "applicable",
+        "reason"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "applicable": {
+          "const": false
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 30
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "caption",
+          "inputs",
+          "expect",
+          "citation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "enum": [
+              "setup",
+              "record",
+              "analyse",
+              "ready",
+              "preview",
+              "paint",
+              "play"
+            ]
+          },
+          "caption": {
+            "type": "string",
+            "minLength": 1
+          },
+          "citation": {
+            "const": "manual/legacy/README-1.4.0.md#rhythm-doctor"
+          },
+          "expect": {
+            "type": "object",
+            "minProperties": 1
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "method",
+                    "args"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "const": "ui"
+                    },
+                    "method": {
+                      "enum": [
+                        "tap_control",
+                        "open_channel_task",
+                        "set_value",
+                        "press_key",
+                        "set_range",
+                        "select_rhythm_doctor_algorithm",
+                        "rhythm_doctor_setup_field",
+                        "adjust_rhythm_doctor_setup_value",
+                        "expect_rhythm_doctor_setup_field",
+                        "rhythm_doctor_capture_edge",
+                        "rhythm_doctor_key_edge",
+                        "select_rhythm_doctor_lane",
+                        "play",
+                        "stop"
+                      ]
+                    },
+                    "args": {
+                      "type": "array"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "const": "wait"
+                    },
+                    "seconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 30
+                    },
+                    "fixture": {
+                      "const": "capture_finish_seconds"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "required": [
+                        "seconds"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "fixture"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "audio-input-start",
+                        "midi-baseline"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

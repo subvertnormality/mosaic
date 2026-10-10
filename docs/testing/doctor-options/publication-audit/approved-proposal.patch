@@ -1,0 +1,166 @@
+--- a/tools/doctor_options_audit.py
++++ b/tools/doctor_options_audit.py
+@@ -112,7 +112,7 @@
+  from ui_map import RHYTHM_DOCTOR_SCREEN
+  cursor=0;cache={}
+  for route,label,value in contracts:
+-  title,layout=RHYTHM_DOCTOR_SCREEN[route];expected=dict(literal_header=[title,'CH01',layout])
++  title,layout=RHYTHM_DOCTOR_SCREEN['screens'][route];expected=dict(literal_header=[title,'CH01',layout])
+   if label is not None:expected['field']=dict(layout=layout,label=label,value=str(value),art=True)
+   found=False
+   for index in range(cursor,len(observations)):
+@@ -199,3 +199,121 @@
+  keys=('index','device_id','port','port_name','monotonic_ns','bytes','decoded');require([{key:p[key] for key in keys} for p in notes]==row['notes'],'ADC accepted notes differ from exact native packet window')
+  expected_phrase=[[p['port'],p['bytes']] for p in notes[:len(steps)]];phrase=check_phrase(packets,steps,expected_phrase,'real-time')
+  return dict(input_selection=selection,mode=mode,pcm_frames=len(channels[0]),signal=signal,analysis_revisions=len(envelopes),phrase=phrase,captured_sha256=row['captured_sha256'])
++
++
++def check_native_observations(events,observations):
++ frame_hashes={value['sha256'] for value in events if value.get('kind')==1};grids={tuple(value['leds']) for value in events if value.get('kind')==2}
++ require(bool(frame_hashes) and bool(grids),'Missing actual native framebuffer/grid events')
++ for item in observations:
++  state=item['state'];pixels=base64.b64decode(state['frame']['pixels_base64'])
++  require(len(pixels)==32768 and hashlib.sha256(pixels).hexdigest()==state['frame']['sha256'] and state['frame']['sha256'] in frame_hashes and tuple(state['grid']) in grids,'Doctor observation lacks exact native frame/grid event')
++
++def audit_ready_witnesses(out,report,results,observations,fixture):
++ rows=[row for row in results if row.get('kind')=='doctor-ready-playback'];require([row.get('id') for row in rows]==['replace-policy','live-preview-commit','clear-keeps-pattern'],'READY needs three exact scoped playback witnesses')
++ events=[json.loads(line) for line in (out/'native/native-events.jsonl').read_text().splitlines()];checked=[]
++ for row in rows:
++  require(row.get('passed') is True and row.get('complete_cycles')==2 and row.get('outstanding_notes')==[] and row.get('expectedphrase')==fixture['midi_expected'],'Changed READY playback witness contract')
++  packets=native_midi_window(events,row['midi_start_index'],row['midi_end_index'],report['clock_mode']);notes=[p for p in packets if 144<=p['bytes'][0]<=159 and p['bytes'][2]>0]
++  keys=('index','device_id','port','port_name','monotonic_ns','bytes','decoded')+(('logical_ns',) if report['clock_mode']=='controlled-experimental' else ())
++  require([{key:p[key] for key in keys} for p in notes]==[{key:p[key] for key in keys} for p in row['attacks']],'READY witness differs from exact native attacks')
++  checked.append(check_phrase(packets,fixture['masks_by_sensitivity']['0.5'],fixture['midi_expected'],report['clock_mode'],cycles=2,closing=True))
++ isolation=[row for row in results if row.get('kind')=='doctor-options' and row.get('check')=='lane-sensitivity-isolation'];require(len(isolation)==1 and isolation[0].get('selected_lane')=='BD' and isolation[0].get('bd_sensitivity')==.5 and isolation[0].get('sd_sensitivity')==1 and isolation[0].get('detector_quality_claim') is False,'Missing independent lane sensitivity acceptance')
++ browse=[row for row in results if row.get('kind')=='doctor-options' and row.get('check')=='browse-gesture'];require(len(browse)>=8,'Missing Doctor tap/held/boundary browse coverage')
++ for row in browse:
++  require(type(row.get('held'))is bool and 0<=row['window_start']<=fixture['window_max'] and bool(row.get('tooltip')),'Invalid Doctor browse receipt')
++  visible_sequence(out,observations,[('R05','Window step',str(row['window_start']+1))])
++  require(any(doctor_tooltip_matches(observation['state'],row['tooltip'],out) for observation in observations),'Missing actual Doctor browse feedback')
++ return dict(scoped_phrases=checked,browse_gestures=len(browse),lane_isolation=True)
++def doctor_tooltip_matches(state,text,out):
++ try:verify_cached_ui(state,dict(doctor_tooltip=text),out);return True
++ except ValueError:return False
++
++def audit_report(path,case,clock,fixture=None):
++ path=Path(path).resolve();require(path.name=='report.json','Doctor report must be explicit original report.json');out=path.parent;report=read(path);check_scope(report,case,clock)
++ require(not (out/'diagnostic-only.json').exists(),'Diagnostic Doctor report cannot qualify');require(report.get('harness_changed')==[],'Doctor harness mutation/missing final source guard')
++ source=check_sources(out,report);require(read(out/'native/native-config.json').get('clock_mode')==clock,'Actual native Doctor clock differs')
++ results=read(out/'results.json');observations=read(out/'observations.json');require(observations and not any(row.get('passed') is False or row.get('matched') is False for row in results),'Missing/failed Doctor semantic results')
++ cleanup=read(out/'native/cleanup.json');require(cleanup and all(row.get('returncode') in ((0,-15) if row.get('service') in ('sclang','crow') else (0,)) for row in cleanup),'Doctor native cleanup failed')
++ final=observations[-1]['state'];require(final.get('held')==[] and final['midi_capture']['outstanding']==[],'Doctor cleanup left held inputs/notes')
++ events=[json.loads(line) for line in (out/'native/native-events.jsonl').read_text().splitlines()];check_native_input_trace(read(out/'recipe.json'),events);check_native_observations(events,observations)
++ require(all(item['state']['clock']['mode']==clock for item in observations),'Doctor observed clock differs')
++ frames=report.get('checkpoints',[])
++ if case not in ('setup_options','ready_options'):
++  expected=[('setup-manual-bpm',dict(route='R01',label='Manual BPM',value='100')),('window-lower-row',dict(route='R05',label='Alignment',value='OPEN >')),('alignment-lower-row',dict(route='R06',label='Fine start',value='0ms'))]
++  if case=='manual_right':expected +=[(key,dict(route='R06',label=label,value=value)) for key,label,value in [('alignment-edited-then-cancelled','Exact BPM','120'),('alignment-confirmed-draft','Exact BPM','120'),('alignment-reanalysis-ready','Half tempo','120')]]
++  require([(frame['id'],frame['expect']) for frame in frames]==expected,'Missing exact Doctor lower-row/alignment checkpoints')
++ for frame in frames:
++  semantic=[row for row in results if row.get('kind')=='doctor-options-checkpoint' and row.get('id')==frame['id']];require(len(semantic)==1 and semantic[0].get('expected')==frame['expect'] and semantic[0].get('passed') is True,'Doctor documentation semantic binding differs')
++  check_frame(frame['output'],results,observations);require(results.index(semantic[0])<results.index(frame['output']['binding']),'Doctor frame precedes semantic assertion')
++  visible_sequence(out,observations,[(frame['expect']['route'],frame['expect']['label'],frame['expect']['value'])])
++ if case=='ready_options':
++  require(isinstance(fixture,tuple) and len(fixture)==3,'READY audit requires explicit fixture/pathSHA/ManualRight report')
++  qualified,proof=audit_fixture(*fixture)
++  require(report.get('ready_fixture')==dict(path=qualified['_path'],sha256=qualified['_sha256']),'READY report fixture pointer differs');prelaunch=read(out/'fixture-prelaunch.json');seed=out/'frozen-project-seed'
++  require(prelaunch.get('passed') is True and prelaunch.get('phase')=='before-native-startup' and prelaunch.get('fixture')==qualified['_path'] and prelaunch.get('fixture_sha256')==qualified['_sha256'],'Missing READY prelaunch qualification receipt')
++  for key in ('acquisition_report','acquisition_report_sha256','geometry_receipt','geometry_receipt_sha256','saved_project_sha256'):require(prelaunch.get(key)==qualified[key],'READY prelaunch provenance differs '+key)
++  require(Path(prelaunch['project_seed']).resolve()==seed.resolve() and prelaunch['project_seed_files']==source['project_seed_files']==qualified['project_seed_files']==seed_files(seed),'READY frozen seed bytes differ')
++  require(read(out/'session.json').get('data_seeds')==[dict(source=str(seed),destination='mosaic')],'Actual native session did not use qualified seed')
++  detail=audit_ui(out,report,results,observations,qualified);detail['scoped']=audit_ready_witnesses(out,report,results,observations,qualified)
++ elif case=='setup_options':detail=audit_ui(out,report,results,observations)
++ else:detail=audit_adc(out,report,results,observations,source)
++ return dict(passed=True,case=case,clock_mode=clock,report=str(path),report_sha256=digest(path),source_sha256=digest(out/'source.json'),results_sha256=digest(out/'results.json'),native_identity_sha256=digest(out/'native/identity.json'),native_events_sha256=digest(out/'native/native-events.jsonl'),frames=len(frames),detail=detail,complete_regression_run=False,hardware_timing_equivalent=False)
++
++def audit_fixture(path,sha,parent_report):
++ path=Path(path).resolve();parent_report=Path(parent_report).resolve();require(digest(path)==sha,'READY fixture SHA differs');fixture=read(path);check_fixture_contract(fixture)
++ require(path==parent_report.parent/'ready-fixture/fixture.json' and Path(fixture['acquisition_report']).resolve()==parent_report and fixture['acquisition_report_sha256']==digest(parent_report),'READY fixture lacks exact ManualRight parent')
++ parent_audit=audit_report(parent_report,'manual_right','real-time')
++ source=read(parent_report.parent/'source.json');require(source['harness_files']['tools/doctor_ready_fixture.py']==digest(ROOT/'tools/doctor_ready_fixture.py'),'Stale READY fixture exporter')
++ receipt_path=Path(fixture['geometry_receipt']).resolve();require(receipt_path==path.parent/'geometry-receipt.json' and digest(receipt_path)==fixture['geometry_receipt_sha256'],'READY geometry receipt differs');receipt=read(receipt_path);draft_path=path.parent/'acquisition.json';draft=read(draft_path)
++ require(receipt.get('passed') is True and receipt.get('kind')=='doctor-saved-project-geometry' and receipt.get('acquisition_report_sha256')==digest(parent_report) and receipt.get('acquisition_receipt_sha256')==digest(draft_path),'READY geometry provenance differs')
++ seed=path.parent/'project-seed';require(Path(fixture['project_seed']).resolve()==seed.resolve() and Path(fixture['saved_project']).resolve()==seed/'autosave.ptn','READY autosave path differs')
++ files=seed_files(seed);require(files==fixture['project_seed_files']==receipt['project_seed_files']==draft['project_seed_files'] and files['autosave.ptn']==fixture['saved_project_sha256']==receipt['saved_project_sha256']==draft['saved_project_sha256'],'READY saved seed/config bytes changed')
++ from doctor_ready_fixture import saved_geometry
++ geometry=saved_geometry(seed/'autosave.ptn');require(geometry==receipt['geometry']==draft['geometry'],'READY geometry not derived from actual saved graph')
++ for key in ('bank_bpm','window_max','beat_count'):require(fixture[key]==geometry[key],'READY scalar geometry differs '+key)
++ require(receipt['observations']==draft['observations']==dict(masks_by_sensitivity=fixture['masks_by_sensitivity'],midi_expected=fixture['midi_expected']),'READY observed masks/MIDI changed')
++ require(draft.get('kind')=='doctor-ready-fixture-acquisition' and draft.get('passed') is True and draft.get('project_seed_origin')==receipt.get('project_seed_origin')==ORIGIN and draft.get('retained_audio') is False and draft.get('recipe_sha256')==receipt.get('recipe_sha256')==digest(ROOT/'tools/doctor_ready_fixture.py'),'READY exporter/acquisition contract differs')
++ results=read(parent_report.parent/'results.json');observations=read(parent_report.parent/'observations.json');events=[json.loads(line) for line in (parent_report.parent/'native/native-events.jsonl').read_text().splitlines()]
++ bindings=[row for row in results if row.get('kind')=='doctor-ready-fixture-acquisition'];require(len(bindings)==1 and bindings[0].get('passed') is True and bindings[0]['receipt_sha256']==digest(draft_path),'READY acquisition result binding differs')
++ backend=next(row for row in results if row.get('kind')=='doctor-backend-options');alignment=next(row for row in results if row.get('kind')=='doctor-retained-alignment');analysis=alignment['analysis'];require(draft['captured_sha256']==backend['captured_sha256']==alignment['captured_sha256'],'READY fixture lost retained actual WAV')
++ require(geometry['bank_bpm']==analysis['bpm'] and geometry['origin_sample']==analysis['origin_sample'] and geometry['beat_count']==len(analysis['beat_positions']) and geometry['window_start']==0 and geometry['sample_rate']==48000 and geometry['samples_per_cell']==48000*60/geometry['bank_bpm']/4,'READY bank alignment differs from recorded analysis')
++ originals=list((parent_report.parent/'data').rglob('autosave.ptn'));require(len(originals)==1 and digest(originals[0])==files['autosave.ptn'],'Seed is not actual application autosave export')
++ frame_map={frame['id']:frame for frame in draft['frames']};required={'window-low','preview-0','preview-0.5','preview-1','paint-p3','full64-midi','full64-midi-release','blank-destinations','window-high-confirmed'};require(set(frame_map)==required and len(frame_map)==len(draft['frames']),'Incomplete or duplicate READY acquisition frames')
++ for frame in draft['frames']:check_frame(frame['output'],results,observations)
++ for level in ('0','0.5','1'):
++  frame=frame_map['preview-'+level];require(frame['expected']['steps']==fixture['masks_by_sensitivity'][level] and [i+1 for i,v in enumerate(frame['output']['grid'][48:112]) if v in (12,15)]==fixture['masks_by_sensitivity'][level],'READY sensitivity mask not actually observed')
++ require([i+1 for i,v in enumerate(frame_map['paint-p3']['output']['grid'][48:112]) if v==15]==fixture['masks_by_sensitivity']['0.5'],'READY fixture paint differs from preview')
++ high=frame_map['window-high-confirmed'];visible_sequence(parent_report.parent,observations,[('R05','Window step',str(geometry['window_max']+1))]);require(high['expected']['window_max']==geometry['window_max'],'READY public bound differs')
++ full=frame_map['full64-midi']['expected'];require(full['expected']==fixture['midi_expected'] and full['steps']==fixture['masks_by_sensitivity']['0.5'],'READY full phrase expectation changed')
++ # The original pre-Stop frame stays immutable. The NEW endpoint records the
++ # real post-Stop release. No open-closing exception or packet-count reduction.
++ endpoint=draft['playback_release'];require(endpoint==receipt['playback_release']==frame_map['full64-midi-release']['expected'] and endpoint['outstanding_notes']==[] and endpoint['midi_start_index']==full['midi_start_index'] and endpoint['midi_end_index']>=full['midi_end_index'],'READY release endpoint provenance differs')
++ packet_rows=native_midi_window(events,endpoint['midi_start_index'],endpoint['midi_end_index'],'real-time');keys=('index','device_id','port','port_name','monotonic_ns','bytes','decoded')
++ recorded=[{key:value[key] for key in keys} for value in endpoint['packets'] if len(value.get('bytes',[]))==3];require([{key:value[key] for key in keys} for value in packet_rows]==recorded,'READY release endpoint differs from actual native packets')
++ attacks=[value for value in packet_rows if value['bytes'][0]==144 and value['bytes'][2]>0];closing=attacks[-1];require(endpoint['closing_attack_index']==closing['index'] and {key:endpoint['closing_attack'][key] for key in keys}=={key:closing[key] for key in keys},'READY closing attack differs')
++ release_rows=[value for value in packet_rows if value['index']>closing['index'] and value['port']==closing['port'] and value['bytes']==[128,closing['bytes'][1],closing['bytes'][2]]]
++ require(release_rows and [{key:value[key] for key in keys} for value in release_rows]==[{key:value[key] for key in keys} for value in endpoint['closing_releases']],'Missing exact native closing note-off')
++ release_semantic=[row for row in results if row.get('kind')=='doctor-ready-fixture-playback-release'];require(len(release_semantic)==1 and release_semantic[0].get('passed') is True and all(release_semantic[0].get(key)==value for key,value in endpoint.items()),'READY release semantic row differs')
++ phrase=check_phrase(packet_rows,full['steps'],full['expected'],'real-time',cycles=2,closing=True)
++ fixture.update(_path=str(path),_sha256=sha)
++ return fixture,dict(passed=True,fixture=str(path),fixture_sha256=sha,parent_report_sha256=parent_audit['report_sha256'],saved_project_sha256=files['autosave.ptn'],geometry=geometry,phrase=phrase)
++
++def audit_qualification(reports,fixture,fixture_sha256):
++ check_roles(reports);report_checks={}
++ for role in ('manual_stereo','auto_left','manual_right','setup_real','setup_controlled'):
++  case,clock=ROLES[role];report_checks[role]=audit_report(reports[role],case,clock)
++ qualified,fixture_check=audit_fixture(fixture,fixture_sha256,reports['manual_right'])
++ for role in ('ready_real','ready_controlled'):
++  case,clock=ROLES[role];report_checks[role]=audit_report(reports[role],case,clock,(Path(fixture),fixture_sha256,Path(reports['manual_right'])))
++ for role,checked in report_checks.items():require(digest(reports[role])==checked['report_sha256'],'Doctor report changed during whole qualification')
++ require(digest(fixture)==fixture_sha256,'READY fixture changed during qualification')
++ return dict(passed=True,roles=report_checks,fixture=fixture_check,real_adc_sessions=3,ui_sessions=4,complete_regression_run=False,hardware_timing_equivalent=False,controlled_audio=dict(applicable=False,reason='Actual ADC/softcut acquisition requires real-time audio'))
++def main():
++ parser=argparse.ArgumentParser(description=__doc__)
++ for role in ROLES:parser.add_argument('--'+role.replace('_','-')+'-report',required=True,type=Path)
++ parser.add_argument('--fixture',required=True,type=Path);parser.add_argument('--fixture-sha256',required=True);parser.add_argument('--output',type=Path);options=parser.parse_args()
++ reports={role:getattr(options,role+'_report') for role in ROLES};report=audit_qualification(reports,options.fixture,options.fixture_sha256)
++ if options.output:
++  with options.output.open('x') as target:target.write(json.dumps(report,indent=2)+'\n')
++ print(json.dumps(report,indent=2));return 0
++if __name__=='__main__':raise SystemExit(main())
+--- a/tests/behaviour/test_doctor_options_audit.py
++++ b/tests/behaviour/test_doctor_options_audit.py
+@@ -62,4 +62,30 @@
+   with self.assertRaisesRegex(ValueError,'retained'):audit.check_fixture_contract(changed)
+   changed=copy.deepcopy(fixture);changed['masks_by_sensitivity']['0.5']=[65]
+   with self.assertRaisesRegex(ValueError,'mask'):audit.check_fixture_contract(changed)
++
++class DoctorNewApiIntegrity(unittest.TestCase):
++ def test_report_refuses_a_missing_final_harness_guard_before_any_acceptance(self):
++  with tempfile.TemporaryDirectory() as directory:
++   report=DoctorScopeIntegrity().report();path=Path(directory)/'report.json';path.write_text(json.dumps(report))
++   with self.assertRaisesRegex(ValueError,'harness'):audit.audit_report(path,'manual_stereo','real-time')
++ def test_fixture_digest_is_checked_before_parsing(self):
++  with tempfile.TemporaryDirectory() as directory:
++   path=Path(directory)/'fixture.json';path.write_text('not JSON')
++   with self.assertRaisesRegex(ValueError,'fixture SHA'):audit.audit_fixture(path,'incorrect',Path(directory)/'report.json')
++ def test_native_observation_cannot_replace_a_real_frame_or_grid(self):
++  import base64,hashlib
++  pixels=bytes(32768);sha=hashlib.sha256(pixels).hexdigest();events=[dict(kind=1,sha256=sha),dict(kind=2,leds=[0]*128)];observations=[dict(state=dict(frame=dict(sha256=sha,pixels_base64=base64.b64encode(pixels).decode()),grid=[0]*128))]
++  audit.check_native_observations(events,observations)
++  changed=copy.deepcopy(observations);changed[0]['state']['grid'][0]=15
++  with self.assertRaisesRegex(ValueError,'native frame/grid'):audit.check_native_observations(events,changed)
++ def test_closing_attack_requires_real_release_and_exact_packet_count(self):
++  packets=DoctorMusicalWindowIntegrity().events();expected=[[1,[144,60,100]],[1,[144,60,90]]]
++  with self.assertRaisesRegex(ValueError,'gate release'):audit.check_phrase(packets[:-1],[1,17],expected,'controlled-experimental',cycles=2,closing=True)
++  changed=copy.deepcopy(packets);changed.append(dict(changed[-1],index=changed[-1]['index']+1))
++  with self.assertRaisesRegex(ValueError,'unbalanced'):audit.check_phrase(changed,[1,17],expected,'controlled-experimental',cycles=2,closing=True)
++ def test_cli_requires_all_seven_explicit_roles_and_fixture_identity(self):
++  import io
++  with patch.object(sys,'argv',['doctor_options_audit.py','--fixture','/fixture.json','--fixture-sha256','hash']),patch('sys.stderr',new_callable=io.StringIO),patch.object(audit,'audit_qualification',side_effect=AssertionError('Incomplete CLI must not audit')):
++   with self.assertRaises(SystemExit):audit.main()
++
+ if __name__=='__main__':unittest.main()

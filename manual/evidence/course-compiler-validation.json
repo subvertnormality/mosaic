@@ -1,0 +1,19 @@
+{
+  "scope": "Authoring compiler characterisation outside instrument manual",
+  "actual_course_validated": true,
+  "chapters": 10,
+  "stages": 37,
+  "course_capture_status": "pending",
+  "validation_tests_passed": 9,
+  "compile_tests_pending": 0,
+  "external_blocker": null,
+  "guards_weakened": false,
+  "files": {
+    "tools/manual_book.py": "9b51cc90587d8a01bce4637d850054a5cdd2a2143ec61b03a14c7dd5947c78ec",
+    "manual/book.schema.json": "c30b65cd5e5f7f155060342682f7d24562b1661a7f247f4c002f2f7bb4e6daa2",
+    "manual/course.schema.json": "37ceedad42d6a95dadd5aa741ea4426da549cd9eece14a1de08573131312477d",
+    "tests/behaviour/test_manual_book.py": "9b7d1a5ae4d1227d49c7ca3ed348d338681a748d00c4bc3d661e2d8e4e606a57"
+  },
+  "test_suite_passed": true,
+  "focused_test_count": 12
+}

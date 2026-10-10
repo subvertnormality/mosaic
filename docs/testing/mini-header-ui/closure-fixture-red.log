@@ -1,0 +1,23 @@
+test_300ms_real_dwell_below_source_bound_is_rejected (__main__.ArchivedRealBlinkTests) ... FAIL
+test_clock_full_authored_motif_moves_outside_obsolete_corner (test_manual_closure_cases.MotionClosureOracleTests) ... FAIL
+
+======================================================================
+FAIL: test_300ms_real_dwell_below_source_bound_is_rejected (__main__.ArchivedRealBlinkTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/closure-fixture-red-runner.py", line 13, in test_300ms_real_dwell_below_source_bound_is_rejected
+    with self.assertRaises(AssertionError):module.queued_blink_levels(rows,False)
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_clock_full_authored_motif_moves_outside_obsolete_corner (test_manual_closure_cases.MotionClosureOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_closure_cases.py", line 42, in test_clock_full_authored_motif_moves_outside_obsolete_corner
+    self.assertGreater(len(set(hashes)),1,'Clock authored motif changes outside old corner crop')
+AssertionError: 1 not greater than 1 : Clock authored motif changes outside old corner crop
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.006s
+
+FAILED (failures=2)

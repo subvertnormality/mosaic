@@ -1,0 +1,49 @@
+New additive canonical-link API acceptance before implementation:
+.E...............E.E
+======================================================================
+ERROR: test_additive_registered_case_links_each_requirement_without_rewriting_history (test_manual_authority_transition.AuthorityTransitionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority_transition.py", line 137, in test_additive_registered_case_links_each_requirement_without_rewriting_history
+    revised=rec.add_registered_cases(self.inventory,registry,{'path':'tests/behaviour/cases.py','sha256':'candidate'})
+AttributeError: module 'reconcile_manual' has no attribute 'add_registered_cases'
+
+======================================================================
+ERROR: test_transition_plan_includes_new_current_canonical_case_extension (test_manual_authority_transition.AuthorityTransitionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority_transition.py", line 151, in test_transition_plan_includes_new_current_canonical_case_extension
+    with patch.object(rec,'canonical_registry',return_value=(registry,{'path':'cases.py','sha256':'new'})):
+  File "/usr/lib/python3.8/unittest/mock.py", line 1393, in __enter__
+    original, local = self.get_original()
+  File "/usr/lib/python3.8/unittest/mock.py", line 1366, in get_original
+    raise AttributeError(
+AttributeError: <module 'reconcile_manual' from '/home/andy/mosaic-manual-1.4.0/tests/behaviour/reconcile_manual.py'> does not have the attribute 'canonical_registry'
+
+======================================================================
+ERROR: test_unknown_requirement_registration_fails_without_inventory_mutation (test_manual_authority_transition.AuthorityTransitionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority_transition.py", line 147, in test_unknown_requirement_registration_fails_without_inventory_mutation
+    rec.add_registered_cases(self.inventory,{'NEW':{'requirements':['missing']}},{})
+AttributeError: module 'reconcile_manual' has no attribute 'add_registered_cases'
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.736s
+
+FAILED (errors=3)
+
+New additive matrix-domain API acceptance before implementation:
+............E........
+======================================================================
+ERROR: test_matrix_links_only_additive_extensions_without_claiming_acceptance (test_manual_authority_transition.AuthorityTransitionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority_transition.py", line 161, in test_matrix_links_only_additive_extensions_without_claiming_acceptance
+    linked=rec.link_case_extensions(matrix,revised)
+AttributeError: module 'reconcile_manual' has no attribute 'link_case_extensions'
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.778s
+
+FAILED (errors=1)

@@ -1,0 +1,9 @@
+{
+  "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+  "manual/manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+  "manual/manual.css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+  "manual/index.html": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+  "manual/generated/book.json": "54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+  "manual/generated/reader-index.json": "39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf",
+  "tests/behaviour/manual_browser.cjs": "a9cc707477dff0d2d48c24e8ebdb44ee90b9ebc15f0b4e07b0c11db080c38e6d"
+}

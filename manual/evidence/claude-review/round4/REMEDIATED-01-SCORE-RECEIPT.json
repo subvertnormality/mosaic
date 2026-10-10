@@ -1,0 +1,12 @@
+{
+  "files": {
+    "validation.json": "20c6963e408a8d082c98dc67ec24c3e6010fadc5927f59087a8ceeadc515150c",
+    "stdout.log": "b5df854aa0d0980c85fd1268636e5b6d4878bfa6af362e5525e21f28af16b3b2",
+    "AGGREGATE.json": "2f55aa7bf9141602161fdccf1ae6d89ac39f75a5cea57877f2c5f790b3706444",
+    "SUB8.json": "4ad761714ca8768b8893ebacf78195639b1c94feff3dc23f74a5faf893af7af0",
+    "DISPUTED-CLAIMS.json": "acb048dfd92e3e4821d45b01b8beeb8e7a2957b42f554ae27ef626282cbe2698"
+  },
+  "strict_validator_sha256": "b67229038b6e32c0561363b6438a9458941079e01cf136dc6cdd5363429d00e9",
+  "reports_unchanged": true,
+  "source_edits": false
+}

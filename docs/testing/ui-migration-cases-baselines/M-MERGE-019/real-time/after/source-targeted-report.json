@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "98293f677963c1e8606ceeea044cbe96f766128f",
+  "after_sha": "423fb5dc49ea0adab22a2dc8d8d310cd8eb60d95",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MERGE-011",
+    "M-MERGE-019",
+    "M-MERGE-023",
+    "M-MERGE-043",
+    "M-MERGE-044"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract/numeric_merging.py",
+      "tests/behaviour/test_ui_layer.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract/numeric_merging.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MERGE-011",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-011/real-time/before/c8cd7df15f4e405ea8aa49b39ff0c349/manifest.json",
+              "manifest_sha256": "2834a8aa160a5fb6158572fc11841eeea57839bac987371ce202e8b8a42062d9"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-011/real-time/after/bd67c2ecca2942b79ee7f286e6927e9d/manifest.json",
+              "manifest_sha256": "7b281c24a5871ed5db899573fd31e81b109cb061ba400d3d78019a5b55c9f1a7"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-011/controlled-experimental/before/24c8e987745645c7bf15d434d64ddf3a/manifest.json",
+              "manifest_sha256": "ffcb0bbdb12e61e3a00225f4dc90938f06eabed4bfe739ae941d8a18f53ca495"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-011/controlled-experimental/after/d5267f0fcdbc4eaaaa7d0b2e6ea2e696/manifest.json",
+              "manifest_sha256": "95f0c366d11dff2ea4213b0854d9bd39372ff9e9b0b438b56db20b1de6176129"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-019",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/real-time/before/9fc10053d23c4504a559b7179ce1e93a/manifest.json",
+              "manifest_sha256": "36b86518a9bb4d00725c355a18b208ca387eed013d147f7941d9ff4a573391d7"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/real-time/after/3b21479b43ae42ad98ed1c42b43f080c/manifest.json",
+              "manifest_sha256": "01da4ed52f4de598e2d0b802e2dd5a820123e2ef50ad44537d41f85686289303"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/controlled-experimental/before/a9dea6f2bd1848b5a499a5fbf614cfaa/manifest.json",
+              "manifest_sha256": "a70c41f340e9241d415e7156925d265257977306cde3a33ea6fa420884a6ca31"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/controlled-experimental/after/1497910fec564e30bc19ab4afb439916/manifest.json",
+              "manifest_sha256": "1c33612c39f2274db15d43f146dc5737e784b6bd59602134937e1d3b27f87a07"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-023",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-023/real-time/before/7a55759d8717426eb7e36f932b7e0587/manifest.json",
+              "manifest_sha256": "c37418b5a54b97b1e9ab29a204f862da9efde10f01980fe9790a551be810abba"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-023/real-time/after/ef13ece46f87445c91b99bd6a828f285/manifest.json",
+              "manifest_sha256": "e220abc33a75c8a32ff17d697d6f20b46142f3e11e91967c17975c785f8a485b"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-023/controlled-experimental/before/e5d06c24ba044b5686f3bd572888243f/manifest.json",
+              "manifest_sha256": "7319589083e6538d8fd21311a56eddf9c2cd29dc0c62f42ea4b123e996bf0d2a"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-023/controlled-experimental/after/8b077349a760418cbe536c1ddfad3211/manifest.json",
+              "manifest_sha256": "8d373700fdd061c0a485b48a7b1149ee8089aebcdb203102e3dea4fd86c72544"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-043",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-043/real-time/before/0950dde553f444ed956232045e7a9a8c/manifest.json",
+              "manifest_sha256": "4f2734751935c4ef3888a61340513158a5e0cf87e30c8b7b84f311d296c678c5"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-043/real-time/after/97bce8e9693740ac8eb654f73a7afa76/manifest.json",
+              "manifest_sha256": "dbebb2083bab311a28cdbf494855d77fa98dab18ae39bf8ea5526a634ec1cfb7"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-043/controlled-experimental/before/ea01c2a85e0b4652aec645a5e6461ffe/manifest.json",
+              "manifest_sha256": "eec77601403225e567dada86421c6f27ae79ca579e47cebf13132f4b964cd874"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-043/controlled-experimental/after/0fb7967be3e042b19a02b09844fb0e9c/manifest.json",
+              "manifest_sha256": "47ce0ffac37c04aba5222a92c1e8ab5e1df5c94a19a81c9a858946224b7c800f"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-044",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-044/real-time/before/08e1cf6c3dd943e8a54e19d543df98a0/manifest.json",
+              "manifest_sha256": "b3ff21238421ee31fb1de4e65668353cf05979e5b51a3efea3ee5b53d78507a3"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-044/real-time/after/d12fef30345e44c1911174e88cdd1987/manifest.json",
+              "manifest_sha256": "1af0c564c86f2f4d75792b2bd2a33839a00770989e53bab11219dbc9ea7b8d22"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-044/controlled-experimental/before/cdcfcb5c73a14fe0a2e7f9d1e594774c/manifest.json",
+              "manifest_sha256": "7c06e51a4f048725bd839b415b32781b04eca0edca71621bf6447528e0f0ef4d"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-044/controlled-experimental/after/166fcd67cfcf4b66971d22047226355f/manifest.json",
+              "manifest_sha256": "7a50760d0680105f5dd4b4aecbf50f4f0deda6a6188badd2de6e070d082a27f7"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

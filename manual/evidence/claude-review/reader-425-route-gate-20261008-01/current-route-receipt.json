@@ -1,0 +1,106 @@
+{
+  "schema": "mosaic-reader-425-route-gate-receipt-v1",
+  "status": "PASS",
+  "qualification_scope": "browser-only current public route, visible content, exact source projection and frame/chunk integrity checks; not a CI/native/audio/publication qualification",
+  "source": {
+    "root": "/home/andy/mosaic-manual-1.4.0",
+    "ledger_sha256": "78d46761bfe935c480d50cd5a8aedb26f8b9e9fcd59cf063e824ad4cbbe2f4bc",
+    "book_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+    "reader_index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+    "authority_sha256": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+    "authoring_source_file_count": 14,
+    "runtime_asset_sha256": {
+      "index.html": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+      "book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+      "manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+      "manual.css": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25"
+    }
+  },
+  "coverage": {
+    "unique_ledger_units": 425,
+    "unique_requested_routes": 425,
+    "families": {
+      "course": 55,
+      "lesson": 138,
+      "recipe": 74,
+      "recording": 22,
+      "scene": 136
+    },
+    "unique_scene_ids": 146,
+    "verified_scene_chunks": 146,
+    "course_only_scene_ids": [
+      "course-build-a-phrase",
+      "course-first-sound",
+      "course-getting-started",
+      "course-harmony-design",
+      "course-keep-your-work",
+      "course-masks",
+      "course-modulation-movement-and-interest",
+      "course-sequence-composition",
+      "course-setup",
+      "course-song-composition"
+    ],
+    "authored_requested_to_canonical_handoffs": [
+      {
+        "ledger_id": "lesson:elektron-program-change-channel:play-elektron-child-enable-and-announce-off",
+        "requested": "#elektron-program-change-channel/lesson/play-elektron-child-enable-and-announce-off",
+        "canonical": "#elektron-program-changes/lesson/play-elektron-child-enable-and-announce-off"
+      },
+      {
+        "ledger_id": "lesson:honor-scale-degree:field-keyboard-honour-degree-pick-natural-minor",
+        "requested": "#honor-scale-degree/lesson/field-keyboard-honour-degree-pick-natural-minor",
+        "canonical": "#midi-controller-options/lesson/field-keyboard-honour-degree-pick-natural-minor"
+      },
+      {
+        "ledger_id": "lesson:honor-scale-rotations:keyboard-honour-degree-rotation",
+        "requested": "#honor-scale-rotations/lesson/keyboard-honour-degree-rotation",
+        "canonical": "#midi-controller-options/lesson/keyboard-honour-degree-rotation"
+      },
+      {
+        "ledger_id": "lesson:masks:add-scale-third-to-chord",
+        "requested": "#masks/lesson/add-scale-third-to-chord",
+        "canonical": "#adding-chords/lesson/add-scale-third-to-chord"
+      },
+      {
+        "ledger_id": "lesson:midi-controller-options:play-mapping-child-selected-and-fixed-raw",
+        "requested": "#midi-controller-options/lesson/play-mapping-child-selected-and-fixed-raw",
+        "canonical": "#midi-controller-mapping/lesson/play-mapping-child-selected-and-fixed-raw"
+      },
+      {
+        "ledger_id": "recipe:locks:1-make-one-step-override-a-channel-note-default-th",
+        "requested": "#locks/recipe/1",
+        "canonical": "#melody-composition/recipe/1"
+      },
+      {
+        "ledger_id": "recipe:locks:2-compare-a-stored-device-value-with-one-step-loca",
+        "requested": "#locks/recipe/2",
+        "canonical": "#device-parameters/recipe/2"
+      },
+      {
+        "ledger_id": "recipe:mask-locks:1-make-one-step-override-a-channel-note-default-th",
+        "requested": "#mask-locks/recipe/1",
+        "canonical": "#melody-composition/recipe/1"
+      }
+    ],
+    "recording_players_checked_paused": 22
+  },
+  "browser": {
+    "passed_rows": 425,
+    "failed_rows": 0,
+    "browser_errors": 0,
+    "http_errors": 0,
+    "audio_playback": "No play action was issued; every recording route asserted the player remained paused.",
+    "owned_browser_closed": true
+  },
+  "artifacts": {
+    "unit-route-manifest.json": "8620ce3df63d35489e9473257313117a3d56c37f034d2f75cc2f986e488829f9",
+    "all-425-route-gate.cjs": "552e5295de5fee73a426c7e5ccba699cbf587403b2446639663ffafeee46c093",
+    "browser-route-report.json": "caa9973c061f75f384466f23bd59ffe3e9775bb48a9ff317572184ca39a78653"
+  },
+  "preservation": {
+    "prior_diagnostic": "../../browser-route-report.json (unqualified initial harness run; unchanged)",
+    "corrected_run_v1": "../output/browser-route-report.json (preserved earlier 310/425 diagnostic)",
+    "corrected_run_v2": "../output-v2/browser-route-report.json (preserved 367/425 diagnostic)",
+    "no project source or generated assets were modified by this gate": true
+  }
+}

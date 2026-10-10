@@ -1,0 +1,6 @@
+{
+  "source_sha256": "40912b93476d68bf74a8b38c133b1c0971a1d622df773508c87454f2b160b1e3",
+  "test_sha256": "c3956d04ee16e45d72f4272379661b6e4346ab24542a177bb54f523ffa41211e",
+  "exit_code": 1,
+  "output": "lua: tests/rhythm_doctor/test_capture_transitions.lua:5: 1 ~= 0\nstack traceback:\n\t[C]: in function 'assert'\n\ttests/rhythm_doctor/test_capture_transitions.lua:5: in local 'equal'\n\ttests/rhythm_doctor/test_capture_transitions.lua:59: in main chunk\n\t[C]: in ?\n"
+}

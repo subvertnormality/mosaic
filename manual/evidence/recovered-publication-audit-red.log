@@ -1,0 +1,21 @@
+.....................EE
+======================================================================
+ERROR: test_exact_selector_alternatives_do_not_authorise_arbitrary_shortened_interval_lists (test_manual_publication_verify.ScopedRecoveryIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 173, in test_exact_selector_alternatives_do_not_authorise_arbitrary_shortened_interval_lists
+    audit.check_authored_assertion(dict(expect=dict(assertion=authored['assertion'])),authored)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_authored_assertion'
+
+======================================================================
+ERROR: test_only_exact_completed_cases_can_be_recovered_with_missing_start_fields_explicit (test_manual_publication_verify.ScopedRecoveryIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 166, in test_only_exact_completed_cases_can_be_recovered_with_missing_start_fields_explicit
+    audit.check_recovery_publication(report,failure,completed)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_recovery_publication'
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.025s
+
+FAILED (errors=2)

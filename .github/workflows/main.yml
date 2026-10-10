@@ -3,7 +3,10 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    # Stacked release branches are gated too: a pull request into a release
+    # branch is reviewed on the same evidence as one into main, and without
+    # this a stacked PR shows no checks at all rather than showing red.
+    branches: [ main, codex/1.4.0, codex/rhythm-doctor-phrase ]
 
 jobs:
   Run-tests-on-Ubuntu:
@@ -15,3 +18,14 @@ jobs:
         with:
           luaVersion: "5.3"
       - run: ./test.sh
+
+  Manual-publisher-contract:
+    name: Manual publisher contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install PyYAML==6.0.2
+      - run: python -m unittest tests.manual_ci.test_publish_manual

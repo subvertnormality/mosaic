@@ -1,0 +1,21 @@
+..........EF.............................................................
+======================================================================
+ERROR: test_dashboard_length_is_exact_native_pixels_and_own_observation (test_manual_publication_verify.CourseDashboardNativeIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 712, in test_dashboard_length_is_exact_native_pixels_and_own_observation
+    row,obs,binding,grid=self.fixture();audit.check_course_dashboard(row,obs,binding,grid)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_course_dashboard'
+
+======================================================================
+FAIL: test_existing_course_dispatch_cannot_ignore_declared_dashboard_value (test_manual_publication_verify.CourseDashboardNativeIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 710, in test_existing_course_dispatch_cannot_ignore_declared_dashboard_value
+    with patch.object(audit,'verify_cached_ui'),self.assertRaises(ValueError):audit.verify_teaching_checkpoint(step,obs,path,'real-time',[row])
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 73 tests in 2.392s
+
+FAILED (failures=1, errors=1)

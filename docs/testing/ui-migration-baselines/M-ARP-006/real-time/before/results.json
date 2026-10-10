@@ -1,0 +1,432 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Note Arpeggio",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083329731,
+        "error_ms": -0.0036023333333246033
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.08336314,
+        "error_ms": 0.02980666666667353
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.08292213,
+        "error_ms": -0.41120333333333203
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083318126,
+        "error_ms": -0.01520733333332247
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082013613,
+        "error_ms": -1.3197203333333296
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083285866,
+        "error_ms": -0.04746733333332864
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083047119,
+        "error_ms": -0.28621433333332613
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.08334219,
+        "error_ms": 0.008856666666667845
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083003316,
+        "error_ms": -0.33001733333333505
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083394548,
+        "error_ms": 0.06121466666667019
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083046538,
+        "error_ms": -0.28679533333332563
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.08336866,
+        "error_ms": 0.035326666666668505
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082966852,
+        "error_ms": -0.366481333333335
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083471406,
+        "error_ms": 0.13807266666666929
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.08296645,
+        "error_ms": -0.36688333333333156
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083276741,
+        "error_ms": -0.05659233333332736
+      }
+    ]
+  },
+  {
+    "kind": "no-mask-ratchet-compatibility-control",
+    "onsets": 17,
+    "passed": true
+  }
+]

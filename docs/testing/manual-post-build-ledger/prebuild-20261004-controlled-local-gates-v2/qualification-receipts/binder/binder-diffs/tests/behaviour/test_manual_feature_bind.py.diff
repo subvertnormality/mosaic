@@ -1,0 +1,46 @@
+--- before/tests/behaviour/test_manual_feature_bind.py
++++ after/tests/behaviour/test_manual_feature_bind.py
+@@ -14,6 +14,7 @@
+   self.feature.write_text(yaml.safe_dump(dict(features=[dict(id='f',prose='Keep exact wording',sources={'code':['lib/a.lua']},source_review={'sha256':'frozen'},scene_refs=['historic'],review=dict(status='pending',native_gap='Original gap',native_evidence=[{'scene':'historic'}]))])))
+   self.original=self.feature.read_bytes();self.mapping={'f':['s']}
+   self.raw=Mock(return_value=dict(passed=True,complete_regression_run=False))
++  self.controlled_raw=Mock(return_value=dict(passed=True,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',complete_regression_run=False))
+   self.lane=Mock(return_value=1)
+   self.identity=Mock(return_value={'application_digest':'candidate'})
+   self.functions=(self.raw,self.lane,self.identity)
+@@ -207,5 +208,35 @@
+   self.assertTrue(result['passed']);self.assertEqual(result['scene_ids'],parent['scene_refs']);audit.assert_called_once_with(path)
+   projection['scenes'][0]['behaviour_case']='different-case';path.write_text(json.dumps(projection))
+   with self.assertRaisesRegex(ValueError,'provenance'):binder.verify_nb_route_bindings(self.root,audit_projection=audit)
++
++ def test_controlled_local_binds_fresh_controlled_scene_without_claiming_realtime(self):
++  manifest=dict(validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',complete_regression_run=False,clock_mode='controlled-experimental')
++  (self.build/'manifest.json').write_text(json.dumps(manifest))
++  self.change_controlled(lambda doc:doc.update(validation_scope='controlled-manual-generation',realtime_qualification='pending-ci'))
++  path,doc=self.docs['controlled-experimental']
++  (self.root/'manual/generated/reference-scenes.json').write_text(json.dumps(doc))
++  scoped=dict(passed=True,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',complete_regression_run=False,controlled_stages=[])
++  with patch.object(binder,'controlled_manual_audit',return_value=scoped) as audit:
++   result=binder.bind(self.build,self.root/'controlled-binding',root=self.root,mappings=self.mapping,controlled_local=True,audit_functions=self.functions)
++  feature=yaml.safe_load(self.feature.read_text())['features'][0]
++  self.assertTrue(result['passed']);self.assertFalse(result['complete_regression_run'])
++  self.assertEqual(result['validation_scope'],'controlled-manual-generation')
++  self.assertEqual(result['realtime_qualification'],'pending-ci')
++  self.assertFalse(result['complete_regression_run'])
++  self.assertEqual(feature['review']['status'],'controlled-verified')
++  self.assertEqual(feature['review']['validation_scope'],'controlled-manual-generation')
++  self.assertEqual(feature['review']['realtime_qualification'],'pending-ci')
++  audit.assert_called_once_with(self.build)
++  self.raw.assert_not_called();self.assertEqual(self.lane.call_count,1)
++
++ def test_controlled_local_rejects_failed_scoped_audit_without_mutation(self):
++  self.change_controlled(lambda doc:doc.update(validation_scope='controlled-manual-generation',realtime_qualification='pending-ci'))
++  path,doc=self.docs['controlled-experimental']
++  (self.root/'manual/generated/reference-scenes.json').write_text(json.dumps(doc))
++  with patch.object(binder,'controlled_manual_audit',return_value=dict(passed=False,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',complete_regression_run=False)):
++   with self.assertRaisesRegex(ValueError,'audit failed'):
++    binder.bind(self.build,self.root/'bad-controlled-binding',root=self.root,mappings=self.mapping,controlled_local=True,audit_functions=self.functions)
++  self.assert_unchanged()
++
+ if __name__=='__main__':unittest.main()
+ 

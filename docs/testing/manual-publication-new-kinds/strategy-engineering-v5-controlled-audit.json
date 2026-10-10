@@ -1,0 +1,20 @@
+{
+  "scope": "engineering explicit immutable stage validation only; global native_source_identity adapter layout refuses this plain-case symlink layout",
+  "passed": true,
+  "manifest": "/home/andy/mosaic-mini-header-engineering-v5-qualification-20261003/controlled/55400d6459d54f368ca84080d58e52d1/manifest.json",
+  "manifest_sha256": "28d08ee55f3328994231854d9b3646c0abd8365207e08fd91589425fe881c9d4",
+  "source_stage": "/home/andy/mosaic-mini-header-engineering-v5-20261003/mosaic",
+  "native_application_files": 17783,
+  "identity_sha256": "55c55c18301630c890d044a5b9c25115351c0397aa813d4b9debd968474fc556",
+  "ui_checkpoints": 8,
+  "music_oracles": [
+    "effective-foundation-musical-result",
+    "effective-fragments-musical-result",
+    "effective-only-silence",
+    "restored-legacy-musical-result",
+    "merge-strategy-next-cycle"
+  ],
+  "cleanup": "all services clean, no held inputs/outstanding notes",
+  "full_current_publication": false,
+  "hardware_timing_equivalent": false
+}

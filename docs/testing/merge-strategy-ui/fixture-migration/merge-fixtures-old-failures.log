@@ -1,0 +1,54 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+F.F...FF...F..F.................................F.............
+Failed tests:
+-------------
+1) test_ui_adapters_merge_descriptor_ids_cover_every_owner_route
+.///lib/ui_adapters_merge_tests.lua:75: expected: {"mode", "rhythm", "phrase", "pitch", "result"}
+actual: {"mode", "rhythm", "phrase", "pitch", "result", "strategy_selector"}
+stack traceback:
+	.///lib/ui_adapters_merge_tests.lua:75: in upvalue 'test_ui_adapters_merge_descriptor_ids_cover_every_owner_route'
+
+2) test_ui_adapters_merge_edit_matches_the_old_encoder_path
+.///lib/ui_adapters_merge_tests.lua:161: expected: true, actual: false
+stack traceback:
+	.///lib/ui_adapters_merge_tests.lua:161: in local 'drive'
+	.///lib/ui_adapters_merge_tests.lua:178: in upvalue 'test_ui_adapters_merge_edit_matches_the_old_encoder_path'
+
+3) test_ui_adapters_merge_stale_generation_and_target_are_refused_without_mutation
+.///lib/ui_adapters_merge_tests.lua:222: expected: true, actual: false
+stack traceback:
+	.///lib/ui_adapters_merge_tests.lua:222: in upvalue 'test_ui_adapters_merge_stale_generation_and_target_are_refused_without_mutation'
+
+4) test_ui_adapters_merge_apply_and_cancel_wrap_owner_commit
+.///lib/ui_adapters_merge_tests.lua:241: expected: true, actual: false
+stack traceback:
+	.///lib/ui_adapters_merge_tests.lua:241: in upvalue 'test_ui_adapters_merge_apply_and_cancel_wrap_owner_commit'
+
+5) test_ui_adapters_merge_child_rows_name_the_screen_they_open
+.///lib/ui_adapters_merge_tests.lua:365: expected: 
+{mode=false, phrase="M06", pitch="M07", result="M05", rhythm="M03"}
+actual: 
+{
+    mode=false,
+    phrase="M06",
+    pitch="M07",
+    result="M05",
+    rhythm="M03",
+    strategy_selector="C09"
+}
+stack traceback:
+	.///lib/ui_adapters_merge_tests.lua:365: in upvalue 'test_ui_adapters_merge_child_rows_name_the_screen_they_open'
+
+6) test_channel_merge_shape_editor_cancel_discards_complete_draft
+.///lib/channel_feature_editor_tests.lua:47: expected: true, actual: false
+stack traceback:
+	.///lib/channel_feature_editor_tests.lua:47: in upvalue 'test_channel_merge_shape_editor_cancel_discards_complete_draft'
+
+7) test_merge_fragments_mode_routes_rhythm_to_fragments_and_hides_foundation_rows
+.///lib/channel_feature_editor_tests.lua:491: expected: "fragments"
+actual: "off"
+stack traceback:
+	.///lib/channel_feature_editor_tests.lua:491: in upvalue 'test_merge_fragments_mode_routes_rhythm_to_fragments_and_hides_foundation_rows'
+
+Ran 62 tests in 0.176 seconds, 55 successes, 7 failures

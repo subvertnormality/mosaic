@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "bf1e4c1abd8731134213100f40e3119f9a37583a",
+  "selected_cases": [
+    "M-EDIT-005"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-EDIT-005"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-EDIT-005",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-7bd31231ff19476180c8b88b89268dab/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-7bd31231ff19476180c8b88b89268dab/manifest.json",
+      "manifest_sha256": "6ba8f5f9745382f7de069505208bb4e834f98a9b2708eca465449084a744aa16",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

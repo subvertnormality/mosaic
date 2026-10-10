@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "qualification": false,
+  "source_changed": [
+    "tests/behaviour/test_manual_publication_verify.py"
+  ],
+  "a01_manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/1b0c2687006f425d90f5afb723727346/manifest.json",
+  "a02_manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/44ba61ba35654c11b71a3fd5176b8d84/manifest.json",
+  "a03_diagnostic_manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/3b7659ab9d2447b0b097dc2daf4e443d/manifest.json",
+  "a18_manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/1e788ff7667643d79e5fb8552f63fc68/manifest.json",
+  "a18_frames": 249,
+  "a18_only_failed_field": "R01 footer",
+  "incorrect_expected_footer": "E2 FIELD E3 SET",
+  "actual_ready_rest_footer": "E2 SETUP GRID REC",
+  "old_helper_path": "docs/testing/vertical-list-ui/invalid-doctor-rest-sweep.py",
+  "old_helper_sha256": "e3a10be96486eb8d0b2036450b05e627483990072087f16bc4e34f37a3517852",
+  "old_bytes_reconstruction": "Current helper with only the added R01 literal override removed; its hash exactly matches immutable lane-start source hash.",
+  "source_guard_not_bypassed": true,
+  "rerun_required": true
+}

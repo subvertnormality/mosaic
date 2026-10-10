@@ -1,0 +1,494 @@
+{
+  "binary_sha256": "002efeb278a1252e5ed4fe8fb0c3c780959588c917644907de0ac8876296acc1",
+  "method": "onset-ac",
+  "rd_tempo_c_sha256": "3acdcde40a40494120cdf5cc5f7a838300d8d58c531e8682c09db4c25292fcc2",
+  "recorded_at": "2026-09-19",
+  "scan_script_sha256": "b01c1cc6fa9cfccc81ff2f098386b4eae17019c25f3f85180d6bbcab6f3cbc4a",
+  "schema_version": 1,
+  "tracks": [
+    {
+      "audio_sha256": "e6590a50b9c4d6aa84d67e03368b42e0d79d56ba4b1244c26c5b9d6ecab89f34",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "phase-fit",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "1fd7413b8f01be812d8b45ab9c7926fa849bdcfd6f6b1fe8763d59a53019bcfb",
+      "midi_tempos_bpm": [
+        80.01002792349975
+      ],
+      "onset_count": 28,
+      "reported_bpm": 41.959461,
+      "track": "Track00001"
+    },
+    {
+      "audio_sha256": "06de7810c57fab9be8ace4e2fe05e24c267696993e0bddad5c1985df1ccde6a4",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "9295015ab7ca81c217fd1e01e0f475a7a87c66083756826f5272c860d841e046",
+      "midi_tempos_bpm": [
+        120.0
+      ],
+      "onset_count": 91,
+      "reported_bpm": 0,
+      "track": "Track00002"
+    },
+    {
+      "audio_sha256": "c628dbf30b818417c30941fccd2fa6ee8a5ad941a45fc8eb85f2d758a1922def",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "phase-fit",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "bcf885afeb0e724df84f63b7e390e3e753c468cca5b4c67628e1229b12f051ae",
+      "midi_tempos_bpm": [
+        150.0
+      ],
+      "onset_count": 56,
+      "reported_bpm": 83.961064,
+      "track": "Track00003"
+    },
+    {
+      "audio_sha256": "d4c1c15491a38a3e2831880a3bcdbedac0b61c1f5064901b6b246017fc32fabe",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "a71aebe31ab23e0d9fbde0b1342d0262b7d927f30f12f69516f7fdb6fa035edc",
+      "midi_tempos_bpm": [
+        115.00024916720653
+      ],
+      "onset_count": 59,
+      "reported_bpm": 0,
+      "track": "Track00004"
+    },
+    {
+      "audio_sha256": "2ada57d35631b349283bde7e6fa8339091520c956d5cd5f9920651280d63919f",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "12b2bc0eeb61e1a25d86bc126c9a71dae231596df501b0932c3e278b67caab29",
+      "midi_tempos_bpm": [
+        105.99995053335641,
+        106.99993580003851,
+        107.99991360006912,
+        109.00014170018422,
+        105.99995053335641,
+        109.00014170018422
+      ],
+      "onset_count": 40,
+      "reported_bpm": 0,
+      "track": "Track00005"
+    },
+    {
+      "audio_sha256": "46c959fd4ff102aa0eac6b2b3f998a70dcfbe3c980de4eb3452e45b21de9440d",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "phase-fit",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "1851d5fe7f2fba1ecd789d9baa9f96fb7c906599cee38bfcd2f206c84310cc38",
+      "midi_tempos_bpm": [
+        61.99999586666694,
+        24.0,
+        25.0,
+        27.00000270000027,
+        28.000001866666793,
+        30.0,
+        32.99999670000033,
+        34.0000170000085,
+        36.99999136666868,
+        38.99998830000351,
+        40.0,
+        42.00001260000378,
+        42.99999498333392,
+        45.000011250002814,
+        45.99999386666749,
+        48.9999918333347,
+        50.99998215000625,
+        52.000006933334255,
+        54.00000540000054,
+        55.00000458333371,
+        56.99997720000912,
+        57.999986466669824,
+        60.99997255001235,
+        62.99999685000016,
+        64.0,
+        60.0,
+        57.999986466669824,
+        55.99997760000896,
+        54.00000540000054,
+        52.000006933334255,
+        57.999986466669824
+      ],
+      "onset_count": 24,
+      "reported_bpm": 54.391605,
+      "track": "Track00006"
+    },
+    {
+      "audio_sha256": "91c0142ad5373c2383499dd323feeb3bac86936c02455446cbaf23f685cf57e8",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "7d6751af5a539b4f61ec834c215a9861f830f3e247667f6f47d97aaca25ff12f",
+      "midi_tempos_bpm": [
+        98.99993565004183,
+        89.00017206699933,
+        45.99999386666749,
+        98.99993565004183
+      ],
+      "onset_count": 78,
+      "reported_bpm": 0,
+      "track": "Track00007"
+    },
+    {
+      "audio_sha256": "a771ddc3a0d2d92d3dfc0ed9b93838be253781279a1231b59244d8b1369abcde",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "22bebe06f89583dc0358d6c7397fad9d7095ebb1f2afa89942870e312985da0b",
+      "midi_tempos_bpm": [
+        64.0,
+        65.99999340000066,
+        62.99999685000016
+      ],
+      "onset_count": 17,
+      "reported_bpm": 0,
+      "track": "Track00008"
+    },
+    {
+      "audio_sha256": "0ca93ceaf8222984bd9391b9e6df80d29572b564c4ca174da4fab2aff1b4c3fd",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "768cbb7ed6bffa3345806825c44d4a975331f8a8287525d6c1a7c0f4ae6a1c36",
+      "midi_tempos_bpm": [
+        120.0
+      ],
+      "onset_count": 43,
+      "reported_bpm": 0,
+      "track": "Track00009"
+    },
+    {
+      "audio_sha256": "6cd939f61c3c44895ac6d00e945cb6d0ff07b23c2f77815e346d9c48ff0f28bb",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "e9f8e75b65563b4c9d49e1ccc18c90628a824822ab3e84f9a006a3ed49193ad8",
+      "midi_tempos_bpm": [
+        101.00159919198721,
+        100.0,
+        98.00094407576127,
+        97.00105084471748,
+        96.0,
+        94.00115934763195,
+        93.00033015117204,
+        91.000091000091,
+        90.00103501190263,
+        89.00096417711192,
+        88.00105601267215,
+        87.00077865696898,
+        86.00054467011624,
+        85.00028333427778,
+        83.00017983372297,
+        82.00082000820008,
+        150.0
+      ],
+      "onset_count": 47,
+      "reported_bpm": 0,
+      "track": "Track00010"
+    },
+    {
+      "audio_sha256": "adb9b52c1ecb28b047fd5de6f7eb886586c4bc6c7dc0bd21b4c99ee045daf111",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "insufficient-beats",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "ceb4b4ad16db20e8e8839b7d9f0aefc538c49ff5ed67ff0ca61f88524a056316",
+      "midi_tempos_bpm": [
+        250.0,
+        122.0000691333725
+      ],
+      "onset_count": 3,
+      "reported_bpm": 0,
+      "track": "Track00011"
+    },
+    {
+      "audio_sha256": "2b5d03c3f9795985cfd85002decd28014c10e2a0044042235321262510dcc597",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "77436364a2f1dbf259b5467483688c9b471382ea3d45b285c0d6dac4e6da94e7",
+      "midi_tempos_bpm": [
+        92.00012880018032
+      ],
+      "onset_count": 37,
+      "reported_bpm": 0,
+      "track": "Track00012"
+    },
+    {
+      "audio_sha256": "29e2f1cb9e806077b97e4d39d0cc5c7fb5491276498196021f5e92d57320c5c0",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "9e912f7a6be90d49b392b3d8c960b10664b23bdafda20c13dd35c309ac4b9e9d",
+      "midi_tempos_bpm": [
+        128.0
+      ],
+      "onset_count": 38,
+      "reported_bpm": 0,
+      "track": "Track00013"
+    },
+    {
+      "audio_sha256": "3e92fc90f7e7cf999b459246dff2a43bd20e67c5f3d78b74129bc82c3bf7f410",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "290682027497e35f3036785e2785918881ab8d03e998eb2dcf0a4dbe3ecf5e9f",
+      "midi_tempos_bpm": [
+        125.0
+      ],
+      "onset_count": 28,
+      "reported_bpm": 0,
+      "track": "Track00014"
+    },
+    {
+      "audio_sha256": "3fdfb90022f17933810dc9fe06e0c05cec2c6c982a459b7c140c226a13913c04",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "706ba513e0a89ee13f2afb4af18b04b159196ccaf10ca66d2eabd4d0aa81da24",
+      "midi_tempos_bpm": [
+        64.0
+      ],
+      "onset_count": 27,
+      "reported_bpm": 0,
+      "track": "Track00015"
+    },
+    {
+      "audio_sha256": "750a138e0f11ce9b9f2e8f0a9b0e91cb95adaf586176c7c5ee0b173c8bd4dfa9",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "1ea4681e3b664179e23b00653e5eb5e1b27bc0bed6b89fc5b46633bd6f6638b3",
+      "midi_tempos_bpm": [
+        103.00075533887248
+      ],
+      "onset_count": 33,
+      "reported_bpm": 0,
+      "track": "Track00016"
+    },
+    {
+      "audio_sha256": "43b3cabb5dc423894dda1cbd4c33dc40a424b13742ebc4213ca977b99ea8b0b9",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "phase-fit",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "a601015ffe4f1263964b7f57660b30c326eace7aa07ae2fe8ed75f560e8ba57c",
+      "midi_tempos_bpm": [
+        103.0000480666891
+      ],
+      "onset_count": 27,
+      "reported_bpm": 50.932319,
+      "track": "Track00017"
+    },
+    {
+      "audio_sha256": "696378bfb0d3abc76ea09485a69661e2a6a86d79f00e67af114e405dd03ad6cb",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "f2cb01004f7db6589ebaaf142203243560dd108d95dab791b2a03b436d04dc8d",
+      "midi_tempos_bpm": [
+        137.00037675103607,
+        140.00014000014,
+        139.0005397854295,
+        138.00019320027047,
+        137.00037675103607,
+        136.0001450668214,
+        135.000135000135
+      ],
+      "onset_count": 51,
+      "reported_bpm": 0,
+      "track": "Track00018"
+    },
+    {
+      "audio_sha256": "c870751da492e28d0deeb90765224ef9bd346ae85c1cb41e6b5dea84b1e8fb49",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "phase-fit",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "bd8b6f0b62be730e9b782d876a690a5a8350d230cc80839bdeb8129d6b6f0233",
+      "midi_tempos_bpm": [
+        127.00025400050801
+      ],
+      "onset_count": 58,
+      "reported_bpm": 141.45307,
+      "track": "Track00019"
+    },
+    {
+      "audio_sha256": "ace79e02353e22d068ac8f869c38e6c03f4e88824a70728785493e1f8df58ea3",
+      "candidate": {
+        "beats_used": 0,
+        "bpm": 0,
+        "double_bpm": 0,
+        "half_bpm": 0,
+        "origin_frame": 0,
+        "phase_error_ms": 0,
+        "reason": "unstable-estimates",
+        "region_end_frame": 0,
+        "status": "UNCERTAIN"
+      },
+      "midi_sha256": "195d3a0b73728636af63d481f90cad1ac2cc12c54cce74e3b108bbef0906d4e7",
+      "midi_tempos_bpm": [
+        120.0
+      ],
+      "onset_count": 38,
+      "reported_bpm": 0,
+      "track": "Track00020"
+    }
+  ],
+  "window_seconds": 45
+}

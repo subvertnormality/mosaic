@@ -1,0 +1,26 @@
+[
+  {
+    "service": "matron",
+    "pid": 5000,
+    "returncode": 0,
+    "seconds": 0.11396818002685905
+  },
+  {
+    "service": "sclang",
+    "pid": 4902,
+    "returncode": -15,
+    "seconds": 0.06442449596943334
+  },
+  {
+    "service": "crone",
+    "pid": 4894,
+    "returncode": 0,
+    "seconds": 6.501103052869439e-05
+  },
+  {
+    "service": "jack",
+    "pid": 4890,
+    "returncode": 0,
+    "seconds": 0.03164628701051697
+  }
+]

@@ -1,0 +1,32 @@
+test_after_stop_original_mask_and_bank_tempo_are_observed (test_doctor_ready_transport.ReadyTransportCoverage.test_after_stop_original_mask_and_bank_tempo_are_observed) ... FAIL
+test_failed_held_route_observation_releases_record_and_stops (test_doctor_ready_transport.ReadyTransportCoverage.test_failed_held_route_observation_releases_record_and_stops) ... FAIL
+test_public_record_press_and_release_are_exercised_while_playing (test_doctor_ready_transport.ReadyTransportCoverage.test_public_record_press_and_release_are_exercised_while_playing) ... FAIL
+
+======================================================================
+FAIL: test_after_stop_original_mask_and_bank_tempo_are_observed (test_doctor_ready_transport.ReadyTransportCoverage.test_after_stop_original_mask_and_bank_tempo_are_observed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_transport.py", line 99, in test_after_stop_original_mask_and_bank_tempo_are_observed
+    self.assertEqual(len(rows), 1, 'no explicit public transport Record result')
+AssertionError: 0 != 1 : no explicit public transport Record result
+
+======================================================================
+FAIL: test_failed_held_route_observation_releases_record_and_stops (test_doctor_ready_transport.ReadyTransportCoverage.test_failed_held_route_observation_releases_record_and_stops)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_transport.py", line 90, in test_failed_held_route_observation_releases_record_and_stops
+    self.assertTrue(failed, 'public held Record route observation was never exercised')
+AssertionError: False is not true : public held Record route observation was never exercised
+
+======================================================================
+FAIL: test_public_record_press_and_release_are_exercised_while_playing (test_doctor_ready_transport.ReadyTransportCoverage.test_public_record_press_and_release_are_exercised_while_playing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_transport.py", line 80, in test_public_record_press_and_release_are_exercised_while_playing
+    self.assertIn(down, events, 'READY recipe omits public Record while playing')
+AssertionError: ('record', True, True) not found in [('header', False, False, 'R05'), ('lane', False, 'BD'), ('mask', False, (), False), ('header', False, False, 'R05'), ('record', False, True), ('header', False, True, 'R10'), ('header', False, True, 'R10'), ('record', False, False), ('header', False, False, 'R05'), ('field', False, 'R05', 'Window bar', 1), ('field', False, 'R05', 'Window bar', 2), ('field', False, 'R05', 'Window bar', 11), ('field', False, 'R05', 'Window step', 174), ('field', False, 'R05', 'Window step', 174), ('field', False, 'R05', 'Window step', 1), ('field', False, 'R05', 'Window step', 2), ('field', False, 'R05', 'Window step', 1), ('field', False, 'R05', 'Window step', 1), ('field', False, 'R05', 'Sensitivity', '0'), ('mask', False, (), True), ('mask', False, (), False), ('field', False, 'R05', 'Sensitivity', '1'), ('mask', False, (), True), ('mask', False, (), False), ('field', False, 'R05', 'Sensitivity', '0.5'), ('lane', False, 'SD'), ('field', False, 'R05', 'Sensitivity', '0'), ('field', False, 'R05', 'Sensitivity', '1'), ('lane', False, 'CYM'), ('lane', False, 'BD'), ('field', False, 'R05', 'Sensitivity', '0.5'), ('mask', False, (10,), True), ('mask', False, (), False), ('lane', False, 'SD'), ('field', False, 'R05', 'Sensitivity', '1'), ('lane', False, 'BD'), ('field', False, 'R05', 'Sensitivity', '0.5'), ('field', False, 'R05', 'Paint policy', 'TOGGLE'), ('field', False, 'R05', 'Paint policy', 'ADD'), ('field', False, 'R05', 'Paint policy', 'REPLACE'), ('field', False, 'R05', 'Paint policy', 'TOGGLE'), ('mask', False, (10,), True), ('mask', False, (), False), ('mask', False, (), False), ('mask', False, (10,), True), ('mask', False, (10,), False), ('mask', False, (), False), ('mask', False, (1, 10), False), ('field', False, 'R05', 'Paint policy', 'TOGGLE'), ('mask', False, (1,), True), ('mask', False, (1,), False), ('mask', False, (1, 10), False), ('field', False, 'R05', 'Paint policy', 'ADD'), ('mask', False, (1,), True), ('mask', False, (1, 10), False), ('mask', False, (1, 10), False), ('field', False, 'R05', 'Paint policy', 'REPLACE'), ('mask', False, (1,), True), ('mask', False, (10,), False), ('field', False, 'R06', 'Half tempo', 120), ('field', False, 'R06', 'Double tempo', 60), ('field', False, 'R06', 'Exact BPM', 40), ('field', False, 'R06', 'Exact BPM', 240), ('field', False, 'R06', 'Start beat', 1), ('field', False, 'R06', 'Start beat', 60), ('field', False, 'R06', 'Fine start', '0ms'), ('field', False, 'R06', 'Fine start', '-1ms'), ('field', False, 'R06', 'Fine start', '1ms'), ('header', False, False, 'R05'), ('mask', False, (10,), False), ('field', False, 'R06', 'Half tempo', 120), ('play',), ('header', True, False, 'R05'), ('lane', True, 'SD'), ('lane', True, 'BD'), ('stop',), ('field', False, 'R05', 'Paint policy', 'REPLACE'), ('mask', False, (), True), ('play',), ('stop',), ('mask', False, (10,), False), ('record', False, True), ('header', False, True, 'R10'), ('record', False, False), ('header', False, False, 'R01'), ('mask', False, (10,), False)] : READY recipe omits public Record while playing
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.012s
+
+FAILED (failures=3)

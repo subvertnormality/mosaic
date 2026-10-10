@@ -1,0 +1,13 @@
+Unfixed browser-source SHA256 d1218ec697ba1bd668151711f062cb9d4a538b43c2121f4bb827aec0148180d2
+AssertionError [ERR_ASSERTION]: A delayed previous sound must not overwrite the currently selected audio
++ actual - expected
+
++ 'blob:http://localhost:8765/2b8bafc7-052b-4c7f-91ef-c982b6575f69'
+- 'blob:http://localhost:8765/e6822311-af5d-47ae-9772-ba28e35923af'
+    at /home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_race.cjs:6:516 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'blob:http://localhost:8765/2b8bafc7-052b-4c7f-91ef-c982b6575f69',
+  expected: 'blob:http://localhost:8765/e6822311-af5d-47ae-9772-ba28e35923af',
+  operator: 'strictEqual'
+}

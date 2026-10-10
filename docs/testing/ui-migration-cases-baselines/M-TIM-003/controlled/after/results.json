@@ -1,0 +1,367 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "source"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "internal"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "midi"
+  },
+  {
+    "kind": "midi-clock-onsets",
+    "rows": [
+      {
+        "index": 0,
+        "expected_seconds": 0.0,
+        "actual_seconds": 0.0
+      },
+      {
+        "index": 1,
+        "expected_seconds": 0.15,
+        "actual_seconds": 0.15
+      },
+      {
+        "index": 2,
+        "expected_seconds": 0.3,
+        "actual_seconds": 0.3
+      },
+      {
+        "index": 3,
+        "expected_seconds": 0.44999999999999996,
+        "actual_seconds": 0.450000001
+      },
+      {
+        "index": 4,
+        "expected_seconds": 0.6,
+        "actual_seconds": 0.6
+      },
+      {
+        "index": 5,
+        "expected_seconds": 0.75,
+        "actual_seconds": 0.75
+      },
+      {
+        "index": 6,
+        "expected_seconds": 0.8999999999999999,
+        "actual_seconds": 0.9
+      },
+      {
+        "index": 7,
+        "expected_seconds": 1.05,
+        "actual_seconds": 1.05
+      },
+      {
+        "index": 8,
+        "expected_seconds": 1.2,
+        "actual_seconds": 1.200000001
+      }
+    ]
+  },
+  {
+    "kind": "midi-clock-durations",
+    "expected_seconds": 0.15,
+    "actual_seconds": [
+      0.15,
+      0.15,
+      0.150000001,
+      0.149999999,
+      0.15,
+      0.15,
+      0.15,
+      0.150000001
+    ]
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "internal"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "tempo"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "100"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "90"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 3
+  },
+  {
+    "kind": "restored-internal-onsets",
+    "actual_seconds": [
+      0.0,
+      0.166666667,
+      0.333333334,
+      0.500000001,
+      0.666666667,
+      0.833333334,
+      1.000000001,
+      1.166666667,
+      1.333333334
+    ]
+  }
+]

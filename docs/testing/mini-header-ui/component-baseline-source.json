@@ -1,0 +1,6 @@
+{
+  "stage": "/tmp/mosaic-mini-component-red/mosaic",
+  "test_sha256": "e13fa692f252fc392ae9aa7b7be3327fd69100fdb8b05639e72b9cbbc33b1996",
+  "renderer_sha256": "0bffa33541043ab3a8a95926bf2c316f3b622f2d1c980bd4dac6b151ba6b2a3e",
+  "acceptance": "new visible miniature; current unmodified renderer must be missing both scenes"
+}

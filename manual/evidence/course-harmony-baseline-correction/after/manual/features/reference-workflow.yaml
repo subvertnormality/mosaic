@@ -1,0 +1,740 @@
+features:
+- id: typical-workflow
+  title: Composition Workflow
+  audience: all
+  summary: Create patterns, assign channels, apply harmony and arrange song slots.
+  prose: '1. Configure one output and create a short pattern.
+
+    2. Assign the pattern to a channel.
+
+    3. Select and apply a scale.
+
+    4. Add melody using masks or MIDI recording.
+
+    5. Apply velocity changes or parameter locks.
+
+    6. Copy the sequence into song slots and edit each variation.
+
+    7. Save a named project.
+
+
+    Patterns supply musical material. Channels combine that material and apply exceptions. Song slots
+    store sequence variations. See [Build a phrase](#build-a-phrase) for the complete procedure.'
+  musical_use: Use a short phrase to compare changes before expanding the arrangement.
+  related:
+  - dig-deeper
+  - build-a-phrase
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-LIVEUI-MERGEMODES-001
+    - M-SCALE-001
+    - M-MASK-007
+    - M-WORKFLOW-001
+    - M-MERGE-PHRASE-001
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - merge-overlap-and-union
+  - scale-edit-versus-apply
+  - mask-precedence
+  - workflow-compose-two-channels
+  - foundation-two-cycle-build
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-MERGEMODES-001
+    - M-SCALE-001
+    - M-MASK-007
+    - M-WORKFLOW-001
+    - M-MERGE-PHRASE-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The full native composition scene verifies pattern assignment, merge choices, two-channel
+      harmony and melody, slot chaining, autosave and isolated restart. Suggested musical variations retain
+      their own scoped evidence.
+  category: workflow
+  parent: null
+  level: 2
+- id: sound-design
+  title: Assigning Instruments to Channels
+  audience: all
+  summary: Select an output for each musical part.
+  prose: '1. Press Grid `(3,8)` and select a channel.
+
+    2. Open Channel tasks → Device.
+
+    3. Select a MIDI device or installed n.b. player.
+
+    4. For MIDI, set port and channel to match the instrument.
+
+    5. Press K3 to apply.
+
+    6. Assign a pattern and start playback to verify the output.
+
+
+    Use separate channels for parts that need independent notes, masks or clock settings. Channel numbers
+    have no reserved musical roles.'
+  musical_use: Use Polyperc for bass or a plucked melody and Doubledecker for chords. Add Oilcan on a
+    separate channel for percussion.
+  related:
+  - channel-editor
+  - devices
+  - typical-workflow
+  sources:
+    readme: manual/legacy/README-1.4.0.md#sound-design
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-LIVEUI-CHSELECT-001
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - channel-routing-visible-scope
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-CHSELECT-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Device and clock scope are asserted. Physical MIDI receiver sound and every instrument
+      map are outside this native example.
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: rhythm-section-design
+  title: Creating a Rhythm Pattern
+  audience: all
+  summary: Enter trigs, then set note and velocity data.
+  prose: '1. Press Grid `(5,8)` to open Pattern Trig.
+
+    2. Select the required pattern.
+
+    3. Press steps to add or remove trigs. Active steps light on the grid.
+
+    4. Press Pattern again to open Note, then set relative notes.
+
+    5. Press Pattern again to open Velocity, then set attack levels.
+
+    6. Assign the pattern to a channel and start playback.
+
+
+    Patterns have 64 steps. For algorithmic entry, prime a pattern, inspect the flashing preview, then
+    paint it. A preview is not committed. Painting toggles overlaps with existing attacks off.'
+  musical_use: For a 16-step pulse, use steps 1, 5, 9 and 13. Add step 15 for a pickup. For a 3–3–2 rhythm
+    over eight steps, use 1, 4 and 7.
+  related:
+  - pattern-editor
+  - adding-trigs
+  - adding-notes
+  - adding-velocity
+  - typical-workflow
+  sources:
+    readme: manual/legacy/README-1.4.0.md#rhythm-section-design
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-PAINT-001
+    - M-EDIT-001
+    - M-EDIT-002
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - algorithm-choose-and-preview
+  - paint-shift-and-cancel
+  - pattern-note-range
+  - pattern-velocity-range
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-PAINT-001
+    - M-EDIT-001
+    - M-EDIT-002
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Algorithm preview, paint feedback, note and velocity boundaries are captured. Hardware
+      sound character is separate.
+    audio_refs:
+    - oilcan-pocket
+    audio_cases:
+    - MA-AUDIO-oilcan-pocket
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: harmony-design
+  title: Applying a Scale
+  audience: all
+  summary: Compare C major and D major using relative pattern notes.
+  prose: 'Before starting: Start with stopped channel 1 assigned pattern 1, range 16, attacks 1,5,9,13,
+    channel Note 60/Vel 80/Len 1/2 and step 13 Note 62/Vel 50. A second channel can use pattern 2 with
+    attacks 1,9, relative degrees 0,4 and octave −1. Apply C major. [Make a piece](#learn) chapters 2–6
+    give the full preparation. If using only one channel, ignore the bass comparison.
+
+
+    ### Restore note inheritance
+
+
+    1. Select CH01 and open Masks.
+
+    2. With no step held, set Note to X.
+
+    3. Hold step 13 and press K2, then release.
+
+    4. Select Vel, hold step 13, set 50 and release.
+
+
+    All Note exceptions are cleared. K2 also cleared the velocity exception, which is deliberately restored.
+
+
+    ### Retain the same melody in the pattern
+
+
+    1. Tap Pattern (5,8) until Note is shown; select pattern 1 at (1,1).
+
+    2. Tap (1,7), (5,7) and (9,7) for degree 0.
+
+    3. Tap (13,6) for degree 1.
+
+    4. Play two bars and stop.
+
+
+    C–C–C–D returns through relative notes. The quieter ending stays in the channel mask.
+
+
+    ### Prepare a second scale
+
+
+    1. Open Scale (4,8).
+
+    2. Select scale slot 2.
+
+    3. Play two bars and stop to hear its stored C-major setting.
+
+    4. Select Root with E2; set D with E3.
+
+    5. Select Scale and choose Major.
+
+
+    The melody and bass still use C major during the comparison. D major is now prepared in the
+    draft; press K3 before using the grid.
+
+
+    ### Compare the transposition
+
+
+    1. Press K3 to apply D major.
+
+    2. Play two bars and stop.
+
+    3. Select the unchanged C-major slot 1 and press K3.
+
+
+    The phrase becomes D–D–D–E and bass D–A. Rhythm and velocity are preserved. C major is restored for
+    the arrangement.
+
+
+    Resulting project: CH01 P1 degrees0/0/0/1; Note defaultX; step 13NoteX/Vel 50; Vel 80/Len1/2 defaults
+    retained. CH02 unchanged. Applied C major restored.'
+  musical_use: Repeat a root–third–fifth pattern over two scale slots. The rhythm remains the same while
+    the harmony changes.
+  related:
+  - scale-editor
+  - scale-locks
+  - typical-workflow
+  sources:
+    readme: manual/legacy/README-1.4.0.md#harmony-design
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-SCALE-001
+    - M-HARMONY-REVOICE-001
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details:
+  - title: Recovery
+    text: If pattern notes do not change the sounding pitch, inspect channel and step Note masks before
+      editing the pattern again.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  - title: Separate listening comparison
+    text: Changing Harmony with Scale Slots uses the same upper relative degrees 0,0,0,1 and bass degrees
+      0,4 to compare two C-major bars with two D-major bars. Its internal-player bass is deliberately
+      set to velocity 60 and length 1/2, while the continuing MIDI course keeps inherited velocity 100
+      and length 1. See the complete preparation in [Changing Harmony with Scale Slots](#tilting-harmony).
+  recipes: []
+  scene_refs:
+  - scale-edit-versus-apply
+  - workflow-compose-two-channels
+  - harmony-revoice-two-voices
+  review:
+    status: verified
+    cases:
+    - M-SCALE-001
+    - M-WORKFLOW-001
+    - M-HARMONY-REVOICE-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native scenes show scale edit/apply, two-channel harmony and revoiced output. Sequenced
+      scale-lock variations retain their own feature evidence.
+    audio_refs:
+    - scale-slot-comparison
+    - bass-and-intervals
+    audio_cases:
+    - MA-AUDIO-scale-slot-comparison
+    - MA-AUDIO-bass-and-intervals
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+    audio_comparison_status: pending-native-capture
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: sequence-composition
+  title: Assigning Patterns to Channels
+  audience: all
+  summary: Hear an independent bass pulse beneath the phrase.
+  prose: 'Before starting: Use a 16-step CH01 phrase with pattern 1 assigned: attacks 1,5,9,13; channel
+    Note 60, Vel 80, Len 1/2; step 13 Note 62 and Vel 50. Use C major at 90 BPM and Rate /1. Playback
+    is stopped. [Make a piece](#learn) chapters 2–5 supply this project. An independent project with the
+    same state also works; pattern 2 must be empty.
+
+
+    ### Enter two bass notes
+
+
+    1. Tap Pattern (5,8) until Trig is shown; select pattern 2 at (2,1).
+
+    2. Add attacks at (1,4) and (9,4).
+
+    3. Tap Pattern once to open Note.
+
+    4. Tap (1,7) for degree 0 and (9,3) for degree 4.
+
+
+    Pattern 2 supplies a root and fifth.
+
+
+    ### Route channel2
+
+
+    1. Tap Channel (3,8); select channel 2 at (2,1).
+
+    2. Open Channel tasks → Device; select an independent output and press K3 to apply.
+
+    3. Tap pattern slot 2 at (2,2).
+
+    4. Hold (1,4), tap (16,4), release.
+
+    5. Tap (9,8) to set channel octave −1.
+
+
+    The bass uses MIDI 48 and55 in the default C-major scale. Both channels repeat in16 steps.
+
+
+    ### Hear the two parts
+
+
+    Play two bars and stop.
+
+
+    C–C–C–D sounds above a C–G bass pulse. Both parts retain independent settings.
+
+
+    ### Compare overlapping rhythms
+
+
+    1. Select CH01 and temporarily assign pattern 2 alongside pattern 1.
+
+    2. Open Merge modes. Compare Skip and All for Trig.
+
+    3. Play and stop after each comparison.
+
+    4. Unassign pattern 2 from CH01 before continuing.
+
+
+    Skip removes overlapping attacks 1 and9, leaving5 and13. All restores the four attacks. The existing
+    Note 60 default and step 13Note62 exception keep the pitch comparison fixed. Unassigning pattern 2
+    returns the original phrase; CH02 keeps its bass pattern.
+
+
+    Resulting project: CH01 remains C–C–C–D. CH02/P2 attacks 1/9, relative degrees0/4, range 16, octave−1,
+    inherited notes/velocity, no masks.'
+  musical_use: Assign the same pattern to bass and chord channels. Use different masks and lengths to
+    distinguish the parts.
+  related:
+  - adding-patterns-to-channels
+  - typical-workflow
+  sources:
+    readme: manual/legacy/README-1.4.0.md#sequence-composition
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-LIVEUI-MERGEMODES-001
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details:
+  - title: Recovery
+    text: If the first part changes, return to CH01 and inspect its route; channel selection does not
+      erase the first part.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  recipes: []
+  scene_refs:
+  - workflow-compose-two-channels
+  - merge-overlap-and-union
+  review:
+    status: verified
+    cases:
+    - M-WORKFLOW-001
+    - M-LIVEUI-MERGEMODES-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Full composition case assigns multiple patterns and verifies the exact merged phrases
+      and independent second channel.
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: using-merge-modes
+  title: Combining Pattern Overlaps
+  audience: all
+  summary: Trig, note, velocity and length merge choices are independent.
+  prose: '1. Assign two patterns to a channel.
+
+    2. Open Channel tasks → Merge modes.
+
+    3. Select the trig merge field with E2.
+
+    4. Change the mode with E3 and compare playback.
+
+    5. Repeat for note, velocity and length merge fields.
+
+
+    The default Skip trig mode removes overlapping attacks. All retains attacks from either pattern. If
+    an attack disappears after assigning another pattern, check the trig merge mode.'
+  musical_use: Combine a steady pulse and a syncopated pattern. Compare Skip with All while keeping the
+    output sound unchanged.
+  related:
+  - merge-modes
+  - trig-merge-modes
+  - note-merge-modes
+  - sequence-composition
+  sources:
+    readme: manual/legacy/README-1.4.0.md#using-merge-modes
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-LIVEUI-MERGEMODES-001
+    - M-MERGE-PHRASE-001
+    code:
+    - lib/pages/channel_edit_page/channel_edit_page.lua
+    - lib/pattern.lua
+    - lib/ui_adapters/read_only.lua
+    - lib/ui_live.lua
+    - lib/ui_spec_data.lua
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - merge-overlap-and-union
+  - workflow-compose-two-channels
+  - foundation-two-cycle-build
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-MERGEMODES-001
+    - M-WORKFLOW-001
+    - M-MERGE-PHRASE-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The UI scene asserts mode choices. The full composition and musical merge scenes independently
+      verify resulting note phrases; this is not an exhaustive campaign for every merge combination.
+  category: workflow
+  parent: sequence-composition
+  level: 4
+- id: melody-composition
+  title: Entering a Melody
+  audience: all
+  summary: Use note masks to replace selected channel pitches.
+  prose: '1. Select the destination channel.
+
+    2. Open Channel tasks → Masks.
+
+    3. Select Note with E2.
+
+    4. Hold the destination step and turn E3 to change its note.
+
+    5. Release the step and start playback to check the phrase.
+
+
+    Without a held step, E3 changes the channel default. A held step can also receive a note or chord
+    from MIDI input; set its length manually. For live entry, arm Record `(2,8)` and play during playback.'
+  musical_use: Repeat three notes and change the fourth. Compare a longer final note or a quiet pickup
+    before adding more pitches.
+  related:
+  - masks
+  - sequence-composition
+  sources:
+    readme: manual/legacy/README-1.4.0.md#melody-composition
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-MASK-007
+    - M-MASK-008
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - mask-precedence
+  - mask-expression
+  - workflow-compose-two-channels
+  review:
+    status: verified
+    cases:
+    - M-MASK-007
+    - M-MASK-008
+    - M-WORKFLOW-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native scenes show encoder-entered masks and held-step MIDI melody entry with exact note
+      output. Live-recording input remains in its own guide.
+  category: workflow
+  parent: sequence-composition
+  level: 4
+- id: modulation-movement-and-interest
+  title: Adding Parameter Variation
+  audience: all
+  summary: Extend the phrase with a lighter attack before the loop restarts.
+  prose: 'Before starting: Use stopped channel 1, range 16, Rate /1, C major, pattern 1 assigned with
+    attacks 1,5,9,13 and relative degrees 0,0,0,1. Set channel Note to X, Vel to 80 and Len to 1/2; step
+    13 Vel is 50 and its Note is X. [Applying a Scale](#harmony-design) includes the note-mask clearance
+    procedure.
+
+
+    ### Add the late attack
+
+
+    1. Tap Pattern (5,8) until Trig is shown; select pattern 1 at (1,1).
+
+    2. Tap (15,4) to add step 15.
+
+    3. Tap Pattern once to Note; tap (15,7) for degree 0.
+
+
+    A C pickup falls halfway between the last beat and the next bar.
+
+
+    ### Reduce the pickup level
+
+
+    1. Select CH01, open Masks and select Vel.
+
+    2. Hold step 15 and set 35 with E3.
+
+    3. Release, play two bars and stop.
+
+
+    The pickup is quieter than the main beats and the D ending. Probability and parameter slides are optional
+    follow-up guides; this version remains deterministic.
+
+
+    Resulting project: P1 attacks 1/5/9/13/15; degree 15=0; step 13Vel50; step 15Vel35; other velocities80;
+    CH02 unchanged.'
+  musical_use: Increase brightness or length on the final note. Apply probability to a quiet pickup while
+    retaining the main attacks.
+  related:
+  - trig-parameters
+  - trig-param-locks
+  - param-slides
+  - lfos-and-modulation
+  sources:
+    readme: manual/legacy/README-1.4.0.md#modulation-movement-and-interest
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-PARAM-001
+    - M-PARAM-016
+    - M-PATCH-017
+    - M-PATCH-033
+    - M-MOD-001
+    - M-MOD-002
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details:
+  - title: Recovery
+    text: Remove step 15 in Pattern Trig to return to the four-beat phrase.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  recipes: []
+  scene_refs:
+  - trig-params-assignment-and-selection
+  - trig-parameter-locks
+  - locks-default-versus-local
+  - global-parameter-slide
+  - local-parameter-slide
+  - matrix-macro-route-clear
+  - toolkit-clocked-lfo-menu
+  review:
+    status: verified
+    cases:
+    - M-PARAM-001
+    - M-PARAM-016
+    - M-PATCH-017
+    - M-PATCH-033
+    - M-MOD-001
+    - M-MOD-002
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Native scenes show parameter selection, channel defaults, held-step locks/clearing and
+      global/local slides with actual output. Device-specific sound character and physical receiver timing
+      remain outside this evidence.
+    native_evidence_catalogues:
+    - generated/reference-parameter-scenes.json
+    - generated/reference-modulation-scenes.json
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: song-composition
+  title: Arranging Song Slots
+  audience: all
+  summary: Alternate a sparse section and the full two-part phrase.
+  prose: 'Before starting: Use one populated Song slot with two independently routed, audible channels
+    and a 16-step loop. Slot 1 is selected; slots 2 and 3 are empty; playback is stopped. The example
+    mutes CH01 while retaining CH02. [Make a piece](#learn) chapters 2–8 prepare the exact phrase and
+    bass; an existing two-part loop with these conditions also works.
+
+
+    ### Copy the complete section
+
+
+    1. Open Song (6,8).
+
+    2. Hold slot 1 (1,1), tap slot 2 (2,1), release slot 1.
+
+    3. Select slot 2.
+
+
+    Slot 2 stores the same phrase, bass and channel settings.
+
+
+    ### Make the first section sparse
+
+
+    1. Open Song (6,8); select slot 1 at (1,1).
+
+    2. Tap Channel (3,8).
+
+    3. Hold K1, tap channel 1 at (1,1), then release K1.
+
+    4. Return to Song and select slot 2 at (2,1).
+
+    5. Open Channel and check channel 1 is unmuted in this copy.
+
+
+    Slot 1 contains bass only; slot 2 adds the upper phrase and pickup.
+
+
+    ### Set the section boundary
+
+
+    1. Open Song (6,8); select slot 1 at (1,1).
+
+    2. Tap (2,7) to set Global length to 16 steps.
+
+    3. Open Song tasks → Slot setup. Select Repeats with E2, set 1 with E3 and press K3 to apply.
+
+    4. Return to Song; select slot 2 and repeat the Global length and Repeats settings.
+
+    5. In Slot setup select Song mode, set On and press K3 to apply.
+
+    6. Leave slot 3 empty and select slot 1.
+
+
+    The contiguous group contains slots1 and2, one16-step pass each.
+
+
+    ### Hear the arrangement
+
+
+    Play four section passes and stop.
+
+
+    Bass alone → bass and phrase → bass alone → bass and phrase. The highlighted Song slot changes at
+    each boundary.
+
+
+    Resulting project: Slot 1 CH01 muted/CH02 audible; slot 2 both channels audible. Global length 16;
+    repeats1; Song modeOn; slot 3empty; selectedslot1; stopped.'
+  musical_use: 'Create three sections: bass alone, bass with chords, then bass, chords and lead. Remove
+    the lead for the final section.'
+  related:
+  - song-editor
+  - typical-workflow
+  sources:
+    readme: manual/legacy/README-1.4.0.md#song-composition
+    behaviour_cases:
+    - M-ENDURANCE-001
+    - M-WORKFLOW-001
+    - M-SONG-FLOW-001
+    - M-LIVEUI-FOCUS-001
+    code:
+    - tests/behaviour/composition_workflow.py
+  controls: []
+  details:
+  - title: Recovery
+    text: Stop before editing the wrong section; select its slot and check the header. Copying a slot
+      does not copy a new isolated project.
+  - title: Course continuity
+    text: Continue the same project through Make a piece. The separate reference demonstrations below
+      start from their stated starting projects; they do not load a replacement into your project.
+  recipes: []
+  scene_refs:
+  - workflow-compose-two-channels
+  - song-mode-groups-and-selection
+  - song-global-length
+  review:
+    status: verified
+    cases:
+    - M-WORKFLOW-001
+    - M-SONG-FLOW-001
+    - M-LIVEUI-FOCUS-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Full composition verifies slot copy, altered octave, song chaining and saved reload. Song
+      selection and length scenes provide scoped controls. It does not establish every reset or physical
+      timing variation.
+    audio_refs:
+    - three-voice-conversation
+    audio_cases:
+    - MA-AUDIO-three-voice-conversation
+    course_status: awaiting-continuous-native-capture
+    course_scope: Existing reference-scene evidence proves its own configured example only. The new authored
+      chapter sequence needs its own continuous capture.
+  category: workflow
+  parent: typical-workflow
+  level: 3

@@ -1,0 +1,194 @@
+{
+  "assets": {
+    "manual/generated/reader-index.json": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca",
+    "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual/manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "manual/manual.css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+    "manual/index.html": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+    "cheat_sheet.html": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+  },
+  "featureCount": 133,
+  "proseChars": 136225,
+  "changes": [
+    {
+      "id": "lock-lead-time",
+      "fields": [
+        "prose"
+      ]
+    },
+    {
+      "id": "mods-and-software-devices",
+      "fields": [
+        "teaching_bindings"
+      ]
+    },
+    {
+      "id": "midi-panic",
+      "fields": [
+        "details",
+        "teaching_bindings"
+      ]
+    },
+    {
+      "id": "adding-chords",
+      "fields": [
+        "teaching_bindings"
+      ]
+    },
+    {
+      "id": "note-merge-modes",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "chord-strum",
+      "fields": [
+        "teaching_bindings"
+      ]
+    },
+    {
+      "id": "scale-editor",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "song-editor",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "interacting-with-slots",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "locks",
+      "fields": [
+        "details",
+        "recipes"
+      ]
+    },
+    {
+      "id": "save-and-load",
+      "fields": [
+        "details",
+        "teaching_bindings"
+      ]
+    },
+    {
+      "id": "lock-all-to-pentatonic",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "lock-random-to-pentatonic",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "midi-controller-options",
+      "fields": [
+        "details"
+      ]
+    },
+    {
+      "id": "honor-scale-rotations",
+      "fields": [
+        "details"
+      ]
+    },
+    {
+      "id": "honour-scale-transpose",
+      "fields": [
+        "details"
+      ]
+    },
+    {
+      "id": "performance-management",
+      "fields": [
+        "details",
+        "prose"
+      ]
+    },
+    {
+      "id": "masks",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "small-hours",
+      "fields": [
+        "prose",
+        "recipes"
+      ]
+    },
+    {
+      "id": "pocket-rhythm",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "tilting-harmony",
+      "fields": [
+        "recipes"
+      ]
+    },
+    {
+      "id": "loops-that-meet",
+      "fields": [
+        "recipes"
+      ]
+    }
+  ],
+  "learningPath": [
+    {
+      "id": "getting-started",
+      "title": "1. Meet Mosaic"
+    },
+    {
+      "id": "setup",
+      "title": "2. Choose one sound"
+    },
+    {
+      "id": "first-sound",
+      "title": "3. Make four equal notes"
+    },
+    {
+      "id": "build-a-phrase",
+      "title": "4. Spread the rhythm across a bar"
+    },
+    {
+      "id": "masks",
+      "title": "5. Give the phrase an ending"
+    },
+    {
+      "id": "sequence-composition",
+      "title": "6. Add a second part"
+    },
+    {
+      "id": "harmony-design",
+      "title": "7. Change harmony without changing the rhythm"
+    },
+    {
+      "id": "modulation-movement-and-interest",
+      "title": "8. Add a pickup"
+    },
+    {
+      "id": "song-composition",
+      "title": "9. Arrange two sections"
+    },
+    {
+      "id": "keep-your-work",
+      "title": "10. Save, reload and perform"
+    }
+  ],
+  "servedHasTagline": false
+}

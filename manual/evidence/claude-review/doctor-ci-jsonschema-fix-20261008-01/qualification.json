@@ -1,0 +1,29 @@
+{
+  "kind": "doctor-options-jsonschema-workflow-candidate-v1",
+  "base_source_sha": "89285eae47b6a02903aed2fd746de65ecb4fabce",
+  "patch": "doctor-options-jsonschema.patch",
+  "patch_sha256": "76990ad58ea5dfe84f64962c1adba8a7fc2076509928525e91ad577fd91ced79",
+  "candidate_workflow_sha256": "07f13a578a8e619f376a4052192fc0cc8596e5fb2da68aed04fc4c5a77ea746e",
+  "candidate_contract_test_sha256": "33a3b0f424ba7d0626c2736fdf7d9531b0791447e0924072b21323ed2d209251",
+  "workflow_preimage_sha256": "43c953478e519112fa38be46d80d2d38ce8e77a9f33fe92d890f960ae9c29167",
+  "contract_test_preimage_sha256": "746e6f4092281e0c8777b630ae1fd3ee57cf68881bc038ad58f829e28e537251",
+  "ci_red_evidence": [
+    {
+      "run_id": "37809731901",
+      "log": "../prior-doctor-options-37809731901/manual_stereo-real-time/orchestrator.log",
+      "log_sha256": "182b943935150d183764e6a8742facaff3bbbf5602ad56f510e544632eec7a91"
+    },
+    {
+      "run_id": "37814620572",
+      "log": "../manual_stereo-real-time/orchestrator.log",
+      "log_sha256": "182b943935150d183764e6a8742facaff3bbbf5602ad56f510e544632eec7a91"
+    }
+  ],
+  "failure": "Both archived Doctor captures fail before capture because manual_model.py imports jsonschema, which is absent in the audio-crow workflow container.",
+  "red_green": {
+    "red": "Workflow contract test with the new dependency assertion fails against the unchanged workflow; the other 3 tests pass.",
+    "green": "4/4 tests pass with the candidate workflow using Python 3.11.9.",
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tests/behaviour python3 -m unittest -v ci.test_rhythm_doctor_options_ci"
+  },
+  "scope": "Adds only python3-jsonschema to the audio-crow job before the Doctor options matrix and asserts that it is installed before matrix invocation. No package installation, build, emulator launch, native capture, or source checkout modification occurred."
+}

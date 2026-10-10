@@ -1,0 +1,268 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "source"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "midi"
+  },
+  {
+    "kind": "recording-across-transition",
+    "notes": {
+      "A": [
+        72,
+        90,
+        "slot1-step2"
+      ],
+      "B": [
+        79,
+        80,
+        "slot2-step2"
+      ]
+    },
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "source"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "internal"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "tempo"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "90"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          84,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          80
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          84,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          80
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          84,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          80
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          84,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          80
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          84,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          80
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          84,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          80
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ]
+    ],
+    "complete_cycles": 3
+  },
+  {
+    "kind": "recording-across-transition-replay",
+    "gaps_seconds": [
+      0.333333334,
+      0.333333333,
+      0.666666667,
+      0.333333333,
+      0.333333333,
+      0.666666667,
+      0.333333333,
+      0.333333334,
+      0.666666666
+    ],
+    "passed": true
+  }
+]

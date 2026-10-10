@@ -1,0 +1,13 @@
+..F..............................
+======================================================================
+FAIL: test_complete_browser_plan_includes_pictured_control_navigation (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 43, in test_complete_browser_plan_includes_pictured_control_navigation
+    self.assertIn("browser-manual_controls_browser",names)
+AssertionError: 'browser-manual_controls_browser' not found in ['masks-real', 'masks-controlled', 'first-sound-real', 'first-sound-controlled', 'reference-real-scene-plans-course-base-midi', 'reference-controlled-scene-plans-course-base-midi', 'doctor-manual-real', 'doctor-auto-real', 'doctor-publish', 'doctor-options-manual-stereo-real', 'doctor-options-auto-left-real', 'doctor-options-manual-right-real', 'doctor-options-setup-real', 'doctor-options-setup-controlled', 'doctor-options-ready-real', 'doctor-options-ready-controlled', 'doctor-options-audit', 'musical-audio', 'player-routes', 'refresh-scene-index', 'refresh-editorial', 'raw-publication-audit', 'caption-rebind', 'course-bind', 'feature-bind', 'inventory', 'compile-book', 'quick-reference', 'publication-audit', 'browser-manual_inline', 'browser-manual_browser', 'browser-manual_book_browser', 'browser-manual_audio_race', 'browser-manual_narrative_browser', 'browser-manual_course_browser']
+
+----------------------------------------------------------------------
+Ran 33 tests in 0.907s
+
+FAILED (failures=1)

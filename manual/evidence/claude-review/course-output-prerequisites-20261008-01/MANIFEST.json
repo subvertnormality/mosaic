@@ -1,0 +1,84 @@
+{
+  "candidate_id": "course-output-prerequisites-20261008-01",
+  "source_root": "/home/andy/mosaic-manual-1.4.0",
+  "scope": "External authored-text proposal only; no authoritative source files, generated outputs, app code, tests, captures, or native state changed.",
+  "files": [
+    {
+      "name": "course.yaml",
+      "source_sha256": "41ffc82cfaef102a738b69ac7a7a85a85b0f05f25b2b94247adb8ed25e9bd449",
+      "candidate_sha256": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a",
+      "changed": true
+    },
+    {
+      "name": "reference-channel.yaml",
+      "source_sha256": "2d9ceadbe122f403a89194a08111badbf1b690ac7771e57cf4d85db7662197bf",
+      "candidate_sha256": "f1959ad4521ab1df2703b6d73ee2d45ad33571ba60e2f3e24c68c7a7c1c098bd",
+      "changed": true
+    },
+    {
+      "name": "tutorials.yaml",
+      "source_sha256": "613240583b1675ac86c71a3fa21a4385634923a9600d4a0386b11f69e4bb5ced",
+      "candidate_sha256": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8",
+      "changed": true
+    },
+    {
+      "name": "reference-learn.yaml",
+      "source_sha256": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+      "candidate_sha256": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+      "changed": false
+    }
+  ],
+  "source_evidence": {
+    "norns_mods_guide": "https://monome.org/docs/norns/mods/",
+    "maiden_project_manager_and_repl": "https://monome.org/docs/norns/maiden/",
+    "nb_polyperc_project": "https://github.com/dstroud/nb_polyperc",
+    "claims": "Mod installation followed by SYSTEM > RESTART; installed mods start unloaded and must be enabled in SYSTEM > MODS with E2/E3, then norns restarted again. nb_polyperc README states one voice is enabled by default and additional voices are configured through its SYSTEM > MODS menu."
+  },
+  "proposed_changes": [
+    "Clarify the course overview and chapter-2 prerequisite: Polyperc 1 requires nb_polyperc to be installed and enabled before the chapter; retain the connected MIDI alternative.",
+    "Change setup-apply so Polyperc 1 is offered only when nb_polyperc is installed and enabled, with a link to its setup instructions.",
+    "Add real nb_polyperc installation, two-restart, enablement, default-one-voice, and additional-voice instructions to the existing norns sound sources feature.",
+    "Convert the four course No Sound references and the tutorial recovery reference to Markdown links.",
+    "Keep reference-learn.yaml byte-identical as requested; its setup paragraph and title are untouched."
+  ],
+  "renderer_finding": {
+    "course_recovery": "book.js routes chapter recovery through markdown(value, body); Markdown links should render as anchors.",
+    "course_result_and_human_outcome": "manual.js inserts selected course result/human_outcome and course stage outcome through textContent/node text. The authored Markdown syntax would display literally in these panels unless a safe inline-Markdown renderer helper is exposed and used there. Propose exporting existing book.js inline renderer through window.MosaicMarkdown.renderInline and using it in the relevant manual.js result/outcome nodes; no renderer source edits are included here."
+  },
+  "affected_public_unit_ids": [
+    {
+      "id": "course:getting-started-objects",
+      "reason": "Chapter 1 recovery panel uses the newly linked No Sound reference."
+    },
+    {
+      "id": "course:getting-started-notation",
+      "reason": "Same chapter recovery panel appears on this course route."
+    },
+    {
+      "id": "course:setup-route",
+      "reason": "Chapter 2 prerequisite changes and is displayed on this route."
+    },
+    {
+      "id": "course:setup-apply",
+      "reason": "Chapter 2 prerequisite plus output-selection action, result, and human_outcome change."
+    },
+    {
+      "id": "course:setup-tempo",
+      "reason": "Chapter 2 prerequisite changes and is displayed on this route."
+    }
+  ],
+  "related_public_unit_recommendation": {
+    "id": "lesson:mods-and-software-devices:play-polyperc-apply-confirm",
+    "reason": "Its public lesson demonstrates selecting Polyperc 1. The scene is unchanged; include in scoped reader review if the final feature page surfaces the new install/enable prerequisite alongside that picker lesson."
+  },
+  "validation": {
+    "yaml_parse": "all 4 source and candidate files parse with PyYAML CSafeLoader",
+    "source_copies_match_authoritative_hashes": true,
+    "reference_learn_byte_identical": true,
+    "course_no_sound_links": 4,
+    "course_setup_feature_links": 3,
+    "tutorial_no_sound_links": 1,
+    "native_or_full_compile_run": false,
+    "proposed_diff_sha256": "43e88491d9817dce1f06de5b6e767efc89de4061607cf7cf3f767600575b61f4"
+  }
+}

@@ -1,0 +1,183 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock merged to pent.",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Lock merged to pent.",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166976817,
+        "error_ms": 0.3101503333333422
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166087419,
+        "error_ms": -0.5792476666666713
+      },
+      {
+        "pitch": 85,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166108992,
+        "error_ms": -0.5576746666666466
+      },
+      {
+        "pitch": 82,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16616733,
+        "error_ms": -0.49933666666665544
+      },
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167150091,
+        "error_ms": 0.4834243333333432
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166151867,
+        "error_ms": -0.5147996666666488
+      },
+      {
+        "pitch": 85,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166102692,
+        "error_ms": -0.5639746666666612
+      },
+      {
+        "pitch": 82,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166135897,
+        "error_ms": -0.5307696666666528
+      },
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165993882,
+        "error_ms": -0.6727846666666482
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167185204,
+        "error_ms": 0.5185373333333465
+      },
+      {
+        "pitch": 85,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166144762,
+        "error_ms": -0.521904666666656
+      },
+      {
+        "pitch": 82,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16614385,
+        "error_ms": -0.5228166666666478
+      }
+    ]
+  },
+  {
+    "kind": "merge-transpose-scale-lock",
+    "source_degrees": [
+      [
+        0,
+        2,
+        4,
+        6
+      ],
+      [
+        2,
+        4,
+        6,
+        0
+      ]
+    ],
+    "merged_average_degrees": [
+      1,
+      3,
+      5,
+      3
+    ],
+    "scale_lock_step": 3,
+    "scale2": {
+      "type": "minor",
+      "root": "D",
+      "transpose": 3
+    },
+    "step_transposes": [
+      -12,
+      0,
+      12,
+      null
+    ],
+    "expected_pitches": [
+      50,
+      65,
+      85,
+      82
+    ],
+    "complete_onsets": 13,
+    "complete_releases": 13,
+    "accounted_non_note_events": 68,
+    "maximum_phase_error_seconds": 0.0010078643333333304,
+    "passed": true
+  }
+]

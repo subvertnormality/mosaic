@@ -1,0 +1,46 @@
+--- a/manual.css (123afe7d baseline)
++++ b/manual.css (c664709 candidate)
+@@ -93,3 +93,43 @@
+ .quick-essentials{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+ .quick-essentials a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;text-decoration:none}
+ #masks #intro>ol>li code{overflow-wrap:anywhere}
++
++/* Two real norns control layouts share the same live input elements. */
++.norns-device-caption{align-items:center;gap:12px}.norns-layout-toggle{font:600 12px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:0;min-height:44px;padding:8px 12px;border-radius:6px;background:var(--panel);color:var(--ink);border:1px solid var(--line);white-space:nowrap}.norns-layout-toggle:hover{border-color:var(--accent)}
++.instruments:not(.grid-enlarged){grid-template-columns:minmax(0,520px) minmax(0,1fr)}.norns-wrap{width:min(100%,560px);max-width:100%;margin:0 auto}.lesson-mode .norns-wrap{width:min(100%,560px);max-width:100%;margin:0 auto}.encoder{width:44px;height:44px;min-width:44px;min-height:44px;flex:none}.encoder span{top:46px;left:4px}.norns-keys button{width:44px;height:44px;min-width:44px;min-height:44px;flex:none}
++body[data-norns-layout="original"] #norns-device{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) 44px 44px;grid-template-rows:66px minmax(120px,auto) 52px;gap:8px;align-items:center;min-width:0}
++body[data-norns-layout="original"] #norns-device>.encoders,body[data-norns-layout="original"] #norns-device>.norns-keys{display:contents;padding:0}
++body[data-norns-layout="original"] #norns-device .encoder[data-n="1"]{grid-column:2;grid-row:1;justify-self:center}
++body[data-norns-layout="original"] #norns-device .encoder[data-n="2"]{grid-column:5;grid-row:2;justify-self:center}
++body[data-norns-layout="original"] #norns-device .encoder[data-n="3"]{grid-column:6;grid-row:2;justify-self:center}
++body[data-norns-layout="original"] #norns-device>#screen{grid-column:1/5;grid-row:2;width:100%;height:auto;min-width:0;margin:0}
++body[data-norns-layout="original"] #norns-device>.norns-keys>button[data-key="1"]{grid-column:1;grid-row:1;justify-self:center}
++body[data-norns-layout="original"] #norns-device>.norns-keys>button[data-key="2"]{grid-column:5;grid-row:3;justify-self:center}
++body[data-norns-layout="original"] #norns-device>.norns-keys>button[data-key="3"]{grid-column:6;grid-row:3;justify-self:center}
++body[data-norns-layout="original"] #norns-device .norns-word{grid-column:1/5;grid-row:3;justify-self:start;margin:0}
++@media(max-width:1120px){.instruments:not(.grid-enlarged){grid-template-columns:minmax(0,1fr);gap:20px}.norns-wrap{width:min(100%,560px);max-width:100%;margin:0 auto}}
++/* Official norns Shield geometry: K1/E1 at upper right; screen center; K2/K3 left and E2/E3 right below. */
++body[data-norns-layout="shield"] #norns-device{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:66px minmax(120px,auto) 52px;gap:8px;align-items:center;min-width:0}
++body[data-norns-layout="shield"] #norns-device>.encoders,body[data-norns-layout="shield"] #norns-device>.norns-keys{display:contents;padding:0}
++body[data-norns-layout="shield"] #norns-device .encoder[data-n="1"]{grid-column:4;grid-row:1;justify-self:center}
++body[data-norns-layout="shield"] #norns-device .encoder[data-n="2"]{grid-column:3;grid-row:3;justify-self:center}
++body[data-norns-layout="shield"] #norns-device .encoder[data-n="3"]{grid-column:4;grid-row:3;justify-self:center}
++body[data-norns-layout="shield"] #norns-device>#screen{grid-column:1/5;grid-row:2;width:100%;height:auto;min-width:0;margin:0}
++body[data-norns-layout="shield"] #norns-device>.norns-keys>button[data-key="1"]{grid-column:3;grid-row:1;justify-self:center}
++body[data-norns-layout="shield"] #norns-device>.norns-keys>button[data-key="2"]{grid-column:1;grid-row:3;justify-self:center}
++body[data-norns-layout="shield"] #norns-device>.norns-keys>button[data-key="3"]{grid-column:2;grid-row:3;justify-self:center}
++body[data-norns-layout="shield"] #norns-device .norns-word{grid-column:1/5;grid-row:4;justify-self:start;margin:0}
++@media(max-width:600px){.norns-wrap,.lesson-mode .norns-wrap{width:min(100%,560px);max-width:100%;margin:0 auto}.norns-device-caption{flex-wrap:wrap}.norns-layout-toggle{white-space:normal}}
++
++/* Enlarged pads stay larger than the compact grid across responsive widths. */
++.grid-enlarged #grid{grid-template-columns:repeat(16,clamp(44px,calc(8vw - 24px),80px))}
++.grid-enlarged #grid button{width:100%;height:auto;min-width:44px;min-height:44px;aspect-ratio:1}
++
++/* Keep the compact captured grid beside the norns display on desktop. */
++@media(min-width:1121px){.instruments:not(.grid-enlarged){grid-template-columns:minmax(280px,.9fr) minmax(0,1.1fr);column-gap:24px}.instruments:not(.grid-enlarged)>.grid-wrap{grid-column:auto;width:100%;min-width:0}.instruments:not(.grid-enlarged)>.norns-wrap{width:100%;max-width:560px}}
++
++@media(min-width:1280px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(0,.58fr) minmax(0,1.42fr)}.lesson-mode .instruments:not(.grid-enlarged){grid-template-columns:minmax(280px,.9fr) minmax(280px,1.1fr);gap:16px}.lesson-mode .instruments:not(.grid-enlarged)>.grid-wrap{grid-column:auto}.lesson-mode .instruments:not(.grid-enlarged)>.norns-wrap{width:100%;max-width:360px}}
++
++/* Let the Norns mock retain its readable canvas when the grid is enlarged. */
++.instruments.grid-enlarged{grid-template-columns:minmax(0,1fr)}
++@media(max-width:1279px){.lesson-mode .instruments:not(.grid-enlarged){grid-template-columns:minmax(0,1fr)}.lesson-mode .instruments:not(.grid-enlarged)>.grid-wrap{grid-column:1/-1}}

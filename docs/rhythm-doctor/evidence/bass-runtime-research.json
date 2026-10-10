@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-19",
+  "scope": "standalone bass research decision; no model was downloaded or installed",
+  "candidate_b_evidence_reviewed": "docs/rhythm-doctor/evidence/candidate_b_pretrained_research_2026-09-19.json",
+  "primary_sources": [
+    {"url": "https://github.com/sigsep/open-unmix-pytorch/blob/master/LICENSE", "fact": "Open-Unmix source is MIT."},
+    {"url": "https://github.com/sigsep/open-unmix-pytorch/blob/master/README.md", "fact": "UMXHQ is trained on MUSDB18-HQ; README explicitly marks only UMXL weights CC BY-NC-SA 4.0, so it does not establish a redistributable licence for the UMXHQ bass weight."},
+    {"url": "https://doi.org/10.5281/zenodo.3370489", "fact": "Official README identifies this DOI for UMXHQ weights; licence metadata must be captured from the resolved record before any delivery."},
+    {"url": "https://github.com/sigsep/open-unmix-pytorch/blob/master/openunmix/model.py", "fact": "Core defaults: 4096 bins, stereo, hidden size 512, three-layer bidirectional LSTM; dense/BatchNorm/tanh/ReLU stages. Separator adds STFT/iSTFT and optional Wiener filtering."}
+  ],
+  "verified": {
+    "weight_redistribution": "UNRESOLVED: MIT source permission does not licence a separately hosted UMXHQ state dict. Do not bundle, download at runtime, or convert UMXHQ weights until the pinned Zenodo weight record supplies an acceptable licence.",
+    "artifact_format": "The published loading path uses PyTorch .pth state dictionaries plus JSON model/separator configuration, not an ONNX delivery artifact.",
+    "conversion": "ONNX export is not a file conversion alone: export the instantiated core or Separator with fixed opset, shape policy, STFT/filterbank choice and output parity fixture. The repository says asteroid STFT can export to ONNX while torch STFT is faster; Wiener and inverse-STFT parity also require verification.",
+    "runtime": "The default bidirectional LSTM requires future frames, so it is offline rather than streaming/real-time. No ARMv7 benchmark or supported native runtime is published in these records."
+  },
+  "inference": {
+    "armv7_decision": "Treat UMXHQ conversion as an offline desktop research-worker experiment, not a viable standalone norns/ARMv7 path, until an exported single-bass graph passes RAM, latency and numerical parity measurements on the target.",
+    "actionable_native_path": "Train and freeze a small causal mono bass-onset model directly on the independently scheduled corpus: log-mel frontend, depthwise-separable 1-D temporal convolutions or a small unidirectional GRU, sigmoid onset head, integer/TFLite or ONNX Runtime Mobile candidate. It avoids source separation, bidirectional recurrence and uncertain third-party weight redistribution. It still needs a licence for training data, export/operator audit, ARMv7 benchmark and held-out five-lane quality evidence.",
+    "interim_path": "For research only, use a separately licensed offline UMXHQ bass stem followed by a lightweight onset model; retain the separator as an optional worker profile and never describe it as standalone norns inference."
+  },
+  "next_gate": [
+    "Resolve and pin UMXHQ Zenodo licence, archive hash and model configuration before any weight acquisition.",
+    "Export core and full separator candidates separately; verify waveform/stem parity and operators with the target ARM runtime.",
+    "Benchmark 45-second buffers on ARMv7: cold/warm latency, peak RSS, model size and onset quality."
+  ],
+  "decision": "Do not select UMXHQ for standalone delivery. Advance the small causal bass-onset model as the native research path; retain Open-Unmix only as a licence-blocked optional offline separation comparison."
+}

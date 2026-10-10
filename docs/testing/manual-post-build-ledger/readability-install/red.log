@@ -1,0 +1,35 @@
+...................................EF...
+======================================================================
+ERROR: test_canonical_full_plan_contains_all_qualification_and_browser_stages (test_reconcile_manual_build.ReviewedDesignGapTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 136, in test_canonical_full_plan_contains_all_qualification_and_browser_stages
+    root=tool.ROOT;plans=sorted(p.name for p in (root/'manual').glob('scene-plans*.yaml'));names=tool.canonical_stage_names(root,plans)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 37, in canonical_stage_names
+    return [row['name'] for row in manual_build.plan(opts,plans)]
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_build.py", line 89, in plan
+    if not installation:raise ValueError("Real readability requires an explicit qualified output-boundary installation")
+ValueError: Real readability requires an explicit qualified output-boundary installation
+
+======================================================================
+FAIL: test_canonical_plan_supplies_explicit_readability_install_argument (test_reconcile_manual_build.ReviewedDesignGapTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 146, in test_canonical_plan_supplies_explicit_readability_install_argument
+    names=tool.canonical_stage_names(tool.ROOT,sorted(p.name for p in (tool.ROOT/'manual').glob('scene-plans*.yaml')))
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 37, in canonical_stage_names
+    return [row['name'] for row in manual_build.plan(opts,plans)]
+  File "/usr/lib/python3.8/unittest/mock.py", line 1081, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1085, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1146, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 142, in reviewed_plan
+    self.assertEqual(getattr(options,'readability_real_install',None),'identity')
+AssertionError: None != 'identity'
+
+----------------------------------------------------------------------
+Ran 40 tests in 0.586s
+
+FAILED (failures=1, errors=1)

@@ -1,0 +1,47 @@
+test_argv_tamper (test_controller.GateTests) ... ok
+test_atomic_exclusive_complete_json (test_controller.GateTests) ... ok
+test_boolean_pid (test_controller.GateTests) ... ok
+test_builder_tamper (test_controller.GateTests) ... ok
+test_checks_stale_and_wrong_request (test_controller.GateTests) ... ok
+test_cleanup_tamper_rejected (test_controller.GateTests) ... ok
+test_duplicate_and_archived (test_controller.GateTests) ... ok
+test_duplicate_json_keys (test_controller.GateTests) ... ok
+test_empty_finish_timestamp (test_controller.GateTests) ... ok
+test_filename_tamper (test_controller.GateTests) ... ok
+test_float_index (test_controller.GateTests) ... ok
+test_held_inputs_rejected (test_controller.GateTests) ... ok
+test_invalid_finish_timestamp (test_controller.GateTests) ... ok
+test_jackdmp_presence_refused (test_controller.GateTests) ... ok
+test_memory_integer_not_boolean (test_controller.GateTests) ... ok
+test_native_participant_proof (test_controller.GateTests) ... ok
+test_native_service_presence (test_controller.GateTests) ... ok
+test_nested_boolean_integer_stage_mismatch (test_controller.GateTests) ... ok
+test_noncanonical_request (test_controller.GateTests) ... ok
+test_plan_pin_tamper (test_controller.GateTests) ... ok
+test_previous_failed (test_controller.GateTests) ... ok
+test_previous_tampered (test_controller.GateTests) ... ok
+test_recycled_pid (test_controller.GateTests) ... ok
+test_request_copy_elsewhere (test_controller.GateTests) ... ok
+test_stage_command_tamper (test_controller.GateTests) ... ok
+test_stage_plan_tamper (test_controller.GateTests) ... ok
+test_symlink_request (test_controller.GateTests) ... ok
+test_unfinished_receipt (test_controller.GateTests) ... ok
+test_unsupported_platform_fails_closed (test_controller.GateTests) ... ok
+test_unsupported_report_needs_external_review (test_controller.GateTests) ... ok
+test_valid_request_exact_resume (test_controller.GateTests) ... ok
+test_bootstrap_and_future_dependency_append (test_prefix_plan.PrefixTests) ... ok
+test_bootstrap_evidence_change_detected (test_prefix_plan.PrefixTests) ... ok
+test_cli_version_receipt_and_duplicate_refusal (test_prefix_plan.PrefixTests) ... ok
+test_nested_types_are_exact (test_prefix_plan.PrefixTests) ... ok
+test_no_bootstrap_at_future_stage (test_prefix_plan.PrefixTests) ... ok
+test_no_repeated_extension (test_prefix_plan.PrefixTests) ... ok
+test_no_skipped_extension (test_prefix_plan.PrefixTests) ... ok
+test_original_count_pin (test_prefix_plan.PrefixTests) ... ok
+test_original_plan_change_detected (test_prefix_plan.PrefixTests) ... ok
+test_previous_commands_preserved_literally (test_prefix_plan.PrefixTests) ... ok
+test_source_pin_required (test_prefix_plan.PrefixTests) ... ok
+
+----------------------------------------------------------------------
+Ran 42 tests in 0.187s
+
+OK

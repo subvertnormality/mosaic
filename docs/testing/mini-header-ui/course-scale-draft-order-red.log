@@ -1,0 +1,13 @@
+........................F
+======================================================================
+FAIL: test_actual_grid_press_preserves_the_course_draft_until_apply (test_manual_course_bind.CourseScaleDraftLifetimeRecipe)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 213, in test_actual_grid_press_preserves_the_course_draft_until_apply
+    self.assertEqual(int(actual.stdout.strip()),2,'listen to the stored C scale before staging D; grid transport cancels an unapplied draft')
+AssertionError: 0 != 2 : listen to the stored C scale before staging D; grid transport cancels an unapplied draft
+
+----------------------------------------------------------------------
+Ran 25 tests in 3.575s
+
+FAILED (failures=1)

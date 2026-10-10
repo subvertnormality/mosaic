@@ -1,0 +1,791 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "DEVICES > "
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "MODS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "MATRIX >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "Fixed Note"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "rhythm 1"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "lfo 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1.00"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "clocked"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "beats"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "shape"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          127,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "steady-lfo-timing",
+    "rows": [
+      {
+        "index": 1,
+        "expected_seconds": 0.0,
+        "actual_seconds": 0.0
+      },
+      {
+        "index": 2,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165993999
+      },
+      {
+        "index": 3,
+        "expected_seconds": 0.3333333333333333,
+        "actual_seconds": 0.333073971
+      },
+      {
+        "index": 4,
+        "expected_seconds": 0.5,
+        "actual_seconds": 0.499889315
+      },
+      {
+        "index": 5,
+        "expected_seconds": 0.6666666666666666,
+        "actual_seconds": 0.666682734
+      },
+      {
+        "index": 6,
+        "expected_seconds": 0.8333333333333334,
+        "actual_seconds": 0.833100161
+      },
+      {
+        "index": 7,
+        "expected_seconds": 1.0,
+        "actual_seconds": 0.999747553
+      },
+      {
+        "index": 8,
+        "expected_seconds": 1.1666666666666667,
+        "actual_seconds": 1.165862635
+      },
+      {
+        "index": 9,
+        "expected_seconds": 1.3333333333333333,
+        "actual_seconds": 1.333033778
+      },
+      {
+        "index": 10,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499062988
+      },
+      {
+        "index": 11,
+        "expected_seconds": 1.6666666666666667,
+        "actual_seconds": 1.666276374
+      },
+      {
+        "index": 12,
+        "expected_seconds": 1.8333333333333333,
+        "actual_seconds": 1.83336107
+      },
+      {
+        "index": 13,
+        "expected_seconds": 2.0,
+        "actual_seconds": 1.999473191
+      },
+      {
+        "index": 14,
+        "expected_seconds": 2.1666666666666665,
+        "actual_seconds": 2.166035378
+      },
+      {
+        "index": 15,
+        "expected_seconds": 2.3333333333333335,
+        "actual_seconds": 2.333129674
+      },
+      {
+        "index": 16,
+        "expected_seconds": 2.5,
+        "actual_seconds": 2.499982186
+      },
+      {
+        "index": 17,
+        "expected_seconds": 2.6666666666666665,
+        "actual_seconds": 2.665956922
+      },
+      {
+        "index": 18,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.83298856
+      },
+      {
+        "index": 19,
+        "expected_seconds": 3.0,
+        "actual_seconds": 2.999816013
+      },
+      {
+        "index": 20,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.16653677
+      },
+      {
+        "index": 21,
+        "expected_seconds": 3.3333333333333335,
+        "actual_seconds": 3.333659063
+      },
+      {
+        "index": 22,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.499757277
+      },
+      {
+        "index": 23,
+        "expected_seconds": 3.6666666666666665,
+        "actual_seconds": 3.666185334
+      },
+      {
+        "index": 24,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.83340715
+      },
+      {
+        "index": 25,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.99966917
+      },
+      {
+        "index": 26,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166172813
+      },
+      {
+        "index": 27,
+        "expected_seconds": 4.333333333333333,
+        "actual_seconds": 4.332674286
+      },
+      {
+        "index": 28,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.499575979
+      },
+      {
+        "index": 29,
+        "expected_seconds": 4.666666666666667,
+        "actual_seconds": 4.666250199
+      },
+      {
+        "index": 30,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.832769661
+      },
+      {
+        "index": 31,
+        "expected_seconds": 5.0,
+        "actual_seconds": 4.999084052
+      },
+      {
+        "index": 32,
+        "expected_seconds": 5.166666666666667,
+        "actual_seconds": 5.166709642
+      }
+    ],
+    "opening_phase_case": "M-LEN-001"
+  }
+]

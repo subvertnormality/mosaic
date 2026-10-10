@@ -1,0 +1,13 @@
+...........................................................E...........
+======================================================================
+ERROR: test_bound_documentation_image_can_repeat_after_sample_with_changed_midi (test_manual_publication_verify.SongQueuedNativeIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 443, in test_bound_documentation_image_can_repeat_after_sample_with_changed_midi
+    audit.check_queue_documentation(row,dict(sha256='same'),[1],obs)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_queue_documentation'
+
+----------------------------------------------------------------------
+Ran 71 tests in 2.239s
+
+FAILED (errors=1)

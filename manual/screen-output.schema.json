@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Captured manual screen payload",
+  "description": "Exclusive screen representation; native raw bytes remain separately hash-bound.",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "screen_rle"
+      ],
+      "properties": {
+        "screen_rle": {
+          "$ref": "#/definitions/rle16"
+        }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "screen_format"
+            ]
+          },
+          {
+            "required": [
+              "screen_gray8_rle"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "screen_format",
+        "screen_gray8_rle"
+      ],
+      "properties": {
+        "screen_format": {
+          "const": "gray8-rle"
+        },
+        "screen_gray8_rle": {
+          "$ref": "#/definitions/rle8"
+        }
+      },
+      "not": {
+        "required": [
+          "screen_rle"
+        ]
+      }
+    }
+  ],
+  "definitions": {
+    "rle16": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/pair16"
+      }
+    },
+    "rle8": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/pair8"
+      }
+    },
+    "pair16": {
+      "type": "array",
+      "items": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8192
+        }
+      ],
+      "additionalItems": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "pair8": {
+      "type": "array",
+      "items": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8192
+        }
+      ],
+      "additionalItems": false,
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}

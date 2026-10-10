@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "complete_regression_run": false,
+  "hardware_timing_verified": false,
+  "publication": "/home/andy/mosaic-manual-1.4.0/manual/generated/reference-device-scenes.json",
+  "publication_sha256": "6be010dd5378f0d39bf4dd1bc62d3205b2407f02f8698a95b029ac6feb83c799",
+  "clock_mode": "real-time",
+  "scenes": 3,
+  "frames": 3,
+  "original_campaign": {
+    "original_report": "/home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0/reference-scenes.json",
+    "original_report_sha256": "db8d3bf62392d0496bf609cc11e9083a5504464f759a39e4af7b14f6930b3338",
+    "scope": "Exact scene subset of the fully passing 17-case real-time campaign; raw frames, inputs, semantic assertions and identities unchanged."
+  },
+  "deferred_scene_ids": [
+    "device-sparse-control-domain",
+    "device-stored-value-and-step-lock"
+  ]
+}

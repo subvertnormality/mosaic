@@ -1,0 +1,30 @@
+{
+  "built_worker_sha256": "037b2630fbea833233b723ce799031308c0e66841c4ffa5f7732dc4338b41312",
+  "cleanup": {
+    "deployment_root_removed": true,
+    "failures": [],
+    "jack_routes_restored": true,
+    "worker_self_cleaned": true
+  },
+  "failure": null,
+  "full_feature_acceptance": false,
+  "launch_worker_build_identity": "83d846c29275ab1999234b46d7d792262a9ba403faed11c713277a70a38fb640",
+  "passed": true,
+  "profile": "physical-norns-launch-worker-system-capture",
+  "run_id": "mosaic-rd-launch-worker-953c6f2f1a144911ae3f38b8604a4113",
+  "runner_sha256": "cfb96febcd2a116442c558d8209e016ab6681570037d57fce9f9069f5f5c00b7",
+  "schema_version": 1,
+  "scope": "production launch_worker plus AF_UNIX transport with system capture ports; no Mosaic user project is deployed or loaded",
+  "source_sha256": {
+    "lib/rhythm_doctor/native_transport.lua": "4870b1f82fff1bc9db22898851c3747e26018cd656a37f8446447b1132c88f2e",
+    "tests/rhythm_doctor/test_launch_worker_transport.lua": "cd5927f45ff4dba33a80b8950bdccf0fe47a92702c1658573f511b28be972661",
+    "tools/rhythm_doctor/launch_worker.py": "79e31b666700026fdeb49f3ca86049d823f4fe38543b72d847ad87ba8a386f8d",
+    "tools/rhythm_doctor/rd_capture.c": "6b613f9e8640c8bbce6a9cab0b6cb376e85204c820288c4d78a8070ed35d3bf3",
+    "tools/rhythm_doctor/rd_capture_worker.c": "dc26a792133346b0c7c735317b6ddc6576ec823af4054484643cd805c618c24b"
+  },
+  "transport": {
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": ""
+  }
+}

@@ -1,0 +1,24 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+FFF.
+Failed tests:
+-------------
+1) test_rhythm_doctor_mailbox_path_accepts_public_native_session_root
+.///lib/rhythm_doctor_mailbox_path_tests.lua:17: Public native worker root must connect
+expected: not nil, actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_mailbox_path_tests.lua:17: in upvalue 'test_rhythm_doctor_mailbox_path_accepts_public_native_session_root'
+
+2) test_rhythm_doctor_mailbox_path_accounts_for_complete_message_suffix
+.///lib/rhythm_doctor_mailbox_path_tests.lua:22: Full temporary filename at PATH_MAX-1 must fit
+expected: not nil, actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_mailbox_path_tests.lua:22: in upvalue 'test_rhythm_doctor_mailbox_path_accounts_for_complete_message_suffix'
+
+3) test_rhythm_doctor_mailbox_path_accounts_for_direction_component
+.///lib/rhythm_doctor_mailbox_path_tests.lua:31: INVALID_MAILBOX_ROOT
+expected: not nil, actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_mailbox_path_tests.lua:31: in upvalue 'test_rhythm_doctor_mailbox_path_accounts_for_direction_component'
+
+Ran 4 tests in 0.003 seconds, 1 success, 3 failures, 2407 non-selected

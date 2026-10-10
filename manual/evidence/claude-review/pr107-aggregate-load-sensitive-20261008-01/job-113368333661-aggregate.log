@@ -1,0 +1,339 @@
+﻿2026-10-08T14:37:10.2259477Z Current runner version: '2.337.0'
+2026-10-08T14:37:10.2279293Z ##[group]Runner Image Provisioner
+2026-10-08T14:37:10.2279974Z Hosted Compute Agent
+2026-10-08T14:37:10.2280544Z Version: 20261002.596
+2026-10-08T14:37:10.2281068Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-08T14:37:10.2281650Z Build Date: 2026-10-02T22:28:27Z
+2026-10-08T14:37:10.2282250Z Worker ID: {cad35654-4eb9-446b-9859-28c693cf2cdc}
+2026-10-08T14:37:10.2282814Z Region: westus3
+2026-10-08T14:37:10.2283273Z Cloud: Azure
+2026-10-08T14:37:10.2284040Z ##[endgroup]
+2026-10-08T14:37:10.2285178Z ##[group]Operating System
+2026-10-08T14:37:10.2285764Z Ubuntu
+2026-10-08T14:37:10.2286198Z 24.04.5
+2026-10-08T14:37:10.2286636Z LTS
+2026-10-08T14:37:10.2287114Z ##[endgroup]
+2026-10-08T14:37:10.2287561Z ##[group]Runner Image
+2026-10-08T14:37:10.2288079Z Image: ubuntu-24.04
+2026-10-08T14:37:10.2288558Z Version: 20261004.327.1
+2026-10-08T14:37:10.2289628Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-08T14:37:10.2290846Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-08T14:37:10.2291638Z ##[endgroup]
+2026-10-08T14:37:10.2292580Z ##[group]GITHUB_TOKEN Permissions
+2026-10-08T14:37:10.2294253Z Contents: read
+2026-10-08T14:37:10.2294803Z Metadata: read
+2026-10-08T14:37:10.2295244Z ##[endgroup]
+2026-10-08T14:37:10.2296951Z Secret source: Actions
+2026-10-08T14:37:10.2297712Z Cache mode: write
+2026-10-08T14:37:10.2298333Z Prepare workflow directory
+2026-10-08T14:37:10.2639194Z Prepare all required actions
+2026-10-08T14:37:10.2677685Z Getting action download info
+2026-10-08T14:37:10.5506328Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-08T14:37:10.9234900Z Download action repository 'actions/download-artifact@v4' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+2026-10-08T14:37:11.6297856Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-08T14:37:11.8643138Z Complete job name: Complete behaviour coverage
+2026-10-08T14:37:11.9272825Z ##[group]Run actions/checkout@v4
+2026-10-08T14:37:11.9273709Z with:
+2026-10-08T14:37:11.9274114Z   submodules: recursive
+2026-10-08T14:37:11.9274606Z   repository: subvertnormality/mosaic
+2026-10-08T14:37:11.9277961Z   token: ***
+2026-10-08T14:37:11.9278363Z   ssh-strict: true
+2026-10-08T14:37:11.9278780Z   ssh-user: git
+2026-10-08T14:37:11.9279198Z   persist-credentials: true
+2026-10-08T14:37:11.9279647Z   clean: true
+2026-10-08T14:37:11.9280064Z   sparse-checkout-cone-mode: true
+2026-10-08T14:37:11.9280566Z   fetch-depth: 1
+2026-10-08T14:37:11.9280968Z   fetch-tags: false
+2026-10-08T14:37:11.9281383Z   show-progress: true
+2026-10-08T14:37:11.9281806Z   lfs: false
+2026-10-08T14:37:11.9282193Z   set-safe-directory: true
+2026-10-08T14:37:11.9282669Z   allow-unsafe-pr-checkout: false
+2026-10-08T14:37:11.9283345Z env:
+2026-10-08T14:37:11.9284194Z   EMULATOR_REVISION: 68ab70903d22500237ce68edc7e31c3b867cf179
+2026-10-08T14:37:11.9284847Z   EMULATOR_ROOT: /tmp/monome-emulator
+2026-10-08T14:37:11.9285401Z   MONOME_EMULATOR: /tmp/monome-emulator
+2026-10-08T14:37:11.9285918Z   DEBIAN_FRONTEND: noninteractive
+2026-10-08T14:37:11.9286384Z ##[endgroup]
+2026-10-08T14:37:12.0092253Z Syncing repository: subvertnormality/mosaic
+2026-10-08T14:37:12.0094313Z ##[group]Getting Git version info
+2026-10-08T14:37:12.0094947Z Working directory is '/home/runner/work/mosaic/mosaic'
+2026-10-08T14:37:12.0099512Z [command]/usr/bin/git version
+2026-10-08T14:37:12.0196354Z git version 2.55.0
+2026-10-08T14:37:12.0216226Z ##[endgroup]
+2026-10-08T14:37:12.0229227Z Temporarily overriding HOME='/home/runner/work/_temp/373436f4-9f85-42fe-95c2-73098b2be966' before making global git config changes
+2026-10-08T14:37:12.0231419Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T14:37:12.0235048Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mosaic/mosaic
+2026-10-08T14:37:12.0280917Z Deleting the contents of '/home/runner/work/mosaic/mosaic'
+2026-10-08T14:37:12.0288483Z ##[group]Initializing the repository
+2026-10-08T14:37:12.0295312Z [command]/usr/bin/git init /home/runner/work/mosaic/mosaic
+2026-10-08T14:37:12.0364409Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-08T14:37:12.0365888Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-08T14:37:12.0367203Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-08T14:37:12.0368268Z hint: call:
+2026-10-08T14:37:12.0368833Z hint:
+2026-10-08T14:37:12.0369549Z hint: 	git config --global init.defaultBranch <name>
+2026-10-08T14:37:12.0370440Z hint:
+2026-10-08T14:37:12.0371250Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-08T14:37:12.0372563Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-08T14:37:12.0373747Z hint:
+2026-10-08T14:37:12.0374387Z hint: 	git branch -m <name>
+2026-10-08T14:37:12.0375040Z hint:
+2026-10-08T14:37:12.0375970Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-08T14:37:12.0377329Z Initialized empty Git repository in /home/runner/work/mosaic/mosaic/.git/
+2026-10-08T14:37:12.0379612Z [command]/usr/bin/git remote add origin https://github.com/subvertnormality/mosaic
+2026-10-08T14:37:12.0422222Z ##[endgroup]
+2026-10-08T14:37:12.0425433Z ##[group]Disabling automatic garbage collection
+2026-10-08T14:37:12.0426426Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-08T14:37:12.0454241Z ##[endgroup]
+2026-10-08T14:37:12.0455283Z ##[group]Setting up auth
+2026-10-08T14:37:12.0459181Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T14:37:12.0487909Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T14:37:12.0827462Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T14:37:12.0890534Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T14:37:12.1078119Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T14:37:12.1108710Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T14:37:12.1306034Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-08T14:37:12.1340145Z ##[endgroup]
+2026-10-08T14:37:12.1341303Z ##[group]Fetching the repository
+2026-10-08T14:37:12.1349311Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +25d760e7a6782b5fdd5d389564555ef5dfed12de:refs/remotes/pull/107/merge
+2026-10-08T14:37:13.5109903Z From https://github.com/subvertnormality/mosaic
+2026-10-08T14:37:13.5111887Z  * [new ref]         25d760e7a6782b5fdd5d389564555ef5dfed12de -> pull/107/merge
+2026-10-08T14:37:13.5114874Z ##[endgroup]
+2026-10-08T14:37:13.5115795Z ##[group]Determining the checkout info
+2026-10-08T14:37:13.5116848Z ##[endgroup]
+2026-10-08T14:37:13.5119625Z [command]/usr/bin/git sparse-checkout disable
+2026-10-08T14:37:13.5170050Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-08T14:37:13.5199822Z ##[group]Checking out the ref
+2026-10-08T14:37:13.5200873Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/107/merge
+2026-10-08T14:37:13.5993381Z Note: switching to 'refs/remotes/pull/107/merge'.
+2026-10-08T14:37:13.5994347Z 
+2026-10-08T14:37:13.5994937Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-08T14:37:13.5996460Z changes and commit them, and you can discard any commits you make in this
+2026-10-08T14:37:13.5998141Z state without impacting any branches by switching back to a branch.
+2026-10-08T14:37:13.5998922Z 
+2026-10-08T14:37:13.5999487Z If you want to create a new branch to retain commits you create, you may
+2026-10-08T14:37:13.6000682Z do so (now or later) by using -c with the switch command. Example:
+2026-10-08T14:37:13.6001341Z 
+2026-10-08T14:37:13.6001637Z   git switch -c <new-branch-name>
+2026-10-08T14:37:13.6002107Z 
+2026-10-08T14:37:13.6002423Z Or undo this operation with:
+2026-10-08T14:37:13.6002924Z 
+2026-10-08T14:37:13.6003254Z   git switch -
+2026-10-08T14:37:13.6003788Z 
+2026-10-08T14:37:13.6004455Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-08T14:37:13.6005420Z 
+2026-10-08T14:37:13.6006504Z HEAD is now at 25d760e Merge e05cf0d7c8e9be44259c3dad5a7c66dcd5dc5bb3 into 5384d0babb01fd5004bdcd6a95eaa8609aa72915
+2026-10-08T14:37:13.6018460Z ##[endgroup]
+2026-10-08T14:37:13.6019805Z ##[group]Setting up auth for fetching submodules
+2026-10-08T14:37:13.6023424Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-08T14:37:13.6061859Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-10-08T14:37:13.6088370Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-10-08T14:37:13.6116761Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-5106848@github.com:
+2026-10-08T14:37:13.6144328Z ##[endgroup]
+2026-10-08T14:37:13.6146043Z ##[group]Fetching submodules
+2026-10-08T14:37:13.6147551Z [command]/usr/bin/git submodule sync --recursive
+2026-10-08T14:37:13.6338431Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+2026-10-08T14:37:13.6530054Z Submodule 'lib/nb' (https://github.com/sixolet/nb.git) registered for path 'lib/nb'
+2026-10-08T14:37:13.6551572Z Cloning into '/home/runner/work/mosaic/mosaic/lib/nb'...
+2026-10-08T14:37:15.7202391Z From https://github.com/sixolet/nb
+2026-10-08T14:37:15.7203470Z  * branch            503be3ae9a7f4368a8bc35d6081795e0a130cadf -> FETCH_HEAD
+2026-10-08T14:37:15.7256220Z Submodule path 'lib/nb': checked out '503be3ae9a7f4368a8bc35d6081795e0a130cadf'
+2026-10-08T14:37:15.7281219Z [command]/usr/bin/git submodule foreach --recursive git config --local gc.auto 0
+2026-10-08T14:37:15.7470320Z Entering 'lib/nb'
+2026-10-08T14:37:15.7514795Z ##[endgroup]
+2026-10-08T14:37:15.7515298Z ##[group]Persisting credentials for submodules
+2026-10-08T14:37:15.7520168Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+2026-10-08T14:37:15.7699951Z Entering 'lib/nb'
+2026-10-08T14:37:15.7751766Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-08T14:37:15.7929874Z Entering 'lib/nb'
+2026-10-08T14:37:15.7980863Z file:/home/runner/work/mosaic/mosaic/.git/modules/lib/nb/config	remote.origin.url
+2026-10-08T14:37:15.8014527Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+2026-10-08T14:37:15.8194779Z Entering 'lib/nb'
+2026-10-08T14:37:15.8239728Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'org-5106848@github.com:'
+2026-10-08T14:37:15.8420322Z Entering 'lib/nb'
+2026-10-08T14:37:15.8460504Z ##[endgroup]
+2026-10-08T14:37:15.8498309Z [command]/usr/bin/git log -1 --format=%H
+2026-10-08T14:37:15.8521524Z 25d760e7a6782b5fdd5d389564555ef5dfed12de
+2026-10-08T14:37:15.8704470Z ##[group]Run git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git /tmp/identity-only
+2026-10-08T14:37:15.8705175Z [36;1mgit clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git /tmp/identity-only[0m
+2026-10-08T14:37:15.8705862Z [36;1mgit -C /tmp/identity-only checkout --detach "$EMULATOR_REVISION"[0m
+2026-10-08T14:37:15.8962243Z shell: /usr/bin/bash -e {0}
+2026-10-08T14:37:15.8962477Z env:
+2026-10-08T14:37:15.8962708Z   EMULATOR_REVISION: 68ab70903d22500237ce68edc7e31c3b867cf179
+2026-10-08T14:37:15.8963000Z   EMULATOR_ROOT: /tmp/monome-emulator
+2026-10-08T14:37:15.8963222Z   MONOME_EMULATOR: /tmp/monome-emulator
+2026-10-08T14:37:15.8963445Z   DEBIAN_FRONTEND: noninteractive
+2026-10-08T14:37:15.8963880Z ##[endgroup]
+2026-10-08T14:37:15.9067360Z Cloning into '/tmp/identity-only'...
+2026-10-08T14:37:17.5608433Z Updating files:  66% (532/805)
+2026-10-08T14:37:17.5610704Z Updating files:  67% (540/805)
+2026-10-08T14:37:17.5615082Z Updating files:  68% (548/805)
+2026-10-08T14:37:17.5618144Z Updating files:  69% (556/805)
+2026-10-08T14:37:17.5623844Z Updating files:  70% (564/805)
+2026-10-08T14:37:17.5627370Z Updating files:  71% (572/805)
+2026-10-08T14:37:17.5630415Z Updating files:  72% (580/805)
+2026-10-08T14:37:17.5633434Z Updating files:  73% (588/805)
+2026-10-08T14:37:17.5636663Z Updating files:  74% (596/805)
+2026-10-08T14:37:17.5641205Z Updating files:  75% (604/805)
+2026-10-08T14:37:17.5645273Z Updating files:  76% (612/805)
+2026-10-08T14:37:17.5649878Z Updating files:  77% (620/805)
+2026-10-08T14:37:17.5653065Z Updating files:  78% (628/805)
+2026-10-08T14:37:17.5656319Z Updating files:  79% (636/805)
+2026-10-08T14:37:17.5659970Z Updating files:  80% (644/805)
+2026-10-08T14:37:17.5663077Z Updating files:  81% (653/805)
+2026-10-08T14:37:17.5666166Z Updating files:  82% (661/805)
+2026-10-08T14:37:17.5669351Z Updating files:  83% (669/805)
+2026-10-08T14:37:17.5673821Z Updating files:  84% (677/805)
+2026-10-08T14:37:17.5677365Z Updating files:  85% (685/805)
+2026-10-08T14:37:17.5680956Z Updating files:  86% (693/805)
+2026-10-08T14:37:17.5684591Z Updating files:  87% (701/805)
+2026-10-08T14:37:17.5687887Z Updating files:  88% (709/805)
+2026-10-08T14:37:17.5691739Z Updating files:  89% (717/805)
+2026-10-08T14:37:17.5694667Z Updating files:  90% (725/805)
+2026-10-08T14:37:17.5697518Z Updating files:  91% (733/805)
+2026-10-08T14:37:17.5702234Z Updating files:  92% (741/805)
+2026-10-08T14:37:17.5706896Z Updating files:  93% (749/805)
+2026-10-08T14:37:17.5710911Z Updating files:  94% (757/805)
+2026-10-08T14:37:17.5715351Z Updating files:  95% (765/805)
+2026-10-08T14:37:17.5719109Z Updating files:  96% (773/805)
+2026-10-08T14:37:17.5722518Z Updating files:  97% (781/805)
+2026-10-08T14:37:17.5726417Z Updating files:  98% (789/805)
+2026-10-08T14:37:17.5729867Z Updating files:  99% (797/805)
+2026-10-08T14:37:17.5730188Z Updating files: 100% (805/805)
+2026-10-08T14:37:17.5730488Z Updating files: 100% (805/805), done.
+2026-10-08T14:37:17.9071050Z HEAD is now at 68ab709 Merge pull request #3 from subvertnormality/codex/input-socket-shutdown
+2026-10-08T14:37:17.9136239Z ##[group]Run actions/download-artifact@v4
+2026-10-08T14:37:17.9136487Z with:
+2026-10-08T14:37:17.9136652Z   pattern: behaviour-*
+2026-10-08T14:37:17.9136827Z   path: reports
+2026-10-08T14:37:17.9136997Z   merge-multiple: false
+2026-10-08T14:37:17.9137193Z   repository: subvertnormality/mosaic
+2026-10-08T14:37:17.9137404Z   run-id: 37778845187
+2026-10-08T14:37:17.9137569Z env:
+2026-10-08T14:37:17.9137779Z   EMULATOR_REVISION: 68ab70903d22500237ce68edc7e31c3b867cf179
+2026-10-08T14:37:17.9138046Z   EMULATOR_ROOT: /tmp/monome-emulator
+2026-10-08T14:37:17.9138260Z   MONOME_EMULATOR: /tmp/monome-emulator
+2026-10-08T14:37:17.9138477Z   DEBIAN_FRONTEND: noninteractive
+2026-10-08T14:37:17.9138672Z ##[endgroup]
+2026-10-08T14:37:18.0437279Z (node:2353) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T14:37:18.0437888Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T14:37:18.2984638Z Found 10 artifact(s)
+2026-10-08T14:37:18.2985382Z Filtering artifacts by pattern 'behaviour-*'
+2026-10-08T14:37:18.3001092Z Preparing to download the following artifacts:
+2026-10-08T14:37:18.3001880Z - behaviour-base-6 (ID: 11558420131, Size: 2427718, Expected Digest: sha256:e710d8668cfa242990d09ca77f264177e02b5a9b0d38d660b78f91aa2d465aac)
+2026-10-08T14:37:18.3003002Z - behaviour-base-0 (ID: 11558215747, Size: 2450536, Expected Digest: sha256:9ab597aa85a983a56cff88d72f3861c2d7167e8f86fae2094e5f450c91249a92)
+2026-10-08T14:37:18.3004134Z - behaviour-base-7 (ID: 11557365432, Size: 2529775, Expected Digest: sha256:d8e8d6e69ac3bab535899a09e7cdc33cf4b657da3d35515694f249368a50b575)
+2026-10-08T14:37:18.3005308Z - behaviour-base-2 (ID: 11557152807, Size: 2435733, Expected Digest: sha256:29064de92786924f9c563b4fad6662c5e3dbcd1106e6b539d0523d3f8fdb4c50)
+2026-10-08T14:37:18.3006373Z - behaviour-base-4 (ID: 11556790790, Size: 2423810, Expected Digest: sha256:c4bd504d49d290696738a6c885c806697ef0408882210507c30aa6935a3ba442)
+2026-10-08T14:37:18.3007411Z - behaviour-base-1 (ID: 11556016361, Size: 2401907, Expected Digest: sha256:960a9850b32a1b96ad747602b041f910b14a80d1d9fc57e7576bb74c1b4a5895)
+2026-10-08T14:37:18.3008499Z - behaviour-base-3 (ID: 11555972810, Size: 2394451, Expected Digest: sha256:e748398a361eec12b55f22d6e5e3a74e4b77173a2eae5871511b489e8030f3a4)
+2026-10-08T14:37:18.3009627Z - behaviour-base-5 (ID: 11555814755, Size: 2435364, Expected Digest: sha256:1df7ab6d223ba81692f3a17005768ae9ec503e61df02c135eaf1db4e659682ea)
+2026-10-08T14:37:18.3010833Z - behaviour-midi-modulation (ID: 11551143025, Size: 151895, Expected Digest: sha256:02a30a47ce468f986110f2a1ef48156ec4ab949486421b07d88a850cca108543)
+2026-10-08T14:37:18.3011979Z - behaviour-audio-crow (ID: 11551128430, Size: 140486, Expected Digest: sha256:38a7b0d988a6be387247db6cfc223d098e65325400a6fe959c31889bcd6495e1)
+2026-10-08T14:37:18.5108672Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-8f9cc577-06e3-573f-bfc3-e89dbbe218a3/artifacts/d8fc7b4ffdb790d4e1104fe1d64173b80a2a86d589788ebc1f5b8b676f89c6ef.zip
+2026-10-08T14:37:18.5110570Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-6
+2026-10-08T14:37:18.6364581Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-e2ea81f7-a427-55e5-8e79-12ac5fd47bc2/artifacts/ccee4d894ff2e38baa02ae42a38a861367a3f8dc6d548284e9a8f9e56e21917a.zip
+2026-10-08T14:37:18.6366213Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-7
+2026-10-08T14:37:18.6420472Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-41abc5ab-e776-507a-bdaf-0c901bf8073d/artifacts/c42543034efd86dc3c45f69203b83b8ced8ae77bd005353afde4da98eea099c8.zip
+2026-10-08T14:37:18.6422656Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-midi-modulation
+2026-10-08T14:37:18.6481258Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-1379eae9-2e07-5da0-90be-bb5e30efcc89/artifacts/e265ed88a74a6f4a09eb867cac1fc91955019c972aa9fafb0bfa08d65a52931f.zip
+2026-10-08T14:37:18.6482305Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-3
+2026-10-08T14:37:18.6510758Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-656652f4-892d-57aa-b02a-8528c468718d/artifacts/bb2d8da2561072aabb3306ca42ea1d40bbd6feca6296ae97cf627c4c3c55980e.zip
+2026-10-08T14:37:18.6512471Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-5
+2026-10-08T14:37:18.6631635Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-41b3bd0e-7f73-5bb2-be93-393fd8de4f7e/artifacts/fae6fab61e6039df52fd10419c6df9f5bf1eaedfdb23bcb8f3cff2fb90e32430.zip
+2026-10-08T14:37:18.6633863Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-0
+2026-10-08T14:37:18.6696621Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-1882dc19-bafe-53ae-b322-036be5d86a67/artifacts/7814a7ae21a94c8c9867603468f6c9976c71fce23c39c9f0c9c4ddcb18b6e81b.zip
+2026-10-08T14:37:18.6698363Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-4
+2026-10-08T14:37:18.6705530Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-e54bad98-010c-5d6d-b877-755987b758b8/artifacts/6d1fd6a51a0dea4a001f44a368b4685638671f4a3e37e05d3cf8a9273134577e.zip
+2026-10-08T14:37:18.6706627Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-1
+2026-10-08T14:37:18.6766781Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-dc5c77df-3efd-5c71-a3b4-e113139d5499/artifacts/f31dd5afbb15974cb1152ce2c49243e9f99db7746a1b39b93fdbbaaff91750a6.zip
+2026-10-08T14:37:18.6767872Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-base-2
+2026-10-08T14:37:18.6906567Z Redirecting to blob download url: https://productionresultssa17.blob.core.windows.net/actions-results/750971ea-8c73-8f16-b389-eb1e632b11c3/workflow-job-run-6855e9eb-9124-510e-9dfe-4e111e852aef/artifacts/61c6644090501f6d63ebb7bb2d87eab9c1e72b7a5a3c827eb1797186670c5573.zip
+2026-10-08T14:37:18.6907679Z Starting download of artifact to: /home/runner/work/mosaic/mosaic/reports/behaviour-audio-crow
+2026-10-08T14:37:18.7579153Z (node:2353) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-10-08T14:37:19.0566261Z SHA256 digest of downloaded artifact is 02a30a47ce468f986110f2a1ef48156ec4ab949486421b07d88a850cca108543
+2026-10-08T14:37:19.0566976Z Artifact download completed successfully.
+2026-10-08T14:37:19.1672802Z SHA256 digest of downloaded artifact is 38a7b0d988a6be387247db6cfc223d098e65325400a6fe959c31889bcd6495e1
+2026-10-08T14:37:19.1673335Z Artifact download completed successfully.
+2026-10-08T14:37:20.2703072Z SHA256 digest of downloaded artifact is e710d8668cfa242990d09ca77f264177e02b5a9b0d38d660b78f91aa2d465aac
+2026-10-08T14:37:20.2704139Z Artifact download completed successfully.
+2026-10-08T14:37:20.3070748Z SHA256 digest of downloaded artifact is c4bd504d49d290696738a6c885c806697ef0408882210507c30aa6935a3ba442
+2026-10-08T14:37:20.3071660Z Artifact download completed successfully.
+2026-10-08T14:37:20.3072770Z SHA256 digest of downloaded artifact is e748398a361eec12b55f22d6e5e3a74e4b77173a2eae5871511b489e8030f3a4
+2026-10-08T14:37:20.3073860Z Artifact download completed successfully.
+2026-10-08T14:37:20.3074680Z SHA256 digest of downloaded artifact is d8e8d6e69ac3bab535899a09e7cdc33cf4b657da3d35515694f249368a50b575
+2026-10-08T14:37:20.3075339Z Artifact download completed successfully.
+2026-10-08T14:37:20.3075828Z SHA256 digest of downloaded artifact is 960a9850b32a1b96ad747602b041f910b14a80d1d9fc57e7576bb74c1b4a5895
+2026-10-08T14:37:20.3076312Z Artifact download completed successfully.
+2026-10-08T14:37:20.3085584Z SHA256 digest of downloaded artifact is 29064de92786924f9c563b4fad6662c5e3dbcd1106e6b539d0523d3f8fdb4c50
+2026-10-08T14:37:20.3086273Z Artifact download completed successfully.
+2026-10-08T14:37:20.3086931Z SHA256 digest of downloaded artifact is 9ab597aa85a983a56cff88d72f3861c2d7167e8f86fae2094e5f450c91249a92
+2026-10-08T14:37:20.3087524Z Artifact download completed successfully.
+2026-10-08T14:37:20.3088160Z SHA256 digest of downloaded artifact is 1df7ab6d223ba81692f3a17005768ae9ec503e61df02c135eaf1db4e659682ea
+2026-10-08T14:37:20.3089061Z Artifact download completed successfully.
+2026-10-08T14:37:20.3089463Z Total of 10 artifact(s) downloaded
+2026-10-08T14:37:20.3094527Z Download artifact has finished successfully
+2026-10-08T14:37:20.3414594Z ##[group]Run mapfile -t suites < <(find reports -name suite.json -type f | sort)
+2026-10-08T14:37:20.3415102Z [36;1mmapfile -t suites < <(find reports -name suite.json -type f | sort)[0m
+2026-10-08T14:37:20.3415454Z [36;1mtest "${#suites[@]}" -eq 10[0m
+2026-10-08T14:37:20.3415898Z [36;1mpython3 tests/behaviour/ci/verify-full.py --output full-behaviour-report.json "${suites[@]}"[0m
+2026-10-08T14:37:20.3416389Z [36;1mcat full-behaviour-report.json >> "$GITHUB_STEP_SUMMARY"[0m
+2026-10-08T14:37:20.3471937Z shell: /usr/bin/bash -e {0}
+2026-10-08T14:37:20.3472197Z env:
+2026-10-08T14:37:20.3472472Z   EMULATOR_REVISION: 68ab70903d22500237ce68edc7e31c3b867cf179
+2026-10-08T14:37:20.3472812Z   EMULATOR_ROOT: /tmp/monome-emulator
+2026-10-08T14:37:20.3473109Z   MONOME_EMULATOR: /tmp/identity-only
+2026-10-08T14:37:20.3473383Z   DEBIAN_FRONTEND: noninteractive
+2026-10-08T14:37:20.3473818Z ##[endgroup]
+2026-10-08T14:37:21.2939630Z Traceback (most recent call last):
+2026-10-08T14:37:21.2940517Z   File "/home/runner/work/mosaic/mosaic/tests/behaviour/ci/verify-full.py", line 57, in <module>
+2026-10-08T14:37:21.2941157Z     if __name__=='__main__':main()
+2026-10-08T14:37:21.2941538Z                             ^^^^^^
+2026-10-08T14:37:21.2942113Z   File "/home/runner/work/mosaic/mosaic/tests/behaviour/ci/verify-full.py", line 56, in main
+2026-10-08T14:37:21.2944454Z     result=verify(a.reports,a.output);print(json.dumps(result))
+2026-10-08T14:37:21.2944939Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-08T14:37:21.2945436Z   File "/home/runner/work/mosaic/mosaic/tests/behaviour/ci/verify-full.py", line 31, in verify
+2026-10-08T14:37:21.2946032Z     if summary.get('load_sensitive'):raise ValueError(f'{path}: behavior failure recovered only on retry')
+2026-10-08T14:37:21.2946528Z                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-08T14:37:21.2947029Z ValueError: reports/behaviour-base-7/suite-effective.json: behavior failure recovered only on retry
+2026-10-08T14:37:21.3137166Z ##[error]Process completed with exit code 1.
+2026-10-08T14:37:21.3298812Z ##[group]Run actions/upload-artifact@v4
+2026-10-08T14:37:21.3299105Z with:
+2026-10-08T14:37:21.3299323Z   name: full-behaviour-report
+2026-10-08T14:37:21.3299594Z   path: full-behaviour-report.json
+2026-10-08T14:37:21.3299862Z   retention-days: 14
+2026-10-08T14:37:21.3300085Z   if-no-files-found: warn
+2026-10-08T14:37:21.3300330Z   compression-level: 6
+2026-10-08T14:37:21.3300551Z   overwrite: false
+2026-10-08T14:37:21.3300779Z   include-hidden-files: false
+2026-10-08T14:37:21.3301019Z env:
+2026-10-08T14:37:21.3301280Z   EMULATOR_REVISION: 68ab70903d22500237ce68edc7e31c3b867cf179
+2026-10-08T14:37:21.3301605Z   EMULATOR_ROOT: /tmp/monome-emulator
+2026-10-08T14:37:21.3301897Z   MONOME_EMULATOR: /tmp/monome-emulator
+2026-10-08T14:37:21.3302168Z   DEBIAN_FRONTEND: noninteractive
+2026-10-08T14:37:21.3302422Z ##[endgroup]
+2026-10-08T14:37:21.4602843Z (node:2374) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T14:37:21.4603800Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T14:37:21.4625988Z ##[warning]No files were found with the provided path: full-behaviour-report.json. No artifacts will be uploaded.
+2026-10-08T14:37:21.4890439Z Post job cleanup.
+2026-10-08T14:37:21.5604132Z [command]/usr/bin/git version
+2026-10-08T14:37:21.5634043Z git version 2.55.0
+2026-10-08T14:37:21.5683191Z Temporarily overriding HOME='/home/runner/work/_temp/9bf47d9f-15e3-45b6-9687-3e9d94ec7bc1' before making global git config changes
+2026-10-08T14:37:21.5684453Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T14:37:21.5685364Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mosaic/mosaic
+2026-10-08T14:37:21.5687167Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T14:37:21.5710538Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T14:37:21.5901294Z Entering 'lib/nb'
+2026-10-08T14:37:21.5960860Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T14:37:21.5982912Z http.https://github.com/.extraheader
+2026-10-08T14:37:21.5991817Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-08T14:37:21.6022088Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T14:37:21.6237869Z Entering 'lib/nb'
+2026-10-08T14:37:21.6264229Z http.https://github.com/.extraheader
+2026-10-08T14:37:21.6318629Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T14:37:21.6356412Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T14:37:21.6578481Z Entering 'lib/nb'
+2026-10-08T14:37:21.6595550Z file:/home/runner/work/mosaic/mosaic/.git/modules/lib/nb/config	remote.origin.url
+2026-10-08T14:37:21.6625177Z [command]/usr/bin/git config --file /home/runner/work/mosaic/mosaic/.git/modules/lib/nb/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T14:37:21.6779925Z Cleaning up orphan processes
+2026-10-08T14:37:21.7011969Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/download-artifact@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

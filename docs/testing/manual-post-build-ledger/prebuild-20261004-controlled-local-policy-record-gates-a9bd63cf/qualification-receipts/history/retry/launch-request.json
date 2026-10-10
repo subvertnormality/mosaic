@@ -1,0 +1,68 @@
+{
+  "operator_id": "mini-frame-retry-a7c898a9543c44289e8abcd520017e3b",
+  "prepared_argv_path": "/home/andy/mosaic-manual-build-operators/mini-frame-retry-a7c898a9543c44289e8abcd520017e3b/focused-five-scene-argv.json",
+  "argv_sha256": "d96ec2448e77ac417fff787c33ec430c7712bad19a673e20b92438aab016b5cb",
+  "argv": [
+    "/usr/bin/python3.8",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-extra.yaml",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-musical.yaml",
+    "--scene",
+    "harmony-range-failure-and-fallback",
+    "--scene",
+    "foundation-protected-and-added",
+    "--scene",
+    "fragments-seed-source-choice",
+    "--scene",
+    "interlock-leader-window",
+    "--scene",
+    "structure-anchor-chord-and-delete",
+    "--profile",
+    "base-midi",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--controlled-local"
+  ],
+  "environment": {
+    "MONOME_EMULATOR": "/home/andy/projects/monome-emulator-ci-combined"
+  },
+  "verified_previous_native_pids_absent": [
+    26439,
+    26327,
+    26307,
+    26303,
+    28403,
+    28296,
+    28288,
+    28272
+  ],
+  "verified_previous_builder_pid_absent": 26113,
+  "source_sha256": {
+    "manual/scene-plans-extra.yaml": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5",
+    "manual/scene-plans-musical.yaml": "3db17925ed6199acde01aee88b06fa98311bcd371a83c5da31f8b35b5b52bfc8",
+    "tools/manual_case_capture.py": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+    "tests/behaviour/contract/harmony_merge_visual.py": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296",
+    "tests/behaviour/test_mini_header_animation_ui.py": "3664f8b3043c6fc41db5917ab1e4152fdfb873869d0f6c584878ba056cbea755",
+    "tests/behaviour/fixtures/harmony-no-voicing-native-obs44.json": "41cd1bc5dc68d5e7387e8e1cb67dd0772530da4564c93b0217606cf6dbdc1be7",
+    "tests/behaviour/test_manual_documentation_frame_selectors.py": "36a50bd867515ac573e95af8690da17ffb017cd2ac0c103e32a0cb8eb5c1add4",
+    "tests/behaviour/suite.py": "1c3653ab614f4a6e1f0773c52396b1812516090f0ea9b814031b81f48202d091"
+  },
+  "controlled_install_path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "controlled_install_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+  "controlled_install_id": "256b07b12acb1f82236053e33303e7fd0cf94a963621462f142bdf652593a616",
+  "selected_scene_ids": [
+    "harmony-range-failure-and-fallback",
+    "foundation-protected-and-added",
+    "fragments-seed-source-choice",
+    "interlock-leader-window",
+    "structure-anchor-chord-and-delete"
+  ],
+  "profile": "base-midi",
+  "clock_mode": "controlled-experimental",
+  "publish": false,
+  "prepared_utc": "2026-10-04T08:36:11.739584+00:00"
+}

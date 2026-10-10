@@ -1,0 +1,273 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "A channel velocity 50",
+    "expected": [
+      [
+        60,
+        50
+      ],
+      [
+        62,
+        50
+      ],
+      [
+        64,
+        50
+      ],
+      [
+        65,
+        50
+      ]
+    ],
+    "heard": [
+      [
+        60,
+        50
+      ],
+      [
+        62,
+        50
+      ],
+      [
+        64,
+        50
+      ],
+      [
+        65,
+        50
+      ]
+    ]
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "A channel velocity back to X",
+    "expected": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ],
+    "heard": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "B step 2 trig N",
+    "expected": [
+      [
+        60,
+        127
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ],
+    "heard": [
+      [
+        60,
+        127
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "B step 2 trig back to X",
+    "expected": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ],
+    "heard": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "C step 3 velocity 50",
+    "expected": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        50
+      ],
+      [
+        65,
+        97
+      ]
+    ],
+    "heard": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        50
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "C step 3 velocity back to X",
+    "expected": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ],
+    "heard": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  }
+]

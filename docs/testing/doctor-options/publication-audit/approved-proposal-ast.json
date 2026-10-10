@@ -1,0 +1,62 @@
+{
+  "applied": false,
+  "executed": false,
+  "artifact_kind": "review-only-unified-diff",
+  "original_auditor_sha256": "0cdf1d84bcc52055e029bec67dd4a760bc78a7dc2c2738d9f9d2e1eb56aa6353",
+  "proposed_auditor_sha256": "24a341b007bb7f30f2800cdc8f9c661104fc519691ed44fcc1bcd7eba59d589f",
+  "original_tests_sha256": "1a559daf6580100f84f24b55d928095fce0240ff81b9b0c838aa3ec6b3b59060",
+  "proposed_tests_sha256": "00252097282ccd5341c921d93384204f7d6b67f3b905737e7f984aee9d9bb79d",
+  "existing_function_names": [
+    "audit_adc",
+    "audit_ui",
+    "band_energy",
+    "bounded",
+    "check_fixture_contract",
+    "check_phrase",
+    "check_roles",
+    "check_scope",
+    "check_selected_channels",
+    "check_sources",
+    "digest",
+    "native_midi_window",
+    "play_windows",
+    "read",
+    "require",
+    "seed_files",
+    "visible_sequence"
+  ],
+  "added_function_names": [
+    "audit_fixture",
+    "audit_qualification",
+    "audit_ready_witnesses",
+    "audit_report",
+    "check_native_observations",
+    "doctor_tooltip_matches",
+    "main"
+  ],
+  "removed_function_names": [],
+  "changed_existing_functions": [
+    "visible_sequence"
+  ],
+  "route_correction": "RHYTHM_DOCTOR_SCREEN[route] -> RHYTHM_DOCTOR_SCREEN['screens'][route]",
+  "packet_release_timing_function_ast_unchanged": true,
+  "all_other_existing_function_asts_unchanged": true,
+  "protected_existing_auditors_sha256": {
+    "tools/manual_doctor_audit.py": "31c6acf50841fd72877f478f6e7bdc048e1ab3aad5d10ee0761904494790ec1e",
+    "tools/manual_publication_verify.py": "a3d1112df7b3941357b3f9912da0608a64f2c4243ac8137ab42239fdf1bff498"
+  },
+  "new_test_methods": 5,
+  "cli_flags": [
+    "--manual-stereo-report",
+    "--auto-left-report",
+    "--manual-right-report",
+    "--setup-real-report",
+    "--setup-controlled-report",
+    "--ready-real-report",
+    "--ready-controlled-report",
+    "--fixture",
+    "--fixture-sha256",
+    "--output"
+  ],
+  "scope": "Additive independent read-only seven-gate test-evidence APIs to NEW untracked auditor; strict existing packet/release/timing and current-source checks retained. No captures, source histories, fixture files, existing auditors or native driver edits."
+}

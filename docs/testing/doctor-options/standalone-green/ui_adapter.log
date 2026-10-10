@@ -1,0 +1,7 @@
+rhythm_doctor ui adapter: 24 tests passed
+lua: tests/rhythm_doctor/test_ui_adapter.lua:452: the recorder can report INVALID_INPUT_SOURCE and the screen has no words for it
+stack traceback:
+	[C]: in function 'assert'
+	tests/rhythm_doctor/test_ui_adapter.lua:452: in local 'check'
+	tests/rhythm_doctor/test_ui_adapter.lua:472: in main chunk
+	[C]: in ?

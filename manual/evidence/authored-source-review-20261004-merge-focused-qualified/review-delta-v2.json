@@ -1,0 +1,17 @@
+{
+  "live_review_sha256": "655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741",
+  "proposed_review_sha256": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+  "paired_qualification_sha256": "298e30097ae7effec6c47476c14fe3cea4174d50ef30c0b1cd8195375d0ddd9d",
+  "members_unchanged": 78,
+  "changed_member_paths": [
+    "manual/features/reference-musical.yaml",
+    "manual/features/reference-workflow.yaml"
+  ],
+  "manual_ids_unchanged": 125,
+  "callbacks_unchanged": 64,
+  "branches_unchanged": 164,
+  "live_applied": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "note": "Scratch assertion used path-order instead of set comparison; actual membership delta is the same exact2paths, no source/proposal mutated to satisfy it"
+}

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "report": "/home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828/reference-scenes.json",
+  "report_sha256": "2fa470ae66b750bc23c62606863c9fc906797752bbcfff1414d3cb85e869d6ba",
+  "clock_mode": "real-time",
+  "scenes": 3,
+  "frames": 11,
+  "participants": [
+    "/home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828/M-MAP-001-base-midi",
+    "/home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828/M-MAP-001-base-midi/mapping",
+    "/home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828/M-OPT-ELEK-001-base-midi",
+    "/home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828/M-OPT-ELEK-001-base-midi/elektron"
+  ],
+  "start_source_identity_sha256": "75ceefbe8abad9c1762cb96757ee3ec0b5fcbf025e2f67de7f745f7ac9bb0a5d",
+  "complete_regression_run": false,
+  "hardware_timing_verified": false
+}

@@ -1,0 +1,17 @@
+{
+  "recipe_sha256": "9a264799d95e9c96d22a28f8039f7f59dd09116cba15e67d646fe5dac7f6b4a9",
+  "test_sha256": "5f642a94f6ea715d965358000d11f0a46a53a4960f7f1af443224d3b207d0dab",
+  "command": [
+    "/usr/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/behaviour",
+    "-p",
+    "test_doctor_ready_encoder.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "scope": "pure public encoder fixture regression; no native application run"
+}

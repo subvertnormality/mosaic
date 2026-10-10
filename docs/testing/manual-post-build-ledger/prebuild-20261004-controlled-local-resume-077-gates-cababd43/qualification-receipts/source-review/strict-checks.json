@@ -1,0 +1,23 @@
+[
+  {
+    "command": [
+      "python3",
+      "docs/ui-reimplementation/tools/refresh_source_inventory.py",
+      "--review",
+      "docs/ui-reimplementation/current-source-review.json",
+      "--check"
+    ],
+    "returncode": 0,
+    "log": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/check-0.log",
+    "log_sha256": "83df7e932109b64aae88f776dee0bf6b6abe55ea3c710cfb85e2bf3cd27a2a7c"
+  },
+  {
+    "command": [
+      "python3",
+      "docs/ui-reimplementation/tools/validate.py"
+    ],
+    "returncode": 0,
+    "log": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/check-1.log",
+    "log_sha256": "e689a30017065f041e8fd6eb76a56415876e025c4083369297a5172df1ec7848"
+  }
+]

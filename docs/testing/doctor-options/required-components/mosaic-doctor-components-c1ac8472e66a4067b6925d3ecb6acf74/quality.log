@@ -1,0 +1,11 @@
+test_boundary (test_quality.QualityTests.test_boundary) ... ok
+test_invalid_times (test_quality.QualityTests.test_invalid_times) ... ok
+test_maximum_cardinality (test_quality.QualityTests.test_maximum_cardinality) ... ok
+test_one_to_one (test_quality.QualityTests.test_one_to_one) ... ok
+test_silence (test_quality.QualityTests.test_silence) ... ok
+test_velocity (test_quality.QualityTests.test_velocity) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.001s
+
+OK

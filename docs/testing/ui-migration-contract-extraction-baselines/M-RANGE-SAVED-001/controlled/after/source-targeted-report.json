@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "7f49d37ab9bf155878f1928f2129f47317b447a8",
+  "after_sha": "1f8a93ad3a5619b6559bede989a9efc16587284a",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-RANGE-SAVED-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract/persisted_range_rejection.py",
+      "tests/behaviour/persisted_ranges.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract/persisted_range_rejection.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/persisted_ranges.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-RANGE-SAVED-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-001/real-time/before/e8d58c7d64e34bf5a3d6e7ee6767a204/manifest.json",
+              "manifest_sha256": "0b3ca57be5a10a25ed68ae06e25c914848cccfc93d29b967cdfb3e6e304352dc"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-001/real-time/after/764e1d8e54f543d0a794f414e435196e/manifest.json",
+              "manifest_sha256": "1914b54aa286fc726a3b57860760c46dda8f0d8eca72272e32964fcbe8318e8a"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-001/controlled-experimental/before/d442afa8d75e4a51b5ca8fae346b0a7c/manifest.json",
+              "manifest_sha256": "9830cb330ad1659b4d9f95fec996217507cc31674c1335e8fcfe0c1b774e457d"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-001/controlled-experimental/after/114886dbc1924a6e83f3da244d88e951/manifest.json",
+              "manifest_sha256": "1b54963cb458344b5df2d211cbd8cc248807fb66d958ee66f10b1aad662f783a"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

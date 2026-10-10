@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "fd1c577d3759767b88ecfc192857fd83643b7bf2",
+  "selected_cases": [
+    "M-TIME-012"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-TIME-012"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-TIME-012",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-5c0aa342bd8a4c58b05678f7675df569/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-5c0aa342bd8a4c58b05678f7675df569/manifest.json",
+      "manifest_sha256": "88f3c9430af7b59bd1988357bbfeae130ef78555791cecaaa48aa578e591179c",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -26,10 +26,10 @@ def expected_stream(slots):
 
 def verify(d,stage,slots,cycles=2):
     expected=expected_stream(slots);length=4*len(slots)
-    marker=d.snapshot()['midi_count'];d.tap(1,8)
+    marker=d.snapshot()['midi_count'];d.ui.play()
     want=len(expected)*cycles+1
     state=d.wait(lambda s:sum(1 for m in s['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0)>=want,timeout=3+length*cycles/6)
-    d.tap(1,8);d.wait(lambda s:not s['midi_capture']['outstanding'])
+    d.ui.stop();d.wait(lambda s:not s['midi_capture']['outstanding'])
     ons=[m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0][:len(expected)*cycles]
     field='logical_ns' if d.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if d.clock_mode=='controlled-experimental' else .01
@@ -42,32 +42,57 @@ def verify(d,stage,slots,cycles=2):
         for m,row in zip(actual,wanted):assert abs((m[field]-origin)/1e9-row[4]/6)<=tolerance,(stage,port,row)
     d.results.append(dict(kind='composition-workflow',stage=stage,expected=expected,cycles=cycles,passed=True))
 
-def build_composition(c,check=None):
-    """The workflow project; check(stage, slots) runs after each workflow stage when given."""
+def build_composition(c,check=None,observe=False):
+    """The workflow project; check(stage, slots) runs after each workflow stage when given.
+
+    ``observe`` additionally checks what the player sees after each group of inputs (grid LEDs,
+    screen header, dashboard) and records a ``composition-step`` row for it, so a manual page can
+    show a checkpoint after every few inputs; it only reads the screen and grid."""
     check=check or (lambda stage,slots:None)
-    def edit_root(semitones):c.enc(2,-1);c.enc(3,semitones);c.key(3);c.enc(2,1)
-    c.configure()
-    c.tap(5,8);c.tap(2,1);c.tap(1,4);c.tap(3,4);c.tap(5,8);c.tap(1,3);c.tap(3,1);c.tap(3,8)
-    c.tap(4,8);c.tap(2,3);edit_root(2);c.tap(3,8)
-    c.tap(2,2);check('default-skip',[(CH1_SKIP,{},0)])
-    c.tap(14,8);c.tap(14,8);c.led_values([(14,8)],[8])
-    c.hold_tap((16,8),(1,2))
+    ui=c.ui
+    def seen(stage,*expectations):
+        if not observe:return
+        for expectation in expectations:expectation()
+        c.results.append(dict(kind='composition-step',stage=stage,passed=True))
+    def edit_root(semitones):ui.turn(2,-1);ui.set_value(semitones);ui.press_key(3);ui.turn(2,1)
+    ui.configure()
+    ui.pattern_editor();ui.tap_control('pattern_select',2);ui.tap_step(1);ui.tap_step(3)
+    seen('pattern-2-trigs',lambda:ui.expect_steps({1:'selected',3:'selected'}))
+    ui.pattern_editor(view='note',from_view='trigger')
+    ui.tap_control('pattern_note_degree',(1,4));ui.tap_control('pattern_note_degree',(3,6))
+    seen('pattern-2-notes',lambda:ui.expect_leds({('pattern_note_degree',(1,4)):'active',('pattern_note_degree',(3,6)):'active'}))
+    ui.menu('channel_editor')
+    ui.scale_editor();ui.tap_control('scale_slot',2);edit_root(2)
+    seen('scale-slot-2-d-major',lambda:ui.expect_header('scale',slot=2))
+    ui.menu('channel_editor')
+    ui.tap_control('pattern_slot',2)
+    seen('pattern-2-assigned',lambda:ui.expect_leds({('pattern_slot',1):'selected',('pattern_slot',2):'selected'}))
+    check('default-skip',[(CH1_SKIP,{},0)])
+    ui.tap_control('trig_merge_mode');ui.tap_control('trig_merge_mode')
+    ui.expect_leds({('trig_merge_mode',None):'medium'})
+    ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
     check('merge-all-average',[(CH1_ALL,{},0)])
-    c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(2,2);c.hold_tap((1,4),(4,4))
-    c.enc(1,-4);c.screen_header('Ch. 2 Note Masks',selected=1)
-    c.action(type='grid',x=3,y=4,state=1)
-    try:c.action(type='midi',port=1,bytes=[144,76,90]);c.elapse(.05);c.action(type='midi',port=1,bytes=[128,76,0])
-    finally:c.action(type='grid',x=3,y=4,state=0)
-    c.elapse(.1);c.tap(1,1)
+    ui.select_channel_on_page(2,'midi_config');ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.tap_control('pattern_slot',2);ui.set_range(1,4)
+    seen('channel-2-routed',lambda:ui.expect_header('merge_detail',channel=2),lambda:ui.expect_leds({('pattern_slot',2):'selected'}))
+    ui.channel_page('masks','midi_config',channel=2,confirm=False)
+    ui.expect_header('masks',channel=2)
+    with ui.hold_step(3):
+        c.action(type='midi',port=1,bytes=[144,76,90]);c.elapse(.05);c.action(type='midi',port=1,bytes=[128,76,0])
+    c.elapse(.1);ui.select_channel(1)
     check('two-channels-with-melody',[(CH1_ALL,CH2,0)])
-    c.tap(6,8);c.tap(2,7)
-    for _ in range(3):c.tap(8,7)
-    c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8);c.tap(1,1);c.tap(11,8);c.tap(6,8);c.tap(1,1);c.tap(3,8)
+    ui.song_editor();ui.tap_control('global_pattern_length',2)
+    for _ in range(3):ui.tap_control('global_pattern_length',8)
+    seen('song-length-4',lambda:ui.expect_dashboard('song',[('Playing','SONG 01'),('Next','SONG 01'),('Pass','1 / 1'),('Global length','4'),('Song mode','AUTO')]))
+    ui.copy_slot(1,2,control='song_pattern_slot');ui.tap_control('song_pattern_slot',2)
+    seen('slot-2-copied',lambda:ui.expect_leds({('song_pattern_slot',2):'selected'}))
+    ui.menu('channel_editor');ui.select_channel(1);ui.tap_control('channel_octave',1)
+    seen('channel-1-octave-plus-1',lambda:ui.expect_channel_octave(1))
+    ui.song_editor();ui.tap_control('song_pattern_slot',1);ui.menu('channel_editor')
     return [(CH1_ALL,CH2,0),(CH1_ALL,CH2,1)]
 
 def composition_workflow(c):
-    song=build_composition(c,lambda stage,slots:verify(c,stage,slots))
+    song=build_composition(c,lambda stage,slots:verify(c,stage,slots),observe=True)
     verify(c,'chained-song',song)
     # Keep it: idle autosave, then a fresh process plays the same song.
     for _ in range(3):c.elapse(21)
@@ -76,6 +101,6 @@ def composition_workflow(c):
     out=c.out/'reloaded';out.mkdir()
     loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
     try:
-        loaded.tap(3,8);verify(loaded,'reloaded-song',song)
+        loaded.ui.menu('channel_editor');verify(loaded,'reloaded-song',song)
     finally:loaded.finish()
     c.results.append(dict(kind='composition-workflow-session',nested=str(out),passed=True))

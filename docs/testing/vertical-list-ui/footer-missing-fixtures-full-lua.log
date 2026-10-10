@@ -1,0 +1,299 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+............................................................................................................................................................................................................................................................................................................................................................................................................................................ls: cannot access '../../../mosaic/lib/config': No such file or directory
+E........................E....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................EEEEE.E.....................................................................................................................................................................................................................................................................................................................................................................................................................ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+...ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+..ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '/tmp/lua_DqzYge/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+F..ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+..ls: cannot access '../../../mosaic/lib/config': No such file or directory
+F.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Fls: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+..ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+Els: cannot access '../../../mosaic/lib/config': No such file or directory
+.ls: cannot access '../../../mosaic/lib/config': No such file or directory
+..................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................EEE............................................................................................................................................................................................................................................................................................
+Tests with errors:
+------------------
+1) test_hardening_all_ten_assignment_slots_clear_replace_and_reassign_without_aliasing
+../../../mosaic/lib/devices/param_lock_assignments.lua:8: attempt to index a nil value (local 'param')
+stack traceback:
+
+2) test_hardening_released_and_current_project_fixtures_validate_and_migrate
+.///lib/project_load_integration_tests.lua:218: attempt to index a nil value (local 'saved')
+stack traceback:
+	.///lib/project_load_integration_tests.lua:218: in upvalue 'test_hardening_released_and_current_project_fixtures_validate_and_migrate'
+
+3) test_merge_v1_oracle_absent_configuration_matches_base
+.///lib/merge_v1_baseline_oracle_tests.lua:171: attempt to index a nil value (local 'v1_saved')
+stack traceback:
+	.///lib/merge_v1_baseline_oracle_tests.lua:171: in upvalue 'round_trip'
+	.///lib/merge_v1_baseline_oracle_tests.lua:237: in upvalue 'test_merge_v1_oracle_absent_configuration_matches_base'
+
+4) test_merge_v1_oracle_explicit_off_matches_base
+.///lib/merge_v1_baseline_oracle_tests.lua:171: attempt to index a nil value (local 'v1_saved')
+stack traceback:
+	.///lib/merge_v1_baseline_oracle_tests.lua:171: in upvalue 'round_trip'
+	.///lib/merge_v1_baseline_oracle_tests.lua:241: in upvalue 'test_merge_v1_oracle_explicit_off_matches_base'
+
+5) test_merge_v1_oracle_fixtures_are_source_identified_and_unaltered
+.///lib/merge_v1_baseline_oracle_tests.lua:68: missing fixture ./fixtures/merge_v1_baseline/capture.sh
+stack traceback:
+	.///lib/merge_v1_baseline_oracle_tests.lua:68: in upvalue 'read'
+	.///lib/merge_v1_baseline_oracle_tests.lua:213: in upvalue 'test_merge_v1_oracle_fixtures_are_source_identified_and_unaltered'
+
+6) test_merge_v1_oracle_foundation_phrases_variation_targets_match_base
+.///lib/merge_v1_baseline_oracle_tests.lua:171: attempt to index a nil value (local 'v1_saved')
+stack traceback:
+	.///lib/merge_v1_baseline_oracle_tests.lua:171: in upvalue 'round_trip'
+	.///lib/merge_v1_baseline_oracle_tests.lua:245: in upvalue 'test_merge_v1_oracle_foundation_phrases_variation_targets_match_base'
+
+7) test_merge_v1_oracle_foundation_with_harmony_pattern_map_matches_base
+.///lib/merge_v1_baseline_oracle_tests.lua:171: attempt to index a nil value (local 'v1_saved')
+stack traceback:
+	.///lib/merge_v1_baseline_oracle_tests.lua:171: in upvalue 'round_trip'
+	.///lib/merge_v1_baseline_oracle_tests.lua:253: in upvalue 'test_merge_v1_oracle_foundation_with_harmony_pattern_map_matches_base'
+
+8) test_merge_v1_oracle_unknown_and_colliding_keys_match_base
+.///lib/merge_v1_baseline_oracle_tests.lua:171: attempt to index a nil value (local 'v1_saved')
+stack traceback:
+	.///lib/merge_v1_baseline_oracle_tests.lua:171: in upvalue 'round_trip'
+	.///lib/merge_v1_baseline_oracle_tests.lua:249: in upvalue 'test_merge_v1_oracle_unknown_and_colliding_keys_match_base'
+
+9) test_real_device_map_get_device_by_name_is_exact_and_case_sensitive
+.///lib/device_map_real_tests.lua:383: attempt to index a nil value
+stack traceback:
+
+10) test_real_device_map_get_device_returns_the_first_class_stock_devices_by_id
+.///lib/device_map_real_tests.lua:365: attempt to index a nil value (local 'device')
+stack traceback:
+
+11) test_real_device_map_get_params_returns_the_shared_cached_table
+.///lib/device_map_real_tests.lua:554: attempt to index a nil value (field '?')
+stack traceback:
+
+12) test_real_device_map_merge_drops_repeated_ids_and_shifts_later_indices
+.///lib/device_map_real_tests.lua:640: attempt to index a nil value (local 'braids')
+stack traceback:
+
+13) test_real_param_manager_update_default_params_assigns_the_auto_mapped_params
+../../../mosaic/lib/devices/param_lock_assignments.lua:73: attempt to index a nil value (local 'meta_device')
+stack traceback:
+
+14) test_real_param_manager_update_default_params_copies_do_not_alias_the_cache
+../../../mosaic/lib/devices/param_lock_assignments.lua:73: attempt to index a nil value (local 'meta_device')
+stack traceback:
+
+15) test_real_param_manager_update_param_assigns_a_midi_device_param_by_index
+../../../mosaic/lib/devices/param_lock_assignments.lua:8: attempt to index a nil value (local 'param')
+stack traceback:
+
+16) test_real_param_manager_update_param_records_the_stored_nrpn_mode
+../../../mosaic/lib/devices/param_lock_assignments.lua:8: attempt to index a nil value (local 'param')
+stack traceback:
+
+17) test_ui_grid_outcomes_every_flow_branch_is_exported_with_its_flow
+.///lib/ui_grid_outcomes_tests.lua:11: ../../docs/ui-reimplementation/source-inventory.json: No such file or directory
+stack traceback:
+	.///lib/ui_grid_outcomes_tests.lua:11: in upvalue 'ledger'
+	.///lib/ui_grid_outcomes_tests.lua:210: in upvalue 'each_ledger_branch'
+	.///lib/ui_grid_outcomes_tests.lua:236: in upvalue 'test_ui_grid_outcomes_every_flow_branch_is_exported_with_its_flow'
+
+18) test_ui_grid_outcomes_every_ledger_branch_classifies
+.///lib/ui_grid_outcomes_tests.lua:11: ../../docs/ui-reimplementation/source-inventory.json: No such file or directory
+stack traceback:
+	.///lib/ui_grid_outcomes_tests.lua:11: in upvalue 'ledger'
+	.///lib/ui_grid_outcomes_tests.lua:210: in upvalue 'each_ledger_branch'
+	.///lib/ui_grid_outcomes_tests.lua:254: in upvalue 'test_ui_grid_outcomes_every_ledger_branch_classifies'
+
+19) test_ui_grid_outcomes_ledger_has_64_registrations_and_164_branches
+.///lib/ui_grid_outcomes_tests.lua:11: ../../docs/ui-reimplementation/source-inventory.json: No such file or directory
+stack traceback:
+	.///lib/ui_grid_outcomes_tests.lua:11: in upvalue 'ledger'
+	.///lib/ui_grid_outcomes_tests.lua:226: in upvalue 'test_ui_grid_outcomes_ledger_has_64_registrations_and_164_branches'
+
+Failed tests:
+-------------
+1) test_real_device_map_available_devices_exclude_unique_devices_used_elsewhere
+.///lib/device_map_real_tests.lua:832: expected: not nil, actual: nil
+stack traceback:
+
+2) test_real_device_map_available_params_filter_other_slots_and_return_copies
+.///lib/device_map_real_tests.lua:851: expected: 48, actual: 15
+stack traceback:
+
+3) test_real_device_map_get_params_counts_per_device
+.///lib/device_map_real_tests.lua:524: syntakt
+expected: 111, actual: 15
+stack traceback:
+
+4) test_real_device_map_get_params_maps_auto_params_to_exact_cc_and_nrpn_numbers
+.///lib/device_map_real_tests.lua:539: digitakt:source_parameters_source_tune
+expected: not nil, actual: nil
+stack traceback:
+
+5) test_real_device_map_get_params_prefixes_stock_params_and_indexes_every_entry
+.///lib/device_map_real_tests.lua:500: expected: 49, actual: 15
+stack traceback:
+
+6) test_real_device_map_merge_adds_none_when_stock_list_does_not_start_with_it
+.///lib/device_map_real_tests.lua:627: expected: 49, actual: 15
+stack traceback:
+
+7) test_real_device_map_only_tested_nb_players_become_devices
+.///lib/device_map_real_tests.lua:749: expected: 24, actual: 3
+stack traceback:
+
+8) test_real_device_map_stock_configs_load_sorted_with_none_first
+.///lib/device_map_real_tests.lua:343: expected: 
+{
+    "None",
+    "CC Device",
+    "Digitakt",
+    "Digitakt 2",
+    "Digitone",
+    "DRM BD",
+    "DRM Clap",
+    "DRM Drum 1",
+    "DRM Drum 2",
+    "DRM HH 1",
+    "DRM HH 2",
+    "DRM Multi",
+    "DRM Snare",
+    "DT M Sample",
+    "DT Poly CV",
+    "EX Braids",
+    "EX M Mixer",
+    "EX M Sample",
+    "EX Plaits",
+    "MidiSid",
+    "Nord Drum 2",
+    "OP-1",
+    "Syntakt"
+}
+actual: 
+{"None", "CC Device"}
+stack traceback:
+
+9) test_real_device_map_validate_devices_resets_unknown_maps_to_none
+.///lib/device_map_real_tests.lua:878: expected and actual object should not be different
+Expected: <table 01-0x56011b6de290> {device_map="digitone", midi_channel=7, midi_device=2}
+Received: <table 02-0x56011b6de3a0> {device_map="none", midi_channel=1, midi_device=1}
+stack traceback:
+
+10) test_real_param_manager_add_device_params_configures_stock_slots
+.///lib/device_map_real_tests.lua:938: expected: "MOSAIC CH 3: DIGITAKT"
+actual: "MOSAIC CH 3"
+stack traceback:
+
+11) test_real_param_manager_add_device_params_for_none_or_nil_resets_the_channel
+.///lib/device_map_real_tests.lua:1192: expected: {{silent=true, value=0}}
+actual: {{silent=true, value=-1}}
+stack traceback:
+
+12) test_real_param_manager_add_device_params_hides_slots_after_the_last_device_param
+.///lib/device_map_real_tests.lua:1156: expected: true, actual: false
+stack traceback:
+
+13) test_real_param_manager_add_device_params_wires_first_class_device_slots_to_midi
+.///lib/device_map_real_tests.lua:1001: midi_device_params_channel_4_25
+expected: true, actual: false
+stack traceback:
+
+14) test_real_param_manager_add_device_params_without_init_does_not_set_values
+.///lib/device_map_real_tests.lua:984: slot 1
+expected: {}
+actual: {{silent=true, value=-1}}
+stack traceback:
+
+15) test_real_param_manager_braids_slot_and_merged_index_disagree
+.///lib/device_map_real_tests.lua:1260: expected: "Model 1"
+actual: "undefined"
+stack traceback:
+
+16) test_real_param_manager_device_slot_controlspecs_follow_cc_or_nrpn_range
+.///lib/device_map_real_tests.lua:1031: expected: 
+{
+    default=-1,
+    maxval=16383,
+    minval=-1,
+    quantum=0.00775146484375,
+    step=1,
+    units="",
+    warp="lin"
+}
+actual: 
+{default=-1, maxval=0, minval=0, quantum=0, step=0, units="", warp="lin"}
+stack traceback:
+
+17) test_real_param_manager_digitakt2_nrpn_mode_honours_the_channel_override
+.///lib/device_map_real_tests.lua:1078: expected: 
+{
+    {
+        channel=9,
+        device=1,
+        kind="nrpn",
+        lsb=0,
+        mode="standard",
+        msb=1,
+        n=6,
+        value=200
+    },
+    {
+        channel=9,
+        device=1,
+        kind="nrpn",
+        lsb=4,
+        mode="legacy-half",
+        msb=1,
+        n=6,
+        value=300
+    }
+}
+actual: 
+{}
+stack traceback:
+
+18) test_real_param_manager_syntakt_pedals_are_cc_parameters
+.///lib/device_map_real_tests.lua:1059: expected: "Sustain"
+actual: "undefined"
+stack traceback:
+
+Ran 2414 tests in 67.548 seconds, 2377 successes, 18 failures, 19 errors

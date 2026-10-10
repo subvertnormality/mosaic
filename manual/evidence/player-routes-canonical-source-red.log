@@ -1,0 +1,7 @@
+Regression before canonical-source repair:
+python3 tests/behaviour/test_manual_player_routes.py
+FAIL: test_canonical_authoring_source_exists
+AssertionError: False is not true : Indexed canonical player-route authoring source is missing
+Ran 6 tests; FAILED (failures=1).
+
+The indexed file was restored; the compiler authoring guard remains unchanged.

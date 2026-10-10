@@ -1,0 +1,18 @@
+--- 
++++ 
+@@ -309,3 +309,15 @@
+  def test_reject_actual_inputs_differing_from_immutable_trace(self):
+   self.document['scenes'][0]['steps'][0]['inputs'][0]['delta']=9
+   with self.assertRaisesRegex(ValueError,'trace'):tool.reference_authoring(self.document)
++
++ def polymeter_fixture(self):
++  assertion={'kind':'rejected-range-channel-isolation','phrases':{1:[[144,60,127]],2:[[145,79,40]]}}
++  for plan in self.plans['scenes']:plan['steps'][0]['assertion']=copy.deepcopy(assertion)
++  for scene in self.original['scenes']:scene['steps'][0]['expect']['assertion']=copy.deepcopy(assertion)
++  self.plan.write_text(yaml.safe_dump(self.plans,sort_keys=False));self.original['source']['plan_files']['manual/plan.yaml']=tool.sha(self.plan.read_bytes());self.document=json.loads(json.dumps(self.original))
++ def test_polymeter_source_typed_phrase_channels_reproduce_exact_yaml(self):
++  self.polymeter_fixture()
++  self.assertEqual(yaml.safe_dump(tool.reference_authoring(self.document),sort_keys=False),yaml.safe_dump(self.expected(),sort_keys=False))
++ def test_polymeter_changed_actual_phrase_value_is_rejected(self):
++  self.polymeter_fixture();self.document['scenes'][0]['steps'][0]['expect']['assertion']['phrases']['1'][0][1]=99
++  with self.assertRaisesRegex(ValueError,'selector'):tool.reference_authoring(self.document)

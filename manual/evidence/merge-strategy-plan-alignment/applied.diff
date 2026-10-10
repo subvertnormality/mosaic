@@ -1,0 +1,97 @@
+--- before/manual/scene-plans.yaml
++++ after/manual/scene-plans.yaml
+@@ -142,28 +142,28 @@
+   - id: skip
+     public_inputs:
+     - E2 +1
+-    observe: Trig mode=SKIP; grid(14,8)=2; MIDI pairs [[64,107],[65,97]] with rests matching steps3/4.
++    observe: Strategy=SKIP; grid(14,8)=2; MIDI pairs [[64,107],[65,97]] with rests matching steps3/4.
+   - id: only
+     public_inputs:
+     - E3 +1
+-    observe: Trig mode=ONLY; grid(14,8)=5. Audible acceptance must use M-MERGE-001 overlap positions,
++    observe: Strategy=ONLY; grid(14,8)=5. Audible acceptance must use M-MERGE-001 overlap positions,
+       not invented velocities.
+   - id: all
+     public_inputs:
+     - E3 +1
+-    - E3 +1
+-    observe: Trig mode=ALL clamped; grid(14,8)=8; MIDI pairs [[60,114],[62,109],[64,107],[65,97]].
++    observe: Strategy=ALL; grid(14,8)=8; MIDI pairs [[60,114],[62,109],[64,107],[65,97]].
+   - id: take-note-from-pattern2
+     public_inputs:
+-    - E2 +1
++    - E2 -24
++    - E2 +4
+     - E3 +4
+     observe: Note mode traverses UP/DOWN/PAT1/PAT2; MIDI pairs [[60,114],[60,109],[60,107],[60,97]].
+   - id: restore-average
+     public_inputs:
+     - E3 -4
+     - E3 -1
+-    observe: AVERAGE clamped; prior All phrase restored exactly; after K2 next grid(14,8) cycles saved
+-      All to Skip.
++    observe: AVERAGE clamped; the prior All phrase is restored exactly. Select Strategy and turn
++      E3 -5 to restore Skip.
+ - id: mask-default-and-exception
+   feature_id: masks
+   cases:
+@@ -447,28 +447,28 @@
+     occurrence: 2
+   - id: skip
+     title: Skip overlap
+-    caption: SKIP keeps trigs present in exactly one source pattern.
++    caption: Select Strategy with E2. SKIP keeps trigs present in exactly one source pattern.
+     assertion:
+       kind: merge-mode
+-      row: Trig mode
++      row: Strategy
+       value: SKIP
+       passed: true
+     occurrence: 1
+   - id: only
+     title: Keep overlap
+-    caption: 'Turn E3: ONLY keeps trigs present in two or more patterns.'
++    caption: 'Turn E3 once on Strategy: ONLY keeps trigs present in two or more patterns.'
+     assertion:
+       kind: merge-mode
+-      row: Trig mode
++      row: Strategy
+       value: ONLY
+       passed: true
+     occurrence: 1
+   - id: all
+     title: Play the union
+-    caption: 'Turn E3 again: ALL includes every trig from either source.'
++    caption: 'Turn E3 once more on Strategy: ALL includes every trig from either source.'
+     assertion:
+       kind: merge-mode
+-      row: Trig mode
++      row: Strategy
+       value: ALL
+       passed: true
+     occurrence: 1
+--- before/tests/behaviour/test_manual_case_capture.py
++++ after/tests/behaviour/test_manual_case_capture.py
+@@ -59,6 +59,21 @@
+    self.assertEqual(json.loads((out/"captured-scenes.json").read_text()),scenes)
+    with self.assertRaises(FileExistsError):module.persist_case_scenes(out,[dict(id="replacement")])
+    self.assertEqual(json.loads((out/"captured-scenes.json").read_text()),scenes)
++ def test_authored_strategy_checkpoints_bind_actual_native_result_fields(self):
++  import ast,yaml
++  module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
++  plan=yaml.safe_load((ROOT/"manual/scene-plans.yaml").read_text())
++  scene=next(s for s in plan["scenes"] if s["id"]=="merge-overlap-and-union")
++  tree=ast.parse((ROOT/"tests/behaviour/contract/live_ui_feedback.py").read_text())
++  callback=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="live_ui_merge_modes")
++  producer=next(n for n in ast.walk(callback) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=="dict" and any(k.arg=="kind" and isinstance(k.value,ast.Constant) and k.value.value=="merge-mode" for k in n.keywords))
++  fields={k.arg:ast.literal_eval(k.value) for k in producer.keywords if k.arg!="value"}
++  checkpoints=[s for s in scene["steps"] if s["assertion"].get("kind")=="merge-mode"]
++  self.assertEqual([s["assertion"]["value"] for s in checkpoints],["SKIP","ONLY","ALL"])
++  for step in checkpoints:
++   with self.subTest(step=step["id"]):
++    actual=dict(fields,value=step["assertion"]["value"])
++    self.assertTrue(module.Selector(step["assertion"],step.get("occurrence",1)).accept(actual),"authored checkpoint must match the actual shared Strategy result, preserving its value")
+ class NestedSessions(unittest.TestCase):
+  def module(self):
+   module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module

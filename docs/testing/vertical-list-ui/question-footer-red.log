@@ -1,0 +1,16 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+FF
+Failed tests:
+-------------
+1) test_ui_live_cancel_question_restores_parent_controls_after_encoder_refusal
+.///lib/ui_live_tests.lua:1200: expected: "E3 SET  K3 APPLY  K2 BACK"
+actual: "K3 CONFIRM  K2 CANCEL"
+stack traceback:
+
+2) test_ui_live_confirm_question_restores_parent_controls_after_encoder_refusal
+.///lib/ui_live_tests.lua:1200: expected: "E3 SET  K3 APPLY  K2 BACK"
+actual: "K3 CONFIRM  K2 CANCEL"
+stack traceback:
+
+Ran 2 tests in 0.153 seconds, 0 successes, 2 failures, 2408 non-selected

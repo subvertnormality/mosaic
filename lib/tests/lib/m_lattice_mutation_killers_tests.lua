@@ -65,6 +65,21 @@ local function error_message(f, ...)
   return tostring(err)
 end
 
+-- README.md Ensemble mode: every member on an onset uses one source snapshot,
+-- captured before the first member note callback.
+function test_lattice_note_group_hooks_bracket_all_deferred_note_callbacks()
+  local lattice=new_lattice({ppqn=PPQN});local log={};local sprocket
+  sprocket=lattice:new_sprocket({division=1/4,enabled=true,action=function()
+    sprocket.note_pending=1
+  end})
+  sprocket.note_action=function()log[#log+1]="note"end
+  sprocket.after_note_action=function()sprocket.note_pending=nil end
+  lattice.before_note_group=function()log[#log+1]="before"end
+  lattice.after_note_group=function()log[#log+1]="after"end
+  run(lattice,PPQN)
+  luaunit.assert_equals({log[1],log[2],log[3]},{"before","note","after"})
+end
+
 local function with_global(name, value, body)
   local saved = _G[name]
   _G[name] = value

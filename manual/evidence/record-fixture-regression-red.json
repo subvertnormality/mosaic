@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "case": "M-REC-001",
+  "citation": "README.md#arm-live-record",
+  "baseline_passed": false,
+  "baseline_case_source_sha256": "cc714c11334a9718f0c72d097b5bd5807ad6cb317d0447a8b1cd790e3ee94c6e",
+  "observations_sha256": "69da149eea42832a1e96408c7532a25d15b6db6e9fb596c8651ecc320bdb8da7",
+  "run": "/home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f",
+  "regression": {
+    "expected_fixture_initial_tempo": 100,
+    "actual_fixture_initial_tempo": 108,
+    "original_encoder_delta": -10,
+    "required_replay_tempo": 90,
+    "actual_replay_tempo": 98,
+    "observation_indices": [
+      43,
+      44
+    ]
+  },
+  "cause": "Native norns external-clock estimate updates the displayed tempo; its adopted value is not guaranteed to be exactly the stimulus tempo. This is setup evidence, not a Mosaic recording regression.",
+  "candidate": "Public native Tempo encoder clamp to 1 then +99 detents, independently assert 100, preserve original -10 detents and required90 oracle. No change to placement, replay, timing tolerances or emulator."
+}

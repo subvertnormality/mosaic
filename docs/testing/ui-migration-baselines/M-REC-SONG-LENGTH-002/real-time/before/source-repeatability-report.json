@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "d2b76f8bc15b029c404bd432ba35efdb8e689b3c",
+  "selected_cases": [
+    "M-TRIPLE-002",
+    "M-TRIPLE-003",
+    "M-REC-SONG-LENGTH-001",
+    "M-REC-SONG-LENGTH-002"
+  ],
+  "selected_modules": {
+    "tests/behaviour/recording_song_transition.py": "M-TRIPLE-002"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/recording_song_transition.py",
+      "case": "M-TRIPLE-002",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-6a5141de62b24aecae137e0545c319a1/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-6a5141de62b24aecae137e0545c319a1/manifest.json",
+      "manifest_sha256": "685844ce6dba5ec68fade9e45890cb86eaf8189982ebdd05c51e9643a6d90e2d",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

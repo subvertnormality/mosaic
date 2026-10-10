@@ -1,0 +1,51 @@
+{
+  "reader_qualified": true,
+  "book_js_sha256": "6ca93f90d90196ac2c1ee6cbef31ae73bce2e9b065228016f65eae501c68ca18",
+  "reader_index_sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+  "public_units": 425,
+  "minimum_all_ten_scores": 8,
+  "prior_qualification": "ROOT-FINAL-READER-QUALIFICATION.json",
+  "changed_scope": "Only product introduction and tutorial section wording on homepage",
+  "astra_scoped_report_sha256": "b949e302c2f513313b62fce7dacc6742bc5986370057f1683523ef3001d83484",
+  "seven_reader_scores": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "full_native_rebuild": false,
+  "publication_qualified": false,
+  "adopted_evidence": [
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/home-introduction-astra-recheck-20261008-01/home-1440.png",
+      "sha256": "982460a5d83c7f0bc5618d3df228a03310817007f9578e29422c24d330da76e7"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/home-introduction-astra-recheck-20261008-01/home-390.png",
+      "sha256": "9348a5bdf947cc23d8514a619d869767cc28dfb2176d9caf00ff30ea34c612bd"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/home-introduction-astra-recheck-20261008-01/observations.json",
+      "sha256": "5cca88cd751e5143d7365651bdd9a575ad0d7323586c89faf79d2ea5a04ad123"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/home-introduction-astra-recheck-20261008-01/review.json",
+      "sha256": "b949e302c2f513313b62fce7dacc6742bc5986370057f1683523ef3001d83484"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/home-introduction-astra-recheck-20261008-01/review.md",
+      "sha256": "3184c5ab305de820f541fe99be3b01204475c7a87ec57332a45b67716d6b7380"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/home-introduction-astra-recheck-20261008-01/tutorial-1440.png",
+      "sha256": "982460a5d83c7f0bc5618d3df228a03310817007f9578e29422c24d330da76e7"
+    },
+    {
+      "path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/home-introduction-astra-recheck-20261008-01/tutorial-390.png",
+      "sha256": "9348a5bdf947cc23d8514a619d869767cc28dfb2176d9caf00ff30ea34c612bd"
+    }
+  ]
+}

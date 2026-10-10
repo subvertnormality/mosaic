@@ -1,0 +1,1678 @@
+schema_version: 1
+fixture_kind: behaviour-case
+trace_contract: Pinned canonical case public inputs and successful exact semantic
+  selectors; generated input traces are evidence derivatives, not editable replay
+  authoring.
+scenes:
+- id: record-keyboard-steps
+  feature_id: arm-live-record
+  title: Capture a live keyboard phrase
+  behaviour_case: M-REC-001
+  requirements:
+  - REC-LIVE-NOTES
+  profile: base-midi
+  session_ordinal: 0
+  setup:
+    fixture: behaviour-case
+    case: M-REC-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: placement
+    title: See where the notes landed
+    caption: Arm recording and play keyboard notes 72 and 79 at scheduled musical
+      positions under external MIDI clock. The grid oracle verifies recorded steps
+      2 and 4, with every other step empty.
+    citation: README.md#arm-live-record
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 8
+      state: 1
+    - type: grid
+      x: 2
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: midi_schedule
+      schedule_id: 1
+      events:
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10785000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10810000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10835000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10860000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10885000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10910000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10935000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10960000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 10985000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11010000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11035000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11060000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11085000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11110000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11135000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11160000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11185000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11210000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11235000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11260000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11285000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11310000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11335000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11360000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11385000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11410000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11435000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11460000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11485000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11510000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11535000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11560000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11585000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11610000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11635000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11660000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11685000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11710000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11735000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11760000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11785000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11810000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11835000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11860000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11885000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11910000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11935000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11960000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 11985000000
+      - port: 1
+        bytes:
+        - 250
+        at_logical_ns: 11990000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12010000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12035000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12060000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12085000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12110000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12135000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12160000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12185000000
+      - port: 1
+        bytes:
+        - 144
+        - 72
+        - 90
+        at_logical_ns: 12190000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12210000000
+      - port: 1
+        bytes:
+        - 128
+        - 72
+        - 0
+        at_logical_ns: 12210000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12235000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12260000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12285000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12310000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12335000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12360000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12385000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12410000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12435000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12460000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12485000000
+      - port: 1
+        bytes:
+        - 144
+        - 79
+        - 80
+        at_logical_ns: 12490000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12510000000
+      - port: 1
+        bytes:
+        - 128
+        - 79
+        - 0
+        at_logical_ns: 12510000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12535000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12560000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12585000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12610000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12635000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12660000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12685000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12710000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12735000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12760000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12785000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12810000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12835000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12860000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12885000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12910000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12935000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12960000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 12985000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13010000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13035000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13060000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13085000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13110000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13135000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13160000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13185000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13210000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13235000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13260000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13285000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13310000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13335000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13360000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13385000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13410000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13435000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13460000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13485000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13510000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13535000000
+      - port: 1
+        bytes:
+        - 248
+        at_logical_ns: 13560000000
+      - port: 1
+        bytes:
+        - 252
+        at_logical_ns: 13565000000
+      time_domain: logical
+    - type: wait
+      seconds: 2.92
+    - type: grid
+      x: 2
+      y: 8
+      state: 1
+    - type: grid
+      x: 2
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: recorded-step-placement
+        expected_steps:
+        - 2
+        - 4
+        channel_range:
+        - 1
+        - 4
+        clock_step_ns: 150000000
+  - id: replay
+    title: Replay after disarming
+    caption: Switch to internal 90 BPM after disarming. A fresh MIDI capture verifies
+      notes 72/90 and 79/80 across three cycles, independent of live preview.
+    citation: README.md#arm-live-record
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: midi
+        complete_cycles: 3
+  - id: spacing
+    title: Keep the recorded rhythm
+    caption: After disarming, replay the phrase at 90 BPM. The two notes alternate
+      one third of a second apart.
+    citation: README.md#arm-live-record
+    inputs: []
+    expect:
+      assertion:
+        kind: recorded-replay-spacing
+        expected_seconds:
+        - 0.3333333333333333
+        - 0.3333333333333333
+        - 0.3333333333333333
+        - 0.3333333333333333
+        - 0.3333333333333333
+        - 0.3333333333333333

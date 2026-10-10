@@ -1,0 +1,86 @@
+{
+  "kind": "DERIVED-retained-native-pilot-fixture-v1",
+  "native_qualification": false,
+  "new_native_run": false,
+  "source_case": "M-MASK-007",
+  "manual_feature": "manual:masks",
+  "original_sources": [
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-20.04\\home\\andy\\mosaic-manual-runs\\b49e28ffc62d4f4f9f997d4ea7b4defe\\mask-precedence\\results.json",
+      "sha256": "aa4a11f1a9e2d5411579f7d42f6af03ece2971e0b7b26b8c6e83c768ae48d282",
+      "bytes": 18898
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-20.04\\home\\andy\\mosaic-manual-runs\\b49e28ffc62d4f4f9f997d4ea7b4defe\\mask-precedence\\observations.json",
+      "sha256": "9edc3ba180022f38298b24745e691aac7de580719612ca19f16bae347a356986",
+      "bytes": 6932690
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-20.04\\home\\andy\\mosaic-manual-runs\\b49e28ffc62d4f4f9f997d4ea7b4defe\\mask-precedence\\native\\identity.json",
+      "sha256": "7b4476287e73ad77228c51e7dcbe329ce2be7631d165c3ec08056c7dfd1f90f2",
+      "bytes": 159839
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-20.04\\home\\andy\\mosaic-manual-runs\\b49e28ffc62d4f4f9f997d4ea7b4defe\\mask-precedence\\native\\native-events.jsonl",
+      "sha256": "a0dbb726e9fca92394b56b16d07fe9fadef6fbbab5c7fb3ebf0124067e3ab51c",
+      "bytes": 1466393
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-20.04\\home\\andy\\mosaic-manual-1.4.0\\manual\\generated\\pilot.json",
+      "sha256": "7b7463c6f5b575ede22defef1f3d11616b9a412e2a11a5cea048e2a3d676ef2e",
+      "bytes": 1099234
+    }
+  ],
+  "selection": {
+    "results_indices": [
+      0,
+      15
+    ],
+    "observation_index": 37,
+    "native_midi_indices": [
+      1,
+      70
+    ],
+    "identity_fields": [
+      "session_id",
+      "application_identity.digest"
+    ],
+    "scene_step_ids": [
+      "route",
+      "default"
+    ]
+  },
+  "derivation": "Retain original MIDI rows1..70 (all fields); results rows0..15 (all fields); original observation37 session and MIDI subtrees; identity session_id/application digest. Retain original route/default inputs/expect/frame binding without framebuffer/grid pixels. Reserialize JSON, so fixture file hashes are new derived hashes, never original native identities.",
+  "original_recorded_pins": {
+    "path": "/home/andy/mosaic-manual-runs/b49e28ffc62d4f4f9f997d4ea7b4defe/mask-precedence",
+    "results_sha256": "aa4a11f1a9e2d5411579f7d42f6af03ece2971e0b7b26b8c6e83c768ae48d282",
+    "identity_sha256": "7b4476287e73ad77228c51e7dcbe329ce2be7631d165c3ec08056c7dfd1f90f2"
+  },
+  "fixture_files": [
+    {
+      "path": "native/identity.json",
+      "sha256": "c132f0eb9e74cbf09f7afbd58a51120ce435880bb3d27ce27cbfc13bb7c9ba08",
+      "bytes": 152
+    },
+    {
+      "path": "native/native-events.jsonl",
+      "sha256": "bdf9d600510335bc610b3d207b5a0180791ee874b88076cb4fa9cb1f7bd5faa3",
+      "bytes": 22813
+    },
+    {
+      "path": "observations.json",
+      "sha256": "c722093bc5f1d3024e8e03dda7a1256e418fc3d834c6d016c130811905f89fee",
+      "bytes": 13883
+    },
+    {
+      "path": "results.json",
+      "sha256": "d9244af32b34bc86533ae8bc0a5dd8b644a5ba96fc9f57c7bffb2db48df81493",
+      "bytes": 2284
+    },
+    {
+      "path": "scene.json",
+      "sha256": "865b6f4355bc6ff9aaea0a5b4b76c15844dd71446725bf906fbbc4c40fd2b2f9",
+      "bytes": 1472
+    }
+  ]
+}

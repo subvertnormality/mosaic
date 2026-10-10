@@ -1,0 +1,523 @@
+{
+  "job_id": "source13-lfo-review-20261008-01",
+  "reviewed_at_utc": "2026-10-08T07:32:33.812Z",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reader_url": "http://127.0.0.1:8923/manual/",
+  "book_sha256": "e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe",
+  "reader_index_sha256": "984dc86e198f71fb2594dac82add5fe03afbd706f30cded8f5f84f5189a44d6c",
+  "book_js_sha256": "453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8",
+  "manual_js_sha256": "1c4326d0ca754680aa2f91d01f7dc56985515ef2cc420c545b55cd5717971be6",
+  "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+  "scene_chunk_sha256": "ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c",
+  "scope": "Two source13 LFO units freshly rated. Eight source12 units carry forward with exact compiled feature-record identity. Three player scene units remain held for source14 caption-link repair. No all-425 review is claimed.",
+  "all_fresh_scores_at_least_8": true,
+  "fresh_units": [
+    {
+      "id": "feature:lfos-and-modulation",
+      "title": "LFOs and Modulation",
+      "kind": "feature",
+      "current_route": "#lfos-and-modulation",
+      "compiled_feature_record_sha256": "e0b002ef77960435ee4bee8134c6e10994ef3d276f9914c22e01c4359302ea66",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The small Macro 1 example and the separate advanced clocked-LFO lesson have distinct stated starting values and actions; the linked lesson now opens with its own full-depth state.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The first example gives a concrete 0.10 depth and a 32→38→32 CC comparison; the advanced link opens the deeper tempo-clock walkthrough.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The prose distinguishes modulation depth from the LFO clock and introduces the advanced route after the small CC example.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The current feature page shows its interactive macro capture, controls, route descriptions and actual advanced lesson link.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The short Macro 1 example and the full-depth clocked LFO lesson are separate reader units, so the initial example stays focused.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The visible “Advanced: Set up a clocked LFO at full depth” link moves from the feature page into the matching lesson and returns the correct title.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The feature’s exact canonical lesson link works by click and the same hash opens the intended lesson by direct load.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "Matrix, Toolkit, Macro 1, depth and clocked are used consistently and the example defines their visible effect; the terminology remains specialized.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The feature title names modulation, and the advanced lesson title states both the clocked LFO task and full-depth starting level.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The canonical route #lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock directly loads “Advanced: Set up a clocked LFO at full depth”.",
+          "evidence": [
+            "browser-evidence/feature.json",
+            "browser-evidence/feature.png",
+            "browser-evidence/source13-pins-binding.json",
+            "browser-evidence/source13-render-check.json",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png"
+          ]
+        }
+      },
+      "evidence_routes": [
+        "#lfos-and-modulation",
+        "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock"
+      ]
+    },
+    {
+      "id": "lesson:toolkit-clocked-lfo-menu-clock",
+      "title": "Advanced: Set up a clocked LFO at full depth",
+      "kind": "lesson",
+      "current_route": "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock",
+      "feature_id": "lfos-and-modulation",
+      "lesson_id": "toolkit-clocked-lfo-menu-clock",
+      "scene_id": "toolkit-clocked-lfo-menu",
+      "from_step_id": "depth",
+      "to_step_id": "clock",
+      "transition_scope": "adjacent",
+      "contract_id": "feature:lfos-and-modulation:toolkit-clocked-lfo-menu-clock",
+      "scene_chunk_sha256": "ebc68641ef246d1bcb3acf5527d41486a7d20e2a69fb9d2c0108df8259c3ac8c",
+      "presentation_metadata_sha256": "fad3bf7bc9e24dc243d68fefaaafe305dc400e5be58e55774b182196ad409be3",
+      "criteria": {
+        "coherence": {
+          "score": 9,
+          "rationale": "The starting point routes LFO 1 to Fixed Note at depth 1.00; the next captured state selects clocked, matching the lesson outcome.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "usefulness": {
+          "score": 9,
+          "rationale": "The practice instruction gives the parameter path, selection and K3 action, then explains the filled marker that confirms clocked mode.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "understandability": {
+          "score": 9,
+          "rationale": "The lesson states the installed mods, stopped transport, channel phrase and exact current Matrix setup before asking the reader to change the clock mode.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "representation": {
+          "score": 9,
+          "rationale": "The Before and Show result controls display the norns screen and grid; the result frame visibly highlights “clocked” and states the outcome.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "granularity": {
+          "score": 9,
+          "rationale": "The lesson covers one adjacent transition, depth to clock, and leaves period, shape, pulse and playback to separate steps.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "flow": {
+          "score": 9,
+          "rationale": "The full-depth starting state, choose-clocked practice action, Show result control and captured target state form a direct sequence.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "integration": {
+          "score": 9,
+          "rationale": "The visible advanced link from the feature page navigates to this lesson; direct cold navigation reaches the same target title.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "vocabulary": {
+          "score": 8,
+          "rationale": "The terms Matrix, Fixed Note, LFO 1, clocked and filled marker match the displayed menu and action; they assume some familiarity with the mods.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "naming": {
+          "score": 9,
+          "rationale": "The repaired title distinguishes this advanced full-depth LFO setup from the introductory small Macro example.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        },
+        "canonical_home": {
+          "score": 9,
+          "rationale": "The lesson’s canonical URL resolves to its intended source scene and target step, “Clock the LFO to the tempo”.",
+          "evidence": [
+            "browser-evidence/lesson-direct.json",
+            "browser-evidence/lesson-direct.png",
+            "browser-evidence/lesson-result.json",
+            "browser-evidence/lesson-result.png",
+            "browser-evidence/lesson-handoff.json",
+            "browser-evidence/lesson-handoff.png",
+            "browser-evidence/source13-pins-binding.json"
+          ]
+        }
+      },
+      "evidence_routes": [
+        "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock"
+      ],
+      "observed": {
+        "direct_url": "http://127.0.0.1:8923/manual/?source13lesson=direct#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock",
+        "clicked_handoff_url": "http://127.0.0.1:8923/manual/?source13lesson=handoff#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock",
+        "feature_link": [
+          {
+            "text": "Advanced: Set up a clocked LFO at full depth",
+            "href": "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock"
+          },
+          {
+            "text": "Set up a clocked LFO at full depth",
+            "href": "#lfos-and-modulation/lesson/toolkit-clocked-lfo-menu-clock"
+          }
+        ],
+        "after_frame_caption": "At this result, the menu highlights clocked.",
+        "recorded_midi": "none",
+        "audio": "not played or listened to"
+      }
+    }
+  ],
+  "carried_forward_units": [
+    {
+      "id": "feature:devices",
+      "title": "Devices",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "devices",
+      "source12_compiled_feature_record_sha256": "1dce74860a2189fc382f51910e5b3bf9dedd555518a24e4ead9c5493941fa06a",
+      "source13_compiled_feature_record_sha256": "1dce74860a2189fc382f51910e5b3bf9dedd555518a24e4ead9c5493941fa06a",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    },
+    {
+      "id": "feature:external-midi-transport",
+      "title": "External MIDI Transport",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "external-midi-transport",
+      "source12_compiled_feature_record_sha256": "35646d63858fd992ef2b91142e0f6861ad9bca442dadb2ad7a1f954ee0738354",
+      "source13_compiled_feature_record_sha256": "35646d63858fd992ef2b91142e0f6861ad9bca442dadb2ad7a1f954ee0738354",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    },
+    {
+      "id": "feature:mods-and-software-devices",
+      "title": "Selecting an n.b. Player",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "mods-and-software-devices",
+      "source12_compiled_feature_record_sha256": "08d28b63f9403ec61c60e992c20ee662ee4b412cd07d3b1834971cfb1350a513",
+      "source13_compiled_feature_record_sha256": "08d28b63f9403ec61c60e992c20ee662ee4b412cd07d3b1834971cfb1350a513",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    },
+    {
+      "id": "feature:norns-sound-sources-with-n-b",
+      "title": "Norns Sound Sources with n.b.",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 9
+      },
+      "feature_record_id": "norns-sound-sources-with-n-b",
+      "source12_compiled_feature_record_sha256": "93af6f5c69bb12bd6dd518e14d0def38498724709408fb27e0d148b10ee72d1b",
+      "source13_compiled_feature_record_sha256": "93af6f5c69bb12bd6dd518e14d0def38498724709408fb27e0d148b10ee72d1b",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    },
+    {
+      "id": "feature:rhythm-doctor",
+      "title": "Rhythm Doctor",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "rhythm-doctor",
+      "source12_compiled_feature_record_sha256": "c26c514d486f74f71e1b58833debdf1c69eeb0ccaff6470c9539038e27fe6797",
+      "source13_compiled_feature_record_sha256": "c26c514d486f74f71e1b58833debdf1c69eeb0ccaff6470c9539038e27fe6797",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    },
+    {
+      "id": "recipe:locks:1-make-one-step-override-a-channel-note-default-th",
+      "title": "Make one step override a channel Note default, then restore inheritance",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "locks",
+      "source12_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "source13_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    },
+    {
+      "id": "recipe:mask-locks:1-make-one-step-override-a-channel-note-default-th",
+      "title": "Make one step override a channel Note default, then restore inheritance",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "mask-locks",
+      "source12_compiled_feature_record_sha256": "fea106737a58625fe3d767f6e701145743fcc161dc5fe4b78368223dbdd46f5e",
+      "source13_compiled_feature_record_sha256": "fea106737a58625fe3d767f6e701145743fcc161dc5fe4b78368223dbdd46f5e",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    },
+    {
+      "id": "recipe:locks:2-compare-a-stored-device-value-with-one-step-loca",
+      "title": "Compare a stored device value with one step-local CC lock",
+      "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+      "source12_criterion_scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "feature_record_id": "locks",
+      "source12_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "source13_compiled_feature_record_sha256": "024031f579bacb5aca09b9c1ffa365e159a36b8163ba88cbee2f561bf6792a7e",
+      "exact_feature_record_match": true,
+      "carry_reason": "Parent-authorized carry-forward only: compiled feature record hash is byte-identical between source12 and source13; no fresh score is claimed."
+    }
+  ],
+  "held_units": [
+    {
+      "id": "scene:software-player-oilcan",
+      "status": "held for source14",
+      "reason": "Source12 rendered the caption’s inline Markdown Apply text literally with no anchor element; parent requested reassessment after the reader-only link-renderer fix."
+    },
+    {
+      "id": "scene:software-player-doubledecker",
+      "status": "held for source14",
+      "reason": "Source12 rendered the caption’s inline Markdown Apply text literally with no anchor element; parent requested reassessment after the reader-only link-renderer fix."
+    },
+    {
+      "id": "scene:software-player-polyperc",
+      "status": "held for source14",
+      "reason": "Source12 rendered the caption’s inline Markdown Apply text literally with no anchor element; parent requested reassessment after the reader-only link-renderer fix."
+    }
+  ],
+  "source12_report_sha256": "595cb6305870c533ad4b52631730b30eeba9a0805925b4ac2dc70b3ae6732469",
+  "source12_revision_history_sha256": "d65479a49abf42ed1ae96ec094bf9906eaa091308271c9104d2e4afbe813a848",
+  "change_identity": {
+    "binding_title": "Advanced: Set up a clocked LFO at full depth",
+    "from_step_id": "depth",
+    "to_step_id": "clock",
+    "scene_id": "toolkit-clocked-lfo-menu",
+    "native_scene_chunk_unchanged": true,
+    "reader_js_css_unchanged": true,
+    "root_receipt": "Source13 parent receipt states 167 URLs passed; 146 scene chunks, 193 contracts and audio unchanged except advanced presentation title/hash."
+  },
+  "method": "Full-document source13 loads required the exact visible route title. Also clicked the feature link and checked the final URL/title, then used Show result to view the captured clocked state. No source edit, build, native run, audio capture or listening."
+}

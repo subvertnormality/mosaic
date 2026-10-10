@@ -1,0 +1,17 @@
+................E........................................
+======================================================================
+ERROR: test_controlled_scene_publication_reproduces_exact_native_bytes (test_reconcile_manual_build.ControlledGenerationSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 227, in test_controlled_scene_publication_reproduces_exact_native_bytes
+    result=tool.reproduced_scenes(root,root,m)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 151, in reproduced_scenes
+    authored=reference_authoring(doc)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 110, in reference_authoring
+    run=Path(doc['evidence']);plans={}
+KeyError: 'evidence'
+
+----------------------------------------------------------------------
+Ran 57 tests in 1.995s
+
+FAILED (errors=1)

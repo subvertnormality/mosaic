@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "path": "manual/scene-plans-course.yaml",
+  "before_sha256": "d71eaedd655dd8441e677d5273443d20f07856901d17941a41a1e6cd61de74b5",
+  "after_sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+  "added_checkpoints": [
+    {
+      "id": "song-composition-global-length-slot1",
+      "title": "Set slot 1 to one bar",
+      "caption": "Song slot 1 shows Global length 16. Its section lasts one 16-step bar when Repeats is 1.",
+      "assertion": {
+        "kind": "manual-course-ui",
+        "stage": "song-composition-global-length-slot1",
+        "page": "song",
+        "params": {
+          "song_slot": 1
+        },
+        "dashboard_rows": [
+          {
+            "row": 4,
+            "label": "Global length",
+            "value": "16"
+          }
+        ],
+        "leds": [
+          {
+            "x": 1,
+            "y": 7,
+            "level": 7
+          },
+          {
+            "x": 2,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 3,
+            "y": 7,
+            "level": 9
+          },
+          {
+            "x": 4,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 5,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 6,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 7,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 8,
+            "y": 7,
+            "level": 7
+          }
+        ],
+        "passed": true
+      }
+    },
+    {
+      "id": "song-composition-global-length-slot2",
+      "title": "Set slot 2 to one bar",
+      "caption": "Song slot 2 shows Global length 16. Its section lasts one 16-step bar when Repeats is 1.",
+      "assertion": {
+        "kind": "manual-course-ui",
+        "stage": "song-composition-global-length-slot2",
+        "page": "song",
+        "params": {
+          "song_slot": 2
+        },
+        "dashboard_rows": [
+          {
+            "row": 4,
+            "label": "Global length",
+            "value": "16"
+          }
+        ],
+        "leds": [
+          {
+            "x": 1,
+            "y": 7,
+            "level": 7
+          },
+          {
+            "x": 2,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 3,
+            "y": 7,
+            "level": 9
+          },
+          {
+            "x": 4,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 5,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 6,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 7,
+            "y": 7,
+            "level": 2
+          },
+          {
+            "x": 8,
+            "y": 7,
+            "level": 7
+          }
+        ],
+        "passed": true
+      }
+    }
+  ],
+  "prior_checkpoint_count": 48,
+  "checkpoint_count": 50,
+  "teaching_stage_count": 38,
+  "features": 133,
+  "existing_checkpoints_unchanged": true,
+  "native_acceptance_claimed": false,
+  "diff_sha256": "cc78cce4f006551b43bc35d3799b0d5228607785cdd820373ccf4624df0ebd50"
+}

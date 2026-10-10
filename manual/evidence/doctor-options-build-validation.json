@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "test": "test_manual_build.py",
+      "passed": true
+    },
+    {
+      "test": "test_manual_feature_bind.py",
+      "passed": true
+    }
+  ],
+  "native_acceptance_claimed": false,
+  "qualification_stages": 7,
+  "independent_audit_stage": true,
+  "files": {
+    "tools/manual_build.py": "10482d2513403b458ffefdfb0c0552d76183463cc8f8a51b660db56996b223fd",
+    "tests/behaviour/test_manual_build.py": "c52113b6d7368d09096efd7b48cc687ccc92d004a5760d816be91af7810d936f",
+    "manual/BUILD.md": "8082ffaff8cfc5b6ebf374f76db83f37fed56efd78fe695af7eaf3222514d191",
+    "manual/scene-plans-readability.yaml": "3f587640478fbee793a5582e342815bfb47074309b5813dd76b03bf88498c9ec",
+    "tools/manual_feature_bind.py": "b32989da1f5fa788be0c2437baacfa35f8b399ea30515ccdeffee1eea8e8561f",
+    "tests/behaviour/test_manual_feature_bind.py": "258020af287995ab385d437641f05364907a99af63a7fbf9d5f10fc80a913ffd"
+  }
+}

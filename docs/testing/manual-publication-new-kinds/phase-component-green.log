@@ -1,0 +1,11 @@
+test_240_can_skip_displayed_phases_but_wrong_shift_is_not_free (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_correct_pose_uses_native_beat_bounds_not_wall_time (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_off_keeps_native_rest_identity_without_fabricated_fresh_redraw (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_real_lane_uses_same_native_beats_without_logical_time_substitution (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_stale_frame_whole_loop_epoch_and_missing_source_clock_cannot_pass (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_wrong_phase_real_revision_and_changed_clock_receipt_are_refused (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.019s
+
+OK

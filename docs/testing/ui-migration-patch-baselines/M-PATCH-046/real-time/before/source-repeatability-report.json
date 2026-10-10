@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "132900c537c367fdb144e5cc323ec4778a4cfb40",
+  "selected_cases": [
+    "M-PATCH-043",
+    "M-PATCH-044",
+    "M-PATCH-045",
+    "M-PATCH-046",
+    "M-PATCH-047",
+    "M-PATCH-048",
+    "M-REC-PARAM-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/patch_params.py": "M-PATCH-043",
+    "tests/behaviour/contract/trig_parameter_interactions.py": "M-REC-PARAM-004"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/patch_params.py",
+      "case": "M-PATCH-043",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-41ecfc90a04440b3821f8d37a0aef063/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-41ecfc90a04440b3821f8d37a0aef063/manifest.json",
+      "manifest_sha256": "365ff89eb3d014b28cd77894d13efa8dd1d3ef6116d7dc04e2441c0241f4c478",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/trig_parameter_interactions.py",
+      "case": "M-REC-PARAM-004",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-a7e029eaa3d34b2fbc15b4d4abcc14b7/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-a7e029eaa3d34b2fbc15b4d4abcc14b7/manifest.json",
+      "manifest_sha256": "f03218784ad4166be1179d74f9b765671a0e501f9e24962e74f14ff6279c389c",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

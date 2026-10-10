@@ -1,0 +1,16 @@
+{
+  "operator_directory": "/home/andy/mosaic-manual-build-operators/focused-dashboard-launch-1f25a146c7784a52af2e93073a5b622b",
+  "created_utc": "2026-10-04T12:34:52.104991+00:00",
+  "root_release": "single controlled no-publish output-dashboard-readout capture",
+  "launch_authorized": true,
+  "argv_file": "/home/andy/mosaic-manual-build-operators/focused-dashboard-launch-1f25a146c7784a52af2e93073a5b622b/focused-dashboard-argv.json",
+  "argv_raw_sha256": "ab05ba2451b657bf01dc3190bd0fb952cef56b8f883e2441738a901f65655723",
+  "argv_canonical_sha256": "e78d4dfc83c444e4c5596cfba03a3f0a029db5917640c5181d171685272aadb6",
+  "source_snapshot": "/home/andy/mosaic-manual-build-operators/focused-dashboard-launch-1f25a146c7784a52af2e93073a5b622b/source-snapshot.json",
+  "source_snapshot_sha256": "3bbcdc06c49e3a59910a75d2418f64a0ec696c5ddbb287afee7cfeca43acf657",
+  "fresh_native_and_builder_scan": [],
+  "scan_utc": "2026-10-04T12:34:52.104991+00:00",
+  "publish": false,
+  "profile": "base-midi",
+  "clock_mode": "controlled-experimental"
+}

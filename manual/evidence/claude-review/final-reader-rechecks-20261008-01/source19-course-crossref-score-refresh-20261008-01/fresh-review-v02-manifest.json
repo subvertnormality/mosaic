@@ -1,0 +1,101 @@
+{
+  "manifest_id": "six-unit-rendered-review-v02",
+  "candidate": "course-output-prerequisites-20261008-01/projection-v02",
+  "reader_index_sha256": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701",
+  "generated_assets": {
+    "/manual/generated/reader-index.json": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701",
+    "/manual/generated/reader-chunks/scenes/course-getting-started-0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b.json": "0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b",
+    "/manual/generated/reader-chunks/scenes/software-player-polyperc-76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53.json": "76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53",
+    "/manual/generated/reader-chunks/scenes/mute-live-resume-c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315.json": "c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315",
+    "/manual/generated/reader-chunks/scenes/range-reject-and-recover-6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636.json": "6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636",
+    "/manual/generated/reader-chunks/scenes/course-setup-9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60.json": "9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60",
+    "/manual/generated/reader-chunks/scenes/player-apply-polyperc-72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b.json": "72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b"
+  },
+  "runtime_reader_js_sha256": "ff5958093a44b274ab4e142d9e5d29f54ed0f53f8d82aee4f85027bbfc2d9091",
+  "harness_path": "review_six_units_v03.cjs",
+  "harness_sha256": "3312b37672746f85903b65c6e946c4018b95e75b8e11dfa9d405b0fe45c2c8f2",
+  "browser_observations_path": "evidence-v07/browser-observations.json",
+  "browser_observations_sha256": "654295a2f991c09a1251d6aa97a245d041872e5185fb59f27042186cbfb9ef92",
+  "report_json_path": "fresh-review-v02.json",
+  "report_json_sha256": "a76fbe9b9babd5abc58e4a88bd204129bc38dfd25868f031f7d7a5c1ed6160d2",
+  "report_markdown_path": "fresh-review-v02.md",
+  "report_markdown_sha256": "ed4ee72ce62879e6eae0c231f36ff11d746889d52d34d4e16bf575ae26ab2581",
+  "screenshot_files": [
+    {
+      "path": "evidence-v07/course-getting-started-notation-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-notation-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-notation.png",
+      "sha256": "68edd00151bb9638850e57e79d3d225045c6b32087ee72ac68fcb59c5da6c0c2"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-objects-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-objects-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-getting-started-objects.png",
+      "sha256": "24aeba71d821547ff0fc212712758b2d5dcdac0bbe6d6b06e611f3341e16d068"
+    },
+    {
+      "path": "evidence-v07/course-setup-apply-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-setup-apply-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-setup-apply.png",
+      "sha256": "9d94de190c78f54710778e41d430196c3ffd997e1f0558f4b47b1bdc65e28bf5"
+    },
+    {
+      "path": "evidence-v07/course-setup-route-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-setup-route-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-setup-route.png",
+      "sha256": "01feebcf866eb170c026dbbd6d2be92b605e4b79127ed330e2a358da6a41bf0d"
+    },
+    {
+      "path": "evidence-v07/course-setup-tempo-destination--no-sound.png",
+      "sha256": "5145347cc9b63ad10e1e5af9dad0122eb8db510581675242b8e25c830eb5ae32"
+    },
+    {
+      "path": "evidence-v07/course-setup-tempo-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/course-setup-tempo.png",
+      "sha256": "ae791840249eb888e7a66ae91dd6a6d193d79f646a5e69ea6e6f6cde20cae976"
+    },
+    {
+      "path": "evidence-v07/lesson-mods-and-software-devices-play-polyperc-apply-confirm-destination--norns-sound-sources-with-n-b.png",
+      "sha256": "e3fac41ae54e97e4adf147cebb21187ea4a438866cb7a6b29e89172d31717964"
+    },
+    {
+      "path": "evidence-v07/lesson-mods-and-software-devices-play-polyperc-apply-confirm.png",
+      "sha256": "7103b6a8dbcb9724ce308e99af6bb25e3449287b529e58036369eac73fbd57d3"
+    }
+  ],
+  "browser_passed": true,
+  "unit_count": 6,
+  "all_routes_raw_markdown_matches": 0,
+  "clicked_destination_checks": [
+    "Norns Sound Sources with n.b. => #norns-sound-sources-with-n-b / Norns Sound Sources with n.b.",
+    "No Sound => #no-sound / Troubleshooting No Sound (five course routes; disclosure opened)"
+  ],
+  "preserved_prior_review": "fresh-review.json and evidence-v02 through evidence-v06 retained; no previous score report overwritten"
+}

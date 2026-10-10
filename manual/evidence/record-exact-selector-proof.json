@@ -1,0 +1,15 @@
+{
+  "native_source": "tests/behaviour/driver.py Driver.playback waits len(expected)*cycles+1; with two-note phrase and cycles3, seven note-ons close three complete cycles. cases.py builds and checks every gap against exact1/3 with original controlled2ns/realtime10ms tolerances unchanged.",
+  "old_documentary_count": 5,
+  "correct_minimum_interval_count": 6,
+  "exact_selector_counts": [
+    6,
+    7
+  ],
+  "rejected_shapes": [
+    "five intervals",
+    "any interval differing from1/3"
+  ],
+  "native_acceptance_changed": false,
+  "original_failed_run": "/home/andy/mosaic-manual-runs/ca0cd5a4be39436c8b26bfff88248541"
+}

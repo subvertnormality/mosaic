@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "publication_kind": "doctor-options-qualification",
+  "scope": "Canonical specialized native-audio qualification; not a global base-MIDI campaign case. Setup option registration names two expected manual-build roles; it does not attest that either native role has run.",
+  "qualifications": [
+    {
+      "id": "MA-DOCTOR-MANUAL-START-BEAT-001",
+      "citation": "manual:rhythm-doctor",
+      "feature_id": "rhythm-doctor",
+      "required_for_manual_build": true,
+      "global_inventory_member": false,
+      "runner": {
+        "path": "tools/doctor_options_capture.py",
+        "role": "manual_right",
+        "clock_mode": "real-time"
+      },
+      "procedure": {
+        "path": "tests/behaviour/contract/rhythm_doctor_start_beat.py",
+        "callable": "next_beat_apply_restore"
+      },
+      "checkpoint_ids": [
+        "start-beat-original1",
+        "start-beat-next2",
+        "start-beat-next-ready",
+        "start-beat-restore1",
+        "start-beat-restored-ready"
+      ],
+      "scope": "Actual Manual capture grid; select beat2, reanalyse the retained PCM, restore beat1, preserving exact recording and candidate absolute sample identity.",
+      "controlled_time": {
+        "applicable": false,
+        "reason": "Public ADC/softcut acquisition and retained-PCM analysis require real-time audio; no controlled-time backend substitute."
+      },
+      "ui_only_witness": {
+        "role": "ready_options",
+        "procedure": "draft_next_cancel",
+        "clock_modes": [
+          "real-time",
+          "controlled-experimental"
+        ],
+        "backend_regression": false,
+        "successful_reanalysis_claim": false,
+        "requires": "Same-build genuinely captured and independently qualified candidate Ready project; tests draft selection/cancel only."
+      }
+    },
+    {
+      "id": "MA-DOCTOR-SETUP-OPTIONS-001",
+      "citation": "manual:rhythm-doctor",
+      "feature_id": "rhythm-doctor",
+      "required_for_manual_build": true,
+      "global_inventory_member": false,
+      "registration_only": true,
+      "native_run_required": true,
+      "runner": {
+        "path": "tools/doctor_options_capture.py",
+        "roles": [
+          {
+            "role": "setup_real",
+            "clock_mode": "real-time",
+            "installation_profile": "audio"
+          },
+          {
+            "role": "setup_controlled",
+            "clock_mode": "controlled-experimental",
+            "installation_profile": "controlled"
+          }
+        ]
+      },
+      "procedure": {
+        "path": "tests/behaviour/contract/rhythm_doctor_options.py",
+        "callable": "setup_options"
+      },
+      "result_ids": [
+        "setup-complete"
+      ],
+      "scope": "Public R01 setup drafts, boundary values, discard/keep and R11 playing gate. UI-only: manual BPM and Stereo/L/R backend use are not claimed.",
+      "controlled_time": {
+        "applicable": true,
+        "reason": "Setup field edits, draft commit/discard and visible playing gate are deterministic public UI behavior; this procedure claims no ADC routing or backend analysis."
+      }
+    }
+  ]
+}

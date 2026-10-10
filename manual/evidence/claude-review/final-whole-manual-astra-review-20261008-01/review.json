@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-08",
+  "reviewer": "Astra independent whole-manual reader review",
+  "url": "http://localhost:8785/manual/",
+  "verdict": "changes_required",
+  "all_seven_at_least_eight": false,
+  "scores": {"readability":7,"comprehensibility":7,"flow":7,"understandability":8,"user_friendliness":8,"interactive_example_usefulness":7,"cohesion":7},
+  "pins": {
+    "book_authoritative_independently_hashed":"54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+    "reader_index_served":"39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf",
+    "book_js_final_served_and_authoritative":"a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "book_js_initial_collection":"ff5958093a44b274ab4e142d9e5d29f54ed0f53f8d82aee4f85027bbfc2d9091",
+    "manual_js":"49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "css":"123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+    "index_html_served_and_authoritative":"c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+    "author_identity_root_supplied":"80cc81d39ab276c32da0561588cafad4ac3f4123b065043573a78b1483312d46",
+    "quick_reference":"6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+  },
+  "coverage": {
+    "widths":[1440,390],"height":900,"prose_feature_inventory":133,"private_guarded_features":3,"course_openings":10,
+    "initial_browser_route_viewport_pairs":66,"initial_page_errors":[],"initial_document_overflows":[],
+    "scene_caption_scan_count":146,"scene_chunk_fetch_failures":[],
+    "current_full_425_lesson_rescore":false,"prior_425_threshold":"external carried evidence only",
+    "actual_interactions":["exact and partial search","keyboard result activation and heading focus","private search and routes","six ordered first-loop controls and result","independent Harmony continuation","keyboard Degree picker all eleven steps","modest and advanced LFO routes","three complete recording recipes","Save named arrangement result","original and Shield layout","persistent Shield preference","standard and enlarged grid","keyboard column16 navigation","audio controls and muted cleanup","quick-reference filter"],
+    "audio_listened":false,"native_or_hardware_run":false,"source_mutated":false
+  },
+  "required_findings": [
+    {"id":"R1","severity":"high","title":"Missing Pattern 1 assignment from empty project","locations":["pocket-rhythm.recipes[0].text","tilting-harmony.recipes[0].text"],"fix":"Explicitly assign Pattern 1 to Channel 1 before playback."},
+    {"id":"R2","severity":"high","title":"Incorrect sixteen-step paging on Channel Masks and Trig params","locations":["small-hours.prose","small-hours.recipes[0].text","small-hours.recipes[2].text","pocket-rhythm.recipes[0].text","pocket-rhythm.recipes[1].text","masks.recipes[4].text"],"fix":"Use all64 step map on rows4–7. Reserve paging for Pattern Note/Velocity."},
+    {"id":"R3","severity":"high","title":"Average/Higher recipe selects copy before preparing source","locations":["note-merge-modes.recipes[0].text"],"fix":"Prepare Average in slot1, copy once, then change only slot2 to Higher."},
+    {"id":"R4","severity":"medium","title":"Misleading playback comparisons","locations":["small-hours.recipes[0].text step5","loops-that-meet.recipes[0].text step2"],"fix":"Account for three empty bars during initial64-step audition; describe phrase-start alignment rather than unique60/79 pitch coincidence."},
+    {"id":"R5","severity":"medium","title":"Review/production language remains in player-facing content","locations":["midi-panic.details[0]","locks.details[0]","midi-controller-options.details[0]","honor-scale-rotations.details[1]","honour-scale-transpose.details[1]","lock-lead-time.prose","performance-management.details[0]","save-and-load.details[0] and human_outcome projections","interacting-with-slots.recipes[1]","locks.recipes[4]","recordings_context param-lock-comparison build_steps","recordings_context lesson_relations explanations"],"fix":"Preserve truthful practical scope in player language; retain audit/provenance separately."}
+  ],
+  "smaller_findings":["small-hours recipes say Press E1","scale-editor recipe0 degree1–4 mismatch with0–3 convention and mismatched Build a phrase link","song-editor recipe0 first-loop CDEF mismatch","interacting-with-slots recipe2 explicit pattern assignments","lock-random-to-pentatonic recipe0 guarantees random note within few passes","lock-all-to-pentatonic recipe0 missing E2 Scale selection","chord-strum-a-timed-chord assign-strum minor verified wording"],
+  "original_issue_closure": {"F01":"closed_reader","F02":"closed_reader","F03":"closed_recorded_replay_scope","F04":"closed_reader","F05":"closed_reviewed_transitions","F06":"reopened_R1_R2_R3_R4","F07":"closed_reader","F08":"closed_reviewed_routes","F09":"closed_reader","F10":"closed_layout","F11":"reopened_R5"},
+  "harness_qualifications":["Only evaluate target after expected rendered content, not hash alone.","Immediate audio measurement after hash saw old playing element; actual rendered-destination check paused original audio at both widths.","Final control-guide Show result requires preceding actions. Full ordered action sequence correctly focuses step-title.","Initial unsupported searchbox Enter assumption replaced with actual result focus+Enter. Search focus behavior passes."],
+  "evidence":["browser-observations.json","interaction-observations.json","workflow-observations.json","audio-check.json","caption-candidates.json","reader-prose.json","review.md"],
+  "next_review":"Scoped verification after corrections with unchanged-source parity; no blanket native/audio/CI closure."
+}

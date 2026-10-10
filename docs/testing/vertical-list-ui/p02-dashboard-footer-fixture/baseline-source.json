@@ -1,0 +1,10 @@
+{
+  "files": {
+    "tests/behaviour/contract/live_ui_feedback.py": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+    "tests/behaviour/test_ui.py": "1293569c8493526519a427eeef89d99c719bf20013ee06432005ca973e81dcdc"
+  },
+  "original_failed_run": "/home/andy/mosaic-manual-runs/8f3610520c1d44e785436eb431767b4d",
+  "failed_build": "c267aa2b68774bec98111a09b82ec17e",
+  "native_last_footer": "E3 SET K3 APPLY",
+  "native_last_frame_sha": "3806dfcafd0ab51e134a0384428e5ee24239813ff9c9853d5481af0b2c25f311"
+}

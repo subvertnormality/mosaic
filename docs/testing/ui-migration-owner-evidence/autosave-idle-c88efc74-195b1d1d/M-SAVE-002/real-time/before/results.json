@@ -1,0 +1,77 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "59.5s-idle",
+    "autosave_state": "absent",
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "input-restarts",
+    "autosave_state": "absent",
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "saved-after-idle",
+    "autosave_state": "created",
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "no-save-while-playing",
+    "autosave_state": "unchanged",
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "stop-restarts",
+    "autosave_state": "unchanged",
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "saved-after-stop",
+    "autosave_state": "changed",
+    "passed": true
+  }
+]

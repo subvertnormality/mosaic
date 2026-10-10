@@ -1,0 +1,13 @@
+......E....................
+======================================================================
+ERROR: test_checkpoint_pixels_must_match_its_own_native_frame_not_another_observation (test_doctor_options_audit.DoctorManualStartBeatIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 191, in test_checkpoint_pixels_must_match_its_own_native_frame_not_another_observation
+    with self.assertRaisesRegex(ValueError,'bound native'):audit.check_checkpoint_pixels(frame,observations,Path('/unused'))
+AttributeError: module 'doctor_options_audit' has no attribute 'check_checkpoint_pixels'
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.064s
+
+FAILED (errors=1)

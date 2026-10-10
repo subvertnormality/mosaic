@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "candidate": "v04",
+  "source": {
+    "commit": "9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0",
+    "tree": "13bc90a62d0e176d2ab8d80c9e091cf90aa28534"
+  },
+  "patch": {
+    "path": "test-corrections-v04.patch",
+    "sha256": "258ee8664fb6ef4afd011234a07f77fbab8f5f4b05d71d0bba0c32a92da330dc",
+    "files": [
+      {
+        "path": "tests/behaviour/test_manual_build.py",
+        "before_sha256": "905f773d13f2a18321a2fc7609d33db10752e63f55478819b568d1c7dd3d8889",
+        "after_sha256": "e884348aeea33040d27dc730fd2e1467b7158dc9a5c0306de00ed2fcab58d63a"
+      },
+      {
+        "path": "tools/test_manual_reconcile_build.py",
+        "before_sha256": "ce80671bea82155db0296192ad263c190fc861562192637332417fbb3306d529",
+        "after_sha256": "148a1e00a614071fe758e5e87103036bc4ceddbc48ca8fafa407f78187a11885"
+      },
+      {
+        "path": "tests/behaviour/test_manual_publication_verify.py",
+        "before_sha256": "73b26edb5148a901e566b92feed1a7602078362af6cb76df53d254a6f7db205c",
+        "after_sha256": "3a149cef46708ffd784a3c8468322b64132c9995b36a763fcfd4b197cfbad7e3"
+      },
+      {
+        "path": "tests/behaviour/test_manual_controlled_generation_integrity.py",
+        "before_sha256": "384381629c4f486dd81d41f07f3d14b127cc2e70d2fd5a74d70326733bd5aff1",
+        "after_sha256": "646f7e120fbfddd556b1fd86a52544b00e1dc7be3fc521f1a9a8901a474b2698"
+      }
+    ]
+  },
+  "review_delta": [
+    "Separate 2026-10-06 receipted stage names from 2026-10-08 source-derived stage names.",
+    "Assert producer after compile and before reader projection, and real Save Dialog before controlled Save Dialog.",
+    "Preserve prior pin, count, scope, and audit assertions."
+  ],
+  "tests": [
+    "test_manual_build overlay with source __file__ pinned to checkout, Python 3.8: 62 passed",
+    "test_manual_build overlay with source __file__ pinned to checkout, Python 3.11.9: 62 passed",
+    "test_manual_reconcile_build overlay with source __file__ pinned to checkout, Python 3.8: 63 passed",
+    "publication verifier focused suite: 73 passed, 2 MONOME_EMULATOR-only skips (from v03, unchanged)",
+    "controlled generation integrity: 2 passed (from v03, unchanged)"
+  ],
+  "limitations": [
+    "The candidate corrects focused portable tests only; separate fixture/evidence failures remain and this does not make the failed Actions run green.",
+    "No production source changes, native launch, audio recording, or full pytest run."
+  ]
+}

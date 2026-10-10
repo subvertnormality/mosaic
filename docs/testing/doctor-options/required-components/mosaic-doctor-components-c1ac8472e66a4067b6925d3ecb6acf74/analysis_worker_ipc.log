@@ -1,0 +1,27 @@
+test_absent_backend_fails_without_a_result_or_ready_payload (test_analysis_worker_ipc.AnalysisWorkerIPC.test_absent_backend_fails_without_a_result_or_ready_payload) ... ok
+test_cancel_terminates_pinned_backend_without_publishing_a_result (test_analysis_worker_ipc.AnalysisWorkerIPC.test_cancel_terminates_pinned_backend_without_publishing_a_result) ... ok
+test_forty_five_second_capture_bound_is_enforced_before_backend_execution (test_analysis_worker_ipc.AnalysisWorkerIPC.test_forty_five_second_capture_bound_is_enforced_before_backend_execution) ... ok
+test_omnizart_partial_drum_backend_reports_its_missing_bass_component (test_analysis_worker_ipc.AnalysisWorkerIPC.test_omnizart_partial_drum_backend_reports_its_missing_bass_component) ... ok
+test_pinned_backend_receives_verified_pcm_and_publishes_every_lane_gate (test_analysis_worker_ipc.AnalysisWorkerIPC.test_pinned_backend_receives_verified_pcm_and_publishes_every_lane_gate) ... ok
+test_capture_contract_cannot_exceed_forty_five_seconds (test_analysis_worker_ipc.AnalysisWorkerValidation.test_capture_contract_cannot_exceed_forty_five_seconds) ... ok
+test_every_active_lane_requires_its_own_gate (test_analysis_worker_ipc.AnalysisWorkerValidation.test_every_active_lane_requires_its_own_gate) ... ok
+test_launcher_refuses_partial_or_changed_local_backend_profile (test_analysis_worker_ipc.AnalysisWorkerValidation.test_launcher_refuses_partial_or_changed_local_backend_profile) ... ok
+test_unknown_lane_and_unpinned_artifact_are_rejected (test_analysis_worker_ipc.AnalysisWorkerValidation.test_unknown_lane_and_unpinned_artifact_are_rejected) ... ok
+test_a_template_identity_is_accepted (test_analysis_worker_ipc.DspBackendConfigurationTests.test_a_template_identity_is_accepted) ... ok
+test_a_template_identity_missing_its_digest_is_refused (test_analysis_worker_ipc.DspBackendConfigurationTests.test_a_template_identity_missing_its_digest_is_refused) ... ok
+test_mixing_the_two_identity_shapes_is_refused (test_analysis_worker_ipc.DspBackendConfigurationTests.test_mixing_the_two_identity_shapes_is_refused) ... ok
+test_the_cli_pins_the_template_digest_it_was_configured_with (test_analysis_worker_ipc.DspBackendConfigurationTests.test_the_cli_pins_the_template_digest_it_was_configured_with)
+main() validated --template-sha256 and then dropped it. ... ok
+test_a_remote_result_is_accepted_when_remote_is_enabled (test_analysis_worker_ipc.RemoteAnalysisAcceptanceTests.test_a_remote_result_is_accepted_when_remote_is_enabled) ... ok
+test_a_remote_result_is_still_held_to_the_structural_contract (test_analysis_worker_ipc.RemoteAnalysisAcceptanceTests.test_a_remote_result_is_still_held_to_the_structural_contract)
+Declaring a remote backend buys identity, not a free pass: a result ... ok
+test_a_result_claiming_another_identity_is_refused (test_analysis_worker_ipc.RemoteAnalysisAcceptanceTests.test_a_result_claiming_another_identity_is_refused) ... ok
+test_remote_results_are_refused_when_remote_is_not_configured (test_analysis_worker_ipc.RemoteAnalysisAcceptanceTests.test_remote_results_are_refused_when_remote_is_not_configured)
+Nothing should accept a remote result on a device with no server ... ok
+test_the_backend_id_is_matched_by_prefix_not_exactly (test_analysis_worker_ipc.RemoteAnalysisAcceptanceTests.test_the_backend_id_is_matched_by_prefix_not_exactly)
+The server names itself for the models it loaded, so the id changes ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.989s
+
+OK

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "1254e289731d54a06a5eed168bc363e9d8bd6cbf",
+  "selected_cases": [
+    "M-MAP-002"
+  ],
+  "selected_modules": {
+    "tests/behaviour/midi_mapping.py": "M-MAP-002"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/midi_mapping.py",
+      "case": "M-MAP-002",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-6df7af140cbf4af7a9087f1fb35e4802/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-6df7af140cbf4af7a9087f1fb35e4802/manifest.json",
+      "manifest_sha256": "4363d5ae3bbcb9cf0a1ad32c4156dbd1d9c157861d3ce94daad63ce18de61121",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

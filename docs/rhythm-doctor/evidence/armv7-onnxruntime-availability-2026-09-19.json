@@ -1,0 +1,53 @@
+{
+  "scope": "Deployment-dependency availability research only. This is not Norns inference, latency, RSS or acceptance evidence.",
+  "date": "2026-09-19",
+  "question": "Does an official prebuilt ONNX Runtime for linux armv7l (32-bit armhf) CPython 3.9 exist for the Norns target?",
+  "target": {
+    "arch": "armv7l",
+    "python": "3.9.2",
+    "os": "Debian bullseye (glibc 2.31, unverified on device)",
+    "gcc": "10.2.1",
+    "cmake": "3.18.4",
+    "mem_total_kib": 1000252,
+    "mem_available_kib_approx": 483000,
+    "swap": "none"
+  },
+  "verdict": "NO official prebuilt ONNX Runtime artifact for linux armv7l has ever been published, for any version or any Python version.",
+  "primary_evidence": {
+    "pypi_onnxruntime_linux_platform_tags_all_releases": [
+      "manylinux1_x86_64", "manylinux2010_x86_64", "manylinux2014_aarch64", "manylinux2014_x86_64",
+      "manylinux_2_27_aarch64", "manylinux_2_27_x86_64", "manylinux_2_28_aarch64", "manylinux_2_28_x86_64"
+    ],
+    "pypi_arm32_tags_found": "NONE",
+    "pypi_enumeration_method": "https://pypi.org/pypi/onnxruntime/json enumerated over all releases; independently reproduced by the primary agent, not accepted from delegation alone",
+    "github_releases": "microsoft/onnxruntime Linux ARM assets are exclusively onnxruntime-linux-aarch64-<ver>.tgz; no armhf/armv7/arm32 asset in any release",
+    "official_build_doc_statement": "https://onnxruntime.ai/docs/build/inferencing.html states the recommended ARM path is ARM64 only (no support for ARM32)"
+  },
+  "secondary_blocker": {
+    "statement": "Independent of architecture, the last onnxruntime release publishing cp39 Linux wheels is 1.19.2; 1.20.0+ ships no cp39, and 1.24.1+ requires Python >= 3.11.",
+    "verified_by": "primary agent, PyPI JSON enumeration"
+  },
+  "build_from_source_assessment": {
+    "arm32_still_build_supported": "cmake/linux_arm32_crosscompile_toolchain.cmake remains on main; ARM32v7 remains in the supported-target matrix, but is never binary-distributed",
+    "documented_approach": "cross-compilation from x86_64 with an arm-linux-gnueabihf toolchain; QEMU route is documented as ARM64-only",
+    "native_build_on_device": "NOT VIABLE. Official docs state the build needs more than 2GB memory and that a 32-bit compiler may lack memory to run the build. Target has ~483 MiB available and no swap.",
+    "toolchain_gap": "target cmake 3.18.4 satisfies only onnxruntime <= ~1.12 (cmake_minimum_required 3.18); 1.16+ requires cmake >= 3.26"
+  },
+  "unofficial_candidates_not_verified": [
+    {"source": "github.com/nknytk/built-onnxruntime-for-raspberrypi-linux", "relevance": "publishes bullseye cp39 linux_armv7l wheels up to 1.16.0", "status": "UNOFFICIAL, no warranty, not smoke-tested on Norns, no redistribution assessment performed"},
+    {"source": "github.com/mann1x/onnxruntime-armhf", "relevance": "1.17.3 C/C++ shared library only, armv7-a NEON hard-float", "status": "UNOFFICIAL, no Python wheel, not smoke-tested on Norns"}
+  ],
+  "alternative_runtimes_surveyed": [
+    {"name": "tract (sonos, Rust)", "armv7": "first-class: CI builds armv7-unknown-linux-gnueabihf; hand-written ARMv7 NEON kernels", "onnx": "native runtime ONNX loading", "python39": "ctypes binding over a cross-built cdylib; no PyPI armv7 wheel", "note": "strongest candidate on paper; unverified on device"},
+    {"name": "ncnn", "armv7": "prebuilt manylinux_2_31_armv7l cp39 wheels on PyPI", "onnx": "offline conversion only (onnx2ncnn/PNNX)", "python39": "yes"},
+    {"name": "tflite-runtime", "armv7": "manylinux2014_armv7l cp39 wheels up to 2.13.0", "onnx": "offline conversion only", "python39": "yes", "note": "successor ai-edge-litert publishes no armv7l wheels"},
+    {"name": "ggml/llama.cpp/whisper.cpp", "armv7": "32-bit builds broken; upstream issue closed as not planned", "onnx": "no"}
+  ],
+  "unresolved": [
+    "None of the unofficial or alternative runtimes has been smoke-tested on the actual Norns device.",
+    "Whether Norns ships numpy, and its exact glibc version, remain unchecked on device.",
+    "No Microsoft announcement formally dropping ARM32 was found; the absence appears to be 'never released' rather than 'dropped on a date'.",
+    "UMXHQ currently runs under PyTorch, which remains an uncredible Norns deployment dependency regardless of this finding."
+  ],
+  "consequence": "Any Norns deployment of the pinned pretrained chain requires either a cross-compiled ONNX Runtime armv7l build produced off-device, or a different runtime such as tract. No official-wheel path exists. This does not by itself invalidate the desktop quality measurement."
+}

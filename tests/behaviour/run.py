@@ -3,6 +3,14 @@ import ast,argparse,hashlib,json,os,platform,subprocess,sys,traceback,uuid,time
 from pathlib import Path
 from driver import Driver,REPO,EMULATOR_ROOT,write,digest
 from cases import CASES
+from manual_authority import verify_authority,verify_manual_sources
+
+
+def behaviour_source_hashes(repo):
+    return {
+        path.relative_to(repo).as_posix(): digest(path)
+        for path in sorted((Path(repo) / 'tests/behaviour').rglob('*.py'))
+    }
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--list',action='store_true')
@@ -30,10 +38,9 @@ def main():
     ids=[k.value for k in keys]
     assert len(ids)==len(set(ids)),'Duplicate case IDs in source registry'
     inventory=json.loads((REPO/'tests/behaviour/manual-inventory.json').read_text())
-    assert digest(REPO/inventory['manual'])==inventory['manual_sha256'],'Manual changed: reconcile inventory'
-    for source in inventory['manual_sources']:
-        if 'path' in source:
-            assert digest(REPO/source['path'])==source['sha256'],'Manual source changed: '+source['path']
+    verify_manual_sources(REPO,inventory)
+    manual_authoring_identity=verify_authority(REPO,inventory)
+    historical=inventory.get('historical_manual')
     requirements={r['id'] for r in inventory['requirements']}
     assert all(set(case['requirements'])<=requirements for case in CASES.values()),'Dangling case requirement ID'
     if args.list:
@@ -62,7 +69,12 @@ def main():
             wall_elapsed_seconds=time.monotonic()-started,
             logical_advanced_seconds=(sum(a['nanoseconds'] for p in out.rglob('recipe.json') if not {'code','data'} & set(p.relative_to(out).parts) for a in json.loads(p.read_text()) if a['type']=='advance')/1e9 if args.clock_mode!='real-time' else None),
             manual_sha256=inventory['manual_sha256'],
-            behaviour_source_sha256={p.relative_to(REPO).as_posix():digest(p) for p in sorted((REPO/'tests/behaviour').glob('*.py'))},
+            manual_authoring_identity=manual_authoring_identity,historical_manual=historical,
+            original_manual=inventory.get("original_manual"),section_manual=inventory.get("section_manual"),
+            manual_source_aliases=inventory.get("manual_source_aliases",{}),
+            manual_authority_status=inventory.get("manual_authority",{}).get("status","legacy"),
+            manual_feature_citations=sorted({fid for section in inventory['sections'] if set(section.get('requirements',[])) & set(CASES[name]['requirements']) for fid in inventory.get('manual_authority',{}).get('feature_links',{}).get(section['id'],[])}),
+            behaviour_source_sha256=behaviour_source_hashes(REPO),
             platform=platform.platform(),failure=failure,
             artifacts=[dict(path=p.relative_to(out).as_posix(),sha256=digest(p),size=p.stat().st_size) for p in sorted(out.rglob('*')) if p.is_file() and 'code' not in p.relative_to(out).parts and 'data' not in p.relative_to(out).parts])
         write(out/'manifest.json',result);print(json.dumps(dict(case=name,passed=result['passed'],manifest=str(out/'manifest.json'))),flush=True)

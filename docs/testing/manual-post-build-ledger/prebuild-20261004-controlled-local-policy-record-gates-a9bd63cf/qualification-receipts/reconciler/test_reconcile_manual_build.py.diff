@@ -1,0 +1,58 @@
+--- 
++++ 
+@@ -220,12 +220,14 @@
+ class ControlledGenerationSourceTests(unittest.TestCase):
+  def test_controlled_scene_publication_reproduces_exact_native_bytes(self):
+   with tempfile.TemporaryDirectory() as temp:
+-   root=Path(temp);doc={'validation_scope':'controlled-manual-generation','realtime_qualification':'pending-ci','clock_mode':'controlled-experimental','complete_regression_run':False,'scenes':[{'id':'example','evidence':{'run':'frozen'},'steps':[{'id':'step','output':{'frame':'actual'},'expect':{'led':1}}]}]}
++   root=Path(temp);write(root/'case/capture-trace.json',[])
++   plan=root/'plan-source/manual/plan.yaml';plan.parent.mkdir(parents=True);plan.write_text(yaml.safe_dump({'scenes':[{'id':'example','steps':[{'id':'step','assertion':{'kind':'led','passed':True}}]}]}))
++   doc={'validation_scope':'controlled-manual-generation','realtime_qualification':'pending-ci','clock_mode':'controlled-experimental','complete_regression_run':False,'evidence':str(root),'source':{'plan_files':{'manual/plan.yaml':tool.sha(plan.read_bytes())}},'scenes':[{'id':'example','behaviour_case':'CASE','requirements':['R1'],'evidence':{'path':str(root/'case'),'capture_trace_sha256':tool.sha((root/'case/capture-trace.json').read_bytes())},'steps':[{'id':'step','inputs':[],'output':{'frame':'actual'},'expect':{'led':1,'assertion':{'kind':'led','passed':True}}}]}]}
+    write(root/'native.json',doc);write(root/'manual/generated/reference-example.json',doc);write(root/'manual/generated/doctor-scenes.json',{'scenes':[]})
+    m={'validation_scope':'controlled-manual-generation','stages':[{'name':'reference-controlled-example','executed_command':['capture','--publish','--output','reference-example.json'],'native_report':{'path':str(root/'native.json')}},{'name':'doctor-manual-real','native_report':{'path':'same-manual'}},{'name':'doctor-auto-real','native_report':{'path':'same-auto'}},{'name':'doctor-publish','executed_command':['publish','--manual-report','same-manual','--auto-report','same-auto']}]}
+    with patch('manual_doctor_publish.collect_reports',return_value={'scenes':[]}),patch('manual_doctor_publish.authored_bindings',return_value={'scenes':[]}):
+     result=tool.reproduced_scenes(root,root,m)
+-   scene=yaml.safe_load(result['manual/features/scenes-reference-example.yaml'])['scenes'][0];self.assertNotIn('evidence',scene);self.assertNotIn('output',scene['steps'][0]);self.assertEqual(scene['steps'][0]['expect'],{'led':1})
++   scene=yaml.safe_load(result['manual/features/scenes-reference-example.yaml'])['scenes'][0];self.assertNotIn('evidence',scene);self.assertNotIn('output',scene['steps'][0]);self.assertEqual(scene['steps'][0]['expect'],{'led':1,'assertion':{'kind':'led','passed':True}})
+  def test_controlled_publication_cannot_masquerade_as_real_time(self):
+   with tempfile.TemporaryDirectory() as temp:
+    root=Path(temp);doc={'validation_scope':'controlled-manual-generation','realtime_qualification':'pending-ci','clock_mode':'real-time','complete_regression_run':False,'scenes':[]}
+@@ -272,3 +274,38 @@
+    with self.assertRaisesRegex(ValueError,'Learning text or source claims'):tool.check_metadata('manual/course.yaml',a,b,build,False)
+    new['project']['description']='Invented lesson';b=yaml.safe_dump(new).encode();(p/'course-after.yaml').write_bytes(b);receipt['course_after_sha256']=tool.sha(b);write(p/'binding-receipt.json',receipt)
+    with self.assertRaisesRegex(ValueError,'Learning text or source claims'):tool.check_metadata('manual/course.yaml',a,b,build,True)
++
++class ReferenceObjectReconstructionTests(unittest.TestCase):
++ def setUp(self):
++  self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.run=Path(self.tmp.name)
++  self.trace=[{'type':'enc','n':2,'delta':2},{'type':'wait','seconds':.1}]
++  trace=self.run/'case/capture-trace.json';write(trace,self.trace);self.trace_sha=tool.sha(trace.read_bytes())
++  self.plans={'scenes':[{'id':sid,'steps':[{'id':'one','assertion':{'kind':'ensemble-polyrhythm','role_pitches':{1:48,2:55}}}]} for sid in ['first','second']]}
++  p=self.run/'plan-source/manual/plan.yaml';p.parent.mkdir(parents=True);p.write_text(yaml.safe_dump(self.plans,sort_keys=False));self.plan=p
++  requirements=['R1'];scenes=[]
++  for sid in ['first','second']:
++   scenes.append(dict(id=sid,behaviour_case='CASE',profile='base-midi',requirements=requirements,steps=[dict(id='one',inputs=self.trace[:],expect={'assertion':{'kind':'ensemble-polyrhythm','role_pitches':{1:48,2:55}}},output={})],evidence={'path':str(trace.parent),'capture_trace_sha256':self.trace_sha}))
++  self.original={'scenes':scenes,'source':{'plan_files':{'manual/plan.yaml':tool.sha(p.read_bytes())}},'evidence':str(self.run)}
++  self.document=json.loads(json.dumps(self.original))
++ def expected(self):
++  expected=copy.deepcopy(self.original['scenes'])
++  for scene in expected:
++   scene.pop('evidence')
++   for step in scene['steps']:step.pop('output')
++  return dict(schema_version=1,fixture_kind='behaviour-case',trace_contract='The original pinned case replays public inputs and verifies every authored semantic selector; per-scene deltas include native encoder units and waits.',scenes=expected)
++ def test_source_typed_integer_selector_keys_reproduce_exact_yaml(self):
++  expected=self.expected();expected['scenes']=expected['scenes'][:1];doc=copy.deepcopy(self.document);doc['scenes']=doc['scenes'][:1]
++  self.assertEqual(yaml.safe_dump(tool.reference_authoring(doc),sort_keys=False),yaml.safe_dump(expected,sort_keys=False))
++ def test_source_shared_trace_and_requirements_reproduce_exact_alias_bytes(self):
++  expected=self.expected()
++  for scene in expected['scenes']:scene['steps'][0]['expect']['assertion']={'kind':'plain','passed':True}
++  for scene in self.document['scenes']:scene['steps'][0]['expect']['assertion']={'kind':'plain','passed':True}
++  for scene in self.plans['scenes']:scene['steps'][0]['assertion']={'kind':'plain','passed':True}
++  self.plan.write_text(yaml.safe_dump(self.plans,sort_keys=False));self.document['source']['plan_files']['manual/plan.yaml']=tool.sha(self.plan.read_bytes())
++  self.assertEqual(yaml.safe_dump(tool.reference_authoring(self.document),sort_keys=False),yaml.safe_dump(expected,sort_keys=False))
++ def test_reject_actual_value_differing_from_pinned_selector(self):
++  self.document['scenes'][0]['steps'][0]['expect']['assertion']['role_pitches']['1']=99
++  with self.assertRaisesRegex(ValueError,'selector'):tool.reference_authoring(self.document)
++ def test_reject_actual_inputs_differing_from_immutable_trace(self):
++  self.document['scenes'][0]['steps'][0]['inputs'][0]['delta']=9
++  with self.assertRaisesRegex(ValueError,'trace'):tool.reference_authoring(self.document)

@@ -1,0 +1,47 @@
+{
+  "name": "reference-controlled-scene-plans-nested-base-midi",
+  "command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-nested.yaml",
+    "--profile",
+    "base-midi",
+    "--output",
+    "reference-nested-scenes.json",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--publish",
+    "--controlled-local"
+  ],
+  "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+  "exclusive_lock": false,
+  "action": null,
+  "passed": true,
+  "executed_command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-nested.yaml",
+    "--profile",
+    "base-midi",
+    "--output",
+    "reference-nested-scenes.json",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--publish",
+    "--controlled-local"
+  ],
+  "returncode": 0,
+  "native_report": {
+    "path": "/home/andy/mosaic-manual-runs/90a5df27f9bd479caf4bec904b54b741/reference-scenes.json",
+    "sha256": "945dbb96257f057634dfb581dfda500dff6a4c47de902653e2a7daaafafb411b"
+  },
+  "started_utc": "2026-10-04T10:13:14.226799+00:00",
+  "finished_utc": "2026-10-04T10:14:16.158707+00:00",
+  "log_sha256": "f4eef41b25900715f59301b02ae01bba1b8436435fc09ecbd58740d13c19940c"
+}

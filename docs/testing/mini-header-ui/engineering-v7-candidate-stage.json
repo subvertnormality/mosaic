@@ -1,0 +1,31 @@
+{
+  "staged_root": "/home/andy/mosaic-mini-header-engineering-v7-20261003/mosaic",
+  "identity_path": "/home/andy/mosaic-mini-header-engineering-v7-20261003/identity.json",
+  "identity_sha256": "f3ec981fb4cf0aee4cb9133312adb8fc931720b6237da0a790e690c637fcf283",
+  "files": 17786,
+  "pre_post_copied_equal": true,
+  "read_only": true,
+  "engineering_only": true,
+  "final_global_qualification": false,
+  "v5_controlled_strategy_scoped_identity_preserved": true,
+  "scoped_unchanged_files": 389,
+  "scoped_drift": [],
+  "previous_stage_preserved": "/home/andy/mosaic-mini-header-engineering-v6-20261003/mosaic",
+  "helper_hashes": {
+    "tests/behaviour/contract/merge_strategy_ui.py": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+    "tests/behaviour/contract/ui_readability.py": "f0f54903a2639403c35b1d59918e8c51dda61e8addbf892800ab96d5d29550f8",
+    "tests/behaviour/contract/mini_header_animation_ui.py": "450dbff89309d6004481b0d9162acd86ae6e359b10f30a861b225289d2d238de",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tests/behaviour/suite.py": "602b8c5dd3a8b18a9f7c6f9748bf004203540d1153ef99bb402ff603840813e2",
+    "tools/manual_doctor_audit.py": "31c6acf50841fd72877f478f6e7bdc048e1ab3aad5d10ee0761904494790ec1e",
+    "tools/manual_doctor_capture.py": "cae82b9fa3909ef29e641bef27c2a873ed935ab253f1f7b791ef2e7d5ec893d4"
+  },
+  "requested_doctor_hash_matches": {
+    "baf935a1": [
+      "tests/behaviour/contract/rhythm_doctor_options.py"
+    ],
+    "7d368751": [
+      "tools/doctor_options_audit.py"
+    ]
+  }
+}
