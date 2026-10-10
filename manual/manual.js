@@ -179,7 +179,7 @@ for(let x=1;x<=16;x++)node("span",x,document.querySelector(".grid-columns"));
 for(let i=0;i<128;i++){
  const b=node("button",undefined,$("grid"));b.type="button";b.tabIndex=i===0?0:-1;b.dataset.index=i;controls.grid.push(b);
  bindPress(b,"grid",{x:i%16+1,y:Math.floor(i/16)+1});
- b.onkeydown=e=>{const shift={ArrowLeft:-1,ArrowRight:1,ArrowUp:-16,ArrowDown:16}[e.key];if(shift!==undefined){e.preventDefault();const target=Math.max(0,Math.min(127,i+shift));controls.grid.forEach(n=>n.tabIndex=-1);controls.grid[target].tabIndex=0;controls.grid[target].focus();controls.grid[target].scrollIntoView({block:"nearest",inline:"nearest"});}};
+ b.onkeydown=e=>{const shift={ArrowLeft:-1,ArrowRight:1,ArrowUp:-16,ArrowDown:16}[e.key];if(shift!==undefined){e.preventDefault();const target=Math.max(0,Math.min(127,i+shift));controls.grid.forEach(n=>n.tabIndex=-1);controls.grid[target].tabIndex=0;const pad=controls.grid[target],wrap=pad.closest(".grid-wrap");pad.focus({preventScroll:true});if(wrap){const bounds=wrap.getBoundingClientRect(),rect=pad.getBoundingClientRect(),margin=10;if(rect.left<bounds.left+margin)wrap.scrollLeft-=bounds.left+margin-rect.left;else if(rect.right>bounds.right-margin)wrap.scrollLeft+=rect.right-bounds.right+margin;}}};
 }
 $("previous").onclick=()=>move(-1);$("next").onclick=()=>move(1);
 $("autoplay").onclick=()=>{
