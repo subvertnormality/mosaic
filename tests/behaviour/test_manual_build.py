@@ -260,6 +260,42 @@ class BuildPlan(unittest.TestCase):
    self.assertEqual(expected.read_text(),"new native publication")
    self.assertIn("features/scenes-reference-scenes.yaml",(root/"manual/book.yaml").read_text())
    self.assertIn("features/first-sound-capture.yaml",(root/"manual/book.yaml").read_text())
+ def test_reader_stage_preserves_previous_projection_before_regeneration(self):
+  # Build orchestration characterisation outside the manual; CI stale-chunk regression.
+  with tempfile.TemporaryDirectory() as folder:
+   root=Path(folder);generated=root/"manual/generated";chunks=generated/"reader-chunks/scenes"
+   chunks.mkdir(parents=True);(chunks/"old.json").write_bytes(b"old chunk")
+   (generated/"reader-index.json").write_bytes(b"old index")
+   (generated/"book.json").write_bytes(b"canonical book")
+   evidence=root/"evidence";evidence.mkdir();opts=self.options();opts.node_path=None
+   script="from pathlib import Path; import json; g=Path('manual/generated'); assert not (g/'reader-chunks').exists(), 'stale reader chunks'; assert not (g/'reader-index.json').exists(); print(json.dumps({'passed':True}))"
+   stage={"name":"reader-projection","command":[sys.executable,"-c",script],"emulator":None,"exclusive_lock":False,"action":None}
+   manifest={"stages":[]}
+   with mock.patch.object(build,"ROOT",root):build.run_build_stages([stage],evidence,opts,None,{},manifest)
+   self.assertTrue(manifest["stages"][0]["passed"])
+   archive=evidence/"previous-reader-projection/manual/generated"
+   self.assertEqual((archive/"reader-chunks/scenes/old.json").read_bytes(),b"old chunk")
+   self.assertEqual((archive/"reader-index.json").read_bytes(),b"old index")
+   self.assertEqual((generated/"book.json").read_bytes(),b"canonical book")
+ def test_reader_archive_refuses_symlinks_and_existing_archive_without_removing_sources(self):
+  # Build orchestration characterisation outside the manual.
+  with tempfile.TemporaryDirectory() as folder:
+   root=Path(folder);generated=root/"manual/generated";generated.mkdir(parents=True)
+   evidence=root/"evidence";evidence.mkdir();outside=root/"outside";outside.write_bytes(b"protected")
+   index=generated/"reader-index.json";index.symlink_to(outside)
+   with mock.patch.object(build,"ROOT",root):
+    with self.assertRaisesRegex(ValueError,"symlinked"):build.preserve_reader_projection(evidence)
+    self.assertEqual(outside.read_bytes(),b"protected");self.assertTrue(index.is_symlink())
+    index.unlink();index.write_bytes(b"old index")
+    archive=evidence/"previous-reader-projection";archive.mkdir()
+    with self.assertRaises(FileExistsError):build.preserve_reader_projection(evidence)
+    self.assertEqual(index.read_bytes(),b"old index")
+ def test_reader_archive_empty_generation_is_a_noop(self):
+  # Build orchestration characterisation outside the manual.
+  with tempfile.TemporaryDirectory() as folder:
+   root=Path(folder);evidence=root/"evidence";evidence.mkdir()
+   with mock.patch.object(build,"ROOT",root):self.assertEqual(build.preserve_reader_projection(evidence),[])
+   self.assertFalse((evidence/"previous-reader-projection").exists())
  def test_stage_evidence_records_failures_and_preserves_existing_log(self):
   with tempfile.TemporaryDirectory() as folder:
    evidence=Path(folder);opts=self.options();opts.node_path=None

@@ -420,6 +420,35 @@ def await_stage_gate(stage,index,evidence,options,completed):
     with (archive/(stem+".json")).open("x") as handle:
         json.dump(dict(request=request,request_sha256=sha,resume=accepted),handle,indent=2);handle.write("\n")
 
+def preserve_reader_projection(evidence):
+    """Archive old derived reader outputs; canonical inputs and strict audits stay intact."""
+    generated=ROOT/"manual/generated"
+    paths=[generated/"reader-index.json",generated/"reader-chunks"]
+    existing=[path for path in paths if path.exists() or path.is_symlink()]
+    if not existing:return []
+    if generated.is_symlink() or any(path.is_symlink() for path in existing):
+        raise ValueError("Refusing symlinked reader publication")
+    files=[]
+    for path in existing:
+        candidates=list(path.rglob("*")) if path.is_dir() else [path]
+        if any(item.is_symlink() for item in candidates):
+            raise ValueError("Refusing symlinked reader publication file")
+        files.extend(item for item in candidates if item.is_file())
+    archive=evidence/"previous-reader-projection"
+    archive.mkdir()
+    receipts=[]
+    for path in files:
+        relative=path.relative_to(ROOT);target=archive/relative
+        target.parent.mkdir(parents=True,exist_ok=True)
+        before=digest(path);shutil.copyfile(path,target)
+        if digest(target)!=before:raise ValueError("Reader publication archive digest mismatch")
+        receipts.append(dict(path=relative.as_posix(),sha256=before,archived_path=str(target)))
+    for path in existing:
+        if path.is_dir():shutil.rmtree(path)
+        else:path.unlink()
+    (archive/"receipt.json").write_text(json.dumps(receipts,indent=2)+"\n")
+    return receipts
+
 def run_stage(stage,evidence,options,browser_url):
     record=dict(stage,passed=False)
     log=evidence/(stage["name"]+".log")
@@ -533,6 +562,10 @@ def run_build_stages(stages,evidence,options,browser_url,adopted,manifest):
                     json.dump(record,handle,indent=2);handle.write(chr(10))
                 manifest["stages"].append(record)
             else:
+                if stage["name"]=="reader-projection":
+                    if (evidence/"reader-projection.log").exists():
+                        raise FileExistsError("Reader projection evidence already exists")
+                    preserve_reader_projection(evidence)
                 manifest["stages"].append(run_stage(stage,evidence,options,browser_url))
         except BaseException:
             record=evidence/(stage["name"]+".json")
