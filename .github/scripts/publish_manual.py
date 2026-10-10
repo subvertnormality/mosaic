@@ -689,7 +689,7 @@ def prepare(args):
     output = os.environ.get("GITHUB_OUTPUT")
     if output:
         with open(output, "a", encoding="utf-8") as stream:
-            stream.write(f"receipt_sha256={receipt_sha}\\n")
+            stream.write(f"receipt_sha256={receipt_sha}\n")
     return True
 
 def main():

@@ -936,6 +936,25 @@ class PR98MergedMainPromotionTests(unittest.TestCase):
             result = publisher.prepare(args)
         return result, fake, args, archive
 
+    def test_pr98_cli_emits_separate_receipt_hash_and_publishable_outputs(self):
+        # Characterisation: GitHub Actions consumes one key=value per line.
+        with tempfile.TemporaryDirectory() as temp:
+            fake, args, archive = self.fixture(temp)
+            output = Path(temp) / "github-output"
+            with patch.object(publisher, "GitHub", return_value=fake), \
+                 patch.object(publisher.subprocess, "check_output",
+                              side_effect=["9" * 40 + chr(10), self.TREE + chr(10)]), \
+                 patch.dict("os.environ", {"GITHUB_TOKEN": "x",
+                     "GITHUB_REPOSITORY": publisher.REPOSITORY,
+                     "GITHUB_REF": "refs/heads/main", "GITHUB_OUTPUT": str(output)}), \
+                 patch.object(sys, "argv", ["publish_manual.py", "--event-path", args.event_path,
+                     "--event-name", args.event_name, "--output-dir", args.output_dir]):
+                self.assertEqual(publisher.main(), 0)
+            receipt = Path(args.output_dir) / "promotion-receipt.json"
+            digest = hashlib.sha256(receipt.read_bytes()).hexdigest()
+            self.assertEqual(output.read_bytes(),
+                             ("receipt_sha256=" + digest + "\npublishable=true\n").encode())
+
     def test_promotes_exact_pr98_ci_artifact_against_merged_main_tree(self):
         with tempfile.TemporaryDirectory() as temp:
             result, fake, args, archive = self.execute(temp)
