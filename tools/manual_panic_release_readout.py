@@ -55,10 +55,9 @@ def _sha(path):
 def _canonical(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
-def validate_panic_release_readout(scene, step_id, wanted, project_root, resolve_evidence=Path):
-    _need(scene.get("id") == "panic-stops-sounding-note" and step_id == "panic-released"
-          and is_retained_panic_source(scene),
-          "Panic sounding-note receipt is restricted to its pinned retained endpoint")
+def _validate_panic_release_readout_contents(scene, step_id, wanted, project_root, resolve_evidence=Path):
+    _need(scene.get("id") == "panic-stops-sounding-note" and step_id == "panic-released",
+          "Panic scene and target step do not match the sounding-note receipt")
     _need(wanted == [{"port": 1, "bytes": [128, 60, 0]}],
           "Panic endpoint must require the actual MIDI 60 note-off")
     evidence = scene.get("evidence", {})
@@ -157,3 +156,60 @@ def validate_panic_release_readout(scene, step_id, wanted, project_root, resolve
             "adapter_source": "tools/manual_panic_release_readout.py",
             "adapter_source_sha256": _sha(Path(project_root) / "tools/manual_panic_release_readout.py"),
             "native": True}
+
+
+def validate_panic_release_readout(scene, step_id, wanted, project_root, resolve_evidence=Path):
+    # The retained-source path remains restricted to its original exact source pins.
+    _need(scene.get("id") == "panic-stops-sounding-note" and step_id == "panic-released"
+          and is_retained_panic_source(scene),
+          "Panic sounding-note receipt is restricted to its pinned retained endpoint")
+    return _validate_panic_release_readout_contents(scene, step_id, wanted, project_root, resolve_evidence)
+
+
+def validate_fresh_panic_release_readout(scene, step_id, wanted, project_root, build_root, manifest, record, resolve_evidence=Path):
+    """Validate the same strict receipt under a caller-pinned current-build admission."""
+    _need(scene.get("id") == "panic-stops-sounding-note" and step_id == "panic-released",
+          "Fresh Panic scene and target step do not match")
+    build_root = Path(build_root).resolve()
+    _need(isinstance(manifest, dict) and manifest.get("kind") == "fresh-native-target-midi-v1"
+          and manifest.get("validation_scope") == "fresh-native-target-midi-source-receipt"
+          and manifest.get("build_root") == str(build_root) and manifest.get("build_id") == build_root.name,
+          "Fresh Panic receipt lacks the current build manifest authority")
+    _need(manifest.get("qualification") in ("fresh-candidate-pending-ci", "derived-unit-fixture")
+          and manifest.get("complete_regression_run") is False,
+          "Fresh Panic manifest qualification is invalid")
+    sid = scene["id"]
+    _need(isinstance(record, dict) and manifest.get("scenes", {}).get(sid) == record
+          and record.get("scene_id") == sid and record.get("step_id") == step_id,
+          "Fresh Panic record does not match the current manifest target")
+    root = Path(resolve_evidence(scene.get("evidence", {}).get("path", ""))).resolve()
+    _need(root == Path(record.get("source_root", "")).resolve() and build_root in root.parents
+          and root.name == record.get("run_id"),
+          "Fresh Panic evidence is outside the authorized current build")
+    step = next((row for row in scene.get("steps", []) if row.get("id") == step_id), None)
+    _need(isinstance(step, dict) and record.get("target_sha256") == hashlib.sha256(
+          _canonical({k: step[k] for k in ("inputs", "expect", "output")})).hexdigest(),
+          "Fresh Panic scene target differs from the admitted target hash")
+    expected_names = {"results.json", "observations.json", "native/identity.json",
+                      "native/native-events.jsonl", "native/cleanup.json", "recipe.json",
+                      "capture-trace.json", "session-context.json"}
+    pins = record.get("source_sha256", {})
+    _need(set(pins) == expected_names, "Fresh Panic source inventory differs")
+    evidence_keys = {"results.json": "results_sha256", "native/identity.json": "identity_sha256",
+                     "native/native-events.jsonl": "native_events_sha256", "native/cleanup.json": "cleanup_sha256",
+                     "recipe.json": "recipe_sha256", "capture-trace.json": "capture_trace_sha256",
+                     "session-context.json": "session_context_sha256"}
+    evidence = scene.get("evidence", {})
+    for name, digest in pins.items():
+        path = root / name
+        _need(path.is_file() and not path.is_symlink() and _sha(path) == digest,
+              "Fresh Panic source digest changed: " + name)
+        key = evidence_keys.get(name)
+        if key is not None:
+            _need(evidence.get(key) == digest, "Fresh Panic scene source pin differs: " + name)
+    identity = json.loads((root / "native/identity.json").read_text(encoding="utf-8"))
+    context = json.loads((root / "session-context.json").read_text(encoding="utf-8"))
+    _need(record.get("session_id") == identity.get("session_id") == context.get("session_id")
+          and record.get("application_digest") == identity.get("application_identity", {}).get("digest"),
+          "Fresh Panic session or application identity differs")
+    return _validate_panic_release_readout_contents(scene, step_id, wanted, project_root, resolve_evidence)

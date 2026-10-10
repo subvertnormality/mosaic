@@ -10,8 +10,8 @@ build=importlib.util.module_from_spec(spec);spec.loader.exec_module(build)
 # The 2026-10-06 root installs add six named stages to the frozen 73-full/44-local baseline.
 # Receipts: /home/andy/mosaic-manual-build-operators/{core-portable,player-publication,public-gap-build,
 # modest-matrix-v10,native-public-gaps-v03}.
-# Committed source 9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0 adds a full-only fresh-target producer and
-# the real/controlled Save Dialog pair; only the controlled Save Dialog stage is in controlled-local.
+# Committed source 9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0 originally added a full-only fresh-target producer and
+# the real/controlled Save Dialog pair. Fresh target receipts now also run in fresh controlled-local builds.
 BASELINE_FULL_STAGES,BASELINE_LOCAL_STAGES,BASELINE_LOCAL_REFERENCE_CONTROLLED=73,44,19
 STAGES_ADDED_20261006_FULL=(
  "reference-real-scene-plans-modulation-macro-midi-modulation","reference-controlled-scene-plans-modulation-macro-midi-modulation",
@@ -19,12 +19,38 @@ STAGES_ADDED_20261006_FULL=(
  "reference-controlled-scene-plans-player-apply-manual-player-ui","reader-projection")
 STAGES_ADDED_20261008_FULL=("fresh-target-midi-producer","reference-real-scene-plans-save-dialog-base-midi","reference-controlled-scene-plans-save-dialog-base-midi")
 STAGES_ADDED_FULL=STAGES_ADDED_20261006_FULL+STAGES_ADDED_20261008_FULL
-STAGES_ADDED_LOCAL=tuple(name for name in STAGES_ADDED_FULL if not name.startswith("reference-real-") and name!="fresh-target-midi-producer")
+STAGES_ADDED_LOCAL=tuple(name for name in STAGES_ADDED_FULL if not name.startswith("reference-real-"))
 def reader_projection_record(**changes):
  """Terminal receipt shape written by run_build_stages for the reader-projection stage."""
  record=dict(name="reader-projection",passed=True,returncode=0,reader_projection=dict(passed=True))
  record.update(changes);return record
 class BuildPlan(unittest.TestCase):
+ def test_retained_resume_does_not_relabel_checkpoint_as_fresh_capture(self):
+  options=self.options()
+  with mock.patch.object(build,'retained_call',return_value={'mode':'retained-resume'}), mock.patch.object(build,'projection_arguments',return_value=['--retained-test-marker']):
+   stages=build.plan(options,['scene-plans-course.yaml'],controlled_local=True)
+  self.assertNotIn('fresh-target-midi-producer',[stage['name'] for stage in stages])
+  for stage in stages:
+   if stage['name'] in ('reader-projection','publication-audit'):
+    self.assertIn('--retained-test-marker',stage['command'])
+    self.assertNotIn('--fresh-target-midi-manifest',stage['command'])
+ def test_controlled_reader_consumes_a_pinned_current_build_midi_receipt(self):
+  options=self.options()
+  options.modulation_code_root='/mods'
+  options.modulation_controlled_install='/native/mod-control.json'
+  stages=build.plan(options,['scene-plans-course.yaml'],controlled_local=True)
+  names=[s['name'] for s in stages]
+  self.assertIn('fresh-target-midi-producer',names,'controlled reader needs complete current-build MIDI evidence')
+  self.assertLess(names.index('compile-book'),names.index('fresh-target-midi-producer'))
+  self.assertLess(names.index('fresh-target-midi-producer'),names.index('reader-projection'))
+  for name in ('reader-projection','publication-audit'):
+   command=next(s['command'] for s in stages if s['name']==name)
+   for argument in ('--fresh-target-midi-manifest','--fresh-target-midi-sha256','--fresh-build-root'):
+    self.assertIn(argument,command)
+  producer=next(s for s in stages if s['name']=='fresh-target-midi-producer')
+  self.assertNotIn('--clock-mode',producer['command'])
+  self.assertNotIn('--experimental-install',producer['command'])
+  self.assertIsNone(producer['emulator'])
  def test_controlled_local_plan_publishes_controlled_captures_without_realtime_qualification(self):
   options=self.options();options.modulation_code_root="/mods";options.modulation_controlled_install="/native/mod-control.json"
   stages=build.plan(options,["scene-plans-course.yaml"],controlled_local=True)
@@ -52,7 +78,7 @@ class BuildPlan(unittest.TestCase):
   for name in STAGES_ADDED_FULL:self.assertEqual(full_names.count(name),1,name)
   for name in STAGES_ADDED_LOCAL:self.assertEqual(local_names.count(name),1,name)
   for name in STAGES_ADDED_FULL:
-   if name.startswith("reference-real-") or name=="fresh-target-midi-producer":self.assertNotIn(name,local_names)
+   if name.startswith("reference-real-"):self.assertNotIn(name,local_names)
   self.assertLess(full_names.index("compile-book"),full_names.index("fresh-target-midi-producer"));self.assertLess(full_names.index("fresh-target-midi-producer"),full_names.index("reader-projection"))
   self.assertLess(full_names.index("reference-real-scene-plans-save-dialog-base-midi"),full_names.index("reference-controlled-scene-plans-save-dialog-base-midi"))
   self.assertLess(full_names.index("reader-projection"),full_names.index("quick-reference"));self.assertGreater(full_names.index("reader-projection"),full_names.index("compile-book"))
@@ -60,7 +86,7 @@ class BuildPlan(unittest.TestCase):
   self.assertEqual(len(controlled_refs),BASELINE_LOCAL_REFERENCE_CONTROLLED+sum(n.startswith("reference-controlled-") for n in STAGES_ADDED_LOCAL))
   self.assertIn("reference-controlled-scene-plans-save-dialog-base-midi",local_names)
   self.assertNotIn("reference-real-scene-plans-save-dialog-base-midi",local_names)
-  self.assertNotIn("fresh-target-midi-producer",local_names)
+  self.assertIn("fresh-target-midi-producer",local_names)
   self.assertFalse(any(row["name"].startswith("reference-real-") or row["name"].startswith("doctor-options-") for row in local))
  def test_launch_mode_requires_real_install_only_for_full_paired_generation(self):
   with self.assertRaisesRegex(ValueError,"explicit qualified real installation"):
@@ -100,11 +126,14 @@ class BuildPlan(unittest.TestCase):
  def test_generation_context_pins_selected_required_scenes_and_sources(self):
   with tempfile.TemporaryDirectory() as folder:
    root=Path(folder);(root/"manual").mkdir();(root/"manual/a.yaml").write_text("scenes: [{id: z}, {id: a}]\n");evidence=root/"evidence";evidence.mkdir()
+   (root/"tools").mkdir()
+   for name in ("manual_capture.py","manual_build.py"):(root/"tools"/name).write_text("# source "+name+"\n")
    with mock.patch.object(build,"ROOT",root):context=build.write_generation_context(evidence,["a.yaml"],["a.yaml"],{"manual/a.yaml":"source-sha"})
    saved=json.loads((evidence/"generation-context.json").read_text())
    self.assertEqual(saved["selected_scene_ids"],["a","z"])
    self.assertEqual(saved["required_scene_ids"],["a","z"])
    self.assertEqual(saved["source_files_before"],{"manual/a.yaml":"source-sha"})
+   self.assertEqual(saved["producer_source_sha256"],{name:build.digest(root/name) for name in ("tools/manual_capture.py","tools/manual_build.py")})
    self.assertEqual(context["validation_scope"],"controlled-manual-generation")
    self.assertEqual(saved["clock_mode"],"controlled-experimental")
    self.assertEqual(context["clock_mode"],"controlled-experimental")
@@ -552,10 +581,10 @@ class StageGates(unittest.TestCase):
   self.assertLess(gate.lineno,launch.lineno)
  def test_planning_and_native_pipe_drain_are_unchanged(self):
   # Frozen original AST identities avoid importing a second fixture module.
-  # The planner has an intentional additive case-route change. Pin its exact
+  # The planner intentionally adds controlled fresh MIDI receipt production. Pin its exact
   # source segment so this assertion is identical under every supported Python.
   # stage_command and run_stage retain their reviewed per-version AST pins.
-  expected={'plan_source': '5256b12ac835374d4e819b2a7aa387edf7252acbb6a20a1e1e7009b3d3116566', 'stage_command': {(3,8): '22493e17bf42d6d3f55b23e5dd811ae88b11e2c294d1d9157511f5113b405ca6', (3,11): '33bf4501400164ff560fcaeac4d116b7498ba94f6e35f36bcd439cc68738f5e0'}, 'run_stage': {(3,8): '1e9e336208e2984f2398337a64016ec12d3f3b78cee671a992905480c654bd4e', (3,11): '45e39ed119b3eafc264bf891046f380f6fcac75d7cfd015e2f9f641e32f7289c'}}
+  expected={'plan_source': '442762a70965d4e4c36c2f3dce570438fd5b28376d5c1021b5cd5865ca59e83b', 'stage_command': {(3,8): '22493e17bf42d6d3f55b23e5dd811ae88b11e2c294d1d9157511f5113b405ca6', (3,11): '33bf4501400164ff560fcaeac4d116b7498ba94f6e35f36bcd439cc68738f5e0'}, 'run_stage': {(3,8): '1e9e336208e2984f2398337a64016ec12d3f3b78cee671a992905480c654bd4e', (3,11): '45e39ed119b3eafc264bf891046f380f6fcac75d7cfd015e2f9f641e32f7289c'}}
   source=MODULE.read_text();candidate=ast.parse(source)
   function=next(n for n in candidate.body if isinstance(n,ast.FunctionDef) and n.name=="plan")
   self.assertEqual(hashlib.sha256(ast.get_source_segment(source,function).encode()).hexdigest(),expected["plan_source"])

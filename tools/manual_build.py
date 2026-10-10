@@ -52,7 +52,7 @@ def plan(options,plans,controlled_local=False):
     real_install=getattr(options,"real_install",None)
     if not real_install and not controlled_local:raise ValueError("Generic real captures require an explicit qualified real installation")
     py=getattr(options,"python",sys.executable)
-    if not controlled_local:
+    if not retained:
         fresh_args=["--fresh-target-midi-manifest","{evidence}/fresh-target-midi-manifest.json",
             "--fresh-target-midi-sha256","{fresh-midi-sha256}","--fresh-build-root","{evidence}"]
     capture=[py,str(ROOT/"tools/manual_capture.py")]
@@ -151,7 +151,7 @@ def plan(options,plans,controlled_local=False):
         stages.append(stage("course-bind",[],action={"course_bind":True,"python":py}))
     stages.append(stage("feature-bind",[py,str(ROOT/"tools/manual_feature_bind.py"),"--build-evidence","{evidence}","--evidence","{evidence}/feature-bind"],options.audio_emulator))
     stages.append(stage("compile-book",[py,str(ROOT/"tools/manual_book.py")]))
-    if not controlled_local:
+    if not retained:
         stages.append(stage("fresh-target-midi-producer",[py,str(ROOT/"tools/manual_fresh_target_midi.py"),
             "--book",str(ROOT/"manual/generated/book.json"),"--project-root",str(ROOT),
             "--build-root","{evidence}","--output","{evidence}/fresh-target-midi-manifest.json"]))
@@ -496,7 +496,8 @@ def write_generation_context(evidence,selected_plans,required_plans,source_files
     selected_ids=scene_ids_for_plans(selected_plans);required_ids=scene_ids_for_plans(required_plans)
     context=dict(schema_version=1,validation_scope="controlled-manual-generation",realtime_qualification="pending-ci",
         clock_mode="controlled-experimental",complete_regression_run=False,selected_plans=selected_plans,required_plans=required_plans,
-        selected_scene_ids=selected_ids,required_scene_ids=required_ids,source_files_before=source_files)
+        selected_scene_ids=selected_ids,required_scene_ids=required_ids,source_files_before=source_files,
+        producer_source_sha256={name:digest(ROOT/name) for name in ("tools/manual_capture.py","tools/manual_build.py")})
     with (evidence/"generation-context.json").open("x") as handle:json.dump(context,handle,indent=2);handle.write("\n")
     return context
 
