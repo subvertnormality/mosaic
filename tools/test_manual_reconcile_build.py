@@ -277,7 +277,9 @@ class ActualControlledCanonicalPlanTests(unittest.TestCase):
   plans=sorted(p.name for p in (tool.ROOT/'manual').glob('scene-plans*.yaml'));names=tool.canonical_stage_names(tool.ROOT,plans,True)
   self.assertIn('masks-controlled',names);self.assertIn('first-sound-controlled',names);self.assertIn('musical-audio-assets',names)
   self.assertIn('reference-controlled-scene-plans-save-dialog-base-midi',names)
-  self.assertNotIn('reference-real-scene-plans-save-dialog-base-midi',names);self.assertNotIn('fresh-target-midi-producer',names)
+  self.assertNotIn('reference-real-scene-plans-save-dialog-base-midi',names);self.assertIn('fresh-target-midi-producer',names)
+  self.assertLess(names.index('compile-book'),names.index('fresh-target-midi-producer'))
+  self.assertLess(names.index('fresh-target-midi-producer'),names.index('reader-projection'))
   self.assertNotIn('masks-real',names);self.assertNotIn('first-sound-real',names);self.assertNotIn('musical-audio',names)
   self.assertFalse(any(n.startswith('reference-real-') or n.startswith('doctor-options-') for n in names))
   self.assertIn('doctor-manual-real',names);self.assertIn('doctor-auto-real',names);self.assertIn('doctor-publish',names)
@@ -285,7 +287,7 @@ class ActualControlledCanonicalPlanTests(unittest.TestCase):
   self.assertLess(full.index('compile-book'),full.index('fresh-target-midi-producer'));self.assertLess(full.index('fresh-target-midi-producer'),full.index('reader-projection'))
   self.assertLess(full.index('reference-real-scene-plans-save-dialog-base-midi'),full.index('reference-controlled-scene-plans-save-dialog-base-midi'))
   for name in STAGES_ADDED:
-   if name.startswith('reference-real-') or name=='fresh-target-midi-producer':self.assertNotIn(name,names)
+   if name.startswith('reference-real-'):self.assertNotIn(name,names)
    else:self.assertIn(name,names)
   self.assertEqual(sum(n.startswith('reference-controlled-') for n in names),sum(n.startswith('reference-controlled-') for n in full));self.assertEqual(sum(n.startswith('browser-') for n in names),8)
 
