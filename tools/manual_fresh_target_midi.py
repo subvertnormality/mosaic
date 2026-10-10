@@ -530,7 +530,10 @@ def main():
     _require(build_root in output.parents,'fresh manifest output must be inside current build root')
     output.parent.mkdir(parents=True,exist_ok=True)
     book=json.loads(args.book.read_text())
-    manifest=build_fresh_target_midi_manifest(list(book.get('scenes',{}).values()),args.project_root,build_root,args.qualification)
+    # The reader applies this strict deterministic projection before checking target hashes.
+    from manual_pilot_midi import project_pilot_midi
+    scenes=[project_pilot_midi(scene) for scene in book.get('scenes',{}).values()]
+    manifest=build_fresh_target_midi_manifest(scenes,args.project_root,build_root,args.qualification)
     output.write_text(json.dumps(manifest,sort_keys=True,separators=(',',':'))+'\n')
     print(json.dumps({'passed':True,'kind':MANIFEST_KIND,'qualification':manifest['qualification'],'scenes':len(manifest['scenes'])},sort_keys=True))
 if __name__=='__main__':main()

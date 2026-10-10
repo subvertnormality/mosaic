@@ -11,6 +11,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -254,6 +255,26 @@ def make_panic_fixture(base):
 
 
 class FreshMidiReceiptTests(unittest.TestCase):
+    def test_cli_seals_the_same_pilot_projected_target_that_the_reader_checks(self):
+        import manual_pilot_midi
+        raw = {"id": "mask-precedence", "steps": [{"id": "default", "inputs": [], "expect": {}, "output": {}}]}
+        projected = copy.deepcopy(raw)
+        projected["steps"][0]["output"]["midi"] = {"events": [{"port": 1, "bytes": [144, 60, 100]}], "truncated": False}
+        def seal(scenes, project_root, build_root, qualification):
+            return {"kind": fresh.MANIFEST_KIND, "qualification": qualification,
+                    "scenes": {scene["id"]: {"target_sha256": sha(canonical(scene["steps"][0]))} for scene in scenes}}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); build = root / "build"; build.mkdir()
+            book = root / "book.json"; write_json(book, {"scenes": {raw["id"]: raw}})
+            output = build / "receipt.json"
+            argv = ["manual_fresh_target_midi", "--book", str(book), "--project-root", str(root),
+                    "--build-root", str(build), "--output", str(output), "--qualification", "derived-unit-fixture"]
+            with mock.patch.object(sys, "argv", argv), mock.patch.object(manual_pilot_midi, "project_pilot_midi", return_value=projected), mock.patch.object(fresh, "build_fresh_target_midi_manifest", side_effect=seal):
+                fresh.main()
+            receipt = json.loads(output.read_text())
+            self.assertEqual(receipt["scenes"][raw["id"]]["target_sha256"], sha(canonical(projected["steps"][0])),
+                             "producer must seal the pilot-projected target validated by the reader")
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="fresh-midi-receipt-unit-")
         self.addCleanup(self.temp.cleanup)
