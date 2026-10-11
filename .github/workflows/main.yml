@@ -17,6 +17,8 @@ jobs:
       - uses: leafo/gh-actions-lua@v10
         with:
           luaVersion: "5.3"
+      - name: Prepare pinned norns Lua test source
+        run: bash .github/scripts/prepare-lua-test-source.sh
       - run: ./test.sh
 
   Manual-publisher-contract:
