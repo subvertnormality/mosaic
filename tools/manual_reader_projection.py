@@ -74,6 +74,9 @@ def build_projection(book_value, audio_value, prelude_admissions=None, project_r
     if retained_midi_admissions is not None and fresh_target_midi_manifest is not None:
         raise ProjectionError("retained and fresh target MIDI routes are mutually exclusive")
     retained_raw = None
+    fresh = None
+    fresh_records = None
+    fresh_source_scenes = None
     if retained_midi_admissions is not None:
         retained, retained_raw = _read_source(retained_midi_admissions, "retained MIDI admission")
         if not retained_midi_admissions_sha256 or _sha(retained_raw) != retained_midi_admissions_sha256:
@@ -92,9 +95,10 @@ def build_projection(book_value, audio_value, prelude_admissions=None, project_r
             raise ProjectionError("fresh target MIDI manifest requires the current build root")
         from manual_fresh_target_midi import project_fresh_target_midi, validate_fresh_target_midi_manifest
         scenes = _scene_rows(book)
-        records = validate_fresh_target_midi_manifest(scenes, _project_root(book_value, project_root), fresh_build_root, fresh)
+        fresh_source_scenes = {scene["id"]: scene for scene in scenes}
+        fresh_records = validate_fresh_target_midi_manifest(scenes, _project_root(book_value, project_root), fresh_build_root, fresh)
         book = dict(book, scenes={scene["id"]: project_fresh_target_midi(scene,
-            _project_root(book_value, project_root), fresh_build_root, fresh, records) for scene in scenes})
+            _project_root(book_value, project_root), fresh_build_root, fresh, fresh_records) for scene in scenes})
     elif fresh_target_midi_sha256 is not None or fresh_build_root is not None:
         raise ProjectionError("fresh target MIDI pin/build root lacks manifest")
     features = _unique_rows(book.get("features"), "book features")
@@ -164,7 +168,11 @@ def build_projection(book_value, audio_value, prelude_admissions=None, project_r
             "receipt_sha256": admission.get("receipt_sha256"),
             "scene_id": summary.get("scene_id"), "target_step_id": summary.get("target_step_id")}
     teaching_contracts = build_teaching_contracts(book, scene_index, normalized_preludes,
-        project_root=_project_root(book_value,project_root))
+        project_root=_project_root(book_value,project_root),
+        fresh_target_midi_manifest=fresh,
+        fresh_build_root=fresh_build_root,
+        fresh_target_midi_records=fresh_records,
+        fresh_target_midi_source_scenes=fresh_source_scenes)
     projected_features = []
     for feature in features:
         projected = dict(feature)

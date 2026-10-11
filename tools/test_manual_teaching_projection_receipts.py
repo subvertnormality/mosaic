@@ -1,8 +1,12 @@
+import copy
 import hashlib
 import json
+import gzip
+from pathlib import Path
 
 from manual_reader_projection import build_projection
 import manual_teaching_v8
+import manual_panic_release_readout
 from manual_teaching_v8_contract import native_transition_hash_v8
 
 
@@ -113,3 +117,65 @@ def test_build_projection_exports_exact_native_receipt_arrays_and_preserves_empt
     for field in ("mask_readout_receipts", "parameter_readout_receipts", "play_note_silence_receipts"):
         assert field not in plain_contract
         assert field not in plain_lesson
+
+
+def test_fresh_panic_projection_exports_receipt_to_feature_contract_and_lesson(tmp_path, monkeypatch):
+    root = Path(__file__).parents[1]
+    scene_path = root / "tests/behaviour/remediation/fixtures/fresh-panic-reader-ci-attempt2.json.gz"
+    fresh_scene = json.loads(gzip.decompress(scene_path.read_bytes()))["panic-stops-sounding-note"]
+    lesson_id = "play-panic-stops-sounding-note-note-sounding"
+    feature = {"id": "midi-panic", "title": "MIDI panic", "scene_refs": ["panic-stops-sounding-note"],
+        "teaching_bindings": [{"id": lesson_id,
+            "binding": {"status": "verified", "scene": "panic-stops-sounding-note", "step": "panic-released"},
+            "teaching_binding": {
+                "from_step_id": "note-sounding", "transition_scope": "adjacent",
+                "actions": [
+                    {"id": "panic-hold", "kind": "hold-grid", "x": 3, "y": 8, "label": "Hold Channel"},
+                    {"id": "panic-release", "kind": "release-grid", "x": 3, "y": 8, "label": "Release Channel"},
+                    {"id": "preview", "kind": "preview-recorded-result", "target_step_id": "panic-released", "label": "Show result"},
+                ],
+                "semantic_requires": {"midi_events_at_target": [{"port": 1, "bytes": [128, 60, 0]}]},
+                "human_outcome": "Channel panic releases the sounding C while playback continues.",
+                "practice_prompt": "Hold Channel, then release it.",
+            }}]}
+    book = {"schema_version": 1, "features": [feature], "scenes": {fresh_scene["id"]: fresh_scene}, "learning_path": []}
+    record = {"scene_id": fresh_scene["id"], "step_id": "panic-released", "source_root": fresh_scene["evidence"]["path"]}
+    manifest = {"kind": "fresh-native-target-midi-v1", "validation_scope": "fresh-native-target-midi-source-receipt",
+        "build_root": str(tmp_path), "build_id": tmp_path.name, "qualification": "fresh-candidate-pending-ci",
+        "complete_regression_run": False, "scenes": {fresh_scene["id"]: record}}
+    expected_receipt = fresh_scene["steps"][-1]["output"]["midi"]["provenance"]["panic_release_readout"]
+    calls = []
+
+    def validate_fresh_manifest(scenes, project_root, build_root, supplied):
+        assert supplied == manifest
+        assert Path(build_root) == tmp_path
+        return {fresh_scene["id"]: record}
+
+    def project_fresh(scene, project_root, build_root, supplied, records):
+        assert supplied == manifest
+        assert records[fresh_scene["id"]] == record
+        projected = copy.deepcopy(scene)
+        projected["projection_test_marker"] = True
+        return projected
+
+    def validate_readout(scene, step_id, wanted, project_root, build_root, supplied, admitted):
+        calls.append((scene, step_id, wanted, supplied, admitted))
+        return expected_receipt
+
+    monkeypatch.setattr("manual_fresh_target_midi.validate_fresh_target_midi_manifest", validate_fresh_manifest, raising=False)
+    monkeypatch.setattr("manual_fresh_target_midi.project_fresh_target_midi", project_fresh, raising=False)
+    monkeypatch.setattr(manual_panic_release_readout, "validate_fresh_panic_release_readout", validate_readout)
+
+    manifest_bytes = (json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode()
+    index, _ = build_projection(book, {"examples": []}, project_root=root,
+        fresh_target_midi_manifest=manifest, fresh_target_midi_sha256=hashlib.sha256(manifest_bytes).hexdigest(), fresh_build_root=tmp_path)
+    contract_id = "feature:midi-panic:" + lesson_id
+    contract = index["teaching_contracts"][contract_id]
+    projected_feature = next(row for row in index["features"] if row["id"] == "midi-panic")
+    projected_lesson = projected_feature["teaching_bindings"][0]
+    assert len(calls) == 1
+    assert calls[0][0] == fresh_scene
+    assert "projection_test_marker" not in calls[0][0]
+    assert calls[0][1:3] == ("panic-released", [{"port": 1, "bytes": [128, 60, 0]}])
+    assert contract["panic_release_receipts"] == [expected_receipt]
+    assert projected_lesson["panic_release_receipts"] == [expected_receipt]

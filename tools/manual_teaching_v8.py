@@ -840,7 +840,10 @@ def feature_presentation(feature_id, lesson):
  identity=hashlib.sha256(json.dumps({"source":source,"metadata":metadata},sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()).hexdigest()
  return source,metadata,identity
 
-def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_root=None):
+def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_root=None,
+                            fresh_target_midi_manifest=None,fresh_build_root=None,
+                            fresh_target_midi_records=None,
+                            fresh_target_midi_source_scenes=None):
  scenes,chapters,features=book.get("scenes"),book.get("learning_path",[]),book.get("features",[])
  if not isinstance(scenes,dict) or not isinstance(chapters,list) or not isinstance(features,list): raise Error("book scene/course/feature shape invalid")
  records=[]; ids=set()
@@ -873,7 +876,17 @@ def build_teaching_contracts(book,scene_chunks,prelude_admissions=None,project_r
   if sid=="panic-stops-sounding-note" and to=="panic-released" and "midi_events_at_target" in req:
    from manual_panic_release_readout import is_retained_panic_source, validate_panic_release_readout
    target_midi=native["to_step"].get("output",{}).get("midi",{})
-   if is_retained_panic_source(scenes[sid]) and isinstance(target_midi,dict) and target_midi.get("truncated") is True:
+   if fresh_target_midi_manifest is not None:
+    if fresh_build_root is None or not isinstance(fresh_target_midi_records,dict):
+     raise Error("fresh Panic readout requires its validated current-build manifest and records")
+    record=fresh_target_midi_records.get(sid)
+    if record is None:
+     raise Error("fresh Panic readout is missing its admitted target record")
+    from manual_panic_release_readout import validate_fresh_panic_release_readout
+    source_scene=(fresh_target_midi_source_scenes or {}).get(sid,scenes[sid])
+    panic_data=validate_fresh_panic_release_readout(source_scene,to,req["midi_events_at_target"],
+     project_root,fresh_build_root,fresh_target_midi_manifest,record)
+   elif is_retained_panic_source(scenes[sid]) and isinstance(target_midi,dict) and target_midi.get("truncated") is True:
     panic_data=validate_panic_release_readout(scenes[sid],to,req["midi_events_at_target"],project_root)
   _validate_output(native,req,mask_data["by_step"].get(to),device_data,panic_data)
   v7_req={k:v for k,v in req.items() if not (k=="midi_phrase_contains" and not (native["to_step"].get("expect") or {}).get("midi_phrase"))}
