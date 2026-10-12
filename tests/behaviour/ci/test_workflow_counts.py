@@ -11,6 +11,11 @@ WORKFLOW = Path(__file__).resolve().parents[3] / '.github' / 'workflows' / 'beha
 
 
 class WorkflowCountTests(unittest.TestCase):
+    def test_fast_ci_checks_the_actual_suite_collection(self):
+        main = WORKFLOW.with_name('main.yml').read_text()
+        self.assertIn('PYTHONPATH: tests/behaviour', main)
+        self.assertIn('python -m unittest test_suite.CollectionTests', main)
+
     def test_base_shards_install_manual_validator_dependencies_before_fast_layers(self):
         text = WORKFLOW.read_text()
         packages = re.search(r"(?ms)^      - &packages\n.*?^        run: \|\n(?P<run>.*?)^      - &checkout", text)

@@ -142,3 +142,29 @@ campaign and a published artifact are still required.
 | Complete CI generation evidence archive | `ae49849844d23d0ad84f7f4673288a6e21e15f6939a773547e63d47f6ae14b97` |
 | Unfixed title-receipt regression log | `90665857cd39fb968357d3dcc3a3679a9b5ba118b6bc3ece5529125db3227f5e` |
 | Actual CI-scene contract replay report | `9c8b54b141c082e289a42256dc4211156bd8848d75f75b22a79652d09e735943` |
+
+
+## CI collection correction after 645bb6dc
+
+Behaviour run 38281355416 rejected the newly added
+`test_manual_compiled_title_receipts` and `test_recorded_chord_stimulus_order`
+modules as unclassified before executing native cases. The registration omission
+was confirmed in base shards 0 and 14 and the MIDI-modulation profile. This was a
+suite integration failure, not evidence of a Mosaic behaviour regression.
+
+Both modules are now explicitly registered. The quick CI job also runs the
+existing `test_suite.CollectionTests` to check every actual test filename, stale
+registration and case profile before reporting its result. The fail-closed
+collection policy is preserved.
+
+The collection failure was reproduced before the registration change. The new
+quick-workflow contract failed before its workflow change. After the changes,
+133 checks passed: collection, both new regression modules, and the exact CI
+partition/aggregation contract modules. Local Linux fixture commits required
+process-only unsigned commits because this host enables SSH signing globally;
+CI already uses unsigned fixtures. No global Git configuration was changed.
+No real-time native behaviour test, audio recording or full generation was run
+locally. The existing manual run 38281355424 was left running; this local fix is
+not a claim that the complete campaign or publication has passed.
+
+CI-contract validation log SHA-256: `d9de50b89076de1efad7d04b9b95dfc5d5fa60ad33944bf2c2fb9e1412a0769f`.
