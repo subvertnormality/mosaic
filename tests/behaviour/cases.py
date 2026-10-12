@@ -2417,6 +2417,7 @@ def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
         c.results.append(dict(kind='overlapping-keyboard-source-isolation',input_sources=inputs,release_order=order,expected=expected,actual=actual))
 
 def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),preview_release_ns=None,release_offsets=(300000000,400000000,500000000)):
+    import time
     ui=c.ui
     ui.configure();ui.tap_control('record')
     marker=c.snapshot()['midi_count'];ui.tap_control('play_stop')
@@ -2434,12 +2435,38 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
     request=dict(type='midi_schedule',schedule_id=1,events=events)
     if controlled:request['time_domain']='logical'
     c.action(**request)
-    if controlled:c.elapse((origin+(10000000 if preview_release_ns is not None else 100000000)-c.logical_ns)/1e9)
-    else:c.wait(lambda state:sum(event['bytes'][0]==144 and event['bytes'][1] in (72,76,79) for event in state['midi_input_schedule']['delivered'])>=3,timeout=2)
-    ui.tap_control('record') # Disarm after all three chord presses; some voices may already be released.
+    if preview_release_ns is not None:
+        # Characterisation of acquisition: the post-disarm preview must follow
+        # the record release, irrespective of client snapshot/HTTP latency.
+        # Use the public native control scheduler; retain every MIDI deadline.
+        disarm_press=origin+max(onset_offsets)+10000000
+        disarm_release=disarm_press+10000000
+        assert disarm_release<origin+100000000,'post-disarm stimulus order: preview precedes planned disarm'
+        ui.grid_events_at([(disarm_press,'record',None,1),(disarm_release,'record',None,0)])
+        disarm_logical_ns=c.logical_ns if controlled else None
+        if not controlled:
+            # Native capture stays active; no diagnostic polling crosses the
+            # chord/disarm/preview interval and delays a scheduled control.
+            end=origin+max(500000000,preview_release_ns)+10000000
+            c.elapse(max(0,(end-time.monotonic_ns())/1e9))
+    else:
+        if controlled:c.elapse((origin+100000000-c.logical_ns)/1e9)
+        else:c.wait(lambda state:sum(event['bytes'][0]==144 and event['bytes'][1] in (72,76,79) for event in state['midi_input_schedule']['delivered'])>=3,timeout=2)
+        ui.tap_control('record') # Disarm after all three chord presses; some voices may already be released.
     if controlled:c.elapse((origin+max(500000000,preview_release_ns or 0)+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=2)
     state=c.snapshot()
+    if preview_release_ns is not None:
+        if controlled:
+            assert origin+max(onset_offsets)<disarm_logical_ns<origin+100000000,'post-disarm stimulus order: invalid logical control order'
+        else:
+            schedule=state['native_input_schedule']
+            assert schedule['status']=='completed' and len(schedule['delivered'])==2,'post-disarm stimulus order: disarm schedule incomplete'
+            disarm_ns=schedule['delivered'][-1]['callback_completed_monotonic_ns']
+            delivered=state['midi_input_schedule']['delivered']
+            chord_ns=max(row['actual_monotonic_ns'] for row in delivered if row['bytes'][0]==144 and row['bytes'][1] in (72,76,79))
+            preview_ns=next(row['actual_monotonic_ns'] for row in delivered if row['bytes']==[144,83,80])
+            assert chord_ns<disarm_ns<preview_ns,dict(reason='post-disarm stimulus order',chord_ns=chord_ns,disarm_ns=disarm_ns,preview_ns=preview_ns)
     c.results.append(dict(kind='scheduled-recorded-chord',release_order=release_order,events=events,delivered=state['midi_input_schedule']['delivered']))
     if preview_release_ns is not None:
         preview=[(m['port'],m['bytes']) for m in state['midi'] if m['bytes'][1:2]==[83] and m['bytes'][0] in (128,144)]

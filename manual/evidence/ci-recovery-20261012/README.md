@@ -32,3 +32,60 @@ Original job logs and downloaded immutable artifacts are retained locally under 
 | Manual build job log | `ea818c28c78f93e494c59b6800aa8c29cd1c1258812adf4ddaeef5f3ec1af187` |
 | Manual diagnostic artifact | `0822a6f0034721c7e87f3a7629b480658b5302a3b2b5ea6888b3824af34cde63` |
 | Native controlled-case result log | `424deb1ab8c9e21a3acec2116d72d5a9750523410f71765f3400f58e607841e3` |
+
+## Follow-up: post-disarm recording stimulus
+
+[Behaviour run 38236046195](https://github.com/subvertnormality/mosaic/actions/runs/38236046195)
+tested source `c2c15c0ac3b1171c423bcb9dd5a5c24d5b4abb58` through PR merge
+`5eef5e8866d0895482fdb9b9b30cf45896bafdff`. All 26 reports cover the 1,765
+applicable case/lane/profile runs with one source/runtime identity. Both earlier
+failures, `M-PARAM-005` and `M-MERGE-FRAGMENTS-002`, passed on their first attempts
+in both lanes. The aggregate correctly rejected one different retry-dependent
+failure: `M-REC-029` in the real-time lane.
+
+The failed native trace shows preview note 83 delivered at `2220334934583` ns,
+before the recording grid release was acknowledged at `2220351948899` ns.
+The case scheduled the supposed post-disarm preview only 100 ms after the chord,
+then used client observation and an unscheduled tap to disarm. The delayed tap
+therefore let Mosaic correctly record the preview as another chord voice.
+This is an invalid test stimulus, not evidence that Mosaic records while disarmed.
+
+The two post-disarm preview cases now schedule the recording grid press/release
+through the existing public UI scheduler, between the chord and preview. The
+real-time acquisition keeps native capture active without diagnostic polling
+across this interval and verifies the actual delivered MIDI/control order.
+An incomplete or late disarm fails explicitly. All original MIDI deadlines,
+replay pitches/velocities, shared half-second chord durations, release-order
+checks and timing tolerances remain unchanged. The other chord-release cases
+retain their original acquisition path.
+
+The deterministic fixture regression reproduces the extra recorded preview on
+the unfixed `c2c15c0a` case. The corrected fixture passes; a negative regression
+still rejects a late native disarm. These clock-simulated regressions run without
+real-time emulation or sleeping and characterize stimulus construction only.
+
+Validation after this correction:
+
+- Fixture and UI checks: 185 passed on Linux.
+- Full Lua suite: 2,455 passed, without fetching norns Lua source.
+- Native controlled cases `M-REC-028` and `M-REC-029`: passed with normal cleanup.
+- The native checks use emulator source `68ab70903d22500237ce68edc7e31c3b867cf179`,
+  matching CI, and an isolated runtime built through the same qualified-runtime
+  builder. Its dependency, binary and interpreted-source guards passed.
+- The first local trial used the older release-integration runtime and failed on
+  its grouped MIDI transport. Those trials are retained and are not relabelled
+  as passes. No assertion or runtime guard was relaxed to accommodate them.
+- No local real-time behaviour test, audio recording or full manual rebuild ran.
+  Real-time qualification remains delegated to CI.
+
+Raw follow-up evidence is retained under `.ci-diagnostics/run-c2c15c0a/` and in
+the Linux scratch checkout. The current manual CI build continues independently;
+this follow-up does not establish a green complete campaign or publication.
+
+| Follow-up evidence | SHA-256 |
+| --- | --- |
+| GitHub shard 14 archive | `ccc6db83cead62db969fb541a3ea0b8d964dcdab60c3b5f0d4eccfd8703735b6` |
+| Unfixed deterministic regression log | `04543dcf7849332d891d96dc5c28814541dfb3e59ce00b1bcd2be533faa1eafe` |
+| Linux fixture/UI validation log | `b94dec82fd64857f5591e47e79a811077907a47ce23a2717123cc1cb4938f688` |
+| Controlled `M-REC-028` manifest | `5fb975564cfd437110990a5e048c1dcbd655298ef142faae117f38787dab83e5` |
+| Controlled `M-REC-029` manifest | `3af498e14f242f7fc901c4ab63488ef25aefebc4438b75074ec23425ca9ec401` |
