@@ -202,6 +202,13 @@ class StaticSitePackageTests(unittest.TestCase):
 
 
 class RuntimeAndWorkflowContractTests(unittest.TestCase):
+    def test_manual_package_audit_inherits_the_pinned_emulator_root(self):
+        wrapper = (ROOT / ".github/scripts/manual-build.sh").read_text()
+        package = wrapper.index('python3 "$ROOT/.github/scripts/manual_artifact.py" "${PACKAGE_ARGS[@]}"')
+        export = 'export MONOME_EMULATOR="$EMULATOR_ROOT"'
+        self.assertIn(export, wrapper)
+        self.assertLess(wrapper.index(export), package)
+
     def test_fetch_pin_resolves_all_targets_under_set_u(self):
         wrapper = (ROOT / ".github/scripts/manual-build.sh").read_text()
         start = wrapper.index("fetch_pin() {")

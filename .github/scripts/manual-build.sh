@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT="${GITHUB_WORKSPACE:?GITHUB_WORKSPACE is required}"
 TEMP_ROOT="${RUNNER_TEMP:?RUNNER_TEMP is required}/mosaic-manual-ci"
 EMULATOR_ROOT="${EMULATOR_ROOT:-$RUNNER_TEMP/monome-emulator}"
+export MONOME_EMULATOR="$EMULATOR_ROOT"
 INSTALLATION="$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"
 AUDIO_BUILD="$TEMP_ROOT/audio-candidate"
 AUDIO_TOOLS="$TEMP_ROOT/audio-tools"
@@ -240,4 +241,3 @@ if [[ -n "${PR_NUMBER:-}" ]]; then
 fi
 python3 "$ROOT/.github/scripts/manual_artifact.py" "${PACKAGE_ARGS[@]}"
 python3 "$ROOT/.github/scripts/manual_artifact.py" verify-site --site-root "$ARTIFACT_ROOT/manual-site" --node "$(command -v node)"
-
