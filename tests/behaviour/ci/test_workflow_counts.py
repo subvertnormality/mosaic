@@ -8,6 +8,8 @@ import unittest
 import yaml
 import os
 import subprocess
+import shlex
+import sys
 import tempfile
 from pathlib import Path
 
@@ -15,6 +17,24 @@ WORKFLOW = Path(__file__).resolve().parents[3] / '.github' / 'workflows' / 'beha
 
 
 class WorkflowCountTests(unittest.TestCase):
+    def test_caption_preflight_executes_without_a_global_tools_import_path(self):
+        workflow = yaml.safe_load(WORKFLOW.with_name('main.yml').read_text())
+        steps = workflow['jobs']['Manual-publisher-contract']['steps']
+        step = next(s for s in steps if s.get('name') ==
+                    'Check caption tests with the native runner import path')
+        env = dict(os.environ)
+        env.pop('PYTHONPATH', None)
+        env.update(step.get('env', {}))
+        self.assertEqual(env['PYTHONPATH'], '')
+        command = shlex.split(step['run'])
+        self.assertEqual(command[0], 'python')
+        command[0] = sys.executable
+        result = subprocess.run(command, env=env,
+                                cwd=WORKFLOW.parents[2] / step['working-directory'],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('Ran 19 tests', result.stderr)
+
     def test_registration_runs_before_an_emulator_checkout_exists(self):
         workflow = yaml.safe_load(WORKFLOW.read_text())
         step = next(s for s in workflow['jobs']['base-midi']['steps']

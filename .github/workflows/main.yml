@@ -29,9 +29,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: python -m pip install PyYAML==6.0.2
+      - run: python -m pip install PyYAML==6.0.2 jsonschema==4.23.0
       - name: Check behaviour test registration
         env:
           PYTHONPATH: tests/behaviour
         run: python -m unittest test_suite.CollectionTests
       - run: python -m unittest tests.manual_ci.test_publish_manual tests.manual_ci.test_audio_bundle_reuse
+      - name: Check caption tests with the native runner import path
+        working-directory: tests/behaviour
+        env:
+          PYTHONPATH: ''
+          MONOME_EMULATOR: ''
+        run: python -m unittest -v test_manual_caption_overlay

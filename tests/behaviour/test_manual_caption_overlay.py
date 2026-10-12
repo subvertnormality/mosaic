@@ -1,10 +1,10 @@
-import manual_publication_verify as audit
 """Editorial characterisation: captions cannot alter native acceptance evidence."""
 import copy,json,sys,tempfile,unittest
 from unittest.mock import patch
 import yaml
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/"tools"))
+import manual_publication_verify as audit
 from manual_caption_overlay import apply_overlays,contract_sha256,text_sha256
 import manual_book
 
