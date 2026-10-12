@@ -1,4 +1,4 @@
-# CI recovery evidence â€” 12 October 2026
+# CI recovery evidence — 12 October 2026
 
 Failed source: `f9205324c0d3d570dae498b5fd98e866fc5f196f` on `codex/1.4.0`, PR #98.
 
@@ -233,3 +233,40 @@ committed head completes.
 
 Packaging/reuse log SHA-256: `2b5aa160ec4ca2c27cc3da7aed6f2b61ee85e8cb11ad3fd0d7a9f810193d39d7`.
 Registration/CI contract log SHA-256: `2e2a1978b3f2e479afb2e8371be369c341f0e22c8412a9007cf643591123a222`.
+
+
+### Cold preflight environment and image mirror correction
+
+CI head f00a7bee1e7ef519a31935dca85e5da858747154 passed the full Lua and
+publisher jobs, but exposed a preflight environment error in behaviour run
+38299830478: `MONOME_EMULATOR` was globally set before that directory was
+cloned. Importing the actual case registry therefore failed with
+`ModuleNotFoundError: No module named 'automation'`. The prior local check used
+an existing emulator checkout and did not cover this cold-start condition.
+
+The new regression executes the workflow's actual registration command in a
+subprocess with a missing emulator directory. It reproduced the exact failure
+before the correction (retained in `cold-preflight-red.log`), then passed when
+the registration step alone explicitly cleared `MONOME_EMULATOR`. Native steps
+retain the qualified global emulator path. The optional targeted collection
+step uses the same override. No driver, case registry or acceptance assertion
+was weakened. Final validation: 152 registration/CI checks and 68 packaging,
+reuse and publisher checks passed on Linux.
+
+A separate shard failed before checkout because ECR Public returned
+`toomanyrequests: Data limit exceeded` while pulling its pinned container.
+Both workflows now pull the official Docker Hub Ubuntu image using the same
+manifest digest, `sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a`.
+The authenticated anonymous registry request retrieved 424 manifest bytes whose
+SHA-256 and Docker-Content-Digest both matched the pin; config/layer identities
+are retained in `official-ubuntu-image.json`. No image layers were downloaded
+and no container was executed locally.
+
+GitHub documents that its hosted runners are exempt from Docker Hub pull
+limits: https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/run-jobs-in-a-container
+The official image manifest is also published at:
+https://hub.docker.com/layers/library/ubuntu/focal-20250404/images/sha256-c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+
+Cold-start red log SHA-256: `c225ab84b8f2fbb7ac51367ec2fab1f52946bd3418a0464cbe62ba91bb767cce`.
+Final registration/CI log SHA-256: `e9b34f01975f5ab49fa4bcb273733f343169dce7c53bed903b57c5a01b71c48e`.
+Final packaging/reuse log SHA-256: `c69a001fb9a7e30c3eaba45805b2d2546b51428c77ed5d8a98732209acd76b32`.

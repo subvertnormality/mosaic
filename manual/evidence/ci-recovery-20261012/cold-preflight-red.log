@@ -1,0 +1,55 @@
+{"passed": false, "report": "/tmp/tmp156upycz/output/targeted-ui-migration.json"}
+...................................................................................................................................................F....
+======================================================================
+FAIL: test_registration_runs_before_an_emulator_checkout_exists (ci.test_workflow_counts.WorkflowCountTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/ci/test_workflow_counts.py", line 27, in test_registration_runs_before_an_emulator_checkout_exists
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 1 != 0 : E.E
+======================================================================
+ERROR: test_every_existing_test_file_is_classified (test_suite.CollectionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/test_suite.py", line 77, in test_every_existing_test_file_is_classified
+    lua,python=suite.collect(set(suite.case_registry()))
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/suite.py", line 329, in case_registry
+    from cases import CASES
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/cases.py", line 1, in <module>
+    from contract.vertical_list_ui import clock_list as vertical_list_clock_workflow
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/contract/vertical_list_ui.py", line 6, in <module>
+    from frame_oracle import render, _region_matches, text_width
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/frame_oracle.py", line 8, in <module>
+    from driver import EMULATOR_ROOT as ROOT
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/driver.py", line 8, in <module>
+    from automation.client import Session
+ModuleNotFoundError: No module named 'automation'
+
+======================================================================
+ERROR: test_unclassified_or_stale_declarations_fail (test_suite.CollectionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/test_suite.py", line 91, in test_unclassified_or_stale_declarations_fail
+    cases=set(suite.case_registry())
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/suite.py", line 329, in case_registry
+    from cases import CASES
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/cases.py", line 1, in <module>
+    from contract.vertical_list_ui import clock_list as vertical_list_clock_workflow
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/contract/vertical_list_ui.py", line 6, in <module>
+    from frame_oracle import render, _region_matches, text_width
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/frame_oracle.py", line 8, in <module>
+    from driver import EMULATOR_ROOT as ROOT
+  File "/tmp/mosaic-ci-f920532-diagnosis-20261012/tests/behaviour/driver.py", line 8, in <module>
+    from automation.client import Session
+ModuleNotFoundError: No module named 'automation'
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.137s
+
+FAILED (errors=2)
+
+
+----------------------------------------------------------------------
+Ran 152 tests in 2.369s
+
+FAILED (failures=1)

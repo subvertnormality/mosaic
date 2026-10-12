@@ -1,0 +1,11 @@
+{
+  "registry": "registry-1.docker.io",
+  "repository": "library/ubuntu",
+  "sha256": "sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a",
+  "digest_header": "sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a",
+  "manifest_bytes": 424,
+  "config": "sha256:b7bab04fd9aa0c771e5720bf0cc7cbf993fd6946645983d9096126e5af45d713",
+  "layers": [
+    "sha256:13b7e930469f6d3575a320709035c6acf6f5485a76abcf03d1b92a64c09c2476"
+  ]
+}

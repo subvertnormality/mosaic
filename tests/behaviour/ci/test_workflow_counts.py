@@ -6,12 +6,26 @@ after the matrix grew to 24 shards.
 import re
 import unittest
 import yaml
+import os
+import subprocess
+import tempfile
 from pathlib import Path
 
 WORKFLOW = Path(__file__).resolve().parents[3] / '.github' / 'workflows' / 'behaviour.yml'
 
 
 class WorkflowCountTests(unittest.TestCase):
+    def test_registration_runs_before_an_emulator_checkout_exists(self):
+        workflow = yaml.safe_load(WORKFLOW.read_text())
+        step = next(s for s in workflow['jobs']['base-midi']['steps']
+                    if s.get('name') == 'Check behaviour test registration')
+        with tempfile.TemporaryDirectory() as temp:
+            env = dict(os.environ, MONOME_EMULATOR=str(Path(temp) / 'not-cloned'))
+            env.update(step.get('env', {}))
+            result = subprocess.run(step['run'], shell=True, env=env,
+                                    cwd=WORKFLOW.parents[2], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_registration_precedes_expensive_native_work(self):
         workflow = yaml.safe_load(WORKFLOW.read_text())
         checked = 0

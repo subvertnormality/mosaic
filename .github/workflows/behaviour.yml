@@ -62,7 +62,7 @@ jobs:
     if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
-      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 180
     strategy:
@@ -86,6 +86,8 @@ jobs:
         name: Check behaviour test registration
         env:
           PYTHONPATH: tests/behaviour
+          # Collection imports the case registry but needs no emulator checkout.
+          MONOME_EMULATOR: ''
         run: python3 -m unittest test_suite.CollectionTests
       - &emulator
         name: Check out pinned emulator
@@ -203,7 +205,7 @@ jobs:
     if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
-      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 90
     steps:
@@ -250,7 +252,7 @@ jobs:
     if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
-      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 120
     steps:
@@ -337,7 +339,7 @@ jobs:
     if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
-      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 120
     steps:
@@ -417,7 +419,7 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && (inputs.ui_migration_targeted || inputs.ui_migration_historical_source) && !inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
-      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 240
     steps:
@@ -492,6 +494,7 @@ jobs:
       - name: Check behaviour test registration
         env:
           HISTORICAL_SOURCE: ${{ inputs.ui_migration_historical_source }}
+          MONOME_EMULATOR: ''
         run: |
           runner_root=after-source
           if [[ "$HISTORICAL_SOURCE" == "true" ]]; then runner_root=tooling-source; fi
@@ -831,7 +834,7 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
-      image: public.ecr.aws/docker/library/ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 240
     steps:

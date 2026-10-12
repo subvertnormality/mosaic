@@ -33,7 +33,7 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # 2026-10-12: manual-build.sh re-pinned after exporting the pinned emulator root to the final publication audit;
     # CI run 38189344038 reached the final audit but failed when frame_oracle had no MONOME_EMULATOR.
     PRODUCER_TOOLING_POLICY_VERSION: {
-        ".github/workflows/manual-build.yml": "91139f24fc1f75ce0ae2b6d7bf90660167b09744df56d976c2474fe2d815316c",
+        ".github/workflows/manual-build.yml": "dac8e7273ec776ef2d6a345ad6e610246da886c968f6a6f1d1e14865d9691c16",
         ".github/scripts/manual-build.sh": "417305e7738f4243e62921242440725a95087a58b0e609e6e1287e8eb86e98de",
         ".github/scripts/manual_artifact.py": "8012a9e1e0f51f240954646e82c5dcfa49f92dfaff61eebf2b0ff12a4f826f23",
         ".github/scripts/audio_bundle_reuse.py": "7ee1ba75f080312fec61f4f5fa83a1947997d7662f9790e6f38520a5683ce6c0",
