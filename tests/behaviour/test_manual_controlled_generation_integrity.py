@@ -11,7 +11,9 @@ def fixture(directory):
  plan=manual/'scene-plans-core.yaml';plan.write_text('scenes:\n- id: one\n  behaviour_case: M-ONE\n')
  build=root/'build';archive=build/'authoring-before/manual';archive.mkdir(parents=True);(archive/plan.name).write_bytes(plan.read_bytes())
  source={'manual/scene-plans-core.yaml':audit.digest(plan)}
- book_source=audit.load()
+ # This synthetic inventory fixture needs only a legacy-source pointer; loading
+ # the real manual here repeatedly parses every authored lesson unnecessarily.
+ book_source={'legacy_source':'legacy.md'}
  inventory_sources={'manual/'+book_source['legacy_source'],'cheat_sheet.html','tests/behaviour/manual-inventory.json'}
  for relative in inventory_sources:
   path=root/relative;path.parent.mkdir(parents=True,exist_ok=True);path.write_text('fixture source: '+relative)
@@ -26,6 +28,40 @@ def fixture(directory):
  return root,manual,build,source,row,book_source
 
 class ControlledGenerationPhaseIntegrity(unittest.TestCase):
+ def test_final_packaging_reuses_the_sealed_fresh_midi_receipt(self):
+  # Regression for manual CI run 38205559039: generation passed with fresh
+  # MIDI, but the final packaging audit discarded its receipt and rejected
+  # the Panic lesson's deliberately truncated reader MIDI preview.
+  with tempfile.TemporaryDirectory() as directory:
+   root,manual,build,source,row,book_source=fixture(directory)
+   fresh=build/'fresh-target-midi-manifest.json';fresh.write_text('{"kind":"fresh-native-target-midi-v1"}')
+   receipt=dict(path=str(fresh.resolve()),sha256=audit.digest(fresh))
+   producer=dict(name='fresh-target-midi-producer',passed=True,returncode=0,fresh_target_midi_manifest=receipt)
+   (build/'fresh-target-midi-producer.json').write_text(json.dumps(producer))
+   projection=dict(passed=True,reader_index_sha256='3'*64)
+   admission=dict(fresh_target_midi_manifest_sha256=receipt['sha256'],fresh_target_midi_qualification='fresh-candidate-pending-ci',fresh_target_midi_producer_sha256='2'*64)
+   projection_row=dict(name='reader-projection',passed=True,returncode=0,reader_projection=projection)
+   manifest=dict(schema_version=1,passed=True,build_complete=False,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',clock_mode='controlled-experimental',manual_generation_complete=True,complete_regression_run=False,controlled_time_admitted=False,renderer_validated=True,selected_plans=['scene-plans-core.yaml'],required_plans=['scene-plans-core.yaml'],selected_scene_ids=['one'],required_scene_ids=['one'],source_files_before=source,source_files_after=source,stages=[row,producer,projection_row])
+   actual=dict(project={},features=[],scenes={'one':dict(id='one')});(manual/'generated/book.json').write_text(json.dumps(actual))
+   expected=dict(fresh_target_midi_manifest=fresh.resolve(),fresh_target_midi_sha256=receipt['sha256'],fresh_build_root=build.resolve())
+   def verify_fresh(retained=None,**kwargs):
+    if retained is not None or kwargs!=expected:
+     raise ValueError('target MIDI missing, truncated, or lacks its typed source receipt')
+    return dict(projection,**admission)
+   def final_audit(changed):
+    (build/'manifest.json').write_text(json.dumps(changed))
+    with patch.object(audit,'ROOT',root),patch.object(audit,'MANUAL',manual),patch.object(audit,'audit_reference',return_value=1),patch.object(audit,'audit_raw_publications',return_value=dict(passed=True,complete_regression_run=False)),patch.object(audit,'compile_book',return_value=actual),patch.object(audit,'load',return_value=book_source),patch.object(audit,'capture_catalogue',return_value={'one':dict(id='one')}),patch.object(audit,'check_compiled_scene_contract'),patch.object(audit,'audit_reader_projection',side_effect=verify_fresh):
+     return audit.audit_controlled_manual_generation(build)
+   result=final_audit(manifest)
+   self.assertTrue(result['manual_generation_complete']);self.assertEqual(result['reader_projection'],projection)
+   self.assertEqual(result['fresh_target_midi_admission'],admission)
+   missing=dict(manifest,stages=[row,projection_row])
+   with self.assertRaisesRegex(ValueError,'Fresh target MIDI producer receipt'):final_audit(missing)
+   conflicted=dict(manifest,retained_midi_admission={'relative_path':'retained.json','sha256':'1'*64})
+   with self.assertRaisesRegex(ValueError,'retained and fresh'):final_audit(conflicted)
+   (build/'fresh-target-midi-producer.json').write_text(json.dumps(dict(producer,passed=False)))
+   with self.assertRaisesRegex(ValueError,'Fresh target MIDI producer receipt'):final_audit(manifest)
+
  def test_prefinal_feature_bind_audits_raw_receipts_without_compiled_book(self):
   with tempfile.TemporaryDirectory() as directory:
    root,manual,build,source,row,book_source=fixture(directory)
@@ -38,7 +74,7 @@ class ControlledGenerationPhaseIntegrity(unittest.TestCase):
   with tempfile.TemporaryDirectory() as directory:
    root,manual,build,source,row,book_source=fixture(directory)
    projection=dict(passed=True,fixture=True);projection_row=dict(name='reader-projection',passed=True,returncode=0,reader_projection=projection)
-   manifest=dict(schema_version=1,passed=True,build_complete=False,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',clock_mode='controlled-experimental',manual_generation_complete=True,complete_regression_run=False,controlled_time_admitted=False,renderer_validated=True,selected_plans=['scene-plans-core.yaml'],required_plans=['scene-plans-core.yaml'],selected_scene_ids=['one'],required_scene_ids=['one'],source_files_before=source,source_files_after=source,stages=[row,projection_row])
+   manifest=dict(schema_version=1,passed=True,build_complete=False,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',clock_mode='controlled-experimental',manual_generation_complete=True,complete_regression_run=False,controlled_time_admitted=False,renderer_validated=True,selected_plans=['scene-plans-core.yaml'],required_plans=['scene-plans-core.yaml'],selected_scene_ids=['one'],required_scene_ids=['one'],source_files_before=source,source_files_after=source,stages=[row,projection_row],retained_midi_admission={'relative_path':'retained-midi.json','sha256':'4'*64})
    (build/'manifest.json').write_text(json.dumps(manifest))
    actual=dict(project={},features=[],scenes={'one':dict(id='one')});(manual/'generated/book.json').write_text(json.dumps(actual))
    with patch.object(audit,'ROOT',root),patch.object(audit,'MANUAL',manual),patch.object(audit,'audit_reference',return_value=1),patch.object(audit,'audit_raw_publications',return_value=dict(passed=True,complete_regression_run=False)),patch.object(audit,'compile_book',return_value=actual),patch.object(audit,'load',return_value=book_source),patch.object(audit,'capture_catalogue',return_value={'one':dict(id='one')}),patch.object(audit,'check_compiled_scene_contract'),patch.object(audit,'audit_reader_projection',return_value=projection) as reader:
@@ -46,7 +82,7 @@ class ControlledGenerationPhaseIntegrity(unittest.TestCase):
    self.assertTrue(result['manual_generation_complete']);self.assertEqual(result['realtime_qualification'],'pending-ci');self.assertEqual(result['inventory_sources'],dict(passed=True,sources=3))
    # Reader projection (reader-shell install, 2026-10-06): the final audit re-derives it from source-bound files and
    # binds the manifest's stage receipt to it; a missing, failed or differing receipt is rejected.
-   reader.assert_called_once_with(None);self.assertEqual(result['reader_projection'],projection)
+   reader.assert_called_once_with(manifest['retained_midi_admission']);self.assertEqual(result['reader_projection'],projection)
    def audited(stages,projection_now=projection):
     changed=dict(manifest,stages=stages);(build/'manifest.json').write_text(json.dumps(changed))
     with patch.object(audit,'ROOT',root),patch.object(audit,'MANUAL',manual),patch.object(audit,'audit_reference',return_value=1),patch.object(audit,'audit_raw_publications',return_value=dict(passed=True,complete_regression_run=False)),patch.object(audit,'compile_book',return_value=actual),patch.object(audit,'load',return_value=book_source),patch.object(audit,'capture_catalogue',return_value={'one':dict(id='one')}),patch.object(audit,'check_compiled_scene_contract'),patch.object(audit,'audit_reader_projection',return_value=projection_now):

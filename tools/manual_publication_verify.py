@@ -1890,9 +1890,35 @@ def _audit_controlled_manual_generation(build_evidence,require_manual_generation
  inventory_identity=audit_inventory_source_hashes(ROOT,MANUAL/'inventory.json',inventory_sources)
  expected=compile_book(book_source);actual=json.loads((MANUAL/'generated/book.json').read_text())
  if expected!=actual:raise ValueError('Stale compiled book after controlled generation')
- reader_projection=audit_reader_projection(manifest.get('retained_midi_admission'))
  projection_rows=[row for row in rows if row.get('name')=='reader-projection']
  if len(projection_rows)!=1 or projection_rows[0].get('passed') is not True:raise ValueError('Reader projection stage receipt is missing or failed')
+ retained=manifest.get('retained_midi_admission')
+ fresh=by_name.get('fresh-target-midi-producer')
+ fresh_admission=None
+ if fresh is not None:
+  if retained:raise ValueError('Controlled build cannot use retained and fresh target MIDI together')
+  producer=build/'fresh-target-midi-producer.json'
+  receipt=fresh.get('fresh_target_midi_manifest',{})
+  target=build/'fresh-target-midi-manifest.json'
+  if (fresh.get('passed') is not True or fresh.get('returncode')!=0
+      or not producer.is_file() or json.loads(producer.read_text())!=fresh
+      or receipt.get('path')!=str(target) or not target.is_file()
+      or receipt.get('sha256')!=digest(target)):
+   raise ValueError('Fresh target MIDI producer receipt is missing, failed, or changed')
+  # Generation and final packaging must validate the same sealed native MIDI,
+  # rather than treating the compact reader preview as complete evidence.
+  reader_projection=audit_reader_projection(None,fresh_target_midi_manifest=target,
+      fresh_target_midi_sha256=receipt['sha256'],fresh_build_root=build)
+  # The projection producer records the canonical reader hashes. Its auditor
+  # additionally returns the independently checked MIDI admission; keep that
+  # provenance separate so the canonical stage report still compares exactly.
+  fresh_admission={key:reader_projection.pop(key) for key in (
+      'fresh_target_midi_qualification','fresh_target_midi_producer_sha256',
+      'fresh_target_midi_manifest_sha256')}
+ else:
+  if not retained:
+   raise ValueError('Fresh target MIDI producer receipt is missing from the controlled build')
+  reader_projection=audit_reader_projection(retained)
  if projection_rows[0].get('reader_projection')!=reader_projection:raise ValueError('Reader projection stage report differs from current source-bound files')
  raw=capture_catalogue()
  for identifier,scene in actual['scenes'].items():
@@ -1903,7 +1929,9 @@ def _audit_controlled_manual_generation(build_evidence,require_manual_generation
   from manual_course_bind import verify_publication as verify_course
   course=verify_course(root=ROOT,controlled_local=True)
   if course.get('passed') is not True or course.get('validation_scope')!='controlled-manual-generation':raise ValueError('Controlled course publication proof did not pass')
- return dict(passed=True,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',clock_mode='controlled-experimental',manual_generation_complete=True,complete_regression_run=False,controlled_stages=audited,current_publication=publication,inventory_sources=inventory_identity,course=course,features=len(actual['features']),reader_projection=reader_projection)
+ result=dict(passed=True,validation_scope='controlled-manual-generation',realtime_qualification='pending-ci',clock_mode='controlled-experimental',manual_generation_complete=True,complete_regression_run=False,controlled_stages=audited,current_publication=publication,inventory_sources=inventory_identity,course=course,features=len(actual['features']),reader_projection=reader_projection)
+ if fresh_admission is not None:result['fresh_target_midi_admission']=fresh_admission
+ return result
 
 def audit_controlled_manual_generation(build_evidence,require_manual_generation_complete=True,metadata_transition_proof=None):
  """Strict generation audit; a reviewed metadata proof is explicit and post-build only."""

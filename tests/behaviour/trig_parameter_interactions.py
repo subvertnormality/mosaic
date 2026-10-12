@@ -28,7 +28,13 @@ def fixed_note_domain(c,start=0,count=16):
         c.ui.set_value(value+(1 if parameter=='quantised_fixed_note' else 0))
     c.ui.turn(2,-3);c.ui.set_value(start+1)
     def phrase(pitches,label):
-        notes=c.playback([(1,[144,pitch,velocity]) for pitch,velocity in zip(pitches,(127,117,107,97))],cycles=2)
+        expected=[(1,[144,pitch,velocity]) for pitch,velocity in zip(pitches,(127,117,107,97))]
+        # Leave native MIDI capture active while two 90-BPM four-step phrases
+        # play. CI run 38205559076 measured a 139-ms diagnostic-observe call
+        # across a note deadline; repeated full-screen polling perturbs the
+        # timing being measured. Every packet and the original 10-ms oracle
+        # remain checked after this quiet acquisition window.
+        notes=_playback_with_bounded_controlled_settle(c,expected,2,5,4/3)
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         origin=notes[0][field]
