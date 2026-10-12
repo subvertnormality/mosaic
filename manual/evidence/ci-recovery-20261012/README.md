@@ -152,7 +152,8 @@ modules as unclassified before executing native cases. The registration omission
 was confirmed in base shards 0 and 14 and the MIDI-modulation profile. This was a
 suite integration failure, not evidence of a Mosaic behaviour regression.
 
-Both modules are now explicitly registered. The quick CI job also runs the
+Both regression sets now live in existing registered modules,
+`test_manual_caption_overlay` and `test_record_placement_oracle`. The quick CI job also runs the
 existing `test_suite.CollectionTests` to check every actual test filename, stale
 registration and case profile before reporting its result. The fail-closed
 collection policy is preserved.
@@ -168,3 +169,21 @@ locally. The existing manual run 38281355424 was left running; this local fix is
 not a claim that the complete campaign or publication has passed.
 
 CI-contract validation log SHA-256: `d9de50b89076de1efad7d04b9b95dfc5d5fa60ad33944bf2c2fb9e1412a0769f`.
+
+
+### Preserve identical audio inputs while fixing collection
+
+The final correction consolidates the two new regression files into their
+existing registered test modules. All five class bodies are structurally
+identical to the original regressions (AST comparison); no assertions or
+simulated stimulus changed. The suite runner matches 645bb6dc exactly. The
+existing audio cache already excludes test modules and CI test files, so this
+arrangement avoids changing any recording input or weakening a reuse guard.
+The quick collection workflow check remains enabled. Final collection,
+regression and CI contract validation: 150 checks passed. The earlier 133-check
+result preceded this consolidation; it is not the final evidence.
+Final validation log SHA-256: `e2703c550ad23ba8f8509c5527af24631964c145f6840a275b8983cc744ffd52`.
+
+The final staged Git audio-input list matches all 1,121 records from 645bb6dc
+exactly. Input-list SHA-256: `ed6326d37ce3d55193e28e7873abddc14c82e6da033432e82ec5bca06b4d1322`.
+The workflow, emulator revision and container inputs are unchanged.

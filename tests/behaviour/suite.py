@@ -46,8 +46,6 @@ PYTHON_UNITTEST.add('test_manual_quick_reference')
 PYTHON_UNITTEST.add('test_manual_case_capture')
 PYTHON_UNITTEST.add('test_manual_build')
 PYTHON_UNITTEST.add('test_manual_fresh_midi_receipts')
-PYTHON_UNITTEST.update({'test_manual_compiled_title_receipts',
-    'test_recorded_chord_stimulus_order'})
 PYTHON_UNITTEST.add('test_manual_capture')
 PYTHON_UNITTEST.add('test_manual_controlled_generation_integrity')
 PYTHON_UNITTEST.add('test_manual_doctor_capture')
