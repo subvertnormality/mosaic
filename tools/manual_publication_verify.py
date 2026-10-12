@@ -1484,14 +1484,32 @@ def scene_contract(scene):
  return value
 def scene_contract_digest(scene):return text_digest(json.dumps(scene_contract(scene),sort_keys=True,separators=(',',':'),ensure_ascii=False))
 def check_compiled_scene_contract(raw,compiled):
- if scene_contract(raw)!=scene_contract(compiled):raise ValueError('Compiled caption changed native contract')
+ # Title overlays are presentation, but their exact receipts must be checked
+ # before they are admitted. Keep the existing native-body comparison and
+ # the producer's original contract hashing rules; do not re-pin captures.
+ from manual_caption_overlay import contract_sha256
+ normalized=copy.deepcopy(compiled);normalized.pop('scene_title_overlay',None)
+ for original,revised in zip(raw.get('steps',[]),normalized.get('steps',[])):
+  revised.pop('step_title_overlay',None)
+  if 'title' in original:revised['title']=original['title']
+  else:revised.pop('title',None)
+ if scene_contract(raw)!=scene_contract(normalized):raise ValueError('Compiled caption changed native contract')
+ contract=contract_sha256(raw)
+ def check_text(original,revised,field,receipt_key,label):
+  receipt=revised.get(receipt_key)
+  if original.get(field)==revised.get(field):
+   if receipt is not None:raise ValueError('Unneeded historic '+label+' receipt on fresh wording')
+   return
+  before,after=original.get(field),revised.get(field)
+  if not isinstance(before,str) or not isinstance(after,str) or not before or not after:
+   raise ValueError('Invalid compiled '+label+' text (native contract)')
+  prefix='caption' if field=='caption' else 'title'
+  wanted={'original_'+prefix+'_sha256':text_digest(before),prefix+'_sha256':text_digest(after),'contract_sha256':contract}
+  if receipt!=wanted:raise ValueError('Missing or changed compiled '+label+' receipt (native contract)')
+ check_text(raw,compiled,'title','scene_title_overlay','scene title')
  for original,revised in zip(raw.get('steps',[]),compiled.get('steps',[])):
-  receipt=revised.get('caption_overlay')
-  if original.get('caption')==revised.get('caption'):
-   if receipt is not None:raise ValueError('Unneeded historic caption receipt on fresh wording')
-   continue
-  wanted=dict(original_caption_sha256=text_digest(original['caption']),caption_sha256=text_digest(revised['caption']),contract_sha256=scene_contract_digest(raw))
-  if receipt!=wanted:raise ValueError('Missing or changed compiled caption receipt')
+  check_text(original,revised,'caption','caption_overlay','caption')
+  check_text(original,revised,'title','step_title_overlay','step title')
 # Reviewed audio lessons: each needs independent acceptance before it may publish.
 # contract_sha256 is canonical_hash(authored midi_contract); pcm_solo_voice limits the
 # PCM proof to that single-voice solo session (None: every session of the lesson).

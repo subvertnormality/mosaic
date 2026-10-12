@@ -89,3 +89,56 @@ this follow-up does not establish a green complete campaign or publication.
 | Linux fixture/UI validation log | `b94dec82fd64857f5591e47e79a811077907a47ce23a2717123cc1cb4938f688` |
 | Controlled `M-REC-028` manifest | `5fb975564cfd437110990a5e048c1dcbd655298ef142faae117f38787dab83e5` |
 | Controlled `M-REC-029` manifest | `3af498e14f242f7fc901c4ab63488ef25aefebc4438b75074ec23425ca9ec401` |
+
+## Follow-up: compiled title receipts
+
+[Manual run 38236046286](https://github.com/subvertnormality/mosaic/actions/runs/38236046286)
+recorded its audio successfully and passed all 49 generation/browser stages
+(124.2 minutes across timed stages). Its final audit passed the corrected fresh
+MIDI admission and reader projection checks, then rejected an editorial title
+overlay with `Compiled caption changed native contract`. No static preview was
+uploaded from that failed package command.
+
+The caption compiler already supports reviewed scene and step titles, with an
+exact receipt for each changed field. The final checker still assumed the older
+caption-only format: it treated `step_title_overlay`, changed step titles and
+`scene_title_overlay` as native-contract edits. The three affected scenes are
+`parameter-slot-endpoints`, `workflow-compose-two-channels` and
+`workflow-second-channel`.
+
+The final checker now validates the original title hash, revised title hash and
+the producer's unchanged original contract hash for each title edit. Missing,
+altered, extra or unneeded receipts remain rejected. Native inputs, expectations,
+output bindings, citations, evidence, scene identity and step order remain bound
+by the original complete native-body comparison. No capture or authored contract
+pin was changed. The checker compares a copy and does not modify the raw or
+compiled lesson.
+
+Validation after this correction:
+
+- A compiler-to-final-auditor regression fails on the unfixed checker with the
+  same native-contract error, then passes on the correction.
+- Affected caption, publication and generation-audit suites: 97 passed.
+- Packaging and publisher suites: 58 passed.
+- Related reader, publication, starting-state, MIDI receipt and build suites:
+  119 passed.
+- Replay against all 146 actual CI-compiled scenes: passed. For 61 scenes with
+  editorial receipts, the baseline was reconstructed from the CI-compiled
+  scene and recorded authored baseline wording; each reconstructed complete
+  native contract exactly matches its recorded producer hash. This is a
+  hash-verified reconstruction, not a new capture or relabelled native run.
+- The old checker rejects exactly the three title-overlay scenes above.
+- The replay rejects 438 mutations of native inputs, expectations and outputs.
+  Additional regression boundaries reject citation, evidence, scene-owner and
+  step-order changes, as well as malformed title receipts.
+
+No generation or audio recording was repeated for this diagnosis. The recording
+stimulus correction above remains independently validated; a new complete CI
+campaign and a published artifact are still required.
+
+| Title-audit evidence | SHA-256 |
+| --- | --- |
+| Failed manual command log (downloaded during evidence upload) | `12e4b662405d7819f0593e8efc5db0ef66de90dd9745ad444f85e9340b5862a8` |
+| Complete CI generation evidence archive | `ae49849844d23d0ad84f7f4673288a6e21e15f6939a773547e63d47f6ae14b97` |
+| Unfixed title-receipt regression log | `90665857cd39fb968357d3dcc3a3679a9b5ba118b6bc3ece5529125db3227f5e` |
+| Actual CI-scene contract replay report | `9c8b54b141c082e289a42256dc4211156bd8848d75f75b22a79652d09e735943` |
