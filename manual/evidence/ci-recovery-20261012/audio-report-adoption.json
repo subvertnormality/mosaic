@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "complete-controlled-audio-report-adoption",
+  "report": {
+    "path": "/mnt/evidence/mosaic-ci-recovery/audio-38236046286/qualification-source/manual/generated/audio-scenes.json",
+    "sha256": "39864ddc5469c526ec611a5c042d88d76f121010b9693cc58a130656c1114a82"
+  },
+  "published_report": {
+    "path": "/mnt/evidence/mosaic-ci-recovery/audio-38236046286/qualification-source/manual/generated/audio-scenes.json",
+    "sha256": "39864ddc5469c526ec611a5c042d88d76f121010b9693cc58a130656c1114a82"
+  },
+  "audit": {
+    "examples": 21,
+    "native_sessions": 54,
+    "midi_sessions": 18,
+    "frames": 2061,
+    "passed": true
+  },
+  "session_audit": {
+    "passed": true,
+    "dsp_sessions": 54,
+    "midi_sessions": 18,
+    "complete_regression_run": false,
+    "hardware_timing_verified": false
+  },
+  "source_files": {
+    "manual/audio-scenes.yaml": "ffc775971ce1fa3bfca8ba55c1059798519cd4a82241eb8827e9852afeebcd74",
+    "manual/audio.schema.json": "1722f08f8e7658a1c65a977089bfb351041e347e6e4e6bde93b81aae0023516d",
+    "tests/behaviour/channel_gestures.py": "ea1b01c6477c301c7f06a50f6ca345e87d2df3760553c462d02e1420c232f707",
+    "tests/behaviour/driver.py": "f38b4e2d329fdda79609b6a288a22f63cc5d99b20f4b01fc12fe3a732f251aba",
+    "tests/behaviour/pcm_oracle.py": "f5ce34d7701440e964f26d984db21c2bc07a968d12195cb7dd242c31f9e55d15",
+    "tests/behaviour/ui.py": "1382109a56d940e3abae4ad6585b8c51d801b05b63665b41a432725072c56d8e",
+    "tests/behaviour/ui_map.py": "8fb570618c8076b9f0ef1073f7599e170933ba108ad15fc486730af16116685f",
+    "tools/manual_audio.py": "6ade2620cca796a34c16c890cccf4578ac743b6a41adce97cd09ce7207f71cc1",
+    "tools/manual_audio_origin_audit.py": "4f99b9c0532180be8df29c1ef09f765c792a6ea1802015c312657b6f4412424d",
+    "tools/manual_audio_resume.py": "f01a0f9598e3a3a508936325c42a34a3a5008575197a0d102abbcc86a463e58e",
+    "tools/manual_audio_setups.py": "c34d6adc634d4a49c805d8c565d31e6c0c9573a98ce1934cddeb70f82f698f93",
+    "tools/manual_capture.py": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+    "tools/manual_publication_verify.py": "6babb19e6bc2409f9eae870eacf30a5de785bf8ce4f1587d114841a37b296761"
+  },
+  "adoption_tool_sha256": "15f6917f32681c594d92eeecc609777fa168ca06453dc09b30c346274ecb71bc",
+  "builder_sha256": "beae6627d726cf5163489c0b0002da8e941a464ef26a8416c88b90b65f7abd73"
+}

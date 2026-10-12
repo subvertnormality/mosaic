@@ -5,12 +5,37 @@ after the matrix grew to 24 shards.
 """
 import re
 import unittest
+import yaml
 from pathlib import Path
 
 WORKFLOW = Path(__file__).resolve().parents[3] / '.github' / 'workflows' / 'behaviour.yml'
 
 
 class WorkflowCountTests(unittest.TestCase):
+    def test_registration_precedes_expensive_native_work(self):
+        workflow = yaml.safe_load(WORKFLOW.read_text())
+        checked = 0
+        for job in workflow['jobs'].values():
+            steps = job.get('steps', [])
+            builds = [i for i, step in enumerate(steps)
+                      if step.get('name') == 'Build native runtimes']
+            if not builds:
+                continue
+            collection = [i for i, step in enumerate(steps)
+                          if 'test_suite.CollectionTests' in step.get('run', '')]
+            self.assertEqual(len(collection), 1, job.get('name'))
+            self.assertLess(collection[0], builds[0])
+            checked += 1
+        self.assertGreaterEqual(checked, 4)
+        manual = yaml.safe_load(WORKFLOW.with_name('manual-build.yml').read_text())
+        steps = manual['jobs']['record-audio']['steps']
+        collection = next((i for i, step in enumerate(steps)
+                           if 'test_suite.CollectionTests' in step.get('run', '')), None)
+        self.assertIsNotNone(collection)
+        runtime = next(i for i, step in enumerate(steps)
+                       if step.get('name') == 'Restore the pinned emulator runtime')
+        self.assertLess(collection, runtime)
+
     def test_fast_ci_checks_the_actual_suite_collection(self):
         main = WORKFLOW.with_name('main.yml').read_text()
         self.assertIn('PYTHONPATH: tests/behaviour', main)

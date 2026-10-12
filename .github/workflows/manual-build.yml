@@ -53,7 +53,7 @@ jobs:
       - name: Trust checkout
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Preflight authored scene case registrations
-        run: PYTHONPATH=tests/behaviour python3 -m unittest test_manual_build.BuildPlan.test_every_authored_scene_case_resolves_through_its_planned_registry
+        run: PYTHONPATH=tests/behaviour python3 -m unittest test_manual_build.BuildPlan.test_every_authored_scene_case_resolves_through_its_planned_registry test_suite.CollectionTests
       - name: Set up Node for manual browser checks
         uses: actions/setup-node@v4
         with:
@@ -63,8 +63,8 @@ jobs:
         with:
           path: ${{ runner.temp }}/monome-emulator/.runtime
           key: monome-emulator-ubuntu20-68ab709-qualified-v9
-      # Real-time audio takes about three hours, so reuse a bundle an earlier run recorded from
-      # byte-identical audio inputs. The build job still re-audits it through --adopt-audio-report.
+      # Prefer byte-identical inputs. A pinned prior recording can also be tried;
+      # both paths require full current-source audio audits before reuse.
       - name: Identify the audio recording inputs
         id: audio-identity
         shell: bash
@@ -72,6 +72,7 @@ jobs:
           inputs="$(git ls-files -s -- mosaic.lua lib docs/ui-reimplementation/code tests/behaviour \
             tools/manual_audio.py tools/manual_audio_setups.py tools/manual_audio_resume.py \
             tools/manual_audio_origin_audit.py tools/manual_capture.py manual/audio-scenes.yaml \
+            tools/manual_course_cases.py manual/course.yaml \
             manual/audio.schema.json manual/voices.lock.json .github/scripts/manual_runtime.py \
             ':(exclude)tests/behaviour/test_*' ':(exclude)tests/behaviour/ci')"
           identity="$(printf '%s\n%s\n%s\n' "$EMULATOR_REVISION" "$CONTAINER_IMAGE" "$inputs" | sha256sum | cut -c1-40)"
@@ -86,29 +87,26 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           AUDIO_IDENTITY: ${{ steps.audio-identity.outputs.id }}
         run: |
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import json, os, urllib.request
-          url = "https://api.github.com/repos/%s/actions/artifacts?per_page=20&name=manual-audio-src-%s" % (os.environ["GITHUB_REPOSITORY"], os.environ["AUDIO_IDENTITY"])
-          request = urllib.request.Request(url, headers={"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"], "Accept": "application/vnd.github+json"})
-          artifacts = json.load(urllib.request.urlopen(request, timeout=30)).get("artifacts", [])
-          live = [a for a in artifacts if not a.get("expired") and a.get("workflow_run", {}).get("id")]
-          print("run_id=%s" % (live[0]["workflow_run"]["id"] if live else ""))
-          PY
+          python3 .github/scripts/audio_bundle_reuse.py find \
+            --repository "$GITHUB_REPOSITORY" --identity "$AUDIO_IDENTITY" \
+            --pin manual/evidence/ci-recovery-20261012/audio-bundle-pin.json >> "$GITHUB_OUTPUT"
       - name: Download the reusable audio bundle
         if: steps.audio-reuse.outputs.run_id != ''
         uses: actions/download-artifact@v4
         with:
-          name: manual-audio-src-${{ steps.audio-identity.outputs.id }}
+          name: ${{ steps.audio-reuse.outputs.artifact_name }}
           run-id: ${{ steps.audio-reuse.outputs.run_id }}
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
       - name: Lint, unit-test and record every audio example
+        id: audio-assets
         shell: bash
         env:
           AUDIO_REUSED: ${{ steps.audio-reuse.outputs.run_id }}
+          AUDIO_PINNED_FALLBACK: ${{ steps.audio-reuse.outputs.pinned }}
         run: .github/scripts/manual-build.sh
       - name: Keep this recording for identical audio inputs
-        if: steps.audio-reuse.outputs.run_id == ''
+        if: steps.audio-assets.outputs.audio_recorded == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: manual-audio-src-${{ steps.audio-identity.outputs.id }}

@@ -695,6 +695,8 @@ class CodexPromotionContractTests(unittest.TestCase):
             ({"tooling_tamper": ".github/workflows/manual-build.yml"}, "trusted release allowlist"),
             ({"tooling_tamper": ".github/scripts/manual-build.sh"}, "trusted release allowlist"),
             ({"tooling_tamper": ".github/scripts/manual_artifact.py"}, "trusted release allowlist"),
+            ({"tooling_tamper": ".github/scripts/audio_bundle_reuse.py"}, "trusted release allowlist"),
+            ({"tooling_tamper": "manual/evidence/ci-recovery-20261012/audio-bundle-pin.json"}, "trusted release allowlist"),
             ({"tooling_missing": ".github/scripts/manual-build.sh"}, "producer tooling response is invalid"),
         ]
         for options, message in cases:
@@ -1054,4 +1056,3 @@ class PR98MergedMainPromotionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

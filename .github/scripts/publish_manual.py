@@ -27,12 +27,17 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # recorded audio bundle across runs when the audio inputs are byte-identical (test files excluded from the identity).
     # 2026-10-07 (Claude): manual-build.sh re-pinned after giving the Masks provisioning capture MONOME_EMULATOR (CI run
     # 37503722733 failed there with "MONOME_EMULATOR is required").
+    # 2026-10-12: pinned prior audio reuse requires immutable bundle bytes and full
+    # current-source audio audits; the helper and original bundle pin are dependencies.
+    # Registration preflights now precede all expensive native jobs.
     # 2026-10-12: manual-build.sh re-pinned after exporting the pinned emulator root to the final publication audit;
     # CI run 38189344038 reached the final audit but failed when frame_oracle had no MONOME_EMULATOR.
     PRODUCER_TOOLING_POLICY_VERSION: {
-        ".github/workflows/manual-build.yml": "32a350cecd9ef198c999140170e22eeb9473a5aeec35b17c557c0c0b17c271d0",
-        ".github/scripts/manual-build.sh": "d73bc83fa58e47ceca858d0795ff1bbe59bcfd95efbee18411495c3238f46297",
+        ".github/workflows/manual-build.yml": "91139f24fc1f75ce0ae2b6d7bf90660167b09744df56d976c2474fe2d815316c",
+        ".github/scripts/manual-build.sh": "417305e7738f4243e62921242440725a95087a58b0e609e6e1287e8eb86e98de",
         ".github/scripts/manual_artifact.py": "8012a9e1e0f51f240954646e82c5dcfa49f92dfaff61eebf2b0ff12a4f826f23",
+        ".github/scripts/audio_bundle_reuse.py": "7ee1ba75f080312fec61f4f5fa83a1947997d7662f9790e6f38520a5683ce6c0",
+        "manual/evidence/ci-recovery-20261012/audio-bundle-pin.json": "72a03bee85b5671600f72382342d2bfc778b07a8cb334bd14b908985756cbeb3",
     },
 }
 

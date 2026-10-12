@@ -34,4 +34,4 @@ jobs:
         env:
           PYTHONPATH: tests/behaviour
         run: python -m unittest test_suite.CollectionTests
-      - run: python -m unittest tests.manual_ci.test_publish_manual
+      - run: python -m unittest tests.manual_ci.test_publish_manual tests.manual_ci.test_audio_bundle_reuse

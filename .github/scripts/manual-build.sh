@@ -108,12 +108,7 @@ python3 "$ROOT/tools/manual_plan_lint.py"
 mapfile -t MANUAL_UNIT_TESTS < <(cd "$ROOT" && ls tools/test_*.py tests/behaviour/test_manual_*.py | grep -v parameter_readout)
 (cd "$ROOT" && MONOME_EMULATOR="$EMULATOR_ROOT" MOSAIC_REPO_ROOT="$ROOT" PYTHONPATH=tools:tests/behaviour PYTHONDONTWRITEBYTECODE=1 \
   python3 -m pytest -p no:cacheprovider -q "${MANUAL_UNIT_TESTS[@]}")
-  if [[ -n "${AUDIO_REUSED:-}" ]]; then
-    # Bundle from run $AUDIO_REUSED with identical audio inputs; the build job re-audits it.
-    test -s "$AUDIO_BUNDLE_DIR/audio.tar" && test -s "$AUDIO_BUNDLE_DIR/report.sha256"
-    echo "Reusing audio recorded by run $AUDIO_REUSED: report $(cat "$AUDIO_BUNDLE_DIR/report.sha256")"
-    exit 0
-  fi
+
 fi
 
 mkdir -p "$VOICE_ROOT" "$MOD_ROOT"
@@ -131,6 +126,46 @@ python3 "$ROOT/.github/scripts/manual_runtime.py" clone-modulation --output "$MO
 # The audio asset runtime is distinct from the qualified MIDI behavior runtime.
 python3 "$ROOT/.github/scripts/manual_runtime.py" build-audio --emulator "$EMULATOR_ROOT" --output "$AUDIO_BUILD" --monitor-output "$AUDIO_TOOLS"
 test -s "$AUDIO_INSTALL"
+
+if [[ "$MODE" == audio && -n "${AUDIO_REUSED:-}" ]]; then
+    # Preserve the original report and native paths. Reuse is accepted only by
+    # the full current-source audits; the build repeats strict adoption later.
+    test -s "$AUDIO_BUNDLE_DIR/audio.tar" && test -s "$AUDIO_BUNDLE_DIR/report.sha256"
+    if [[ "${AUDIO_PINNED_FALLBACK:-false}" == true ]]; then
+      python3 "$ROOT/.github/scripts/audio_bundle_reuse.py" verify-bundle \
+        --bundle "$AUDIO_BUNDLE_DIR" \
+        --pin "$ROOT/manual/evidence/ci-recovery-20261012/audio-bundle-pin.json"
+    fi
+    tar -C / -xf "$AUDIO_BUNDLE_DIR/audio.tar"
+    [[ "$(sha256sum "$ROOT/manual/generated/audio-scenes.json" | cut -d' ' -f1)" == "$(cat "$AUDIO_BUNDLE_DIR/report.sha256")" ]]
+    if (cd "$ROOT" && PYTHONPATH=tools:tests/behaviour:.github/scripts python3 - <<'PY'
+import hashlib, json, os
+from pathlib import Path
+import manual_audio
+import manual_publication_verify
+from audio_bundle_reuse import qualify_audio
+report = Path("manual/generated/audio-scenes.json")
+sha = hashlib.sha256(report.read_bytes()).hexdigest()
+result = qualify_audio(manual_audio.audit_controlled_publication,
+                       lambda: manual_publication_verify.audit_audio_session_integrity(controlled_local=True))
+if hashlib.sha256(report.read_bytes()).hexdigest() != sha:
+    raise ValueError("Stored audio report changed during qualification")
+result.update(original_run_id=os.environ["AUDIO_REUSED"], report_sha256=sha,
+              recording_executed=False)
+Path(os.environ["RUNNER_TEMP"], "mosaic-manual-ci", "manual-build-evidence", "audio-cache-qualification.json").write_text(json.dumps(result, indent=2) + "\n")
+print(json.dumps(result))
+raise SystemExit(0 if result["reusable"] else 3)
+PY
+    ); then
+      echo "Verified original audio from run $AUDIO_REUSED; no recording executed"
+      echo "audio_recorded=false" >> "$GITHUB_OUTPUT"
+      exit 0
+    else
+      status=$?
+      if [[ "$status" != 3 ]]; then exit "$status"; fi
+      echo "Stored recording inputs changed; recording the current authored examples"
+    fi
+fi
 
 if [[ "$MODE" == audio ]]; then
   # The exact musical-audio-assets stage command from manual_build.plan (controlled-local).
@@ -159,6 +194,7 @@ paths = sorted(runs) + [str(report), str(root / "manual/audio")]
 print("Audio bundle:", len(runs), "native runs; report", (out / "report.sha256").read_text().strip())
 PY
   tar -C / -cf "$AUDIO_BUNDLE_DIR/audio.tar" -T "$AUDIO_BUNDLE_DIR/paths.txt"
+  echo "audio_recorded=true" >> "$GITHUB_OUTPUT"
   exit 0
 fi
 

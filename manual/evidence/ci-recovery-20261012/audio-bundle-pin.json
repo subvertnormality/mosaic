@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "run_id": 38236046286,
+  "run_attempt": 1,
+  "head_sha": "c2c15c0ac3b1171c423bcb9dd5a5c24d5b4abb58",
+  "artifact_name": "manual-audio-src-60863f8e3b90a30e29e359fa0593fb993b716e8b",
+  "archive_sha256": "1c9b801ee6c8bb4745ab4e64a9f44ecb90d5668e20a579c81d10802edd6b448f",
+  "tar_sha256": "fb106987258bbab929258bcd641f56ae8b5c3970479ad2e63e204bd9bf7fafac",
+  "report_sha256": "39864ddc5469c526ec611a5c042d88d76f121010b9693cc58a130656c1114a82"
+}

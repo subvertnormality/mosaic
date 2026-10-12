@@ -1,4 +1,4 @@
-# CI recovery evidence — 12 October 2026
+# CI recovery evidence â€” 12 October 2026
 
 Failed source: `f9205324c0d3d570dae498b5fd98e866fc5f196f` on `codex/1.4.0`, PR #98.
 
@@ -187,3 +187,49 @@ Final validation log SHA-256: `e2703c550ad23ba8f8509c5527af24631964c145f6840a275
 The final staged Git audio-input list matches all 1,121 records from 645bb6dc
 exactly. Input-list SHA-256: `ed6326d37ce3d55193e28e7873abddc14c82e6da033432e82ec5bca06b4d1322`.
 The workflow, emulator revision and container inputs are unchanged.
+
+
+### Reuse the original successful audio and fail early on collection
+
+The existing successful recording job from CI run 38236046286 (attempt 1,
+source c2c15c0ac3b1171c423bcb9dd5a5c24d5b4abb58) was recovered from its
+GitHub-digest-verified 30-day source artifact. Its ZIP, complete audio tar and
+original report identities are committed in `audio-bundle-pin.json`.
+The original files and failed first local qualification remain on the approved
+external evidence drive. No clips or report fields were rewritten.
+
+The final unchanged adoption and native-session audits passed against the
+current application and audio sources: 21 examples, 54 DSP sessions, 18 MIDI
+sessions and 2,061 native frames. Receipt: `audio-report-adoption.json`, SHA-256
+`dfe201f25288ae2a39ad62db7619c2cbced05ed337aae74a75d67732a3cc5bb8`.
+The original report SHA-256 remained
+`39864ddc5469c526ec611a5c042d88d76f121010b9693cc58a130656c1114a82`.
+This is qualification of stored evidence, not a new recording or a complete
+regression campaign. It does not establish hardware timing.
+
+The CI reuse helper validates the pinned producer, successful original audio
+job and archive identity before downloading. The shell driver verifies tar and
+report hashes, restores the original native paths after provisioning the
+locked runtime/voices, and repeats both strict audits. A separate qualification
+receipt preserves the original run ID. The complete builder audits adoption
+again. Source-incompatible recordings trigger fresh recording; corruption and
+invalid current authoring remain fatal. Fresh recordings are cached even when
+a stale candidate was initially selected.
+
+Independent read-only Luna high review found two missing cache inputs:
+`manual/course.yaml` and `tools/manual_course_cases.py`. A regression failed on
+the old key for both missing inputs, then passed after adding them. Invalid
+current course contracts remain fatal because recording cannot repair authoring
+errors. The normal audio audit validates current authoring before reuse.
+
+Behaviour test collection now runs before native provisioning in all relevant
+behaviour jobs and before manual runtime setup. The two new regression class
+sets remain in their existing registered modules; their assertions are intact.
+Final Linux checks: 68 packaging/reuse/publisher tests and 151 collection,
+regression and workflow contract tests passed. No native session, audio
+recording, local real-time qualification or full manual generation was started
+for this final check. CI and publication remain unverified until the corrected
+committed head completes.
+
+Packaging/reuse log SHA-256: `2b5aa160ec4ca2c27cc3da7aed6f2b61ee85e8cb11ad3fd0d7a9f810193d39d7`.
+Registration/CI contract log SHA-256: `2e2a1978b3f2e479afb2e8371be369c341f0e22c8412a9007cf643591123a222`.

@@ -71,6 +71,8 @@ The separate producer workflow is `Build manual site` (`.github/workflows/manual
 
 A clean CI runner first captures Masks in controlled time and records its actual DSP audio through the audio worker. This bootstrap supplies fresh raw audio evidence rather than relying on paths from an earlier developer machine. The complete builder then replays Masks with the other authored plans and performs the final strict audit. Only the audio recording uses real time.
 
+The separate audio job first checks for a retained recording with identical input identities, including the course authoring and its musical contracts. It can also try the explicitly pinned successful CI recording listed in `manual/evidence/ci-recovery-20261012/audio-bundle-pin.json`. That fallback verifies the original repository, workflow, source commit, attempt, successful recording job and immutable archive, tar and report hashes. Selection alone does not permit reuse: after provisioning the pinned runtime and voice sources, the job repeats the full current-source PCM, MIDI, encoded-asset and native-session audits. The original report and recordings remain unchanged, and a separate qualification receipt identifies their original run. Changed recording inputs require new recordings; damaged evidence or invalid current authoring fails the job. The downstream manual builder repeats strict audio adoption and all controlled generation and packaging checks.
+
 For an on-demand build, open Actions → Build manual site → Run workflow and select the source ref. The CI entry point is:
 
 ```sh

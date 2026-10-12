@@ -82,6 +82,11 @@ jobs:
           submodules: recursive
       - name: Trust checkout
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - &registration
+        name: Check behaviour test registration
+        env:
+          PYTHONPATH: tests/behaviour
+        run: python3 -m unittest test_suite.CollectionTests
       - &emulator
         name: Check out pinned emulator
         run: |
@@ -206,6 +211,7 @@ jobs:
       - *checkout
       - name: Trust checkout
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - *registration
       - *emulator
       - *cache
       - *build
@@ -252,6 +258,7 @@ jobs:
       - *checkout
       - name: Trust checkout
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - *registration
       - *emulator
       - *cache
       - *build
@@ -338,6 +345,7 @@ jobs:
       - *checkout
       - name: Trust checkout
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - *registration
       - *emulator
       - *cache
       - *build
@@ -481,6 +489,14 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 python3-yaml python3-jsonschema libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+      - name: Check behaviour test registration
+        env:
+          HISTORICAL_SOURCE: ${{ inputs.ui_migration_historical_source }}
+        run: |
+          runner_root=after-source
+          if [[ "$HISTORICAL_SOURCE" == "true" ]]; then runner_root=tooling-source; fi
+          cd "$runner_root/tests/behaviour"
+          python3 -m unittest test_suite.CollectionTests
       - name: Check out pinned emulator
         run: |
           git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git "$EMULATOR_ROOT"
@@ -843,6 +859,7 @@ jobs:
       - name: Verify the offline drift runner
         working-directory: tests/behaviour
         run: python3 -m unittest -v ci.test_ui_migration_drift_runner
+      - *registration
       - *emulator
       - *cache
       - name: Build native runtimes

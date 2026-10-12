@@ -326,7 +326,7 @@ fetch_pin matrix https://example.invalid/matrix.git "$EXPECTED_SHA"
         self.assertLess(runtime, inputs)
         self.assertLess(inputs, recording)
         self.assertEqual(steps[preflight]["run"],
-            "PYTHONPATH=tests/behaviour python3 -m unittest test_manual_build.BuildPlan.test_every_authored_scene_case_resolves_through_its_planned_registry")
+            "PYTHONPATH=tests/behaviour python3 -m unittest test_manual_build.BuildPlan.test_every_authored_scene_case_resolves_through_its_planned_registry test_suite.CollectionTests")
 
     def test_workflow_has_only_pr_and_dispatch_build_triggers(self):
         workflow = (ROOT / ".github/workflows/manual-build.yml").read_text()
