@@ -7,6 +7,18 @@ sys.path.insert(0,str(ROOT/'tools'))
 spec=importlib.util.spec_from_file_location('manual_publication_verify',ROOT/'tools/manual_publication_verify.py')
 audit=importlib.util.module_from_spec(spec);spec.loader.exec_module(audit)
 class PublicationIntegrity(unittest.TestCase):
+ def test_oracle_font_source_falls_back_to_pinned_runtime_when_capture_source_is_null(self):
+  import frame_oracle
+  with tempfile.TemporaryDirectory() as directory:
+   root=Path(directory);runtime=root/'.runtime';runtime.mkdir();(runtime/'current.json').write_text(json.dumps({'source':'/pinned/norns'}))
+   with patch.object(frame_oracle,'ROOT',root):
+    self.assertEqual(audit.oracle_font_source({'runtime_identity':{'source':None}},frame_oracle),'/pinned/norns')
+    self.assertEqual(audit.oracle_font_source({'runtime_identity':{'source':'/captured/norns'}},frame_oracle),'/captured/norns')
+ def test_oracle_font_source_fails_clearly_without_any_pinned_source(self):
+  import frame_oracle
+  with tempfile.TemporaryDirectory() as directory,patch.object(frame_oracle,'ROOT',Path(directory)):
+   with self.assertRaisesRegex(ValueError,'norns font source'):
+    audit.oracle_font_source({'runtime_identity':{'source':None}},frame_oracle)
  def test_editorial_overlay_keeps_exact_performance_contract(self):
   baseline=dict(schema_version=1,feature=dict(id='masks',title='Masks',summary='old'),scenes=[dict(id='note',steps=[dict(inputs=[dict(type='key',n=3)],expect=dict(midi=[60]))])],audio=dict(bpm=90,tracks=[]))
   revised=copy.deepcopy(baseline);revised['feature']['summary']='New literal description';revised['audio']['description']='Four bars'

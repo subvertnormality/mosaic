@@ -6,6 +6,17 @@ from manual_book import ROOT,MANUAL,load,compile_book,capture_catalogue
 from manual_model import source_hash
 from manual_verify import check_frame,digest
 
+def oracle_font_source(identity,frame_oracle):
+ runtime_identity=identity.get('runtime_identity',{})
+ source=runtime_identity.get('source') if isinstance(runtime_identity,dict) else None
+ if isinstance(source,str) and source.strip():return source
+ root=frame_oracle.ROOT
+ current=root/'.runtime/current.json' if root is not None else None
+ if current is not None and current.is_file():
+  source=json.loads(current.read_text()).get('source')
+  if isinstance(source,str) and source.strip():return source
+ raise ValueError('Cannot render captured screen: no norns font source in capture or pinned runtime')
+
 def canonical_hash(value):
  return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def performance_contract(data):
@@ -299,7 +310,7 @@ def check_readability_samples(row,observations,events,path):
   states.append(state)
  identity=json.loads((path/'native/identity.json').read_text())
  with tempfile.TemporaryDirectory(prefix='readability-font-oracle-') as directory:
-  runtime=Path(directory)/'.runtime';runtime.mkdir();(runtime/'current.json').write_text(json.dumps(dict(source=identity['runtime_identity']['source'])));previous=frame_oracle.ROOT;frame_oracle.ROOT=Path(directory)
+  runtime=Path(directory)/'.runtime';runtime.mkdir();(runtime/'current.json').write_text(json.dumps(dict(source=oracle_font_source(identity,frame_oracle))));previous=frame_oracle.ROOT;frame_oracle.ROOT=Path(directory)
   try:
    # V2 detail/vertical mini sprites extend left of the historical x120.
    # Verify exact authored literal art before excluding only its own rectangle.
@@ -878,7 +889,7 @@ def verify_cached_ui(state,expected,path):
  # Render the independent UI oracle with the captured norns source's font.
  # The temporary descriptor selects a font only; no emulator session is started.
  with tempfile.TemporaryDirectory(prefix='manual-font-oracle-') as directory:
-  runtime=Path(directory)/'.runtime';runtime.mkdir();(runtime/'current.json').write_text(json.dumps(dict(source=identity['runtime_identity']['source'])))
+  runtime=Path(directory)/'.runtime';runtime.mkdir();(runtime/'current.json').write_text(json.dumps(dict(source=oracle_font_source(identity,frame_oracle))))
   previous=frame_oracle.ROOT;frame_oracle.ROOT=Path(directory)
   try:
    if 'literal_header' in expected:
