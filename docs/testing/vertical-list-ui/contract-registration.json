@@ -1,0 +1,10 @@
+{
+  "before_sha256": "24a6785283409ab14f0595dc831dff19c11c0bac175f6c341f1f3e2faad0fb94",
+  "old_count": 429,
+  "new_count": 430,
+  "added": "M-UI-VERTICAL-001",
+  "previous_ceiling": 472,
+  "current_ceiling": 473,
+  "reason": "One authorized new canonical contract case; retain existing ceil(1.10*classified_count) headroom rule and fixed ceiling assertion",
+  "headroom_formula": "(classified_count * 11 + 9) // 10"
+}

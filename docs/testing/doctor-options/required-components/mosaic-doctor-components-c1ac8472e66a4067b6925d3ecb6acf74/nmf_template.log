@@ -1,0 +1,10 @@
+test_general_midi_hats_split_closed_from_open (test_nmf_template.NmfTemplateTests.test_general_midi_hats_split_closed_from_open) ... ok
+test_keeps_single_class_event_with_no_nearby_drum_onset (test_nmf_template.NmfTemplateTests.test_keeps_single_class_event_with_no_nearby_drum_onset) ... ok
+test_rejects_other_lane_inside_symmetric_isolation_window (test_nmf_template.NmfTemplateTests.test_rejects_other_lane_inside_symmetric_isolation_window) ... ok
+test_requires_preceding_tail_gap_but_preserves_same_lane_when_clear (test_nmf_template.NmfTemplateTests.test_requires_preceding_tail_gap_but_preserves_same_lane_when_clear) ... ok
+test_unmapped_drum_onsets_cannot_make_a_template_isolated (test_nmf_template.NmfTemplateTests.test_unmapped_drum_onsets_cannot_make_a_template_isolated) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.003s
+
+OK

@@ -1,0 +1,1115 @@
+{
+  "review_id": "proposal-review-20261008-01",
+  "decision": "HOLD",
+  "scope": "Read-only adversarial review of three human-text proposals; no source edits, builds, captures, native or audio activity.",
+  "rubric": {
+    "criterion_source": "root-round4-score-summary.py",
+    "criteria": [
+      "coherence",
+      "usefulness",
+      "understandability",
+      "representation",
+      "granularity",
+      "flow",
+      "integration",
+      "vocabulary",
+      "naming",
+      "canonical_home"
+    ],
+    "threshold": "All ten criteria >= 8 for every affected teaching unit.",
+    "ledger_path": "source19-course-crossref-score-refresh-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v07.json",
+    "ledger_sha256": "4ceb17deba072d7c5a4b4ee75da6c8a5ae87f362a09c8a4b612541645c650917",
+    "scoring_method": "Manual review of changed unit text and source context; exact repeated recording relationship strings are scored separately per recording but use a shared rationale because the text and user-facing role are identical."
+  },
+  "proposal_pins": [
+    {
+      "proposal": "recipe-text-overlay-20261008-01",
+      "manifest_sha256": "028bc97f51da6985a88df7f2b7cecb75351974da948685ba081892b0b4048851",
+      "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+      "source_files": [
+        {
+          "path": "manual/features/cookbook.yaml",
+          "before_sha256": "5f5935095bd5ad13849bfede00671c213231ebc490ef3edacd6d2505e2091ba0",
+          "after_sha256": "3048824ae4f8d468b562e91e8c4a1a44299681a3845bcd52612bdd70f8f1af2b"
+        },
+        {
+          "path": "manual/features/masks.yaml",
+          "before_sha256": "b1b5e01e17479e813d51e6931fd510424fe7f6d6f1a34a6c072b0c10a52f8052",
+          "after_sha256": "7ce6c9e91bfea69866c778731ccb54451ff3cf2ac6877cd57e4083129587e263"
+        },
+        {
+          "path": "manual/features/reference-channel.yaml",
+          "before_sha256": "f1959ad4521ab1df2703b6d73ee2d45ad33571ba60e2f3e24c68c7a7c1c098bd",
+          "after_sha256": "3f3bc53bb7ffa7347d1a873a048355f503f319ecf8f9a593fe93728847633ace"
+        }
+      ]
+    },
+    {
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "manifest_sha256": "9e4c9c00ee8a3cbf4eaa4a9fd88773829e9de1fc06806d22386d3e96b00ac519",
+      "candidate_hashes": {
+        "manual/features/reference-learn.yaml": {
+          "sha256": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7",
+          "bytes": 307439
+        },
+        "manual/features/reference-locks.yaml": {
+          "sha256": "03b233d712a3da94fab44bcef51189a8583f7f529dadf352890a68bb5b22e8d5",
+          "bytes": 233539
+        },
+        "manual/features/reference-options.yaml": {
+          "sha256": "1721ca983c2ceefcf808c5e1d2933610515011e7de86fd10de9e853766ca52e8",
+          "bytes": 10133050
+        },
+        "manual/features/reference-musical.yaml": {
+          "sha256": "733d2176e9ab651855a63990a9f48cc95694301806c27eabdf8db45815fa4a20",
+          "bytes": 1106741
+        },
+        "manual/features/reference-song.yaml": {
+          "sha256": "ef6912969372a7ce5cd256655e23593df0082b3a251e41b8d6bcd0d11de1358d",
+          "bytes": 4095443
+        },
+        "manual/recordings.yaml": {
+          "sha256": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585",
+          "bytes": 32862
+        },
+        "manual/scene-captions.yaml": {
+          "sha256": "78400a80e122d38f85333bc1230ecc1320c2d6dfcaae25cc67bf8d0f9a475d8b",
+          "bytes": 86803
+        }
+      }
+    },
+    {
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "candidate_path": "practical-small-recipe-corrections-20261008-01/candidate.yaml",
+      "candidate_sha256": "54f54edbed95062dedf776a49c87d4ea8d8c5e88d0618087401826161fa75195",
+      "source_pins": {
+        "source_root": "/home/andy/mosaic-manual-1.4.0",
+        "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+        "sha256": {
+          "manual/features/reference-options.yaml": "bad51a3d8b0637651973b296500d9cd10843599847af3ef1e6848d5af1795134",
+          "manual/features/reference-scale.yaml": "5b7a7a5dffd350a3326c03881688496d62be43e6d8f64925148ed23f1385747e",
+          "manual/features/reference-song.yaml": "612fcf0de656c7ee07fbd536510d1078adacfb0be06c843a4d627cd7b95eb2cc",
+          "manual/features/reference-pattern.yaml": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+          "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/final-whole-manual-astra-review-20261008-01/review.md": "03f3905ec4bbe4baefbf5d9d5013fbb7daa251141272a1466e56da3a4025af26"
+        }
+      }
+    }
+  ],
+  "unit_ratings": [
+    {
+      "unit_id": "recipe-text-overlay:pocket-rhythm:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#pocket-rhythm.recipes[0].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 6,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 5,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Correct full-grid map and Pattern 1 assignment; missing nb_oilcan installation/enabling prerequisite or setup link.",
+      "blocker": "Oilcan may be absent from Device picker on a fresh norns."
+    },
+    {
+      "unit_id": "recipe-text-overlay:pocket-rhythm:recipes[1]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#pocket-rhythm.recipes[1].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Probability boundaries and 50% variability are described accurately; 44=(12,6), 60=(12,7).",
+      "blocker": ""
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:prose",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.prose",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 6,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 5,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "The timeline and 64-step map are clear; no pattern assignment plan or n.b. installation/enabling precondition for the three voices.",
+      "blocker": "Arrangement needs distinct channel pattern assignments and installed/enabled Oilcan, Polyperc and Doubledecker mods."
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[0].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Step coordinates are accurate; empty channel 1 gets Oilcan but no Pattern 1 assignment or mod prerequisite.",
+      "blocker": "Added trigs will not play without a selected pattern; Oilcan may not be available."
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[1]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[1].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Bass pitches/step lists are coherent; channel 2 lacks Pattern 2 assignment and Polyperc prerequisite.",
+      "blocker": "Channel 2 has no pattern selection."
+    },
+    {
+      "unit_id": "recipe-text-overlay:small-hours:recipes[2]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#small-hours.recipes[2].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Chord notes and scale intervals are consistent; channel 3 lacks Pattern 3 assignment and Doubledecker prerequisite.",
+      "blocker": "Channel 3 has no pattern selection."
+    },
+    {
+      "unit_id": "recipe-text-overlay:tilting-harmony:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#tilting-harmony.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 7,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 7,
+        "vocabulary": 9,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Pattern assignments and C/D-major MIDI predictions are internally consistent; prerequisite does not ensure Doubledecker/Polyperc are installed and enabled.",
+      "blocker": "Fresh norns may not offer the specified n.b. players."
+    },
+    {
+      "unit_id": "recipe-text-overlay:loops-that-meet:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/cookbook.yaml#loops-that-meet.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Three- and four-step loops realign after 12 steps; timing and pitches cohere.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "recipe-text-overlay:masks:recipes[4]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/masks.yaml#masks.recipes[4].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 5,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 4,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Full-grid mapping and chord choices are sensible; empty project omits separate Pattern 1/2 assignments and n.b. setup prerequisite.",
+      "blocker": "Bass/chord layers cannot be reproduced as described without distinct channel pattern selections."
+    },
+    {
+      "unit_id": "recipe-text-overlay:note-merge-modes:recipes[0]",
+      "proposal": "recipe-text-overlay-20261008-01",
+      "source_path": "manual/features/reference-channel.yaml#note-merge-modes.recipes[0].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 7,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 6,
+        "integration": 7,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Pattern assignments and copy order preserve Average in slot 1 and Higher in slot 2; it leaves slot 2 selected, then says play “in order” without returning to slot 1. Polyperc setup also unstated.",
+      "blocker": "Playback can begin at slot 2 and skip the Average-to-Higher comparison; fresh norns may lack Polyperc."
+    },
+    {
+      "unit_id": "practical-small:scale-editor:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-scale.yaml#scale-editor.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Identifies Pattern 1, Pattern Note degrees 0–3, C major and Note mask X; D-major MIDI predictions are correct.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "practical-small:song-editor:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-song.yaml#song-editor.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Pattern assignment and copy-before-edit sequence are clear; the 90 BPM duration estimate is conditional and no tempo is stated in the starting point.",
+      "blocker": "Minor: make the 90 BPM/Rate /1 assumption explicit if the duration informs this audition."
+    },
+    {
+      "unit_id": "practical-small:interacting-with-slots:recipes[2]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-song.yaml#interacting-with-slots.recipes[2].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Adds distinct pattern assignments before slot construction; three-part arrangement and MIDI checkpoints cohere.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "practical-small:lock-random-to-pentatonic:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-options.yaml#lock-random-to-pentatonic.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Correctly removes a guarantee about stochastic F/B outcomes while preserving the invariant.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "practical-small:lock-all-to-pentatonic:recipes[0]",
+      "proposal": "practical-small-recipe-corrections-20261008-01",
+      "source_path": "manual/features/reference-options.yaml#lock-all-to-pentatonic.recipes[0].text",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Pattern Note degrees, Note mask X, E2/E3 Scale edit and K3 apply are explicit; expected MIDI values agree with natural minor.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:midi-panic:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-learn.yaml#feature.midi-panic.details[0]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Separates sent Note Off from the receiving instrument’s release; states Panic neither stops the sequencer nor cancels scheduled voices.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:lock-lead-time:prose",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-learn.yaml#feature.lock-lead-time.prose",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Dense but useful advanced explanation includes controls, pulse rounding, musical invariants and exceptions.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:locks:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.locks.details[0]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Clear result after clearing one transpose lock; preserves the separate zero lock.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:locks:recipes[4]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.locks.recipes[4].text",
+      "scores": {
+        "coherence": 7,
+        "usefulness": 6,
+        "understandability": 7,
+        "representation": 8,
+        "granularity": 7,
+        "flow": 6,
+        "integration": 4,
+        "vocabulary": 6,
+        "naming": 7,
+        "canonical_home": 6
+      },
+      "rationale": "Practical relative-turn caveat survives, but language still foregrounds “captured” gestures and “not a reconstruction”; empty-project recipe also omits Pattern 1 assignment and Polyperc install prerequisite.",
+      "blocker": "Rewrite the comparison in player terms, retain relative-turn/no-absolute-value caveat, add pattern assignment and device prerequisite."
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:save-and-load:detail-demo",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.save-and-load.details[0]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 9,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Detailed name-entry workflow and distinct starting state are actionable; separate-demo framing is useful to avoid mistaking it for a continuation.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:save-and-load:binding-outcome",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-locks.yaml#feature.save-and-load.teaching_bindings[0].teaching_binding.human_outcome",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Outcome names the saved project, available picker item and cancel result.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:midi-controller-options:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.midi-controller-options.details[0]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Clarifies comparison after the full phrase rather than startup notes; relies on values displayed in the surrounding examples.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:honor-scale-rotations:details[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.honor-scale-rotations.details[1]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Same useful completed-phrase/MIDI-strip direction for this option.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:honour-scale-transpose:details[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-options.yaml#feature.honour-scale-transpose.details[1]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 9,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Same useful completed-phrase/MIDI-strip direction for this option.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:performance-management:details[0]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-musical.yaml#feature.performance-management.details[0]",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 7,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "The physical-device variability caution is useful; version 1.1.1 test history is stale production metadata.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:feature:interacting-with-slots:recipes[1]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/features/reference-song.yaml#feature.interacting-with-slots.recipes[1].text",
+      "scores": {
+        "coherence": 8,
+        "usefulness": 8,
+        "understandability": 8,
+        "representation": 8,
+        "granularity": 8,
+        "flow": 8,
+        "integration": 8,
+        "vocabulary": 8,
+        "naming": 8,
+        "canonical_home": 8
+      },
+      "rationale": "Short copy/compare exercise is understandable and relies on an explicit pre-existing slot motif.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:oilcan-pocket:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:bass-and-intervals:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[1]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[2]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:ghost-note-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:scale-slot-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:polymeter:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 8,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence accurately says the recipe shares the recording’s notes, voices and arrangement.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:swing-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:note-merge-modes:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:song-sections:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:harmony-strum-arp:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:voice-leading-revoice:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:masks-small-hours:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence names the separate-project starting context without backend provenance.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-first-sound-hear:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-build-a-phrase-compare:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-masks-listen:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-masks-keep:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-sequence-composition-both:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-harmony-design-apply:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-modulation-movement-and-interest-level:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-song-composition-transition:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:course-keep-your-work-perform:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 8,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "This repeated relationship sentence tells the reader which course-stage project state the recording matches.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:param-lock-comparison:lesson_relations[0]",
+      "proposal": "doc-language-cleanup",
+      "source_path": "manual/recordings.yaml",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Explains the relative recorded gesture while retaining the caveat that the source did not show absolute Decay values.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:recording:param-lock-comparison:build_steps[4]",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/recordings.yaml#param-lock-comparison.build_steps[4]",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Relative +200/+40 adjustments are distinguished from absolute displayed Decay values.",
+      "blocker": ""
+    },
+    {
+      "unit_id": "doc-language-cleanup:caption:chord-strum-a-timed-chord:assign-strum",
+      "proposal": "doc-language-cleanup-20261008-01/candidate-v03",
+      "source_path": "manual/scene-captions.yaml#overlays.append.chord-strum-a-timed-chord.assign-strum",
+      "scores": {
+        "coherence": 9,
+        "usefulness": 9,
+        "understandability": 9,
+        "representation": 9,
+        "granularity": 9,
+        "flow": 9,
+        "integration": 9,
+        "vocabulary": 9,
+        "naming": 9,
+        "canonical_home": 9
+      },
+      "rationale": "Removes the provenance adjective while keeping the exact half-step starting value and control instruction.",
+      "blocker": ""
+    }
+  ],
+  "affected_unit_count": 52,
+  "below_threshold_unit_count": 10,
+  "below_threshold_units": [
+    "recipe-text-overlay:pocket-rhythm:recipes[0]",
+    "recipe-text-overlay:small-hours:prose",
+    "recipe-text-overlay:small-hours:recipes[0]",
+    "recipe-text-overlay:small-hours:recipes[1]",
+    "recipe-text-overlay:small-hours:recipes[2]",
+    "recipe-text-overlay:tilting-harmony:recipes[0]",
+    "recipe-text-overlay:masks:recipes[4]",
+    "recipe-text-overlay:note-merge-modes:recipes[0]",
+    "doc-language-cleanup:feature:locks:recipes[4]",
+    "doc-language-cleanup:feature:performance-management:details[0]"
+  ],
+  "blockers": [
+    "Empty channels initialize with no selected patterns: lib/models/model_defaults.lua:65; playback consumes only assigned selections: lib/pattern.lua:115,229; assignment is made in Channel Editor: lib/pages/channel_edit_page/channel_edit_page.lua:317. Add explicit pattern assignment to Small Hours (P1/P2/P3), Masks four-bar (P1/P2) and Locks (P1).",
+    "Add install/enable prerequisite and shared reader link #norns-sound-sources-with-n-b for n.b. device recipes using Oilcan, Polyperc and Doubledecker.",
+    "In Note Merge Modes, explicitly select slot 1 before playback after editing slot 2.",
+    "Rewrite Locks recipe 4 to remove “captured gesture” / “not a reconstruction” production framing while preserving the relative-turn caveat.",
+    "Remove version 1.1.1 provenance from Performance Management detail while preserving practical device variability warning."
+  ],
+  "verified_checks": [
+    "All 64-grid coordinates in modified maps are consistent; step 44=(12,6), step 60=(12,7).",
+    "Relative Pattern Note degrees and Note mask X yield stated C-major/D-major pitch expectations.",
+    "Interacting-with-slots and Song Editor copy order is coherent.",
+    "No listening, timbral quality or physical-device claims made."
+  ]
+}

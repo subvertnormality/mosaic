@@ -1,0 +1,468 @@
+schema_version: 1
+recordings:
+- id: oilcan-pocket
+  title: Three sounds, one pocket
+  purpose: Removing the MIDI 38 trigs leaves the two beat timbres; restoring them fills the gaps without adding accents.
+  starting_point: Start in a separate empty project with playback stopped. Set 90 BPM, Rate /1, channel 1 range 1–64, Snap note masks to scale Off, and assign Oilcan 1 to channel 1. This is the independent fixed percussion recipe; the course rhythm phrase is a different starting pattern.
+  lesson_relations:
+  - kind: recipe
+    feature_id: pocket-rhythm
+    recipe_index: 3
+    recipe_title: Separate fixed percussion example
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  build_steps:
+  - Open Masks. With no step held, set Note to MIDI 36, Vel to 48 and Len to ½ step.
+  - In bar 1, hold K1 and tap steps 1, 4, 5, 7, 9, 12, 13 and 15 to add the eight trigs.
+  - Select Note. Hold steps 4, 7, 12 and 15 in turn and set each to MIDI 38; set steps 5 and 13 to MIDI 37. Steps 1 and 9 keep MIDI 36.
+  - Repeat those positions in bars 2–4, adding 16, 32 and 48 to each step in the bar template.
+  - Press Play for four bars, then Stop. To hear the stated contrast, clear the trigs on the four MIDI 38 positions in each bar; Play again, then re-add those trigs to restore the full pattern.
+  listen_for:
+  - MIDI 36 on beats 1 and 3, MIDI 37 on beats 2 and 4, and the MIDI 38 timbre filling the gaps at the same velocity.
+  restore_steps:
+  - Restore the four MIDI 38 trigs. Keep this separate project out of the continuing course; return to the course project when finished.
+  limits: []
+- id: bass-and-intervals
+  title: A bass with room above it - fixed C-major bass and chord contrast
+  purpose: The C-major/D-major relative-scale recipe changes with the scale; this fixed-note recipe stays in C major when the scale changes. Its MIDI-note Masks keep their pitches instead of following the scale.
+  starting_point: 'Use a separate empty project at 90 BPM and Rate /1. Set channels 1 and 2 to range 1-16. Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. Keep the scale in C major. These are fixed MIDI-note Masks: changing the scale will not move their notes to new pitches.'
+  lesson_relations:
+  - kind: recipe
+    feature_id: tilting-harmony
+    recipe_index: 2
+    recipe_title: Separate fixed bass-and-chord example
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  build_steps:
+  - 'Channel 1 bass: in Masks set Note MIDI 48, Vel 48 and Len 1/2 step. Hold K1 and tap steps 1, 5, 9 and 13; change step 9 to MIDI 55. Check: the four bass trigs are present, with only step 9 on MIDI 55.'
+  - 'Channel 2 chords: in Masks set Note MIDI 60, Vel 32 and Len 3 steps. Set Chd1 to 3rd and Chd2 to 5th. Hold K1 and tap channel 2 steps 1 and 9. Keep step 1 at MIDI 60 and set step 9 to MIDI 62. Check: the two roots are C4 (MIDI 60) and D4 (MIDI 62).'
+  - Play four bars, then Stop. Listen for the two-bar chord pattern repeating over the four bass notes.
+  listen_for:
+  - C-E-G chords on step 1 and D-F-A chords on step 9; the bass plays C2 on steps 1, 5 and 13 and G2 on step 9.
+  restore_steps:
+  - Stop playback and return to the course project. Do not substitute this fixed-note example for the course’s relative-note lesson.
+  limits: []
+- id: three-voice-conversation
+  title: Rhythm, bass and a changing chord
+  purpose: 'Hear three separate layers over four bars: Oilcan drums and Polyperc bass repeat, while Doubledecker chord roots change only in bar 4.'
+  starting_point: The cookbook recipe and recording both build a four-bar, 90 BPM loop with Oilcan drums, Polyperc bass and Doubledecker chords; the drums and bass repeat while chord roots change in bar 4.
+  lesson_relations:
+  - kind: recipe
+    feature_id: small-hours
+    recipe_index: 1
+    recipe_title: Percussion Channel
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  - kind: recipe
+    feature_id: small-hours
+    recipe_index: 2
+    recipe_title: Bass Channel
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  - kind: recipe
+    feature_id: small-hours
+    recipe_index: 3
+    recipe_title: Chord Channel
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  build_steps:
+  - 'Channel 1, Oilcan 1 drums: velocity 38; steps 1/36, 4/38, 5/37, 9/36, 12/38 and 13/37 repeat each bar. Check: this is the loudest layer.'
+  - 'Channel 2, Polyperc 1 bass: velocity 42; MIDI 48 on steps 1, 5 and 13, and MIDI 55 on step 9. Check: this is the quietest layer and repeats each bar.'
+  - 'Channel 3, Doubledecker chords: velocity 26, three steps long, Chd1 3rd and Chd2 5th. In bars 1-3 the roots are MIDI 60 on step 1 and MIDI 62 on step 9; in bar 4 they are MIDI 67 on step 49 and MIDI 60 on step 57.'
+  - 'Build the explicitly linked recipes in order: percussion, bass, then chord channel. Play four bars. Check: only the chord roots change at bar 4; drums and bass continue unchanged.'
+  listen_for:
+  - bar 4 changes roots to MIDI 67 and 60 while drums and bass stay unchanged.
+  restore_steps:
+  - Continue from the matching lesson stage or recipe using its documented outgoing state.
+  limits: []
+- id: ghost-note-comparison
+  title: Adding a Ghost Note
+  purpose: Hear adding a ghost note.
+  starting_point: The cookbook recipe explicitly compares bars 1–2 main hits with bars 3–4 adding MIDI 38 at velocity 35 on step 12 before the MIDI 37 accent, matching the recording.
+  lesson_relations:
+  - kind: recipe
+    feature_id: pocket-rhythm
+    recipe_index: 1
+    recipe_title: Make the recorded ghost-note comparison
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  build_steps:
+  - Follow the explicitly linked recipe from its stated starting point.
+  listen_for:
+  - bars 3 and 4 add MIDI 38 at velocity 35 on step 12 before the MIDI 37 accent.
+  restore_steps:
+  - Continue from the matching lesson stage or recipe using its documented outgoing state.
+  limits: []
+- id: scale-slot-comparison
+  title: Changing Harmony with Scale Slots
+  purpose: The same relative-note patterns and rhythm play under C major in bars 1-2 and D major in bars 3-4. The upper line changes from MIDI 60, 60, 60, 62 to 62, 62, 62, 64; the lower line changes from MIDI 48 and 55 to 50 and 57. Note masks stay X.
+  starting_point: The cookbook recipe uses the same relative-note patterns under C major in bars 1–2 and D major in bars 3–4, with Note masks unset.
+  lesson_relations:
+  - kind: recipe
+    feature_id: tilting-harmony
+    recipe_index: 1
+    recipe_title: Make the relative-note scale comparison
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  build_steps:
+  - 'Channel 1, Doubledecker: the linked recipe uses degrees 0, 0, 0 and 1 on steps 1, 5, 9 and 13. In C major these sound MIDI 60, 60, 60 and 62; in D major they sound 62, 62, 62 and 64. The last note is softer at velocity 50.'
+  - 'Channel 2, Polyperc 1: the linked recipe uses degrees 0 and 4 at octave -1 on steps 1 and 9. In C major these sound MIDI 48 and 55; in D major they sound MIDI 50 and 57.'
+  - 'Follow the linked recipe from its stated starting point. Use C major in slots 1-2 and D major in slots 3-4; keep Note masks at X. Check: the same events and rhythm remain while both lines move up a whole tone.'
+  listen_for:
+  - C major for bars 1 and 2; D major for bars 3 and 4; Note masks X.
+  restore_steps:
+  - Continue from the matching lesson stage or recipe using its documented outgoing state.
+  limits: []
+- id: swing-comparison
+  title: Straight, then swung
+  purpose: Bars 1–2 are straight. Bars 3–4 use Swing 25. Only each pair’s second step moves.
+  starting_point: Use a separate empty project at 90 BPM, Rate /1, global Swing 0, playback stopped. Assign Oilcan 1 to channel 1 and Polyperc 1 to channel 2; set both channel ranges to 1–16 and set Snap note masks to scale Off.
+  lesson_relations:
+  - kind: recipe
+    feature_id: clocks-swing-and-shuffle
+    recipe_index: 1
+    recipe_title: 'Build the recording: Straight, then swung'
+    relationship: exact
+    explanation: "This recipe follows the recording’s setup in a separate project, apart from the course project."
+  build_steps:
+  - On channel 1 Masks, set Note MIDI 36, Vel 80 and Len ½. Add trigs at 1,2,5,6,9,10,13,14. Set steps 2,6,10,14 to MIDI 37 and steps 5,13 to MIDI 38; steps 1 and 9 stay MIDI 36.
+  - On channel 2 Masks, set Note MIDI 48, Vel 60 and Len ½. Add trigs at steps 1,4,9,12; set steps 4 and 12 to MIDI 55 and step 9 to MIDI 52.
+  - In Song Editor, set slot 1 length to 32 steps. Copy slot 1 to slot 2, leaving slot 2 length 32.
+  - With slot2 selected, open Clock for each channel. Select Swing type with E2, chooseSwing with E3 and press K3. Select Swing with E2, set 25 with E3 and press K3. Leave slot 1 straight.
+  - Play the two slots in order, then Stop and select slot 1 to restore the straight version.
+  listen_for:
+  - 'Moved in bars 3-4: the channel 1 MIDI 37 hits on steps 2, 6, 10 and 14, and channel 2 MIDI 55 hits on steps 4 and 12, land about 0.04 seconds late.'
+  - 'Stay on the grid: channel 1 MIDI 36 and 38 hits and channel 2 MIDI 48 downbeats do not move. Bars 1-2 are straight; bars 3-4 use Swing 25.'
+  restore_steps:
+  - Select slot 1 to hear the unswung version again, then stop playback and return to the original project.
+  limits: []
+- id: note-merge-modes
+  title: Average, then Higher
+  purpose: When both patterns trigger on the same step, Note merge chooses the pitch they produce together. Average uses the midpoint of the two pattern pitches; Higher raises that midpoint using the gap between the inputs. Trig merge All combines the triggers from both patterns. Lock merged to pent. is a separate pitch restriction, kept Off here so the comparison isolates the two Note modes.
+  starting_point: Use a separate empty project at 90 BPM, Rate /1, scale C major, playback stopped. Assign Polyperc 1 to channel 1, range 1-16. Turn Lock merged to pent. Off before comparing, then assign patterns 1 and 2 to channel 1.
+  lesson_relations:
+  - kind: recipe
+    feature_id: note-merge-modes
+    recipe_index: 1
+    recipe_title: 'Build the recording: Average, then Higher'
+    relationship: exact
+    explanation: "This recipe follows the recording’s setup in a separate project, apart from the course project."
+  - kind: feature-lesson
+    feature_id: lock-merged-to-pentatonic
+    lesson_id: play-merged-pentatonic-off-phrase
+    relationship: contextual
+    explanation: The linked lesson shows Lock merged to pent. Off, the setup used here to isolate the Note Merge modes.
+  build_steps:
+  - "Checkpoint 1 — Pattern 1. In Pattern Trig tap steps 1, 3, 5, 7, 9 and 13. In Pattern Note set degrees 0, 2, 4, 2, 0 and 4 on those steps. Check the six notes on pattern 1 before you build pattern 2."
+  - "Checkpoint 2 — Pattern 2. In Pattern Trig tap steps 1, 5, 9, 11, 13 and 15. In Pattern Note set degrees 2, 6, 3, 3, 0 and 5. On the Note grid, row 7 is degree 0 and each row above is one degree higher. Check that both patterns overlap on 1, 5, 9 and 13, while 3, 7, 11 and 15 belong to only one pattern."
+  - "Before merging, verify the overlap: both patterns trigger on steps 1, 5, 9 and 13. Only one pattern triggers on steps 3, 7, 11 and 15. The comparison changes the shared-step pitches; the single-pattern pitches stay put."
+  - "On channel 1 Masks leave Note and Trig at X so the patterns supply pitches and triggers. Set Vel to 80 and Len to half a step. The recorded setup uses these channel masks; it does not leave Vel and Len unset."
+  - "Checkpoint 3 — common channel and Average. Open Channel tasks > Merge modes. Select Strategy with E2 and turn E3 until ALL reads. Select Note mode with E2 and turn E3 until AVERAGE reads; these controls apply immediately. Set Song slot 1 length to 32. Check that Strategy reads ALL and Note mode reads AVERAGE before copying the slot."
+  - "Checkpoint 4 — compare Higher. Copy slot 1 to slot 2 and select slot 2; keep its length 32. In Merge modes select Note mode with E2 and turn E3 to UP (the Higher comparison). Play both slots, then stop and select slot 1 to restore Average."
+  listen_for:
+  - 'Shared steps 1, 5, 9 and 13: MIDI 62, 69, 64 and 64 under Average; MIDI 65, 72, 69 and 71 under Higher.'
+  - 'Single-pattern steps 3, 7, 11 and 15 do not change: MIDI 64, 64, 65 and 69.'
+  restore_steps:
+  - Select slot 1 for Average. Keep Lock merged to pent. Off and Trig Merge All for this recorded comparison; return to the separate course project when finished.
+  limits: []
+- id: polymeter
+  title: Sixteen steps against twelve
+  purpose: Range sets how many steps a channel plays before its loop restarts. Here the 16-step drums and 12-step bass begin together, drift apart, and meet after 48 steps at the start of bar 4.
+  starting_point: Start a separate empty project at 90 BPM, Rate /1, playback stopped and Song mode Off so the ranges run continuously. Assign Oilcan 1 to channel 1 and Polyperc 1 to channel 2. Keep this independent 16/12 extension separate from the course four-step/three-step example.
+  lesson_relations:
+  - kind: recipe
+    feature_id: loops-that-meet
+    recipe_index: 4
+    recipe_title: 'Listening extension: sixteen steps against twelve'
+    relationship: exact
+    explanation: "This recipe uses the same notes, voices and arrangement as the recording."
+  build_steps:
+  - Set channel 1 range to steps 1-16. In Masks set Note MIDI 36, Vel 80 and Len 1/2; add trigs at 1, 5, 9, 13 and 15. Set step 5 to MIDI 37, step 13 to MIDI 37 and step 15 to MIDI 38.
+  - Set channel 2 range to steps 1-12. In Masks set Note MIDI 48, Vel 60 and Len 1/2; add trigs at 1, 4, 7 and 10. Set step 4 to MIDI 55, step 7 to MIDI 52 and step 10 to MIDI 55.
+  - 'Set Snap note masks to scale Off. Start both channels together and play the four-bar map: bar 1, both begin together; bars 2-3, the shorter bass loop shifts against the drums; at the start of bar 4, after 48 steps, both return to step 1. Stop playback.'
+  listen_for:
+  - The bass phrase shifts against the drums in bars 2 and 3, then both loops return to step 1 at the start of bar 4, about eight seconds in.
+  restore_steps:
+  - Stop after four bars. Return to the project that contains the continuing course; keep the 16/12 setup separate.
+  limits: []
+- id: song-sections
+  title: Intro, verse and outro
+  purpose: Slot 1 mutes the lead; slot 2 unmutes it; slot 3 raises the lead octave and lowers bass velocity.
+  starting_point: Use a separate empty project at 90 BPM, Rate /1 and C major, with playback stopped. Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. Give each channel range 1–16.
+  lesson_relations:
+  - kind: recipe
+    feature_id: interacting-with-slots
+    recipe_index: 3
+    recipe_title: 'Build the recording: Intro, verse and outro'
+    relationship: exact
+    explanation: "This recipe follows the recording’s setup in a separate project, apart from the course project."
+  build_steps:
+  - 'Create pattern 1 on channel 1: trigs 1,5,9,13 with degrees 0,0,4,0. Set channel octave -1, velocity 70 and half-step length.'
+  - 'Create pattern 2 on channel 2: trigs 3,7,11,15 with degrees 4,2,4,6. Set channel octave 0, velocity 60 and half-step length. In C major these patterns sound bass MIDI 48,48,55,48 and lead MIDI 67,64,67,71.'
+  - In Song Editor, set slot 1 length to 16 steps and mute channel 2 with K1 plus its selector (2,1).
+  - Copy slot 1 to slot 2; set slot 2 length to 32 steps and toggle channel 2 back on. This is the two-bar verse.
+  - Copy slot 2 to slot 3; set length to 16 steps. Set channel 2 octave to +1 and channel 1 Velocity to 40. Play the three slots, then Stop and select slot 1.
+  listen_for:
+  - The lead enters after the first bar, about 2.7 seconds in; in the final bar it is higher while the bass is softer.
+  restore_steps:
+  - Select slot 1 for the intro. This is a separate arrangement example; return to the continuing course project when finished.
+  limits: []
+- id: harmony-strum-arp
+  title: Block chords, strummed, then arpeggiated
+  purpose: The four chord roots and progression stay fixed. Chord Strum spreads chord notes over time; Spread controls their spacing, and Acceleration changes that spacing as the strum goes on. Chord Arpeggio plays the selected chord notes in sequence. Only these per-slot behaviors change.
+  starting_point: Use a separate empty project at 90 BPM, Rate /1 and C major. Assign Doubledecker to channel 1 and set range 1-16. Set Note MIDI 60, Vel 80, Len 2 steps, Chd1=3rd and Chd2=5th; add trigs at 1, 5, 9 and 13 with roots MIDI 60, 57, 65 and 67.
+  lesson_relations:
+  - kind: recipe
+    feature_id: adding-chords
+    recipe_index: 2
+    recipe_title: 'Build the recording: Block chords, strummed, then arpeggiated'
+    relationship: exact
+    explanation: "This recipe follows the recording’s setup in a separate project, apart from the course project."
+  build_steps:
+  - 'Start with slot 1 at length 16 and the four block chords. Leave Strum and Arpeggio locks unset. Check: all three notes of each chord start together.'
+  - 'Copy slot 1 to slot 2 and set slot 2 length to 32. In Trig params assign Chord Note Strum to slot 1, Chord Spread to slot 2 and Chord Accel Mod to slot 3. On steps 1, 5, 9 and 13 lock Strum to 1, Spread to 1 and Acceleration to -1. Check: the roots sound first, then the 3rds, then the 5ths; the gaps get shorter.'
+  - 'Copy slot 2 to slot 3 and set slot 3 length to 16. Assign Chord Note Arpeggio to slot 4 and lock Arpeggio 1/2 on steps 1, 5, 9 and 13. Arpeggio takes precedence over Strum in this slot. Check: each chord becomes the root followed by the 3rd, with the 5th absent.'
+  - 'Play all three slots, then Stop and select slot 1 to restore block chords. The bar map is: bar 1 block chords; bars 2-3 speeding strum; bar 4 two-note arpeggio.'
+  listen_for:
+  - Bar 1 has block chords; bars 2–3 open into a speeding strum; bar 4 changes to a sparse two-note arpeggio.
+  restore_steps:
+  - Select slot 1 to restore block chords, then stop. Keep the recipe in its own project while the course project remains open.
+  limits: []
+- id: param-lock-comparison
+  title: Parameter locks on and off
+  purpose: A parameter lock sets a device parameter for one trig only. A Decay lock changes how long that note's sound fades; it does not change the note pattern. In this example, longer Decay locks are on steps 1 and 9; shorter Decay locks are on steps 5 and 13.
+  starting_point: 'Use a separate empty project at 90 BPM, Rate /1, playback stopped. Assign Polyperc 1 to channel 1, range 1–16. In Masks set default velocity 70 and Len ½; add odd-step trigs and these notes: 1/48,3/55,5/52,7/55,9/48,11/55,13/53,15/55.'
+  lesson_relations:
+  - kind: recipe
+    feature_id: locks
+    recipe_index: 5
+    recipe_title: Practice longer and shorter Decay envelopes
+    relationship: "exact"
+    explanation: "The Locks recipe replays the +200/+40-detent comparison from this recording, then offers a separate endpoint-practice contrast. The recording does not show absolute Decay values; use the values displayed by your device for the separate practice."
+  build_steps:
+  - "Slot 1 is two bars (32 steps) with no parameter locks. Keep the eight-note MIDI line unchanged; this is the straight comparison."
+  - "Copy slot 1 to slot 2 and keep its length at 32 steps, covering bars 3–4. Open Channel tasks > Trig params and assign Decay to slot 1."
+  - "In slot 2, hold step 1 and replay the captured +200-detent E3 gesture, then release the step. Repeat the same +200-detent gesture on step 9 and release it. Check: steps 1 and 9 are the longer-tail group."
+  - "Hold step 5 and replay the captured +40-detent E3 gesture, then release the step. Repeat on step 13 and release it. Check: steps 5 and 13 are the shorter-tail group; the note pattern stays fixed."
+  - "Play slots 1 and 2, then stop and select slot 1 to restore the no-lock line. The +200 and +40 turns adjust Decay relative to its current setting; the absolute value shown depends on your device."
+  - Play slots 1 and 2, then Stop and select slot 1 to restore the no-lock line. The note pattern remains the same throughout.
+  listen_for:
+  - From bar 3, the on-beat plucks ring longer than the notes between them; the line returns to an even sound at the end.
+  restore_steps:
+  - Select slot 1 to restore the unmodified line. Stop and return to the separate course project when finished.
+  limits:
+  - The retained trace records E3 event 126 followed by +200 and +40 detents while steps are held. It does not record the displayed Decay values, so those raw input counts do not establish the recording’s exact Decay settings. The endpoint recipe is a contextual comparison, not a reconstruction of those unseen values.
+- id: voice-leading-revoice
+  title: Block chords, then Revoice
+  purpose: Harmony Off keeps each chord in its written root-position voicing. Revoice moves those same chord notes to different octaves while preserving their pitch classes, note count and rhythm; ROOT keeps each chord root lowest.
+  starting_point: Use a separate empty project at 90 BPM, Rate /1 and C major. Assign Doubledecker to channel 1, range 1–16. Set Note MIDI 48, Vel 80, Len 2 steps, Chd1=3rd and Chd2=5th; add trigs at 1,5,9,13 and root notes MIDI 48,45,53,55 (C, A, F, G).
+  lesson_relations:
+  - kind: recipe
+    feature_id: harmony
+    recipe_index: 2
+    recipe_title: 'Build the recording: Block chords, then Revoice'
+    relationship: exact
+    explanation: "This recipe follows the recording’s setup in a separate project, apart from the course project."
+  build_steps:
+  - 'Before: build slot 1 at length 32 with Harmony Mode Off. It plays C, A minor, F and G in root position on steps 1, 5, 9 and 13 of each bar. Play twice to hear the written voicing.'
+  - 'After: copy slot 1 to slot 2 and select slot 2; keep length 32. Open Channel tasks > Harmony. Select Mode with E2, choose REVOICE with E3 and press K3. Select Register with E2 and press K3; select Bass Mode with E2, choose ROOT with E3 and apply as the page indicates.'
+  - 'Compare bars 1-2 with bars 3-4: the same four chords, notes and rhythm return, but some notes move to other octaves and each chord root is lowest. Play both slots, then Stop and select slot 1 to restore Harmony Off.'
+  listen_for:
+  - At bar 3, the same four pitch-class groups and rhythm return in different octaves, with each chord root lowest.
+  restore_steps:
+  - Select slot 1 to restore Harmony Off, then stop and return to the separate course project.
+  limits: []
+- id: course-first-sound-hear
+  title: Four equal notes
+  purpose: Hear the four trigs repeat.
+  starting_point: Continue the course through 3. Make four equal notes and its incoming stages. This recording is the audition of Play the loop.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: first-sound-hear
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Tap Play (1,8).
+
+    2. Listen for two repeats. Four identical short C notes follow quickly, making a fast stutter.
+
+    3. Tap Play again to stop.'
+  listen_for:
+  - six identical C3 notes each second, velocity 80, half-step gates.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-build-a-phrase-compare
+  title: Four notes across a bar
+  purpose: Hear the same note spread across a bar.
+  starting_point: Continue the course through 4. Spread the rhythm across a bar and its incoming stages. This recording is the audition of Hear the wider phrase.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: build-a-phrase-compare
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Tap Play (1,8) and listen for two passes of the 16-step phrase.
+
+    2. Tap Play again to stop.'
+  listen_for:
+  - C3 on steps 1,5,9,13, velocity 80, half-step gates.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-masks-listen
+  title: Raising the last note
+  purpose: Hear the exception on the beat it belongs to.
+  starting_point: Continue the course through 5. Give the phrase an ending and its incoming stages. This recording is the audition of Hear the new ending.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: masks-listen
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Tap Play (1,8) and listen for two passes.
+
+    2. Tap Play again to stop.'
+  listen_for:
+  - C3,C3,C3,D3, all velocity 80.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-masks-keep
+  title: Quieter last note
+  purpose: Finish the optional comparisons with the same softer D ending you had before them.
+  starting_point: 'Continue the course through 5. Give the phrase an ending and its incoming stages. This recording is the audition of Optional: rebuild the ending.'
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: masks-keep
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. With no step held, turn E2 to Note. Hold (13,4), turn E3 right two detents to D3 and release (13,4).
+
+    2. Turn E2 to Vel. Hold (13,4), turn E3 left 30 detents to 50 and release (13,4).
+
+    3. Tap Play (1,8), listen for two passes, then tap Play to stop.'
+  listen_for:
+  - C3,C3,C3 at 80, D3 at 50.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-sequence-composition-both
+  title: A bass under the phrase
+  purpose: Hear the bass under the phrase.
+  starting_point: Continue the course through 6. Add a second part and its incoming stages. This recording is the audition of Finish the bass and hear both parts.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: sequence-composition-both
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Tap Play (1,8).
+
+    2. Listen for two passes of the 16-step phrase. Channel 1 plays C, C, C, D on beats 1 to 4. Channel 2 plays a low C on beat 1 and a low G on beat 3. The MIDI strip lists both channels'' notes.
+
+    3. Tap Play again to stop.'
+  listen_for:
+  - C2 on step 1 and G2 on step 9 below C,C,C,D.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-harmony-design-apply
+  title: The phrase moved to D
+  purpose: Hear the same rhythm transposed.
+  starting_point: Continue the course through 7. Change harmony without changing the rhythm and its incoming stages. This recording is the audition of Apply D major.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: harmony-design-apply
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Press K3 to apply D major. The Press K3 to confirm line disappears: that is how you tell applied from draft.
+
+    2. Tap Play (1,8), listen for two passes, then tap Play to stop. Channel 1 now plays D, D, D, E (MIDI 62, 62, 62, 64) and channel 2 plays D and A (MIDI 50 and 57). Rhythm and velocities are unchanged.'
+  listen_for:
+  - D,D,D,E above D2,A2 after applying D major.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-modulation-movement-and-interest-level
+  title: A quiet pickup
+  purpose: 'Shape the dynamics: main beats 80, ending 50, pickup 35.'
+  starting_point: Continue the course through 8. Add a pickup and its incoming stages. This recording is the audition of Make the pickup quiet.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: modulation-movement-and-interest-level
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Turn E2 to Vel.
+
+    2. Hold (15,4), the step you just added. While a step is held, the screen shows that step''s own value. Turn E3 left 45 detents until Vel reads 35 (from 80), then release (15,4).
+
+    3. Tap Play (1,8), listen for two passes, then tap Play to stop.'
+  listen_for:
+  - extra C3 on step 15 at velocity 35.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-song-composition-transition
+  title: Two song sections
+  purpose: Hear the two sections alternate.
+  starting_point: Continue the course through 9. Arrange two sections and its incoming stages. This recording is the audition of Hear the arrangement.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: song-composition-transition
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Tap Song (6,8) and tap (1,1) to select slot 1.
+
+    2. Tap Play (1,8). Listen for four one-bar sections. The MIDI strip lists the notes: the bass (port 2) in every section and the phrase (port 1) only in the slot 2 sections.
+
+    3. Tap Play again to stop.'
+  listen_for:
+  - bass-only first bar then full phrase and pickup in second, repeating.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: course-keep-your-work-perform
+  title: The saved song, reloaded
+  purpose: Hear that the loaded project plays the same arrangement.
+  starting_point: Continue the course through 10. Save, reload and perform and its incoming stages. This recording is the audition of Replay the restored sections.
+  lesson_relations:
+  - kind: course-stage
+    course_stage_id: keep-your-work-perform
+    relationship: exact
+    explanation: "This recording matches the project at the end of this course stage."
+  build_steps:
+  - '1. Tap Song (6,8) and tap (1,1) to select slot 1.
+
+    2. Tap Play (1,8), listen for four one-bar sections, then tap Play to stop.'
+  listen_for:
+  - saved bass-only/full sections play note for note after reload.
+  restore_steps:
+  - Stop playback and continue from this stage’s documented outgoing state.
+  limits: []
+- id: masks-small-hours
+  title: Small hours · four bars in C major
+  purpose: With channel 2 muted, only the bass remains. Unmuting restores the chord layer over the same four-bar bass phrase.
+  starting_point: Use a separate empty project at 90 BPM, Rate /1 and C major. Set channel 1 to Polyperc 1 and channel 2 to Doubledecker; set both ranges and Song slot 1 length to 64 steps. The event positions below come from the Masks feature’s frozen audio track definition.
+  lesson_relations:
+  - kind: recipe
+    feature_id: masks
+    recipe_index: 5
+    recipe_title: 'Build the recording: Small hours · four bars in C major'
+    relationship: exact
+    explanation: "This recipe follows the recording’s setup in a separate project, apart from the course project."
+  build_steps:
+  - 'Channel 1 bass, bars 1-2: in Masks set default Note MIDI 48, Vel 70 and Len 1/2. Add trigs at steps 1, 5, 9, 13, 17, 21, 25 and 29. Set steps 9 and 25 to MIDI 43; the other bass trigs stay MIDI 48. Check: each bar has four bass notes.'
+  - 'Channel 1 bass, bars 3-4: add trigs at steps 33, 37, 41, 45, 49, 53, 57 and 61. Set steps 41 and 57 to MIDI 43; the others stay MIDI 48. Check: the four-bar bass phrase now has all sixteen notes.'
+  - 'Channel 2 chords, bars 1-2: in Masks set default Note MIDI 60, Vel 45 and Len 3 steps; set Chd1=3rd and Chd2=5th. Add trigs at 1, 9, 17 and 25; keep each root at MIDI 60. Check: two C-major chord masks sound per bar.'
+  - 'Channel 2 chords, bars 3-4: add trigs at 33, 41, 49 and 57, all with root MIDI 60. Check: the chord layer repeats on beats 1 and 3 over the bass.'
+  - Play four bars. Hold K1 and tap channel 2 selector (2,1) to mute the chords; tap it again with K1 held to restore them. Stop playback.
+  listen_for:
+  - The bass alternates C2 and G1 within each bar while C-E-G chord masks sound on beats 1 and 3; muting channel 2 leaves the bass alone.
+  restore_steps:
+  - Unmute channel 2 and stop. Keep this four-bar extension in its separate project; the course Masks phrases use different notes.
+  limits: []

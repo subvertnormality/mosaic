@@ -10,17 +10,16 @@ clock must play each recorded note only in its own slot.
 import time
 
 def recording_song_transition(c,held_across=False,release_length=False,chord=False):
-    from cases import menu_label,menu_value
-    c.configure()
-    c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)                               # clear pattern 1 trigs
-    c.tap(6,8);c.tap(2,7)
-    for _ in range(3):c.tap(8,7)                                 # global length 4
-    c.hold_tap((1,1),(2,1));c.tap(1,1);c.tap(3,8)                # slot 2 = copy of slot 1
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    c.ui.configure()
+    c.ui.pattern_editor()
+    for step in range(1,5):c.ui.tap_step(step)                               # clear pattern 1 trigs
+    c.ui.song_editor();c.ui.tap_control('global_pattern_length',2)
+    for _ in range(3):c.ui.tap_control('global_pattern_length',8)                                 # global length 4
+    c.ui.copy_slot(1,2,control='song_pattern_slot');c.ui.tap_control('song_pattern_slot',1);c.ui.tap_control('channel_editor')                # slot 2 = copy of slot 1
+    c.ui.press_key(1);c.ui.turn(1,4);c.ui.press_key(3);c.ui.expect_native_menu_label('levels_root')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi');c.key(1)
-    c.tap(2,8)                                                   # arm recording
+    c.ui.select_field('CLOCK',offset=position);c.ui.press_key(3);c.ui.expect_native_menu_label('clock_source');c.ui.set_value(1);c.ui.expect_native_menu_value('clock_source','midi');c.ui.press_key(1)
+    c.ui.tap_control('record')                                                   # arm recording
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
     a_on=1430000000;b_on=1430000000+4*150000000                  # slot 1 step 2; slot 2 step 2
@@ -38,11 +37,11 @@ def recording_song_transition(c,held_across=False,release_length=False,chord=Fal
     c.action(**request)
     if controlled:c.elapse((origin+2820000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=5)
-    c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)  # disarm
+    c.wait(lambda state:not state['midi_capture']['outstanding']);c.ui.tap_control('record')  # disarm
     c.results.append(dict(kind='recording-across-transition',notes={'A':[72,90,'slot1-step2'],'B':[79,80,'slot2-step2']},passed=True))
-    c.key(1);c.key(3);menu_label(c,'source');c.enc(3,-1);menu_value(c,'internal')
-    c.enc(2,1);menu_label(c,'tempo');c.enc(3,-10);menu_value(c,'90');c.key(1)
-    c.tap(6,8);c.tap(1,1);c.tap(3,8)                             # play the chain from slot 1
+    c.ui.press_key(1);c.ui.press_key(3);c.ui.expect_native_menu_label('clock_source');c.ui.set_value(-1);c.ui.expect_native_menu_value('clock_source','internal')
+    c.ui.select_field('tempo',offset=1);c.ui.expect_native_menu_label('clock_tempo');c.ui.set_value(-10);c.ui.expect_menu_value('90');c.ui.press_key(1)
+    c.ui.song_editor();c.ui.tap_control('song_pattern_slot',1);c.ui.tap_control('channel_editor')                             # play the chain from slot 1
     # Current-active-step recording (user decision, LIVE_RECORDING_PLACEMENT.md): a note belongs
     # to the step, and so the slot, active at its first press.
     phrase=[(1,[144,72,90])]+([(1,[144,84,70])] if held_across else [])+([(1,[144,88,70])] if chord else [])+[(1,[144,79,80])]

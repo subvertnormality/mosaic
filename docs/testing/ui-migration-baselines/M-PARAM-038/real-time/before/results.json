@@ -1,0 +1,3225 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock random to pent.",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Lock random to pent.",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock merged to pent.",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Lock merged to pent.",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Random Note",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Twos Random Note",
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167261782,
+        "error_ms": 0.5951153333333403
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165324831,
+        "error_ms": -1.341835666666652
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166485819,
+        "error_ms": -0.1808476666666503
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166408998,
+        "error_ms": -0.257668666666655
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16607838,
+        "error_ms": -0.5882866666666597
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165881452,
+        "error_ms": -0.7852146666666449
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167104309,
+        "error_ms": 0.437642333333349
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165415332,
+        "error_ms": -1.2513346666666592
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.1671563,
+        "error_ms": 0.48963333333335024
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165963841,
+        "error_ms": -0.7028256666666566
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166540771,
+        "error_ms": -0.1258956666666533
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166126284,
+        "error_ms": -0.5403826666666445
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166155625,
+        "error_ms": -0.5110416666666562
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166175296,
+        "error_ms": -0.4913706666666573
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166435048,
+        "error_ms": -0.23161866666665532
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165605796,
+        "error_ms": -1.0608706666666579
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166134365,
+        "error_ms": -0.5323016666666514
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166109254,
+        "error_ms": -0.5574126666666457
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166246324,
+        "error_ms": -0.42034266666665654
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16647458,
+        "error_ms": -0.19208666666664653
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.1664544,
+        "error_ms": -0.21226666666665506
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166454109,
+        "error_ms": -0.21255766666666842
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165762668,
+        "error_ms": -0.9039986666666555
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166148372,
+        "error_ms": -0.5182946666666688
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166251283,
+        "error_ms": -0.4153836666666577
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166341608,
+        "error_ms": -0.3250586666666555
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166506319,
+        "error_ms": -0.16034766666664368
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165957781,
+        "error_ms": -0.7088856666666588
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166680585,
+        "error_ms": 0.01391833333333481
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166300475,
+        "error_ms": -0.36619166666665426
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166208667,
+        "error_ms": -0.45799966666665304
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166162084,
+        "error_ms": -0.5045826666666697
+      }
+    ]
+  },
+  {
+    "kind": "random-note-domain",
+    "pentatonic": false,
+    "random": 0,
+    "twos": 0,
+    "seed": 42,
+    "mask": null,
+    "components": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "allowed": [
+      0
+    ],
+    "pitches": [
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166481588,
+        "error_ms": -0.18507866666664374
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166052141,
+        "error_ms": -0.614525666666671
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167122891,
+        "error_ms": 0.45622433333333823
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166284463,
+        "error_ms": -0.38220366666666394
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166158674,
+        "error_ms": -0.5079926666666512
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165355422,
+        "error_ms": -1.3112446666666555
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166054413,
+        "error_ms": -0.6122536666666456
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166465329,
+        "error_ms": -0.2013376666666622
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166082704,
+        "error_ms": -0.5839626666666597
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166360095,
+        "error_ms": -0.30657166666664404
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166208985,
+        "error_ms": -0.4576816666666539
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166307899,
+        "error_ms": -0.3587676666666484
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166667341,
+        "error_ms": 0.0006743333333392165
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165565427,
+        "error_ms": -1.1012396666666702
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166351817,
+        "error_ms": -0.3148496666666445
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165865268,
+        "error_ms": -0.8013986666666473
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166323238,
+        "error_ms": -0.3434286666666453
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166142744,
+        "error_ms": -0.5239226666666486
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166757294,
+        "error_ms": 0.09062733333334294
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166000391,
+        "error_ms": -0.6662756666666603
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166212406,
+        "error_ms": -0.45426066666665044
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166064112,
+        "error_ms": -0.6025546666666437
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166151285,
+        "error_ms": -0.5153816666666478
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166193715,
+        "error_ms": -0.47295166666666555
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166294717,
+        "error_ms": -0.37194966666664886
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166318455,
+        "error_ms": -0.3482116666666535
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166827335,
+        "error_ms": 0.16066833333333586
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165922562,
+        "error_ms": -0.7441046666666618
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166282825,
+        "error_ms": -0.3838416666666622
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166113642,
+        "error_ms": -0.5530246666666516
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166412369,
+        "error_ms": -0.254297666666653
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166033622,
+        "error_ms": -0.6330446666666656
+      }
+    ]
+  },
+  {
+    "kind": "random-note-domain",
+    "pentatonic": false,
+    "random": 0,
+    "twos": 1,
+    "seed": 42,
+    "mask": null,
+    "components": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ]
+    ],
+    "offsets": [
+      0,
+      2,
+      0,
+      0,
+      0,
+      2,
+      2,
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      2,
+      0,
+      2,
+      2,
+      2,
+      2,
+      0,
+      0,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      0,
+      2,
+      2,
+      2
+    ],
+    "allowed": [
+      0,
+      2
+    ],
+    "pitches": [
+      60,
+      65,
+      64,
+      65,
+      60,
+      65,
+      67,
+      65,
+      60,
+      62,
+      67,
+      65,
+      60,
+      62,
+      67,
+      65,
+      64,
+      65,
+      67,
+      69,
+      60,
+      62,
+      67,
+      69,
+      64,
+      65,
+      67,
+      69,
+      64,
+      62,
+      67,
+      69,
+      64
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166334965,
+        "error_ms": -0.3317016666666561
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166287833,
+        "error_ms": -0.3788336666666614
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166101111,
+        "error_ms": -0.5655556666666617
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166612747,
+        "error_ms": -0.05391966666665193
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166464446,
+        "error_ms": -0.20222066666666927
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166485956,
+        "error_ms": -0.1807106666666669
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165237966,
+        "error_ms": -1.4287006666666713
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167193118,
+        "error_ms": 0.5264513333333443
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165140628,
+        "error_ms": -1.526038666666646
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166272372,
+        "error_ms": -0.3942946666666558
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166634639,
+        "error_ms": -0.03202766666665635
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165932148,
+        "error_ms": -0.7345186666666559
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166563466,
+        "error_ms": -0.10320066666666405
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166577616,
+        "error_ms": -0.08905066666664574
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16609721,
+        "error_ms": -0.5694566666666623
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166525427,
+        "error_ms": -0.14123966666665377
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165268047,
+        "error_ms": -1.3986196666666562
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16616959,
+        "error_ms": -0.4970766666666515
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166366894,
+        "error_ms": -0.29977266666667
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166260594,
+        "error_ms": -0.4060726666666459
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166711758,
+        "error_ms": 0.045091333333330263
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165189737,
+        "error_ms": -1.4769296666666543
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166388823,
+        "error_ms": -0.27784366666666616
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16604531,
+        "error_ms": -0.6213566666666559
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166973343,
+        "error_ms": 0.3066763333333389
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165308348,
+        "error_ms": -1.3583186666666636
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166188281,
+        "error_ms": -0.47838566666666416
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167187577,
+        "error_ms": 0.5209103333333465
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166348422,
+        "error_ms": -0.3182446666666616
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165495041,
+        "error_ms": -1.171625666666648
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166145633,
+        "error_ms": -0.5210336666666704
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166436764,
+        "error_ms": -0.22990266666667036
+      }
+    ]
+  },
+  {
+    "kind": "random-note-domain",
+    "pentatonic": false,
+    "random": 0,
+    "twos": 2,
+    "seed": 42,
+    "mask": null,
+    "components": [
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ]
+    ],
+    "offsets": [
+      -2,
+      -2,
+      -2,
+      2,
+      2,
+      0,
+      2,
+      0,
+      -2,
+      -2,
+      0,
+      0,
+      2,
+      0,
+      2,
+      0,
+      -2,
+      2,
+      2,
+      2,
+      0,
+      0,
+      -2,
+      -2,
+      2,
+      -2,
+      2,
+      -2,
+      2,
+      0,
+      -2,
+      -2,
+      2
+    ],
+    "allowed": [
+      -2,
+      0,
+      2
+    ],
+    "pitches": [
+      57,
+      59,
+      60,
+      69,
+      64,
+      62,
+      67,
+      65,
+      57,
+      59,
+      64,
+      65,
+      64,
+      62,
+      67,
+      65,
+      57,
+      65,
+      67,
+      69,
+      60,
+      62,
+      60,
+      62,
+      64,
+      59,
+      67,
+      62,
+      64,
+      62,
+      60,
+      62,
+      64
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166908543,
+        "error_ms": 0.24187633333333514
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166563987,
+        "error_ms": -0.10267966666666073
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166117241,
+        "error_ms": -0.5494256666666586
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166361795,
+        "error_ms": -0.30487166666665066
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165213756,
+        "error_ms": -1.452910666666668
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167258498,
+        "error_ms": 0.591831333333348
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165540362,
+        "error_ms": -1.126304666666661
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166465053,
+        "error_ms": -0.2016136666666557
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165753115,
+        "error_ms": -0.913551666666651
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166705807,
+        "error_ms": 0.03914033333335398
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166081021,
+        "error_ms": -0.5856456666666621
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166011765,
+        "error_ms": -0.6549016666666518
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165911718,
+        "error_ms": -0.7549486666666438
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166712427,
+        "error_ms": 0.045760333333338954
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166158059,
+        "error_ms": -0.5086076666666606
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16612075,
+        "error_ms": -0.545916666666646
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166093957,
+        "error_ms": -0.5727096666666709
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165898036,
+        "error_ms": -0.7686306666666587
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166170382,
+        "error_ms": -0.49628466666665205
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167068873,
+        "error_ms": 0.4022063333333492
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165937497,
+        "error_ms": -0.729169666666668
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166171147,
+        "error_ms": -0.49551966666666614
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166223272,
+        "error_ms": -0.44339466666665217
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166074989,
+        "error_ms": -0.5916776666666512
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166017737,
+        "error_ms": -0.6489296666666589
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165906146,
+        "error_ms": -0.7605206666666531
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166374514,
+        "error_ms": -0.2921526666666563
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166398643,
+        "error_ms": -0.2680236666666447
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166379592,
+        "error_ms": -0.2870746666666646
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16612867,
+        "error_ms": -0.5379966666666514
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166381144,
+        "error_ms": -0.28552266666664883
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165962227,
+        "error_ms": -0.7044396666666675
+      }
+    ]
+  },
+  {
+    "kind": "random-note-domain",
+    "pentatonic": false,
+    "random": 0,
+    "twos": 3,
+    "seed": 42,
+    "mask": null,
+    "components": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        4,
+        4
+      ]
+    ],
+    "offsets": [
+      0,
+      -2,
+      4,
+      4,
+      4,
+      -2,
+      -2,
+      -2,
+      2,
+      2,
+      -2,
+      -2,
+      2,
+      4,
+      0,
+      0,
+      2,
+      -2,
+      4,
+      4,
+      2,
+      -2,
+      4,
+      2,
+      4,
+      -2,
+      2,
+      2,
+      0,
+      4,
+      0,
+      4,
+      4
+    ],
+    "allowed": [
+      -2,
+      0,
+      2,
+      4
+    ],
+    "pitches": [
+      60,
+      59,
+      71,
+      72,
+      67,
+      59,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      69,
+      64,
+      65,
+      64,
+      59,
+      71,
+      72,
+      64,
+      59,
+      71,
+      69,
+      67,
+      59,
+      67,
+      69,
+      60,
+      69,
+      64,
+      72,
+      67
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166730089,
+        "error_ms": 0.06342233333334057
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166530668,
+        "error_ms": -0.1359986666666646
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166158707,
+        "error_ms": -0.5079596666666686
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166050409,
+        "error_ms": -0.6162576666666475
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166335063,
+        "error_ms": -0.3316036666666522
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165689282,
+        "error_ms": -0.9773846666666641
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166484765,
+        "error_ms": -0.18190166666665064
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166012856,
+        "error_ms": -0.653810666666671
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166469125,
+        "error_ms": -0.19754166666666184
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166669447,
+        "error_ms": 0.002780333333340934
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166010359,
+        "error_ms": -0.6563076666666612
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166397132,
+        "error_ms": -0.26953466666665427
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165399419,
+        "error_ms": -1.2672476666666654
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167034392,
+        "error_ms": 0.36772533333334634
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165705334,
+        "error_ms": -0.9613326666666477
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166541885,
+        "error_ms": -0.1247816666666568
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166158118,
+        "error_ms": -0.5085486666666639
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166200846,
+        "error_ms": -0.46582066666664423
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166273378,
+        "error_ms": -0.39328866666665796
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166028181,
+        "error_ms": -0.6384856666666605
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166569361,
+        "error_ms": -0.0973056666666583
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166167944,
+        "error_ms": -0.49872266666664555
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165983388,
+        "error_ms": -0.6832786666666479
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165715307,
+        "error_ms": -0.9513596666666513
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166379208,
+        "error_ms": -0.28745866666665676
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16657686,
+        "error_ms": -0.08980666666666415
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166481139,
+        "error_ms": -0.1855276666666572
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165198879,
+        "error_ms": -1.4677876666666645
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166168793,
+        "error_ms": -0.49787366666664834
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166178525,
+        "error_ms": -0.4881416666666638
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166299267,
+        "error_ms": -0.3673996666666568
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166215675,
+        "error_ms": -0.45099166666665025
+      }
+    ]
+  },
+  {
+    "kind": "random-note-domain",
+    "pentatonic": false,
+    "random": 0,
+    "twos": 4,
+    "seed": 42,
+    "mask": null,
+    "components": [
+      [
+        0,
+        -4,
+        -4
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        -4,
+        -4
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        -4,
+        -4
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        -4,
+        -4
+      ],
+      [
+        0,
+        -4,
+        -4
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -4,
+        -4
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsets": [
+      -4,
+      2,
+      4,
+      -4,
+      4,
+      -4,
+      2,
+      0,
+      -2,
+      4,
+      -4,
+      -4,
+      0,
+      2,
+      2,
+      2,
+      0,
+      0,
+      -2,
+      2,
+      0,
+      4,
+      0,
+      2,
+      0,
+      -4,
+      4,
+      -2,
+      -2,
+      2,
+      -2,
+      0,
+      0
+    ],
+    "allowed": [
+      -4,
+      -2,
+      0,
+      2,
+      4
+    ],
+    "pitches": [
+      53,
+      65,
+      71,
+      59,
+      67,
+      55,
+      67,
+      65,
+      57,
+      69,
+      57,
+      59,
+      60,
+      65,
+      67,
+      69,
+      60,
+      62,
+      60,
+      69,
+      60,
+      69,
+      64,
+      69,
+      60,
+      55,
+      71,
+      62,
+      57,
+      65,
+      60,
+      65,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166424717,
+        "error_ms": -0.24194966666665763
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166562331,
+        "error_ms": -0.10433566666664951
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16660571,
+        "error_ms": -0.060956666666667214
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165365882,
+        "error_ms": -1.3007846666666656
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166466019,
+        "error_ms": -0.20064766666666456
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166143175,
+        "error_ms": -0.5234916666666534
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166435378,
+        "error_ms": -0.23128866666666248
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166835095,
+        "error_ms": 0.1684283333333314
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165155946,
+        "error_ms": -1.5107206666666595
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166215677,
+        "error_ms": -0.4509896666666513
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166367906,
+        "error_ms": -0.2987606666666476
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166200414,
+        "error_ms": -0.46625266666666665
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166323697,
+        "error_ms": -0.34296966666666484
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166478619,
+        "error_ms": -0.18804766666666306
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166516039,
+        "error_ms": -0.15062766666665284
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165480154,
+        "error_ms": -1.186512666666667
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166970008,
+        "error_ms": 0.3033413333333457
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165569375,
+        "error_ms": -1.0972916666666666
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166202305,
+        "error_ms": -0.4643616666666628
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166100801,
+        "error_ms": -0.565865666666665
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166709593,
+        "error_ms": 0.042926333333331845
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166122333,
+        "error_ms": -0.5443336666666465
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166142684,
+        "error_ms": -0.5239826666666447
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166589721,
+        "error_ms": -0.07694566666666125
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166025811,
+        "error_ms": -0.640855666666662
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166091753,
+        "error_ms": -0.5749136666666488
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166270756,
+        "error_ms": -0.39591066666666563
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166427028,
+        "error_ms": -0.2396386666666528
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165536196,
+        "error_ms": -1.1304706666666609
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166449329,
+        "error_ms": -0.21733766666665044
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166306033,
+        "error_ms": -0.3606336666666654
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166439779,
+        "error_ms": -0.2268876666666475
+      }
+    ]
+  },
+  {
+    "kind": "random-note-domain",
+    "pentatonic": false,
+    "random": 4,
+    "twos": 4,
+    "seed": 42,
+    "mask": null,
+    "components": [
+      [
+        -2,
+        0,
+        -2
+      ],
+      [
+        0,
+        -2,
+        -2
+      ],
+      [
+        -1,
+        -4,
+        -5
+      ],
+      [
+        1,
+        -2,
+        -1
+      ],
+      [
+        -1,
+        2,
+        1
+      ],
+      [
+        1,
+        4,
+        5
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        -4,
+        -4
+      ],
+      [
+        1,
+        -4,
+        -3
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        1,
+        -4,
+        -3
+      ],
+      [
+        -2,
+        2,
+        0
+      ],
+      [
+        -2,
+        0,
+        -2
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        1,
+        -2,
+        -1
+      ],
+      [
+        -1,
+        4,
+        3
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        -1,
+        -2,
+        -3
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        1,
+        -4,
+        -3
+      ],
+      [
+        1,
+        0,
+        1
+      ],
+      [
+        2,
+        -4,
+        -2
+      ],
+      [
+        2,
+        -2,
+        0
+      ],
+      [
+        -2,
+        2,
+        0
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        -1,
+        -4,
+        -5
+      ],
+      [
+        2,
+        0,
+        2
+      ],
+      [
+        1,
+        4,
+        5
+      ],
+      [
+        -2,
+        2,
+        0
+      ],
+      [
+        2,
+        2,
+        4
+      ],
+      [
+        -2,
+        -4,
+        -6
+      ],
+      [
+        1,
+        -4,
+        -3
+      ],
+      [
+        2,
+        4,
+        6
+      ]
+    ],
+    "offsets": [
+      -2,
+      -2,
+      -5,
+      -1,
+      1,
+      5,
+      0,
+      -4,
+      -3,
+      2,
+      -3,
+      0,
+      -2,
+      6,
+      -1,
+      3,
+      6,
+      -3,
+      6,
+      -3,
+      1,
+      -2,
+      0,
+      0,
+      2,
+      -5,
+      2,
+      5,
+      0,
+      4,
+      -6,
+      -3,
+      6
+    ],
+    "allowed": [
+      -6,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "pitches": [
+      57,
+      59,
+      55,
+      64,
+      62,
+      71,
+      64,
+      59,
+      55,
+      65,
+      59,
+      65,
+      57,
+      72,
+      62,
+      71,
+      71,
+      57,
+      74,
+      60,
+      62,
+      59,
+      64,
+      65,
+      64,
+      53,
+      67,
+      74,
+      60,
+      69,
+      53,
+      60,
+      71
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166983268,
+        "error_ms": 0.31660133333333285
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166562359,
+        "error_ms": -0.10430766666666424
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165383861,
+        "error_ms": -1.2828056666666643
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166159124,
+        "error_ms": -0.507542666666666
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167194269,
+        "error_ms": 0.527602333333349
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165952901,
+        "error_ms": -0.7137656666666437
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166473048,
+        "error_ms": -0.19361866666664507
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165414433,
+        "error_ms": -1.2522336666666578
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166141204,
+        "error_ms": -0.5254626666666706
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166350737,
+        "error_ms": -0.3159296666666589
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166368417,
+        "error_ms": -0.29824966666666675
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166458169,
+        "error_ms": -0.20849766666666825
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166110483,
+        "error_ms": -0.5561836666666542
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166543729,
+        "error_ms": -0.12293766666665595
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165929801,
+        "error_ms": -0.7368656666666695
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166018063,
+        "error_ms": -0.6486036666666639
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166163533,
+        "error_ms": -0.5031336666666553
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166070502,
+        "error_ms": -0.5961646666666487
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166422909,
+        "error_ms": -0.24375766666664966
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166440457,
+        "error_ms": -0.22620966666664355
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166037592,
+        "error_ms": -0.6290746666666458
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16657426,
+        "error_ms": -0.09240666666665565
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165352722,
+        "error_ms": -1.3139446666666499
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166929566,
+        "error_ms": 0.26289933333334403
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166039551,
+        "error_ms": -0.62711566666665
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166467959,
+        "error_ms": -0.19870766666665873
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165723656,
+        "error_ms": -0.9430106666666604
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166611512,
+        "error_ms": -0.05515466666666802
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165526914,
+        "error_ms": -1.1397526666666602
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166189703,
+        "error_ms": -0.47696366666666323
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166609011,
+        "error_ms": -0.057655666666656114
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166525329,
+        "error_ms": -0.1413376666666577
+      }
+    ]
+  },
+  {
+    "kind": "random-note-domain",
+    "pentatonic": false,
+    "random": 0,
+    "twos": 0,
+    "seed": 42,
+    "mask": null,
+    "components": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "allowed": [
+      0
+    ],
+    "pitches": [
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60,
+      62,
+      64,
+      65,
+      60
+    ],
+    "passed": true
+  }
+]

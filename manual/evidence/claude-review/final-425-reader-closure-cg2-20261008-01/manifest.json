@@ -1,0 +1,55 @@
+{
+  "schema": "mosaic-final-425-reader-closure-install-v1",
+  "status": "installed reviewed current closure",
+  "candidate_id": "final-reader-qualified-425-ledger-20261008-01",
+  "installed_at_utc": "2026-10-08T16:20:52.449785+00:00",
+  "ledger_file": "final-425-ledger.json",
+  "ledger_sha256": "f8a63feac757df8595e574e3865d967efe0ee860934faeb2e4f0af92cdc9619a",
+  "rows": 425,
+  "all_ten_criteria_at_least_8": true,
+  "unit_rows_unchanged_from_reviewed_candidate": true,
+  "previous_ratings_baseline": {
+    "path": "../final-425-reader-ledger-20261008-01/final-425-ledger.json",
+    "sha256": "78d46761bfe935c480d50cd5a8aedb26f8b9e9fcd59cf063e824ad4cbbe2f4bc",
+    "preserved_unchanged": true
+  },
+  "fe378_baseline": {
+    "path": "../final-425-reader-ledger-20261008-01/fe378-baseline-425-ledger.json",
+    "sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+    "historic_unchanged_rows": 387
+  },
+  "route_gate": {
+    "path": "../reader-425-route-gate-cg2-20261008-01/current-route-report.json",
+    "sha256": "ecb71218e5376c4bb1b952ae58ed62a3b5053dc7528bf02f38eae371addca084",
+    "manifest_path": "../reader-425-route-gate-cg2-20261008-01/unit-route-manifest-v5-cg2.json",
+    "manifest_sha256": "d3bb5d410a86d9d71ef9353f581d2fd66cc81d9c2c1af2971cb662ec52a3583b",
+    "receipt_path": "../reader-425-route-gate-cg2-20261008-01/current-route-receipt.json",
+    "receipt_sha256": "9b4c2ac9dffe000f83e88760fa6b475e2c88a77ac6dd30529df29dad0fb25b2f",
+    "passed_routes": 425,
+    "scenes": 146,
+    "verified_scene_chunks": 146,
+    "source_and_chunk_references": 150
+  },
+  "score_lineage": {
+    "fresh_rendered_followup": 3,
+    "fresh_v07_source_rating": 3,
+    "v07_carried_rating_from_v06_source_review": 32,
+    "carried_unchanged_existing_ledger_row": 387
+  },
+  "style_review": {
+    "path": "../compact-grid-v3-astra-recheck-20261008-01/review.json",
+    "sha256": "fd3228b6f54aa176a6164ff9cb7f4c94243cc47c05c99cff298d11db5c8e0bf7",
+    "markdown_path": "../compact-grid-v3-astra-recheck-20261008-01/review.md",
+    "markdown_sha256": "3684a17a5a7d027a409a291535855f059bdc9338c84a5e85dc6a224690929030",
+    "CG1": "closed",
+    "CG2": "closed"
+  },
+  "publication_qualified": false,
+  "publication_pending": [
+    "CI",
+    "merge",
+    "deployment"
+  ],
+  "external_candidate_report_sha256": "4ceb740d1cd3ba8b1f2ec4e11ccd41d498c79b5725ae4b2c5c2b7cfcfc9e3e62",
+  "retained_history": "Original 78d ledger and fe378 baseline folders and historical holds/receipts are preserved."
+}

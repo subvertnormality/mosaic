@@ -1,0 +1,103 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "pattern-boundary-input-validity",
+    "lane": "real-time",
+    "boundary_ns": 506742376950,
+    "planned_ns": [
+      506711376950,
+      506712376950
+    ],
+    "callback_completed_ns": [
+      506711850503,
+      506712968468
+    ],
+    "both_callbacks_completed_before_boundary": true
+  },
+  {
+    "kind": "pattern-boundary-edit",
+    "channel": 16,
+    "expected": [
+      60,
+      62,
+      64,
+      65,
+      72,
+      74,
+      76,
+      77,
+      67,
+      62,
+      64,
+      65,
+      72
+    ],
+    "actual": [
+      60,
+      62,
+      64,
+      65,
+      72,
+      74,
+      76,
+      77,
+      67,
+      62,
+      64,
+      65,
+      72
+    ],
+    "input_validity": {
+      "kind": "pattern-boundary-input-validity",
+      "lane": "real-time",
+      "boundary_ns": 506742376950,
+      "planned_ns": [
+        506711376950,
+        506712376950
+      ],
+      "callback_completed_ns": [
+        506711850503,
+        506712968468
+      ],
+      "both_callbacks_completed_before_boundary": true
+    }
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "complete_regression_run": false,
+  "hardware_timing_verified": false,
+  "publication": "/home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc/reference-scenes.json",
+  "publication_sha256": "a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd",
+  "clock_mode": "controlled-experimental",
+  "scenes": 25,
+  "frames": 74,
+  "deferred": [
+    {
+      "scene_id": "global-parameter-slide",
+      "step_id": "ramp",
+      "capture_stage": "before-finish",
+      "pre_finish_expect": {
+        "menu_label": {
+          "label": "CC 1"
+        },
+        "menu_value": {
+          "value": "63"
+        }
+      },
+      "assertion_index": 16
+    },
+    {
+      "scene_id": "local-parameter-slide",
+      "step_id": "local",
+      "capture_stage": "before-finish",
+      "pre_finish_expect": {
+        "menu_label": {
+          "label": "CC 1"
+        },
+        "menu_value": {
+          "value": "63"
+        }
+      },
+      "assertion_index": 16
+    }
+  ]
+}

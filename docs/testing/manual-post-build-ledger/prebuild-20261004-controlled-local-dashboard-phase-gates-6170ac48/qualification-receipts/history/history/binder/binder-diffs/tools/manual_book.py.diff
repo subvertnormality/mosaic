@@ -1,0 +1,67 @@
+--- before/tools/manual_book.py
++++ after/tools/manual_book.py
+@@ -4,6 +4,9 @@
+ import yaml,jsonschema
+ ROOT=Path(__file__).resolve().parents[1]
+ MANUAL=ROOT/"manual"
++CONTROLLED_SCOPE="controlled-manual-generation"
++REALTIME_PENDING="pending-ci"
++CONTROLLED_STATUS="controlled-verified"
+ sys.path.insert(0,str(ROOT/"tests/behaviour"))
+ sys.path.insert(0,str(ROOT/"tools"))
+ from manual_authority import authoring_identity
+@@ -46,6 +49,10 @@
+     schema=json.loads((MANUAL/"book.schema.json").read_text())
+     try:jsonschema.Draft7Validator(schema).validate(data)
+     except jsonschema.ValidationError as error:raise ValueError(error.message) from error
++    for feature in data["features"]:
++        review=feature.get("review",{})
++        if review.get("status")==CONTROLLED_STATUS and (review.get("validation_scope")!=CONTROLLED_SCOPE or review.get("realtime_qualification")!=REALTIME_PENDING):
++            raise ValueError("Controlled feature binding lacks explicit scope or pending realtime qualification")
+     ids=[f["id"] for f in data["features"]]
+     if len(set(ids))!=len(ids):raise ValueError("Duplicate feature ID")
+     scenes=capture_catalogue()
+@@ -69,6 +76,9 @@
+     if digest(legacy)!=data["legacy_source_sha256"]:raise ValueError("Legacy source identity changed")
+     return data
+ def validate_course(course,feature_ids,scenes):
++    controlled=course.get("project",{}).get("capture_status")==CONTROLLED_STATUS
++    if controlled and (course["project"].get("validation_scope")!=CONTROLLED_SCOPE or course["project"].get("realtime_qualification")!=REALTIME_PENDING):
++        raise ValueError("Controlled course binding lacks explicit scope or pending realtime qualification")
+     schema=json.loads((MANUAL/"course.schema.json").read_text())
+     try:jsonschema.Draft7Validator(schema).validate(course)
+     except jsonschema.ValidationError as error:raise ValueError("Invalid course: "+error.message) from error
+@@ -87,7 +97,9 @@
+             scene=scenes[binding["scene"]]
+             matched=[step for step in scene["steps"] if step["id"]==binding["step"]]
+             if len(matched)!=1:raise ValueError("Unknown course step: "+str(binding["step"]))
+-            if binding["status"]=="verified":
++            if binding["status"] in ("verified",CONTROLLED_STATUS):
++                wanted_status=CONTROLLED_STATUS if controlled else "verified"
++                if binding["status"]!=wanted_status:raise ValueError("Course binding lane scope differs from capture scope")
+                 proof=matched[0].get("output",{}).get("binding",{})
+                 if proof.get("passed") is not True or not proof.get("semantic_assertions") or not proof.get("sha256") or not proof.get("grid_sha256"):
+                     raise ValueError("Unverified course binding: "+stage["id"])
+@@ -102,10 +114,11 @@
+         if "scene-captions.yaml" not in data.get("scene_sources",[]):
+             raise ValueError("Caption overlay missing from authoring identity")
+         scenes=apply_overlays(scenes,read(overlay_path))
+-    complete=all(f["review"]["status"] in ("verified","pilot-reviewed") for f in data["features"])
++    complete=all(f["review"]["status"] in ("verified","pilot-reviewed",CONTROLLED_STATUS) for f in data["features"])
+     course=data.get("course")
+     if course:
+-        complete=complete and course["project"]["capture_status"]=="verified" and all(stage["binding"]["status"]=="verified" for chapter in course["learning_path"] for stage in chapter["stages"])
++        controlled_course=course["project"]["capture_status"]==CONTROLLED_STATUS
++        complete=complete and course["project"]["capture_status"] in ("verified",CONTROLLED_STATUS) and all(stage["binding"]["status"]==(CONTROLLED_STATUS if controlled_course else "verified") for chapter in course["learning_path"] for stage in chapter["stages"])
+     course_scenes={stage["binding"]["scene"] for chapter in course["learning_path"] for stage in chapter["stages"]} if course else set()
+     result=dict(schema_version=2,edition=data["edition"],title=data["title"],
+                 authoring_identity=authoring_identity(ROOT),
+@@ -115,6 +128,8 @@
+                 features=data["features"],
+                 scenes={key:value for key,value in scenes.items() if key in course_scenes or any(key in f["scene_refs"] for f in data["features"])})
+     if course:result.update(course_title=course["title"],course_summary=course["summary"],project=course["project"],learning_path=course["learning_path"])
++    if any(f["review"]["status"]==CONTROLLED_STATUS for f in data["features"]) or course and course["project"]["capture_status"]==CONTROLLED_STATUS:
++        result.update(validation_scope=CONTROLLED_SCOPE,realtime_qualification=REALTIME_PENDING,complete_regression_run=False)
+     return result
+ def main():
+     data=compile_book(load())

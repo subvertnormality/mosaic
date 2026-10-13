@@ -1,0 +1,7 @@
+{
+  "application": "/tmp/mosaic-doctor-mailbox-red-1765bc799823415c825baf382e919737/mosaic",
+  "sha256": {
+    "lib/rhythm_doctor/file_mailbox.lua": "decf535858834f12cce976d0ebabb6de130c76f259de7174191a080541fadc14",
+    "lib/tests/lib/rhythm_doctor_mailbox_path_tests.lua": "c4752783007c2e70388e86107b9ec1241160bc3df14535c836066d4f4ff5e044"
+  }
+}

@@ -1,0 +1,5 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+.
+Ran 1 tests in 0.054 seconds, 1 success, 0 failures, 2444 non-selected
+OK
+find: ‘/home/we/norns/lua/core’: No such file or directory

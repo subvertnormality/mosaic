@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "7f49d37ab9bf155878f1928f2129f47317b447a8",
+  "selected_cases": [
+    "M-RANGE-SAVED-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/persisted_ranges.py": "M-RANGE-SAVED-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/persisted_ranges.py",
+      "case": "M-RANGE-SAVED-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-dac407ca47434ab7bbab5c90148926db/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-dac407ca47434ab7bbab5c90148926db/manifest.json",
+      "manifest_sha256": "8c9a9b485ed60fe3aacf90c61fac65cb8d9b4e1be7e7e67ac82713a512c8058e",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

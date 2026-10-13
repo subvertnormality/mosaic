@@ -1,0 +1,8 @@
+test_g20_without_step_hold_remains_destination_p01 (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+test_g21_preserves_doctor_return_frame_until_release (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+test_recipe_observes_release_return_without_extra_navigation (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.039s
+
+OK

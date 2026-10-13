@@ -1,0 +1,39 @@
+{
+  "assets": {
+    "generated/reader-index.json": "1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654",
+    "book.js": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+    "manual.js": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+    "manual.css": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+    "index.html": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482"
+  },
+  "changes": [
+    {
+      "id": "midi-panic",
+      "changedFields": [
+        "teaching_bindings"
+      ]
+    },
+    {
+      "id": "lfos-and-modulation",
+      "changedFields": [
+        "prose"
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "scene": "panic-from-song-channel",
+      "step": "hold-and-release",
+      "title": "Hold Channel for two seconds",
+      "caption": "From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing."
+    },
+    {
+      "scene": "panic-from-song-pattern",
+      "step": "hold-and-release",
+      "title": "Hold Pattern for two seconds",
+      "caption": "From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing."
+    }
+  ],
+  "sameLearningPath": true,
+  "sameAudioExamples": true
+}

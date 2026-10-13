@@ -1,0 +1,24 @@
+{
+  "reviewed_files": 78,
+  "manual_source": {
+    "file": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+    "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+    "meaning": "Keep125 historical MAN IDs bound to exactly frozen full UI README8e93de46 after user-approved thin-overview migration. Current intendedmanualauthority isbook/course/features YAML; no historicalheading is fabricated fromoverview."
+  },
+  "authority_metadata_before_sha256": "56a9cf58e1da9a8bcef6cd468a10baaf79a476ae2e1d20c7ee42205eecb072a0",
+  "authority_metadata_after_sha256": "dc8a262685386bc9e94fb07702bfdc5a25e19cc8926e5eb1b7bbc4bc1101af39",
+  "runtime_export_check": "ui_spec_data.lua is current",
+  "executable_files_byte_identical_to2444_green": [
+    "lib/ui_mini.lua",
+    "lib/ui_mini_atlas.lua",
+    "lib/ui_render.lua",
+    "lib/ui_live.lua",
+    "lib/ui_motion.lua",
+    "lib/ui_spec_data.lua",
+    "mosaic.lua"
+  ],
+  "full_source_validation_pending": false,
+  "full_source_validation": "PASS without skips",
+  "independent_review": "docs/testing/mini-header-ui/independent-source-rereview.json",
+  "all_spec_fields_except_authority_identical_to2444_green": true
+}

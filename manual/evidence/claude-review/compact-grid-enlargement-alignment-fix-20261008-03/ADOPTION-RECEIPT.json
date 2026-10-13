@@ -1,0 +1,23 @@
+{
+  "adopted_to": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/compact-grid-enlargement-alignment-fix-20261008-03",
+  "mirrored_to": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/compact-grid-enlargement-alignment-fix-20261008-03",
+  "inventory": "FILE-HASH-INVENTORY.json",
+  "inventory_sha256": "c3fee1ae703a2ccb9b9cbf9df4d51df0c9b0a286da8188ec17754bb1b1efbcb9",
+  "inventory_entry_count": 21,
+  "manifest_sha256": "9a16e083907fc6aaa6674be1c8ba10dd89f94c22a500d16ccb1c58100cf27449",
+  "referenced_manifest_paths_missing": [],
+  "raw_filter_mismatches": [],
+  "production_roots_match_installed_pins": true,
+  "raw_filter_audit": {
+    "manifest_references_missing": [],
+    "file_inventory_vs_tree_mismatches": [],
+    "primary_ignore_status": "not ignored; evidence directory appears as untracked",
+    "publication_ignore_status": "not ignored; evidence directory appears as untracked",
+    "staged_or_committed": false
+  },
+  "production_pins_verified_both_roots": {
+    "manual/manual.css": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+    "manual/manual.js": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+    "tests/behaviour/manual_browser.cjs": "222644db14483052ed41f40c90542995df76a079eca28417e9217816a6f1aff0"
+  }
+}

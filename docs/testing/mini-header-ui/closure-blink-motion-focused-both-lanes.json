@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "scope": "Focused closure fixture qualification; independent raw audit required separately before publication",
+  "helper_sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+  "unit_tests": 15,
+  "prior_failed_run": "/home/andy/mosaic-manual-runs/46fb3925aba34782b54fbecea7423fae",
+  "production_emulator_music_oracle_changes": false,
+  "runs": [
+    {
+      "run": "/home/andy/mosaic-manual-runs/d2ba58ca3e1f4f6498fe6a9bbda5f042",
+      "clock_mode": "real-time",
+      "report": "/home/andy/mosaic-manual-runs/d2ba58ca3e1f4f6498fe6a9bbda5f042/reference-scenes.json",
+      "report_sha256": "14613c2c39098bc3ea83449bc4c12f80576e3f1eb7405375ab71eb972ac72aab",
+      "cases": [
+        {
+          "case": "M-MANUAL-CLOSURE-SONG-001-base-midi",
+          "cleanup": [
+            {
+              "service": "matron",
+              "pid": 1091,
+              "returncode": 0,
+              "seconds": 0.11389935598708689
+            },
+            {
+              "service": "sclang",
+              "pid": 980,
+              "returncode": -15,
+              "seconds": 0.11450325103942305
+            },
+            {
+              "service": "crone",
+              "pid": 968,
+              "returncode": 0,
+              "seconds": 6.675097392871976e-05
+            },
+            {
+              "service": "jack",
+              "pid": 962,
+              "returncode": 0,
+              "seconds": 0.03162349801277742
+            }
+          ],
+          "actual_modes": [
+            "real-time"
+          ],
+          "helper_sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+          "blink": {
+            "samples": 98,
+            "native_changes": 8,
+            "levels": null,
+            "timing_contract": {
+              "blink_period_ns": 400000000,
+              "grid_flush_period_ns": 50000000,
+              "real_clock_allowance_ns": 10000000,
+              "min_transition_ns": 340000000,
+              "max_transition_ns": 460000000,
+              "observation_poll_ns": 30000000,
+              "window_ns": 3330000000,
+              "source": "mosaic.lua blink clock.sleep(0.4); grid_redraw clock.sleep(1/20); existing real musical allowance0.01s"
+            }
+          }
+        },
+        {
+          "case": "M-MANUAL-CLOSURE-MOTION-001-base-midi",
+          "cleanup": [
+            {
+              "service": "matron",
+              "pid": 2932,
+              "returncode": 0,
+              "seconds": 0.11393820802913979
+            },
+            {
+              "service": "sclang",
+              "pid": 2826,
+              "returncode": -15,
+              "seconds": 0.11444258998380974
+            },
+            {
+              "service": "crone",
+              "pid": 2818,
+              "returncode": 0,
+              "seconds": 6.881100125610828e-05
+            },
+            {
+              "service": "jack",
+              "pid": 2811,
+              "returncode": 0,
+              "seconds": 0.015477181994356215
+            }
+          ],
+          "actual_modes": [
+            "real-time"
+          ],
+          "helper_sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+          "motion": [
+            {
+              "enabled": false,
+              "samples": 6,
+              "observed_poses": [
+                0,
+                4
+              ]
+            },
+            {
+              "enabled": true,
+              "samples": 24,
+              "observed_poses": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run": "/home/andy/mosaic-manual-runs/4e136b11b7204a8db9930dd78b6c34ed",
+      "clock_mode": "controlled-experimental",
+      "report": "/home/andy/mosaic-manual-runs/4e136b11b7204a8db9930dd78b6c34ed/reference-scenes.json",
+      "report_sha256": "94f53046e05895e4b9457dac88d708a5aba7056f198dbf10791a2d85ff69c31f",
+      "cases": [
+        {
+          "case": "M-MANUAL-CLOSURE-SONG-001-base-midi",
+          "cleanup": [
+            {
+              "service": "matron",
+              "pid": 5888,
+              "returncode": 0,
+              "seconds": 0.11402529996121302
+            },
+            {
+              "service": "sclang",
+              "pid": 5782,
+              "returncode": -15,
+              "seconds": 0.1145644019707106
+            },
+            {
+              "service": "crone",
+              "pid": 5771,
+              "returncode": 0,
+              "seconds": 7.698102854192257e-05
+            },
+            {
+              "service": "jack",
+              "pid": 5767,
+              "returncode": 0,
+              "seconds": 0.0317169229965657
+            }
+          ],
+          "actual_modes": [
+            "controlled-experimental"
+          ],
+          "helper_sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+          "blink": {
+            "samples": 7,
+            "native_changes": 0,
+            "levels": [
+              1,
+              7,
+              1,
+              7,
+              1,
+              7,
+              1
+            ],
+            "timing_contract": null
+          }
+        },
+        {
+          "case": "M-MANUAL-CLOSURE-MOTION-001-base-midi",
+          "cleanup": [
+            {
+              "service": "matron",
+              "pid": 8967,
+              "returncode": 0,
+              "seconds": 0.11397120502078906
+            },
+            {
+              "service": "sclang",
+              "pid": 8857,
+              "returncode": -15,
+              "seconds": 0.11460883199470118
+            },
+            {
+              "service": "crone",
+              "pid": 8849,
+              "returncode": 0,
+              "seconds": 7.085100514814258e-05
+            },
+            {
+              "service": "jack",
+              "pid": 8801,
+              "returncode": 0,
+              "seconds": 0.03189149498939514
+            }
+          ],
+          "actual_modes": [
+            "controlled-experimental"
+          ],
+          "helper_sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+          "motion": [
+            {
+              "enabled": false,
+              "samples": 6,
+              "observed_poses": [
+                0,
+                4
+              ]
+            },
+            {
+              "enabled": true,
+              "samples": 24,
+              "observed_poses": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "remaining_native_processes": [],
+  "global_final_publication_acceptance": false,
+  "clock_bitmap_coverage_clarification": {
+    "authored_phase_indices": 8,
+    "unique_authored_bitmaps": 5,
+    "off_matching_indices": [
+      0,
+      4
+    ],
+    "off_meaning": "Both indices have the exact same resting bitmap; this does not imply visible motion",
+    "on_meaning": "All eight authored phase indices observed and all five unique bitmaps covered, with independently checked native clock phase. Symmetric repeated poses are preserved unchanged."
+  }
+}

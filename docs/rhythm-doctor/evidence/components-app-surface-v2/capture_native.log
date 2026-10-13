@@ -1,0 +1,26 @@
+test_injected_stereo_pcm_is_contiguous_and_atomically_published_after_stop (test_capture_native.NativeJackCaptureTests) ... Cannot lock down 82280346 byte memory area (Cannot allocate memory)
+Cannot use real-time scheduling (RR/5)(1: Operation not permitted)
+JackClient::AcquireSelfRealTime error
+Cannot lock down 82280346 byte memory area (Cannot allocate memory)
+Cannot lock down 82280346 byte memory area (Cannot allocate memory)
+ok
+test_preflight_never_autostarts_or_attaches_to_another_server_name (test_capture_native.NativeJackCaptureTests) ... Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+ok
+test_server_shutdown_fails_an_armed_capture (test_capture_native.NativeJackCaptureTests) ... Cannot lock down 82280346 byte memory area (Cannot allocate memory)
+Cannot use real-time scheduling (RR/5)(1: Operation not permitted)
+JackClient::AcquireSelfRealTime error
+Cannot read socket fd = 6 err = Success
+CheckRes error
+JackSocketClientChannel read fail
+Server is not running
+Server is not running
+ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.368s
+
+OK

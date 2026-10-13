@@ -1,0 +1,2125 @@
+schema_version: 1
+fixture_kind: behaviour-case
+trace_contract: The original pinned case replays public inputs and verifies every
+  authored semantic selector; per-scene deltas include native encoder units and waits.
+scenes:
+- id: course-save-dialog
+  feature_id: save-and-load
+  title: Save the same arrangement under a name
+  behaviour_case: M-MANUAL-SAVE-DIALOG-001
+  requirements:
+  - SAVE-NAMED
+  profile: base-midi
+  session_ordinal: 0
+  screen_format: gray8-rle
+  setup:
+    fixture: behaviour-case
+    case: M-MANUAL-SAVE-DIALOG-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: cancel
+    title: Cancel the first save
+    caption: Press K2 in name entry. The Save project menu returns and neither named
+      project file is created.
+    citation: manual:save-and-load
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: enc
+      n: 2
+      delta: -100
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 6
+      y: 8
+      state: 1
+    - type: grid
+      x: 6
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    - type: wait
+      seconds: 0.01
+    expect:
+      assertion:
+        kind: manual-save-dialog-cancel
+        stage: cancel
+        passed: true
+  - id: entry
+    title: Open name entry
+    caption: Press K3 on Save project. The suggested name is new and OK is selected.
+    citation: manual:save-and-load
+    inputs:
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-save-dialog-frame
+        stage: entry
+        passed: true
+  - id: delete
+    title: Select DEL
+    caption: Turn E2 left. DEL becomes bright and OK dims.
+    citation: manual:save-and-load
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: manual-save-dialog-frame
+        stage: delete
+        passed: true
+  - id: empty
+    title: Remove the suggested name
+    caption: Press K3 three times. The name is empty.
+    citation: manual:save-and-load
+    inputs:
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-save-dialog-frame
+        stage: empty
+        passed: true
+  - id: first-character
+    title: Enter F
+    caption: Turn E3 left to the character row, turn E2 to F, then press K3. F appears
+      in the name.
+    citation: manual:save-and-load
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-save-dialog-frame
+        stage: first-character
+        passed: true
+  - id: name-entered
+    title: Complete Four notes
+    caption: Select and enter o, u, r, space, n, o, t, e and s with E2 and K3. The
+      name reads Four notes.
+    citation: manual:save-and-load
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-save-dialog-frame
+        stage: name-entered
+        passed: true
+  - id: confirm
+    title: Select OK
+    caption: Turn E3 right, then E2 right. OK becomes bright with Four notes still
+      visible.
+    citation: manual:save-and-load
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: manual-save-dialog-frame
+        stage: confirm
+        passed: true
+  - id: returned
+    title: Confirm the save
+    caption: Press and release K3, then K1. The arrangement returns on SLOT SETUP
+      SONG01.
+    citation: manual:save-and-load
+    inputs:
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-save-dialog-return
+        stage: returned
+        passed: true
+  - id: saved
+    title: Find the named project
+    caption: Open Load project and select Four notes.ptn, then cancel the picker and
+      return to Mosaic. Both named files match the retained arrangement and no input
+      remains held.
+    citation: manual:save-and-load
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: enc
+      n: 2
+      delta: -100
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: enc
+      n: 2
+      delta: 1
+    - type: wait
+      seconds: 0.03
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-save-dialog-persistence
+        stage: saved
+        passed: true

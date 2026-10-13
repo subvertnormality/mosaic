@@ -1,0 +1,24 @@
+........FE.
+======================================================================
+ERROR: test_observer_never_runs_before_exact_selected_field_is_verified (test_merge_strategy_ui_routes.StrategyFooterTemporalGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 191, in test_observer_never_runs_before_exact_selected_field_is_verified
+    select_strategy(c,'SKIP',after_edit=lambda:footer(c,'SKIP APPLIED'))
+TypeError: select_strategy() got an unexpected keyword argument 'after_edit'
+
+======================================================================
+FAIL: test_native_footer_recipe_observes_before_later_row_navigation (test_merge_strategy_ui_routes.StrategyFooterTemporalGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 181, in test_native_footer_recipe_observes_before_later_row_navigation
+    exec(compile(ast.Module(body=[statement],type_ignores=[]),'actual-feedback-recipe','exec'),namespace)
+  File "actual-feedback-recipe", line 20, in <module>
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 164, in footer
+    self.assertLess(clock['now']-clock['applied'],3.0,'transient footer expired during later field navigation')
+AssertionError: 3.4000000000000004 not less than 3.0 : transient footer expired during later field navigation
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.038s
+
+FAILED (failures=1, errors=1)

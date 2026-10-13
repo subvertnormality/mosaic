@@ -1,0 +1,36 @@
+{
+  "candidate": "installed C07-1 three-scalar follow-up",
+  "files": {
+    "bass-1440.png": "d011293514ea4674880be844f8355c5fbae166a5d06bb0f23fdc2931dd6e9376",
+    "bass-390.png": "7b28e90ec803217dc0e1d942cc9f7f12c8a62d395a9f88bbfd3fc0e75096038c",
+    "chord-1440.png": "bb637d57c45d225fdcb46bbd20be54d620768f9803e85b7b6760307a2d4feb5c",
+    "chord-390.png": "16c782719a4a0d0591ec4631f70d7aab7c622cbdcc3efa2a6c626f48b50a0276",
+    "decay-1440.png": "845bea8db63b4e9872a30477d9b81cb9aac3f83f6d7e15ddabd0d7bbf2d6bc46",
+    "decay-390.png": "2a02be690d8d4a3be258d6be9fb79b414d97227dd86b84e6cf40023463c5ab17",
+    "observations.json": "b716206cf32fb15d50fc1a1ede640a7e9230c08509a11ccab12f867f158ac62a",
+    "review.json": "c84cb0994000d8810f27fe58319a20c99fe9dd8a3f9f7544d5bd3d69c3fe0be0",
+    "review.md": "c704b486fc630f6826a4ccc0de39a8dcf47578e3ea850f2d892a7493a0ad1909"
+  },
+  "limits": [
+    "Reader evidence only; this does not qualify 425-unit route/source reconciliation, CI, native/audio generation, or publication.",
+    "Prior failed and historical reports remain preserved.",
+    "The 14 MB reader-index dump and source mirrors are intentionally excluded."
+  ],
+  "result": {
+    "all_seven_at_least_8": true,
+    "fresh_viewports": 6,
+    "open_findings": [],
+    "scores": {
+      "cohesion": 8,
+      "comprehensibility": 8,
+      "flow": 8,
+      "readability": 8,
+      "understandability": 8,
+      "usefulness_of_interactive_examples": 8,
+      "user_friendliness": 8
+    },
+    "unintended_overflows": 0,
+    "verdict": "reader review pass"
+  },
+  "schema": "mosaic-reader-astra-evidence-adoption-v1"
+}

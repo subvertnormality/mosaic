@@ -1,0 +1,156 @@
+{
+  "scope": "Engineering qualification only, independently verified immutable app/test stages; not current-global source final publication, exhaustive regression, stock-runtime F8 phase guarantee or physical norns equivalence",
+  "source_stage": "/home/andy/mosaic-mini-header-engineering-v10-20261003/mosaic",
+  "source_identity": "0e016344c2beb1b0f825c4925b3fe8feed25394d86b17d4faa02ec03e89d5983",
+  "strategy_controlled_scope": "V5 controlled Strategy remains applicable by exact nine execution dependencies and app byte equality receipts; no failed source relabeled",
+  "real_readability_installation": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+  "reports": [
+    {
+      "feature": "Strategy",
+      "lane": "controlled-experimental",
+      "manifest": "/home/andy/mosaic-mini-header-engineering-v5-qualification-20261003/controlled/55400d6459d54f368ca84080d58e52d1/manifest.json",
+      "manifest_sha256": "28d08ee55f3328994231854d9b3646c0abd8365207e08fd91589425fe881c9d4",
+      "passed": true,
+      "wall_elapsed_seconds": 137.44598054804374,
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 25317,
+          "returncode": 0,
+          "seconds": 0.1141408080002293
+        },
+        {
+          "service": "sclang",
+          "pid": 25203,
+          "returncode": -15,
+          "seconds": 0.06442901800619438
+        },
+        {
+          "service": "crone",
+          "pid": 25195,
+          "returncode": 0,
+          "seconds": 6.463105091825128e-05
+        },
+        {
+          "service": "jack",
+          "pid": 25190,
+          "returncode": 0,
+          "seconds": 0.031612320977728814
+        }
+      ]
+    },
+    {
+      "feature": "Strategy",
+      "lane": "real-time stock installation",
+      "manifest": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261003/real/4d1e7077a99c4d65835b0e21cb15f933/manifest.json",
+      "manifest_sha256": "1ca514825b57b4d291519b9dd354e269968fff828a2e99770bdf09737a0cdb07",
+      "passed": true,
+      "wall_elapsed_seconds": 150.26714825001545,
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 29786,
+          "returncode": 0,
+          "seconds": 0.16414612997323275
+        },
+        {
+          "service": "sclang",
+          "pid": 29688,
+          "returncode": -15,
+          "seconds": 0.11443118803435937
+        },
+        {
+          "service": "crone",
+          "pid": 29680,
+          "returncode": 0,
+          "seconds": 6.234104512259364e-05
+        },
+        {
+          "service": "jack",
+          "pid": 29672,
+          "returncode": 0,
+          "seconds": 0.031595692969858646
+        }
+      ]
+    },
+    {
+      "feature": "Readability",
+      "lane": "controlled-experimental",
+      "manifest": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261003/controlled/2af9e6e4e34c4ec09bcdb42a08ce4980/manifest.json",
+      "manifest_sha256": "e231422458a5ecd0b5b1aaa3b66ed966c1447c899b7daf8461f28a322ac5b6d4",
+      "passed": true,
+      "wall_elapsed_seconds": 176.39110821898794,
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 22504,
+          "returncode": 0,
+          "seconds": 0.11385987198445946
+        },
+        {
+          "service": "sclang",
+          "pid": 22386,
+          "returncode": -15,
+          "seconds": 0.11448992002988234
+        },
+        {
+          "service": "crone",
+          "pid": 22378,
+          "returncode": 0,
+          "seconds": 6.367103196680546e-05
+        },
+        {
+          "service": "jack",
+          "pid": 22371,
+          "returncode": 0,
+          "seconds": 0.031696579011622816
+        }
+      ]
+    },
+    {
+      "feature": "Readability",
+      "lane": "real-time boundary-capable installation",
+      "manifest": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261004/real-boundary-quiet/5f7a319726114a769773cad44698245a/manifest.json",
+      "manifest_sha256": "19988cd615b4a1ea4ae8e08d26fa46be524d07b224bd636fd9c51649701fa2dc",
+      "passed": true,
+      "wall_elapsed_seconds": 228.76522544800537,
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 22107,
+          "returncode": 0,
+          "seconds": 0.11400048300856724
+        },
+        {
+          "service": "sclang",
+          "pid": 21979,
+          "returncode": -15,
+          "seconds": 0.11460816999897361
+        },
+        {
+          "service": "crone",
+          "pid": 21971,
+          "returncode": 0,
+          "seconds": 6.106100045144558e-05
+        },
+        {
+          "service": "jack",
+          "pid": 21955,
+          "returncode": 0,
+          "seconds": 0.01548331999219954
+        }
+      ]
+    }
+  ],
+  "independent_audit": "All four scoped engineering reports independently raw audited passed; final qualified real verifies all17789applicationidentityfiles, exactnativeinputs/frames/MIDI/releases,4cleanup,actualreal-timeobservations and3binaries+168interpretedruntimefiles",
+  "prior_failures_retained": [
+    "45ce6626eb414d42864e2672dbd9d4d2 stock-real exact F8 origin inapplicable, entire case failed",
+    "e7c3f6db2473405dad9cf41427672a0f qualified real host-stall240phase bracket failed",
+    "All earlier fixture failures remain immutable with distinct receipts"
+  ],
+  "cleanup_inventory": "No matron/crone/sclang/jack/crow process after final pass; no native relaunch planned",
+  "oracles": "Same exact authored744bitmap poses, bounded outside-icon controls, phase/timing tolerances and original musical expectations throughout final accepted real retry",
+  "qualified_real_audit_receipt": "docs/testing/manual-publication-new-kinds/readability-engineering-v10-real-boundary-quiet-audit.json",
+  "runtime_status": "experimental-unadmitted; capability-qualified real-time evidence, no stock runtime or physical norns equivalence"
+}

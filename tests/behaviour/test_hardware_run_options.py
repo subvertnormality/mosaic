@@ -10,6 +10,7 @@ from unittest.mock import patch
 import hardware_performance
 import real_norns
 from real_norns import main as real_norns_main
+from ui import Ui
 
 
 class Trace:
@@ -33,9 +34,12 @@ class Driver:
         self.tempo_bpm = 90
         self.elapsed = []
         self.finished = False
+        self.ui = Ui(self)
     def tap(self, *unused):
         return None
     def led_values(self, *unused):
+        pass
+    def action(self, **unused):
         pass
     def elapse(self, seconds):
         self.elapsed.append(seconds)
@@ -125,6 +129,7 @@ class HardwareRunOptionsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary, \
              patch('real_norns.SSH'), patch('real_norns.Maiden', return_value=Maiden()), \
              patch('real_norns.MaidenInput'), patch('real_norns.Runner', Runner), \
+             patch('real_norns.subprocess.check_output', return_value='isolated-stage'), \
              patch('real_norns.run_hardware_performance', side_effect=lambda *args, **kwargs:
                    calls.append(kwargs) or {'passed': True}):
             status = real_norns.main([

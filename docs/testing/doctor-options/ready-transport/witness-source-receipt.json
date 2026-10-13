@@ -1,0 +1,40 @@
+{
+  "scope": "Additive independent native observation binding for public READY playing Record acceptance",
+  "production_changed": false,
+  "native_launched": false,
+  "expected_red_failures": 1,
+  "expected_red_log": "/home/andy/mosaic-manual-1.4.0/docs/testing/doctor-options/ready-transport/witness-red.log",
+  "unbound_recipe": "/home/andy/mosaic-manual-1.4.0/docs/testing/doctor-options/ready-transport/witness-red-recipe.py",
+  "affected_counts": [
+    4,
+    3,
+    4,
+    5,
+    5
+  ],
+  "affected_total": 21,
+  "affected_green_log": "/home/andy/mosaic-manual-1.4.0/docs/testing/doctor-options/ready-transport/witness-affected-green.log",
+  "witness_names": [
+    "pre_play",
+    "held_record",
+    "released_record",
+    "post_stop_mask",
+    "stopped_bpm",
+    "end"
+  ],
+  "observation_index": "zero-based actual Driver.observations wrapper index",
+  "recipe_index": "executed public input prefix length; next input index",
+  "state_sha256": "SHA256 UTF8 json.dumps(state,sort_keys=True,separators=(comma,colon),ensure_ascii=True)",
+  "frame_sha256": "actual native state.frame.sha256",
+  "sources": {
+    "tests/behaviour/contract/rhythm_doctor_options.py": "baf935a163066dfb81f6160c5137ff6c695b0937fa71f11d24c47768cfdd761d",
+    "tests/behaviour/test_doctor_ready_transport.py": "ececbc90808a0d970f8e68c072f19c9f1358f32321eda34af334ef01ebb74581",
+    "tests/behaviour/suite.py": "602b8c5dd3a8b18a9f7c6f9748bf004203540d1153ef99bb402ff603840813e2",
+    "tools/doctor_options_capture.py": "ad8e4efb823004d36d6af2bb186a218ca56904844d73bd89d29c8f869935422d",
+    "tools/doctor-qualification-inventory.json": "f0c27bddedfd6c7167b2cb9d040f6d85e2285656d82dee7382983cd085b7825b",
+    "tests/rhythm_doctor/run_components.py": "d6848185a1f5fba5546cf07cb8eb13fbf8c2d3cafaca9312498e72874c59cb9d"
+  },
+  "native_qualification": "pending final seven-role capture/audit",
+  "staged_unrun": true,
+  "required_component_campaign": "prepared; waits root native-queue release"
+}

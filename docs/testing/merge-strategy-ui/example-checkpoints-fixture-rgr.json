@@ -1,0 +1,65 @@
+{
+  "capture_plan_baseline": "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148",
+  "baseline_native_behavior_passed_but_capture_failed": true,
+  "candidate_sources": [
+    {
+      "path": "manual/scene-plans-extra.yaml",
+      "sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_feedback.py",
+      "sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f"
+    },
+    {
+      "path": "tests/behaviour/test_merge_strategy_ui_routes.py",
+      "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+    },
+    {
+      "path": "tests/behaviour/merge_strategy_routes.py",
+      "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/example-unfixed-plan.yaml",
+      "sha256": "d1c6d613d32cdf1760977992ccb552ee059b75ee59ceaf71392cfa229acda592"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/example-unfixed-feedback.py",
+      "sha256": "e2c42d52ed5f2f9164c28c1192e28e88480633e29c2bf7d76f7b1898fe0c4048"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/example-red-test-source.py",
+      "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/example-checkpoints-red.log",
+      "sha256": "81e1c65c0de3cb1adf214e35f11b510597f2406cac38ce81093b61538bd02355"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/example-checkpoints-green.log",
+      "sha256": "8701b20bcb98b21a68674a5aef172b5a0397d0c5cf4c1f402469c2a5963cd545"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/example-checkpoints.diff",
+      "sha256": "13dfdc6ab7e36d418be05a881b407f49a7f2bd74f456d8139aef7aef91a073a2"
+    }
+  ],
+  "command": "python3 -m unittest discover -s tests/behaviour -p test_merge_strategy_ui_routes.py",
+  "tests_passed": 12,
+  "unchanged_engineering_step_ids": [
+    "shape-only",
+    "shape-all",
+    "legacy-return"
+  ],
+  "human_strategies": [
+    "Foundation",
+    "All",
+    "Skip"
+  ],
+  "musical_literal_AST_unchanged": true,
+  "production_changed": false,
+  "emulator_changed": false,
+  "live_source_ledger_changed": false,
+  "native_candidate_pending": true
+}

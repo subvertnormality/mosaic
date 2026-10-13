@@ -1,0 +1,10 @@
+{
+  "command": "python3 -m unittest test_manual_case_capture.Checkpoints.test_live_record_replay_tempo_reset_uses_schema_valid_public_encoder_and_selects_one",
+  "exit_code": 1,
+  "expected_failure": "public encoder delta outside schema bounds",
+  "log_sha256": "6b6852f40f40e047d75c4b4baf197373a3e818fb9728112aca6e3c586494f325",
+  "source_sha256": {
+    "tests/behaviour/cases.py": "e0d21d7d20aeff5bc89392a8dd725407afee58803322a0a63d8aabedd4cab408",
+    "tests/behaviour/test_manual_case_capture.py": "327fa32fa3ef39bdfc4f02d46a9abfa1fff1e38c33d075a002bec6964d44ec61"
+  }
+}

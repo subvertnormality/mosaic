@@ -1,0 +1,10848 @@
+schema_version: 1
+fixture_kind: behaviour-case
+trace_contract: The original pinned case replays public inputs and verifies every
+  authored semantic selector; per-scene deltas include native encoder units and waits.
+scenes:
+- id: algorithm-choose-and-preview
+  feature_id: adding-trigs
+  title: Choose a trig algorithm
+  behaviour_case: M-LIVEUI-ALGO-001
+  requirements:
+  - UI-FEEDBACK-ALGORITHM
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-LIVEUI-ALGO-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: euclidean
+    title: Choose Euclidean
+    caption: Tap grid (14,2). The row reads SELECTED and its algorithm fader lights.
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 14
+      y: 2
+      state: 1
+    - type: grid
+      x: 14
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: selected-field
+        label: Euclidean
+        value: SELECTED
+        matched: true
+  - id: focus-drum
+    title: Browse without applying
+    caption: Turn E2 two detents left to Drum. A blank value means the focused algorithm
+      has not been applied.
+    citation: README.md#adding-trigs
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: selected-field
+        label: Drum
+        value: ''
+        matched: true
+  - id: apply-drum
+    title: Apply Drum
+    caption: Press K3. Drum now reads SELECTED; the grid uses the same algorithm.
+    citation: README.md#adding-trigs
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: selected-field
+        label: Drum
+        value: SELECTED
+        matched: true
+  - id: preview-differs
+    title: Compare the preview
+    caption: 'Cancel the Drum preview. Choose Euclidean from Pattern tasks and prime
+      again: the independently checked preview cells differ.'
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: wait
+      seconds: 0.6
+    expect:
+      assertion:
+        kind: prime-uses-selected-algorithm
+        passed: true
+- id: paint-shift-and-cancel
+  feature_id: adding-trigs
+  title: Move a rhythm before committing
+  behaviour_case: M-LIVEUI-PAINT-001
+  requirements:
+  - UI-FEEDBACK-PAINT
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-LIVEUI-PAINT-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: numeric
+    title: Choose Numeric
+    caption: Tap grid (15,2). Numeric gives a sparse preview that makes shifts easy
+      to see.
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 15
+      y: 2
+      state: 1
+    - type: grid
+      x: 15
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: selected-field
+        label: Numeric
+        value: SELECTED
+        matched: true
+  - id: right
+    title: Shift right
+    caption: 'Prime then tap grid (12,8): Shift +1 rotates each preview cell one step
+      right.'
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: wait
+      seconds: 0.6
+    - type: grid
+      x: 12
+      y: 8
+      state: 1
+    - type: grid
+      x: 12
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: wait
+      seconds: 0.6
+    expect:
+      assertion:
+        kind: paint-shift-cells
+        control: shift_right
+        shift: '+1'
+        passed: true
+  - id: left
+    title: Return to zero
+    caption: 'Tap grid (10,8): Shift 0 restores the original preview.'
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 10
+      y: 8
+      state: 1
+    - type: grid
+      x: 10
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: wait
+      seconds: 0.6
+    expect:
+      assertion:
+        kind: paint-shift-cells
+        control: shift_left
+        shift: '0'
+        passed: true
+  - id: before
+    title: Shift left
+    caption: 'Tap grid (10,8) again: Shift -1 rotates each preview cell one step left.'
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 10
+      y: 8
+      state: 1
+    - type: grid
+      x: 10
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: wait
+      seconds: 0.6
+    expect:
+      assertion:
+        kind: paint-shift-cells
+        control: shift_left
+        shift: '-1'
+        passed: true
+  - id: reset
+    title: Reset the shift
+    caption: Tap grid (11,8) to reset the preview to Shift 0.
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 11
+      y: 8
+      state: 1
+    - type: grid
+      x: 11
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    - type: wait
+      seconds: 0.6
+    expect:
+      assertion:
+        kind: paint-shift-cells
+        control: shift_reset
+        shift: '0'
+        passed: true
+  - id: cancel
+    title: Cancel the preview
+    caption: Tap grid (14,8). Preview is OFF, Trigs is NONE, and no preview cells
+      remain.
+    citation: README.md#adding-trigs
+    inputs:
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.6
+    expect:
+      assertion:
+        kind: live-ui-paint-summary
+        passed: true
+- id: merge-overlap-and-union
+  feature_id: merge-modes
+  title: Merge two patterns
+  behaviour_case: M-LIVEUI-MERGEMODES-001
+  requirements:
+  - UI-FEEDBACK-MERGE-MODES
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-LIVEUI-MERGEMODES-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: patterns
+    title: Two source patterns
+    caption: The channel receives patterns 01 and 02. Assign them on the grid; this
+      row is read-only.
+    citation: README.md#merge-modes
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 1
+      state: 1
+    - type: grid
+      x: 2
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: selected-field
+        label: Patterns
+        value: 01 02
+        matched: true
+  - id: skip
+    title: Skip overlap
+    caption: SKIP keeps trigs present in exactly one source pattern.
+    citation: README.md#merge-modes
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: merge-mode
+        row: Trig mode
+        value: SKIP
+        passed: true
+  - id: only
+    title: Keep overlap
+    caption: 'Turn E3: ONLY keeps trigs present in two or more patterns.'
+    citation: README.md#merge-modes
+    inputs:
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: merge-mode
+        row: Trig mode
+        value: ONLY
+        passed: true
+  - id: all
+    title: Play the union
+    caption: 'Turn E3 again: ALL includes every trig from either source.'
+    citation: README.md#merge-modes
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: merge-mode
+        row: Trig mode
+        value: ALL
+        passed: true
+  - id: note-pat2
+    title: Choose a pitch source
+    caption: Select Note mode with E2 and turn E3 through UP, DOWN and PAT 1 to PAT
+      2. Rhythm still merges; notes come from pattern 2.
+    citation: README.md#merge-modes
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: selected-field
+        label: Note mode
+        value: PAT 2
+        matched: true
+  - id: average
+    title: Restore the average
+    caption: Turn E3 back to AVERAGE. Independent MIDI checks confirm the averaged
+      phrase returns.
+    citation: README.md#merge-modes
+    inputs:
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: selected-field
+        label: Note mode
+        value: AVERAGE
+        matched: true
+- id: scale-edit-versus-apply
+  feature_id: scale-editor
+  title: Prepare a scale before applying it
+  behaviour_case: M-SCALE-001
+  requirements:
+  - SCALE-SELECT
+  - SCALE-EDIT
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-SCALE-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: save-unused
+    title: Save an unused scale
+    caption: Hold K1 and select scale 2, change its root to D and press K3. The verified
+      MIDI phrase stays in C while scale 1 remains applied.
+    citation: README.md#scale-editor
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 8
+      state: 1
+    - type: grid
+      x: 4
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 2
+      y: 3
+      state: 1
+    - type: grid
+      x: 2
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: midi
+        complete_cycles: 3
+  - id: apply-d
+    title: Apply D major
+    caption: Tap scale slot 2. The emitted phrase now reads D, E, F sharp and G; the
+      applied slot indicator follows.
+    citation: README.md#scale-editor
+    inputs:
+    - type: grid
+      x: 2
+      y: 3
+      state: 1
+    - type: grid
+      x: 2
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: midi
+        complete_cycles: 3
+  - id: browse-unused
+    title: Browse without changing playback
+    caption: Long-select scale slot 3. The editor changes but the verified phrase
+      remains in D major.
+    citation: README.md#scale-editor
+    inputs:
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: wait
+      seconds: 1.1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: midi
+        complete_cycles: 3
+  - id: turn-off
+    title: Return to chromatic notes
+    caption: Long-select the edit slot again to disable scale mapping. MIDI confirms
+      the chromatic relative intervals C, C sharp, D and D sharp.
+    citation: README.md#scale-editor
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 2
+      y: 3
+      state: 1
+    - type: grid
+      x: 2
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: wait
+      seconds: 1.1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: wait
+      seconds: 1.1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: midi
+        complete_cycles: 3
+- id: song-global-length
+  feature_id: adjusting-song-sequence-length
+  title: Set the global song length
+  behaviour_case: M-LIVEUI-FOCUS-001
+  requirements:
+  - UI-FEEDBACK-GRID-FOCUS
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-LIVEUI-FOCUS-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: shorten
+    title: Shorten by one step
+    caption: Open Song with grid (6,8), then tap (1,7). Global length is 63 on the
+      live dashboard.
+    citation: README.md#adjusting-song-sequence-length
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 2
+      state: 1
+    - type: key
+      n: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 1
+      state: 1
+    - type: grid
+      x: 2
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 9
+      y: 4
+      state: 1
+    - type: grid
+      x: 9
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 6
+      y: 8
+      state: 1
+    - type: grid
+      x: 6
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: dashboard
+        rows:
+        - - Playing
+          - SONG 01
+        - - Next
+          - SONG 01
+        - - Pass
+          - 1 / 1
+        - - Global length
+          - '63'
+        - - Song mode
+          - AUTO
+        passed: true
+  - id: restore
+    title: Return to 64 steps
+    caption: Tap grid (8,7). Global length returns to 64.
+    citation: README.md#adjusting-song-sequence-length
+    inputs:
+    - type: grid
+      x: 8
+      y: 7
+      state: 1
+    - type: grid
+      x: 8
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: dashboard
+        rows:
+        - - Playing
+          - SONG 01
+        - - Next
+          - SONG 01
+        - - Pass
+          - 1 / 1
+        - - Global length
+          - '64'
+        - - Song mode
+          - AUTO
+        passed: true
+- id: channel-routing-visible-scope
+  feature_id: devices
+  title: Keep each channel independent
+  behaviour_case: M-LIVEUI-CHSELECT-001
+  requirements:
+  - UI-FEEDBACK-CHANNEL-SELECT
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-LIVEUI-CHSELECT-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: device1
+    title: Channel 1 has its own output
+    caption: The configured channel shows CC Device on CH01.
+    citation: README.md#norns-menu-navigation
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: selected-field
+        label: Device
+        value: CC Device
+        matched: true
+  - id: device2
+    title: An unused channel has no output
+    caption: Tap grid (2,1). Device stays open on CH02 and shows None.
+    citation: README.md#norns-menu-navigation
+    inputs:
+    - type: grid
+      x: 2
+      y: 1
+      state: 1
+    - type: grid
+      x: 2
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: selected-field
+        label: Device
+        value: None
+        matched: true
+  - id: device1-again
+    title: Return to channel 1
+    caption: Tap grid (1,1). Its CC Device returns.
+    citation: README.md#norns-menu-navigation
+    inputs:
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: selected-field
+        label: Device
+        value: CC Device
+        matched: true
+  - id: clock2
+    title: Give channel 2 a different rate
+    caption: Open Clock, select channel 2, turn E3 down two detents and K3 to apply
+      /2.
+    citation: README.md#norns-menu-navigation
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 1
+      state: 1
+    - type: grid
+      x: 2
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: selected-field
+        label: Rate
+        value: /2
+        matched: true
+  - id: clock1
+    title: Channel 1 keeps its rate
+    caption: Select channel 1. Its Clock page still reads /1.
+    citation: README.md#norns-menu-navigation
+    inputs:
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    expect:
+      assertion:
+        kind: selected-field
+        label: Rate
+        value: /1
+        matched: true
+  - id: clock2-again
+    title: Channel 2 remembers its rate
+    caption: Select channel 2 again. Its Clock page reads /2.
+    citation: README.md#norns-menu-navigation
+    inputs:
+    - type: grid
+      x: 2
+      y: 1
+      state: 1
+    - type: grid
+      x: 2
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    expect:
+      assertion:
+        kind: selected-field
+        label: Rate
+        value: /2
+        matched: true
+- id: pattern-note-range
+  feature_id: adding-notes
+  title: Shape notes across the grid range
+  behaviour_case: M-EDIT-001
+  requirements:
+  - PAT-NOTE-RANGE
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-EDIT-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: initial-note-range
+    title: Choose a scale degree
+    caption: Tap the fourth column note fader. MIDI confirms the fourth note is 71
+      while the first three notes stay unchanged.
+    citation: README.md#adding-notes
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: initial-note-range
+        passed: true
+  - id: first-up-step
+    title: Move the note range up
+    caption: Tap the range-up control and choose the upper value. The fourth MIDI
+      note becomes 72.
+    citation: README.md#adding-notes
+    inputs:
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: first-up-step
+        passed: true
+  - id: hold-to-highest-range
+    title: Reach the upper boundary
+    caption: Hold range up, then choose the upper value. The fourth MIDI note is 83;
+      the next range-up tap clamps here.
+    citation: README.md#adding-notes
+    inputs:
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: wait
+      seconds: 1.1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: hold-to-highest-range
+        passed: true
+  - id: center-restores-root-page
+    title: Return to the central range
+    caption: Tap the central range control and choose the fourth value. The fourth
+      MIDI note returns to 65.
+    citation: README.md#adding-notes
+    inputs:
+    - type: grid
+      x: 14
+      y: 8
+      state: 1
+    - type: grid
+      x: 14
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: wait
+      seconds: 1.1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: grid
+      x: 4
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 15
+      y: 8
+      state: 1
+    - type: grid
+      x: 15
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: center-restores-root-page
+        passed: true
+- id: pattern-velocity-range
+  feature_id: adding-velocity
+  title: Shape accents and rests
+  behaviour_case: M-EDIT-002
+  requirements:
+  - PAT-VELOCITY
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-EDIT-002
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: velocity-127
+    title: Make a strong accent
+    caption: Choose the top velocity in column four. MIDI confirms velocity 127 on
+      the fourth note.
+    citation: README.md#adding-velocity
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: velocity-127
+        passed: true
+  - id: velocity-68
+    title: Soften the accent
+    caption: Choose the lower visible velocity. MIDI confirms 68 while the other three
+      notes keep their velocities.
+    citation: README.md#adding-velocity
+    inputs:
+    - type: grid
+      x: 4
+      y: 2
+      state: 1
+    - type: grid
+      x: 4
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 3
+      state: 1
+    - type: grid
+      x: 4
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 5
+      state: 1
+    - type: grid
+      x: 4
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 6
+      state: 1
+    - type: grid
+      x: 4
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: velocity-68
+        passed: true
+  - id: velocity-0
+    title: Turn an attack into a rest
+    caption: Hold the range-down control and choose the lowest value. The fourth note
+      is absent from the exact MIDI phrase.
+    citation: README.md#adding-velocity
+    inputs:
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 15
+      y: 8
+      state: 1
+    - type: grid
+      x: 15
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: wait
+      seconds: 1.1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 2
+      state: 1
+    - type: grid
+      x: 4
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 3
+      state: 1
+    - type: grid
+      x: 4
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 5
+      state: 1
+    - type: grid
+      x: 4
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 6
+      state: 1
+    - type: grid
+      x: 4
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: velocity-0
+        passed: true
+  - id: hold-to-highest-velocity-range
+    title: Restore full velocity
+    caption: Hold the central range control and choose the top value. The fourth MIDI
+      note returns at velocity 127.
+    citation: README.md#adding-velocity
+    inputs:
+    - type: grid
+      x: 16
+      y: 8
+      state: 1
+    - type: grid
+      x: 16
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 15
+      y: 8
+      state: 1
+    - type: wait
+      seconds: 1.1
+    - type: grid
+      x: 15
+      y: 8
+      state: 0
+    - type: grid
+      x: 4
+      y: 1
+      state: 1
+    - type: grid
+      x: 4
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: hold-to-highest-velocity-range
+        passed: true
+- id: pattern-copy-groups
+  feature_id: adding-notes
+  title: Copy notes and dynamics across all four pages
+  behaviour_case: M-EDIT-003
+  requirements:
+  - PAT-NOTE-SHIFT
+  - PAT-STEP-PAGES
+  - PAT-VELOCITY
+  profile: base-midi
+  setup:
+    fixture: behaviour-case
+    case: M-EDIT-003
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: shift-copies-notes-to-four-groups
+    title: Copy the contour
+    caption: Hold K1 while entering the four note degrees. The semantic grid oracle
+      verifies the same four active degrees on all four pages.
+    citation: README.md#adding-notes
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 4
+      state: 1
+    - type: grid
+      x: 3
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 1
+      state: 1
+    - type: grid
+      x: 1
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 3
+      state: 1
+    - type: grid
+      x: 3
+      y: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 5
+      state: 1
+    - type: grid
+      x: 1
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 5
+      state: 1
+    - type: grid
+      x: 2
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 5
+      state: 1
+    - type: grid
+      x: 4
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 6
+      state: 1
+    - type: grid
+      x: 1
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 6
+      state: 1
+    - type: grid
+      x: 3
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 6
+      state: 1
+    - type: grid
+      x: 4
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 2
+      y: 7
+      state: 1
+    - type: grid
+      x: 2
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 3
+      y: 7
+      state: 1
+    - type: grid
+      x: 3
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 4
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 2
+      y: 6
+      state: 1
+    - type: grid
+      x: 2
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 3
+      y: 5
+      state: 1
+    - type: grid
+      x: 3
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: grid
+      x: 9
+      y: 8
+      state: 1
+    - type: grid
+      x: 9
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 10
+      y: 8
+      state: 1
+    - type: grid
+      x: 10
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 11
+      y: 8
+      state: 1
+    - type: grid
+      x: 11
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 12
+      y: 8
+      state: 1
+    - type: grid
+      x: 12
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: shift-copies-notes-to-four-groups
+        passed: true
+  - id: shift-copies-velocities-to-four-groups
+    title: Copy the dynamics
+    caption: Hold K1 while setting velocities. Each of the four pages shows the corresponding
+      active fader cells.
+    citation: README.md#adding-notes
+    inputs:
+    - type: grid
+      x: 5
+      y: 8
+      state: 1
+    - type: grid
+      x: 5
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 1
+      y: 2
+      state: 1
+    - type: grid
+      x: 1
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 2
+      y: 2
+      state: 1
+    - type: grid
+      x: 2
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 3
+      y: 2
+      state: 1
+    - type: grid
+      x: 3
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: key
+      n: 1
+      state: 1
+    - type: wait
+      seconds: 0.3
+    - type: grid
+      x: 4
+      y: 2
+      state: 1
+    - type: grid
+      x: 4
+      y: 2
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: key
+      n: 1
+      state: 0
+    - type: grid
+      x: 9
+      y: 8
+      state: 1
+    - type: grid
+      x: 9
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 10
+      y: 8
+      state: 1
+    - type: grid
+      x: 10
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 11
+      y: 8
+      state: 1
+    - type: grid
+      x: 11
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 12
+      y: 8
+      state: 1
+    - type: grid
+      x: 12
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: shift-copies-velocities-to-four-groups
+        passed: true
+  - id: play-step-group-4
+    title: Hear the fourth page
+    caption: "Restrict the channel range to steps 49\u201352. The exact emitted phrase\
+      \ is C, D, E, F, each at velocity 117."
+    citation: README.md#adding-notes
+    inputs:
+    - type: grid
+      x: 3
+      y: 8
+      state: 1
+    - type: grid
+      x: 3
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 1
+    - type: grid
+      x: 4
+      y: 4
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 5
+      state: 1
+    - type: grid
+      x: 4
+      y: 5
+      state: 1
+    - type: grid
+      x: 4
+      y: 5
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 5
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 6
+      state: 1
+    - type: grid
+      x: 4
+      y: 6
+      state: 1
+    - type: grid
+      x: 4
+      y: 6
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 6
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 1
+    - type: grid
+      x: 4
+      y: 7
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: grid
+      x: 1
+      y: 7
+      state: 0
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: wait
+      seconds: 0.03
+    - type: grid
+      x: 1
+      y: 8
+      state: 1
+    - type: grid
+      x: 1
+      y: 8
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: workflow-check
+        name: play-step-group-4
+        passed: true

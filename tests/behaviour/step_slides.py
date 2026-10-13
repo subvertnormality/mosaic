@@ -7,19 +7,19 @@ with wrap on it moves linearly to the wrapped first lock, arriving with it.
 """
 
 def step_slide_variants(c):
-    from cases import assign_trig_parameter,set_mosaic_options
-    from patch_params import open_patch_control,turn
-    from cases import menu_value
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    ui = c.ui
+    ui.open_patch_control();ui.turn_patch_control(63);ui.turn_patch_control(1);ui.expect_menu_value('63');ui.press_key(1)
+    ui.channel_page('trig_locks','midi_config',confirm=False);ui.assign_trig_parameter('CC 1')
     for step,value in [(1,24),(3,96),(4,48)]:
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    def step_k3(step):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.key(3)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with ui.hold_step(step):
+            c.elapse(.05);ui.encoder_event(3,-126);ui.set_value(value+1)
+            # README.md#trig-param-locks: the held step's slot shows its own value with an L.
+            ui.expect_selected_param(1,value,marker='L')
+    def step_k3(step,value,marker):
+        with ui.hold_step(step):
+            ui.press_key(3)
+            # README.md#param-slides: a slide on the held step shows S; toggled off the lock shows L again.
+            ui.expect_selected_param(1,value,marker=marker)
         c.elapse(.1)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
@@ -30,7 +30,7 @@ def step_slide_variants(c):
         return notes,events
     def between(events,a,b):return [m for m in events if a['index']<m['index']<b['index'] and m['bytes'][:2]==[176,1]]
     # 1) Toggle a step slide on and off: the source jumps straight to its destination.
-    step_k3(1);step_k3(1)
+    step_k3(1,24,'S');step_k3(1,24,'L')
     notes,events=run()
     for cycle in range(2):
         inner=[m['bytes'][2] for m in between(events,notes[4*cycle],notes[4*cycle+2])]
@@ -39,7 +39,7 @@ def step_slide_variants(c):
         assert arrival and arrival[-1]['bytes'][2]==96,('Destination lock missing',arrival)
     c.results.append(dict(kind='step-slide',stage='toggled-off-jumps',passed=True))
     # 2) A step slide on the last lock, wrap off: nothing to slide toward.
-    step_k3(4)
+    step_k3(4,48,'S')
     notes,events=run()
     for cycle in range(1):
         inner=[m['bytes'][2] for m in between(events,notes[4*cycle+3],notes[4*cycle+4])]
@@ -48,9 +48,8 @@ def step_slide_variants(c):
     c.results.append(dict(kind='step-slide',stage='last-lock-no-wrap',passed=True))
     # 3) Wrap on: the last lock moves linearly to the wrapped first lock.
     # norns reopens the menu inside the patch group; return to its top level first.
-    from cases import menu_label
-    c.key(1);c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
-    set_mosaic_options(c,[('Wrap param slides',True)])
+    ui.press_key(1);ui.press_key(2);ui.turn(2,-60);ui.expect_menu_label('LEVELS >');ui.press_key(2);ui.press_key(1)
+    ui.set_mosaic_options([('Wrap param slides',True)])
     notes,events=run()
     samples=[]
     for cycle in range(1):

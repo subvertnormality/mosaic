@@ -1,0 +1,743 @@
+{
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci",
+  "history": {
+    "previous_snapshot": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/snapshot.json",
+      "sha256": "19c1436619a0beebd65938f1c17263d3e6822de87071a4e8aaccc3605bce78ef"
+    },
+    "previous_qualification": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-dashboard-phase-gates-6170ac48/qualification-pins.json",
+      "sha256": "f1328f7f14023e02c48e1cbc4335453b56348d6f498f3a7a0ff9c4c87348fe10"
+    },
+    "all_prior_sources_and_results_immutable": true
+  },
+  "current_nonmember_pins": [
+    {
+      "path": ".github/scripts/manual-build.sh",
+      "sha256": "daa921e910d9298ec908ba38b0e7094427140882940127e7aaec041fecfdd401",
+      "preserved_path": "qualification-source-bytes/.github/scripts/manual-build.sh"
+    },
+    {
+      "path": ".github/scripts/manual-site-smoke.cjs",
+      "sha256": "2a09e7cf8add42bb76f918335b67f582206fa65117bb2825505813f96310595b",
+      "preserved_path": "qualification-source-bytes/.github/scripts/manual-site-smoke.cjs"
+    },
+    {
+      "path": ".github/scripts/manual_artifact.py",
+      "sha256": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
+      "preserved_path": "qualification-source-bytes/.github/scripts/manual_artifact.py"
+    },
+    {
+      "path": ".github/scripts/manual_runtime.py",
+      "sha256": "b9fc9bc69c011262e3b014483dfe561b63bd3fa7745b09a12905d435381761e2",
+      "preserved_path": "qualification-source-bytes/.github/scripts/manual_runtime.py"
+    },
+    {
+      "path": ".github/scripts/publish_manual.py",
+      "sha256": "1bf377e658ac6c38006ec42654d433d17760526533ac9e49753bf1ba420286df",
+      "preserved_path": "qualification-source-bytes/.github/scripts/publish_manual.py"
+    },
+    {
+      "path": ".github/workflows/manual-build.yml",
+      "sha256": "a3aa1d41578e1fc4886278c9c02ced8e605ba38ee809922a5f96904f1759049d",
+      "preserved_path": "qualification-source-bytes/.github/workflows/manual-build.yml"
+    },
+    {
+      "path": ".github/workflows/manual-publish.yml",
+      "sha256": "af1b701f693a7066f827be27698a12f3b1a8bf55924a77ee09d356c3e8f0f597",
+      "preserved_path": "qualification-source-bytes/.github/workflows/manual-publish.yml"
+    },
+    {
+      "path": "docs/ui-reimplementation/tools/reconcile_manual_build.py",
+      "sha256": "387f549f69147003be47d17ddef9cc2085c3665a91ebc61daa840dea9f140b95",
+      "preserved_path": "qualification-source-bytes/docs/ui-reimplementation/tools/reconcile_manual_build.py"
+    },
+    {
+      "path": "docs/ui-reimplementation/tools/test_reconcile_manual_build.py",
+      "sha256": "3c4b7069967eb64bc0f3b001212658391ee240e0da9143a9e66d861f965dbe65",
+      "preserved_path": "qualification-source-bytes/docs/ui-reimplementation/tools/test_reconcile_manual_build.py"
+    },
+    {
+      "path": "lib/tests/lib/ui_live_tests.lua",
+      "sha256": "58024da1288998c7b5311a70438afdbb1ec0108fbb39ddcb98c7c91c874ad0ee",
+      "preserved_path": "qualification-source-bytes/lib/tests/lib/ui_live_tests.lua"
+    },
+    {
+      "path": "manual/BUILD.md",
+      "sha256": "e7c2024f3037cd3d54817bfae6a7b0005647f823d2f21d17fb310e9cc2b1c15a",
+      "preserved_path": "qualification-source-bytes/manual/BUILD.md"
+    },
+    {
+      "path": "manual/VOICES.md",
+      "sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+      "preserved_path": "qualification-source-bytes/manual/VOICES.md"
+    },
+    {
+      "path": "manual/book.schema.json",
+      "sha256": "fef9bf3a4993cfbe24a05f8bcf1215533a93a8b3cb1b5a5f04bddf4d1bb72038",
+      "preserved_path": "qualification-source-bytes/manual/book.schema.json"
+    },
+    {
+      "path": "manual/course.schema.json",
+      "sha256": "0f4120a691476d539522fce1ee3858ce1024f168131e958d58e17a673504d1f7",
+      "preserved_path": "qualification-source-bytes/manual/course.schema.json"
+    },
+    {
+      "path": "manual/scene-plans-course.yaml",
+      "sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+      "preserved_path": "qualification-source-bytes/manual/scene-plans-course.yaml"
+    },
+    {
+      "path": "manual/scene-plans-extra.yaml",
+      "sha256": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5",
+      "preserved_path": "qualification-source-bytes/manual/scene-plans-extra.yaml"
+    },
+    {
+      "path": "manual/scene-plans-musical.yaml",
+      "sha256": "3db17925ed6199acde01aee88b06fa98311bcd371a83c5da31f8b35b5b52bfc8",
+      "preserved_path": "qualification-source-bytes/manual/scene-plans-musical.yaml"
+    },
+    {
+      "path": "manual/scene-plans.yaml",
+      "sha256": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791",
+      "preserved_path": "qualification-source-bytes/manual/scene-plans.yaml"
+    },
+    {
+      "path": "manual/schema.json",
+      "sha256": "5b7dc7115541c43fa1dbdac161cf39355772aa7c88e5d92f9c5f42a898fbc954",
+      "preserved_path": "qualification-source-bytes/manual/schema.json"
+    },
+    {
+      "path": "tests/behaviour/cases.py",
+      "sha256": "440fd85e793f6985411069a95573f89fd4e87a27ad19310b88b0e97d4c1820bf",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/cases.py"
+    },
+    {
+      "path": "tests/behaviour/contract/harmony_merge_visual.py",
+      "sha256": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/contract/harmony_merge_visual.py"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_feedback.py",
+      "sha256": "47682bb0536f3506386f558759cc898ed9c2a01606e2b6d25092bb8a7c78ffdd",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/contract/live_ui_feedback.py"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_sweep.py",
+      "sha256": "ff2bd9cb2304e2cf99d7c03bc3a5c6206679c400e02af6fb93d5c2d04c523a1a",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/contract/live_ui_sweep.py"
+    },
+    {
+      "path": "tests/behaviour/contract/lock_lead_clock_matrix.py",
+      "sha256": "1f8f7f65f59e776f69aadc6c9becfa51a72f24a205407b0f83088539be3e3ba4",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/contract/lock_lead_clock_matrix.py"
+    },
+    {
+      "path": "tests/behaviour/contract/mini_phase_oracle.py",
+      "sha256": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/contract/mini_phase_oracle.py"
+    },
+    {
+      "path": "tests/behaviour/fixtures/harmony-no-voicing-native-obs44.json",
+      "sha256": "41cd1bc5dc68d5e7387e8e1cb67dd0772530da4564c93b0217606cf6dbdc1be7",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/fixtures/harmony-no-voicing-native-obs44.json"
+    },
+    {
+      "path": "tests/behaviour/manual_audio_contract.py",
+      "sha256": "c716178137201fdc9bae4af26b0cd907c450fc49cee543740c21f59fed3e67fb",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/manual_audio_contract.py"
+    },
+    {
+      "path": "tests/behaviour/manual_authority.py",
+      "sha256": "02a730b973a1ce986cdab643aee388d143a78f2bbde0c8b1330257b7a4c8d88c",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/manual_authority.py"
+    },
+    {
+      "path": "tests/behaviour/merge_strategy_routes.py",
+      "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/merge_strategy_routes.py"
+    },
+    {
+      "path": "tests/behaviour/mini_phase_oracle.py",
+      "sha256": "09e822da182bacde9516a0f318291ed94d5215ca1e9b367f49f8ec05fd73738f",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/mini_phase_oracle.py"
+    },
+    {
+      "path": "tests/behaviour/suite.py",
+      "sha256": "1c3653ab614f4a6e1f0773c52396b1812516090f0ea9b814031b81f48202d091",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/suite.py"
+    },
+    {
+      "path": "tests/behaviour/test_lock_lead_owner.py",
+      "sha256": "290b62792c695b64c2682794941559bf3ee2d2ce36fb32b115257394c7a7f84c",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_lock_lead_owner.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_authority.py",
+      "sha256": "9c33f4471870f742ec3099b5a0137f06ec764f2fdcdddcaa88865a6710262fb4",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_authority.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_book.py",
+      "sha256": "95aac15dabf023c57634c57434e76ab1c6886c3d9188e76ecd01bf3c13cf025d",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_book.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_build.py",
+      "sha256": "460b17fd6b4885d65b1a7e7515a7319a3b9c98bc7806433cc8446189ec26ae77",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_build.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_capture.py",
+      "sha256": "eea02adb476a6afc940244e4e3d699c524e85e82360eb0cf9a9c4ca4d605444f",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_capture.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_case_capture.py",
+      "sha256": "f99e10cf9a01cfb349336321a6900b0c6db52da286e7953628bac1c3a6e978c6",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_case_capture.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_controlled_generation_integrity.py",
+      "sha256": "a4214ef0190631b16569c9b197ca4114ee6f8925d76c13c637f3e6a178a9e612",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_controlled_generation_integrity.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_course_bind.py",
+      "sha256": "cb82406f5ee6e5b36d515e221cac8daba4a883dbdf9b3f1347bc247efc31c809",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_course_bind.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_documentation_frame_selectors.py",
+      "sha256": "36a50bd867515ac573e95af8690da17ffb017cd2ac0c103e32a0cb8eb5c1add4",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_documentation_frame_selectors.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_feature_bind.py",
+      "sha256": "6d0c81caf12bef0d2230305acd78b7d80186923c8ea962bd9974f1af35d033cb",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_feature_bind.py"
+    },
+    {
+      "path": "tests/behaviour/test_manual_publication_verify.py",
+      "sha256": "32d9f2bfb6293bafff4003041dd213d5534b8ede7abdd27fbc1b9664b4b6ec89",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_manual_publication_verify.py"
+    },
+    {
+      "path": "tests/behaviour/test_merge_strategy_ui_routes.py",
+      "sha256": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_merge_strategy_ui_routes.py"
+    },
+    {
+      "path": "tests/behaviour/test_mini_header_animation_ui.py",
+      "sha256": "3664f8b3043c6fc41db5917ab1e4152fdfb873869d0f6c584878ba056cbea755",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_mini_header_animation_ui.py"
+    },
+    {
+      "path": "tests/behaviour/test_mini_phase_oracle.py",
+      "sha256": "61c41d4e5fb724914696f2cd1f37e3ddf21f40e9a35bf7f47257d5ceb7f36ed0",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_mini_phase_oracle.py"
+    },
+    {
+      "path": "tests/behaviour/test_ui.py",
+      "sha256": "2f3a899d3a7b14f08c44eb15c51f7f8c4547ee13cb30046398c6f311eea6fc75",
+      "preserved_path": "qualification-source-bytes/tests/behaviour/test_ui.py"
+    },
+    {
+      "path": "tests/manual_ci/test_build_manual.py",
+      "sha256": "35fe1fd286a69982f11518e71fafb7e3f08d598d415bcae35ada3c435ce58276",
+      "preserved_path": "qualification-source-bytes/tests/manual_ci/test_build_manual.py"
+    },
+    {
+      "path": "tests/manual_ci/test_publish_manual.py",
+      "sha256": "a34f1798a2dd008bdb5d30c89dcbfbcab6d046890cc95dc5b3285d182d472950",
+      "preserved_path": "qualification-source-bytes/tests/manual_ci/test_publish_manual.py"
+    },
+    {
+      "path": "tools/manual_audio.py",
+      "sha256": "33c12d17c053452a891a8c047d0cb4dac60d85ca58466617d456a8c3e1d73f8a",
+      "preserved_path": "qualification-source-bytes/tools/manual_audio.py"
+    },
+    {
+      "path": "tools/manual_book.py",
+      "sha256": "9a33afe212b7fbd78806c91ec74392ab7e8867ffa7a02a62fb1ff44e03602611",
+      "preserved_path": "qualification-source-bytes/tools/manual_book.py"
+    },
+    {
+      "path": "tools/manual_build.py",
+      "sha256": "7ec922bb6a8118e174aaadbe8483a6aa164bf00e95c483778b8df54df4cd053e",
+      "preserved_path": "qualification-source-bytes/tools/manual_build.py"
+    },
+    {
+      "path": "tools/manual_capture.py",
+      "sha256": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+      "preserved_path": "qualification-source-bytes/tools/manual_capture.py"
+    },
+    {
+      "path": "tools/manual_case_capture.py",
+      "sha256": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+      "preserved_path": "qualification-source-bytes/tools/manual_case_capture.py"
+    },
+    {
+      "path": "tools/manual_closure_cases.py",
+      "sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+      "preserved_path": "qualification-source-bytes/tools/manual_closure_cases.py"
+    },
+    {
+      "path": "tools/manual_course_bind.py",
+      "sha256": "f19701ed67e4e45ca97e4854f25a7dbdc87a72244c3e6e6e1f7c6a9a5318a1e9",
+      "preserved_path": "qualification-source-bytes/tools/manual_course_bind.py"
+    },
+    {
+      "path": "tools/manual_course_cases.py",
+      "sha256": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5",
+      "preserved_path": "qualification-source-bytes/tools/manual_course_cases.py"
+    },
+    {
+      "path": "tools/manual_feature_bind.py",
+      "sha256": "4fdd27c0a5ccff772f6ff67456e574a6d4349201ca64093ba147137c52e2b3ff",
+      "preserved_path": "qualification-source-bytes/tools/manual_feature_bind.py"
+    },
+    {
+      "path": "tools/manual_publication_verify.py",
+      "sha256": "0b53fa7eda495dbd4520880099ccf2a99d111badf95bd418c7c6646175de4d61",
+      "preserved_path": "qualification-source-bytes/tools/manual_publication_verify.py"
+    },
+    {
+      "path": "tools/manual_reconcile_build.py",
+      "sha256": "c52cffddd8fd64a54b9f3043b2aaed0d96886a05d681dbb8dedc422aa168b404",
+      "preserved_path": "qualification-source-bytes/tools/manual_reconcile_build.py"
+    },
+    {
+      "path": "tools/test_manual_reconcile_build.py",
+      "sha256": "497e02078d59b54c8d48cc9287fba479f1facb4d729a2f115fec8870e654e954",
+      "preserved_path": "qualification-source-bytes/tools/test_manual_reconcile_build.py"
+    },
+    {
+      "path": "tools/test_manual_audio_configuration.py",
+      "sha256": "54e8155f76cd6eb630108adc24f380756a7062701aba86e1ac91b7eb9030d02e",
+      "preserved_path": "qualification-source-bytes/tools/test_manual_audio_configuration.py"
+    },
+    {
+      "path": "tools/resume_adoption.py",
+      "sha256": "78c977b9b6f5087ea24bc5df58f7328cbb99d99e5ad17eff76043b537d8d54c3",
+      "preserved_path": "qualification-source-bytes/tools/resume_adoption.py"
+    },
+    {
+      "path": "tools/test_manual_resume_adoption.py",
+      "sha256": "9f5eb95ed7b8b1c5d1de2d796e08343e39034503c28efad5be3e8d73bc724168",
+      "preserved_path": "qualification-source-bytes/tools/test_manual_resume_adoption.py"
+    }
+  ],
+  "supporting_architecture_guards": [
+    {
+      "path": "tests/behaviour/ui_layer_guard.py",
+      "sha256": "ccc5c2662e091c39a787228f10ec53f4dedb8f4420c674eba5f211144dcef14e",
+      "preserved_path": "qualification-supporting-guards/tests/behaviour/ui_layer_guard.py"
+    },
+    {
+      "path": "tests/behaviour/contract_cases.json",
+      "sha256": "9d678a2a0e147d39850209c18e120bcdd9ab3968869ded8cc0b8cdc0590a7e89",
+      "preserved_path": "qualification-supporting-guards/tests/behaviour/contract_cases.json"
+    },
+    {
+      "path": "tests/behaviour/test_ui_layer.py",
+      "sha256": "882397c160243a3d1657b24c807ca8d479a0938714ce997a766fe1b6ed742cd0",
+      "preserved_path": "qualification-supporting-guards/tests/behaviour/test_ui_layer.py"
+    }
+  ],
+  "supporting_harmony_assets": [
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/images/harmony-tone-map.png",
+      "sha256": "9ada7d5dfae6b9d849e19f4228b1475459595d3f9eefe57af08ef87904e6f823",
+      "preserved_path": "qualification-supporting-assets/images/harmony-tone-map.png"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/images/harmony-no-voicing.png",
+      "sha256": "f55f4b3fb68a92d1721a928b3e587ba0716dc174ab05a9cf1e4bb6d094eac7ea",
+      "preserved_path": "qualification-supporting-assets/images/harmony-no-voicing.png"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/images/merge-shape-foundation.png",
+      "sha256": "1dac205f0379af973f62703cc49507cddacea68d019fcac9a172d46ec7ea9850",
+      "preserved_path": "qualification-supporting-assets/images/merge-shape-foundation.png"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/images/merge-shape-fragments.png",
+      "sha256": "7984c43100cc0c290f1f9639d32ed0aae7102f10c0d7efa03e8c3f3afa6f014a",
+      "preserved_path": "qualification-supporting-assets/images/merge-shape-fragments.png"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/images/merge-shape-interlock.png",
+      "sha256": "533d8bbbb5553040db390a0dd79c89873fd58a37b1f8d8a1a218c62bbbb5f4e2",
+      "preserved_path": "qualification-supporting-assets/images/merge-shape-interlock.png"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/images/merge-shape-structure.png",
+      "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223",
+      "preserved_path": "qualification-supporting-assets/images/merge-shape-structure.png"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/mini_header_atlas_v2.json",
+      "sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+      "preserved_path": "qualification-supporting-assets/tests/behaviour/contract/mini_header_atlas_v2.json"
+    }
+  ],
+  "qualification_receipts": {
+    "source-review/check-0.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/check-0.log",
+      "sha256": "83df7e932109b64aae88f776dee0bf6b6abe55ea3c710cfb85e2bf3cd27a2a7c",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/check-0.log"
+    },
+    "source-review/strict-checks.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/strict-checks.json",
+      "sha256": "622ed8d0bd75d7f4fc974c10c047dd76e5b8487fd3886942701fd3985ad97ec9",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/strict-checks.json"
+    },
+    "source-review/check-1.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/check-1.log",
+      "sha256": "e689a30017065f041e8fd6eb76a56415876e025c4083369297a5172df1ec7848",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/check-1.log"
+    },
+    "source-review/application-receipt.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/application-receipt.json",
+      "sha256": "c4023979911e8a6bccb2c98c1098b55baaaf17919b37a85185020622d078c179",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/application-receipt.json"
+    },
+    "source-review/bounded-source-review-receipt.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/bounded-source-review-receipt.json",
+      "sha256": "c0f508ddf25b48a4428014e5bf867881fbf609001bea01d2ed981a1b83232d26",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/bounded-source-review-receipt.json"
+    },
+    "source-review/before/docs/ui-reimplementation/source-inventory.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/source-inventory.json",
+      "sha256": "126ac9d0b9adc7f6321de8938ce30dfec9fb3b163e0c7a0a6465be402bd64c1e",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/before/docs/ui-reimplementation/source-inventory.json"
+    },
+    "source-review/before/docs/ui-reimplementation/current-source-review.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/current-source-review.json",
+      "sha256": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/before/docs/ui-reimplementation/current-source-review.json"
+    },
+    "source-review/before/docs/ui-reimplementation/generated/source-review-receipt.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/generated/source-review-receipt.json",
+      "sha256": "6bce24656ba00973c806d02bdbdb6db7fdfc843a6e5d91aca790404bd9ee5025",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/source-review/before/docs/ui-reimplementation/generated/source-review-receipt.json"
+    },
+    "review-draft/original-generation-context.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/original-generation-context.json",
+      "sha256": "f60ed54a66a8a9f4b656ff0fee195b191421d25f9da39a5fda90f98bcb217e12",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/original-generation-context.json"
+    },
+    "review-draft/cookbook.diff": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/cookbook.diff",
+      "sha256": "ae5387aa7cbc678903b9d21635885e3f42cef3c63df461aa134f9d2180ef3d89",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/cookbook.diff"
+    },
+    "review-draft/pilot.capture-original.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/pilot.capture-original.json",
+      "sha256": "00218cf3e08628ba2da426a68110250399f6aee0b6d4a79c925434e000b5f9a2",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/pilot.capture-original.json"
+    },
+    "review-draft/ghost-root-installation.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/ghost-root-installation.json",
+      "sha256": "5b557e7e4314a53d35fea756b30b2d0de2b666eeb5173a66bc1b6afd25b65726",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/ghost-root-installation.json"
+    },
+    "review-draft/pilot.live.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/pilot.live.json",
+      "sha256": "3a9a9150fb9775d652d3231beb3e9b95db04fed8704f7144c32da0952e890e46",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/pilot.live.json"
+    },
+    "review-draft/masks-saved-result-validation.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/masks-saved-result-validation.json",
+      "sha256": "fd327f045c00826dfc0da5123a555df8dd7369f4d769afb01b928844ce63b9df",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/masks-saved-result-validation.json"
+    },
+    "review-draft/review-delta.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/review-delta.json",
+      "sha256": "41793a8bdc55ba2173802d65b9f970a488fdd3366d8e8f799c322353d0001648",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/review-delta.json"
+    },
+    "review-draft/cookbook.before.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/cookbook.before.yaml",
+      "sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/cookbook.before.yaml"
+    },
+    "review-draft/ghost-root-native-green.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/ghost-root-native-green.json",
+      "sha256": "d481ab5957a53b7e71a5d690c353cec63bf4f0b7b77f6a7a0e50c8b2472bc1bf",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/ghost-root-native-green.json"
+    },
+    "review-draft/cookbook.after.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/cookbook.after.yaml",
+      "sha256": "af43f4a5bda3c90e712e9ab9278f424d4ae9e9cacf92b4f63bafe20376f8df67",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/cookbook.after.yaml"
+    },
+    "review-draft/ghost-manifest.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/ghost-manifest.json",
+      "sha256": "26475dd7efc00abb0ceb4df8d3b08db2dff55eaf0dfc1c106fd789c35561a4de",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/ghost-manifest.json"
+    },
+    "review-draft/original-failed-manifest.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/original-failed-manifest.json",
+      "sha256": "7a074c5e5de8eafd3d1191bfed1ded1911baca384f4378632761f3d79ed94f87",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/original-failed-manifest.json"
+    },
+    "review-draft/exact-reproduction/manual/features/scenes-reference-workflow-scenes.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-workflow-scenes.yaml",
+      "sha256": "a6d493556c663cc294db9f7ae6035dd8113d3052825d07b9505c9fe6e4fafa1a",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/exact-reproduction/manual/features/scenes-reference-workflow-scenes.yaml"
+    },
+    "review-draft/exact-reproduction/manual/features/scenes-doctor-scenes.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-doctor-scenes.yaml",
+      "sha256": "e937d5567481348aa7800657b24b97bd0bf66859ed02fc21d686cfdc9e0d74ee",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/exact-reproduction/manual/features/scenes-doctor-scenes.yaml"
+    },
+    "review-draft/exact-reproduction/manual/features/scenes-reference-remaining-scenes.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-remaining-scenes.yaml",
+      "sha256": "119dfbdaf993f1d78462d407d4e374306625a402755b659ba2f6f5f57033af1c",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/exact-reproduction/manual/features/scenes-reference-remaining-scenes.yaml"
+    },
+    "review-draft/exact-reproduction/manual/features/scenes-reference-scenes.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-scenes.yaml",
+      "sha256": "c664c494e7121360fa110a953f7eb49a14731e77f851482ce0ae13fdd2aa33d8",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/exact-reproduction/manual/features/scenes-reference-scenes.yaml"
+    },
+    "review-draft/exact-reproduction/manual/features/scenes-reference-vertical-list-scenes.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/next-resume-candidate-review-draft-42bd0d2afdf845789dc87aaa00750ea2/exact-reproduction/manual/features/scenes-reference-vertical-list-scenes.yaml",
+      "sha256": "77b88ac21ba47bc1d38811b9986bac6a97872b738a88753fdde81c0a1131a0fc",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/review-draft/exact-reproduction/manual/features/scenes-reference-vertical-list-scenes.yaml"
+    },
+    "resume-tools/final-qualification.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-prototype-20261004/final-qualification.json",
+      "sha256": "d14faf4efd93d7386028b1a77dbaa426a18a6fd2bf4416ddae31889a2eb31690",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/resume-tools/final-qualification.json"
+    },
+    "resume-tools/root-installation.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-prototype-20261004/root-installation.json",
+      "sha256": "7b8b69fdd927bf2997a7240414a96c1ee83b6c68767a524b8397a7d75f8cad08",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/resume-tools/root-installation.json"
+    },
+    "resume-tools/root-installed-tests.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-prototype-20261004/root-installed-tests.log",
+      "sha256": "f13e0fab01180daf6cd406e83f61b6e32ed03ea0aab7b2903ec7408d749085d9",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/resume-tools/root-installed-tests.log"
+    },
+    "resume-tools/final-review.diff": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-prototype-20261004/final-review.diff",
+      "sha256": "bf3887eb24add537ea8dd1b3555594e660655f46c98e66e066df73b13123e653",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/resume-tools/final-review.diff"
+    },
+    "actual-resume-preparation/BUILD-before.md": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-43-resume-077b-841eaad81b454426bdf53d8a15514a6b/BUILD-before.md",
+      "sha256": "377059de6d6c86e0e346396a3c367e5d541bf848828d8ed1377c1c03962df7c9",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/actual-resume-preparation/BUILD-before.md"
+    },
+    "actual-resume-preparation/BUILD-after.md": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-43-resume-077b-841eaad81b454426bdf53d8a15514a6b/BUILD-after.md",
+      "sha256": "e7c2024f3037cd3d54817bfae6a7b0005647f823d2f21d17fb310e9cc2b1c15a",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/actual-resume-preparation/BUILD-after.md"
+    },
+    "actual-resume-preparation/BUILD-change.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-43-resume-077b-841eaad81b454426bdf53d8a15514a6b/BUILD-change.json",
+      "sha256": "becf72d00a0cd340f1f969be6a9b7b0057b9d0770d20a67af2e39cd1e35ddaef",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/actual-resume-preparation/BUILD-change.json"
+    },
+    "actual-resume-preparation/argv.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-43-resume-077b-841eaad81b454426bdf53d8a15514a6b/argv.json",
+      "sha256": "acdb6341ea642fdeaf9f1bb4936c72282a3a26237c7c16e4857b7e38de58cce9",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/actual-resume-preparation/argv.json"
+    },
+    "actual-resume-preparation/preparation.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/controlled-local-43-resume-077b-841eaad81b454426bdf53d8a15514a6b/preparation.json",
+      "sha256": "73b9db74c635c13cb6a37a8b664a7514b0e938f521c128420fc06daac954811f",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/actual-resume-preparation/preparation.json"
+    },
+    "reconcile-endpoint/manual_reconcile_build.py.diff": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/manual_reconcile_build.py.diff",
+      "sha256": "2a4d8c501c4713101ab6e2719129b99c8826b012dd43c0f748e2861a74a6b26b",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/manual_reconcile_build.py.diff"
+    },
+    "reconcile-endpoint/qualification-receipt.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/qualification-receipt.json",
+      "sha256": "33c07111e7b53b00634dc22f5f4525423e0dad72e18c04f43e9ea417a3c7ce77",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/qualification-receipt.json"
+    },
+    "reconcile-endpoint/test_manual_reconcile_build.py.diff": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/test_manual_reconcile_build.py.diff",
+      "sha256": "56fefe1329864cd502ce380d0a11ef71fce32be25c08ab75d661b4649e244fb6",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/test_manual_reconcile_build.py.diff"
+    },
+    "reconcile-endpoint/adapter-green.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/adapter-green.log",
+      "sha256": "c33da458566e46279ad1290fa79d90dd1b1dc19d3678511374c9af9ccb7fc774",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/adapter-green.log"
+    },
+    "reconcile-endpoint/root-installation.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/root-installation.json",
+      "sha256": "4f14bcd7b3578d891590068c734312a3954a455eb95890e02be5d2d7c817e67c",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/root-installation.json"
+    },
+    "reconcile-endpoint/test_endpoint_portability.py": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/test_endpoint_portability.py",
+      "sha256": "56dbd7bf8d23c54b413c91028230745b7a07bc38d08e6a83966183c3fe1541f5",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/test_endpoint_portability.py"
+    },
+    "reconcile-endpoint/root-installed-tests.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/root-installed-tests.log",
+      "sha256": "360edd07499507ce60eb3a84a41a81affbdcff645b6846d355fced91ea9d1f33",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/root-installed-tests.log"
+    },
+    "reconcile-endpoint/actual-workflow-endpoint-green.yaml": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/actual-workflow-endpoint-green.yaml",
+      "sha256": "a6d493556c663cc294db9f7ae6035dd8113d3052825d07b9505c9fe6e4fafa1a",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/actual-workflow-endpoint-green.yaml"
+    },
+    "reconcile-endpoint/portable-green.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/portable-green.log",
+      "sha256": "3bc05f7cda5115d24aa1e42646d7629dfbde2b7e82dc6381d5c14aaa82bf19a9",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/portable-green.log"
+    },
+    "reconcile-endpoint/adapter-red.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/manual-reconcile-endpoint-candidate-4c263f1da59747ae9825877fc340a048/adapter-red.log",
+      "sha256": "44ef10f3075bec7afccc4768790ae6c583d6cfad6783887dcfff8fa563ba01f5",
+      "preserved_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-receipts/reconcile-endpoint/adapter-red.log"
+    }
+  },
+  "source_review_member_deltas": [
+    {
+      "path": "manual/features/cookbook.yaml",
+      "before_sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+      "after_sha256": "af43f4a5bda3c90e712e9ab9278f424d4ae9e9cacf92b4f63bafe20376f8df67"
+    },
+    {
+      "path": "manual/features/scenes-doctor-scenes.yaml",
+      "before_sha256": "09bab660df9b7b98bafaa03f7a432dc85602d1c16f7ea0e3ab0b85ced1117359",
+      "after_sha256": "e937d5567481348aa7800657b24b97bd0bf66859ed02fc21d686cfdc9e0d74ee"
+    },
+    {
+      "path": "manual/features/scenes-reference-remaining-scenes.yaml",
+      "before_sha256": "8c7ecaa953f52f9c5a79a0fdf4e1eef0234f222af2514320c077225aacef4a94",
+      "after_sha256": "119dfbdaf993f1d78462d407d4e374306625a402755b659ba2f6f5f57033af1c"
+    },
+    {
+      "path": "manual/features/scenes-reference-scenes.yaml",
+      "before_sha256": "039b06d5a7ee9b3cea172782781257da6be7bd0f9d7f9592d99c617378e9f1fc",
+      "after_sha256": "c664c494e7121360fa110a953f7eb49a14731e77f851482ce0ae13fdd2aa33d8"
+    },
+    {
+      "path": "manual/features/scenes-reference-vertical-list-scenes.yaml",
+      "before_sha256": "49d96e0793e08b323b9f314bc559b4b3d5734654d61ad83b1485a82b39f69c85",
+      "after_sha256": "77b88ac21ba47bc1d38811b9986bac6a97872b738a88753fdde81c0a1131a0fc"
+    },
+    {
+      "path": "manual/features/scenes-reference-workflow-scenes.yaml",
+      "before_sha256": "a2f58bc29bd6eb9624b33ac7b1bb73ba07c4f6042bc6c1a2a7867e09ede20b30",
+      "after_sha256": "a6d493556c663cc294db9f7ae6035dd8113d3052825d07b9505c9fe6e4fafa1a"
+    },
+    {
+      "path": "docs/ui-reimplementation/current-source-review.json",
+      "before_sha256": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975",
+      "after_sha256": "569085ef5b273cb41da5dd551733c75b039d8965bca7cd2eddc4665af80125fe"
+    },
+    {
+      "path": "docs/ui-reimplementation/source-inventory.json",
+      "before_sha256": "126ac9d0b9adc7f6321de8938ce30dfec9fb3b163e0c7a0a6465be402bd64c1e",
+      "after_sha256": "3098cf2ffa2797dc0fc1b60d7e4d79f5a133c208ed300166ff4a56d0f053590c"
+    },
+    {
+      "path": "docs/ui-reimplementation/generated/source-review-receipt.json",
+      "before_sha256": "6bce24656ba00973c806d02bdbdb6db7fdfc843a6e5d91aca790404bd9ee5025",
+      "after_sha256": "410bbb090de9d6d0d2f4771bc797f8809f75c10e2d34aba34a1cf9e992873555"
+    }
+  ],
+  "qualified_nonmember_deltas": [
+    {
+      "path": "manual/BUILD.md",
+      "sha256": "e7c2024f3037cd3d54817bfae6a7b0005647f823d2f21d17fb310e9cc2b1c15a"
+    },
+    {
+      "path": "tools/manual_audio.py",
+      "sha256": "33c12d17c053452a891a8c047d0cb4dac60d85ca58466617d456a8c3e1d73f8a"
+    },
+    {
+      "path": "tools/manual_build.py",
+      "sha256": "7ec922bb6a8118e174aaadbe8483a6aa164bf00e95c483778b8df54df4cd053e"
+    },
+    {
+      "path": "tools/manual_publication_verify.py",
+      "sha256": "0b53fa7eda495dbd4520880099ccf2a99d111badf95bd418c7c6646175de4d61"
+    }
+  ],
+  "additional_new_nonmembers": [
+    {
+      "path": "tools/manual_reconcile_build.py",
+      "sha256": "c52cffddd8fd64a54b9f3043b2aaed0d96886a05d681dbb8dedc422aa168b404",
+      "preserved_path": "qualification-source-bytes/tools/manual_reconcile_build.py"
+    },
+    {
+      "path": "tools/test_manual_reconcile_build.py",
+      "sha256": "497e02078d59b54c8d48cc9287fba479f1facb4d729a2f115fec8870e654e954",
+      "preserved_path": "qualification-source-bytes/tools/test_manual_reconcile_build.py"
+    },
+    {
+      "path": "tools/test_manual_audio_configuration.py",
+      "sha256": "54e8155f76cd6eb630108adc24f380756a7062701aba86e1ac91b7eb9030d02e",
+      "preserved_path": "qualification-source-bytes/tools/test_manual_audio_configuration.py"
+    },
+    {
+      "path": "tools/resume_adoption.py",
+      "sha256": "78c977b9b6f5087ea24bc5df58f7328cbb99d99e5ad17eff76043b537d8d54c3",
+      "preserved_path": "qualification-source-bytes/tools/resume_adoption.py"
+    },
+    {
+      "path": "tools/test_manual_resume_adoption.py",
+      "sha256": "9f5eb95ed7b8b1c5d1de2d796e08343e39034503c28efad5be3e8d73bc724168",
+      "preserved_path": "qualification-source-bytes/tools/test_manual_resume_adoption.py"
+    }
+  ],
+  "p02_qualification": {
+    "owner_receipt_sha256": "909dedf4399775b38b11573552615c4f75e3f8de52d93308960e572bfd418607",
+    "full_lua_tests": 2445,
+    "full_lua_current_source_files": 347,
+    "focused_controlled_native_frames": 1,
+    "focused_receipt_sha256": "62108e163411f7458c010feef620a03a32046d4d30518ce4afc9decd694c8a61",
+    "independent_audit_receipt_sha256": "a740ca265a66ac54d9dd64014da609cbe4894a7ecfdf1e9e5e9f94dfc6cbbe54"
+  },
+  "phase_relocation": {
+    "original_implementation_sha256": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "implementation_byte_identical": true,
+    "semantic_or_tolerance_delta": false,
+    "compatibility_facade": "tests/behaviour/mini_phase_oracle.py",
+    "contract_implementation": "tests/behaviour/contract/mini_phase_oracle.py"
+  },
+  "bounded_partial_publication": {
+    "whole_failed_uuid": "c267aa2b68774bec98111a09b82ec17e",
+    "whole_manifest_sha256": "51904c9db687e16dce2dc588b87b2b403128ac2c6badf4d2e0a5ebe732325ef0",
+    "successful_stages": 17,
+    "historical_frames": {
+      "polymeter": 1,
+      "reason-swing": 6
+    },
+    "full_manual_complete": false,
+    "current_source_qualified": false
+  },
+  "reconciler_qualification": {
+    "tests": 59,
+    "receipt_sha256": "ecd4192dd8182a87b3a2153f14e72e1c51db4aa582fea6003877ef38ed0eee8c",
+    "root_log_sha256": "a4b0285adb59c75590362710d204bd575f88466ed6f373fdc2f147529e498ae7"
+  },
+  "complete_regression_run": false,
+  "manual_generation_complete": false,
+  "whole_manual_complete": false,
+  "authority_activation": false,
+  "generation_not_launched": true,
+  "resume_source_review": {
+    "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/bounded-source-review-receipt.json",
+    "sha256": "c0f508ddf25b48a4428014e5bf867881fbf609001bea01d2ed981a1b83232d26"
+  },
+  "original_generation_failed": true,
+  "actual_resume_operator": "/home/andy/mosaic-manual-build-operators/controlled-local-43-resume-077b-841eaad81b454426bdf53d8a15514a6b",
+  "source_start_distinct_from_original_077": true
+}

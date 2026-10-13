@@ -1,0 +1,532 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "masks",
+    "channel": 1
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 3
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166066859,
+        "error_ms": -0.5998076666666463
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16621939,
+        "error_ms": -0.44727666666666277
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166437453,
+        "error_ms": -0.22921366666664444
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166172588,
+        "error_ms": -0.49407866666664746
+      }
+    ]
+  },
+  {
+    "kind": "last-step-mask-clearing",
+    "stage": "both-boundary-overrides",
+    "steps": [
+      63,
+      64
+    ],
+    "expected": [
+      72,
+      74
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 3
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166414833,
+        "error_ms": -0.2518336666666454
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166743929,
+        "error_ms": 0.07726233333335553
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166221659,
+        "error_ms": -0.4450076666666636
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165315114,
+        "error_ms": -1.3515526666666444
+      }
+    ]
+  },
+  {
+    "kind": "last-step-mask-clearing",
+    "stage": "step63-cleared-step64-preserved",
+    "steps": [
+      63,
+      64
+    ],
+    "expected": [
+      60,
+      74
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 3
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166839669,
+        "error_ms": 0.1730023333333386
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166538054,
+        "error_ms": -0.1286126666666665
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165729002,
+        "error_ms": -0.937664666666671
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165846584,
+        "error_ms": -0.8200826666666661
+      }
+    ]
+  },
+  {
+    "kind": "last-step-mask-clearing",
+    "stage": "step64-cleared-defaults-preserved",
+    "steps": [
+      63,
+      64
+    ],
+    "expected": [
+      60,
+      60
+    ],
+    "passed": true
+  }
+]

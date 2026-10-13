@@ -1,0 +1,11 @@
+--- frozen27c
++++ candidate
+@@ -212,7 +212,7 @@
+     ui.channel_editor();ui.channel_page('masks',channel=1);mask(c,'velocity',-45,15)
+     musical(c,'modulation-movement-and-interest-level')
+     ui.song_editor();ui.copy_slot(1,2,control='song_pattern_slot');ui.tap_control('song_pattern_slot',2)
+-    checkpoint(c,'song-composition-copy','song',{'song_slot':2})
++    checkpoint(c,'song-composition-copy','song_setup',{'song_slot':2},leds=[(2,1,15)])
+     ui.tap_control('song_pattern_slot',1);ui.channel_editor()
+     c.action(type='key',n=1,state=1);c.elapse(.35);ui.tap_control('channel',1);c.action(type='key',n=1,state=0);c.elapse(.1)
+     checkpoint(c,'song-composition-sparse-muted','masks',{'channel':1,'mute':True})

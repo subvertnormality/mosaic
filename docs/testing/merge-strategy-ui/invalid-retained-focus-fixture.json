@@ -1,0 +1,18 @@
+{
+  "failed_run": "/home/andy/mosaic-behaviour-runs/pre-mini-strategy-candidate-controlled-experimental/09ab3fbd06f14c65ac1a58df800023fa",
+  "accepted_as_production_failure": false,
+  "actual_frame_title": "PHRASE",
+  "actual_selected_label": "Cycles",
+  "actual_value": "8",
+  "frame_sha256": "57656b7e9558c96588ab3da90a4c6d545c07d8908286bf13b20168a8254c2ab8",
+  "diagnosis": "M02 retains public focus; relative E2+1 from Rhythm opened Phrase. Reopen destinations using explicit public select_row. Final M02 readonly and draft-return fixtures likewise explicitly restore their intended row.",
+  "before_helper_sha256": "a416b4cbdeb69d1ee853e8d2433706602e2b806ae6d9a7f195312faf7b3d1f0f",
+  "after_helper_sha256": "61b23d9e29dea1f401c246aeb9e7ce8f3d312c25203b91aad305919f41378331",
+  "unchanged_minimal_functions": {
+    "valid_anchor_fixture": true,
+    "foundation_selection": true,
+    "queued_cycle": true
+  },
+  "music_oracles_changed": false,
+  "native_retry_pending": true
+}

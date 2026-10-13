@@ -1,0 +1,90 @@
+{
+  "stage_identity_sha256": "ea063341ea64238c8d99b87912ff4f80fb9be3ff21968b86be896fef2e137009",
+  "failures": [
+    {
+      "case": "M-UI-READABILITY-001",
+      "manifest": "/home/andy/mosaic-mini-header-final-qualification-20261003/controlled/e9d503b2e2f5410089ef15b4ade69227/manifest.json",
+      "failure": {
+        "type": "UiMapError",
+        "message": "unknown native menu value clock_tempo.1",
+        "traceback": "Traceback (most recent call last):\n  File \"/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic/tests/behaviour/ui.py\", line 1187, in expect_native_menu_value\n    rendered = NATIVE_MENU_VALUES[parameter][value]\nKeyError: 'clock_tempo'\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 60, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic/tests/behaviour/contract/ui_readability.py\", line 84, in readability_workflow\n    c.configure();internal_tempo(c,90);c.ui.channel_page(\"trig_params\",channel=1);c.ui.press_key(2)\n  File \"/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic/tests/behaviour/contract/ui_readability.py\", line 77, in internal_tempo\n    c.ui.expect_native_menu_value(\"clock_tempo\",\"1\")\n  File \"/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic/tests/behaviour/ui.py\", line 1189, in expect_native_menu_value\n    raise UiMapError(\"unknown native menu value %s.%s\" % (parameter, value)) from error\nui.UiMapError: unknown native menu value clock_tempo.1\n"
+      },
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 1485,
+          "returncode": 0,
+          "seconds": 0.11395012499997392
+        },
+        {
+          "service": "sclang",
+          "pid": 1380,
+          "returncode": -15,
+          "seconds": 0.11459235299844295
+        },
+        {
+          "service": "crone",
+          "pid": 1372,
+          "returncode": 0,
+          "seconds": 6.891100201755762e-05
+        },
+        {
+          "service": "jack",
+          "pid": 1366,
+          "returncode": 0,
+          "seconds": 0.03162083902861923
+        }
+      ],
+      "classification": "invalid fixture; no whole-case acceptance"
+    },
+    {
+      "case": "M-MERGE-STRATEGY-001",
+      "manifest": "/home/andy/mosaic-mini-header-final-qualification-20261003/controlled/78e3b87a064f49cb89ada8ef85aa3dfa/manifest.json",
+      "failure": {
+        "type": "AssertionError",
+        "message": "Required observable output did not arrive",
+        "traceback": "Traceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 60, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic/tests/behaviour/contract/merge_strategy_ui.py\", line 169, in selector_workflow\n    c.ui.expect_selected_field(\"detail\",\"Anchor\",\"NONE\")\n  File \"/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic/tests/behaviour/ui.py\", line 1417, in expect_selected_field\n    self.driver.wait(lambda state: selected_field_matches(\n  File \"/home/andy/mosaic-mini-header-final-candidate-20261003/mosaic/tests/behaviour/driver.py\", line 126, in wait\n    raise AssertionError('Required observable output did not arrive')\nAssertionError: Required observable output did not arrive\n"
+      },
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 29633,
+          "returncode": 0,
+          "seconds": 0.1640768590150401
+        },
+        {
+          "service": "sclang",
+          "pid": 29531,
+          "returncode": -15,
+          "seconds": 0.11450316000264138
+        },
+        {
+          "service": "crone",
+          "pid": 29523,
+          "returncode": 0,
+          "seconds": 6.404099985957146e-05
+        },
+        {
+          "service": "jack",
+          "pid": 29518,
+          "returncode": 0,
+          "seconds": 0.03165762295247987
+        }
+      ],
+      "classification": "invalid fixture; no whole-case acceptance"
+    }
+  ],
+  "corrected_public_route": "Fresh CH02 AnchorNONE; assign P01/P02, refuse Foundation, recover Fragments, restore empty CH02; CH01 saved Anchor1 retained",
+  "numeric_fixture": "Tempo uses exact scalar expect_menu_value instead of nonexistent enum-map entry",
+  "unchanged_function_AST": [
+    "valid_anchor_fixture",
+    "foundation_selection",
+    "music",
+    "queued_cycle"
+  ],
+  "unchanged_musical_literals": [
+    "FOUNDATION_EVENTS",
+    "LEGACY_EVENTS",
+    "FRAGMENT_EVENTS"
+  ]
+}

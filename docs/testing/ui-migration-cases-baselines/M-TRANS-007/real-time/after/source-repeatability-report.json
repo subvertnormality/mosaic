@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "83fbee75fdce2ac1ecfa18d3191f92794664a15e",
+  "selected_cases": [
+    "M-TRANS-007"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-TRANS-007"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-TRANS-007",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-ce155b0e3e8a4fca97c5f5be7f00e346/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-ce155b0e3e8a4fca97c5f5be7f00e346/manifest.json",
+      "manifest_sha256": "51c75d3182dd0a5ee67038132a0dcabc9d4c1675454c5951630db4ac0508ec7f",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

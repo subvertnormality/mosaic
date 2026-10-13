@@ -1,0 +1,29 @@
+EE
+======================================================================
+ERROR: test_inventory (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_inventory
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/unittest/loader.py", line 154, in loadTestsFromName
+    module = __import__(module_name)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_inventory.py", line 4, in <module>
+    from cases import CASES
+ModuleNotFoundError: No module named 'cases'
+
+
+======================================================================
+ERROR: test_collection (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_collection
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/unittest/loader.py", line 154, in loadTestsFromName
+    module = __import__(module_name)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_collection.py", line 6, in <module>
+    import run
+ModuleNotFoundError: No module named 'run'
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (errors=2)

@@ -1,0 +1,1554 @@
+{
+  "schema_version": 1,
+  "original_failure": "/home/andy/mosaic-manual-runs/ca11089961ce4497b04526a0747df3f1",
+  "no_application_fixture_oracle_tolerance_emulator_changes": true,
+  "classification": "stock native internal-clock reference discontinuity on tempo changes; existing independently installed qualified clock-continuity capability applicable",
+  "stock_failure": {
+    "first_note_duration_seconds": 0.630763992,
+    "expected_seconds": 0.5,
+    "phase_error_seconds": 0.130763992,
+    "repeat_first_duration_seconds": 0.617488352,
+    "repeat_phase_error_seconds": 0.117488352,
+    "old_pre_play_native_tempo": 90,
+    "visible_confirmed_tempo": 30,
+    "same_epoch_beat_regression": [
+      37.337125,
+      37.315291667
+    ],
+    "midi_receiver_max_delay_ms": 1.203028
+  },
+  "independent_installed_runtime_semantics": {
+    "stock": "set_tempo updates tempo struct; background tick later overwrites beat reference with ticks/24 using pre-sleep tempo snapshot",
+    "qualified": "set_tempo synchronously retimes affine reference and increments generation; stale pre-sleep publication rejected; periodic publication preserves beat continuity",
+    "installation": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+    "experimental_unadmitted": true
+  },
+  "runs": [
+    {
+      "run": "/home/andy/mosaic-manual-runs/823fc58f3b434376818775592ef1bc47",
+      "label": "stock-real-failure",
+      "passed": false,
+      "stages": [],
+      "source_equal": {
+        "case_sources": true,
+        "capture_sources": true,
+        "fixture_sources": true,
+        "plan_files": true
+      },
+      "actual_clock_modes": [
+        "real-time"
+      ],
+      "runtime_identity": {
+        "lock_sha256": "256b07b12acb1f82236053e33303e7fd0cf94a963621462f142bdf652593a616",
+        "source": "/home/andy/projects/monome-emulator-ci-combined/.runtime/builds/256b07b12acb1f82/norns",
+        "prefix": "/home/andy/projects/monome-emulator-ci-combined/.runtime/prefix",
+        "binaries": {
+          "matron": {
+            "path": "/home/andy/projects/monome-emulator-ci-combined/.runtime/builds/256b07b12acb1f82/norns/build/matron/matron",
+            "sha256": "b71651f4b67938f4b15924cb1cd49568ed3c411b7208cc0ecf3569e7ebefe574"
+          },
+          "crone": {
+            "path": "/home/andy/projects/monome-emulator-ci-combined/.runtime/builds/256b07b12acb1f82/norns/build/crone/crone",
+            "sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f"
+          },
+          "libmonome": {
+            "path": "/home/andy/projects/monome-emulator-ci-combined/.runtime/prefix/lib/libmonome.so",
+            "sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f"
+          }
+        },
+        "norns_revision": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+        "patches": [
+          {
+            "path": "patches/norns/0001-desktop-architecture.patch",
+            "sha256": "1945a65e586446e5ae6a75cac646fc468aace34914c8f19a5d192925ad314e78"
+          },
+          {
+            "path": "patches/norns/0002-platform-read.patch",
+            "sha256": "745d47530e0769f8edceee525fa2e5cf35fa75cd9f180a3866bccffa35bd9a63"
+          },
+          {
+            "path": "patches/norns/0003-portable-display-conversion.patch",
+            "sha256": "a6f14a5cb4bba9203f3738b605a5d6902a8612b73c45c07a998a73fcad322ba9"
+          },
+          {
+            "path": "patches/norns/0004-virtual-device-spike.patch",
+            "sha256": "0b7fc1089332629f9cbd64933d04136974c978f347af5376eb22009925dcb173"
+          },
+          {
+            "path": "patches/norns/0005-native-session-hooks.patch",
+            "sha256": "f418d02d9e2ce1756b35348f432421cd0888a905c28b3740736a5459a45c0278"
+          },
+          {
+            "path": "patches/norns/0006-hook-error-reporting.patch",
+            "sha256": "fa5233c3adbadb62ec5bbe17dd41fd4e670d6a34a07ee3e1d2af2875b8143ea2"
+          },
+          {
+            "path": "patches/norns/0007-crone-thread-shutdown.patch",
+            "sha256": "a733a8b3daf2834f9193c38fb33e00c4b3dd817041236385b43974f37a32719f"
+          },
+          {
+            "path": "patches/norns/0008-grid-device-contract.patch",
+            "sha256": "647f46a6619fd36d968dff2e2990ca46ad373dae023773f65595bad26ba7c247"
+          },
+          {
+            "path": "patches/norns/0009-midi-device-contract.patch",
+            "sha256": "6233f827a3bbf090d3a6b7470569b3f232fe551bea7a94a5e24168c521955cc0"
+          },
+          {
+            "path": "patches/norns/0010-grid-native-level-conversion.patch",
+            "sha256": "fc079402b99feca9a878f2c97f02334ee75f6c06d7c4cc7d667a168935d7ad84"
+          },
+          {
+            "path": "patches/norns/0011-clock-cancel-queued-resume.patch",
+            "sha256": "40bb49162614d014a4b56f1189dcb9345991d0c1548a48fdf2518cdfea614499"
+          },
+          {
+            "path": "patches/norns/0012-scheduled-midi-input.patch",
+            "sha256": "fb94e9ed062d52b2dfec48a42db9f3690015d4e16116e6cfb6ef895c52230bcd"
+          },
+          {
+            "path": "patches/norns/0013-midi-connection-lifecycle.patch",
+            "sha256": "5598ce08c2829565e8614c8f8b3c88834c5ebb003d62342384e72d879fa90e29"
+          },
+          {
+            "path": "patches/norns/0014-runtime-stall.patch",
+            "sha256": "3bbec21eae0c2b684cd2ac85e0fa8810da5d274c278e1dd576dca3c8e3d36ec9"
+          }
+        ],
+        "interpreted_files": {
+          "lua/core/arc.lua": "f242495cc84de0a0454945dbfd189c75bde0f8e1114890ea92e48a8498dd05c7",
+          "lua/core/audio.lua": "eaf8f99fe3403e0d5ce3e2300670381a2c661339eb066be355e1ecc13c450cff",
+          "lua/core/clock.lua": "e39411ea122b3e9110e98500ebf7ff8bc982617472ba88582446eb68b8db9f54",
+          "lua/core/config.lua": "cbe963e9a2267bad92ac434c3baf78d36bdc7935f5f2dddfd4ecc491fe2074fa",
+          "lua/core/controlspec.lua": "4c5c3288957d14082a54a61cd82ce55a3913fe93deb471835fc22eb0c0889ece",
+          "lua/core/crow/public.lua": "55dbd0f5e2f392f8d631bf8d300cf951b44e759cb099abcbbe57a0fa546b2cfa",
+          "lua/core/crow/quote.lua": "4aa2e47149346f35b79e6aa7dd417ad108f01194adfbfd5500f4850ea6155a90",
+          "lua/core/crow.lua": "311a8de9cb131953c75fa2031dd4d40dcb59885f19db6d339e143457d84671de",
+          "lua/core/encoders.lua": "3e506a1d76e0e7d717348f4612526314db2f392546ed13a64e5b788985cc5adb",
+          "lua/core/engine.lua": "98d60c79bff98d6bc481dc96a197ac267109d0db7ab05940d3b3a84b709c64e2",
+          "lua/core/gamepad.lua": "430ef0ab6b97fa6ca7131e5c8fc87951e72ced0630208e4850a36efc525cd6a8",
+          "lua/core/gamepad_model/ibufalo_classic_usb.lua": "dd8225d8d2db68575d1e1349e3b8e52a0c86f1e20e51e50649ab6cc6804855cf",
+          "lua/core/gamepad_model/index.lua": "379873e8bac8e22ece145e90315fb2591a1db31cb5aaa0b0298f5f66af924a52",
+          "lua/core/gamepad_model/retro_controller.lua": "4e98f4b5ffe4eccf25f193e9206020ed4ef4dafd097c8e4a1e2a91df06e50bf0",
+          "lua/core/gamepad_model/xbox_360.lua": "a14a3955fe2056c9e73aea09976d50acdc7c57dac2ed6a55e7b13142526006f0",
+          "lua/core/grid.lua": "4a0ba6d64d3a1f8db5f3063f4334ce030ded4277f831f950398a6d9df28bfaaa",
+          "lua/core/help.lua": "9ebdba9352194a5d8793f3897ef12ede43d1444ec3032a0e3f54a457d3e6a982",
+          "lua/core/hid.lua": "abc45726d1c4ce2865db51b0ab5601eed3579390cdd66bed2bf454e572260129",
+          "lua/core/hid_device_class.lua": "3b26cb39ebdd6621672b108da79112b87b9b59140de102b0b1dddefa7f07c8c9",
+          "lua/core/hid_events.lua": "b13224c68ed1f2bdfaba651c02e614d7f10c4931835f539bb7b1b588c3ed6f5c",
+          "lua/core/hook.lua": "cae1a3367f1e0a7760c8da692f5a6edbc40b486203d0cdf1e08df958761389d8",
+          "lua/core/keyboard.lua": "4eba5075400e2e7ac67bc94b8c057d10b83b9348b998096b737c225f105e70ed",
+          "lua/core/keymap/be.lua": "899d8478cd28ddd6bb2b6c16cf92891041a48c2040ecb5dce23c37c4ae6c1b16",
+          "lua/core/keymap/char_modifier.lua": "27dcb40103fc85ffd2cfec5c2e40016839b7e86f0485fafaceb9ea1edb4ecda7",
+          "lua/core/keymap/cz.lua": "00bef6edead77a744c0acc2b80fdfde1e5fb4d82d5e974a8ea38c05e7f77c8fd",
+          "lua/core/keymap/de.lua": "f86218837a50f03e119fefe9c19e69f16134b27aa97734c99d341050dffc5cb6",
+          "lua/core/keymap/dk.lua": "09b946e206d24011fa1c4c04921bc4010bace2c4ae906cf3a3dd653631bb6875",
+          "lua/core/keymap/ee.lua": "c8966d504844438afcf61732f123953b572519ac502cb4bdf2383682d5fbbdae",
+          "lua/core/keymap/es.lua": "5252f10932c37a7cdd41f7f904f21d79818bfbae70d9673f879031de7cc35a5c",
+          "lua/core/keymap/fi.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+          "lua/core/keymap/fr.lua": "44e6c2a1876717ebc256c061239f5807941c1227fed090187be91cea8eb3f6cd",
+          "lua/core/keymap/gr.lua": "1578e8cf423ef9d639494bf756a0322fd82ee87127c7e3e9f9390d396b0338bd",
+          "lua/core/keymap/hr.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+          "lua/core/keymap/hu.lua": "d834842e9e99fa01d9e89f50e4b249d36b2ccb8f7730a7489c677a6a78dad710",
+          "lua/core/keymap/ie.lua": "f31bbd078acc5194850cf0a09558d53bd65ef7f5a9530c2fe037a2526f97249d",
+          "lua/core/keymap/is.lua": "4dddd7fd599036ead6b5787996da55ed3d1669c58b1f642d5c59ded8569f55e0",
+          "lua/core/keymap/it.lua": "90df2d7baeb0f40e51baabd5ef6ecebc4793a03b917f68bd3f88a3fc6608e4f1",
+          "lua/core/keymap/jp.lua": "ad401b8cc5de8453be928975fae8b448a314641724942a095b20cd8d01d9a33d",
+          "lua/core/keymap/kp.lua": "080c4b6afcb7d637e07aa79ee53094c6fa4645b1ff51e6519545066e412be692",
+          "lua/core/keymap/lv.lua": "64e70d30c7add3eb7a7ba06348102815486a8dc7b36d8eafb98d08518181044b",
+          "lua/core/keymap/no.lua": "c2d13a88d26e23fe4b1beeb25e73966bb6c18d335af435ba690e3286d2c01299",
+          "lua/core/keymap/pl.lua": "b0b5c68e1e22394816ec81a192bf8b5282919e8ab16abbec46178074755f0d85",
+          "lua/core/keymap/pt.lua": "2c6aa619edd75af84ea8a4e066cd9ee1e5dda748f0f4a534f8de095faea394c7",
+          "lua/core/keymap/ro.lua": "6886805c50f86bcd9e0022a5ddb8e076c286650f61c11445d337ae08d1e4a68b",
+          "lua/core/keymap/rs.lua": "2b085e36ae288802998e315365a5aa7121817b17c1724bb93f37f7400f7963b7",
+          "lua/core/keymap/ru.lua": "24b85071ec4c1788e12a630569b50ef412da02709811a8d5d747478a27fa44c2",
+          "lua/core/keymap/se.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+          "lua/core/keymap/si.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+          "lua/core/keymap/sk.lua": "6d0819e2d729989588e5805162a3408cbc873b04a2e902c725972222d9a96188",
+          "lua/core/keymap/uk.lua": "7f66705b546db4a9401bcec96593fe1b53bd8dc5ebe4b833c45385a5d2fb15eb",
+          "lua/core/keymap/us.lua": "14360c91202592ea3e06dad70450460080e8fe9cb00805005085c289cc317e24",
+          "lua/core/menu/devices.lua": "fa141e7150fa8cedb28ae405ea12437cc942cacc28da77fa01d48a50dc2a99e7",
+          "lua/core/menu/display.lua": "11ac274cefac8ed50c71f1b13dd0d26a4f8b32895f5f91bb26649bb99d0e8ae2",
+          "lua/core/menu/home.lua": "decea467b269c60cbe21f8c88058e3eb97d93bdfaaa97a58778def12eaa60341",
+          "lua/core/menu/mix.lua": "ed559e3387cb787c42e5919f0c38a3308810b23e3c718e544fa478e1bcf79b0d",
+          "lua/core/menu/mods.lua": "a4d035d3535988db73e8cf45b41117f54278fc3074237b3883fdc26dc7a38c02",
+          "lua/core/menu/params.lua": "44cd5c78b9ead6b6133cd053a6043bbda207b5be8623e42a835a112d02f9c88b",
+          "lua/core/menu/preview.lua": "c54079102331bc2365253b3b9044e9986889cce75c0fbaffd4485cf188784cd0",
+          "lua/core/menu/reset.lua": "327eab6ca7c2585fea4fe6a18151958f31f8a115c8429c869fe7bdbcc2852c8c",
+          "lua/core/menu/restart.lua": "c028bbc34b385a1f67f2d49c962288fe2fa12d4c32b86cde37b897b8b6c3d8d0",
+          "lua/core/menu/select.lua": "47f11486c115336238829d88fdb8fa494d7935d605a3e85128138c0befddcac1",
+          "lua/core/menu/settings.lua": "5d4afaf805a55e3e6351aef027ac2d8ce6e12e3b216be9bf0ce51b17e6d0350d",
+          "lua/core/menu/sleep.lua": "5d1235cd51b48e615238e3bb6ecdfc931236ec17bb9cc86ddfa1d56f38f6dd11",
+          "lua/core/menu/system.lua": "0ae21deb50981f8596b20156adb1365ac047d06b1df54f0dbe49fe02c2c27c0b",
+          "lua/core/menu/tape.lua": "3c51a61ea86a4ec264a1809e895539154ed94b2e71bf337100d3ed3358045fb0",
+          "lua/core/menu/update.lua": "ea60d6e071e2543158daa51ee984ecdeafd2f1a7d956fbbf34482f1879c6a9d6",
+          "lua/core/menu/wifi.lua": "055a8127970b0f5c5c7bfd282656c0322858b090b8baa50e29f18dd3bef8f829",
+          "lua/core/menu.lua": "d4429657fca43c2fbc5093a42d819e49fa778f0a110c80d8f74961e2166b72f3",
+          "lua/core/metro.lua": "f0428b08121f0d8faeef6aa1b22baba474c25d658bebb39efd2a2520e236fa04",
+          "lua/core/midi.lua": "de4d9e26f39b0de1ffc76d24b094af86f5ce4416860c56bfdb017e914e1f6ab8",
+          "lua/core/mods.lua": "d9bf914902c0167be6a74124216de399ead2c8981de27f4c84223dd8e1098802",
+          "lua/core/norns.lua": "8d347b84c7e5ae14ba71866f54fd21334a0a700be2de08043b17c6a2e4141708",
+          "lua/core/osc.lua": "09e330bacc3830a87ae6763f893f42fbe130083e10517e4708bc33adc101a525",
+          "lua/core/params/binary.lua": "dc04eebeb78e624a028b1bde952e4c54b0ed15fd754bb16319bb9b821d35e6fa",
+          "lua/core/params/control.lua": "c08039f8219ec337a5096d145a8520bfd1fd75199eb603cd329bda6a780e3f19",
+          "lua/core/params/file.lua": "5fc39c476346972e5b62de529f4e905e492a72445cb18feb4a1019214ab7d11c",
+          "lua/core/params/group.lua": "ad50e9d9a383714201cb1a8390db766ff9079ba827b9227ac016f5f6ab0ca394",
+          "lua/core/params/number.lua": "46e82744708c4637fb000abff4ab28bce723a98b130a5e44a15fa4628bfb58dc",
+          "lua/core/params/option.lua": "09dc6e68890a8b6497242dc61135a1fddfc7fe9f52c71ff94535c0c60d3ce49e",
+          "lua/core/params/separator.lua": "53688e97ebc68b2d92b7c732c8ff58ae1adcea0302b152f6f623c1f7ea9a74a8",
+          "lua/core/params/taper.lua": "099a52e84f18295da0e9991f6a213de899e79dd86f72d1ea77ffca4a97ff3a5c",
+          "lua/core/params/text.lua": "e6175cc05eeea9f99079633dfbb289f5835d66071b84815ba03b896723f3c93f",
+          "lua/core/params/trigger.lua": "b2e5647ab52b87f72a9937f88c0d4141d37725a2fe01c7ee39b36f258f1f38d7",
+          "lua/core/paramset.lua": "1cded541234610937b2118464ec7318c5d6034c0fac8966c11e533d4e5e94e4a",
+          "lua/core/pmap.lua": "eea56045659c4498b1747f297dd7e174ff3fa809dc545b95ba5870993495e375",
+          "lua/core/poll.lua": "feced9cde17ff9592c654e5c62282ed888c222a91c7fff62aa12e1ec125abb5b",
+          "lua/core/screen.lua": "59cf7b3ba1712f0426681c7d8cc93bb29dc9047af08071ee8421b440c5ed6251",
+          "lua/core/script.lua": "1a17573064202573a2090ae15ec9aaca681bb0120518331c3a8bc773c3eff806",
+          "lua/core/serial.lua": "15012b5a54b049cae2d85cf4f20013c929ce09a24ec60f972b39e00a16790877",
+          "lua/core/softcut.lua": "a961139fbc4a9e4f00d4df3d10128cc21e112d3b35b02be5674e2e5f8043c7b4",
+          "lua/core/startup.lua": "9f84bfb46ff4c5e4a0c0ce5e43168f301fb5dd957561ba5241a476ca258f36fa",
+          "lua/core/state.lua": "adfb5996ff8e9506f3cd73b84b94530fc34e47b22ae615129a9bfb6bbe04338c",
+          "lua/core/vport.lua": "a84bff4751120057bc6b1e686c89f2d5eebbf4a5b73e508ab6ef1f92939601ea",
+          "lua/core/wifi.lua": "7a9ef8a8a49190aae3bb7cc64668c39bdb30aaf2a62cc9b6fe0d6f4c406b49f4",
+          "lua/engine/polyperc.lua": "acf896ca1e00159bf77659d10b1c5895c691263e87f2a128bc3d26032cf8b546",
+          "lua/engine/polysub.lua": "9a61404b824401fe9a522376e5bc1cd160a56d05e3a2b2594ca4696864693fd2",
+          "lua/extn/sky/core/object.lua": "3326c1c5e806cc3f5056457ba5f77e341ee50096f0e460de224101a9e53f5d64",
+          "lua/extn/sky/prelude.lua": "76507e18513b4825621c421dc12d5f433ec12507b8634f36685f75fa96b47937",
+          "lua/extn/sky/unstable/core/page.lua": "b769a686e299c67fc47d39536dd80fb1993687379d7687d2a51676ecc9066d87",
+          "lua/extn/sky/unstable/device/es.lua": "93e59548e3aae96310a44bae77da23ee9cdefff48d84c70e3afe153324de684e",
+          "lua/extn/sky/unstable/device/linn.lua": "250d7e673a3639b126bab062e28b0d92583bccbfc69a7738c524e174f8d77209",
+          "lua/extn/sky/unstable/engine/polyperc.lua": "d91be322a6a7ccd288156a3b488d00fd25d5f6b9ec6c620520d8d36c7d2fafdc",
+          "lua/extn/sky/unstable/engine/polysub.lua": "769ec85986134820fbafb075fe2e2098b5c754e94fa5ae1f321885836298b128",
+          "lua/extn/sky/unstable/io/arc.lua": "4a461c98c64371ee8dcaceceff7e53cc250f7790985bd19e7cb645e7b8e82e5b",
+          "lua/extn/sky/unstable/io/grid.lua": "dafd01d339ae3f438216d0e0052e3b60711006c3389d6f6fcbb81f4d5c8b507c",
+          "lua/extn/sky/unstable/io/norns.lua": "b65591a864bae0e27b708abb96ced2bfdc8fa9e6d7529706cf39b157ec70ace3",
+          "lua/extn/sky/unstable.lua": "7e5e8c04e8c49eef45061167fb181b131ad2eda4e5346942721c76ca44daff33",
+          "lua/extn/sky/v1/core/event.lua": "caa5ec82352d2d3cf55d2b7844d68f71bbe370a3d9f84b02a64848c613a26b91",
+          "lua/extn/sky/v1/core/process.lua": "ec2e39c51164bb4f7fd210671d2a4fcfb6f81e48e92e3014286c0902c7c5907c",
+          "lua/extn/sky/v1/device/arp.lua": "3d55ef27854d47c088aaaf92a83c1cfcdc6638463b0c1cbf29c8b2ada2a24ed4",
+          "lua/extn/sky/v1/device/behavior.lua": "a474f8fd301283cbe94d14a9253d9b407d88e5ee75e1334dd08df75354e3cb9e",
+          "lua/extn/sky/v1/device/filter.lua": "4445f9e9a720720a6fde97240597e8efe20d7dca0fea6d7286f3a522e0ba96ac",
+          "lua/extn/sky/v1/device/make_note.lua": "c55532084df6fe845bfcb3e41c38dc503637c8e5c98ba5b923157d493bd4c912",
+          "lua/extn/sky/v1/device/switcher.lua": "36e5d68538a4f267b47de753c0c5078ff14208acf7d0d53a869074c0db22edb7",
+          "lua/extn/sky/v1/device/transform.lua": "c8b198d76350495475280c6b9e9f2f12f5c6dd6e879c929cddb6040be0f4a16a",
+          "lua/extn/sky/v1/device/utility.lua": "9e1954cf840c01e5f7f188d13706d795c07f3661d58606c752d957adc8cccf56",
+          "lua/extn/sky/v1/device/virtual.lua": "b6de76dea64824c83ae47beaaecf54eb7ab2129fd5115336c1b19dc5aec1c675",
+          "lua/extn/sky/v1.lua": "d0535669d932031c308f9907bba2449add01201d51062a304fde090e91f1d4c0",
+          "lua/lib/asl.lua": "1b73cc2a5bd07fe28de84730c4857d433d041bb883bd3aa8995f165f0a1492e2",
+          "lua/lib/beatclock.lua": "9319d9c400c479591197393c4497ab1dd3a066c5ac110aa9e697a5c3f36f2237",
+          "lua/lib/container/defaulttable.lua": "00fa1658df56b14aa3178d3aa2fe194d1b2c85d69fb3c3a86688a4aa80b7f901",
+          "lua/lib/container/deque.lua": "0de4f516dd81e773d2015951443413f17007720a90277644f872a0575e137ae5",
+          "lua/lib/container/observable.lua": "d3fd1e2075b0784d2d01fa7e70d3b6b0a2fe131e2600f8af5ae1d0430cf4c3d9",
+          "lua/lib/container/watchtable.lua": "b246d604fd8361763a78ed87af4c251e3cb98927e1052e712cacc9da9a6fc3d9",
+          "lua/lib/container/weaktable.lua": "4e6fcccd7d8fb3396318a74817f944e461cce74835d420857702f833f0f6c12b",
+          "lua/lib/elca.lua": "336ad847149f5291f036ed023ac463b8d99eb5ec586126533696c4df14b8a173",
+          "lua/lib/envgraph.lua": "121ae97c5226cfb8f5dd4313f653a7d10cdbbedd426702e7a4a688859e2ce161",
+          "lua/lib/er.lua": "d0d719956c474f86cbedc7e8cea2dd70e042d950e47dcc9bf0dcd9f6fc1f80f3",
+          "lua/lib/fileselect.lua": "2b5a7af0f4aa51cbccdbd5c70db0dee8da434100cf9b8decd0973aedb212b806",
+          "lua/lib/filtergraph.lua": "d205434ea1f8441593ef5ab246a8b2373556e17e41f4e750fb755ee0b2379fea",
+          "lua/lib/filters.lua": "b5c6963d091f3ea75baab73cb39a0b3276b888dc49ad53b356aa97fe11367aba",
+          "lua/lib/formatters.lua": "5bdb3d3847b8037a7bd29199b8f4e20e1f2112b7e22a9b2c089f4a6dd95f25fa",
+          "lua/lib/graph.lua": "22a3ba02202b536af350e4124528a3c1d07074d856132a4fe4bde4ac62b80965",
+          "lua/lib/gridbuf.lua": "bd1bdff997d9d5f638bc69aa116eb791647d128c591b81c2080bf8e36f939508",
+          "lua/lib/hotswap.lua": "d81047cf503b769f7e253c2c7bfef012da4aa07e817a242fe9b504f0dc4fd30c",
+          "lua/lib/intonation.lua": "7c458d9cdfbec1e7c24dff22edfea1518f6d565315b4abdf775a91c4c2c31791",
+          "lua/lib/lattice.lua": "9c44ba4b8490c7d8b8b0250ee95611184ee12086624177b821b3012544102d83",
+          "lua/lib/lfo.lua": "9754a4d198f5e3638cc723dfd98e31555ba4cc6f256a7bd9d225eb6b2f3d7079",
+          "lua/lib/listselect.lua": "4c6d0c5a8af1a7827ca6947927d1c40606b404e9037dd9b982ddaf21638ed111",
+          "lua/lib/musicutil.lua": "89392bf3f6156d8e08b5fb0b0d3e0540102006ec964fab4058e70be1901e88aa",
+          "lua/lib/pattern_time.lua": "8a9cefd1f39930ee609b83dd291d9ae2ab3741e3f5045f4ec4142a3290115a39",
+          "lua/lib/reflection.lua": "0d2e7b3ca33321f0e6b3d7afb1896e6efbca004b41042c6b810be8897612dcda",
+          "lua/lib/sequins.lua": "85341f5e0db42ce7e400f995b284dae513a003a5be303216d2e86ef60cf64c82",
+          "lua/lib/tabutil.lua": "1e0c553bb30a924148566f76d2a8fdc2e3289f952029b5540f2505c6025fc57b",
+          "lua/lib/test/luaunit.lua": "5d63a80a2c9e30d9d2c852863c420f897e655f27e13a617def171a59091ddd62",
+          "lua/lib/test/mock.lua": "f7c21619c89d78bd48a702e5d2f87586fdf26241bc675d8f47fd36cca002c567",
+          "lua/lib/textentry.lua": "74f15d734ece2eeb401a069b9c44ebb7dda845b4c645b559afe05f8006366586",
+          "lua/lib/textentry_kbd.lua": "a577566eaa266bd06c8adb5faede19cf6b764ecfdad806095cc20ae16f473e2f",
+          "lua/lib/timeline.lua": "8b1790cdd1e5e73d9076da42cf956a65de3b944a928f83e4b158ec39b559b8f1",
+          "lua/lib/ui.lua": "faa2e8b1fe6e9b125bee685cad813d14c44e1a42b05f92bfaa423cb3740cbb9b",
+          "lua/lib/util.lua": "366a38ad6fdc6e58cdb4e522a13f89fb9be7a95e83fd5b59580d2cfd4adfc84a",
+          "lua/lib/voice.lua": "ca9191dba1bda14c2ed05530813d137f9af3d1e8852d9f6b11030f043dd8d8cb",
+          "lua/test/core/audio_test.lua": "208a1221d9273ea33686d0f1a40cc069b124dcf676a58e83c347a94cd2526d5c",
+          "lua/test/core/menu/tape_test.lua": "15f698ee61bfebc7d779c6665703e31a29fe08f0d10775543839019c42d83e6f",
+          "lua/test/lib/container/defaulttable_test.lua": "2c9c0b86b42aa40be5f915b34768d3ff14db609b6b2cdf1a70ee29343e013c7d",
+          "lua/test/lib/container/deque_test.lua": "4675f03cda3dd707a89f95d2f3b404217cf008fcec6d013e939f6254c01508de",
+          "lua/test/lib/container/observable_test.lua": "8d49be45f5437c982b193ceb9f2765f9687a5f591bbe9060191a82b9078411a8",
+          "lua/test/lib/container/watchtable_test.lua": "5c375e3ddae8fb82fefad612c39bf4f5d027b68307cee6bb41070085f2284692",
+          "lua/test/lib/container/weaktable_test.lua": "9844e9b117901b3e24ba230a05a8455f813a43b48403be3371d0a90f3de2caa8",
+          "lua/test/lib/test/mock_test.lua": "acee6731c1c6d40ddb4359a95744f430ee9e32a0c136a2bf10526cbaf351e81f",
+          "lua/test/test_runner.lua": "e49d61887a914e5a5483ea3ac5b0d02d9f4ed64df26197cee0caa143373f36a2",
+          "sc/core/Crone.sc": "c5092bdb471c593463776800992c08159545059c17ea3f8083d590201acb82e2",
+          "sc/core/CroneAudioContext.sc": "57e9b0318f1a7cdc2095625b5cc6b63dbb505a81807eba4681b4e24e3410e09a",
+          "sc/core/CroneDefs.sc": "f8b90295d86a55810f2c646a2c5117967dedf59cb94ce42e7bfb424130a5289f",
+          "sc/core/CroneEffects.sc": "b96a467f4cbf2492f364af4a49db58adb5745925a06e43e2641045785e83ce89",
+          "sc/core/CroneEngine.sc": "125e34b54b78bac0ee86a160086d19cac44695f96ec30ae833d9747b9276554c",
+          "sc/core/CronePoll.sc": "7a20d39cdd0d604409b34e279220ac19e5ed66ad77463254316df50c8ac57fd2",
+          "sc/core/CroneTester.sc": "f6a1c16729129a01826cee1fa3640646eb83e8a24463c86d9edc1e135a246ce2"
+        }
+      },
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 12714,
+          "returncode": 0,
+          "seconds": 0.06378828798187897
+        },
+        {
+          "service": "sclang",
+          "pid": 12615,
+          "returncode": -15,
+          "seconds": 0.11443147802492604
+        },
+        {
+          "service": "crone",
+          "pid": 12607,
+          "returncode": 0,
+          "seconds": 0.00011709099635481834
+        },
+        {
+          "service": "jack",
+          "pid": 12596,
+          "returncode": 0,
+          "seconds": 0.03161632001865655
+        }
+      ],
+      "result_sha256": "4ebf8a737fb7141b27bdbbbd7b7cf416e5a5950b8c21b1006512742ed372ee8b",
+      "tempo_witnesses": [
+        {
+          "selected": "30",
+          "observation_index": 45,
+          "native_tempo": 90.0
+        }
+      ]
+    },
+    {
+      "run": "/home/andy/mosaic-manual-runs/3f9108686dc64c6abe975f0e858be6f7",
+      "label": "qualified-real-pass",
+      "passed": true,
+      "stages": [
+        {
+          "kind": "song-global-tempo",
+          "stage": "minimum",
+          "slot": 1,
+          "bpm": 30,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "minimum-other-slot",
+          "slot": 2,
+          "bpm": 30,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "maximum",
+          "slot": 2,
+          "bpm": 300,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "maximum-other-slot",
+          "slot": 1,
+          "bpm": 300,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "restore",
+          "slot": 1,
+          "bpm": 90,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "restored-other-slot",
+          "slot": 2,
+          "bpm": 90,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        }
+      ],
+      "source_equal": {
+        "case_sources": true,
+        "capture_sources": true,
+        "fixture_sources": true,
+        "plan_files": true
+      },
+      "actual_clock_modes": [
+        "real-time"
+      ],
+      "runtime_identity": {
+        "lock_sha256": "256b07b12acb1f82236053e33303e7fd0cf94a963621462f142bdf652593a616",
+        "source": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns",
+        "prefix": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix",
+        "binaries": {
+          "matron": {
+            "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/matron/matron",
+            "sha256": "c60c21338c3b1a5b6a7be40b136d090fd751a0c864b9c3e3e4f8dd17223eab7a"
+          },
+          "crone": {
+            "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/crone/crone",
+            "sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f"
+          },
+          "libmonome": {
+            "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix/lib/libmonome.so",
+            "sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f"
+          }
+        },
+        "norns_revision": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+        "patches": [
+          {
+            "path": "patches/norns/0001-desktop-architecture.patch",
+            "sha256": "1945a65e586446e5ae6a75cac646fc468aace34914c8f19a5d192925ad314e78"
+          },
+          {
+            "path": "patches/norns/0002-platform-read.patch",
+            "sha256": "745d47530e0769f8edceee525fa2e5cf35fa75cd9f180a3866bccffa35bd9a63"
+          },
+          {
+            "path": "patches/norns/0003-portable-display-conversion.patch",
+            "sha256": "a6f14a5cb4bba9203f3738b605a5d6902a8612b73c45c07a998a73fcad322ba9"
+          },
+          {
+            "path": "patches/norns/0004-virtual-device-spike.patch",
+            "sha256": "0b7fc1089332629f9cbd64933d04136974c978f347af5376eb22009925dcb173"
+          },
+          {
+            "path": "patches/norns/0005-native-session-hooks.patch",
+            "sha256": "f418d02d9e2ce1756b35348f432421cd0888a905c28b3740736a5459a45c0278"
+          },
+          {
+            "path": "patches/norns/0006-hook-error-reporting.patch",
+            "sha256": "fa5233c3adbadb62ec5bbe17dd41fd4e670d6a34a07ee3e1d2af2875b8143ea2"
+          },
+          {
+            "path": "patches/norns/0007-crone-thread-shutdown.patch",
+            "sha256": "a733a8b3daf2834f9193c38fb33e00c4b3dd817041236385b43974f37a32719f"
+          },
+          {
+            "path": "patches/norns/0008-grid-device-contract.patch",
+            "sha256": "647f46a6619fd36d968dff2e2990ca46ad373dae023773f65595bad26ba7c247"
+          },
+          {
+            "path": "patches/norns/0009-midi-device-contract.patch",
+            "sha256": "6233f827a3bbf090d3a6b7470569b3f232fe551bea7a94a5e24168c521955cc0"
+          },
+          {
+            "path": "patches/norns/0010-grid-native-level-conversion.patch",
+            "sha256": "fc079402b99feca9a878f2c97f02334ee75f6c06d7c4cc7d667a168935d7ad84"
+          },
+          {
+            "path": "patches/norns/0011-clock-cancel-queued-resume.patch",
+            "sha256": "40bb49162614d014a4b56f1189dcb9345991d0c1548a48fdf2518cdfea614499"
+          },
+          {
+            "path": "patches/norns/0012-scheduled-midi-input.patch",
+            "sha256": "fb94e9ed062d52b2dfec48a42db9f3690015d4e16116e6cfb6ef895c52230bcd"
+          },
+          {
+            "path": "patches/norns/0013-midi-connection-lifecycle.patch",
+            "sha256": "5598ce08c2829565e8614c8f8b3c88834c5ebb003d62342384e72d879fa90e29"
+          },
+          {
+            "path": "patches/norns/0014-runtime-stall.patch",
+            "sha256": "3bbec21eae0c2b684cd2ac85e0fa8810da5d274c278e1dd576dca3c8e3d36ec9"
+          }
+        ],
+        "interpreted_files": {
+          "lua/core/arc.lua": "f242495cc84de0a0454945dbfd189c75bde0f8e1114890ea92e48a8498dd05c7",
+          "lua/core/audio.lua": "eaf8f99fe3403e0d5ce3e2300670381a2c661339eb066be355e1ecc13c450cff",
+          "lua/core/clock.lua": "1b97118fa37e979c5f1f4978fd560f6c73c837efb8c4a6e3445fc9a8b8570907",
+          "lua/core/config.lua": "cbe963e9a2267bad92ac434c3baf78d36bdc7935f5f2dddfd4ecc491fe2074fa",
+          "lua/core/controlspec.lua": "4c5c3288957d14082a54a61cd82ce55a3913fe93deb471835fc22eb0c0889ece",
+          "lua/core/crow/public.lua": "55dbd0f5e2f392f8d631bf8d300cf951b44e759cb099abcbbe57a0fa546b2cfa",
+          "lua/core/crow/quote.lua": "4aa2e47149346f35b79e6aa7dd417ad108f01194adfbfd5500f4850ea6155a90",
+          "lua/core/crow.lua": "311a8de9cb131953c75fa2031dd4d40dcb59885f19db6d339e143457d84671de",
+          "lua/core/encoders.lua": "3e506a1d76e0e7d717348f4612526314db2f392546ed13a64e5b788985cc5adb",
+          "lua/core/engine.lua": "98d60c79bff98d6bc481dc96a197ac267109d0db7ab05940d3b3a84b709c64e2",
+          "lua/core/gamepad.lua": "430ef0ab6b97fa6ca7131e5c8fc87951e72ced0630208e4850a36efc525cd6a8",
+          "lua/core/gamepad_model/ibufalo_classic_usb.lua": "dd8225d8d2db68575d1e1349e3b8e52a0c86f1e20e51e50649ab6cc6804855cf",
+          "lua/core/gamepad_model/index.lua": "379873e8bac8e22ece145e90315fb2591a1db31cb5aaa0b0298f5f66af924a52",
+          "lua/core/gamepad_model/retro_controller.lua": "4e98f4b5ffe4eccf25f193e9206020ed4ef4dafd097c8e4a1e2a91df06e50bf0",
+          "lua/core/gamepad_model/xbox_360.lua": "a14a3955fe2056c9e73aea09976d50acdc7c57dac2ed6a55e7b13142526006f0",
+          "lua/core/grid.lua": "4a0ba6d64d3a1f8db5f3063f4334ce030ded4277f831f950398a6d9df28bfaaa",
+          "lua/core/help.lua": "9ebdba9352194a5d8793f3897ef12ede43d1444ec3032a0e3f54a457d3e6a982",
+          "lua/core/hid.lua": "abc45726d1c4ce2865db51b0ab5601eed3579390cdd66bed2bf454e572260129",
+          "lua/core/hid_device_class.lua": "3b26cb39ebdd6621672b108da79112b87b9b59140de102b0b1dddefa7f07c8c9",
+          "lua/core/hid_events.lua": "b13224c68ed1f2bdfaba651c02e614d7f10c4931835f539bb7b1b588c3ed6f5c",
+          "lua/core/hook.lua": "cae1a3367f1e0a7760c8da692f5a6edbc40b486203d0cdf1e08df958761389d8",
+          "lua/core/keyboard.lua": "4eba5075400e2e7ac67bc94b8c057d10b83b9348b998096b737c225f105e70ed",
+          "lua/core/keymap/be.lua": "899d8478cd28ddd6bb2b6c16cf92891041a48c2040ecb5dce23c37c4ae6c1b16",
+          "lua/core/keymap/char_modifier.lua": "27dcb40103fc85ffd2cfec5c2e40016839b7e86f0485fafaceb9ea1edb4ecda7",
+          "lua/core/keymap/cz.lua": "00bef6edead77a744c0acc2b80fdfde1e5fb4d82d5e974a8ea38c05e7f77c8fd",
+          "lua/core/keymap/de.lua": "f86218837a50f03e119fefe9c19e69f16134b27aa97734c99d341050dffc5cb6",
+          "lua/core/keymap/dk.lua": "09b946e206d24011fa1c4c04921bc4010bace2c4ae906cf3a3dd653631bb6875",
+          "lua/core/keymap/ee.lua": "c8966d504844438afcf61732f123953b572519ac502cb4bdf2383682d5fbbdae",
+          "lua/core/keymap/es.lua": "5252f10932c37a7cdd41f7f904f21d79818bfbae70d9673f879031de7cc35a5c",
+          "lua/core/keymap/fi.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+          "lua/core/keymap/fr.lua": "44e6c2a1876717ebc256c061239f5807941c1227fed090187be91cea8eb3f6cd",
+          "lua/core/keymap/gr.lua": "1578e8cf423ef9d639494bf756a0322fd82ee87127c7e3e9f9390d396b0338bd",
+          "lua/core/keymap/hr.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+          "lua/core/keymap/hu.lua": "d834842e9e99fa01d9e89f50e4b249d36b2ccb8f7730a7489c677a6a78dad710",
+          "lua/core/keymap/ie.lua": "f31bbd078acc5194850cf0a09558d53bd65ef7f5a9530c2fe037a2526f97249d",
+          "lua/core/keymap/is.lua": "4dddd7fd599036ead6b5787996da55ed3d1669c58b1f642d5c59ded8569f55e0",
+          "lua/core/keymap/it.lua": "90df2d7baeb0f40e51baabd5ef6ecebc4793a03b917f68bd3f88a3fc6608e4f1",
+          "lua/core/keymap/jp.lua": "ad401b8cc5de8453be928975fae8b448a314641724942a095b20cd8d01d9a33d",
+          "lua/core/keymap/kp.lua": "080c4b6afcb7d637e07aa79ee53094c6fa4645b1ff51e6519545066e412be692",
+          "lua/core/keymap/lv.lua": "64e70d30c7add3eb7a7ba06348102815486a8dc7b36d8eafb98d08518181044b",
+          "lua/core/keymap/no.lua": "c2d13a88d26e23fe4b1beeb25e73966bb6c18d335af435ba690e3286d2c01299",
+          "lua/core/keymap/pl.lua": "b0b5c68e1e22394816ec81a192bf8b5282919e8ab16abbec46178074755f0d85",
+          "lua/core/keymap/pt.lua": "2c6aa619edd75af84ea8a4e066cd9ee1e5dda748f0f4a534f8de095faea394c7",
+          "lua/core/keymap/ro.lua": "6886805c50f86bcd9e0022a5ddb8e076c286650f61c11445d337ae08d1e4a68b",
+          "lua/core/keymap/rs.lua": "2b085e36ae288802998e315365a5aa7121817b17c1724bb93f37f7400f7963b7",
+          "lua/core/keymap/ru.lua": "24b85071ec4c1788e12a630569b50ef412da02709811a8d5d747478a27fa44c2",
+          "lua/core/keymap/se.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+          "lua/core/keymap/si.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+          "lua/core/keymap/sk.lua": "6d0819e2d729989588e5805162a3408cbc873b04a2e902c725972222d9a96188",
+          "lua/core/keymap/uk.lua": "7f66705b546db4a9401bcec96593fe1b53bd8dc5ebe4b833c45385a5d2fb15eb",
+          "lua/core/keymap/us.lua": "14360c91202592ea3e06dad70450460080e8fe9cb00805005085c289cc317e24",
+          "lua/core/menu/devices.lua": "fa141e7150fa8cedb28ae405ea12437cc942cacc28da77fa01d48a50dc2a99e7",
+          "lua/core/menu/display.lua": "11ac274cefac8ed50c71f1b13dd0d26a4f8b32895f5f91bb26649bb99d0e8ae2",
+          "lua/core/menu/home.lua": "decea467b269c60cbe21f8c88058e3eb97d93bdfaaa97a58778def12eaa60341",
+          "lua/core/menu/mix.lua": "ed559e3387cb787c42e5919f0c38a3308810b23e3c718e544fa478e1bcf79b0d",
+          "lua/core/menu/mods.lua": "a4d035d3535988db73e8cf45b41117f54278fc3074237b3883fdc26dc7a38c02",
+          "lua/core/menu/params.lua": "44cd5c78b9ead6b6133cd053a6043bbda207b5be8623e42a835a112d02f9c88b",
+          "lua/core/menu/preview.lua": "c54079102331bc2365253b3b9044e9986889cce75c0fbaffd4485cf188784cd0",
+          "lua/core/menu/reset.lua": "327eab6ca7c2585fea4fe6a18151958f31f8a115c8429c869fe7bdbcc2852c8c",
+          "lua/core/menu/restart.lua": "c028bbc34b385a1f67f2d49c962288fe2fa12d4c32b86cde37b897b8b6c3d8d0",
+          "lua/core/menu/select.lua": "47f11486c115336238829d88fdb8fa494d7935d605a3e85128138c0befddcac1",
+          "lua/core/menu/settings.lua": "5d4afaf805a55e3e6351aef027ac2d8ce6e12e3b216be9bf0ce51b17e6d0350d",
+          "lua/core/menu/sleep.lua": "5d1235cd51b48e615238e3bb6ecdfc931236ec17bb9cc86ddfa1d56f38f6dd11",
+          "lua/core/menu/system.lua": "0ae21deb50981f8596b20156adb1365ac047d06b1df54f0dbe49fe02c2c27c0b",
+          "lua/core/menu/tape.lua": "3c51a61ea86a4ec264a1809e895539154ed94b2e71bf337100d3ed3358045fb0",
+          "lua/core/menu/update.lua": "ea60d6e071e2543158daa51ee984ecdeafd2f1a7d956fbbf34482f1879c6a9d6",
+          "lua/core/menu/wifi.lua": "055a8127970b0f5c5c7bfd282656c0322858b090b8baa50e29f18dd3bef8f829",
+          "lua/core/menu.lua": "d4429657fca43c2fbc5093a42d819e49fa778f0a110c80d8f74961e2166b72f3",
+          "lua/core/metro.lua": "f0428b08121f0d8faeef6aa1b22baba474c25d658bebb39efd2a2520e236fa04",
+          "lua/core/midi.lua": "de4d9e26f39b0de1ffc76d24b094af86f5ce4416860c56bfdb017e914e1f6ab8",
+          "lua/core/mods.lua": "d9bf914902c0167be6a74124216de399ead2c8981de27f4c84223dd8e1098802",
+          "lua/core/norns.lua": "8d347b84c7e5ae14ba71866f54fd21334a0a700be2de08043b17c6a2e4141708",
+          "lua/core/osc.lua": "09e330bacc3830a87ae6763f893f42fbe130083e10517e4708bc33adc101a525",
+          "lua/core/params/binary.lua": "dc04eebeb78e624a028b1bde952e4c54b0ed15fd754bb16319bb9b821d35e6fa",
+          "lua/core/params/control.lua": "c08039f8219ec337a5096d145a8520bfd1fd75199eb603cd329bda6a780e3f19",
+          "lua/core/params/file.lua": "5fc39c476346972e5b62de529f4e905e492a72445cb18feb4a1019214ab7d11c",
+          "lua/core/params/group.lua": "ad50e9d9a383714201cb1a8390db766ff9079ba827b9227ac016f5f6ab0ca394",
+          "lua/core/params/number.lua": "46e82744708c4637fb000abff4ab28bce723a98b130a5e44a15fa4628bfb58dc",
+          "lua/core/params/option.lua": "09dc6e68890a8b6497242dc61135a1fddfc7fe9f52c71ff94535c0c60d3ce49e",
+          "lua/core/params/separator.lua": "53688e97ebc68b2d92b7c732c8ff58ae1adcea0302b152f6f623c1f7ea9a74a8",
+          "lua/core/params/taper.lua": "099a52e84f18295da0e9991f6a213de899e79dd86f72d1ea77ffca4a97ff3a5c",
+          "lua/core/params/text.lua": "e6175cc05eeea9f99079633dfbb289f5835d66071b84815ba03b896723f3c93f",
+          "lua/core/params/trigger.lua": "b2e5647ab52b87f72a9937f88c0d4141d37725a2fe01c7ee39b36f258f1f38d7",
+          "lua/core/paramset.lua": "1cded541234610937b2118464ec7318c5d6034c0fac8966c11e533d4e5e94e4a",
+          "lua/core/pmap.lua": "eea56045659c4498b1747f297dd7e174ff3fa809dc545b95ba5870993495e375",
+          "lua/core/poll.lua": "feced9cde17ff9592c654e5c62282ed888c222a91c7fff62aa12e1ec125abb5b",
+          "lua/core/screen.lua": "59cf7b3ba1712f0426681c7d8cc93bb29dc9047af08071ee8421b440c5ed6251",
+          "lua/core/script.lua": "1a17573064202573a2090ae15ec9aaca681bb0120518331c3a8bc773c3eff806",
+          "lua/core/serial.lua": "15012b5a54b049cae2d85cf4f20013c929ce09a24ec60f972b39e00a16790877",
+          "lua/core/softcut.lua": "a961139fbc4a9e4f00d4df3d10128cc21e112d3b35b02be5674e2e5f8043c7b4",
+          "lua/core/startup.lua": "9f84bfb46ff4c5e4a0c0ce5e43168f301fb5dd957561ba5241a476ca258f36fa",
+          "lua/core/state.lua": "adfb5996ff8e9506f3cd73b84b94530fc34e47b22ae615129a9bfb6bbe04338c",
+          "lua/core/vport.lua": "a84bff4751120057bc6b1e686c89f2d5eebbf4a5b73e508ab6ef1f92939601ea",
+          "lua/core/wifi.lua": "7a9ef8a8a49190aae3bb7cc64668c39bdb30aaf2a62cc9b6fe0d6f4c406b49f4",
+          "lua/engine/polyperc.lua": "acf896ca1e00159bf77659d10b1c5895c691263e87f2a128bc3d26032cf8b546",
+          "lua/engine/polysub.lua": "9a61404b824401fe9a522376e5bc1cd160a56d05e3a2b2594ca4696864693fd2",
+          "lua/extn/sky/core/object.lua": "3326c1c5e806cc3f5056457ba5f77e341ee50096f0e460de224101a9e53f5d64",
+          "lua/extn/sky/prelude.lua": "76507e18513b4825621c421dc12d5f433ec12507b8634f36685f75fa96b47937",
+          "lua/extn/sky/unstable/core/page.lua": "b769a686e299c67fc47d39536dd80fb1993687379d7687d2a51676ecc9066d87",
+          "lua/extn/sky/unstable/device/es.lua": "93e59548e3aae96310a44bae77da23ee9cdefff48d84c70e3afe153324de684e",
+          "lua/extn/sky/unstable/device/linn.lua": "250d7e673a3639b126bab062e28b0d92583bccbfc69a7738c524e174f8d77209",
+          "lua/extn/sky/unstable/engine/polyperc.lua": "d91be322a6a7ccd288156a3b488d00fd25d5f6b9ec6c620520d8d36c7d2fafdc",
+          "lua/extn/sky/unstable/engine/polysub.lua": "769ec85986134820fbafb075fe2e2098b5c754e94fa5ae1f321885836298b128",
+          "lua/extn/sky/unstable/io/arc.lua": "4a461c98c64371ee8dcaceceff7e53cc250f7790985bd19e7cb645e7b8e82e5b",
+          "lua/extn/sky/unstable/io/grid.lua": "dafd01d339ae3f438216d0e0052e3b60711006c3389d6f6fcbb81f4d5c8b507c",
+          "lua/extn/sky/unstable/io/norns.lua": "b65591a864bae0e27b708abb96ced2bfdc8fa9e6d7529706cf39b157ec70ace3",
+          "lua/extn/sky/unstable.lua": "7e5e8c04e8c49eef45061167fb181b131ad2eda4e5346942721c76ca44daff33",
+          "lua/extn/sky/v1/core/event.lua": "caa5ec82352d2d3cf55d2b7844d68f71bbe370a3d9f84b02a64848c613a26b91",
+          "lua/extn/sky/v1/core/process.lua": "ec2e39c51164bb4f7fd210671d2a4fcfb6f81e48e92e3014286c0902c7c5907c",
+          "lua/extn/sky/v1/device/arp.lua": "3d55ef27854d47c088aaaf92a83c1cfcdc6638463b0c1cbf29c8b2ada2a24ed4",
+          "lua/extn/sky/v1/device/behavior.lua": "a474f8fd301283cbe94d14a9253d9b407d88e5ee75e1334dd08df75354e3cb9e",
+          "lua/extn/sky/v1/device/filter.lua": "4445f9e9a720720a6fde97240597e8efe20d7dca0fea6d7286f3a522e0ba96ac",
+          "lua/extn/sky/v1/device/make_note.lua": "c55532084df6fe845bfcb3e41c38dc503637c8e5c98ba5b923157d493bd4c912",
+          "lua/extn/sky/v1/device/switcher.lua": "36e5d68538a4f267b47de753c0c5078ff14208acf7d0d53a869074c0db22edb7",
+          "lua/extn/sky/v1/device/transform.lua": "c8b198d76350495475280c6b9e9f2f12f5c6dd6e879c929cddb6040be0f4a16a",
+          "lua/extn/sky/v1/device/utility.lua": "9e1954cf840c01e5f7f188d13706d795c07f3661d58606c752d957adc8cccf56",
+          "lua/extn/sky/v1/device/virtual.lua": "b6de76dea64824c83ae47beaaecf54eb7ab2129fd5115336c1b19dc5aec1c675",
+          "lua/extn/sky/v1.lua": "d0535669d932031c308f9907bba2449add01201d51062a304fde090e91f1d4c0",
+          "lua/lib/asl.lua": "1b73cc2a5bd07fe28de84730c4857d433d041bb883bd3aa8995f165f0a1492e2",
+          "lua/lib/beatclock.lua": "9319d9c400c479591197393c4497ab1dd3a066c5ac110aa9e697a5c3f36f2237",
+          "lua/lib/container/defaulttable.lua": "00fa1658df56b14aa3178d3aa2fe194d1b2c85d69fb3c3a86688a4aa80b7f901",
+          "lua/lib/container/deque.lua": "0de4f516dd81e773d2015951443413f17007720a90277644f872a0575e137ae5",
+          "lua/lib/container/observable.lua": "d3fd1e2075b0784d2d01fa7e70d3b6b0a2fe131e2600f8af5ae1d0430cf4c3d9",
+          "lua/lib/container/watchtable.lua": "b246d604fd8361763a78ed87af4c251e3cb98927e1052e712cacc9da9a6fc3d9",
+          "lua/lib/container/weaktable.lua": "4e6fcccd7d8fb3396318a74817f944e461cce74835d420857702f833f0f6c12b",
+          "lua/lib/elca.lua": "336ad847149f5291f036ed023ac463b8d99eb5ec586126533696c4df14b8a173",
+          "lua/lib/envgraph.lua": "121ae97c5226cfb8f5dd4313f653a7d10cdbbedd426702e7a4a688859e2ce161",
+          "lua/lib/er.lua": "d0d719956c474f86cbedc7e8cea2dd70e042d950e47dcc9bf0dcd9f6fc1f80f3",
+          "lua/lib/fileselect.lua": "2b5a7af0f4aa51cbccdbd5c70db0dee8da434100cf9b8decd0973aedb212b806",
+          "lua/lib/filtergraph.lua": "d205434ea1f8441593ef5ab246a8b2373556e17e41f4e750fb755ee0b2379fea",
+          "lua/lib/filters.lua": "b5c6963d091f3ea75baab73cb39a0b3276b888dc49ad53b356aa97fe11367aba",
+          "lua/lib/formatters.lua": "5bdb3d3847b8037a7bd29199b8f4e20e1f2112b7e22a9b2c089f4a6dd95f25fa",
+          "lua/lib/graph.lua": "22a3ba02202b536af350e4124528a3c1d07074d856132a4fe4bde4ac62b80965",
+          "lua/lib/gridbuf.lua": "bd1bdff997d9d5f638bc69aa116eb791647d128c591b81c2080bf8e36f939508",
+          "lua/lib/hotswap.lua": "d81047cf503b769f7e253c2c7bfef012da4aa07e817a242fe9b504f0dc4fd30c",
+          "lua/lib/intonation.lua": "7c458d9cdfbec1e7c24dff22edfea1518f6d565315b4abdf775a91c4c2c31791",
+          "lua/lib/lattice.lua": "9c44ba4b8490c7d8b8b0250ee95611184ee12086624177b821b3012544102d83",
+          "lua/lib/lfo.lua": "9754a4d198f5e3638cc723dfd98e31555ba4cc6f256a7bd9d225eb6b2f3d7079",
+          "lua/lib/listselect.lua": "4c6d0c5a8af1a7827ca6947927d1c40606b404e9037dd9b982ddaf21638ed111",
+          "lua/lib/musicutil.lua": "89392bf3f6156d8e08b5fb0b0d3e0540102006ec964fab4058e70be1901e88aa",
+          "lua/lib/pattern_time.lua": "8a9cefd1f39930ee609b83dd291d9ae2ab3741e3f5045f4ec4142a3290115a39",
+          "lua/lib/reflection.lua": "0d2e7b3ca33321f0e6b3d7afb1896e6efbca004b41042c6b810be8897612dcda",
+          "lua/lib/sequins.lua": "85341f5e0db42ce7e400f995b284dae513a003a5be303216d2e86ef60cf64c82",
+          "lua/lib/tabutil.lua": "1e0c553bb30a924148566f76d2a8fdc2e3289f952029b5540f2505c6025fc57b",
+          "lua/lib/test/luaunit.lua": "5d63a80a2c9e30d9d2c852863c420f897e655f27e13a617def171a59091ddd62",
+          "lua/lib/test/mock.lua": "f7c21619c89d78bd48a702e5d2f87586fdf26241bc675d8f47fd36cca002c567",
+          "lua/lib/textentry.lua": "74f15d734ece2eeb401a069b9c44ebb7dda845b4c645b559afe05f8006366586",
+          "lua/lib/textentry_kbd.lua": "a577566eaa266bd06c8adb5faede19cf6b764ecfdad806095cc20ae16f473e2f",
+          "lua/lib/timeline.lua": "8b1790cdd1e5e73d9076da42cf956a65de3b944a928f83e4b158ec39b559b8f1",
+          "lua/lib/ui.lua": "faa2e8b1fe6e9b125bee685cad813d14c44e1a42b05f92bfaa423cb3740cbb9b",
+          "lua/lib/util.lua": "366a38ad6fdc6e58cdb4e522a13f89fb9be7a95e83fd5b59580d2cfd4adfc84a",
+          "lua/lib/voice.lua": "ca9191dba1bda14c2ed05530813d137f9af3d1e8852d9f6b11030f043dd8d8cb",
+          "lua/test/core/audio_test.lua": "208a1221d9273ea33686d0f1a40cc069b124dcf676a58e83c347a94cd2526d5c",
+          "lua/test/core/menu/tape_test.lua": "15f698ee61bfebc7d779c6665703e31a29fe08f0d10775543839019c42d83e6f",
+          "lua/test/lib/container/defaulttable_test.lua": "2c9c0b86b42aa40be5f915b34768d3ff14db609b6b2cdf1a70ee29343e013c7d",
+          "lua/test/lib/container/deque_test.lua": "4675f03cda3dd707a89f95d2f3b404217cf008fcec6d013e939f6254c01508de",
+          "lua/test/lib/container/observable_test.lua": "8d49be45f5437c982b193ceb9f2765f9687a5f591bbe9060191a82b9078411a8",
+          "lua/test/lib/container/watchtable_test.lua": "5c375e3ddae8fb82fefad612c39bf4f5d027b68307cee6bb41070085f2284692",
+          "lua/test/lib/container/weaktable_test.lua": "9844e9b117901b3e24ba230a05a8455f813a43b48403be3371d0a90f3de2caa8",
+          "lua/test/lib/test/mock_test.lua": "acee6731c1c6d40ddb4359a95744f430ee9e32a0c136a2bf10526cbaf351e81f",
+          "lua/test/test_runner.lua": "e49d61887a914e5a5483ea3ac5b0d02d9f4ed64df26197cee0caa143373f36a2",
+          "sc/core/Crone.sc": "c5092bdb471c593463776800992c08159545059c17ea3f8083d590201acb82e2",
+          "sc/core/CroneAudioContext.sc": "57e9b0318f1a7cdc2095625b5cc6b63dbb505a81807eba4681b4e24e3410e09a",
+          "sc/core/CroneDefs.sc": "f8b90295d86a55810f2c646a2c5117967dedf59cb94ce42e7bfb424130a5289f",
+          "sc/core/CroneEffects.sc": "b96a467f4cbf2492f364af4a49db58adb5745925a06e43e2641045785e83ce89",
+          "sc/core/CroneEngine.sc": "125e34b54b78bac0ee86a160086d19cac44695f96ec30ae833d9747b9276554c",
+          "sc/core/CronePoll.sc": "7a20d39cdd0d604409b34e279220ac19e5ed66ad77463254316df50c8ac57fd2",
+          "sc/core/CroneTester.sc": "f6a1c16729129a01826cee1fa3640646eb83e8a24463c86d9edc1e135a246ce2"
+        },
+        "build_inputs_sha256": "2dc4bdce082aa0c7d58f2aed06c715da05c4a041baa7d7e1346405764400ad0b",
+        "experimental": {
+          "status": "experimental-unadmitted",
+          "files": [
+            {
+              "path": "matron/src/clock.c",
+              "before_sha256": "a9af796faf78e91d26c5e3cb505ffb784ef6e8c3944b5c85ad3ad25c130cb030",
+              "after_sha256": "edb2bca58db7f9199a74c3994c056043f33ea1e32fa98c3996a679d2bef7af27"
+            },
+            {
+              "path": "matron/src/clocks/clock_internal.c",
+              "before_sha256": "21ad04624781b6fee6b8d26c48cb2b1b4f49d678df5502cc4d2f9e25a4a5e023",
+              "after_sha256": "09b0c14cdd1801004454cd10d66933616a7b1c288f3bfe92cab00118a8ef64e4"
+            },
+            {
+              "path": "matron/src/clocks/clock_internal.h",
+              "before_sha256": "1eccd29af4af8860c57172cc2f5e541be2b15b8166cea41be5394d099d317994",
+              "after_sha256": "c8c77409f63fdf7961588cae9343f57349bdb0e83cede5019f2596cdda2fd547"
+            },
+            {
+              "path": "matron/src/clocks/clock_scheduler.c",
+              "before_sha256": "65a6fd3581885775fe22e943e8802a4705bdf2bfec2a2c933ca11364f83ce853",
+              "after_sha256": "b341e67cd9742c0fc992a9113c92a8434b1d202392c24b3589dbece5bfa8c917"
+            },
+            {
+              "path": "matron/src/clocks/clock_scheduler.h",
+              "before_sha256": "5b74b4fc8d495ad9b1d6b0c5cba26e24bbe84ec3b152d38e36ea8391454887c0",
+              "after_sha256": "a3934537e8edc810dc1b587808400d6290f61fc1dad64ffa44c8ad9b40091175"
+            },
+            {
+              "path": "matron/src/emu_bridge.c",
+              "before_sha256": "c50afb60e3348eb92f8d8a048b91d63196100a155d9be7fd15ce8528529b1481",
+              "after_sha256": "3b0eda57ab3e48c53a37fa64b64341b0511d0b35a8b6acf9637efb1aa076a2d0"
+            },
+            {
+              "path": "matron/src/emu_clock.c",
+              "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "after_sha256": "57e483d61f52a2063a6ee572eff79bb6c4dff29d81d20329268e758b39987bfd"
+            },
+            {
+              "path": "matron/src/emu_clock.h",
+              "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "after_sha256": "eed31d7b30148d5f11fbaee4c00e02f70078f9f0cfc000563411739d4380c17f"
+            },
+            {
+              "path": "matron/src/events.c",
+              "before_sha256": "ca97309cdab290aa5d0cedf848dd282797bfbac822d2658a0a16c8875cf843cb",
+              "after_sha256": "ea143071c8e91024ad1d64c8d1332a3143e4476e2dc537784a2d9feb3e36251f"
+            },
+            {
+              "path": "matron/src/events.h",
+              "before_sha256": "e20130f736ce4635564e11069002b5667c24b521985e127e75d082be8006951c",
+              "after_sha256": "c5374b8a98a05c3eda3649d8d7fbae72614e5dc79ee219e3620706712363215d"
+            },
+            {
+              "path": "matron/src/main.c",
+              "before_sha256": "4ddbf077537977757783af4ae88ac47e14593bc23ca2634469a078edafcc0706",
+              "after_sha256": "c4eb1dca85d73f3e4c37dd73d7ac2e6a9222d78c111d23647a7350e95b8781fe"
+            },
+            {
+              "path": "matron/src/metro.c",
+              "before_sha256": "57672a8dcf750288efecb121714760bf2d03feeb617d6dcd9f35808fa4263f58",
+              "after_sha256": "007ba758d77b85402c92b5d3f5661d62703c4e7c8c70fc4b608c2cdddf056325"
+            },
+            {
+              "path": "matron/src/metro.h",
+              "before_sha256": "0f10716efd308dd05f889b150cf18efde807207bb6bb3e65213ea6ba8e12994b",
+              "after_sha256": "ab8d8ee0837849968991ad18955b71b557446c36bf70adbe102061887f71eb4b"
+            },
+            {
+              "path": "matron/src/time_since.c",
+              "before_sha256": "da2bb04fdffc16db75007603a9f7fde97b6f71d810d31f5e855b6a98e2ef6da8",
+              "after_sha256": "3969d24a9e68995d4911cebfe439e0aed89033e57e0bdf86c8f957e39d2a7a7b"
+            },
+            {
+              "path": "matron/src/weaver.c",
+              "before_sha256": "6a61898925a9db55d41443b271ef0ef9908b76755c1bc668279b903a19000afd",
+              "after_sha256": "f33180ca6b21da5acdb6a9fa8ddef10310ca03e6c265e8c6364df0931f157827"
+            },
+            {
+              "path": "matron/wscript",
+              "before_sha256": "d14d9f7063f916b1e4acc57c6c26db21e1f0681911b52938407a3d11afd4e5c5",
+              "after_sha256": "7fe41bac2c5d6acc14a98c605c26f10835ff317a32e0747841f937cb08249c21"
+            },
+            {
+              "path": "matron/src/clocks/clock_midi.c",
+              "before_sha256": "4800bb7137032a15a17e9edb3751d99b81b7883ff29fabd2df84ae31a9897ed1",
+              "after_sha256": "a267d3655cf36076c8a69ecf30b6c4b155e35143d89f42f6c1c59fd774c78b7d"
+            },
+            {
+              "path": "matron/src/clocks/clock_midi.h",
+              "before_sha256": "6800ad935d64ce134ddbcffa50901122c7ae2db4095ea8d894d071984613eda8",
+              "after_sha256": "044e9cf29ec5861f64ab7ea1c5f0ebe8f3a22c75786a0e15eb279bd35c218784"
+            },
+            {
+              "path": "matron/src/clock.h",
+              "before_sha256": "1922a84cb1dafc86298f32f3b1b7306619739ddecf7fc179c6473a1c645ce7a1",
+              "after_sha256": "47963248144af5c7caac4c976dbfda8155258a39d0341c3544238c49260a5b3b"
+            },
+            {
+              "path": "matron/src/event_types.h",
+              "before_sha256": "c911eb1e7e81a14a30f85610d82e5078229adbcd45b4c4e0910fb879a99c06f6",
+              "after_sha256": "a6e2a23fa4dbc0bb7d1d9beb8ad0b7f6b4d2b1a870182869a83d7b5252408ab4"
+            },
+            {
+              "path": "matron/src/weaver.h",
+              "before_sha256": "c6eed642ff5aa2541556cd296922ec63389cee0c93e6e610222f012f48b0cce5",
+              "after_sha256": "3792abedc432fea1069bb342ca7b201b47e012f09f86d538e4da44630fda01de"
+            },
+            {
+              "path": "lua/core/clock.lua",
+              "before_sha256": "e39411ea122b3e9110e98500ebf7ff8bc982617472ba88582446eb68b8db9f54",
+              "after_sha256": "1b97118fa37e979c5f1f4978fd560f6c73c837efb8c4a6e3445fc9a8b8570907"
+            }
+          ],
+          "midi_schedule_domains": [
+            "logical",
+            "monotonic"
+          ],
+          "patch_sha256": "1d57b953d14d0415f9aceb024458af2e1e3f922b5aa0b6cb09e0c1212e3a9d41",
+          "midi_connection_status": "unvalidated",
+          "midi_connection_version": 1,
+          "rebase": {
+            "source_install": "/home/andy/projects/monome-runtime-candidates/midi-hotplug-locked-01/installation.json",
+            "source_install_sha256": "5422eeb5f9a3ce69c28e0b56f525c3be08706b096fecc4032c0572c3062399b5",
+            "original_controlled_install": "/home/andy/projects/monome-runtime-candidates/midi-hotplug-d-05/installation.json"
+          },
+          "midi_clock_correction": {
+            "status": "experimental-unadmitted",
+            "patch": "patches/norns/candidates/midi-clock-start.patch",
+            "sha256": "8485549d26ea14ad2c0d6d62d0444e2917d6c4c4860a9089748cee9b6f584c96"
+          },
+          "baseline_install_sha256": "5422eeb5f9a3ce69c28e0b56f525c3be08706b096fecc4032c0572c3062399b5",
+          "controlled_baseline_sha256": "5efc2367528c21705416c163d0ef1341e16bc63df695d9c5bd920219de9d002b",
+          "midi_output_boundary": {
+            "status": "experimental-unadmitted",
+            "patches": [
+              {
+                "path": "patches/norns/candidates/clock-scheduled-deadline.patch",
+                "sha256": "09726e7c5346dcbae3cdb54dd0af3e51587d6d5edcce592be85c87829f5ca479"
+              },
+              {
+                "path": "patches/norns/candidates/midi-output-boundary.patch",
+                "sha256": "1e6ea366b8199a362f4971fe55ece3b0e9eee3b95b0f863ecd0124e353d8c4a2"
+              },
+              {
+                "path": "patches/norns/candidates/clock-queued-epoch.patch",
+                "sha256": "158a230daf6529ecfa041a58cb27cb3fb08ad210e0d4af6286c1d5d7ceead569"
+              },
+              {
+                "path": "patches/norns/candidates/midi-output-fault-isolation.patch",
+                "sha256": "c195d22ad36734b2a33cb7bb1aaf5edab21d90a7d957bfda2f07be5c85d6ea3b"
+              },
+              {
+                "path": "patches/norns/candidates/midi-received-zero.patch",
+                "sha256": "f31f072313e210a27adc077e9e8fa1f59f9cd2c6ef33b8e483a4851d0aaeb09e"
+              },
+              {
+                "path": "patches/norns/candidates/midi-source-serialization.patch",
+                "sha256": "a84b3faea319fa1936af86742751a5d84c3bdaeaf2175dc7807a2e353a35841e"
+              }
+            ]
+          },
+          "prior_install_sha256": "1265cbfe390142974552b9ef47927d0c714c155cd486027f5291968b269018e6",
+          "internal_tempo_continuity": {
+            "status": "experimental-unadmitted",
+            "patch": "patches/norns/candidates/internal-tempo-continuity.patch",
+            "sha256": "5f17474c33f4ae4c9908ff18e9ef6c047b25b54d16ba16336277ab37206c6b3b",
+            "base_install": "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-09/installation.json",
+            "base_install_sha256": "91b7d25dbd8830747a5b014b741ff19d1d9b49a2420ec7d4751384f8443d57a9",
+            "files": [
+              {
+                "path": "matron/src/clock.c",
+                "before_sha256": "edb2bca58db7f9199a74c3994c056043f33ea1e32fa98c3996a679d2bef7af27",
+                "after_sha256": "f1954c61bcfc99d210180a36bf675b693240ea2d71f8b128dbcdb05fa7edc6a7"
+              },
+              {
+                "path": "matron/src/clock.h",
+                "before_sha256": "47963248144af5c7caac4c976dbfda8155258a39d0341c3544238c49260a5b3b",
+                "after_sha256": "21549133a360e2231d0aa181bacb7f1fe0fdc70723073cf9b067d5bf3b9adee5"
+              },
+              {
+                "path": "matron/src/clocks/clock_internal.c",
+                "before_sha256": "09b0c14cdd1801004454cd10d66933616a7b1c288f3bfe92cab00118a8ef64e4",
+                "after_sha256": "72ff2ae99cbdd22d11259db0b30eee490d4d935f692b2f81c10b664c25c8b385"
+              },
+              {
+                "path": "matron/src/clocks/clock_internal.h",
+                "before_sha256": "c8c77409f63fdf7961588cae9343f57349bdb0e83cede5019f2596cdda2fd547",
+                "after_sha256": "47fa86e1d4633d9f04efe53c660f57eabd62c0a07debcd4e22c67b48871a6469"
+              },
+              {
+                "path": "matron/src/emu_clock.c",
+                "before_sha256": "57e483d61f52a2063a6ee572eff79bb6c4dff29d81d20329268e758b39987bfd",
+                "after_sha256": "0cb92725145c615f6305bc895c2655042af44c3d1d5d02be040b7833660fa150"
+              },
+              {
+                "path": "tests/matron/clocks/clock_internal/test_clock_internal.cpp",
+                "before_sha256": "ca0aab015e32fb54e24007f2c5165f8788fd6e2506155d3da45be7a4711a8df7",
+                "after_sha256": "89861f88ed351d7de1cf974cedbe31f5a676b8a1501395e9b4c71f4661fef016"
+              },
+              {
+                "path": "tests/matron/clocks/common/helpers.c",
+                "before_sha256": "8856028cbdeae3907029cc8b27a5988003b3fe9a628e501a60b02e72ab0869a6",
+                "after_sha256": "e76fd186695cbf6d24ee324fb9c2cc54c6d98cba89630cae070094ae6fc45f86"
+              },
+              {
+                "path": "tests/matron/clocks/common/helpers.h",
+                "before_sha256": "6fcf74c469919dd91d12c9e5abe9ea06623f5a74743e203b12399785e1067efe",
+                "after_sha256": "873649ea6b488a43c777ffe64a02bc517f130300730e03f95396ec2af45c34ab"
+              },
+              {
+                "path": "tests/wscript",
+                "before_sha256": "383e84ae082aa27bd10d8a9b6da0f58b37460ba632d7d99ba4ff5540b786d952",
+                "after_sha256": "bff5ae3c61cabcaf9a7cb9c8ace968c419fde9002b68b5462e41c91bc03083a1"
+              }
+            ]
+          },
+          "midi_schedule_capacity": {
+            "status": "experimental-unadmitted",
+            "events": 2048,
+            "max_request_body_bytes": 524288,
+            "max_native_packet_bytes": 65552,
+            "patch": "patches/norns/candidates/midi-schedule-capacity.patch",
+            "patch_sha256": "b1749ba59d28a3e77e80ecb3cbf5b78a0c49aac7b8a37ee21fff2d90d1d67114",
+            "base_install": "/home/andy/projects/monome-runtime-candidates/internal-tempo-continuity-10/installation.json",
+            "base_install_sha256": "44ccdf20716fb80e13972170e96507ce76de3bf5812f36f5934104b2b5db084d"
+          },
+          "runtime_stall": {
+            "status": "experimental-unadmitted",
+            "milliseconds_min": 1,
+            "milliseconds_max": 1000,
+            "patch": "patches/norns/0014-runtime-stall.patch",
+            "patch_sha256": "3bbec21eae0c2b684cd2ac85e0fa8810da5d274c278e1dd576dca3c8e3d36ec9"
+          }
+        }
+      },
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 15063,
+          "returncode": 0,
+          "seconds": 0.06389201298588887
+        },
+        {
+          "service": "sclang",
+          "pid": 14946,
+          "returncode": -15,
+          "seconds": 0.11444237001705915
+        },
+        {
+          "service": "crone",
+          "pid": 14923,
+          "returncode": 0,
+          "seconds": 6.769102765247226e-05
+        },
+        {
+          "service": "jack",
+          "pid": 14899,
+          "returncode": 0,
+          "seconds": 0.031703121960163116
+        }
+      ],
+      "result_sha256": "12bb2e9473460bbcfe662be7c26dd38af86e1efcec07584813f307cdebec1a1c",
+      "tempo_witnesses": [
+        {
+          "selected": "30",
+          "observation_index": 46,
+          "native_tempo": 30.0
+        },
+        {
+          "selected": "30",
+          "observation_index": 52,
+          "native_tempo": 30.0
+        },
+        {
+          "selected": "300",
+          "observation_index": 57,
+          "native_tempo": 300.0
+        },
+        {
+          "selected": "300",
+          "observation_index": 63,
+          "native_tempo": 300.0
+        },
+        {
+          "selected": "90",
+          "observation_index": 68,
+          "native_tempo": 90.0
+        },
+        {
+          "selected": "90",
+          "observation_index": 74,
+          "native_tempo": 90.0
+        }
+      ]
+    },
+    {
+      "run": "/home/andy/mosaic-manual-runs/1c61648106b14b91aee003293a13b56f",
+      "label": "qualified-controlled-pass",
+      "passed": true,
+      "stages": [
+        {
+          "kind": "song-global-tempo",
+          "stage": "minimum",
+          "slot": 1,
+          "bpm": 30,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "minimum-other-slot",
+          "slot": 2,
+          "bpm": 30,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "maximum",
+          "slot": 2,
+          "bpm": 300,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "maximum-other-slot",
+          "slot": 1,
+          "bpm": 300,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "restore",
+          "slot": 1,
+          "bpm": 90,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        },
+        {
+          "kind": "song-global-tempo",
+          "stage": "restored-other-slot",
+          "slot": 2,
+          "bpm": 90,
+          "onsets": 9,
+          "release_checks": 9,
+          "passed": true
+        }
+      ],
+      "source_equal": {
+        "case_sources": true,
+        "capture_sources": true,
+        "fixture_sources": true,
+        "plan_files": true
+      },
+      "actual_clock_modes": [
+        "controlled-experimental"
+      ],
+      "runtime_identity": {
+        "lock_sha256": "256b07b12acb1f82236053e33303e7fd0cf94a963621462f142bdf652593a616",
+        "source": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns",
+        "prefix": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix",
+        "binaries": {
+          "matron": {
+            "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/matron/matron",
+            "sha256": "c60c21338c3b1a5b6a7be40b136d090fd751a0c864b9c3e3e4f8dd17223eab7a"
+          },
+          "crone": {
+            "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/crone/crone",
+            "sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f"
+          },
+          "libmonome": {
+            "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix/lib/libmonome.so",
+            "sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f"
+          }
+        },
+        "norns_revision": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+        "patches": [
+          {
+            "path": "patches/norns/0001-desktop-architecture.patch",
+            "sha256": "1945a65e586446e5ae6a75cac646fc468aace34914c8f19a5d192925ad314e78"
+          },
+          {
+            "path": "patches/norns/0002-platform-read.patch",
+            "sha256": "745d47530e0769f8edceee525fa2e5cf35fa75cd9f180a3866bccffa35bd9a63"
+          },
+          {
+            "path": "patches/norns/0003-portable-display-conversion.patch",
+            "sha256": "a6f14a5cb4bba9203f3738b605a5d6902a8612b73c45c07a998a73fcad322ba9"
+          },
+          {
+            "path": "patches/norns/0004-virtual-device-spike.patch",
+            "sha256": "0b7fc1089332629f9cbd64933d04136974c978f347af5376eb22009925dcb173"
+          },
+          {
+            "path": "patches/norns/0005-native-session-hooks.patch",
+            "sha256": "f418d02d9e2ce1756b35348f432421cd0888a905c28b3740736a5459a45c0278"
+          },
+          {
+            "path": "patches/norns/0006-hook-error-reporting.patch",
+            "sha256": "fa5233c3adbadb62ec5bbe17dd41fd4e670d6a34a07ee3e1d2af2875b8143ea2"
+          },
+          {
+            "path": "patches/norns/0007-crone-thread-shutdown.patch",
+            "sha256": "a733a8b3daf2834f9193c38fb33e00c4b3dd817041236385b43974f37a32719f"
+          },
+          {
+            "path": "patches/norns/0008-grid-device-contract.patch",
+            "sha256": "647f46a6619fd36d968dff2e2990ca46ad373dae023773f65595bad26ba7c247"
+          },
+          {
+            "path": "patches/norns/0009-midi-device-contract.patch",
+            "sha256": "6233f827a3bbf090d3a6b7470569b3f232fe551bea7a94a5e24168c521955cc0"
+          },
+          {
+            "path": "patches/norns/0010-grid-native-level-conversion.patch",
+            "sha256": "fc079402b99feca9a878f2c97f02334ee75f6c06d7c4cc7d667a168935d7ad84"
+          },
+          {
+            "path": "patches/norns/0011-clock-cancel-queued-resume.patch",
+            "sha256": "40bb49162614d014a4b56f1189dcb9345991d0c1548a48fdf2518cdfea614499"
+          },
+          {
+            "path": "patches/norns/0012-scheduled-midi-input.patch",
+            "sha256": "fb94e9ed062d52b2dfec48a42db9f3690015d4e16116e6cfb6ef895c52230bcd"
+          },
+          {
+            "path": "patches/norns/0013-midi-connection-lifecycle.patch",
+            "sha256": "5598ce08c2829565e8614c8f8b3c88834c5ebb003d62342384e72d879fa90e29"
+          },
+          {
+            "path": "patches/norns/0014-runtime-stall.patch",
+            "sha256": "3bbec21eae0c2b684cd2ac85e0fa8810da5d274c278e1dd576dca3c8e3d36ec9"
+          }
+        ],
+        "interpreted_files": {
+          "lua/core/arc.lua": "f242495cc84de0a0454945dbfd189c75bde0f8e1114890ea92e48a8498dd05c7",
+          "lua/core/audio.lua": "eaf8f99fe3403e0d5ce3e2300670381a2c661339eb066be355e1ecc13c450cff",
+          "lua/core/clock.lua": "1b97118fa37e979c5f1f4978fd560f6c73c837efb8c4a6e3445fc9a8b8570907",
+          "lua/core/config.lua": "cbe963e9a2267bad92ac434c3baf78d36bdc7935f5f2dddfd4ecc491fe2074fa",
+          "lua/core/controlspec.lua": "4c5c3288957d14082a54a61cd82ce55a3913fe93deb471835fc22eb0c0889ece",
+          "lua/core/crow/public.lua": "55dbd0f5e2f392f8d631bf8d300cf951b44e759cb099abcbbe57a0fa546b2cfa",
+          "lua/core/crow/quote.lua": "4aa2e47149346f35b79e6aa7dd417ad108f01194adfbfd5500f4850ea6155a90",
+          "lua/core/crow.lua": "311a8de9cb131953c75fa2031dd4d40dcb59885f19db6d339e143457d84671de",
+          "lua/core/encoders.lua": "3e506a1d76e0e7d717348f4612526314db2f392546ed13a64e5b788985cc5adb",
+          "lua/core/engine.lua": "98d60c79bff98d6bc481dc96a197ac267109d0db7ab05940d3b3a84b709c64e2",
+          "lua/core/gamepad.lua": "430ef0ab6b97fa6ca7131e5c8fc87951e72ced0630208e4850a36efc525cd6a8",
+          "lua/core/gamepad_model/ibufalo_classic_usb.lua": "dd8225d8d2db68575d1e1349e3b8e52a0c86f1e20e51e50649ab6cc6804855cf",
+          "lua/core/gamepad_model/index.lua": "379873e8bac8e22ece145e90315fb2591a1db31cb5aaa0b0298f5f66af924a52",
+          "lua/core/gamepad_model/retro_controller.lua": "4e98f4b5ffe4eccf25f193e9206020ed4ef4dafd097c8e4a1e2a91df06e50bf0",
+          "lua/core/gamepad_model/xbox_360.lua": "a14a3955fe2056c9e73aea09976d50acdc7c57dac2ed6a55e7b13142526006f0",
+          "lua/core/grid.lua": "4a0ba6d64d3a1f8db5f3063f4334ce030ded4277f831f950398a6d9df28bfaaa",
+          "lua/core/help.lua": "9ebdba9352194a5d8793f3897ef12ede43d1444ec3032a0e3f54a457d3e6a982",
+          "lua/core/hid.lua": "abc45726d1c4ce2865db51b0ab5601eed3579390cdd66bed2bf454e572260129",
+          "lua/core/hid_device_class.lua": "3b26cb39ebdd6621672b108da79112b87b9b59140de102b0b1dddefa7f07c8c9",
+          "lua/core/hid_events.lua": "b13224c68ed1f2bdfaba651c02e614d7f10c4931835f539bb7b1b588c3ed6f5c",
+          "lua/core/hook.lua": "cae1a3367f1e0a7760c8da692f5a6edbc40b486203d0cdf1e08df958761389d8",
+          "lua/core/keyboard.lua": "4eba5075400e2e7ac67bc94b8c057d10b83b9348b998096b737c225f105e70ed",
+          "lua/core/keymap/be.lua": "899d8478cd28ddd6bb2b6c16cf92891041a48c2040ecb5dce23c37c4ae6c1b16",
+          "lua/core/keymap/char_modifier.lua": "27dcb40103fc85ffd2cfec5c2e40016839b7e86f0485fafaceb9ea1edb4ecda7",
+          "lua/core/keymap/cz.lua": "00bef6edead77a744c0acc2b80fdfde1e5fb4d82d5e974a8ea38c05e7f77c8fd",
+          "lua/core/keymap/de.lua": "f86218837a50f03e119fefe9c19e69f16134b27aa97734c99d341050dffc5cb6",
+          "lua/core/keymap/dk.lua": "09b946e206d24011fa1c4c04921bc4010bace2c4ae906cf3a3dd653631bb6875",
+          "lua/core/keymap/ee.lua": "c8966d504844438afcf61732f123953b572519ac502cb4bdf2383682d5fbbdae",
+          "lua/core/keymap/es.lua": "5252f10932c37a7cdd41f7f904f21d79818bfbae70d9673f879031de7cc35a5c",
+          "lua/core/keymap/fi.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+          "lua/core/keymap/fr.lua": "44e6c2a1876717ebc256c061239f5807941c1227fed090187be91cea8eb3f6cd",
+          "lua/core/keymap/gr.lua": "1578e8cf423ef9d639494bf756a0322fd82ee87127c7e3e9f9390d396b0338bd",
+          "lua/core/keymap/hr.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+          "lua/core/keymap/hu.lua": "d834842e9e99fa01d9e89f50e4b249d36b2ccb8f7730a7489c677a6a78dad710",
+          "lua/core/keymap/ie.lua": "f31bbd078acc5194850cf0a09558d53bd65ef7f5a9530c2fe037a2526f97249d",
+          "lua/core/keymap/is.lua": "4dddd7fd599036ead6b5787996da55ed3d1669c58b1f642d5c59ded8569f55e0",
+          "lua/core/keymap/it.lua": "90df2d7baeb0f40e51baabd5ef6ecebc4793a03b917f68bd3f88a3fc6608e4f1",
+          "lua/core/keymap/jp.lua": "ad401b8cc5de8453be928975fae8b448a314641724942a095b20cd8d01d9a33d",
+          "lua/core/keymap/kp.lua": "080c4b6afcb7d637e07aa79ee53094c6fa4645b1ff51e6519545066e412be692",
+          "lua/core/keymap/lv.lua": "64e70d30c7add3eb7a7ba06348102815486a8dc7b36d8eafb98d08518181044b",
+          "lua/core/keymap/no.lua": "c2d13a88d26e23fe4b1beeb25e73966bb6c18d335af435ba690e3286d2c01299",
+          "lua/core/keymap/pl.lua": "b0b5c68e1e22394816ec81a192bf8b5282919e8ab16abbec46178074755f0d85",
+          "lua/core/keymap/pt.lua": "2c6aa619edd75af84ea8a4e066cd9ee1e5dda748f0f4a534f8de095faea394c7",
+          "lua/core/keymap/ro.lua": "6886805c50f86bcd9e0022a5ddb8e076c286650f61c11445d337ae08d1e4a68b",
+          "lua/core/keymap/rs.lua": "2b085e36ae288802998e315365a5aa7121817b17c1724bb93f37f7400f7963b7",
+          "lua/core/keymap/ru.lua": "24b85071ec4c1788e12a630569b50ef412da02709811a8d5d747478a27fa44c2",
+          "lua/core/keymap/se.lua": "f4607f7c348dd9a1a076d6984db3e7eed989aad370b604341aa01c532d8f28b9",
+          "lua/core/keymap/si.lua": "23ab09ebfca7e8f695a835c2e51d3ec6b3c4f1740bc85060bb6a88233389bb88",
+          "lua/core/keymap/sk.lua": "6d0819e2d729989588e5805162a3408cbc873b04a2e902c725972222d9a96188",
+          "lua/core/keymap/uk.lua": "7f66705b546db4a9401bcec96593fe1b53bd8dc5ebe4b833c45385a5d2fb15eb",
+          "lua/core/keymap/us.lua": "14360c91202592ea3e06dad70450460080e8fe9cb00805005085c289cc317e24",
+          "lua/core/menu/devices.lua": "fa141e7150fa8cedb28ae405ea12437cc942cacc28da77fa01d48a50dc2a99e7",
+          "lua/core/menu/display.lua": "11ac274cefac8ed50c71f1b13dd0d26a4f8b32895f5f91bb26649bb99d0e8ae2",
+          "lua/core/menu/home.lua": "decea467b269c60cbe21f8c88058e3eb97d93bdfaaa97a58778def12eaa60341",
+          "lua/core/menu/mix.lua": "ed559e3387cb787c42e5919f0c38a3308810b23e3c718e544fa478e1bcf79b0d",
+          "lua/core/menu/mods.lua": "a4d035d3535988db73e8cf45b41117f54278fc3074237b3883fdc26dc7a38c02",
+          "lua/core/menu/params.lua": "44cd5c78b9ead6b6133cd053a6043bbda207b5be8623e42a835a112d02f9c88b",
+          "lua/core/menu/preview.lua": "c54079102331bc2365253b3b9044e9986889cce75c0fbaffd4485cf188784cd0",
+          "lua/core/menu/reset.lua": "327eab6ca7c2585fea4fe6a18151958f31f8a115c8429c869fe7bdbcc2852c8c",
+          "lua/core/menu/restart.lua": "c028bbc34b385a1f67f2d49c962288fe2fa12d4c32b86cde37b897b8b6c3d8d0",
+          "lua/core/menu/select.lua": "47f11486c115336238829d88fdb8fa494d7935d605a3e85128138c0befddcac1",
+          "lua/core/menu/settings.lua": "5d4afaf805a55e3e6351aef027ac2d8ce6e12e3b216be9bf0ce51b17e6d0350d",
+          "lua/core/menu/sleep.lua": "5d1235cd51b48e615238e3bb6ecdfc931236ec17bb9cc86ddfa1d56f38f6dd11",
+          "lua/core/menu/system.lua": "0ae21deb50981f8596b20156adb1365ac047d06b1df54f0dbe49fe02c2c27c0b",
+          "lua/core/menu/tape.lua": "3c51a61ea86a4ec264a1809e895539154ed94b2e71bf337100d3ed3358045fb0",
+          "lua/core/menu/update.lua": "ea60d6e071e2543158daa51ee984ecdeafd2f1a7d956fbbf34482f1879c6a9d6",
+          "lua/core/menu/wifi.lua": "055a8127970b0f5c5c7bfd282656c0322858b090b8baa50e29f18dd3bef8f829",
+          "lua/core/menu.lua": "d4429657fca43c2fbc5093a42d819e49fa778f0a110c80d8f74961e2166b72f3",
+          "lua/core/metro.lua": "f0428b08121f0d8faeef6aa1b22baba474c25d658bebb39efd2a2520e236fa04",
+          "lua/core/midi.lua": "de4d9e26f39b0de1ffc76d24b094af86f5ce4416860c56bfdb017e914e1f6ab8",
+          "lua/core/mods.lua": "d9bf914902c0167be6a74124216de399ead2c8981de27f4c84223dd8e1098802",
+          "lua/core/norns.lua": "8d347b84c7e5ae14ba71866f54fd21334a0a700be2de08043b17c6a2e4141708",
+          "lua/core/osc.lua": "09e330bacc3830a87ae6763f893f42fbe130083e10517e4708bc33adc101a525",
+          "lua/core/params/binary.lua": "dc04eebeb78e624a028b1bde952e4c54b0ed15fd754bb16319bb9b821d35e6fa",
+          "lua/core/params/control.lua": "c08039f8219ec337a5096d145a8520bfd1fd75199eb603cd329bda6a780e3f19",
+          "lua/core/params/file.lua": "5fc39c476346972e5b62de529f4e905e492a72445cb18feb4a1019214ab7d11c",
+          "lua/core/params/group.lua": "ad50e9d9a383714201cb1a8390db766ff9079ba827b9227ac016f5f6ab0ca394",
+          "lua/core/params/number.lua": "46e82744708c4637fb000abff4ab28bce723a98b130a5e44a15fa4628bfb58dc",
+          "lua/core/params/option.lua": "09dc6e68890a8b6497242dc61135a1fddfc7fe9f52c71ff94535c0c60d3ce49e",
+          "lua/core/params/separator.lua": "53688e97ebc68b2d92b7c732c8ff58ae1adcea0302b152f6f623c1f7ea9a74a8",
+          "lua/core/params/taper.lua": "099a52e84f18295da0e9991f6a213de899e79dd86f72d1ea77ffca4a97ff3a5c",
+          "lua/core/params/text.lua": "e6175cc05eeea9f99079633dfbb289f5835d66071b84815ba03b896723f3c93f",
+          "lua/core/params/trigger.lua": "b2e5647ab52b87f72a9937f88c0d4141d37725a2fe01c7ee39b36f258f1f38d7",
+          "lua/core/paramset.lua": "1cded541234610937b2118464ec7318c5d6034c0fac8966c11e533d4e5e94e4a",
+          "lua/core/pmap.lua": "eea56045659c4498b1747f297dd7e174ff3fa809dc545b95ba5870993495e375",
+          "lua/core/poll.lua": "feced9cde17ff9592c654e5c62282ed888c222a91c7fff62aa12e1ec125abb5b",
+          "lua/core/screen.lua": "59cf7b3ba1712f0426681c7d8cc93bb29dc9047af08071ee8421b440c5ed6251",
+          "lua/core/script.lua": "1a17573064202573a2090ae15ec9aaca681bb0120518331c3a8bc773c3eff806",
+          "lua/core/serial.lua": "15012b5a54b049cae2d85cf4f20013c929ce09a24ec60f972b39e00a16790877",
+          "lua/core/softcut.lua": "a961139fbc4a9e4f00d4df3d10128cc21e112d3b35b02be5674e2e5f8043c7b4",
+          "lua/core/startup.lua": "9f84bfb46ff4c5e4a0c0ce5e43168f301fb5dd957561ba5241a476ca258f36fa",
+          "lua/core/state.lua": "adfb5996ff8e9506f3cd73b84b94530fc34e47b22ae615129a9bfb6bbe04338c",
+          "lua/core/vport.lua": "a84bff4751120057bc6b1e686c89f2d5eebbf4a5b73e508ab6ef1f92939601ea",
+          "lua/core/wifi.lua": "7a9ef8a8a49190aae3bb7cc64668c39bdb30aaf2a62cc9b6fe0d6f4c406b49f4",
+          "lua/engine/polyperc.lua": "acf896ca1e00159bf77659d10b1c5895c691263e87f2a128bc3d26032cf8b546",
+          "lua/engine/polysub.lua": "9a61404b824401fe9a522376e5bc1cd160a56d05e3a2b2594ca4696864693fd2",
+          "lua/extn/sky/core/object.lua": "3326c1c5e806cc3f5056457ba5f77e341ee50096f0e460de224101a9e53f5d64",
+          "lua/extn/sky/prelude.lua": "76507e18513b4825621c421dc12d5f433ec12507b8634f36685f75fa96b47937",
+          "lua/extn/sky/unstable/core/page.lua": "b769a686e299c67fc47d39536dd80fb1993687379d7687d2a51676ecc9066d87",
+          "lua/extn/sky/unstable/device/es.lua": "93e59548e3aae96310a44bae77da23ee9cdefff48d84c70e3afe153324de684e",
+          "lua/extn/sky/unstable/device/linn.lua": "250d7e673a3639b126bab062e28b0d92583bccbfc69a7738c524e174f8d77209",
+          "lua/extn/sky/unstable/engine/polyperc.lua": "d91be322a6a7ccd288156a3b488d00fd25d5f6b9ec6c620520d8d36c7d2fafdc",
+          "lua/extn/sky/unstable/engine/polysub.lua": "769ec85986134820fbafb075fe2e2098b5c754e94fa5ae1f321885836298b128",
+          "lua/extn/sky/unstable/io/arc.lua": "4a461c98c64371ee8dcaceceff7e53cc250f7790985bd19e7cb645e7b8e82e5b",
+          "lua/extn/sky/unstable/io/grid.lua": "dafd01d339ae3f438216d0e0052e3b60711006c3389d6f6fcbb81f4d5c8b507c",
+          "lua/extn/sky/unstable/io/norns.lua": "b65591a864bae0e27b708abb96ced2bfdc8fa9e6d7529706cf39b157ec70ace3",
+          "lua/extn/sky/unstable.lua": "7e5e8c04e8c49eef45061167fb181b131ad2eda4e5346942721c76ca44daff33",
+          "lua/extn/sky/v1/core/event.lua": "caa5ec82352d2d3cf55d2b7844d68f71bbe370a3d9f84b02a64848c613a26b91",
+          "lua/extn/sky/v1/core/process.lua": "ec2e39c51164bb4f7fd210671d2a4fcfb6f81e48e92e3014286c0902c7c5907c",
+          "lua/extn/sky/v1/device/arp.lua": "3d55ef27854d47c088aaaf92a83c1cfcdc6638463b0c1cbf29c8b2ada2a24ed4",
+          "lua/extn/sky/v1/device/behavior.lua": "a474f8fd301283cbe94d14a9253d9b407d88e5ee75e1334dd08df75354e3cb9e",
+          "lua/extn/sky/v1/device/filter.lua": "4445f9e9a720720a6fde97240597e8efe20d7dca0fea6d7286f3a522e0ba96ac",
+          "lua/extn/sky/v1/device/make_note.lua": "c55532084df6fe845bfcb3e41c38dc503637c8e5c98ba5b923157d493bd4c912",
+          "lua/extn/sky/v1/device/switcher.lua": "36e5d68538a4f267b47de753c0c5078ff14208acf7d0d53a869074c0db22edb7",
+          "lua/extn/sky/v1/device/transform.lua": "c8b198d76350495475280c6b9e9f2f12f5c6dd6e879c929cddb6040be0f4a16a",
+          "lua/extn/sky/v1/device/utility.lua": "9e1954cf840c01e5f7f188d13706d795c07f3661d58606c752d957adc8cccf56",
+          "lua/extn/sky/v1/device/virtual.lua": "b6de76dea64824c83ae47beaaecf54eb7ab2129fd5115336c1b19dc5aec1c675",
+          "lua/extn/sky/v1.lua": "d0535669d932031c308f9907bba2449add01201d51062a304fde090e91f1d4c0",
+          "lua/lib/asl.lua": "1b73cc2a5bd07fe28de84730c4857d433d041bb883bd3aa8995f165f0a1492e2",
+          "lua/lib/beatclock.lua": "9319d9c400c479591197393c4497ab1dd3a066c5ac110aa9e697a5c3f36f2237",
+          "lua/lib/container/defaulttable.lua": "00fa1658df56b14aa3178d3aa2fe194d1b2c85d69fb3c3a86688a4aa80b7f901",
+          "lua/lib/container/deque.lua": "0de4f516dd81e773d2015951443413f17007720a90277644f872a0575e137ae5",
+          "lua/lib/container/observable.lua": "d3fd1e2075b0784d2d01fa7e70d3b6b0a2fe131e2600f8af5ae1d0430cf4c3d9",
+          "lua/lib/container/watchtable.lua": "b246d604fd8361763a78ed87af4c251e3cb98927e1052e712cacc9da9a6fc3d9",
+          "lua/lib/container/weaktable.lua": "4e6fcccd7d8fb3396318a74817f944e461cce74835d420857702f833f0f6c12b",
+          "lua/lib/elca.lua": "336ad847149f5291f036ed023ac463b8d99eb5ec586126533696c4df14b8a173",
+          "lua/lib/envgraph.lua": "121ae97c5226cfb8f5dd4313f653a7d10cdbbedd426702e7a4a688859e2ce161",
+          "lua/lib/er.lua": "d0d719956c474f86cbedc7e8cea2dd70e042d950e47dcc9bf0dcd9f6fc1f80f3",
+          "lua/lib/fileselect.lua": "2b5a7af0f4aa51cbccdbd5c70db0dee8da434100cf9b8decd0973aedb212b806",
+          "lua/lib/filtergraph.lua": "d205434ea1f8441593ef5ab246a8b2373556e17e41f4e750fb755ee0b2379fea",
+          "lua/lib/filters.lua": "b5c6963d091f3ea75baab73cb39a0b3276b888dc49ad53b356aa97fe11367aba",
+          "lua/lib/formatters.lua": "5bdb3d3847b8037a7bd29199b8f4e20e1f2112b7e22a9b2c089f4a6dd95f25fa",
+          "lua/lib/graph.lua": "22a3ba02202b536af350e4124528a3c1d07074d856132a4fe4bde4ac62b80965",
+          "lua/lib/gridbuf.lua": "bd1bdff997d9d5f638bc69aa116eb791647d128c591b81c2080bf8e36f939508",
+          "lua/lib/hotswap.lua": "d81047cf503b769f7e253c2c7bfef012da4aa07e817a242fe9b504f0dc4fd30c",
+          "lua/lib/intonation.lua": "7c458d9cdfbec1e7c24dff22edfea1518f6d565315b4abdf775a91c4c2c31791",
+          "lua/lib/lattice.lua": "9c44ba4b8490c7d8b8b0250ee95611184ee12086624177b821b3012544102d83",
+          "lua/lib/lfo.lua": "9754a4d198f5e3638cc723dfd98e31555ba4cc6f256a7bd9d225eb6b2f3d7079",
+          "lua/lib/listselect.lua": "4c6d0c5a8af1a7827ca6947927d1c40606b404e9037dd9b982ddaf21638ed111",
+          "lua/lib/musicutil.lua": "89392bf3f6156d8e08b5fb0b0d3e0540102006ec964fab4058e70be1901e88aa",
+          "lua/lib/pattern_time.lua": "8a9cefd1f39930ee609b83dd291d9ae2ab3741e3f5045f4ec4142a3290115a39",
+          "lua/lib/reflection.lua": "0d2e7b3ca33321f0e6b3d7afb1896e6efbca004b41042c6b810be8897612dcda",
+          "lua/lib/sequins.lua": "85341f5e0db42ce7e400f995b284dae513a003a5be303216d2e86ef60cf64c82",
+          "lua/lib/tabutil.lua": "1e0c553bb30a924148566f76d2a8fdc2e3289f952029b5540f2505c6025fc57b",
+          "lua/lib/test/luaunit.lua": "5d63a80a2c9e30d9d2c852863c420f897e655f27e13a617def171a59091ddd62",
+          "lua/lib/test/mock.lua": "f7c21619c89d78bd48a702e5d2f87586fdf26241bc675d8f47fd36cca002c567",
+          "lua/lib/textentry.lua": "74f15d734ece2eeb401a069b9c44ebb7dda845b4c645b559afe05f8006366586",
+          "lua/lib/textentry_kbd.lua": "a577566eaa266bd06c8adb5faede19cf6b764ecfdad806095cc20ae16f473e2f",
+          "lua/lib/timeline.lua": "8b1790cdd1e5e73d9076da42cf956a65de3b944a928f83e4b158ec39b559b8f1",
+          "lua/lib/ui.lua": "faa2e8b1fe6e9b125bee685cad813d14c44e1a42b05f92bfaa423cb3740cbb9b",
+          "lua/lib/util.lua": "366a38ad6fdc6e58cdb4e522a13f89fb9be7a95e83fd5b59580d2cfd4adfc84a",
+          "lua/lib/voice.lua": "ca9191dba1bda14c2ed05530813d137f9af3d1e8852d9f6b11030f043dd8d8cb",
+          "lua/test/core/audio_test.lua": "208a1221d9273ea33686d0f1a40cc069b124dcf676a58e83c347a94cd2526d5c",
+          "lua/test/core/menu/tape_test.lua": "15f698ee61bfebc7d779c6665703e31a29fe08f0d10775543839019c42d83e6f",
+          "lua/test/lib/container/defaulttable_test.lua": "2c9c0b86b42aa40be5f915b34768d3ff14db609b6b2cdf1a70ee29343e013c7d",
+          "lua/test/lib/container/deque_test.lua": "4675f03cda3dd707a89f95d2f3b404217cf008fcec6d013e939f6254c01508de",
+          "lua/test/lib/container/observable_test.lua": "8d49be45f5437c982b193ceb9f2765f9687a5f591bbe9060191a82b9078411a8",
+          "lua/test/lib/container/watchtable_test.lua": "5c375e3ddae8fb82fefad612c39bf4f5d027b68307cee6bb41070085f2284692",
+          "lua/test/lib/container/weaktable_test.lua": "9844e9b117901b3e24ba230a05a8455f813a43b48403be3371d0a90f3de2caa8",
+          "lua/test/lib/test/mock_test.lua": "acee6731c1c6d40ddb4359a95744f430ee9e32a0c136a2bf10526cbaf351e81f",
+          "lua/test/test_runner.lua": "e49d61887a914e5a5483ea3ac5b0d02d9f4ed64df26197cee0caa143373f36a2",
+          "sc/core/Crone.sc": "c5092bdb471c593463776800992c08159545059c17ea3f8083d590201acb82e2",
+          "sc/core/CroneAudioContext.sc": "57e9b0318f1a7cdc2095625b5cc6b63dbb505a81807eba4681b4e24e3410e09a",
+          "sc/core/CroneDefs.sc": "f8b90295d86a55810f2c646a2c5117967dedf59cb94ce42e7bfb424130a5289f",
+          "sc/core/CroneEffects.sc": "b96a467f4cbf2492f364af4a49db58adb5745925a06e43e2641045785e83ce89",
+          "sc/core/CroneEngine.sc": "125e34b54b78bac0ee86a160086d19cac44695f96ec30ae833d9747b9276554c",
+          "sc/core/CronePoll.sc": "7a20d39cdd0d604409b34e279220ac19e5ed66ad77463254316df50c8ac57fd2",
+          "sc/core/CroneTester.sc": "f6a1c16729129a01826cee1fa3640646eb83e8a24463c86d9edc1e135a246ce2"
+        },
+        "build_inputs_sha256": "2dc4bdce082aa0c7d58f2aed06c715da05c4a041baa7d7e1346405764400ad0b",
+        "experimental": {
+          "status": "experimental-unadmitted",
+          "files": [
+            {
+              "path": "matron/src/clock.c",
+              "before_sha256": "a9af796faf78e91d26c5e3cb505ffb784ef6e8c3944b5c85ad3ad25c130cb030",
+              "after_sha256": "edb2bca58db7f9199a74c3994c056043f33ea1e32fa98c3996a679d2bef7af27"
+            },
+            {
+              "path": "matron/src/clocks/clock_internal.c",
+              "before_sha256": "21ad04624781b6fee6b8d26c48cb2b1b4f49d678df5502cc4d2f9e25a4a5e023",
+              "after_sha256": "09b0c14cdd1801004454cd10d66933616a7b1c288f3bfe92cab00118a8ef64e4"
+            },
+            {
+              "path": "matron/src/clocks/clock_internal.h",
+              "before_sha256": "1eccd29af4af8860c57172cc2f5e541be2b15b8166cea41be5394d099d317994",
+              "after_sha256": "c8c77409f63fdf7961588cae9343f57349bdb0e83cede5019f2596cdda2fd547"
+            },
+            {
+              "path": "matron/src/clocks/clock_scheduler.c",
+              "before_sha256": "65a6fd3581885775fe22e943e8802a4705bdf2bfec2a2c933ca11364f83ce853",
+              "after_sha256": "b341e67cd9742c0fc992a9113c92a8434b1d202392c24b3589dbece5bfa8c917"
+            },
+            {
+              "path": "matron/src/clocks/clock_scheduler.h",
+              "before_sha256": "5b74b4fc8d495ad9b1d6b0c5cba26e24bbe84ec3b152d38e36ea8391454887c0",
+              "after_sha256": "a3934537e8edc810dc1b587808400d6290f61fc1dad64ffa44c8ad9b40091175"
+            },
+            {
+              "path": "matron/src/emu_bridge.c",
+              "before_sha256": "c50afb60e3348eb92f8d8a048b91d63196100a155d9be7fd15ce8528529b1481",
+              "after_sha256": "3b0eda57ab3e48c53a37fa64b64341b0511d0b35a8b6acf9637efb1aa076a2d0"
+            },
+            {
+              "path": "matron/src/emu_clock.c",
+              "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "after_sha256": "57e483d61f52a2063a6ee572eff79bb6c4dff29d81d20329268e758b39987bfd"
+            },
+            {
+              "path": "matron/src/emu_clock.h",
+              "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "after_sha256": "eed31d7b30148d5f11fbaee4c00e02f70078f9f0cfc000563411739d4380c17f"
+            },
+            {
+              "path": "matron/src/events.c",
+              "before_sha256": "ca97309cdab290aa5d0cedf848dd282797bfbac822d2658a0a16c8875cf843cb",
+              "after_sha256": "ea143071c8e91024ad1d64c8d1332a3143e4476e2dc537784a2d9feb3e36251f"
+            },
+            {
+              "path": "matron/src/events.h",
+              "before_sha256": "e20130f736ce4635564e11069002b5667c24b521985e127e75d082be8006951c",
+              "after_sha256": "c5374b8a98a05c3eda3649d8d7fbae72614e5dc79ee219e3620706712363215d"
+            },
+            {
+              "path": "matron/src/main.c",
+              "before_sha256": "4ddbf077537977757783af4ae88ac47e14593bc23ca2634469a078edafcc0706",
+              "after_sha256": "c4eb1dca85d73f3e4c37dd73d7ac2e6a9222d78c111d23647a7350e95b8781fe"
+            },
+            {
+              "path": "matron/src/metro.c",
+              "before_sha256": "57672a8dcf750288efecb121714760bf2d03feeb617d6dcd9f35808fa4263f58",
+              "after_sha256": "007ba758d77b85402c92b5d3f5661d62703c4e7c8c70fc4b608c2cdddf056325"
+            },
+            {
+              "path": "matron/src/metro.h",
+              "before_sha256": "0f10716efd308dd05f889b150cf18efde807207bb6bb3e65213ea6ba8e12994b",
+              "after_sha256": "ab8d8ee0837849968991ad18955b71b557446c36bf70adbe102061887f71eb4b"
+            },
+            {
+              "path": "matron/src/time_since.c",
+              "before_sha256": "da2bb04fdffc16db75007603a9f7fde97b6f71d810d31f5e855b6a98e2ef6da8",
+              "after_sha256": "3969d24a9e68995d4911cebfe439e0aed89033e57e0bdf86c8f957e39d2a7a7b"
+            },
+            {
+              "path": "matron/src/weaver.c",
+              "before_sha256": "6a61898925a9db55d41443b271ef0ef9908b76755c1bc668279b903a19000afd",
+              "after_sha256": "f33180ca6b21da5acdb6a9fa8ddef10310ca03e6c265e8c6364df0931f157827"
+            },
+            {
+              "path": "matron/wscript",
+              "before_sha256": "d14d9f7063f916b1e4acc57c6c26db21e1f0681911b52938407a3d11afd4e5c5",
+              "after_sha256": "7fe41bac2c5d6acc14a98c605c26f10835ff317a32e0747841f937cb08249c21"
+            },
+            {
+              "path": "matron/src/clocks/clock_midi.c",
+              "before_sha256": "4800bb7137032a15a17e9edb3751d99b81b7883ff29fabd2df84ae31a9897ed1",
+              "after_sha256": "a267d3655cf36076c8a69ecf30b6c4b155e35143d89f42f6c1c59fd774c78b7d"
+            },
+            {
+              "path": "matron/src/clocks/clock_midi.h",
+              "before_sha256": "6800ad935d64ce134ddbcffa50901122c7ae2db4095ea8d894d071984613eda8",
+              "after_sha256": "044e9cf29ec5861f64ab7ea1c5f0ebe8f3a22c75786a0e15eb279bd35c218784"
+            },
+            {
+              "path": "matron/src/clock.h",
+              "before_sha256": "1922a84cb1dafc86298f32f3b1b7306619739ddecf7fc179c6473a1c645ce7a1",
+              "after_sha256": "47963248144af5c7caac4c976dbfda8155258a39d0341c3544238c49260a5b3b"
+            },
+            {
+              "path": "matron/src/event_types.h",
+              "before_sha256": "c911eb1e7e81a14a30f85610d82e5078229adbcd45b4c4e0910fb879a99c06f6",
+              "after_sha256": "a6e2a23fa4dbc0bb7d1d9beb8ad0b7f6b4d2b1a870182869a83d7b5252408ab4"
+            },
+            {
+              "path": "matron/src/weaver.h",
+              "before_sha256": "c6eed642ff5aa2541556cd296922ec63389cee0c93e6e610222f012f48b0cce5",
+              "after_sha256": "3792abedc432fea1069bb342ca7b201b47e012f09f86d538e4da44630fda01de"
+            },
+            {
+              "path": "lua/core/clock.lua",
+              "before_sha256": "e39411ea122b3e9110e98500ebf7ff8bc982617472ba88582446eb68b8db9f54",
+              "after_sha256": "1b97118fa37e979c5f1f4978fd560f6c73c837efb8c4a6e3445fc9a8b8570907"
+            }
+          ],
+          "midi_schedule_domains": [
+            "logical",
+            "monotonic"
+          ],
+          "patch_sha256": "1d57b953d14d0415f9aceb024458af2e1e3f922b5aa0b6cb09e0c1212e3a9d41",
+          "midi_connection_status": "unvalidated",
+          "midi_connection_version": 1,
+          "rebase": {
+            "source_install": "/home/andy/projects/monome-runtime-candidates/midi-hotplug-locked-01/installation.json",
+            "source_install_sha256": "5422eeb5f9a3ce69c28e0b56f525c3be08706b096fecc4032c0572c3062399b5",
+            "original_controlled_install": "/home/andy/projects/monome-runtime-candidates/midi-hotplug-d-05/installation.json"
+          },
+          "midi_clock_correction": {
+            "status": "experimental-unadmitted",
+            "patch": "patches/norns/candidates/midi-clock-start.patch",
+            "sha256": "8485549d26ea14ad2c0d6d62d0444e2917d6c4c4860a9089748cee9b6f584c96"
+          },
+          "baseline_install_sha256": "5422eeb5f9a3ce69c28e0b56f525c3be08706b096fecc4032c0572c3062399b5",
+          "controlled_baseline_sha256": "5efc2367528c21705416c163d0ef1341e16bc63df695d9c5bd920219de9d002b",
+          "midi_output_boundary": {
+            "status": "experimental-unadmitted",
+            "patches": [
+              {
+                "path": "patches/norns/candidates/clock-scheduled-deadline.patch",
+                "sha256": "09726e7c5346dcbae3cdb54dd0af3e51587d6d5edcce592be85c87829f5ca479"
+              },
+              {
+                "path": "patches/norns/candidates/midi-output-boundary.patch",
+                "sha256": "1e6ea366b8199a362f4971fe55ece3b0e9eee3b95b0f863ecd0124e353d8c4a2"
+              },
+              {
+                "path": "patches/norns/candidates/clock-queued-epoch.patch",
+                "sha256": "158a230daf6529ecfa041a58cb27cb3fb08ad210e0d4af6286c1d5d7ceead569"
+              },
+              {
+                "path": "patches/norns/candidates/midi-output-fault-isolation.patch",
+                "sha256": "c195d22ad36734b2a33cb7bb1aaf5edab21d90a7d957bfda2f07be5c85d6ea3b"
+              },
+              {
+                "path": "patches/norns/candidates/midi-received-zero.patch",
+                "sha256": "f31f072313e210a27adc077e9e8fa1f59f9cd2c6ef33b8e483a4851d0aaeb09e"
+              },
+              {
+                "path": "patches/norns/candidates/midi-source-serialization.patch",
+                "sha256": "a84b3faea319fa1936af86742751a5d84c3bdaeaf2175dc7807a2e353a35841e"
+              }
+            ]
+          },
+          "prior_install_sha256": "1265cbfe390142974552b9ef47927d0c714c155cd486027f5291968b269018e6",
+          "internal_tempo_continuity": {
+            "status": "experimental-unadmitted",
+            "patch": "patches/norns/candidates/internal-tempo-continuity.patch",
+            "sha256": "5f17474c33f4ae4c9908ff18e9ef6c047b25b54d16ba16336277ab37206c6b3b",
+            "base_install": "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-09/installation.json",
+            "base_install_sha256": "91b7d25dbd8830747a5b014b741ff19d1d9b49a2420ec7d4751384f8443d57a9",
+            "files": [
+              {
+                "path": "matron/src/clock.c",
+                "before_sha256": "edb2bca58db7f9199a74c3994c056043f33ea1e32fa98c3996a679d2bef7af27",
+                "after_sha256": "f1954c61bcfc99d210180a36bf675b693240ea2d71f8b128dbcdb05fa7edc6a7"
+              },
+              {
+                "path": "matron/src/clock.h",
+                "before_sha256": "47963248144af5c7caac4c976dbfda8155258a39d0341c3544238c49260a5b3b",
+                "after_sha256": "21549133a360e2231d0aa181bacb7f1fe0fdc70723073cf9b067d5bf3b9adee5"
+              },
+              {
+                "path": "matron/src/clocks/clock_internal.c",
+                "before_sha256": "09b0c14cdd1801004454cd10d66933616a7b1c288f3bfe92cab00118a8ef64e4",
+                "after_sha256": "72ff2ae99cbdd22d11259db0b30eee490d4d935f692b2f81c10b664c25c8b385"
+              },
+              {
+                "path": "matron/src/clocks/clock_internal.h",
+                "before_sha256": "c8c77409f63fdf7961588cae9343f57349bdb0e83cede5019f2596cdda2fd547",
+                "after_sha256": "47fa86e1d4633d9f04efe53c660f57eabd62c0a07debcd4e22c67b48871a6469"
+              },
+              {
+                "path": "matron/src/emu_clock.c",
+                "before_sha256": "57e483d61f52a2063a6ee572eff79bb6c4dff29d81d20329268e758b39987bfd",
+                "after_sha256": "0cb92725145c615f6305bc895c2655042af44c3d1d5d02be040b7833660fa150"
+              },
+              {
+                "path": "tests/matron/clocks/clock_internal/test_clock_internal.cpp",
+                "before_sha256": "ca0aab015e32fb54e24007f2c5165f8788fd6e2506155d3da45be7a4711a8df7",
+                "after_sha256": "89861f88ed351d7de1cf974cedbe31f5a676b8a1501395e9b4c71f4661fef016"
+              },
+              {
+                "path": "tests/matron/clocks/common/helpers.c",
+                "before_sha256": "8856028cbdeae3907029cc8b27a5988003b3fe9a628e501a60b02e72ab0869a6",
+                "after_sha256": "e76fd186695cbf6d24ee324fb9c2cc54c6d98cba89630cae070094ae6fc45f86"
+              },
+              {
+                "path": "tests/matron/clocks/common/helpers.h",
+                "before_sha256": "6fcf74c469919dd91d12c9e5abe9ea06623f5a74743e203b12399785e1067efe",
+                "after_sha256": "873649ea6b488a43c777ffe64a02bc517f130300730e03f95396ec2af45c34ab"
+              },
+              {
+                "path": "tests/wscript",
+                "before_sha256": "383e84ae082aa27bd10d8a9b6da0f58b37460ba632d7d99ba4ff5540b786d952",
+                "after_sha256": "bff5ae3c61cabcaf9a7cb9c8ace968c419fde9002b68b5462e41c91bc03083a1"
+              }
+            ]
+          },
+          "midi_schedule_capacity": {
+            "status": "experimental-unadmitted",
+            "events": 2048,
+            "max_request_body_bytes": 524288,
+            "max_native_packet_bytes": 65552,
+            "patch": "patches/norns/candidates/midi-schedule-capacity.patch",
+            "patch_sha256": "b1749ba59d28a3e77e80ecb3cbf5b78a0c49aac7b8a37ee21fff2d90d1d67114",
+            "base_install": "/home/andy/projects/monome-runtime-candidates/internal-tempo-continuity-10/installation.json",
+            "base_install_sha256": "44ccdf20716fb80e13972170e96507ce76de3bf5812f36f5934104b2b5db084d"
+          },
+          "runtime_stall": {
+            "status": "experimental-unadmitted",
+            "milliseconds_min": 1,
+            "milliseconds_max": 1000,
+            "patch": "patches/norns/0014-runtime-stall.patch",
+            "patch_sha256": "3bbec21eae0c2b684cd2ac85e0fa8810da5d274c278e1dd576dca3c8e3d36ec9"
+          }
+        }
+      },
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 18753,
+          "returncode": 0,
+          "seconds": 0.1139463169965893
+        },
+        {
+          "service": "sclang",
+          "pid": 18643,
+          "returncode": -15,
+          "seconds": 0.1143943999777548
+        },
+        {
+          "service": "crone",
+          "pid": 18635,
+          "returncode": 0,
+          "seconds": 6.478099385276437e-05
+        },
+        {
+          "service": "jack",
+          "pid": 18631,
+          "returncode": 0,
+          "seconds": 0.015517789986915886
+        }
+      ],
+      "result_sha256": "b3b2ac30e95bc6a1dc7d7fc6fc59d3eb43064d8d24b8dd94e74e6d6c6810fda8",
+      "tempo_witnesses": [
+        {
+          "selected": "30",
+          "observation_index": 44,
+          "native_tempo": 30.0
+        },
+        {
+          "selected": "30",
+          "observation_index": 50,
+          "native_tempo": 30.0
+        },
+        {
+          "selected": "300",
+          "observation_index": 55,
+          "native_tempo": 300.0
+        },
+        {
+          "selected": "300",
+          "observation_index": 61,
+          "native_tempo": 300.0
+        },
+        {
+          "selected": "90",
+          "observation_index": 66,
+          "native_tempo": 90.0
+        },
+        {
+          "selected": "90",
+          "observation_index": 72,
+          "native_tempo": 90.0
+        }
+      ]
+    }
+  ],
+  "remaining_native_processes": [],
+  "global_final_publication_acceptance": false
+}

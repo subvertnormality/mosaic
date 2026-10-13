@@ -1,0 +1,21 @@
+..............................EE
+======================================================================
+ERROR: test_large_scroll_checkpoint_requires_actual_public_encoder_delta (test_manual_publication_verify.VerticalListCheckpointIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 233, in test_large_scroll_checkpoint_requires_actual_public_encoder_delta
+    with self.assertRaisesRegex(ValueError,'encoder'):audit.check_vertical_public_inputs(row,[dict(type='enc',n=2,delta=1)])
+AttributeError: module 'manual_publication_verify' has no attribute 'check_vertical_public_inputs'
+
+======================================================================
+ERROR: test_unknown_or_changed_literal_vertical_checkpoint_is_not_accepted (test_manual_publication_verify.VerticalListCheckpointIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 227, in test_unknown_or_changed_literal_vertical_checkpoint_is_not_accepted
+    with self.assertRaisesRegex(ValueError,'Unsupported vertical'):audit.vertical_checkpoint_contract(dict(kind='vertical-list-ui',checkpoint='arbitrary',passed=True))
+AttributeError: module 'manual_publication_verify' has no attribute 'vertical_checkpoint_contract'
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.015s
+
+FAILED (errors=2)

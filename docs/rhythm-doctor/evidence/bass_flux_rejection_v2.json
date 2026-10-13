@@ -1,0 +1,195 @@
+{
+  "artifact": {
+    "directory": "tests/rhythm_doctor/artifacts/umxhq-bass-precision-v3-20260919",
+    "model_joblib": "tests/rhythm_doctor/artifacts/umxhq-bass-precision-v3-20260919/bass-flux-rejection-final.joblib",
+    "model_npz": "tests/rhythm_doctor/artifacts/umxhq-bass-precision-v3-20260919/bass-flux-rejection-final.npz",
+    "results": "tests/rhythm_doctor/artifacts/umxhq-bass-precision-v3-20260919/results.json",
+    "results_sha256": "4c22d1de7ca539fd9728516aba484a2b0a034a9d0e19dbf06acaf492f93d2d2b"
+  },
+  "diagnostic_held_once": {
+    "aggregate_50ms_one_to_one": {
+      "f1": 0.6543778801843319,
+      "fn": 48,
+      "fp": 102,
+      "precision": 0.5819672131147541,
+      "recall": 0.7473684210526316,
+      "tp": 142
+    },
+    "per_track_counts": [
+      {
+        "candidate_count": 36,
+        "prediction_count": 30,
+        "reference_count": 24,
+        "score_50ms_one_to_one": {
+          "f1": 0.8518518518518519,
+          "fn": 1,
+          "fp": 7,
+          "tp": 23
+        },
+        "track": "Track00001"
+      },
+      {
+        "candidate_count": 36,
+        "prediction_count": 36,
+        "reference_count": 26,
+        "score_50ms_one_to_one": {
+          "f1": 0.6774193548387096,
+          "fn": 5,
+          "fp": 15,
+          "tp": 21
+        },
+        "track": "Track00002"
+      },
+      {
+        "candidate_count": 29,
+        "prediction_count": 22,
+        "reference_count": 5,
+        "score_50ms_one_to_one": {
+          "f1": 0.14814814814814814,
+          "fn": 3,
+          "fp": 20,
+          "tp": 2
+        },
+        "track": "Track00006"
+      },
+      {
+        "candidate_count": 20,
+        "prediction_count": 18,
+        "reference_count": 7,
+        "score_50ms_one_to_one": {
+          "f1": 0.48,
+          "fn": 1,
+          "fp": 12,
+          "tp": 6
+        },
+        "track": "Track00008"
+      },
+      {
+        "candidate_count": 11,
+        "prediction_count": 10,
+        "reference_count": 11,
+        "score_50ms_one_to_one": {
+          "f1": 0.8571428571428571,
+          "fn": 2,
+          "fp": 1,
+          "tp": 9
+        },
+        "track": "Track00009"
+      },
+      {
+        "candidate_count": 24,
+        "prediction_count": 21,
+        "reference_count": 49,
+        "score_50ms_one_to_one": {
+          "f1": 0.5714285714285714,
+          "fn": 29,
+          "fp": 1,
+          "tp": 20
+        },
+        "track": "Track00011"
+      },
+      {
+        "candidate_count": 12,
+        "prediction_count": 11,
+        "reference_count": 9,
+        "score_50ms_one_to_one": {
+          "f1": 0.8,
+          "fn": 1,
+          "fp": 3,
+          "tp": 8
+        },
+        "track": "Track00014"
+      },
+      {
+        "candidate_count": 32,
+        "prediction_count": 27,
+        "reference_count": 21,
+        "score_50ms_one_to_one": {
+          "f1": 0.875,
+          "fn": 0,
+          "fp": 6,
+          "tp": 21
+        },
+        "track": "Track00015"
+      },
+      {
+        "candidate_count": 26,
+        "prediction_count": 26,
+        "reference_count": 14,
+        "score_50ms_one_to_one": {
+          "f1": 0.6,
+          "fn": 2,
+          "fp": 14,
+          "tp": 12
+        },
+        "track": "Track00016"
+      },
+      {
+        "candidate_count": 30,
+        "prediction_count": 23,
+        "reference_count": 5,
+        "score_50ms_one_to_one": {
+          "f1": 0.35714285714285715,
+          "fn": 0,
+          "fp": 18,
+          "tp": 5
+        },
+        "track": "Track00019"
+      },
+      {
+        "candidate_count": 23,
+        "prediction_count": 20,
+        "reference_count": 19,
+        "score_50ms_one_to_one": {
+          "f1": 0.7692307692307693,
+          "fn": 4,
+          "fp": 5,
+          "tp": 15
+        },
+        "track": "Track00020"
+      }
+    ],
+    "tracks_scored": 11
+  },
+  "exclusion": [
+    {
+      "reason": "missing declared Bass MIDI; excluded from training and scoring, not a negative example",
+      "reference_status": "incomplete_missing_declared_bass_midi",
+      "track": "Track00017"
+    }
+  ],
+  "kind": "BASS cached-flux candidate rejection precision diagnostic",
+  "limitations": [
+    "The diagnostic-held set was previously reused; it is scored once here after the DEV-only decision and is not clean corpus evidence.",
+    "No ARM, latency, real-time, physical-norns, or pristine-corpus claim is made.",
+    "Earlier mixed_flux_rejection scorer outputs are diagnostic-unverified because they used a bespoke unsorted nearest-greedy scorer, could omit zero-candidate tracks, and their source was overwritten between configurations."
+  ],
+  "prior_mixed_flux_results": "diagnostic-unverified: they used a bespoke unsorted nearest-greedy scorer, could omit zero-candidate tracks, and source was overwritten between configurations.",
+  "schema_version": 1,
+  "selection": {
+    "frozen_decision_before_held": {
+      "development_loo_aggregate": {
+        "f1": 0.7824267782426778,
+        "fn": 16,
+        "fp": 88,
+        "precision": 0.68,
+        "recall": 0.9211822660098522,
+        "tp": 187
+      },
+      "development_tracks_scored": 8,
+      "k": 6,
+      "threshold": 0.6
+    },
+    "grid_size": 51,
+    "method": "leave-one-song-out; each complete DEV track contributes a sorted one-to-one 50 ms onset_score, including zero-prediction tracks",
+    "source_split": "development only"
+  },
+  "source_hashes": {
+    "base_report_sha256": "6f87758499bbd2bcc3c4bd11f7e363ec44979875197770c8e1752193d744f433",
+    "model_joblib_sha256": "a7a7c625e0cb15ea2d70557695d95d29f0248d7d492e0d34391aeb7cb3202ead",
+    "model_npz_sha256": "e4b43d316af3cbfea5d436fc7cf7b24e891376fa996bd19949ee19785cd16ccb",
+    "quality_py_sha256": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b",
+    "script_sha256": "888b82183224308472cfcd6e2661fedab1516857598e8996c6d466ad50122b7b"
+  },
+  "status": "completed_diagnostic_only"
+}

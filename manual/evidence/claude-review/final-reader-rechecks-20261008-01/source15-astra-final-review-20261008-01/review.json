@@ -1,0 +1,17 @@
+{
+  "review_id":"source15-astra-final-review-20261008-01",
+  "reader":"http://localhost:8925/manual/",
+  "status":"final_reader_approval_withheld",
+  "reader_approval":false,
+  "cumulative_quality_scores":{"readability":8,"comprehensibility":8,"flow":8,"understandability":8,"user_friendliness":8,"usefulness_of_interactive_examples":8,"cohesion":8},
+  "scores_do_not_override_blocking_requirement":true,
+  "blocking_findings":[{"id":"P15-1","original_finding":"F11","routes":["#midi-panic/panic-from-song-channel/hold-and-release","#midi-panic/panic-from-song-pattern/hold-and-release"],"problem":"Ordinary result panel below simplified caption still exposes6144-message sweep audit and development-record history prose","minimal_fix":"Concise useful Note Off result summary; retain numerical completeness/history in evidence/details","root_acknowledged":true}],
+  "checks":{"lfo_wording_condition_closed":true,"modest_first_and_advanced_result":true,"keyboard_degree_11_steps_partitioned_5_plus_6":true,"keyboard_rotation_3_steps_partitioned_2_plus_1":true,"first_loop_own_milestones_preserved":true,"private_guard":true,"harmony_search_focus_query":true,"oilcan_caption_link":true},
+  "quick_reference_new_patch_reviewed":false,
+  "next_review_scope":"Source16 Panic summary correction and new quick-reference desktop/mobile review; parity and final reader gate",
+  "coverage":{"observations":21,"viewports":[[1440,900],[390,844]],"browser_errors":0,"owned_browsers_closed":true,"whole133_or425_campaign_repeated":false},
+  "parity":{"changed_feature_ids":["midi-panic","lfos-and-modulation"],"changed_scene_captions":2,"learning_path_identical":true,"audio_examples_identical":true,"manual_js_css_html_exact_source14":true},
+  "original_findings":{"F01":"prior reader closure retained; native separate","F02":"reader closure retained","F03":"recorded replay closure retained","F04":"reader closure retained; native separate","F05":"reader closure retained","F06":"reader closure retained; no listening/PCM audit","F07":"reader closure retained","F08":"reader closure retained","F09":"manual reader closure retained; new quickref excluded","F10":"manual reader closure retained; new quickref excluded","F11":"open:P15-1"},
+  "pins":{"book_owner_supplied":"d49d8551e5a18334d23537974d16b18116cfd1a79122edd7a169452e53060202","reader_index":"1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654","book_js":"914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825","manual_js":"e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7","css":"1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309","index_html":"2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482"},
+  "production_mutations":false,"native_audio_rerun":false,"listened":false,"blanket_native_runtime_ci_closure":false,"prior_reports_preserved":true
+}

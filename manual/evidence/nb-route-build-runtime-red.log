@@ -1,0 +1,13 @@
+................F.................
+======================================================================
+FAIL: test_feature_binding_supplies_audio_runtime_for_canonical_player_frame_audit (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 47, in test_feature_binding_supplies_audio_runtime_for_canonical_player_frame_audit
+    self.assertEqual(row['emulator'],'/native/audio')
+AssertionError: None != '/native/audio'
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.746s
+
+FAILED (failures=1)

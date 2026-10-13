@@ -1,0 +1,273 @@
+{
+  "passed": true,
+  "preview": "http://localhost:8785/manual/",
+  "installed": {
+    "book_json_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+    "reader_index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+    "authority_sha256": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+    "book_js_sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual_js_sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "manual_css_sha256": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+    "postinstall_reader_pins_sha256": "221496a38940a5b0374923005afa393fb2410c5d9abfe5318741eb6a06547fe8",
+    "install_manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41"
+  },
+  "candidate": {
+    "reviewed_candidate_manifest_sha256": "7c47faeea25788afcd2afc924352488b2b5fdfb9ae62b7b44e3e81d682644392",
+    "installed_candidate_manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41",
+    "patch_sha256": "19214520c9662803b9aee51eccbff8c336f15442aa346b9eb77d5c0fb17efe84",
+    "candidate_file_after_sha256s": [
+      {
+        "path": "manual/features/reference-locks.yaml",
+        "sha256": "72525c531a4726ea38d60c8b1e3106d692fa0c3b3c1139de124ca3af9c1ba074"
+      },
+      {
+        "path": "manual/features/cookbook.yaml",
+        "sha256": "f2d9bcf4c5bf824f9e809c8a9ae83772a87455cdc97c1b1db7c7fd44d6469ba6"
+      }
+    ]
+  },
+  "review_lineage": {
+    "previous_report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+    "previous_units": 52,
+    "previous_performance_units": 2,
+    "followup_review_sha256": "0423e6769944cda6103733b065be49d28659bd8e3e0648592bb291577270f98a",
+    "freshly_rated_units": [
+      {
+        "id": "doc-language-cleanup:feature:locks:recipes[4]",
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 8,
+          "naming": 9,
+          "canonical_home": 9
+        }
+      },
+      {
+        "id": "recipe-text-overlay:small-hours:recipes[1]",
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        }
+      },
+      {
+        "id": "recipe-text-overlay:small-hours:recipes[2]",
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        }
+      }
+    ],
+    "prior_units_carried": 49,
+    "source_hold_closed": true,
+    "installed_render_hold_cleared": true
+  },
+  "exact_source_leaf_parity": {
+    "locks_recipe_4": true,
+    "small_hours_recipe_1": true,
+    "small_hours_recipe_2": true,
+    "all_three_match_book_and_index": true
+  },
+  "retained_route_checks": [
+    {
+      "feature": "pocket-rhythm",
+      "section": "cookbook",
+      "needles": [
+        "nb_oilcan",
+        "64 steps",
+        "pattern 1"
+      ]
+    },
+    {
+      "feature": "small-hours",
+      "section": "cookbook",
+      "needles": [
+        "nb_doubledecker",
+        "Pattern 1",
+        "Pattern 2"
+      ]
+    },
+    {
+      "feature": "tilting-harmony",
+      "section": "cookbook",
+      "needles": [
+        "nb_doubledecker",
+        "nb_polyperc",
+        "MIDI 62"
+      ]
+    },
+    {
+      "feature": "loops-that-meet",
+      "section": "cookbook",
+      "needles": [
+        "one step is a sixth of a second",
+        "90 BPM"
+      ]
+    },
+    {
+      "feature": "masks",
+      "section": "cookbook",
+      "needles": [
+        "nb_polyperc",
+        "Pattern 1",
+        "Pattern 2"
+      ]
+    },
+    {
+      "feature": "note-merge-modes",
+      "section": "cookbook",
+      "needles": [
+        "nb_polyperc",
+        "AVERAGE",
+        "UP (Higher)"
+      ]
+    },
+    {
+      "feature": "scale-editor",
+      "section": "cookbook",
+      "needles": [
+        "Pattern Note",
+        "K3"
+      ]
+    },
+    {
+      "feature": "song-editor",
+      "section": "cookbook",
+      "needles": [
+        "slot 2"
+      ]
+    },
+    {
+      "feature": "interacting-with-slots",
+      "section": "cookbook",
+      "needles": [
+        "slot 2",
+        "octave"
+      ]
+    },
+    {
+      "feature": "lock-random-to-pentatonic",
+      "section": "cookbook",
+      "needles": [
+        "several loops",
+        "random"
+      ]
+    },
+    {
+      "feature": "lock-all-to-pentatonic",
+      "section": "cookbook",
+      "needles": [
+        "C, D, E, F",
+        "Minor"
+      ]
+    },
+    {
+      "feature": "midi-panic",
+      "section": "reference",
+      "needles": [
+        "Panic",
+        "playback"
+      ]
+    },
+    {
+      "feature": "lock-lead-time",
+      "section": "reference",
+      "needles": [
+        "lock values",
+        "note"
+      ]
+    },
+    {
+      "feature": "locks",
+      "section": "cookbook",
+      "needles": [
+        "channel G3 default",
+        "explicit zero transpose lock",
+        "Use E2 to select parameter slot 1"
+      ]
+    },
+    {
+      "feature": "save-and-load",
+      "section": "reference",
+      "needles": [
+        "Enter a name",
+        "successful named save"
+      ]
+    },
+    {
+      "feature": "midi-controller-options",
+      "section": "reference",
+      "needles": [
+        "keyboard",
+        "scale"
+      ]
+    },
+    {
+      "feature": "honor-scale-rotations",
+      "section": "reference",
+      "needles": [
+        "Degree",
+        "Rotation"
+      ]
+    },
+    {
+      "feature": "honour-scale-transpose",
+      "section": "reference",
+      "needles": [
+        "Transpose",
+        "scale"
+      ]
+    },
+    {
+      "feature": "performance-management",
+      "section": "reference",
+      "needles": [
+        "When playback slows"
+      ]
+    }
+  ],
+  "mobile_checks": [
+    {
+      "feature": "small-hours",
+      "title": "Four-Bar Percussion, Bass and Chord Example",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390
+    },
+    {
+      "feature": "locks",
+      "title": "Locks",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390
+    }
+  ],
+  "interaction_checks": [
+    "setup link navigates",
+    "Small Hours Pattern 1/2/3 assignment instructions visible",
+    "slot 2 selection/octave instructions visible",
+    "Performance details expanded and current advice visible"
+  ],
+  "page_errors": [],
+  "audio_or_playback_started": false
+}

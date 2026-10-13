@@ -1,0 +1,15 @@
+test_a_confirmed_alignment_is_honoured (test_native_backend.NativeBackendTests.test_a_confirmed_alignment_is_honoured) ... ok
+test_a_forty_eight_kilohertz_capture_is_not_read_fast (test_native_backend.NativeBackendTests.test_a_forty_eight_kilohertz_capture_is_not_read_fast) ... ok
+test_identity_is_its_own_source_and_templates (test_native_backend.NativeBackendTests.test_identity_is_its_own_source_and_templates) ... ok
+test_it_aligns_the_phrase_where_the_reference_does (test_native_backend.NativeBackendTests.test_it_aligns_the_phrase_where_the_reference_does)
+The native backend is a port, so a phrase start it finds somewhere ... ok
+test_it_finds_the_same_onsets_as_the_reference (test_native_backend.NativeBackendTests.test_it_finds_the_same_onsets_as_the_reference) ... ok
+test_result_satisfies_the_worker_contract (test_native_backend.NativeBackendTests.test_result_satisfies_the_worker_contract) ... ok
+test_silence_is_a_valid_empty_result (test_native_backend.NativeBackendTests.test_silence_is_a_valid_empty_result) ... ok
+test_the_phrase_start_is_a_whole_number_of_cells_after_the_origin (test_native_backend.NativeBackendTests.test_the_phrase_start_is_a_whole_number_of_cells_after_the_origin)
+Same grid rule as the reference: a phrase start off a cell boundary ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 6.153s
+
+OK

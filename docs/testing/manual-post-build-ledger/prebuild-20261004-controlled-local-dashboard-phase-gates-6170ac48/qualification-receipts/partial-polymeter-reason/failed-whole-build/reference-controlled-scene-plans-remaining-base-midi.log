@@ -1,0 +1,16 @@
+Verified M-MEMORY-001 / memory-undo-redo-and-branch
+Failure evidence /home/andy/mosaic-manual-runs/8f3610520c1d44e785436eb431767b4d
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 307, in <module>
+    if __name__=="__main__":main()
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 293, in main
+    captured=capture_group(group,out,a);persist_case_scenes(out,captured);results.extend(captured)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py", line 225, in capture_group
+    with freeze_child_drivers(case_modules,Driver,options.app_root,child_factory):CASES[case]["run"](c)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/live_ui_feedback.py", line 205, in live_ui_dashboards
+    _expect_footer(c, 'E3 SET  K3 APPLY')
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/live_ui_feedback.py", line 216, in _expect_footer
+    c.wait(lambda state: footer_matches(state, text))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/driver.py", line 133, in wait
+    raise AssertionError('Required observable output did not arrive')
+AssertionError: Required observable output did not arrive

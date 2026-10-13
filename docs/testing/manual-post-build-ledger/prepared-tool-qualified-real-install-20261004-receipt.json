@@ -1,0 +1,43 @@
+{
+  "purpose": "Prepared and independently reviewed strict post-build reconciliation; NOT executed on current incomplete publications",
+  "passed": true,
+  "complete_regression_run": false,
+  "source_files": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": "5946e9dc203f84e170b5f4406cc88b8df51c336e7ea633e9c7131f0b20a0ffa3",
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": "207594b9d7b9f13435d88dbae9a44fa6f92c4389025b0def6de6f58b823ad3a6",
+    "docs/ui-reimplementation/tools/refresh_source_inventory.py": "d5915d41fd4df567cea7f6e403d153d294aec6f8d2453334cb572a918dd5fa3f"
+  },
+  "tests": {
+    "total": 41,
+    "new": 25,
+    "existing_retained_source_review_tests": 16,
+    "green_log": "qualified-real-install-20261004/green.log",
+    "red_log": "qualified-real-install-20261004/red.log"
+  },
+  "independent_review": "manual_course_compiler checked actual schemas/API, all three specific strict gaps closed, no remaining actual API/provenance blocker",
+  "prebuild_snapshot": "prebuild-20261003/snapshot.json",
+  "snapshot_sha256": "cbb6082763d75e3b3e6b9e6359598fbf6563606bd1028f29f0e519d5ca5da1ed",
+  "before_root_cheat_sha256": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+  "preserved_counts": {
+    "manual_sections": 125,
+    "callbacks": 64,
+    "branches": 164,
+    "source_files_before": 78
+  },
+  "expected_generated_delta": {
+    "removed": 8,
+    "added": 11,
+    "net": 3,
+    "source_files_after_expected": 81
+  },
+  "authority_activation": false,
+  "actual_post_build_reconciliation": false,
+  "narrow_change": "canonical_stage_names additionally passes real_install=identity to current builder API; focused planning regression proves distinct explicit installations for generic real MIDI, readability override, controlled time and Doctor/DSP; musical audio forwards midi-real-install; real MIDI clock mode and ordered72 stages retained.",
+  "previous_prepared_receipt_sha256": "83f1db90ec7d6660e4a9b4da42a2145ab4a6fa8abab6231eb08d129a49e522bd",
+  "builder_sha256": "1332b0a497b1363058f6126af275650dc63f142c652a188596d4e6b5cb5448bf",
+  "strict_current_ledger_check": "pass; 78 current files/125 manual IDs/64 callbacks/164 branches preserved, no-source-skip validator pass",
+  "all_prebuild_snapshot_bytes_still_match": true,
+  "audio_tool_sha256": "4583b55b74e3a4fb63dcec6d073bb90b4928ed81f613919af1417f58aa935774",
+  "reviewed_source_files_before": 78,
+  "snapshot_files_including_ledger_review_receipt": 81
+}

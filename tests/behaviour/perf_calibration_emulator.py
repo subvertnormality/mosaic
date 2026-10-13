@@ -19,13 +19,11 @@ from heldout_workloads import recovery_oracle,run_window
 class EmulatorLane:
     def __init__(self,d):self.d=d
     def gesture(self,kind,a,b):
-        if kind=='grid':
-            self.d.action(type='grid',x=a,y=b,state=1);self.d.action(type='grid',x=a,y=b,state=0)
-        else:self.d.action(type='enc',n=a,delta=b)
+        self.d.ui.performance_gesture(kind,a,b)
     def lua_load(self,iterations):self.d.action(type='runtime_lua_load',iterations=int(iterations))
 
 def preflight(d,spec):
-    marker=d.snapshot()['midi_count'];d.tap(1,8);d.elapse(2.0);d.tap(1,8);d.elapse(.4);state=d.snapshot()
+    marker=d.snapshot()['midi_count'];d.ui.play();d.elapse(2.0);d.ui.stop();d.elapse(.4);state=d.snapshot()
     events=[e for e in state['midi'] if e.get('index',0)>marker] if state['midi'] and 'index' in state['midi'][0] else state['midi']
     channels=sorted({e['bytes'][0]&15 for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==144 and e['bytes'][2]>0 and e['port']==1})
     cc1=sorted({e['bytes'][0]&15 for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==1 and e['port']==1})
@@ -62,14 +60,14 @@ def main():
         if tempo!=90:raise AssertionError(('Emulator lane expects the norns default 90 BPM',tempo))
         build_project(d,spec['channels'],spec['workload'])
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(d)
-        d.tap(5,8);d.tap(1,1);d.led_values([(x,4) for x in range(1,17,spec.get('step_stride',1))],[15]*len(range(1,17,spec.get('step_stride',1))))
+        d.ui.pattern_editor();d.ui.tap_control('pattern_select',1);d.ui.expect_steps({step:'selected' for step in range(1,17,spec.get('step_stride',1))})
         report['preflight']=preflight(d,spec)
         if a.lua_profile:profile_before=profile_snapshot()
         for window in range(1,a.windows+1):
-            start=d.snapshot()['midi_count'];t0=time.monotonic_ns();d.tap(1,8)
+            start=d.snapshot()['midi_count'];t0=time.monotonic_ns();d.ui.play()
             stimulus=run_window(EmulatorLane(d),spec) if (spec.get('render') or spec.get('loads')) else None
             if stimulus is None:d.elapse(spec['seconds'])
-            d.tap(1,8);d.elapse(.3 if not spec.get('loads') else 1.5);end=d.snapshot()['midi_count']
+            d.ui.stop();d.elapse(.3 if not spec.get('loads') else 1.5);end=d.snapshot()['midi_count']
             bounds.append((window,start,end,t0,time.monotonic_ns(),stimulus))
             if window<a.windows:d.elapse(2.0)
         if a.lua_profile:profile_after=profile_snapshot()

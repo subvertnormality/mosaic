@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "scope": "Independent queued visual waveform and full authored Motion mini evidence; no native campaign or publication promotion",
+  "focused_tests": 69,
+  "prior_auditor_sha256": "0b6964b935ce59cb08318580f9202589f4774856c0256805586ee3074582cb74",
+  "files": {
+    "tools/manual_publication_verify.py": "40e393053175e9d1f574b483b67d76076f4ccf30914c151d98d213c96b1a5dca",
+    "tests/behaviour/test_manual_publication_verify.py": "c2b32696642b9f244faa64a76ee4d6136e8260bd94ccbc2d59fbff23e64a82cf",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tools/doctor_options_audit.py": "7d368751d3dc67c3dbfe4bd060c17a0d340d1fbe59bcc05cb820052394435323"
+  },
+  "logs": {
+    "queued-real-waveform-red.log": "ba6b0b9259790eb17b8bb8a6a2318a4ee187470dfcbf36b720d2f2f9e8ea914d",
+    "queued-real-waveform-green.log": "49a2f1770228f980cead544fc2ecf74a3d714dfb2f855c51f559e955156aeb07",
+    "motion-atlas-red.log": "379baf8d46702210d983cba0adb1da630b05b9849695bad2303d1772268c2432",
+    "motion-direction-red.log": "1d4ed7d86b6bd094a796aee25f154c6a11fb21f2562cc302e1ce8e5b86907352",
+    "motion-atlas-green.log": "01b072b2bb86b89c20eeb73e852b1b26b371bb3b904bf2dfc7e4e6ee4f168a35"
+  },
+  "invariants": [
+    "Controlled queued blink remains seven alternating observations at exact400ms",
+    "Real complete native dwells340\u2013460ms from400ms source+50ms grid flush+10ms existing allowance; censored first phase excluded",
+    "Actual observation grid revisions/full LEDs and complete native transitions independently regenerated",
+    "Motion original immediately preceding C04 proof/full atlas/native clock phase and controls/grid/MIDI rechecked",
+    "Actual Rate edit\u22122/restore+2 public acknowledgements;250ms bound unchanged",
+    "All musical onset/gate tolerances unchanged2ns controlled/.01s real"
+  ],
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "native_acceptance_pending": true
+}

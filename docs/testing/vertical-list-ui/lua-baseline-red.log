@@ -1,0 +1,24 @@
+..FFFF
+Failed tests:
+-------------
+1) test_ui_vertical_list_long_exact_selected_value_keeps_label_and_neighbors
+...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:48: expected: true, actual: false
+stack traceback:
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:48: in function 'test_ui_vertical_list_long_exact_selected_value_keeps_label_and_neighbors'
+
+2) test_ui_vertical_list_scrolls_to_last_row_and_names_position
+...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:37: expected: true, actual: false
+stack traceback:
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:37: in function 'test_ui_vertical_list_scrolls_to_last_row_and_names_position'
+
+3) test_ui_vertical_list_shows_four_rows_selection_and_exact_values
+...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:24: expected: true, actual: false
+stack traceback:
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:24: in function 'test_ui_vertical_list_shows_four_rows_selection_and_exact_values'
+
+4) test_ui_vertical_list_single_field_has_stable_row_and_action_footer
+...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:43: expected: true, actual: false
+stack traceback:
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:43: in function 'test_ui_vertical_list_single_field_has_stable_row_and_action_footer'
+
+Ran 6 tests in 0.002 seconds, 2 successes, 4 failures

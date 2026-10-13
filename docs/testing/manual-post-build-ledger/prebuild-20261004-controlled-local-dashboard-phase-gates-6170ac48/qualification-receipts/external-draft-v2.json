@@ -1,0 +1,294 @@
+{
+  "status": "DRAFT ONLY; focused native success and root release required before finalizing new candidate",
+  "created_utc": "2026-10-04T12:31:26.923151+00:00",
+  "prior_candidate": {
+    "snapshot": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-policy-record-gates-a9bd63cf/snapshot.json",
+    "sha256": "543e2184b0713283215fe02a3635abc751f8335073d4d03fde385335efe177cf",
+    "qualification": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-policy-record-gates-a9bd63cf/qualification-pins.json",
+    "qualification_sha256": "1a16a6f59b92e68d36f04af7bcfa9a366a6defe14128f5b5871e8eb2ed92d854"
+  },
+  "live_review": {
+    "path": "docs/ui-reimplementation/current-source-review.json",
+    "sha256": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975"
+  },
+  "prospective_snapshot_files": {
+    "lib/m_grid.lua": "3abd77f7360344bb799525614e0b6f74d8b8a3c2ec696ee6776dfe2cf2691386",
+    "lib/pages/channel_edit_page/channel_edit_clock_controls.lua": "4c76afe36435bf16b161e528414684beb5bfbe0b711c35f8cf5dae15ce9b8132",
+    "lib/pages/channel_edit_page/channel_edit_history.lua": "4c83ed3ea18e21bc11151a95315fb39a39c17aaedca19884edb70166a15dbdd3",
+    "lib/pages/channel_edit_page/channel_edit_masks.lua": "020dcc2693ec16e6f49b204bdd8d34d471eacaeb1388cacb42d3e4e8d13f8627",
+    "lib/pages/channel_edit_page/channel_edit_navigation.lua": "158fc5a26c68e0ac6da4b86e5e2b848d803bcfb5f6828b6719ce0be9f92ea54e",
+    "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+    "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5ecd63e70de462af8e94db01143835dc5bebb3f9f0cf3b445c2c252bc4cc2228",
+    "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua": "f5e2035cec55c7ab568802dd595e6b9ac779384305c70de4fb2551a64a96dde6",
+    "lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua": "4d29c5aafc271747c7f46abc25465e5d25a69954cdc3806ae481efb3c706b3ae",
+    "lib/pages/channel_edit_page/channel_edit_parameters.lua": "435fe1841f32efc06cf8a09bfadddb9ca8c366f106d02d5b0105f69cf6a911f5",
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+    "lib/pages/note_edit_page/note_edit_page.lua": "d4658759c6ee301ebf301f2219d22b4a00f4f0b12405f367800896199e5b03b0",
+    "lib/pages/note_edit_page/note_edit_page_ui.lua": "d9718ed3b571d9338a81dc088d6113dd15066b93071ead60cdc619778d726e9f",
+    "lib/pages/pages.lua": "6eb2f6d17847e28bd2b3aed2210820bb24b05c5696b1f368ed8555e5c1574e8f",
+    "lib/pages/scale_edit_page/scale_edit_page.lua": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc",
+    "lib/pages/scale_edit_page/scale_edit_page_ui.lua": "7c6c6a50a187cc42d8526c927478718ca1bbbd96906adf993f368cc7e2ab3e23",
+    "lib/pages/song_edit_page/song_edit_page.lua": "006fcbbaf05510e0050f9b20a0335b0b9b0303d0b21e6230f5d392fafce0c2c6",
+    "lib/pages/song_edit_page/song_edit_page_ui.lua": "9228f92c828d709f6f26e63e323018bcacbb9b2bdab7d1b6c8105048edad6755",
+    "lib/pages/trigger_edit_page/trigger_edit_page.lua": "45f3b115dafc5d4977d9d0a754620042c1bb7f52e30ab76bf8a28bea26d8dde9",
+    "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua": "a87469638ecbdfce617a5749bb4ff6091b2f9b38fa5431d467d288b3ad87e78d",
+    "lib/pages/velocity_edit_page/velocity_edit_page.lua": "c295bd601c907350f57252eedf6f2a3d7567e0277e78f17676ea74a68e99d207",
+    "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua": "d06d53fbb4f6e47e7882a75cd53608927ad5a2b012836f63a50959da958fc3dd",
+    "lib/ui.lua": "64870c05585fa02615d1ad6e6e95963153b47687ae4ef1155fd1f2864da5ab28",
+    "lib/rhythm_doctor/ui_adapter.lua": "ec03592c858ecefb448f9c649e3f711ecefee3539ffd68717a0eb0bcad9eb06e",
+    "lib/application_parameters.lua": "19de1bd408a242305b20975629facee550b571d157315e12575a74114d4f6290",
+    "mosaic.lua": "2a7434f627ec5f7e20ce6a974757683f8f52286d3b9857cbba83f044b1d5ddca",
+    "README.md": "b4624ee41d639a2712a95c24bb042ac56d5d0bb6da3068a5e0687ec89bf4098d",
+    "cheat_sheet.html": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+    "lib/ui_live.lua": "bbdee8cf4cef9eedac03bf435095b0324fee31d6fcb81714bc6d7a06e54242ab",
+    "lib/ui_render.lua": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+    "lib/ui_spec_data.lua": "65b26e5ba2838bbce449d213191d9d881cf11be6c1e1d69c45e9544bae34932e",
+    "lib/rhythm_doctor/file_mailbox.lua": "c580c40f9b562da4c471b19297a5968dcce0d5207a9f6ae2a3dd52720f256b89",
+    "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+    "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+    "lib/rhythm_doctor/runtime.lua": "c19a660b367c6f260837a10f619f3975acda1d3e9deb7a89689a9136669f51ca",
+    "lib/rhythm_doctor/capture_controller.lua": "8d9fba25659f80f021fcb1633205f252d6658c3858b110dbb612cc5b14496203",
+    "lib/rhythm_doctor/softcut_recorder.lua": "46e36d8d4bdbef00e43323ff460c2940b9f351e99b75a9bcd807724bfdd1ba95",
+    "lib/ui_motion.lua": "e8710327daa4a73dec1f7cf45e508fbbf2d581d493e2dc43a65765ec905241d6",
+    "lib/ui_mini.lua": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+    "lib/ui_mini_atlas.lua": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+    "AGENTS.md": "753908e33247686fc4d0c772bfc7e2355545e94326e8f687c9210abfc061b7e2",
+    "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+    "manual/legacy/cheat-sheet-before-authority-6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed.html": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+    "manual/book.yaml": "422934c09a9aa2c4b97e223c4d9aaeb4144b30d6be5fa2e43c77461cf43a95cc",
+    "manual/course.yaml": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
+    "manual/player-routes.yaml": "5e60341faa3c1c354a330d4996d0cfe0b6dc943965038adc1bc1d5e150286b3e",
+    "manual/features/cookbook.yaml": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+    "manual/features/first-sound-capture.yaml": "7c6e8a21329ed7a8ef7a308704048d269ab8648d7a73cf734559fecbe53cb85a",
+    "manual/features/masks.yaml": "4ee9691bf731f934bba71c86f62c91ec0eab1526f3991449641de0cff70b9a0d",
+    "manual/features/reference-channel.yaml": "bef96579573279e6244596a40e721bebdcfff7b81ac3b800f6a84d002188aafd",
+    "manual/features/reference-developer.yaml": "662cbaea52f8a3235054957316ba7f2384288cfa1133abe4bc8a59385aab9fa1",
+    "manual/features/reference-learn.yaml": "ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d",
+    "manual/features/reference-locks.yaml": "89283a2cd968ebb3b99a15c001d708f8d83181b6b47bc869a09971faf430b8c5",
+    "manual/features/reference-musical.yaml": "dff7e9290852baac9ccda2f6ca910bc31757f85138a5914658fca3e4f4540363",
+    "manual/features/reference-options.yaml": "85f3f0a06727e60d9bf856091567bd6cc940db8c1ab4f724cbf03134124d9d39",
+    "manual/features/reference-pattern.yaml": "f417b2010a2e7deac15168610ee874d41dae7825689f96bf63ee7350ce5146f9",
+    "manual/features/reference-scale.yaml": "68f5389591462169e8b448e900c7f9e07317fbf4e7d6de6fc66077229bfa98d3",
+    "manual/features/reference-song.yaml": "93b05f827f6a732a22bd22fefe0fafc68d43c7070f80640d1954bf7cb76397eb",
+    "manual/features/reference-workflow.yaml": "a0af2f5068e354dbe3064b1152d5e4ae5578466ec06d305142ca7c4c60be3b28",
+    "manual/features/scenes-doctor-scenes.yaml": "09bab660df9b7b98bafaa03f7a432dc85602d1c16f7ea0e3ab0b85ced1117359",
+    "manual/features/scenes-player-routes.yaml": "4d091759c5e5eec9d7fe2a258686619e6674b46e57aa80457a62de7f24c94fba",
+    "manual/features/scenes-reference-device-scenes.yaml": "55287f34c2c71bc83a673315f66e84a1ef0330622c246b1a9a57e73a30d22557",
+    "manual/features/scenes-reference-lock-scenes.yaml": "d461fffea62843e1830a4e1f055ce6a8e6725f706521c83d452a9b544edd0438",
+    "manual/features/scenes-reference-modulation-scenes.yaml": "78d23ca37a52e428b14ed3f17e36f2e6bdc50b6d0fc187eac48b710776686b41",
+    "manual/features/scenes-reference-musical-scenes.yaml": "04bbf4782e05d26f1cb89a5d414471a57cd091aaaacd83102dffbbe910d4ef00",
+    "manual/features/scenes-reference-navigation-scenes.yaml": "286fcb39d96d00ff3eece722032974281e53ff201204632d3c72c737aca55d02",
+    "manual/features/scenes-reference-nested-scenes.yaml": "2fe0f2b128916c24effc28890c21a50e3b30b560b9504e707a7dad3e2d9c895d",
+    "manual/features/scenes-reference-option-scenes.yaml": "ec3ad6994e9fa60bda204360e71d96e5a28a2b9d962c0fdd3e7b14f5d08d7da3",
+    "manual/features/scenes-reference-parameter-scenes.yaml": "602bb4059b30757dceb2f585e38d7b321a39c0850d233d4106b0a44e19871579",
+    "manual/features/scenes-reference-polymeter-scenes.yaml": "edf572eb89be95baf6ddb4403ef1492895217aa110ac8e656b89b806faed926e",
+    "manual/features/scenes-reference-reason-swing-scenes.yaml": "9c206523acbf747168bec38015827bbe2b8fdc92266fae47eb8485c4a2db5249",
+    "manual/features/scenes-reference-record-scenes.yaml": "60675dfec90321f9699510bd5f5aab0b43299325c796f6b5bad8d00d5a33f517",
+    "manual/features/scenes-reference-remaining-scenes.yaml": "8c7ecaa953f52f9c5a79a0fdf4e1eef0234f222af2514320c077225aacef4a94",
+    "manual/features/scenes-reference-scenes.yaml": "039b06d5a7ee9b3cea172782781257da6be7bd0f9d7f9592d99c617378e9f1fc",
+    "manual/features/scenes-reference-stop-scenes.yaml": "b5c29d403a37963f3ce6dd6d4da7b6acd17ec079a789b993b26595b7f36ed496",
+    "manual/features/scenes-reference-vertical-list-scenes.yaml": "49d96e0793e08b323b9f314bc559b4b3d5734654d61ad83b1485a82b39f69c85",
+    "manual/features/scenes-reference-workflow-scenes.yaml": "a2f58bc29bd6eb9624b33ac7b1bb73ba07c4f6042bc6c1a2a7867e09ede20b30",
+    "manual/features/tutorials.yaml": "4a900da83f50145373889b69174ff352fc8652d703b77e5f7cf9bb7bb79ab343",
+    "docs/ui-reimplementation/current-source-review.json": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975",
+    "docs/ui-reimplementation/source-inventory.json": "126ac9d0b9adc7f6321de8938ce30dfec9fb3b163e0c7a0a6465be402bd64c1e",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "6bce24656ba00973c806d02bdbdb6db7fdfc843a6e5d91aca790404bd9ee5025"
+  },
+  "prospective_nonmember_pins": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": "387f549f69147003be47d17ddef9cc2085c3665a91ebc61daa840dea9f140b95",
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": "3c4b7069967eb64bc0f3b001212658391ee240e0da9143a9e66d861f965dbe65",
+    "manual/BUILD.md": "377059de6d6c86e0e346396a3c367e5d541bf848828d8ed1377c1c03962df7c9",
+    "manual/VOICES.md": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574",
+    "manual/book.schema.json": "fef9bf3a4993cfbe24a05f8bcf1215533a93a8b3cb1b5a5f04bddf4d1bb72038",
+    "manual/course.schema.json": "0f4120a691476d539522fce1ee3858ce1024f168131e958d58e17a673504d1f7",
+    "manual/scene-plans-course.yaml": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+    "manual/scene-plans-extra.yaml": "3ea426acb2eee62853a7963e77e3f56ce11dc7867966b31bdd125aa916ea17f5",
+    "manual/scene-plans.yaml": "163f698f5460a6a623ed8b2ecaa128cbcab737b2c6b5cc3a4e277dade9b97791",
+    "manual/schema.json": "5b7dc7115541c43fa1dbdac161cf39355772aa7c88e5d92f9c5f42a898fbc954",
+    "tests/behaviour/contract/live_ui_feedback.py": "47682bb0536f3506386f558759cc898ed9c2a01606e2b6d25092bb8a7c78ffdd",
+    "tests/behaviour/manual_audio_contract.py": "c716178137201fdc9bae4af26b0cd907c450fc49cee543740c21f59fed3e67fb",
+    "tests/behaviour/manual_authority.py": "02a730b973a1ce986cdab643aee388d143a78f2bbde0c8b1330257b7a4c8d88c",
+    "tests/behaviour/merge_strategy_routes.py": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af",
+    "tests/behaviour/test_manual_authority.py": "9c33f4471870f742ec3099b5a0137f06ec764f2fdcdddcaa88865a6710262fb4",
+    "tests/behaviour/test_manual_book.py": "95aac15dabf023c57634c57434e76ab1c6886c3d9188e76ecd01bf3c13cf025d",
+    "tests/behaviour/test_manual_build.py": "460b17fd6b4885d65b1a7e7515a7319a3b9c98bc7806433cc8446189ec26ae77",
+    "tests/behaviour/test_manual_capture.py": "eea02adb476a6afc940244e4e3d699c524e85e82360eb0cf9a9c4ca4d605444f",
+    "tests/behaviour/test_manual_case_capture.py": "f99e10cf9a01cfb349336321a6900b0c6db52da286e7953628bac1c3a6e978c6",
+    "tests/behaviour/test_manual_controlled_generation_integrity.py": "a4214ef0190631b16569c9b197ca4114ee6f8925d76c13c637f3e6a178a9e612",
+    "tests/behaviour/test_manual_course_bind.py": "cb82406f5ee6e5b36d515e221cac8daba4a883dbdf9b3f1347bc247efc31c809",
+    "tests/behaviour/test_manual_feature_bind.py": "6d0c81caf12bef0d2230305acd78b7d80186923c8ea962bd9974f1af35d033cb",
+    "tests/behaviour/test_manual_publication_verify.py": "32d9f2bfb6293bafff4003041dd213d5534b8ede7abdd27fbc1b9664b4b6ec89",
+    "tests/behaviour/test_merge_strategy_ui_routes.py": "00da5094b75992497be6124fcb235750966fbd52bf6e027dada732f37ee836dc",
+    "tools/manual_audio.py": "d1fb7cea325312f9b77ee002c7aa71d5f6b829e86f963d7f384ae60af73e17de",
+    "tools/manual_book.py": "9a33afe212b7fbd78806c91ec74392ab7e8867ffa7a02a62fb1ff44e03602611",
+    "tools/manual_build.py": "cdf8b1cb1fdca9d6d2384e7e954acc7f992ddf6e4ca0d9e5a3b48d3cc8afd0cc",
+    "tools/manual_capture.py": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+    "tools/manual_case_capture.py": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+    "tools/manual_closure_cases.py": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be",
+    "tools/manual_course_bind.py": "f19701ed67e4e45ca97e4854f25a7dbdc87a72244c3e6e6e1f7c6a9a5318a1e9",
+    "tools/manual_course_cases.py": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5",
+    "tools/manual_feature_bind.py": "4fdd27c0a5ccff772f6ff67456e574a6d4349201ca64093ba147137c52e2b3ff",
+    "tools/manual_publication_verify.py": "490e067a6a39ec95f6a89ef14cd5635d3c493fe55af29f8c189e8943c7dadd8a",
+    "tests/behaviour/suite.py": "1c3653ab614f4a6e1f0773c52396b1812516090f0ea9b814031b81f48202d091",
+    "tests/behaviour/contract/harmony_merge_visual.py": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296",
+    "tests/behaviour/test_mini_header_animation_ui.py": "3664f8b3043c6fc41db5917ab1e4152fdfb873869d0f6c584878ba056cbea755",
+    "tests/behaviour/fixtures/harmony-no-voicing-native-obs44.json": "41cd1bc5dc68d5e7387e8e1cb67dd0772530da4564c93b0217606cf6dbdc1be7",
+    "manual/scene-plans-musical.yaml": "3db17925ed6199acde01aee88b06fa98311bcd371a83c5da31f8b35b5b52bfc8",
+    "tests/behaviour/test_manual_documentation_frame_selectors.py": "36a50bd867515ac573e95af8690da17ffb017cd2ac0c103e32a0cb8eb5c1add4",
+    "tests/behaviour/contract/lock_lead_clock_matrix.py": "1f8f7f65f59e776f69aadc6c9becfa51a72f24a205407b0f83088539be3e3ba4",
+    "tests/behaviour/test_lock_lead_owner.py": "290b62792c695b64c2682794941559bf3ee2d2ce36fb32b115257394c7a7f84c",
+    "tests/behaviour/cases.py": "440fd85e793f6985411069a95573f89fd4e87a27ad19310b88b0e97d4c1820bf",
+    ".github/workflows/manual-build.yml": "a3aa1d41578e1fc4886278c9c02ced8e605ba38ee809922a5f96904f1759049d",
+    ".github/workflows/manual-publish.yml": "af1b701f693a7066f827be27698a12f3b1a8bf55924a77ee09d356c3e8f0f597",
+    ".github/scripts/manual-build.sh": "daa921e910d9298ec908ba38b0e7094427140882940127e7aaec041fecfdd401",
+    ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
+    ".github/scripts/manual_runtime.py": "b9fc9bc69c011262e3b014483dfe561b63bd3fa7745b09a12905d435381761e2",
+    ".github/scripts/manual-site-smoke.cjs": "2a09e7cf8add42bb76f918335b67f582206fa65117bb2825505813f96310595b",
+    ".github/scripts/publish_manual.py": "1bf377e658ac6c38006ec42654d433d17760526533ac9e49753bf1ba420286df",
+    "tests/manual_ci/test_build_manual.py": "35fe1fd286a69982f11518e71fafb7e3f08d598d415bcae35ada3c435ce58276",
+    "tests/manual_ci/test_publish_manual.py": "a34f1798a2dd008bdb5d30c89dcbfbcab6d046890cc95dc5b3285d182d472950",
+    "tests/behaviour/test_ui.py": "2f3a899d3a7b14f08c44eb15c51f7f8c4547ee13cb30046398c6f311eea6fc75",
+    "tests/behaviour/test_mini_phase_oracle.py": "61c41d4e5fb724914696f2cd1f37e3ddf21f40e9a35bf7f47257d5ceb7f36ed0",
+    "tests/behaviour/contract/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tests/behaviour/mini_phase_oracle.py": "09e822da182bacde9516a0f318291ed94d5215ca1e9b367f49f8ec05fd73738f",
+    "lib/tests/lib/ui_live_tests.lua": "58024da1288998c7b5311a70438afdbb1ec0108fbb39ddcb98c7c91c874ad0ee",
+    "tests/behaviour/contract/live_ui_sweep.py": "ff2bd9cb2304e2cf99d7c03bc3a5c6206679c400e02af6fb93d5c2d04c523a1a"
+  },
+  "additional_new_nonmembers": [
+    "lib/tests/lib/ui_live_tests.lua",
+    "tests/behaviour/contract/live_ui_sweep.py",
+    "tests/behaviour/contract/mini_phase_oracle.py",
+    "tests/behaviour/mini_phase_oracle.py",
+    "tests/behaviour/test_mini_phase_oracle.py",
+    "tests/behaviour/test_ui.py"
+  ],
+  "supporting_unchanged_architecture_guards": {
+    "tests/behaviour/ui_layer_guard.py": {
+      "sha256": "ccc5c2662e091c39a787228f10ec53f4dedb8f4420c674eba5f211144dcef14e",
+      "qualification": "Unchanged fixed ceiling/raw-UI guard bytes; keep supporting constraints separate from changed-source roster"
+    },
+    "tests/behaviour/contract_cases.json": {
+      "sha256": "9d678a2a0e147d39850209c18e120bcdd9ab3968869ded8cc0b8cdc0590a7e89",
+      "qualification": "Unchanged fixed ceiling/raw-UI guard bytes; keep supporting constraints separate from changed-source roster"
+    },
+    "tests/behaviour/test_ui_layer.py": {
+      "sha256": "882397c160243a3d1657b24c807ca8d479a0938714ce997a766fe1b6ed742cd0",
+      "qualification": "Unchanged fixed ceiling/raw-UI guard bytes; keep supporting constraints separate from changed-source roster"
+    }
+  },
+  "approved_reviewed_or_ledger_deltas": [
+    {
+      "path": "lib/ui_live.lua",
+      "before_sha256": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+      "current_sha256": "bbdee8cf4cef9eedac03bf435095b0324fee31d6fcb81714bc6d7a06e54242ab"
+    },
+    {
+      "path": "manual/features/reference-pattern.yaml",
+      "before_sha256": "03d48e5fb111831c11818bfd52c77c8db1b5242871af3aad363e245b1c9a3c14",
+      "current_sha256": "f417b2010a2e7deac15168610ee874d41dae7825689f96bf63ee7350ce5146f9"
+    },
+    {
+      "path": "manual/features/scenes-reference-polymeter-scenes.yaml",
+      "before_sha256": "d664e3aec6044b10d812b67f5ea595efd2b0350a959aca6682c7949edb768475",
+      "current_sha256": "edf572eb89be95baf6ddb4403ef1492895217aa110ac8e656b89b806faed926e"
+    },
+    {
+      "path": "manual/features/scenes-reference-reason-swing-scenes.yaml",
+      "before_sha256": "13c5d9aa6258b561caa9955fe00ebd475aef3d575ddd942cb7ec48d5be8e9666",
+      "current_sha256": "9c206523acbf747168bec38015827bbe2b8fdc92266fae47eb8485c4a2db5249"
+    },
+    {
+      "path": "docs/ui-reimplementation/current-source-review.json",
+      "before_sha256": "f89e402cfdb5bac9417045d07b75c5774fb56a55bf667ce77e4d783c6f9ed35e",
+      "current_sha256": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975"
+    },
+    {
+      "path": "docs/ui-reimplementation/source-inventory.json",
+      "before_sha256": "d7ce9161ccb379c1ac63081e009a7ceaec6fa38616937d7e78b1a2a92d7004d7",
+      "current_sha256": "126ac9d0b9adc7f6321de8938ce30dfec9fb3b163e0c7a0a6465be402bd64c1e"
+    },
+    {
+      "path": "docs/ui-reimplementation/generated/source-review-receipt.json",
+      "before_sha256": "3395071c88fd9b6ed0c4f9f6c21019d66a793a0ee788d3d07214daf69dd2ca5a",
+      "current_sha256": "6bce24656ba00973c806d02bdbdb6db7fdfc843a6e5d91aca790404bd9ee5025"
+    }
+  ],
+  "qualified_nonmember_deltas": [
+    {
+      "path": "docs/ui-reimplementation/tools/reconcile_manual_build.py",
+      "before_sha256": "a65bd218e651932b05a1b94c955edf8053aa17ed2fad50bd5837e343e16ec3cc",
+      "current_sha256": "387f549f69147003be47d17ddef9cc2085c3665a91ebc61daa840dea9f140b95"
+    },
+    {
+      "path": "docs/ui-reimplementation/tools/test_reconcile_manual_build.py",
+      "before_sha256": "0fe2c9f94ba3c3b6d056308ca68160509c6b63e70501f061b1de53567063eb57",
+      "current_sha256": "3c4b7069967eb64bc0f3b001212658391ee240e0da9143a9e66d861f965dbe65"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_feedback.py",
+      "before_sha256": "585e8010c0c8634feec2977e9708a6fc59162856833c5e3700dc30c83453fc4f",
+      "current_sha256": "47682bb0536f3506386f558759cc898ed9c2a01606e2b6d25092bb8a7c78ffdd"
+    }
+  ],
+  "receipts": {
+    "p02-final-editorial-freeze.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/vertical-list-ui/p02-truthful-footer/final-editorial-freeze.json",
+      "sha256": "909dedf4399775b38b11573552615c4f75e3f8de52d93308960e572bfd418607",
+      "draft_preserved_path": "/home/andy/mosaic-manual-build-operators/next-candidate-p02-phase-draft-ff4c7b907a6946b19fc570662c6fc719/p02-final-editorial-freeze.json"
+    },
+    "mini-phase-relocation-receipt.json": {
+      "path": "/home/andy/mosaic-manual-1.4.0/manual/evidence/mini-phase-contract-relocation/relocation-receipt.json",
+      "sha256": "8c2e72c13104f5392fdb4933a35441abbe8a4f54adf3188b963a90519870644a",
+      "draft_preserved_path": "/home/andy/mosaic-manual-build-operators/next-candidate-p02-phase-draft-ff4c7b907a6946b19fc570662c6fc719/mini-phase-relocation-receipt.json"
+    },
+    "root-reconciler-59.log": {
+      "path": "/home/andy/mosaic-manual-build-operators/root-dashboard-retry-qualification/reconciler-59.log",
+      "sha256": "a4b0285adb59c75590362710d204bd575f88466ed6f373fdc2f147529e498ae7",
+      "draft_preserved_path": "/home/andy/mosaic-manual-build-operators/next-candidate-p02-phase-draft-ff4c7b907a6946b19fc570662c6fc719/root-reconciler-59.log"
+    },
+    "bounded-polymeter-reason-review.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/bounded-review-receipt.json",
+      "sha256": "e8cd0afa8f186d8fdb74266afb16be717e5110f0fdf33edc5afa5bd48f423ad2",
+      "draft_preserved_path": "/home/andy/mosaic-manual-build-operators/next-candidate-p02-phase-draft-ff4c7b907a6946b19fc570662c6fc719/bounded-polymeter-reason-review.json"
+    },
+    "bounded-polymeter-reason-application.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/application-receipt.json",
+      "sha256": "eedd52968f85071fca35d357f49c94e7e6ad87964f28a07fe9cbba8ee1bbd373",
+      "draft_preserved_path": "/home/andy/mosaic-manual-build-operators/next-candidate-p02-phase-draft-ff4c7b907a6946b19fc570662c6fc719/bounded-polymeter-reason-application.json"
+    },
+    "reconciler-polymeter-qualification.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/reconciler-polymeter-phrases-e0fc753c68bf435da68e03937cd2f6b7/qualification-receipt.json",
+      "sha256": "ecd4192dd8182a87b3a2153f14e72e1c51db4aa582fea6003877ef38ed0eee8c",
+      "draft_preserved_path": "/home/andy/mosaic-manual-build-operators/next-candidate-p02-phase-draft-ff4c7b907a6946b19fc570662c6fc719/reconciler-polymeter-qualification.json"
+    }
+  },
+  "phase_relocation": {
+    "original_implementation_sha256": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "implementation_byte_identical": true,
+    "semantic_or_tolerance_delta": false,
+    "compatibility_facade": "tests/behaviour/mini_phase_oracle.py",
+    "contract_implementation": "tests/behaviour/contract/mini_phase_oracle.py"
+  },
+  "counts": {
+    "reviewed_ui_members": 78,
+    "prospective_snapshot_paths": 81,
+    "prospective_nonmember_pins": 58,
+    "supporting_guard_pins": 3
+  },
+  "pending": [
+    "Focused current-source controlled native footer/spacing qualification with source identity and cleanup",
+    "Root review/release of all final source hashes and draft changes",
+    "Final candidate creation and complete current/preserved hash verification"
+  ],
+  "whole_manual_complete": false,
+  "manual_generation_complete": false,
+  "complete_regression_run": false,
+  "authority_activation": false,
+  "native_launched": false,
+  "checkout_files_changed": false,
+  "prior_external_draft": {
+    "path": "/home/andy/mosaic-manual-build-operators/next-candidate-p02-phase-draft-ff4c7b907a6946b19fc570662c6fc719/candidate-allowlist.draft.json",
+    "sha256": "86202a8eca57d659f56a0cbcb9fcc1ce83e5d9894cf1dd2e0628f26caee58088"
+  },
+  "historical_partial_stage_status": "17 passed native stages belong to failed whole build51904; bounded polymeter1/ReasonSwing6frames verified only against immutable source tree; never relabeled current after fixture/footer changes"
+}

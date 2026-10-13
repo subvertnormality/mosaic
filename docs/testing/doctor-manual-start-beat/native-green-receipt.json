@@ -1,0 +1,29 @@
+{
+  "status": "engineering-native-green-final-current-source-qualification-pending",
+  "report": "/home/andy/mosaic-doctor-options-runs/4a991148aa4042b8a1b875631aa3ed23/report.json",
+  "report_sha256": "d04881bd155cba2f7e57e42ba10a53292460a286d78415a46ca5aff237183e65",
+  "fixture": "/home/andy/mosaic-doctor-options-runs/4a991148aa4042b8a1b875631aa3ed23/ready-fixture/fixture.json",
+  "fixture_sha256": "ae316353ff99f9a12e26e7ef88d5d2b0b857b2df3b1ad49617d5df997fdbc830",
+  "passed": true,
+  "cleanup_failure": null,
+  "harness_changed": [],
+  "checkpoints": 12,
+  "geometry": {
+    "bank_bpm": 120,
+    "window_max": 173,
+    "beat_count": 60,
+    "project_seed_origin": "application-autosave-after-public-adc",
+    "retained_audio": false
+  },
+  "native_cleanup": "/home/andy/mosaic-doctor-options-runs/4a991148aa4042b8a1b875631aa3ed23/native/cleanup.json",
+  "baseline_report": "/home/andy/mosaic-doctor-options-runs/7cadc7162f704283b97f2d36715c62a6/report.json",
+  "recipe_unchanged_from_baseline": true,
+  "complete_regression_run": false,
+  "controlled_adc_applicable": false,
+  "remaining": [
+    "READY options genuine fixture real/control",
+    "setup options real/control",
+    "final current-source seven-role qualification",
+    "root full Lua at global source freeze"
+  ]
+}

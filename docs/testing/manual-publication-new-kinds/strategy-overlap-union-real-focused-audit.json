@@ -1,0 +1,16 @@
+{
+  "scope": "Focused real overlap union raw audit only",
+  "clock_mode": "real-time",
+  "report": "/home/andy/mosaic-manual-runs/58fb8d5fb0c7421d97de79027d2c38a8/reference-scenes.json",
+  "report_sha256": "d565a191f2860faf60f2f8cc6dcfd88fec695c883889811a34224398b28bad47",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "frames": 6,
+  "passed": true,
+  "positive_native_kind3_onsets": 32,
+  "native_releases": 32,
+  "wire_sequence_matches": true,
+  "cleanup_sha256": "61e00c27316f540e6c176f38f95e1c79136e63aef20cb92ece133775a123dd63",
+  "native_events_sha256": "33718349de9058a69b8251dd422b861e75b8526508d99e2a9f2d6c9d3f118182",
+  "seconds": 0.33822244801558554
+}

@@ -1,0 +1,144 @@
+{
+  "real_time": {
+    "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/report.json",
+    "sha256": "886ea3ee883dd578312f79870afcc8c2dc62fdec0cc12659ee5e3f82ffb8b940",
+    "report": {
+      "run_id": "fc962cf089eb4b46a4420cd8597902a0",
+      "source_sha256": "14d4330441833bceea835384640c3f49d6d1d60a5779d1228932fa273e7cd3bc",
+      "base_revision": "54d7b871358fcc68b7166847603cc9fb1461d0b6",
+      "revision": "2ed35ee1563a27ba7887a88814519de50a9669ad",
+      "clock_mode": "real-time",
+      "complete_regression_run": false,
+      "passed": false,
+      "behaviour_cases": [
+        {
+          "case": "M-MASK-007",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-007",
+          "results_sha256": "89be1f372e43f2dc57fbb6452ae22b84a7179ef26292a3fc577b4d86f8b628f1"
+        },
+        {
+          "case": "M-MASK-008",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-008",
+          "results_sha256": "8245f14beff3337665005eb5c68919e766932138d1931597423353f30458bd4d"
+        },
+        {
+          "case": "M-MASK-010",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-010",
+          "results_sha256": "25d7565051af04cf196f6d7735c810c42c67ca386d904016b69332e6ce6f8e69"
+        },
+        {
+          "case": "M-MASK-005",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-005",
+          "results_sha256": "d1180f97c8481ded2a250099215abc73a766e8e1d03372c201ca69244750f126"
+        }
+      ],
+      "failure": "Traceback (most recent call last):\n  File \"tools/manual_capture.py\", line 249, in main\n    result[\"audio\"]=audio_capture(data[\"audio\"],out,staged/\"audio\",options)\n  File \"tools/manual_capture.py\", line 143, in audio_capture\n    c = tracked_driver(out, profile=data[\"profile\"], mod_code_root=options.mod_code_root, app_root=options.app_root)\n  File \"tools/manual_capture.py\", line 21, in tracked_driver\n    c=Driver(*args, **kwargs)\n  File \"/home/andy/mosaic-manual-1.4.0/tests/behaviour/driver.py\", line 89, in __init__\n    if required not in supported:raise ValueError('Missing required output capability: '+required)\nValueError: Missing required output capability: SuperCollider\n"
+    }
+  },
+  "controlled": {
+    "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/report.json",
+    "sha256": "b845738e7f822a53026e541e3902c6be5b9c958f3f1c86d3c69728739c32eb2e",
+    "report": {
+      "run_id": "d3c46089aca14f90abdf81f12e5ad801",
+      "source_sha256": "14d4330441833bceea835384640c3f49d6d1d60a5779d1228932fa273e7cd3bc",
+      "base_revision": "54d7b871358fcc68b7166847603cc9fb1461d0b6",
+      "revision": "2ed35ee1563a27ba7887a88814519de50a9669ad",
+      "clock_mode": "controlled-experimental",
+      "complete_regression_run": false,
+      "passed": true,
+      "behaviour_cases": [
+        {
+          "case": "M-MASK-007",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-007",
+          "results_sha256": "e4bb958104209b344f91faa4e523e0a17b2b7290919503d6f1015cf761eac4f2"
+        },
+        {
+          "case": "M-MASK-008",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-008",
+          "results_sha256": "225f89940183e4dd1a677166a47f2c9809068135635685fb98cf83d396674543"
+        },
+        {
+          "case": "M-MASK-010",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-010",
+          "results_sha256": "c57cb19425d8cf5c61d06a42d3d8156ef1e0cc392971bf79de8cdc380e131dcd"
+        },
+        {
+          "case": "M-MASK-005",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/d3c46089aca14f90abdf81f12e5ad801/M-MASK-005",
+          "results_sha256": "8d384db503cff1daf96189270891aaa1ece0f592e4ae777dd2f0a68fc872ec97"
+        }
+      ],
+      "pilot_complete": false
+    }
+  },
+  "published": {
+    "path": "/home/andy/mosaic-manual-runs/f3f4ab10272d41568558e4f5ab069043/report.json",
+    "sha256": "a193379c5b269f74bcd609ec9c203f664f9086bfa0f5a02fe8dcd3d0c76fbeca",
+    "report": {
+      "run_id": "f3f4ab10272d41568558e4f5ab069043",
+      "source_sha256": "1d62d425801e672d98b40cc1a76a0e3ac13546803cf01cd15cc74a30eb10a0c9",
+      "base_revision": "54d7b871358fcc68b7166847603cc9fb1461d0b6",
+      "revision": "2ed35ee1563a27ba7887a88814519de50a9669ad",
+      "clock_mode": "real-time",
+      "complete_regression_run": false,
+      "passed": true,
+      "capture_tool_sha256": "772d63613f07b671423394c185ebe5116f0d07f3eb961030ad70f9dd13fc030e",
+      "driver_sha256": "8f20a5cbc721e5cee57e69c4f60ee15d5e16718952ff669d31ca6788c837e13c",
+      "voice_lock_sha256": "4063938bb2697ab2f88079fa4388795a8690492683a79eee67429f22da56069f",
+      "behaviour_cases": [
+        {
+          "case": "M-MASK-007",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-007",
+          "results_sha256": "89be1f372e43f2dc57fbb6452ae22b84a7179ef26292a3fc577b4d86f8b628f1"
+        },
+        {
+          "case": "M-MASK-008",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-008",
+          "results_sha256": "8245f14beff3337665005eb5c68919e766932138d1931597423353f30458bd4d"
+        },
+        {
+          "case": "M-MASK-010",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-010",
+          "results_sha256": "25d7565051af04cf196f6d7735c810c42c67ca386d904016b69332e6ce6f8e69"
+        },
+        {
+          "case": "M-MASK-005",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/M-MASK-005",
+          "results_sha256": "d1180f97c8481ded2a250099215abc73a766e8e1d03372c201ca69244750f126"
+        }
+      ],
+      "reused_visual_evidence": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0",
+      "pilot_complete": true
+    }
+  },
+  "authoring_mutation": {
+    "path": "/home/andy/mosaic-manual-runs/310f7b2301fd474bacf8216a39290279/report.json",
+    "sha256": "58eeaca62400fce1406dd310a7b4f1af91758d264f8120585f8005bb12b6502c",
+    "report": {
+      "run_id": "310f7b2301fd474bacf8216a39290279",
+      "source_sha256": "b076a3cee7adf11851abc6b71920fe276342c5a3a49f3c3b999e8cb7efb46721",
+      "base_revision": "54d7b871358fcc68b7166847603cc9fb1461d0b6",
+      "revision": "2ed35ee1563a27ba7887a88814519de50a9669ad",
+      "clock_mode": "controlled-experimental",
+      "complete_regression_run": false,
+      "passed": true,
+      "capture_tool_sha256": "772d63613f07b671423394c185ebe5116f0d07f3eb961030ad70f9dd13fc030e",
+      "driver_sha256": "8f20a5cbc721e5cee57e69c4f60ee15d5e16718952ff669d31ca6788c837e13c",
+      "voice_lock_sha256": "4063938bb2697ab2f88079fa4388795a8690492683a79eee67429f22da56069f",
+      "behaviour_cases": [],
+      "pilot_complete": false
+    }
+  }
+}

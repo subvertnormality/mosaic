@@ -1,0 +1,22 @@
+{
+  "kind": "read-only TOM mapping/time audit of frozen ADTOF pilot v2",
+  "acceptance_claimed": false,
+  "artifact": "tests/rhythm_doctor/artifacts/adtof-pilot-v2/tom-audit.json",
+  "pilot_weight_sha256": "1bc986e596ec47ba0b44916f87cd4a39f0b2bec23596df3fb5d0e87749217320",
+  "frozen_audit_source_sha256": "99db09d9426d2add0ebb6345bf67815601a23f02a139fa03723081e676f907ea",
+  "audit_report_sha256": "899b18716d9b282c5aa3dec36172130ba2f57a36eb7cc7e5603eaab13df10fb0",
+  "upstream_labels_5": [35, 38, 47, 42, 49],
+  "verified_mapping": {"47": "TOM", "42": "HH", "49": "cymbal not scored"},
+  "held_tom_events": {"total": 45, "by_midi_note": {"41": 0, "43": 29, "45": 8, "47": 2, "48": 4, "50": 2}},
+  "prediction_distribution": {
+    "positive-track_predicted_tom_events": 0,
+    "positive-track_references_without_any_predicted_tom": 45,
+    "false_positive_track": "Track00019",
+    "false_positive_track_reference_tom_events": 0,
+    "false_positive_track_predicted_tom_events": 29
+  },
+  "frozen_development_tom": {"tp": 2, "fp": 24, "fn": 22, "precision": 0.07692307692307693, "recall": 0.08333333333333333},
+  "aggregate_drum_stem_energy": {"window_seconds": 0.03, "median_post_over_pre": 2.5624192750908237, "nearby_other_drum_events": 6},
+  "interpretation": "The exact upstream class mapping and source-MIDI timing boundary did not reveal an index swap or global timing offset. The aggregate-stem energy check supports real attacks at many literal TOM times, but cannot isolate simultaneous sources. The zero held TOM result remains preserved and is consistent with this frozen model/domain configuration failing TOM recognition.",
+  "limitations": ["No held threshold or model tuning occurred.", "Aggregate DRUM stem energy is supporting evidence, not independent annotation.", "This old preliminary diagnostic is not acceptance evidence."]
+}

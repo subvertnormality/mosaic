@@ -1,0 +1,13 @@
+..........................................F.......................
+======================================================================
+FAIL: test_summary_must_call_independent_emitted_clock_phase_audit (test_manual_publication_verify.PlayingPhaseRawDispatchIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 571, in test_summary_must_call_independent_emitted_clock_phase_audit
+    self.assertTrue(any(isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id=='check_playing_phases' for node in ast.walk(tree)),'Raw summary cannot rely on live passed or bitmap membership alone')
+AssertionError: False is not true : Raw summary cannot rely on live passed or bitmap membership alone
+
+----------------------------------------------------------------------
+Ran 66 tests in 0.184s
+
+FAILED (failures=1)

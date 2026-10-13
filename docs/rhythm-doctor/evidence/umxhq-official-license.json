@@ -1,0 +1,10 @@
+{
+  "url": "https://zenodo.org/api/records/3370489",
+  "record_sha256": "5c482e4ca5f70563daa0a0489e53d8aeb698dbea3c1867d1767f151707b4c9e6",
+  "record_license": {
+    "id": "mit-license"
+  },
+  "source": "Official Zenodo model weight record, not source-code license inference",
+  "supersedes": "Unresolved UMXHQ weight licensing in bass-runtime-research.json and candidate_b_pretrained_research_2026-09-19.json",
+  "full_feature_acceptance": false
+}

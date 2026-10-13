@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/__w/mosaic/mosaic/tools/doctor_options_capture.py", line 10, in <module>
+    from manual_doctor_capture import tracked_driver,close,freeze
+  File "/__w/mosaic/mosaic/tools/manual_doctor_capture.py", line 7, in <module>
+    from manual_capture import tracked_driver, frame, close
+  File "/__w/mosaic/mosaic/tools/manual_capture.py", line 16, in <module>
+    from manual_model import ROOT, MANUAL, load, validate, validate_capture, source_hash
+  File "/__w/mosaic/mosaic/tools/manual_model.py", line 7, in <module>
+    import jsonschema
+ModuleNotFoundError: No module named 'jsonschema'

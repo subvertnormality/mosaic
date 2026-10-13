@@ -1,0 +1,228 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Trigless locks",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Trigless locks",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "source"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "midi"
+  },
+  {
+    "kind": "trigless-slide-external-tempo-step",
+    "change_after_clock": 27,
+    "bpm": [
+      100,
+      150
+    ],
+    "accounting": {
+      "onsets": 10,
+      "releases": 10,
+      "maximum_onset_error_ns": 1
+    },
+    "cycles": [
+      {
+        "cycle": 0,
+        "tempo_change_inside": false,
+        "samples": [
+          {
+            "ordinal": 0.0,
+            "value": 24,
+            "ideal": 24
+          },
+          {
+            "ordinal": 2.0,
+            "value": 36,
+            "ideal": 36.0
+          },
+          {
+            "ordinal": 4.0,
+            "value": 48,
+            "ideal": 48.0
+          },
+          {
+            "ordinal": 6.0,
+            "value": 60,
+            "ideal": 60.0
+          },
+          {
+            "ordinal": 8.0,
+            "value": 72,
+            "ideal": 72.0
+          },
+          {
+            "ordinal": 10.0,
+            "value": 84,
+            "ideal": 84.0
+          },
+          {
+            "ordinal": 12.0,
+            "value": 96,
+            "ideal": 96
+          }
+        ]
+      },
+      {
+        "cycle": 1,
+        "tempo_change_inside": true,
+        "samples": [
+          {
+            "ordinal": 0.0,
+            "value": 24,
+            "ideal": 24.0
+          },
+          {
+            "ordinal": 2.0,
+            "value": 36,
+            "ideal": 36.0
+          },
+          {
+            "ordinal": 4.0,
+            "value": 48,
+            "ideal": 48.0
+          },
+          {
+            "ordinal": 6.0,
+            "value": 60,
+            "ideal": 60.0
+          },
+          {
+            "ordinal": 8.0,
+            "value": 72,
+            "ideal": 72.0
+          },
+          {
+            "ordinal": 10.0,
+            "value": 84,
+            "ideal": 84.0
+          },
+          {
+            "ordinal": 12.0,
+            "value": 96,
+            "ideal": 96
+          }
+        ]
+      },
+      {
+        "cycle": 2,
+        "tempo_change_inside": false,
+        "samples": [
+          {
+            "ordinal": 0.0,
+            "value": 24,
+            "ideal": 24.0
+          },
+          {
+            "ordinal": 2.0,
+            "value": 36,
+            "ideal": 36.0
+          },
+          {
+            "ordinal": 4.0,
+            "value": 48,
+            "ideal": 48.0
+          },
+          {
+            "ordinal": 6.0,
+            "value": 60,
+            "ideal": 60.0
+          },
+          {
+            "ordinal": 8.0,
+            "value": 72,
+            "ideal": 72.0
+          },
+          {
+            "ordinal": 10.0,
+            "value": 84,
+            "ideal": 84.0
+          },
+          {
+            "ordinal": 12.0,
+            "value": 96,
+            "ideal": 96
+          }
+        ]
+      }
+    ],
+    "passed": true
+  }
+]

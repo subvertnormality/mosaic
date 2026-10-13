@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "claim": "Retired focused callers fail closed before observation; only literal vertical_list calls may earn new layout acceptance. No transparent remap.",
+  "red_failures": [
+    "retired tag did not raise ValueError",
+    "stale UI verb reached observation instead of UiMapError"
+  ],
+  "green_tests": 245,
+  "old_helper_sources": "/home/andy/mosaic-manual-runs/900050b869a744e493f08cc58a866e0a/case-source/tests/behaviour",
+  "files": {
+    "/home/andy/mosaic-manual-runs/900050b869a744e493f08cc58a866e0a/case-source/tests/behaviour/frame_oracle.py": "4195dd3e90ec68a44bb6affb01a3f08db8cbe71bec22ac76387a9b167cf396da",
+    "/home/andy/mosaic-manual-runs/900050b869a744e493f08cc58a866e0a/case-source/tests/behaviour/ui.py": "0484104ee89e4b96705622050adb7eeb66a0a60c480c8f5d8f1ff4881511ccca",
+    "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_vertical_list_ui.py": "ccbdd8a09fc086689c06a887e7b9e5c733054f60ac5ed15e0cf30bcfce979ad4",
+    "/home/andy/mosaic-manual-1.4.0/docs/testing/vertical-list-ui/retired-layout-red.log": "bcb70a7f14d80970122cc23aeab0603c0563174c04d78161e6bdebd70e0eade7",
+    "/home/andy/mosaic-manual-1.4.0/docs/testing/vertical-list-ui/python-ui-green.log": "0e0ca6f9c12eccb891d07824e351e6ceb4ba6532f0608b72f21ae7d4f53bc8bb"
+  }
+}

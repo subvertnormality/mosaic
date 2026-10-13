@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "frames": 14,
+  "report": "/home/andy/mosaic-manual-runs/4e136b11b7204a8db9930dd78b6c34ed/reference-scenes.json",
+  "report_sha256": "94f53046e05895e4b9457dac88d708a5aba7056f198dbf10791a2d85ff69c31f",
+  "seconds": 1.9460656499722973,
+  "clock_mode": "controlled-experimental",
+  "scope": "Two closure cases, three scenes; not complete regression or hardware timing",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "auditor_sha256": "3d6ae35d5035415cdd9a552af19ff11197dd01073b775007d291b7ef5425023f"
+}

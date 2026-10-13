@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "complete_regression_run": false,
+  "hardware_timing_verified": false,
+  "lanes": [
+    {
+      "publication": "/home/andy/mosaic-manual-1.4.0/manual/generated/first-sound.json",
+      "source": "features/first-sound-capture.yaml",
+      "scenes": 1,
+      "frames": 6,
+      "clock_mode": "real-time",
+      "baseline_cases": [
+        {
+          "case": "M-PAT-001",
+          "identity_sha256": "243d0202ba8edcb5c27fce4434a73b405e5178febb987a66f778960aa3c9d3d7",
+          "application_digest": "b1d1b551259ef430fb7fab994412f6c534d86ccdcfad188ba943c14805c44a91"
+        }
+      ]
+    },
+    {
+      "publication": "/home/andy/mosaic-manual-runs/503550d3fa12488489f34e739d07b0ee/pilot.json",
+      "source": "features/first-sound-capture.yaml",
+      "scenes": 1,
+      "frames": 6,
+      "clock_mode": "controlled-experimental",
+      "baseline_cases": [
+        {
+          "case": "M-PAT-001",
+          "identity_sha256": "37a41308a0654b90255ee64fc58dca048ac41e598abdb7089302d4a68e0f8ef4",
+          "application_digest": "b1d1b551259ef430fb7fab994412f6c534d86ccdcfad188ba943c14805c44a91"
+        }
+      ]
+    }
+  ]
+}

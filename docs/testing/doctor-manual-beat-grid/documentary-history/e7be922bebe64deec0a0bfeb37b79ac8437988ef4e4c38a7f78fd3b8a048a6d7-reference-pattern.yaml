@@ -1,0 +1,929 @@
+features:
+- id: dig-deeper
+  title: Dig Deeper
+  audience: all
+  summary: Reference sections for pattern editing, channel processing and song arrangement.
+  prose: Use the following reference sections to edit patterns, process channels and arrange song sequences.
+  musical_use: Edit the source pattern first. Apply channel processing, then arrange song patterns. Check
+    playback after each change.
+  related: []
+  sources:
+    readme: manual/legacy/README-1.4.0.md#dig-deeper
+    behaviour_cases: []
+    code: []
+  controls: []
+  details: []
+  recipes: []
+  scene_refs:
+  - pattern-note-range
+  - pattern-velocity-range
+  - foundation-protected-and-added
+  - harmony-revoice-two-voices
+  review:
+    status: verified
+    cases:
+    - M-HARMONY-REVOICE-001
+    - M-MERGE-FOUNDATION-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: pattern-note-range
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-001
+      assertions:
+      - &id001
+        kind: workflow-check
+        name: initial-note-range
+        passed: true
+      - &id002
+        kind: workflow-check
+        name: first-up-step
+        passed: true
+      - &id003
+        kind: workflow-check
+        name: hold-to-highest-range
+        passed: true
+      - &id004
+        kind: workflow-check
+        name: center-restores-root-page
+        passed: true
+      scope: Overview examples cover Pattern Note and Velocity editing; other advanced features have their
+        own reference.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: pattern-velocity-range
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-002
+      assertions:
+      - &id005
+        kind: workflow-check
+        name: velocity-127
+        passed: true
+      - &id006
+        kind: workflow-check
+        name: velocity-68
+        passed: true
+      - &id007
+        kind: workflow-check
+        name: velocity-0
+        passed: true
+      - &id008
+        kind: workflow-check
+        name: hold-to-highest-velocity-range
+        passed: true
+      scope: Overview examples cover Pattern Note and Velocity editing; other advanced features have their
+        own reference.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: foundation-protected-and-added
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-MERGE-FOUNDATION-001
+      assertions:
+      - kind: documentation-frame
+        name: images/merge-shape-foundation.png
+        sha256: 49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463
+        passed: true
+      - kind: foundation-physical-workflow
+        passed: true
+      scope: Overview examples of Pattern editing, Foundation merging and Harmony Revoice.
+    - scene: harmony-revoice-two-voices
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-HARMONY-REVOICE-001
+      assertions:
+      - kind: revoice-physical-workflow
+        passed: true
+      scope: Overview examples of Pattern editing, Foundation merging and Harmony Revoice.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Overview examples of Pattern editing, Foundation merging and Harmony Revoice.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: foundation-protected-and-added
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: harmony-revoice-two-voices
+      clock_mode: controlled-experimental
+  category: pattern
+  parent: null
+  level: 2
+- id: pattern-editor
+  title: Pattern Editor
+  audience: all
+  summary: Edit source-pattern trigs, scale-relative notes and velocities, then assign the patterns to
+    channels.
+  prose: 'Create source patterns in the pattern editors. Assign them to channels, then use channel merging
+    to combine or remix their note, velocity and rhythm data.
+
+
+    Press the third button in the grid’s global menu cluster to open Pattern Editor.
+
+
+    Pattern editor demo'
+  musical_use: Create several source patterns. Assign them to channels and set masks or merge modes separately
+    for each channel.
+  related:
+  - dig-deeper
+  sources:
+    readme: manual/legacy/README-1.4.0.md#pattern-editor
+    behaviour_cases: []
+    code:
+    - lib/pages/pages.lua
+    - lib/pages/trigger_edit_page/trigger_edit_page.lua
+    - lib/pages/note_edit_page/note_edit_page.lua
+    - lib/pages/velocity_edit_page/velocity_edit_page.lua
+  controls:
+  - gesture: Grid (5,8)
+    result: Open Pattern Trig; press again to cycle Pattern Note and Pattern Velocity.
+  - gesture: 'Pattern Trig: tap grid row 1'
+    result: Choose one of 16 editable source patterns.
+  details: []
+  recipes: []
+  scene_refs:
+  - algorithm-choose-and-preview
+  - pattern-note-range
+  - pattern-velocity-range
+  - workflow-compose-two-channels
+  review:
+    status: verified
+    cases:
+    - M-WORKFLOW-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: algorithm-choose-and-preview
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-LIVEUI-ALGO-001
+      assertions:
+      - &id009
+        kind: selected-field
+        label: Euclidean
+        value: SELECTED
+        matched: true
+      - &id010
+        kind: selected-field
+        label: Drum
+        value: ''
+        matched: true
+      - &id011
+        kind: selected-field
+        label: Drum
+        value: SELECTED
+        matched: true
+      - &id012
+        kind: prime-uses-selected-algorithm
+        passed: true
+      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child
+        reference.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: pattern-note-range
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-001
+      assertions:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child
+        reference.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: pattern-velocity-range
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-002
+      assertions:
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      scope: Overview covers algorithm selection and Note/Velocity ranges; it does not replace each child
+        reference.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: workflow-compose-two-channels
+      data: reference-workflow-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/2de11f78f9984f9e852e4acfdd5c646e
+      data_sha256: 239ee675560047a01a9df969446fb61e17756436fd87d962042c80c3ca36a771
+      case: M-WORKFLOW-001
+      assertions:
+      - kind: composition-workflow
+        stage: default-skip
+        passed: true
+      - kind: composition-workflow
+        stage: merge-all-average
+        passed: true
+      - kind: composition-workflow
+        stage: two-channels-with-melody
+        passed: true
+      - kind: composition-workflow
+        stage: chained-song
+        passed: true
+      scope: Overview of pattern trig/note/velocity editing and its use in a two-channel arrangement.
+    applicability: native-ui
+    native_gap: null
+    rationale: Overview of pattern trig/note/velocity editing and its use in a two-channel arrangement.
+  category: pattern
+  parent: dig-deeper
+  level: 3
+- id: adding-trigs
+  title: Adding Trigs
+  audience: all
+  summary: Enter pattern trigs manually or preview and paint a generated rhythm.
+  prose: 'Trigs are added in the pattern editor. Using the top row, pick one of the 16 available patterns.
+
+
+    Press a sequencer step to enter a trig. Active trigs glow brightly. Hold a trig and select its end
+    step to set its length. Dimmer steps show the note’s duration. Another trig in the same pattern ends
+    that duration.
+
+
+    Select a built-in rhythm algorithm using the five algorithm buttons. From left to right:
+
+
+    * Button 1: The drum algorithm, using banks of classic drum patterns.
+
+    * Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo
+    multiplier can be set on the Norns screen for more variations.
+
+    * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
+
+    * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
+
+    * Button 5: Rhythm Doctor, a capture and paint workflow described below. Recording needs the sequencer
+    stopped; an analysed bank can be used while it plays.
+
+
+    Pressing an algorithm button shows the Trig Algorithm screen on the norns, with the algorithm in use
+    marked SELECTED. You can also choose there: E2 moves through the five algorithms and K3 selects one,
+    exactly as its grid button does. Choosing Rhythm Doctor opens the Doctor. Algorithm, in the pattern
+    task list, opens the same screen.
+
+
+    Use the row-3 bank fader starting at column 12 to choose a bank: five choices for Drum and Tresillo,
+    four for Numeric Repetitor. Euclidean and Rhythm Doctor do not use this selector.
+
+
+    Use the left fader in row 2 for the first algorithm parameter and the left fader in row 3 for the
+    second. The outer buttons change the value by one; the inner buttons choose broader proportional values,
+    with the centre selecting the middle value. The second fader is disabled for Drum, and both are disabled
+    for Rhythm Doctor. Changing an enabled parameter refreshes the prepared pattern; use Paint to commit
+    it.'
+  musical_use: Select a drum bank or Euclidean rhythm. Press Paint to preview its steps against the existing
+    pattern. Press Paint again to commit, or press Cancel to discard the preview.
+  related:
+  - pattern-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#adding-trigs
+    behaviour_cases:
+    - M-ALG-001
+    - M-ALG-002
+    - M-ALG-003
+    - M-ALG-004
+    - M-ALG-PAINT-RACE-001
+    - M-LEN-001
+    - M-LEN-002
+    - M-LEN-003
+    - M-LEN-004
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-PAINT-001
+    - M-LIVEUI-VIEW-001
+    - M-MASK-028
+    - M-MASK-029
+    - M-MIDI-001
+    - M-MIDI-002
+    - M-MIDI-003
+    - M-MIDI-004
+    - M-MIDI-005
+    - M-MIDI-REPEAT-001
+    - M-PAT-001
+    - M-PAT-002
+    - M-PAT-003
+    - M-PAT-004
+    - M-PAT-005
+    - M-PAT-BOUNDARY-001
+    - M-PROJECT-LIVE-001
+    - M-PROJECT-LIVE-002
+    - M-PROJECT-LIVE-003
+    - M-PROJECT-LIVE-004
+    - M-REC-005
+    - M-REC-015
+    - M-REC-016
+    - M-REC-024
+    - M-REC-025
+    - M-REC-SOURCES-001
+    - M-REC-SOURCES-002
+    - M-SYNC-005
+    - M-SYNC-006
+    - M-SYNC-007
+    - M-SYNC-008
+    - M-SYNC-015
+    - M-SYNC-016
+    - M-SYNC-017
+    - M-SYNC-018
+    - M-SYNC-019
+    - M-SYNC-020
+    - M-SYNC-021
+    - M-SYNC-022
+    - M-SYNC-023
+    - M-TIM-001
+    - M-TIM-002
+    - M-TIM-004
+    - M-TIM-005
+    - M-UI-001
+    - M-UI-002
+    - M-UIACC-A11-001
+    - M-VIEW-001
+    - M-XA-003-JF-OWNERSHIP
+    - M-XA-004-JF-OVERLAP
+    code:
+    - lib/pages/trigger_edit_page/trigger_edit_page.lua
+    - lib/pages/trigger_edit_page/trigger_edit_page_ui.lua
+    - lib/controls/sequencer.lua
+    - lib/pattern.lua
+  controls:
+  - gesture: 'Pattern Trig: tap row-1 pattern button'
+    result: Choose the source pattern for editing.
+  - gesture: Tap a sequencer step in grid rows 4–7
+    result: Toggle a trig; active trigs glow brightly.
+  - gesture: Hold a trig and choose its end step
+    result: Set the note’s length; dimmer steps show its duration, cut short by another trig in the same
+      pattern.
+  - gesture: Tap algorithm button, columns 12–16 of row 2
+    result: Select Drum, Tresillo, Euclidean, Numeric Repetitor or Rhythm Doctor.
+  - gesture: Tap Paint at grid (16,8), then tap it again
+    result: Preview the generated pattern, then commit it; flashing steps show the preview.
+  - gesture: Tap Cancel at grid (14,8)
+    result: Discard the prepared preview.
+  - gesture: Grid (10,8), (11,8), (12,8)
+    result: Move the preview left, reset its shift, or move it right; paint to commit.
+  - gesture: Grid row 3, columns 12–16, with Drum or Tresillo selected
+    result: Select one of five algorithm banks.
+  - gesture: Grid row 3, columns 12–15, with Numeric Repetitor selected
+    result: Select one of four banks. Euclidean and Rhythm Doctor do not use this bank fader.
+  - gesture: Grid row 2, columns 1–10
+    result: Set the algorithm’s first parameter. The outer buttons decrement/increment; inner buttons
+      choose broader values.
+  - gesture: Grid row 3, columns 1–10
+    result: Set the second algorithm parameter for Tresillo, Euclidean or Numeric Repetitor. This fader
+      is disabled for Drum and Rhythm Doctor.
+  details:
+  - title: Algorithm faders
+    text: 'Use the left faders to edit the generated pattern before painting. The first fader occupies
+      columns 1–10 of row 2; the second occupies the same columns of row 3. Each end button changes its
+      value by one. The inner buttons select proportional values, with the centre selecting the middle
+      value. The enabled parameters depend on the algorithm: Drum uses Pattern 1 (1–128); Tresillo uses
+      Pattern 1 and Pattern 2 (each 1–128); Euclidean uses Fill and Length (each 1–32); Numeric Repetitor
+      uses Pattern 1 (1–32) and Pattern 2 (1–16). Rhythm Doctor disables these faders and uses its capture
+      controls.'
+  - title: Bank selection
+    text: Select banks with the row-3 fader starting at column 12. Drum and Tresillo have five bank choices;
+      Numeric Repetitor has four. Euclidean and Rhythm Doctor do not use bank selection. Changing an enabled
+      parameter or bank refreshes the prepared algorithm pattern.
+  recipes: []
+  scene_refs:
+  - algorithm-choose-and-preview
+  - paint-shift-and-cancel
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-ALGO-001
+    - M-LIVEUI-PAINT-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: algorithm-choose-and-preview
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-LIVEUI-ALGO-001
+      assertions:
+      - *id009
+      - *id010
+      - *id011
+      - *id012
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: paint-shift-and-cancel
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-LIVEUI-PAINT-001
+      assertions:
+      - kind: selected-field
+        label: Numeric
+        value: SELECTED
+        matched: true
+      - kind: paint-shift-cells
+        control: shift_right
+        shift: '+1'
+        passed: true
+      - kind: paint-shift-cells
+        control: shift_left
+        shift: '0'
+        passed: true
+      - kind: paint-shift-cells
+        control: shift_left
+        shift: '-1'
+        passed: true
+      - kind: paint-shift-cells
+        control: shift_reset
+        shift: '0'
+        passed: true
+      - kind: live-ui-paint-summary
+        passed: true
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    applicability: native-ui
+    native_gap: null
+  category: pattern
+  parent: pattern-editor
+  level: 4
+- id: rhythm-doctor
+  title: Rhythm Doctor
+  audience: all
+  summary: Select the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm
+    lanes.
+  prose: "Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.\nSetup and workflow\
+    \ screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual\
+    \ footer names confirmation actions; painting still uses the grid Paint control.\nEach project retains\
+    \ one captured bank. Select a lane, preview a 64-step\nwindow, then paint it into the selected pattern.\n\
+    \nThe lanes occupy a block of five columns on each of two rows, starting at\ncolumn 3: lanes one to\
+    \ five on row 2 at columns 3–7, and lanes six to ten on\nrow 3 at the same columns. Column 1 of row\
+    \ 2 is Record, column 2 is reserved,\nand columns 12–16 of both rows belong to the algorithm and bank-mask\
+    \ faders and\nare never lanes. A bank analysed on the device declares three lanes — **BD**\n(bass\
+    \ drum), **SD** (snare drum) and **CYM** (hi-hats and cymbals) — so only\nthe first three cells light.\
+    \ A remote analysis declares up to ten, which is why\nthe block is two rows: a single row would run\
+    \ the later lanes under the\nalgorithm fader, where selecting one would also change the algorithm.\n\
+    \nLanes read in kit order rather than alphabetically: kick, snare, hi-hat,\ncymbals and toms fill\
+    \ the top row, and whatever else the analysis separated out\n— bass, guitar, piano, vocals and demucs'\
+    \ residual **OTHER** — follows on the\nbottom row. A lane neither of those names keeps a stable alphabetical\
+    \ place\nafter the ones they do, so an unfamiliar backend still puts its columns in the\nsame order\
+    \ every time a project loads. A bank saved before this order existed\nis brought forward when it loads,\
+    \ so an older capture does not keep an\nalphabetical grid until it is recorded again.\n\nThe lanes\
+    \ describe what can be told apart reliably, not a full drum-kit\ntranscription. **CYM** is hats *and*\
+    \ cymbals together because a closed hat and a\nride are both inharmonic metal with overlapping spectra,\
+    \ and the decay that\ndistinguishes them in isolation is buried in a mix; separating them was measured\n\
+    and does not work. Bass, open hi-hat and tom have no lane: none could be\ndetected reliably enough\
+    \ to paint. Bass was tried and withdrawn — every\napproach either failed to separate a bass note from\
+    \ the kick that hides it, or\nmarked the kicks themselves, so the lane only ever restated what BD\
+    \ already\nsaid.\n\nRecording needs the sequencer stopped, because capture takes over the audio\n\
+    input and analysis replaces the bank underneath whatever is on the screen. So\ndoes Alignment, which\
+    \ re-analyses. Record, capture setup and Alignment do\nnothing while the sequencer runs, and the screen\
+    \ says `STOP SEQUENCER` when\nthere is no bank to work on instead.\n\nA bank that has already been\
+    \ analysed stays usable while the sequencer plays.\nChoosing a lane, browsing the recording, changing\
+    \ sensitivity or paint policy,\nand previewing and painting all read a finished bank and write to\
+    \ a pattern,\nwhich is what the rest of the Trigger Editor already lets you do while playing.\nStarting\
+    \ the sequencer cancels an unfinished capture or analysis and closes a\ncapture-setup or alignment\
+    \ draft, but keeps an armed paint preview, so you can\narm Paint, start the sequencer and commit.\
+    \ Rhythm Doctor does not start or stop\nthe sequencer for you.\n\nOn an empty bank, press grid column\
+    \ 1, row 2 to begin Record; the press starts\nthe action and its release is consumed. Press Record\
+    \ again to stop, or press K3:\neither finishes the capture once the screen says `ENOUGH / REC OR K3`.\
+    \ Until it\ndoes, the screen says `MORE AUDIO NEEDED`, and pressing Record then asks whether\nto abandon\
+    \ the take instead. Pressing Record on an occupied bank asks whether to\nclear its capture bank. K2\
+    \ cancels that question and K3 confirms it; clearing keeps patterns that\nwere already painted. In\
+    \ a ready bank, use E2 to choose Window bar, Window\nstep, selected-lane sensitivity, Paint policy,\
+    \ or Alignment, then use E3 to\nedit the chosen item. Window bar moves by 16 steps and Window step\
+    \ by one; both\nview the same bounded timeline. Alignment shows `OPEN >`: choose it and press\nK3\
+    \ (or turn E3) to open its tempo, start-beat, and fine-start settings; K2\ncancels and K3 applies\
+    \ the draft.\n\nBefore recording, use E2/E3 to open and edit the setup draft for Auto or Manual tempo,\
+    \ manual BPM (40–240), and Stereo/L/R input. Press K3 to confirm the settings for the take, or K2\
+    \ to discard the draft. Record uses the confirmed settings.\n\nStereo records left and right separately.\
+    \ L records the left input into both recorded channels; R records the right input into both. Auto\
+    \ estimates tempo and phrase start from the recording. Manual uses the selected integer BPM and starts\
+    \ the phrase at the beginning of recording. Applying an explicit Alignment draft later replaces that\
+    \ capture timing.\n\nTo paint a ready lane, select the destination pattern with the top row, press\n\
+    Paint (column 16, row 8) to preview, then press it again to commit. Cancel\n(column 14, row 8) discards\
+    \ the preview. Toggle is the default paint policy;\nAdd and Replace are selectable on the Rhythm Doctor\
+    \ screen. Painting does not\nalter the captured bank.\n\n**Finding the phrase.** Auto estimates where\
+    \ the four-bar phrase begins and aligns gates to it. Manual starts the phrase at the beginning of\
+    \ recording; Alignment can move it afterward. In this mode columns 10, 11 and 12 of row 8 browse the\
+    \ recording, and\nthey do it with the same gestures that shift a previewed pattern everywhere\nelse.\
+    \ A press of column 10 or 12 moves the window one step back or forward.\nHolding either of them covers\
+    \ a whole four-bar phrase in that direction, which\nis exactly the width of the displayed window,\
+    \ so every position reached by\nholding stays aligned with the phrase. A press of column 11 returns\
+    \ to the\ncalculated phrase start. E3 still moves by a single bar or step. In every\nother algorithm\
+    \ those three buttons continue to shift a previewed pattern's\nposition.\n\nEach move names where\
+    \ it landed, as bar.beat.step, so the tooltip\nidentifies the current window position. A move that\
+    \ the\nrecording absorbs -- a step forward when the window is already at the last\nwhole phrase, or\
+    \ a return to a phrase start you are already sitting on --\nsays so instead of reporting a move that\
+    \ did not happen. If you are painting\nwhile you browse, the preview follows the window: the grid\
+    \ keeps showing the\ngates under the part of the recording you are looking at.\n\nUse the estimated\
+    \ phrase start as an initial position. A crash on the first\nbeat or a fill before the bar provides\
+    \ evidence for the bar boundary. Identical\nbars can make that boundary undecidable; check the reported\
+    \ confidence. To\nchange the position, open ALIGNMENT and step START BEAT through the detected\nbeat\
+    \ grid. The editor starts on the detected beat. Confirming without an edit\npreserves that position.\n\
+    \n**Analysis server (advanced).** Analysis runs on the norns by default and\nneeds nothing configured.\
+    \ If you run the optional analysis server on a computer\non the same network, Rhythm Doctor can send\
+    \ the capture there instead and get\nback ten lanes rather than three: KICK, SNARE, TOMS, HIHAT and\
+    \ CYMBALS from a\nmodel that separates a kit into its pieces, and BASS, GUITAR, PIANO, VOCALS and\n\
+    OTHER from the rest of the mix. The melodic lanes carry rhythm and velocity,\nnot notes.\n\nSet it\
+    \ up in PARAMS > MOSAIC > Rhythm Doctor: put the address in **Analysis\nserver** (for example `http://192.168.1.50:8420`)\
+    \ and switch **Use analysis\nserver** on. The switch is separate from the address so you can keep\
+    \ a server\nsaved while working locally.\n\nThe on-device analysis stays the default and the fallback.\
+    \ If the server is\nswitched off, unreachable, slower than its timeout, or returns anything Mosaic\n\
+    does not accept, the capture is analysed on the norns instead and you still get\ngates. You lose the\
+    \ extra lanes, not the recording.\n\nThe server also tracks the beat with a model trained for it,\
+    \ so on the remote\npath the tempo and the phrase start are usually better than the on-device\nestimate.\n\
+    \n`tools/rhythm_doctor_server/README.md` has step-by-step setup, including a\nWindows walkthrough\
+    \ that needs no administrator rights, how to find the\naddress to type into the setting, and what\
+    \ to check when captures keep coming\nback with three lanes. Three lanes is the on-device fallback:\
+    \ it is what you\nget whenever the server cannot be reached, so it is the symptom to look for\nrather\
+    \ than an error message.\n\n**Availability:** Mosaic starts a local capture helper when this mode\
+    \ opens,\nand analyses captures with a model-free detector it builds from source the\nfirst time this\
+    \ mode is used. Nothing is downloaded, no Python packages are\nneeded. The local worker uses python3\
+    \ to launch the analysis and gcc to compile the shipped C source. No analysis server configuration\
+    \ is required. The build takes about half a\nminute on a Norns and is then reused. Analysis of a 45-second\
+    \ capture takes\nroughly half a minute on the device.\n\nIf no C compiler is available, or the build\
+    \ fails, analysis fails closed with\n`ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery\
+    \ profile can\nstill point the analysis worker at its own executable that accepts the worker\nrequest/result\
+    \ protocol and returns the lanes it declares, in which case that\none is used instead. No detector\
+    \ quality, transcription accuracy, or timing\nperformance is claimed here.\n\nEach algorithm has its\
+    \ own grid options. Press a grid control to display its function on norns.\n\nThe left side faders\
+    \ adjust algorithm values. Brightly lit end buttons refine values, with the furthest left-hand button\
+    \ incrementing downwards and the furthest right-hand button incrementing upwards. The dimmer ones\
+    \ in the middle of the faders adjust values broadly. \n\nThe rightmost fader typically toggles between\
+    \ different banks in the selected algorithm.\n\nPress Prime to preview the selected algorithm’s pattern.\
+    \ Potential new steps are shown as flashing bright steps on the sequencer. While these steps flash,\
+    \ they aren't painted yet. Any step that would be painted over an existing active step will blink\
+    \ dimly. By painting the new pattern, you'll deactivate the faintly blinking steps. You can modify\
+    \ algorithm parameters while the pattern is primed.\n\nIf you haven't painted the new pattern, the\
+    \ prime button continues to blink. Pressing it again paints your edits. Pressing the prime button\
+    \ again without tweaking the algorithm or its parameters effectively acts as an undo for the last\
+    \ action.\n\nPress Cancel to discard a prepared pattern.\n\nWhile previewing a new pattern, use the\
+    \ move controls to shift its position. The first button shifts it left, the third to the right, and\
+    \ the center button resets it. Press Paint to commit the changes. Pressing prime, cancel or a move\
+    \ button shows the Paint Preview screen on the norns: whether a preview is showing, the algorithm\
+    \ it comes from, the shift, and how many steps it triggers. In Rhythm Doctor these same three buttons\
+    \ browse the recording instead, with the same gestures: a press of the outer two moves the window\
+    \ one step, holding either covers a whole four-bar phrase, and the centre button returns to the calculated\
+    \ start of the phrase.\n\nOn the Norns screen, Pattern Trig shows the pattern you are editing brightly\
+    \ over the viewed channel's steps, which stay dim as context; the viewed channel is the merged version\
+    \ of the channel. The title row names both (`PAT02 CH01`). Channel view, in the pattern task list,\
+    \ shows the viewed channel on its own. Use E3 to view another channel; it does not change the selected\
+    \ channel. Choose Options from the pattern task list (E1) to edit the tresillo multiplier in use;\
+    \ a new multiplier takes effect the next time you prime the tresillo algorithm. Change the multiplier\
+    \ and prime Tresillo again to compare the generated rhythm.\n\n  \n  Pattern editor trig page demo"
+  musical_use: Record a percussion phrase into an empty bank. Select a lane and an unused destination
+    pattern. Adjust sensitivity and paint policy, preview the result, then paint it.
+  related:
+  - adding-trigs
+  sources:
+    readme: manual/legacy/README-1.4.0.md#rhythm-doctor
+    behaviour_cases:
+    - M-LIVEUI-ALGO-001
+    - M-UIACC-A11-001
+    code:
+    - lib/rhythm_doctor/ui_adapter.lua
+    - lib/rhythm_doctor/runtime.lua
+    - lib/rhythm_doctor/capture_controller.lua
+    - lib/rhythm_doctor/analysis_controller.lua
+    - lib/rhythm_doctor/paint_transactions.lua
+    - lib/pages/trigger_edit_page/trigger_edit_page.lua
+  controls:
+  - gesture: Choose Rhythm Doctor; stop the sequencer before recording
+    result: Open capture and paint for the selected bank.
+  - gesture: 'Empty bank: grid (1,2)'
+    result: Start Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.
+  - gesture: Record before enough audio, or Record on an occupied bank
+    result: Open an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already
+      painted patterns.
+  - gesture: 'Before capture: E2/E3 edit setup → K3 confirm; K2 cancels.'
+    result: Record uses the confirmed Auto/Manual tempo and Stereo/L/R settings for the take. Manual uses
+      the selected integer BPM and starts timing at recording start.
+  - gesture: 'Ready bank: select a lane, then E2 field → E3'
+    result: Browse Window bar/step, sensitivity or paint policy.
+  - gesture: 'Ready bank: select Alignment → K3'
+    result: Open the tempo, start beat and fine-start draft. K2 cancels; K3 confirms explicit alignment
+      and replaces the earlier capture timing.
+  - gesture: Grid (10,8) / (12,8); hold for a phrase
+    result: Move the recording window one step backward / forward, or a whole four-bar phrase.
+  - gesture: Grid (11,8)
+    result: Return the window to its calculated phrase start.
+  - gesture: Select destination pattern in row 1 → grid (16,8) twice
+    result: Preview the selected lane, then paint it; grid (14,8) cancels the preview.
+  details:
+  - title: Recording and playback
+    text: Stop the transport before recording. After analysis produces a ready bank, browse, adjust and
+      paint it while playback runs.
+  - title: Capture and analysis results
+    text: Capture, analysis and painting are separate stages. A backend failure shows an explicit error
+      and does not produce a ready bank. The retained README describes the ten broad instrument lanes
+      as an experimental detector; it does not specify detection accuracy.
+  - title: Paint destination
+    text: Select the destination pattern and song slot before previewing. Changing either invalidates
+      the prepared Doctor paint preview. Preview again before committing.
+  - title: Local worker requirements
+    text: The default path uses python3 to launch the worker and gcc to compile the shipped model-free
+      C detector. It does not require third-party Python packages.
+  - title: Vertical list controls
+    text: 'Rhythm Doctor’s setup, capture, analysis, window, alignment and paint screens show labelled
+      vertical rows. Select an editable row with E2 and change it with E3. Read the contextual footer
+      before confirming an action: the grid Paint button remains the painting control, and K3 does not
+      substitute for it. This display change does not change capture, lane selection or paint scope.'
+  - title: Confirmed capture setup
+    text: Confirm the setup with K3 before Record. Stereo preserves separate left/right channels; L or
+      R duplicates that chosen input into both channels. Manual uses 40–240 integer BPM from recording
+      start; Auto estimates tempo and phrase start. A later explicitly confirmed Alignment draft takes
+      precedence.
+  recipes: []
+  scene_refs:
+  - rhythm-doctor-open
+  review:
+    status: pending
+    cases:
+    - M-LIVEUI-ALGO-001
+    note: Setup and timing prose now matches the candidate confirmed capture contract. Historical entry-only
+      native evidence below is preserved; current Manual/Auto input qualification and full published workflow
+      evidence remain separate and pending.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: rhythm-doctor-open
+      data: reference-remaining-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: eb97da1626d05057276204030487ffb52955a3fc8ff83fbb999a2bb2e33b8746
+      case: M-LIVEUI-ALGO-001
+      assertions:
+      - kind: k3-rhythm-doctor-opens-r01
+        passed: true
+      scope: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing
+        and painting are not acceptance claims.
+    applicability: native-ui
+    native_gap: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing
+      and painting are not acceptance claims.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/cd93ee88b1c04883ae47a9be2738d464
+      data_sha256: c4f8b619f19666138374af1984d2102a6129359cb15a396b929083e4fac5f729
+      scene: rhythm-doctor-open
+      clock_mode: controlled-experimental
+    rationale: Only Algorithm K3 entry to R01 is captured; recording, local analysis, ready-bank browsing
+      and painting are not acceptance claims.
+  category: pattern
+  parent: adding-trigs
+  level: 5
+- id: adding-notes
+  title: Adding Notes
+  audience: all
+  summary: Set source-pattern notes as scale degrees relative to the channel’s active root.
+  prose: 'Pattern notes are positions relative to the active scale root, not fixed pitches. In C major,
+    position 0 is C, one step above is D and one step below is B. Changing the channel scale to E minor
+    makes the same positions E, F sharp and D.
+
+
+    Sequenced scale and degree changes described in [Harmony Design](#harmony-design) affect pattern output.
+    Use pattern notes for harmony and rhythm parts. Patterns can also provide melodies, but changing a
+    scale progression changes their tonality. Use [Masks](#masks) to enter a deliberate melody independently.
+
+
+    From Pattern Trig, press the third global-menu button again to open Pattern Note.
+
+
+    The grid displays 16 steps at a time. Active trigs show dim vertical bars; a dim horizontal line marks
+    the root. Selected note values glow brightly. Press a cell in a step’s column to set its note. Hold
+    K1 while entering a note to copy it to the corresponding position across all four step pages.
+
+
+    The channel supplies the scale; the pattern does not own it. The same source pattern can therefore
+    play different notes on different channels. Use the norns channel grid viewer to inspect channel output.
+
+
+    Use the step-page buttons to select one of four groups of 16 steps.
+
+
+    Use the outer note-range buttons to move the displayed range up or down one step. Hold an outer button
+    to reach its extreme. Press the middle button to return to the page with the root note on the bottom
+    row.
+
+
+    A step without a trig can still store note data for use by another merge mode.
+
+
+    The top row flickers to indicate the selected pattern. Hold a top-row button, or hold K1 and press
+    it, to select another pattern.
+
+
+    The norns Pattern Note screen shows the viewed channel’s steps as 64 cells. Turn E3 to view another
+    channel.
+
+
+    Pattern editor note page demo'
+  musical_use: Enter a repeating scale-degree pattern. Assign it to two channels with different scales.
+    Set note masks where a channel needs specific pitches.
+  related:
+  - harmony-design
+  - masks
+  - pattern-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#adding-notes
+    behaviour_cases:
+    - M-EDIT-001
+    - M-EDIT-003
+    - M-EDIT-004
+    - M-EDIT-005
+    - M-EDIT-FLICKER-001
+    - M-LIVEUI-NOTESTEP-001
+    - M-MERGE-002
+    - M-MERGE-003
+    - M-MERGE-008
+    - M-MERGE-016
+    - M-MERGE-019
+    - M-MERGE-043
+    - M-MERGE-044
+    - M-PAT-001
+    - M-PAT-002
+    - M-PAT-006
+    - M-PAT-BOUNDARY-001
+    - M-UIACC-A11-001
+    code:
+    - lib/pages/note_edit_page/note_edit_page.lua
+    - lib/controls/vertical_fader.lua
+    - lib/harmony/grid_projection.lua
+    - lib/ui_adapters/read_only.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: From Pattern Trig, press grid (5,8) again
+    result: Open Pattern Note.
+  - gesture: Tap a note in a step’s grid column
+    result: Set a scale-relative note for that source step, including steps without trigs.
+  - gesture: Hold K1 while entering a note
+    result: Copy the note to the corresponding position on all four sixteen-step pages.
+  - gesture: Grid (9,8)–(12,8)
+    result: Choose steps 1–16, 17–32, 33–48 or 49–64.
+  - gesture: Grid (14,8), (15,8), (16,8)
+    result: Move the note range down, reset to root through +6, or move up; hold an outer button to reach
+      its extreme.
+  - gesture: Hold a row-1 pattern button, or K1 + tap it
+    result: Select another source pattern while on the note page.
+  - gesture: E3 on Pattern Note screen
+    result: View another channel’s resolved steps without changing the selected channel.
+  details:
+  - title: Source notes and channel pitch
+    text: The pattern stores distance from a scale root. Each channel applies its active scale and subsequent
+      processing. An edit affects every channel using that source pattern. A step without a source trig
+      can supply note data when a different pattern supplies the merged rhythm.
+  recipes: []
+  scene_refs:
+  - pattern-note-range
+  - pattern-copy-groups
+  review:
+    status: verified
+    cases:
+    - M-EDIT-001
+    - M-EDIT-003
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: pattern-note-range
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-001
+      assertions:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: pattern-copy-groups
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-003
+      assertions:
+      - &id013
+        kind: workflow-check
+        name: shift-copies-notes-to-four-groups
+        passed: true
+      - &id014
+        kind: workflow-check
+        name: shift-copies-velocities-to-four-groups
+        passed: true
+      - &id015
+        kind: workflow-check
+        name: play-step-group-4
+        passed: true
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    applicability: native-ui
+    native_gap: null
+  category: pattern
+  parent: pattern-editor
+  level: 4
+- id: adding-velocity
+  title: Adding Velocity
+  audience: all
+  summary: Set source-pattern velocities using fourteen discrete grid levels from MIDI 127 to 0.
+  prose: 'From Pattern Note, press the third global-menu button again to open Pattern Velocity.
+
+
+    The velocity editor operates like the note editor. Its two extreme vertical pages show velocities
+    127–68 and 58–0. Press a velocity-range button to move the displayed range by one value level. Hold
+    it to reach an extreme.
+
+
+    The norns Pattern Velocity screen shows the viewed channel’s steps as 64 cells. Turn E3 to view another
+    channel.
+
+
+    Pattern editor velocity page demo'
+  musical_use: Set higher velocities on the main hits and lower velocities on intervening hits. Use velocity
+    masks for channel-specific overrides.
+  related:
+  - pattern-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#adding-velocity
+    behaviour_cases:
+    - M-EDIT-002
+    - M-EDIT-003
+    - M-EDIT-005
+    - M-EDIT-FLICKER-001
+    - M-LIVEUI-NOTESTEP-001
+    - M-PAT-001
+    - M-PAT-BOUNDARY-001
+    - M-UIACC-A11-001
+    code:
+    - lib/pages/velocity_edit_page/velocity_edit_page.lua
+    - lib/controls/vertical_fader.lua
+    - lib/controls/fade_button.lua
+    - lib/ui_adapters/read_only.lua
+  controls:
+  - gesture: From Pattern Note, press grid (5,8) again
+    result: Open Pattern Velocity.
+  - gesture: Tap a level in a step’s grid column
+    result: Set that source step’s velocity to the displayed grid level.
+  - gesture: Hold K1 while entering a velocity
+    result: Copy it to the corresponding position across all four sixteen-step pages.
+  - gesture: Grid (9,8)–(12,8)
+    result: Choose the sixteen-step page.
+  - gesture: Grid (15,8) / (16,8)
+    result: Move the displayed velocity range toward higher / lower values; hold to reach an extreme.
+  - gesture: Hold a row-1 pattern button, or K1 + tap it
+    result: Select another source pattern.
+  - gesture: E3 on Pattern Velocity screen
+    result: View another channel’s resolved steps without changing the selected channel.
+  details:
+  - title: Grid levels are discrete
+    text: Fourteen source levels span MIDI 127 to 0. The initial seven levels are 127, 117, 107, 97, 87,
+      78 and 68; the lower extreme shows 58, 48, 39, 29, 19, 9 and 0. A short range-button press moves
+      the seven-row window by one level rather than adjusting MIDI velocity by one. Existing M-EDIT-002
+      covers every displayed value and the range clamps.
+  recipes: []
+  scene_refs:
+  - pattern-velocity-range
+  - pattern-copy-groups
+  review:
+    status: verified
+    cases:
+    - M-EDIT-002
+    - M-EDIT-003
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: pattern-velocity-range
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-002
+      assertions:
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: pattern-copy-groups
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-EDIT-003
+      assertions:
+      - *id013
+      - *id014
+      - *id015
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    applicability: native-ui
+    native_gap: null
+  category: pattern
+  parent: pattern-editor
+  level: 4

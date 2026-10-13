@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "91394ab69ff8a54f8273d7641220e3dc5447d10d",
+  "after_sha": "5beec06c1a30e5469241909147b8b4e9517ab72d",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-REC-PARAM-022"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/recording_stop_safety.py": "M-REC-PARAM-022"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/recording_stop_safety.py",
+      "case": "M-REC-PARAM-022",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-7e2f39df5a5646a0a43f72208aa2f797/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-7e2f39df5a5646a0a43f72208aa2f797/manifest.json",
+      "manifest_sha256": "c8f40b4317ed79064deaaa4bc17b28e71d1e1494370d42026c29443c9715101d",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

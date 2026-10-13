@@ -13,14 +13,13 @@ action. The same up-three-down-one gesture on Chd4 (step 3) comes first, as the 
 
 
 def memory_chord_three_held(c):
-    from frame_oracle import render
-    import base64
-    c.configure()
+    ui = c.ui
+    ui.configure()
     field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
 
     def heard(stage):
         # One pattern cycle (4 steps at 1/6 s): every voice sounding from the first onset.
-        marker = c.snapshot()['midi_count']; c.tap(1, 8); c.elapse(1.4); c.tap(1, 8)
+        marker = c.snapshot()['midi_count']; ui.play(); c.elapse(1.4); ui.stop()
         state = c.wait(lambda s: not s['midi_capture']['outstanding'])
         ons = [m for m in state['midi'] if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0]
         assert ons, ('Nothing heard', stage)
@@ -29,33 +28,26 @@ def memory_chord_three_held(c):
         return cycle
 
     def counter(stage, current, total):
-        expected = render([(0, 23, 15, str(current)), (0, 49, 15, str(total))], font_size=10, antialias=1)
-        indexes = [(y * 128 + x) * 4 + k for y in list(range(13, 26)) + list(range(39, 52)) for x in range(16) for k in range(3)]
-        def match(state):
-            actual = base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[i] == expected[i] for i in indexes)
-        try: c.wait(match)
+        try: ui.wait_memory_position(current, total)
         except AssertionError: raise AssertionError(('Memory counter', stage, dict(current=current, total=total)))
         c.results.append(dict(kind='chord-three-held-counter', stage=stage, current=current, total=total, frame_matched=True))
 
     def held_chord(step, field_offset, turns):
         # From the Memory page: hold a step on Note Masks and turn E3 on one chord field.
-        c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
-        c.enc(2, -9); c.enc(2, field_offset)
-        c.action(type='grid', x=step, y=4, state=1); c.elapse(.05)
-        try:
-            for t in turns: c.enc(3, t)
-        finally: c.action(type='grid', x=step, y=4, state=0)
-        c.elapse(.1); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+        ui.channel_page('masks', 'memory', confirm=False); ui.expect_header('masks', channel=1)
+        ui.select_field('chord_mask', saturate=-9, then=field_offset)
+        with ui.hold_step(step):
+            c.elapse(.05)
+            for t in turns: ui.turn(3, t)
+        c.elapse(.1); ui.channel_page('memory', 'masks', confirm=False); ui.expect_header('memory', channel=1)
 
     def shift(n):
         # norns passes K1 to the script only after its 0.25 s menu threshold.
-        c.action(type='key', n=1, state=1)
-        try: c.elapse(.4); c.key(n)
-        finally: c.action(type='key', n=1, state=0)
+        with ui.hold_keys(1):
+            c.elapse(.4); ui.press_key(n)
         c.elapse(.1)
 
-    c.enc(1, -2); c.screen_header('Ch. 1 Memory')
+    ui.channel_page('memory', 'midi_config', confirm=False); ui.expect_header('memory', channel=1)
     original = heard('original')
     # characterisation, not manual text: the configured phrase the case starts from.
     assert original == [[60, 127], [62, 117], [64, 107], [65, 97]], original

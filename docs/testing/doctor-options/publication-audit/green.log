@@ -1,0 +1,23 @@
+test_fixture_requires_exact_manual_right_parent_and_real_autosave_origin (test_doctor_options_audit.DoctorFixtureProvenanceIntegrity) ... ok
+test_setup_lookalikes_outside_explicit_window_are_excluded (test_doctor_options_audit.DoctorMusicalWindowIntegrity) ... ok
+test_whole_phrase_and_release_timing_not_just_positive_attack_count (test_doctor_options_audit.DoctorMusicalWindowIntegrity) ... ok
+test_cli_requires_all_seven_explicit_roles_and_fixture_identity (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_closing_attack_requires_real_release_and_exact_packet_count (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_fixture_digest_is_checked_before_parsing (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_native_observation_cannot_replace_a_real_frame_or_grid (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_report_refuses_a_missing_final_harness_guard_before_any_acceptance (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_backend_templates_and_runtime_json_are_required_but_manual_outputs_are_not (test_doctor_options_audit.DoctorProductionInventoryIntegrity) ... ok
+test_startup_spec_is_mandatory_harness_dependency (test_doctor_options_audit.DoctorProductionInventoryIntegrity) ... ok
+test_unloaded_production_source_cannot_be_omitted_from_snapshot (test_doctor_options_audit.DoctorProductionInventoryIntegrity) ... ok
+test_actual_stop_time_is_recomputed_from_native_inputs (test_doctor_options_audit.DoctorPublicStopIntegrity) ... ok
+test_real_stop_uses_native_monotonic_clock (test_doctor_options_audit.DoctorPublicStopIntegrity) ... ok
+test_shortened_final_gate_cannot_pass_without_actual_public_stop (test_doctor_options_audit.DoctorPublicStopIntegrity) ... ok
+test_all_seven_unique_reports_are_required (test_doctor_options_audit.DoctorScopeIntegrity) ... ok
+test_audio_cannot_claim_controlled_time_or_a_failed_qualification (test_doctor_options_audit.DoctorScopeIntegrity) ... ok
+test_setup_ready_allow_two_ui_lanes_and_require_exact_role (test_doctor_options_audit.DoctorScopeIntegrity) ... ok
+test_input_selection_requires_the_actual_selected_spectrum (test_doctor_options_audit.DoctorSelectedInputIntegrity) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.049s
+
+OK

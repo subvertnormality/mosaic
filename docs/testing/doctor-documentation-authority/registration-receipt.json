@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "specialized-registration-only",
+  "case_id": "MA-DOCTOR-MANUAL-START-BEAT-001",
+  "citation": "manual:rhythm-doctor",
+  "global_case_inventory_changed": false,
+  "feature_review_status": "pending",
+  "native_acceptance_claimed": false,
+  "complete_regression_run": false,
+  "tests": {
+    "documentation_authority": 5,
+    "registration": 4,
+    "start_beat_oracles": 5,
+    "quick_reference": 7
+  },
+  "ast_proofs": [
+    "registration-oracle-ast-proof.json",
+    "registration-runner-ast-proof.json"
+  ],
+  "source_files": {
+    "tools/doctor-qualification-inventory.json": "f0c27bddedfd6c7167b2cb9d040f6d85e2285656d82dee7382983cd085b7825b",
+    "tools/doctor_options_capture.py": "e9fa70d80946b06c034a0877da0f84aef1cbe62009608d0d3d66f9dfbfb7b4f1",
+    "tests/behaviour/contract/rhythm_doctor_start_beat.py": "695f7b3254a246b87d0e011d9435e1b4ceb3cd145cc450c1746bc74f54670763",
+    "tests/behaviour/test_doctor_qualification_registration.py": "1575618abfb70a4c332ab7a8c33eb8cd4ccb3ca706f00c312d0191b382c268b3",
+    "manual/features/reference-pattern.yaml": "03d48e5fb111831c11818bfd52c77c8db1b5242871af3aad363e245b1c9a3c14",
+    "manual/evidence/quick-reference-coverage.json": "0a4713f0ae1c010b6f4a38a32c48125b58e2778cd07558d4d2d71599f01ec5d3"
+  }
+}

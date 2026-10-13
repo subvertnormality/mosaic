@@ -1,0 +1,20 @@
+F
+======================================================================
+FAIL: test_ui_layer_is_raw_free_outside_contract (test_ui_layer.UiLayerGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui_layer.py", line 564, in test_ui_layer_is_raw_free_outside_contract
+    self.assertEqual(validate_ui_layer(), [])
+AssertionError: Lists differ: ['raw UI outside contract module: mini_phase_oracle.py:13'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'raw UI outside contract module: mini_phase_oracle.py:13'
+
+- ['raw UI outside contract module: mini_phase_oracle.py:13']
++ []
+
+----------------------------------------------------------------------
+Ran 1 test in 18.356s
+
+FAILED (failures=1)

@@ -1,0 +1,265 @@
+FEFEEEEEEEFFFFF.EEFFF
+======================================================================
+ERROR: test_complete_audited_course_binds_exactly_and_records_evidence (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 41, in test_complete_audited_course_binds_exactly_and_records_evidence
+    result=self.bind();course=yaml.safe_load((self.root/"manual/course.yaml").read_text())
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_durable_publication_reaudits_both_native_reports (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 111, in test_durable_publication_reaudits_both_native_reports
+    self.bind()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_durable_publication_rejects_changed_course_or_receipt (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 102, in test_durable_publication_rejects_changed_course_or_receipt
+    self.bind();p=self.root/"manual/course.yaml";p.write_bytes(p.read_bytes()+b"\n")
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_durable_publication_rejects_changed_report (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 98, in test_durable_publication_rejects_changed_report
+    self.bind();self.documents[1].write_bytes(self.documents[1].read_bytes()+b"\n")
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_durable_publication_rejects_forged_mapping (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 106, in test_durable_publication_rejects_forged_mapping
+    self.bind();p=self.root/"manual/generated/course-binding.json";d=json.loads(p.read_text());d["mappings"][0]["scene"]="unrelated";p.write_text(json.dumps(d))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_durable_publication_requires_full_independent_checkpoint_count (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 116, in test_durable_publication_requires_full_independent_checkpoint_count
+    self.bind()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_durable_publication_verifies_without_artifact_writes (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 90, in test_durable_publication_verifies_without_artifact_writes
+    self.bind();publication=self.root/"manual/generated/course-binding.json"
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_existing_evidence_directory_not_overwritten (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 86, in test_existing_evidence_directory_not_overwritten
+    with self.assertRaises(FileExistsError):self.bind()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_verify_only_does_not_replace_durable_receipt (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 120, in test_verify_only_does_not_replace_durable_receipt
+    self.bind();p=self.root/"manual/generated/course-binding.json";before=p.read_bytes()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+ERROR: test_verify_only_requires_and_preserves_verified_course (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 71, in test_verify_only_requires_and_preserves_verified_course
+    self.bind();before=(self.root/"manual/course.yaml").read_bytes()
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 22, in bind
+    with patch.object(binder,"audit_reference",return_value=48):return binder.bind(*self.documents,self.root/"proof",root=self.root,verify_only=verify)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 64, in bind
+    mappings=check_course(course,plan,verify_only)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_course_bind.py", line 56, in check_course
+    if len(mappings)!=37 or len({m["stage"] for m in mappings})!=37:raise ValueError("Course requires all 37 distinct teaching stages")
+ValueError: Course requires all 37 distinct teaching stages
+
+======================================================================
+FAIL: test_changed_inputs_during_audit_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 81, in test_changed_inputs_during_audit_rejected
+    with self.assertRaisesRegex(ValueError,"inputs changed"):binder.bind(*self.documents,self.root/"proof",root=self.root)
+AssertionError: "inputs changed" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_duplicate_scene_and_unverified_binding_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 56, in test_duplicate_scene_and_unverified_binding_rejected
+    with self.assertRaisesRegex(ValueError,"scene"):self.bind()
+AssertionError: "scene" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_failed_independent_audit_keeps_pending (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 38, in test_failed_independent_audit_keeps_pending
+    with self.assertRaisesRegex(ValueError,"native mismatch"):binder.bind(*self.documents,self.root/"proof",root=self.root)
+AssertionError: "native mismatch" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_failed_semantic_binding_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 69, in test_failed_semantic_binding_rejected
+    with self.assertRaisesRegex(ValueError,"semantic proof"):self.bind()
+AssertionError: "semantic proof" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_missing_checkpoint_cannot_promote_or_mutate_course (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 27, in test_missing_checkpoint_cannot_promote_or_mutate_course
+    with self.assertRaisesRegex(ValueError,"checkpoint"):self.bind()
+AssertionError: "checkpoint" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_missing_cleanup_or_semantic_proof_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 60, in test_missing_cleanup_or_semantic_proof_rejected
+    with self.assertRaisesRegex(ValueError,"cleanup"):self.bind()
+AssertionError: "cleanup" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_split_session_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 31, in test_split_session_rejected
+    with self.assertRaisesRegex(ValueError,"continuous"):self.bind()
+AssertionError: "continuous" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_wrong_case_owner_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 63, in test_wrong_case_owner_rejected
+    with self.assertRaisesRegex(ValueError,"ownership"):self.bind()
+AssertionError: "ownership" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_wrong_checkpoint_selector_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 66, in test_wrong_checkpoint_selector_rejected
+    with self.assertRaisesRegex(ValueError,"selector"):self.bind()
+AssertionError: "selector" does not match "Course requires all 37 distinct teaching stages"
+
+======================================================================
+FAIL: test_wrong_lane_or_cleanup_rejected (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+ValueError: Course requires all 37 distinct teaching stages
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 34, in test_wrong_lane_or_cleanup_rejected
+    with self.assertRaisesRegex(ValueError,"clock"):self.bind()
+AssertionError: "clock" does not match "Course requires all 37 distinct teaching stages"
+
+----------------------------------------------------------------------
+Ran 21 tests in 2.580s
+
+FAILED (failures=10, errors=10)

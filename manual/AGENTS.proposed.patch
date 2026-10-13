@@ -1,0 +1,46 @@
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -1,8 +1,10 @@
+ # Mosaic development instructions
+ 
+-Mosaic is a grid-first norns sequencer. `README.md` is its user manual and the
+-primary source of truth for intended behaviour. `cheat_sheet.html` is a second
+-user-facing reference and must remain consistent with the manual.
++Mosaic is a grid-first norns sequencer. `manual/book.yaml` and every YAML
++authoring source it lists are the primary source of truth for intended
++behaviour. The HTML manual and `cheat_sheet.html` are generated user references
++and must remain consistent with that model. `README.md` provides an overview,
++installation and first steps.
+ 
+ ## Development method
+ 
+@@ -45,8 +47,12 @@
+ inapplicable when it depends on audio, Crow, physical hardware or real wall time; record
+ that reason explicitly. Do not weaken an oracle or tolerance merely to obtain a pass.
+ 
+-Every assertion must cite the relevant `README.md` behaviour or be labelled as a
+-characterisation outside the manual. Preserve failure evidence and source identity so
++Every new assertion must cite a stable manual feature ID (`manual:<feature-id>`)
++or be labelled as a characterisation outside the manual. Preserve existing
++requirement and case IDs. Historical README citations resolve using their
++recorded source revision: the original `manual/legacy/README-1.4.0.md` or an exact
++later full-manual snapshot alias. Do not relabel historical results. Preserve
++failure evidence and source identity so
+ a passing candidate cannot overwrite or relabel its baseline.
+ 
+ Manual clicking or listening is never required acceptance. Tests must leave no running
+@@ -54,8 +60,12 @@
+ 
+ ## Manual and images
+ 
+-Every new user-facing feature must be explained in `README.md`, with the cheat sheet
+-updated when it affects controls or quick-reference behaviour. Include appropriate grid
++Every new user-facing feature must be explained in the manual YAML model, with
++the generated cheat sheet updated when it affects controls or quick-reference
++behaviour. Bind interactive scene inputs, captions, actual emulator frames and
++semantic assertions to stable behaviour cases; regenerate the manual and
++validate its authoring identity. Do not substitute drawn interface states for
++native captures. Include appropriate grid
+ and norns screen images that show how the feature is reached and what feedback the user
+ receives. Prefer deterministic captures of the actual emulator framebuffer and grid
+ state. Store durable documentation images under `images/`, and keep the corresponding

@@ -1,0 +1,382 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        2,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        3,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        4,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        2,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        3,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        4,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          47,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          47,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          47,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          47,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          47,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          59,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          47,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 47,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166062043,
+        "error_ms": -0.6046236666666649
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166719977,
+        "error_ms": 0.053310333333334015
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165555971,
+        "error_ms": -1.1106956666666612
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166596993,
+        "error_ms": -0.06967366666665864
+      },
+      {
+        "pitch": 47,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165581691,
+        "error_ms": -1.0849756666666543
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16658162,
+        "error_ms": -0.08504666666664384
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16578438,
+        "error_ms": -0.8822866666666485
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.1668206,
+        "error_ms": 0.1539333333333559
+      }
+    ]
+  },
+  {
+    "kind": "lydian-pentatonic-octave-equivalence",
+    "degrees": [
+      -7,
+      0,
+      7,
+      0
+    ],
+    "pitches": [
+      47,
+      59,
+      71,
+      59
+    ],
+    "passed": true
+  }
+]

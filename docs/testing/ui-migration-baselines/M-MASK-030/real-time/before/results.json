@@ -1,0 +1,330 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          55
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          55
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          55
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          55
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          55
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          55
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ]
+    ],
+    "complete_cycles": 3
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167309083,
+        "error_ms": 0.6424163333333399
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165732362,
+        "error_ms": -0.9343046666666632
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166102648,
+        "error_ms": -0.5640186666666658
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166101167,
+        "error_ms": -0.5654996666666634
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166075057,
+        "error_ms": -0.5916096666666593
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16586112,
+        "error_ms": -0.8055466666666566
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166944795,
+        "error_ms": 0.2781283333333495
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165109899,
+        "error_ms": -1.556767666666653
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16661173,
+        "error_ms": -0.054936666666643985
+      }
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        16,
+        7
+      ]
+    ],
+    "expected": [
+      0,
+      0,
+      0
+    ],
+    "actual": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "kind": "multiheld-keyboard",
+    "first_released": true,
+    "range": [
+      2,
+      4
+    ],
+    "expected": [
+      [
+        1,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          79,
+          55
+        ]
+      ]
+    ],
+    "passed": true
+  }
+]

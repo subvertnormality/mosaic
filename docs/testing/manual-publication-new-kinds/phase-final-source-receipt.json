@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "purpose": "independent native mini animation phase acceptance",
+  "source_sha256": {
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tests/behaviour/test_mini_phase_oracle.py": "ab9ceda3204db3f0865f230802c71aa8b1ebcc3d3378a66554bda4344d15bf1c",
+    "tools/manual_publication_verify.py": "7b01b8f5e165321ad019e08a715be0c5fadc89cbc870dbbfb38da3a0b4900be7",
+    "tests/behaviour/test_manual_publication_verify.py": "2bcafcc1f4ac0dc5f86b4456c6d695cce298c7bfce0aed670f926de450e2b5c1"
+  },
+  "focused_tests": {
+    "phase": 9,
+    "publication": 66,
+    "driver_wait": 8,
+    "passed": true
+  },
+  "native_qualification": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "stopped_source": "native selected clock beat diagnostics surrounding exact native framebuffer revision",
+  "playing_source": "actual emitted public MIDI Start/F8/Stop; two distinct genuinely active literal poses mandatory",
+  "timing_limits": "bounded native beat intervals; identical bitmap phases ambiguous; 240 BPM skipped display poses allowed; no host elapsed-time beat estimate",
+  "existing_controls": "unchanged exact notes, gates, grid and literal atlas acceptance retained"
+}

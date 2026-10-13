@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "before_sha": "1254e289731d54a06a5eed168bc363e9d8bd6cbf",
+  "after_sha": "d2b76f8bc15b029c404bd432ba35efdb8e689b3c",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TRIPLE-002",
+    "M-TRIPLE-003",
+    "M-REC-SONG-LENGTH-001",
+    "M-REC-SONG-LENGTH-002"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/recording_song_transition.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/recording_song_transition.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TRIPLE-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-002/real-time/before/e55b84a3078f4a11b59719e270b14ff9/manifest.json",
+              "manifest_sha256": "630c3688355540801f89c439056356a3fda52ea0d251fdc684a1a3dcc91ed329"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-002/real-time/after/33bc650eafe24b75b00db8a45abbf86e/manifest.json",
+              "manifest_sha256": "3d20cb6c679cab5c0a1bd9099be4dabd96be1c113eddb741cca52ab36157d294"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-002/controlled-experimental/before/6f11743b81244d6ca3cbaef3aeccecad/manifest.json",
+              "manifest_sha256": "9f109d59305fc77887ff8885245765422bfcdc717175ef1a69765fcc385cf5f3"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-002/controlled-experimental/after/63328f4813514768821371a0d28c8c00/manifest.json",
+              "manifest_sha256": "3743212571c6280c0799c3d373d297f1da3f1b1d31d0479104a50abc578e1c5e"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-TRIPLE-003",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-003/real-time/before/aeefc9c25895450b910929e7f513191e/manifest.json",
+              "manifest_sha256": "56886be1b771341210393fbfcf927ba73d6570b9d6011607d1862c3fb333a7ad"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-003/real-time/after/feed8618a44d4a7b9c73ac092e9dd9a9/manifest.json",
+              "manifest_sha256": "61f01f1139c646e9a7779fbd207c4135f3602be9d50d35cb0417200b5193dfcc"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-003/controlled-experimental/before/24e09647d0e2464d91483a21f1f2f401/manifest.json",
+              "manifest_sha256": "3a5f87ef9c6383c958894ed476af3a8f4d26ab3674e1ec73b80b87d5bd50ee7f"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-003/controlled-experimental/after/e8ca9c25ed04475aa1feb877ce66a4f9/manifest.json",
+              "manifest_sha256": "7a5223970c3c97562510189fa745a8b72471ab2fe2455d1220df0c72bf88e6c3"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-SONG-LENGTH-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-001/real-time/before/dc4e1119401a470a99bfeeb66de230e5/manifest.json",
+              "manifest_sha256": "340ae081291e50b83d1938973542ccd24e63bdd0d77eae298ba8104849715fe7"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-001/real-time/after/d155695d250e4e4788d948df08772fc3/manifest.json",
+              "manifest_sha256": "2d180c0b37309b3820612bbed152f2ce0ab4d62ad7cc4e2cb725b4602a781ef6"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-001/controlled-experimental/before/22396f7e13084b4e9935c50f37e2d3f5/manifest.json",
+              "manifest_sha256": "6cff113cd0dfd6e8f9f786a78d12d480a589f687e782fac6acb17443683c7bdd"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-001/controlled-experimental/after/75ccad104009412cb597d5c5a9f5ffba/manifest.json",
+              "manifest_sha256": "8463be43ca847c59d53b7c816a91189d3ecfbafc5203bc4926973823df4bd019"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-SONG-LENGTH-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-002/real-time/before/3a828184211744cbbf57d86d2f57c159/manifest.json",
+              "manifest_sha256": "31887b7b61a84814099e918198a315d2984c21c2e32a4b8e3796c7b59975ca97"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-002/real-time/after/d378d07733f84e76b30cacda415b07e2/manifest.json",
+              "manifest_sha256": "26de71ee6498d6f5d85426946957dcc623180c373c913a57b570809935247e9f"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-002/controlled-experimental/before/05eb173b2896475795de3569f520c01c/manifest.json",
+              "manifest_sha256": "3fe167388a4ae47933a13eaf16166afd1c1f5801a6000ffe595439c31652c290"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-SONG-LENGTH-002/controlled-experimental/after/c3fdf5b08f4e4f93a99f27317d9ae45a/manifest.json",
+              "manifest_sha256": "aaadc9a457cae565b64ead079574d63be247fc9ad68e65d71de63d5915bf5f43"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

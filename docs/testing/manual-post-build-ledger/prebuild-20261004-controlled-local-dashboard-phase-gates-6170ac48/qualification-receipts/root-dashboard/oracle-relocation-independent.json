@@ -1,0 +1,14 @@
+{
+  "byte_sha256": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+  "facade_identity": {
+    "require": true,
+    "finite": true,
+    "observed_phases": true,
+    "native_frame": true,
+    "clock_receipt": true,
+    "phase_interval": true,
+    "check_stopped_phase": true,
+    "check_playing_phases": true
+  },
+  "guard_sha256": "ccc5c2662e091c39a787228f10ec53f4dedb8f4420c674eba5f211144dcef14e"
+}

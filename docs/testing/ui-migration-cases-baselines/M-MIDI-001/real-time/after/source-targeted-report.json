@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "912cf7a8fd6bdf7756547eca8e1266a908c5760d",
+  "after_sha": "9b355094ecc623844577c327bb79e0079e6d2844",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MIDI-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MIDI-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MIDI-001/real-time/before/94e6e5ae940044e4890f34e7923666fe/manifest.json",
+              "manifest_sha256": "641f6e6675a07e6235f1b61d1489e12500900537d5c2256402ff4d548c57b308"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MIDI-001/real-time/after/e0b72bca34724e0f8e4a027cc4b683c2/manifest.json",
+              "manifest_sha256": "2567741988662f8bfbb602e4d1b57719c643fd10d3b127524d18e197f295ee59"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MIDI-001/controlled-experimental/before/a3691e8891a3482e80aed1cf61688331/manifest.json",
+              "manifest_sha256": "dd27f301fbaf1976412d4a8bbe759e6c8610a7c14723f005dc2d7e9d4d42edb4"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MIDI-001/controlled-experimental/after/93a0b46c83364a189672abbe9973976f/manifest.json",
+              "manifest_sha256": "427d6605644737f3bba6743f8784320ed612aed70b7d5c813e4e06a3151b2ad4"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

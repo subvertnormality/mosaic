@@ -1,0 +1,27 @@
+{
+  "before_source": "/tmp/mosaic-final-merge-doctor-lua-b0aogi_8/mosaic",
+  "before_spec_sha256": "3068113936fe265a84154e68d4eb7e2a776c9a07332b95db5d28834f77865b2f",
+  "after_spec_sha256": "b4c4bb4d9f493bca35ee18f6767d10f2d97985b849aeeb1c98e110a09b740902",
+  "before_runtime_sha256": "246d92f7a5f4f239a86be6d9ad7d8d064f8c907326bbdb807caa2802f8af97a8",
+  "after_runtime_sha256": "b2b56372d36ba6c9fbc0548f2420e55150aad24bef60bf1302ed944e6b5075fa",
+  "changed_paths": [
+    "/layout_contract/families/vertical_list/priority",
+    "/layout_contract/motion"
+  ],
+  "removed": [
+    "        [\"priority\"] = \"Values exact and whole; selected label/value use separate rows if they cannot share one, retaining neighboring fields. Labels and values never animate. Position count appears when fields exceed viewport; footer names actions rather than horizontal neighbors.\",",
+    "    [\"motion\"] = \"on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame. Text too wide for its room scrolls right to left so it can be read in full (owner request 26 September 2026): on a 10 Hz tick shared by every cut text it rests 8 ticks, drops one character per tick until its end shows, rests 8 ticks and starts again; the phase restarts with the screen or selection, a frame is drawn only when a text moves, and with motion off text is cut statically with ~. Authorized 3 October 2026: vertical_list essential text never scrolls or rolls. Focused horizontal layouts are replaced; startup/title-mark and non-list musical/status animation remain.\","
+  ],
+  "added": [
+    "        [\"priority\"] = \"Values remain exact. Selected label/value use separate rows if they cannot share one, retaining neighboring fields. Fitting labels/values stay static; selected oversized text retains the existing Motion-controlled marquee so its full content can be read. Neighboring fields, title, scope and footer stay static. Motion Off preserves explicit overflow feedback. Position count appears when fields exceed viewport; footer names contextual actions.\",",
+    "    [\"motion\"] = \"on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame. Text too wide for its room scrolls right to left so it can be read in full (owner request 26 September 2026): on a 10 Hz tick shared by every cut text it rests 8 ticks, drops one character per tick until its end shows, rests 8 ticks and starts again; the phase restarts with the screen or selection, a frame is drawn only when a text moves, and with motion off text is cut statically with ~. Authorized correction 3 October 2026: fitting vertical_list text stays static; selected oversized labels or exact values retain the existing Motion-controlled marquee on their separate selected rows. Neighboring fields, title, scope and footer stay static. Focused horizontal layouts are replaced; startup/title-mark and non-list musical/status animation remain.\","
+  ],
+  "executable_function_files_unchanged": {
+    "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+    "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+    "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+    "lib/ui_live.lua": "66ffd22008369999b6d6b24fe58546b869ed5ee5c1551e81745a6b2398d5c31b",
+    "lib/ui_render.lua": "0bffa33541043ab3a8a95926bf2c316f3b622f2d1c980bd4dac6b151ba6b2a3e"
+  }
+}

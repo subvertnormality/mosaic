@@ -1,0 +1,247 @@
+schema_version: 1
+scenes:
+- id: public-display-readability
+  feature_id: navigating-the-norns-display
+  title: 'See what UI motion changes: Off and On'
+  behaviour_case: M-UI-READABILITY-001
+  citation: README.md#ui-motion
+  source: tests/behaviour/contract/ui_readability.py
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step phrase on steps 1-4 (MIDI 60, 62, 64, 65 at velocities
+      127, 117, 107, 97) through a MIDI device on OUT 1, in C major, with the internal clock
+      at 90 BPM and Rate /1. In PARAMS > MOSAIC, UI motion starts Off; later steps turn it
+      On and then change the tempo. This lesson compares the norns screen with UI motion Off
+      and On: Off keeps everything still, On animates the small title pictures and any text
+      too long for its space.'
+    assertion:
+      kind: mosaic-option-input
+      label: UI motion
+      enabled: false
+  - id: assignment-off
+    title: 'Motion Off: a long name does not scroll'
+    caption: Press K2 on a Trig params slot to open its parameter list and select Quantised
+      Fixed Note. The long name is cut short and does not scroll; its value reads CURRENT
+      and nothing else on the screen moves.
+    assertion:
+      kind: public-assignment-marquee
+      enabled: false
+      label: Quantised Fixed Note
+      value: CURRENT
+      passed: true
+  - id: mini-c02-off-90
+    title: Trig Params header with motion Off at 90 BPM
+    caption: The resting header motif stays at its authored first pose. Labels, values, selection,
+      footer, grid and stopped MIDI remain unchanged.
+    assertion:
+      kind: public-mini-header
+      page: C02
+      enabled: false
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: false
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: clock-off
+    title: Read Clock with motion Off
+    caption: The fitting Rate label and /1 value stay still in the vertical list while the
+      selected row and context remain readable.
+    assertion:
+      kind: public-fitting-vertical-text
+      page: clock
+      enabled: false
+      label: Rate
+      value: /1
+      passed: true
+  - id: mini-c04-off-90
+    title: 'Motion Off: the Clock picture rests'
+    caption: Press K2 to leave the list, then open Channel tasks > Clock. Rate /1 fits its
+      space and stays still, and the small metronome picture beside the Clock title rests
+      on its first pose at 90 BPM. Labels, values, selection, footer, grid and MIDI do not
+      change.
+    assertion:
+      kind: public-mini-header
+      page: C04
+      enabled: false
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: false
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: scale-off
+    title: Read Scale with motion Off
+    caption: The fitting Scale label and Major value stay still in the vertical list while
+      the selected row and context remain readable.
+    assertion:
+      kind: public-fitting-vertical-text
+      page: scale
+      enabled: false
+      label: Scale
+      value: Major
+      passed: true
+  - id: mini-s01-off-90
+    title: Scale header with motion Off at 90 BPM
+    caption: The resting header motif stays at its authored first pose. Labels, values, selection,
+      footer, grid and stopped MIDI remain unchanged.
+    assertion:
+      kind: public-mini-header
+      page: S01
+      enabled: false
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 4
+      all_distinct_poses_required: false
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: mini-c01-off-90
+    title: 'Motion Off: Scale and Masks pictures rest'
+    caption: Press Scale (4,8), then Channel (3,8) and open Masks. The Scale and Masks title
+      pictures also rest on one pose; labels, values, grid and MIDI are unchanged.
+    assertion:
+      kind: public-mini-header
+      page: C01
+      enabled: false
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: false
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: motion-on
+    title: Turn UI motion On
+    caption: Open PARAMS > MOSAIC and set UI motion to On.
+    assertion:
+      kind: mosaic-option-input
+      label: UI motion
+      enabled: true
+  - id: assignment-on
+    title: 'Motion On: a long name scrolls'
+    caption: Repeat the Quantised Fixed Note list. The long name now scrolls right to left
+      so you can read it in full; the value CURRENT, title, footer, grid and MIDI do not move.
+    assertion:
+      kind: public-assignment-marquee
+      enabled: true
+      label: Quantised Fixed Note
+      value: CURRENT
+      passed: true
+  - id: mini-c02-on-90
+    title: Trig Params header with motion On at 90 BPM
+    caption: Every distinct authored motif pose is visible across the sampled loop. Labels,
+      values, selection, footer, grid and stopped MIDI remain unchanged.
+    assertion:
+      kind: public-mini-header
+      page: C02
+      enabled: true
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: true
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: clock-on
+    title: Read Clock with motion On
+    caption: The fitting Rate label and /1 value stay still in the vertical list while the
+      selected row and context remain readable.
+    assertion:
+      kind: public-fitting-vertical-text
+      page: clock
+      enabled: true
+      label: Rate
+      value: /1
+      passed: true
+  - id: mini-c04-on-90
+    title: 'Motion On: the Clock picture swings'
+    caption: 'Press K2 to leave the list and open Channel tasks > Clock again. Rate /1 fits
+      its space, so it stays still: only text too long for its space scrolls. The metronome
+      picture now swings in time at 90 BPM, completing its two-beat loop every 1.3 seconds.'
+    assertion:
+      kind: public-mini-header
+      page: C04
+      enabled: true
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: true
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: scale-on
+    title: Read Scale with motion On
+    caption: The fitting Scale label and Major value stay still in the vertical list while
+      the selected row and context remain readable.
+    assertion:
+      kind: public-fitting-vertical-text
+      page: scale
+      enabled: true
+      label: Scale
+      value: Major
+      passed: true
+  - id: mini-s01-on-90
+    title: Scale header with motion On at 90 BPM
+    caption: Every distinct authored motif pose is visible across the sampled loop. Labels,
+      values, selection, footer, grid and stopped MIDI remain unchanged.
+    assertion:
+      kind: public-mini-header
+      page: S01
+      enabled: true
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 4
+      all_distinct_poses_required: true
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: mini-c01-on-90
+    title: 'Motion On: Scale and Masks pictures move'
+    caption: Open Scale (4,8), then Masks. The Scale and Masks title pictures move in time
+      with the tempo; the screens are otherwise the same as before.
+    assertion:
+      kind: public-mini-header
+      page: C01
+      enabled: true
+      tempo: 90
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: true
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: mini-c04-on-40
+    title: 'Motion On: 40 BPM is slow'
+    caption: 'In the clock params set the tempo to 40 BPM, then open Channel tasks > Clock.
+      The metronome swings slowly: its two-beat loop now takes three seconds. Labels, values,
+      footer, grid and stopped MIDI are unchanged.'
+    assertion:
+      kind: public-mini-header
+      page: C04
+      enabled: true
+      tempo: 40
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: true
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: mini-c04-on-240
+    title: 'Motion On: 240 BPM is fast'
+    caption: Set the tempo to 240 BPM and look at Clock again. The same two-beat loop now
+      takes half a second, so the metronome swings fast; the screen redraws at a limited rate,
+      so some poses may be skipped.
+    assertion:
+      kind: public-mini-header
+      page: C04
+      enabled: true
+      tempo: 240
+      pose_count: 8
+      loop_quarter_beats: 2
+      all_distinct_poses_required: false
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: stable-overviews-and-music
+    title: Controls and music stay steady
+    caption: 'Set the tempo back to 90 BPM, open Masks and press Play twice (start, stop):
+      the same four-note phrase repeats, MIDI 60, 62, 64, 65, with or without motion. The
+      Masks and Trig params overviews were identical with motion Off and On.'
+    assertion:
+      kind: public-readability-summary
+      passed: true

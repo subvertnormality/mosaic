@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "d7ded214fcb165d11d2e57ed5caffdaf53f70938",
+  "after_sha": "83fbee75fdce2ac1ecfa18d3191f92794664a15e",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TRANS-001",
+    "M-TRANS-006",
+    "M-TRANS-007",
+    "M-TRANS-009",
+    "M-VIEW-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_verb_sources.json"
+    ],
+    "historical_tooling_paths": [
+      "tests/behaviour/ci/compare_ptn_graph.lua",
+      "tests/behaviour/ci/targeted-ui-migration.py",
+      "tests/behaviour/ui_migration_gate.py"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TRANS-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-001/real-time/before/ed9fac3f8ad3449cb48639a5309d1452/manifest.json",
+              "manifest_sha256": "8fd6f273ea07eadd639fe7a11e8a28b9588479ce899d37538335ef0707d8b539",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-001/real-time/after/203766103d864a249e5fb6c59d2aa478/manifest.json",
+              "manifest_sha256": "f538cc9ad263e1c94ec18eab7540395f8eff8d84861a9029ca3596ba99fd6d36",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-001/controlled-experimental/before/8350428f69ce4831a46c1a9ce0565317/manifest.json",
+              "manifest_sha256": "274a16a3f16e04d48985ebf262b942b4deda8799af6088ab93c04ff2398d66c5",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-001/controlled-experimental/after/7ddcaba66f5e45f299818f834c8e2769/manifest.json",
+              "manifest_sha256": "931bbb536a137bccb60c186a6589b2152c74c27a5ceddc260787f0706ae1405c",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-TRANS-006",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/real-time/before/fe3ad6d882f74029a2ab6e828572a763/manifest.json",
+              "manifest_sha256": "908d1772b9bec99358d55f9557bc9b7665e5332d24a0f599519641b223d57a0e",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/real-time/after/a14ff57b2be74875b5b3a00673da385c/manifest.json",
+              "manifest_sha256": "1c256c24b7fa78522612f6471f8a07d88494af97cc9a9bd077bf718d4bf5c76e",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/controlled-experimental/before/aa163f397b44430d852505de6759a7dd/manifest.json",
+              "manifest_sha256": "a00258eb46bf4e836d0186ecdb4e7c34eca961a368198176907b71fedc43fe51",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/controlled-experimental/after/1bba8ff41253436a83c1ca123f9f12ed/manifest.json",
+              "manifest_sha256": "b1e39c9f4abcfb00bb73506ec7c94d6f2d1a7e7858e0c0d77ec98ae17db1df67",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-TRANS-007",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-007/real-time/before/d56d186d5d7e4b40a16debe3573ca544/manifest.json",
+              "manifest_sha256": "fbd46fb2cd71bc7d04f8cc50ac54873cdd9d6ce8523b39247a5eaeae7e2ff288",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-007/real-time/after/0259ea74b4b94fb092d6769ba7adfdd5/manifest.json",
+              "manifest_sha256": "7c232634e8410d6564cc6de713681187f18a08a7b38b96923085805cfb104520",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-007/controlled-experimental/before/97c39fc3497944beaa52106a7cb17f74/manifest.json",
+              "manifest_sha256": "cd7601d1fcb748a9b7a7a868ff681a6da6b9f9520a5ca36b7787b17e616e3d03",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-007/controlled-experimental/after/38f8c49294ca4cd3bc997e6229344f42/manifest.json",
+              "manifest_sha256": "6448db6e0a7ff2235bb8e438ff510eb76aec00621eb0d6c0b7b17a82c9ab5a09",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-TRANS-009",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/real-time/before/b2308ef6fab347bc901ffe6abc87ead6/manifest.json",
+              "manifest_sha256": "86e0b7d4fcaaac049c3c1ff531b1b392160318b974e90a65892994de6efa3015",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/real-time/after/bb34c98445ba487f951ed0319052d5d1/manifest.json",
+              "manifest_sha256": "dca9ba9d88e3829b1481b443dd119e1d88872f4a4386fa4fa7eb673e8231882a",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/controlled-experimental/before/423b0f1ffa1a496182463b962a65b9ce/manifest.json",
+              "manifest_sha256": "b023bad8b5f4dc501e62b6604cf72cd301e62856056260769fc31c06101d5e62",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/controlled-experimental/after/0a6341ece28d40579b6a606a47425a22/manifest.json",
+              "manifest_sha256": "b6279ebca21a1539bf96dfd2a07a479c86ec49c082508bc4f925cbe4543799a8",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-VIEW-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/real-time/before/dc49798381c5499f89a995e4b9dfd6d1/manifest.json",
+              "manifest_sha256": "e91456b0760c99116d92f19d6d295ad319c612d71f1c724637be0ea730b3c74b",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/real-time/after/f4d45ef679b84be5bbb0ef80cd897d88/manifest.json",
+              "manifest_sha256": "f7d0b479aebc98fe055ab7cf5d7fc6a6031ba1982f97cff8d770c0d3a2ee2034",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/controlled-experimental/before/0acec1572953436ea34d565b799484de/manifest.json",
+              "manifest_sha256": "741151c3f23fcb04d6d9ff1f4c7f244bb92e5b9cdec114a310537bd3c07baebc",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/controlled-experimental/after/1309395d32ed42ea9bef4772b2db8472/manifest.json",
+              "manifest_sha256": "8b42bda8007bcc8c913f3c63fa905238c88d7d09823498fce577e8dff9146630",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "tooling": {
+    "sha": "3e6943cd94c70d08fa052a7af9bb652512dfd036",
+    "sha256": {
+      "tests/behaviour/ui_migration_gate.py": "1112d792cfa99d1f73118348b8be77ade4d66381d1b32fc8fa3733c64629a45e",
+      "tests/behaviour/ci/targeted-ui-migration.py": "b33afab0d2f59ba826968d0aa4f3bfb8fcce2762d8b4365191d612752dd196f9",
+      "tests/behaviour/ci/compare_ptn_graph.lua": "2c5f793815d0bc4a580a34d8849b3713db22aa055391d6a2cd12962eff23b000"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+...............................................F.............F...F...F............
+Failed tests:
+-------------
+1) test_ui_live_fragments_merge_buttons_say_fragments_is_in_use
+.///lib/ui_live_tests.lua:713: expected: "up"
+actual: "average"
+stack traceback:
+
+2) test_ui_live_merge_and_harmony_menu_order_and_layout
+.///lib/ui_live_tests.lua:827: expected: {"mode", "rhythm", "phrase", "pitch", "result"}
+actual: {"mode", "rhythm", "phrase", "pitch", "result", "strategy_selector"}
+stack traceback:
+
+3) test_ui_live_merge_fragments_mode_opens_fragments_and_k3_applies_it
+.///lib/ui_live_tests.lua:622: expected: "FRAGMENTS"
+actual: "SKIP"
+stack traceback:
+
+4) test_ui_live_merge_shape_and_voice_leading_are_lists
+.///lib/ui_live_tests.lua:852: expected: 5, actual: 6
+stack traceback:
+
+Ran 82 tests in 5.439 seconds, 78 successes, 4 failures, 2338 non-selected
+find: ‘/home/we/norns/lua/core’: No such file or directory

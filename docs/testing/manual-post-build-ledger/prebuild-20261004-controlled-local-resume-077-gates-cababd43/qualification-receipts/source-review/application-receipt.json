@@ -1,0 +1,25 @@
+{
+  "before": {
+    "docs/ui-reimplementation/current-source-review.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/current-source-review.json",
+      "sha256": "60cb7bb82f1718149ed7efe8ecd7c0be0bae15590f5f7ba859895b16ce1ff975"
+    },
+    "docs/ui-reimplementation/source-inventory.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/source-inventory.json",
+      "sha256": "126ac9d0b9adc7f6321de8938ce30dfec9fb3b163e0c7a0a6465be402bd64c1e"
+    },
+    "docs/ui-reimplementation/generated/source-review-receipt.json": {
+      "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/before/docs/ui-reimplementation/generated/source-review-receipt.json",
+      "sha256": "6bce24656ba00973c806d02bdbdb6db7fdfc843a6e5d91aca790404bd9ee5025"
+    }
+  },
+  "after_review": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/current-source-review.json",
+    "sha256": "569085ef5b273cb41da5dd551733c75b039d8965bca7cd2eddc4665af80125fe"
+  },
+  "bounded_review": {
+    "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/bounded-source-review-receipt.json",
+    "sha256": "c0f508ddf25b48a4428014e5bf867881fbf609001bea01d2ed981a1b83232d26"
+  },
+  "manual_generation_complete": false
+}

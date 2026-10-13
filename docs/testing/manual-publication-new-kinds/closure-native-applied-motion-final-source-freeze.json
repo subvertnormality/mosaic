@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "focused_tests": 71,
+  "prior_auditor_sha256": "40e393053175e9d1f574b483b67d76076f4ccf30914c151d98d213c96b1a5dca",
+  "files": {
+    "tools/manual_publication_verify.py": "3d6ae35d5035415cdd9a552af19ff11197dd01073b775007d291b7ef5425023f",
+    "tests/behaviour/test_manual_publication_verify.py": "64363f16c8d5cec7d4e77ac99ab66c1e47d7a15935662b469d691d6129cdf19f",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tools/doctor_options_audit.py": "7d368751d3dc67c3dbfe4bd060c17a0d340d1fbe59bcc05cb820052394435323"
+  },
+  "logs": {
+    "native-applied-time-red.log": "b97c7393c7a0143c1c2b9da4349ccae0a0f32edfcfcad0ac85172a795e32d276",
+    "queue-documentation-chronology-red.log": "43566eef822e4fd6715a3a392ddd29a339ece951b10a0d369c6b1a3e0f02c6c9",
+    "motion-marker-format-red.log": "74b409f5bf7e7f72d0e7597f19d78b8356abb6f2fb4d0ed6ee05e68860ffa7fb",
+    "native-applied-motion-final-green.log": "592cd917d2ac89a22276dcae00a86ef3097f840fc4cabf9ca9c4a0d942d8d2e8"
+  },
+  "audits": {
+    "closure-final-focused-real-audit.json": "5919a3baa4f7d4a87249094f9cb0a02df52f6d777dad7adaf0f28abf08b3555a",
+    "closure-final-focused-real-reaudit.json": "0df9ea5a338a1bb224b192ace29514118029fa22a75b0329a786864904abf923",
+    "closure-final-focused-controlled-reaudit.json": "62e0a413a009d67660eefdd87f54178d5c19a9aa222b1e56adbc42411bd12d43",
+    "closure-final-focused-real-applied-reaudit.json": "573cfb1fcffc62e02d07bd5baecb5ea27abe645e7ee6a4c64a9b8c132ddab67e",
+    "closure-final-focused-controlled-applied-reaudit.json": "713cd12db2be3401c608359baabfa78d5c6af005569c7bc34ceb2cb944693468",
+    "closure-final-focused-real-marker-reaudit.json": "7429f9ec38e94a07677d972ae8732189342f1dc58300b09b06cf81610ed9979f",
+    "closure-final-focused-controlled-marker-reaudit.json": "b48987ab72121ff783d8bc00f721aaa42165e902e95bb8e785f52cbe6caf2ad5"
+  },
+  "native_scope": [
+    {
+      "lane": "real",
+      "report": "/home/andy/mosaic-manual-runs/d2ba58ca3e1f4f6498fe6a9bbda5f042/reference-scenes.json",
+      "clock_mode": "real-time",
+      "frames": 14,
+      "blink_samples": 98,
+      "native_visible_blink_changes": 8,
+      "complete_native_dwells": 7,
+      "motion": [
+        {
+          "enabled": false,
+          "samples": 6,
+          "phase_indices": [
+            0,
+            4
+          ],
+          "distinct_actual_bitmaps": 1
+        },
+        {
+          "enabled": true,
+          "samples": 24,
+          "phase_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "distinct_actual_bitmaps": 5
+        }
+      ]
+    },
+    {
+      "lane": "controlled",
+      "report": "/home/andy/mosaic-manual-runs/4e136b11b7204a8db9930dd78b6c34ed/reference-scenes.json",
+      "clock_mode": "controlled-experimental",
+      "frames": 14,
+      "blink_samples": 7,
+      "native_visible_blink_changes": 0,
+      "complete_native_dwells": 0,
+      "motion": [
+        {
+          "enabled": false,
+          "samples": 6,
+          "phase_indices": [
+            0,
+            4
+          ],
+          "distinct_actual_bitmaps": 1
+        },
+        {
+          "enabled": true,
+          "samples": 24,
+          "phase_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "distinct_actual_bitmaps": 5
+        }
+      ]
+    }
+  ],
+  "source_contract": "Received input timestamp differs from applied kind4; native_ack_ns and applied event must exactly match, with received/submission/completion causal ordering",
+  "documentation_contract": "Exact framebufferSHA and complete grid after final sampled observation and before next actual public gesture",
+  "marker_contract": "RGB bytes y0..7/x96..127 as immutable C04 comparison window; exact atlas/native phase/stationary body independently verified",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "width": 1440,
+    "route": "rhythm-doctor",
+    "screenWidth": 412,
+    "screenHeight": 206,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 405,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 1440,
+    "route": "first-sound/course",
+    "screenWidth": 412,
+    "screenHeight": 206,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 712,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 1280,
+    "route": "rhythm-doctor",
+    "screenWidth": 412,
+    "screenHeight": 206,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 516,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 1280,
+    "route": "first-sound/course",
+    "screenWidth": 412,
+    "screenHeight": 206,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 780,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 1121,
+    "route": "rhythm-doctor",
+    "screenWidth": 412,
+    "screenHeight": 206,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 401,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 1121,
+    "route": "first-sound/course",
+    "screenWidth": 265.53125,
+    "screenHeight": 132.765625,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 749,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 768,
+    "route": "rhythm-doctor",
+    "screenWidth": 422,
+    "screenHeight": 211,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 119,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 768,
+    "route": "first-sound/course",
+    "screenWidth": 422,
+    "screenHeight": 211,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 115,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 390,
+    "route": "rhythm-doctor",
+    "screenWidth": 190,
+    "screenHeight": 95,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 473,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  },
+  {
+    "width": 390,
+    "route": "first-sound/course",
+    "screenWidth": 190,
+    "screenHeight": 95,
+    "layout": "false",
+    "overflow": false,
+    "scroll": 473,
+    "focused": "Grid column 16, row 1, brightness 2 of 15"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "stage": "/tmp/mosaic-mini-v2-component-green/mosaic",
+  "files": {
+    "lib/ui_mini.lua": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+    "lib/ui_mini_atlas.lua": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+    "lib/ui_render.lua": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+    "lib/ui_live.lua": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+    "lib/ui_motion.lua": "e8710327daa4a73dec1f7cf45e508fbbf2d581d493e2dc43a65765ec905241d6",
+    "lib/tests/lib/ui_mini_tests.lua": "33e1d6f9346869c5c02fd1965b0a762c98ae6d8503503938b49b00852bf1f583"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "baseline_run": "/home/andy/mosaic-manual-runs/f435a5b46e6643979afd1302951904d1",
+  "baseline_helper_sha256": "846b62015e247cebe6986bbfbef7e2352b9b895928ff6fb9859baa1d1f5c3053",
+  "candidate_helper_sha256": "27c4149db11c6469595dbe0321a99c5535d91e0be293c482ef5deb29314d37d3",
+  "test_sha256": "537b28321a44815fc2aff5956248f66ee9b4b94db95f26b9ca8e1b2916f75ea0",
+  "command": "python3 -m unittest discover -s tests/behaviour -p test_manual_course_bind.py",
+  "evidence": [
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-scale-draft-order-red.log",
+      "sha256": "19cb9517418fa7d7154acb1623bf816cfb8804516dc929e8921b6754f1220ae6"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-scale-draft-order-green.log",
+      "sha256": "a5bc8562f3aeccd27766160476ea8d4ab1fc3bb1963ba50227812e1c86ef33c3"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-scale-draft-order-unfixed.py",
+      "sha256": "846b62015e247cebe6986bbfbef7e2352b9b895928ff6fb9859baa1d1f5c3053"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-scale-draft-order-red-source.py",
+      "sha256": "537b28321a44815fc2aff5956248f66ee9b4b94db95f26b9ca8e1b2916f75ea0"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-scale-draft-order-helper.diff",
+      "sha256": "8086e93d65cf1920bd3aaab52d8cc68d5ba3707afc78a9670cc4f50dd6b87052"
+    }
+  ],
+  "regression_actual_production_modules": [
+    "lib/press.lua",
+    "lib/ui_components/save_confirm.lua"
+  ],
+  "old_committed_root_offset": 0,
+  "new_committed_root_offset": 2,
+  "all19_musical_expectations_periods_tolerances_and_functions_ast_unchanged": true,
+  "only_helper_change": "Move existing C-baseline musical window before Root D draft editing, preserving all windows and K3 apply",
+  "production_changed": false,
+  "emulator_changed": false,
+  "native_qualification_pending": true
+}

@@ -1,0 +1,40 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+FFFFFF
+Failed tests:
+-------------
+1) test_rhythm_doctor_setup_backend_adapter_commits_and_forwards_values
+.///lib/rhythm_doctor_setup_backend_tests.lua:32: expected: {input_source="left", manual_bpm=100}
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:32: in upvalue 'test_rhythm_doctor_setup_backend_adapter_commits_and_forwards_values'
+
+2) test_rhythm_doctor_setup_backend_auto_omits_manual_alignment
+.///lib/rhythm_doctor_setup_backend_tests.lua:49: expected: "left"
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:49: in upvalue 'test_rhythm_doctor_setup_backend_auto_omits_manual_alignment'
+
+3) test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition
+.///lib/rhythm_doctor_setup_backend_tests.lua:87: expected: "FAILED"
+actual: "READY"
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:87: in upvalue 'test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition'
+
+4) test_rhythm_doctor_setup_backend_recorder_routes_only_selected_adc
+.///lib/rhythm_doctor_setup_backend_tests.lua:80: expected: 1, actual: 0
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:80: in upvalue 'test_rhythm_doctor_setup_backend_recorder_routes_only_selected_adc'
+
+5) test_rhythm_doctor_setup_backend_rejects_invalid_values_before_open
+.///lib/rhythm_doctor_setup_backend_tests.lua:58: expected: false, actual: true
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:58: in upvalue 'test_rhythm_doctor_setup_backend_rejects_invalid_values_before_open'
+
+6) test_rhythm_doctor_setup_backend_runtime_freezes_source_and_manual_analysis
+.///lib/rhythm_doctor_setup_backend_tests.lua:39: expected: "right"
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:39: in upvalue 'test_rhythm_doctor_setup_backend_runtime_freezes_source_and_manual_analysis'
+
+Ran 6 tests in 0.003 seconds, 0 successes, 6 failures, 2415 non-selected

@@ -1,0 +1,1131 @@
+schema_version: 1
+status: authoring-contract-not-captured
+scope: One empty-start public-input project across all chapters. Native acceptance remains pending final
+  source freeze and strict independent audit. Additional comparisons are checkpoints within that same
+  project, never independent fixtures.
+scenes:
+- id: course-getting-started
+  feature_id: getting-started
+  title: 1. Meet Mosaic
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Empty project start
+    caption: A new, empty project is open on NOTE MASKS for channel 1 before the first course action.
+      No mask is set.
+    assertion:
+      kind: manual-course-ui
+      stage: start
+      passed: true
+  - id: getting-started-objects
+    title: Open channel 1
+    caption: 'You start from a new, empty project: transport stopped, nothing set up, channel 1 selected.
+      Tap Channel (3,8), the third button on the bottom row. The screen opens NOTE MASKS for CH01 with
+      eight cells (Trig, Note, Vel, Len and Chd1 to Chd4) that all read X: no value is set, because a
+      new channel has no pattern, pitch or sound yet. On the grid, (1,1) is lit because channel 1 is the
+      channel you edit, and (3,8) is lit because it is the page you are on.'
+    assertion:
+      kind: manual-course-ui
+      stage: getting-started-objects
+      passed: true
+  - id: getting-started-notation
+    title: Try the Pattern button
+    caption: 'Tap Pattern (5,8), the fifth button on the bottom row. The grid and screen switch to the
+      pattern editor: the title row reads PATTERN TRIG with PAT01 CH01, and every step is dim because
+      pattern 1 has no trigs yet. (1,1) is lit because pattern 1 is the pattern you edit, and (5,8) is
+      lit because you are on the Pattern page.'
+    assertion:
+      kind: manual-course-ui
+      stage: getting-started-notation
+      passed: true
+- id: course-setup
+  feature_id: setup
+  title: 2. Choose one sound
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: A new, empty project with the transport stopped and nothing assigned to a channel. The pattern
+      editor from chapter 1 is on screen. Channel 1 has no output chosen yet and no tempo has been set;
+      the rest of the course uses MIDI port 1, MIDI channel 1 for channel 1.
+    assertion:
+      kind: manual-course-ui
+      stage: getting-started-notation
+      passed: true
+  - id: setup-tasks
+    title: Open Channel tasks
+    caption: 'Tap Channel (3,8), then turn E1 right three detents. The title row reads CHANNEL TASKS with
+      CH01: a list of the pages of channel 1, each marked OPEN >, with the footer Channel Editor. This
+      list is how you reach every channel page (Masks, Trig params, Output, Clock, Merge modes, Merge
+      Shape, Harmony, Device and History).'
+    assertion:
+      kind: manual-course-ui
+      stage: setup-tasks
+      passed: true
+  - id: setup-device-selected
+    title: Select Device
+    caption: In Channel tasks, move E2 to Device. The selected row reads OPEN >, so K3 opens its settings.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-device-selected
+      passed: true
+      selected_field:
+        layout: detail
+        label: Device
+        value: OPEN >
+  - id: setup-route
+    title: Open Device
+    caption: 'Turn E2 down the list to Device, the eighth task (seven detents below Masks), and press
+      K3. The title row reads DEVICE with CH01. Only the Device row is listed, set to None: the MIDI channel
+      and MIDI port rows appear once you choose a device.'
+    assertion:
+      kind: manual-course-ui
+      stage: setup-route
+      passed: true
+      device_configuration:
+        device: None
+  - id: setup-draft
+    title: Choose CC Device (draft)
+    caption: Turn E3 one detent to choose the first entry after None, CC Device (a generic MIDI device).
+      DEVICE CH01 now lists Device CC Device, MIDI channel CC1 and MIDI port OUT 1. This is only a draft;
+      K2 cancels it and K3 applies it.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-draft
+      passed: true
+      device_configuration:
+        device: CC Device
+        midi_channel: CC1
+        midi_port: OUT 1
+  - id: setup-apply
+    title: Choose a device and apply it
+    caption: Press K3 to apply the draft. Notes from channel 1 now leave on MIDI port 1, MIDI channel
+      1. With your own gear, choose its device entry and set its port and channel; with no external gear,
+      choose Polyperc 1 for the norns voice.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-apply
+      passed: true
+      device_configuration:
+        device: CC Device
+        midi_channel: CC1
+        midi_port: OUT 1
+  - id: setup-tempo-open
+    title: Open Tempo
+    caption: Tap Song (6,8), turn E1 right one detent to Song tasks, turn E2 to Tempo & feel and press
+      K3, then turn E2 up to Tempo. GLOBAL FEEL for SONG 01 lists Tempo, Swing type and Swing, and Tempo
+      shows the norns clock tempo; in this recording it already reads 90, the value every timing in the
+      chapters ahead assumes. On your norns it may read something else, such as 120.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-tempo-open
+      passed: true
+  - id: setup-tempo-set
+    title: Read Tempo before confirming
+    caption: Turn E3 until GLOBAL FEEL reads Tempo 90. Check the displayed value, then press K3 to finish.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-tempo-set
+      passed: true
+  - id: setup-tempo
+    title: Set the tempo to 90
+    caption: Tempo moves one BPM per detent between 30 and 300, with no coarse step. To see it work, turn
+      E3 left or right and watch the number follow, then bring it back to 90 and press K3 to apply. GLOBAL
+      FEEL shows Tempo 90, which makes a beat exactly 2/3 s for every timing in the chapters ahead.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-tempo
+      passed: true
+- id: course-first-sound
+  feature_id: first-sound
+  title: 3. Make four equal notes
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'The project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel
+      1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM
+      (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback
+      is stopped.'
+    assertion:
+      kind: manual-course-ui
+      stage: setup-tempo
+      passed: true
+  - id: first-sound-attacks
+    title: Enter four trigs
+    caption: Tap Channel (3,8), then Pattern (5,8), choose pattern 1 at (1,1), then tap (1,4), (2,4),
+      (3,4) and (4,4). Row 4 holds steps 1 to 16, so these are the first four steps. PATTERN TRIG PAT01
+      CH01 shows four bright trigs at the left of row 4. Four neighbouring trigs are a deliberately plain
+      rhythm to hear first; chapter 4 spreads them out.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-attacks
+      passed: true
+  - id: first-sound-assign-pattern
+    title: Assign pattern 1
+    caption: Tap Channel (3,8), then tap (1,2), the first pattern slot on row 2, to give channel 1 pattern
+      1. Mosaic opens MERGE MODES for CH01 because assigning a pattern always shows it, and the tooltip
+      reads Pattern 1 added to ch. 1. Patterns reads 01; ignore the other rows for now.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-assign-pattern
+      passed: true
+  - id: first-sound-assign
+    title: Loop four steps
+    caption: 'Row 4 of the channel page is the range row: hold (1,4), tap (4,4) and release (1,4) to loop
+      only steps 1 to 4. Steps 1 to 4 stay bright, the rest go dark, and the tooltip reads Channel 1 length
+      changed.'
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-assign
+      passed: true
+  - id: first-sound-masks-open
+    title: Open Masks
+    caption: 'Turn E1 right three detents to Channel tasks, turn E2 to Masks and press K3. NOTE MASKS
+      CH01 lists eight cells (Trig, Note, Vel, Len and Chd1 to Chd4), all X: no mask is set, so the channel
+      has no pitch, velocity or length yet. With no step held, E2 chooses a cell and E3 sets that cell
+      for every step of the channel.'
+    assertion:
+      kind: ui-confirm
+      page: masks
+      channel: 1
+  - id: first-sound-note-set
+    title: Set the channel note
+    caption: Turn E2 to Note and E3 until the channel default reads C3.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-note-set
+      passed: true
+  - id: first-sound-velocity-set
+    title: Set the channel velocity
+    caption: Turn E2 to Vel and E3 until the channel default reads 80.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-velocity-set
+      passed: true
+  - id: first-sound-defaults
+    title: Give the trigs a pitch, level and length
+    caption: Select Note with E2 and turn E3 right until it reads C3 (it starts at X, so about 60 detents),
+      select Vel and turn E3 right to 80 (about 80 detents), then select Len and turn E3 right to 1/2
+      (8 detents). NOTE MASKS CH01 now lists Note C3, Vel 80 and Len 1/2, the defaults for every step.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-defaults
+      passed: true
+  - id: first-sound-hear
+    title: Play and stop
+    caption: 'Tap Play (1,8), listen for two repeats of the four-step loop, then tap Play again. While
+      it plays the screen stays on NOTE MASKS, the Play pad (1,8) is lit and a dim playhead cell moves
+      along row 4. The MIDI strip shows note 60 (C3) at velocity 80 about every 167 ms (1/6 s): four notes
+      per repeat, so you hear a fast stutter rather than a tune. Stop leaves no note sounding. This confirms
+      the whole chain (pattern, channel, masks, output) before you shape the rhythm.'
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-hear-playing
+      passed: true
+  - id: first-sound-stopped
+    title: Stop and confirm the note setup remains
+    caption: Stop playback. The note, velocity and length settings remain C3, 80 and 1/2.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-stopped
+      passed: true
+- id: course-build-a-phrase
+  feature_id: build-a-phrase
+  title: 4. Spread the rhythm across a bar
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: Pattern 1 has trigs on steps 1 to 4 and is assigned to channel 1, which loops steps 1 to
+      4. Channel 1's Masks are Note C3 (60), Vel 80 and Len 1/2, and the tempo is 90 BPM. Playback is
+      stopped.
+    assertion:
+      kind: manual-course-midi
+      stage: first-sound-hear
+      passed: true
+  - id: build-a-phrase-range
+    title: Loop all 16 steps
+    caption: 'Hold (1,4), tap (16,4) and release (1,4): the range is now 16 steps, one bar. On row 4,
+      steps 5 to 16 now glow dimly because they are inside the loop (they were dark at range 4), and the
+      trigs are still on steps 1 to 4. Then open the Clock page for the next step: turn E1 right three
+      detents to Channel tasks, turn E2 to Clock and press K3.'
+    assertion:
+      kind: ui-confirm
+      page: clock_mods
+      channel: 1
+  - id: build-a-phrase-rate-selected
+    title: Read the selected rate
+    caption: On CLOCK CH01, check that Rate reads /1 before pressing K3.
+    assertion:
+      kind: manual-course-ui
+      stage: build-a-phrase-rate-selected
+      passed: true
+  - id: build-a-phrase-rate
+    title: Check the rate
+    caption: 'Select Rate (the top row of the CLOCK page; turn E2 up if it is not highlighted) and press
+      K3. CLOCK CH01 shows Rate /1, the default sixteenth-note rate: each step lasts 1/6 s at 90 BPM and
+      the 16 steps last 2.7 s. Nothing changes here; this confirms the rate that every timing in the course
+      relies on.'
+    assertion:
+      kind: manual-course-ui
+      stage: build-a-phrase-rate
+      passed: true
+  - id: build-a-phrase-rhythm
+    title: Move the trigs onto the beats
+    caption: 'Tap Pattern (5,8), tap (2,4), (3,4) and (4,4) to remove those trigs, then tap (5,4), (9,4)
+      and (13,4) to add trigs. Keep (1,4). PATTERN TRIG PAT01 CH01 shows trigs on steps 1, 5, 9 and 13:
+      four steps apart is one beat at 90 BPM.'
+    assertion:
+      kind: manual-course-ui
+      stage: build-a-phrase-rhythm
+      passed: true
+  - id: build-a-phrase-open-masks
+    title: Open Masks for the next chapter
+    caption: Tap Channel (3,8), turn E1 right three detents to Channel tasks, turn E2 to Masks and press
+      K3. NOTE MASKS CH01 shows Note C3, Vel 80 and Len 1/2 as before, and row 4 of the grid shows the
+      four trigs one beat apart inside the 16-step range. Masks stays open so chapter 5 starts on the
+      page it needs.
+    assertion:
+      kind: ui-confirm
+      page: masks
+      channel: 1
+    occurrence: 2
+  - id: build-a-phrase-compare
+    title: Hear the longer phrase
+    caption: 'Tap Play (1,8), let two 16-step passes run (about 5.3 s), then tap Play to stop. While it
+      plays the Play pad (1,8) is lit and a dim playhead cell moves along row 4, one beat at a time over
+      the four trigs. The MIDI strip shows note 60 (C3) at velocity 80 once per beat, about 667 ms (2/3
+      s) apart: the same note as chapter 3, spread over a bar instead of 167 ms apart. Stop leaves no
+      note sounding.'
+    assertion:
+      kind: manual-course-ui
+      stage: build-a-phrase-compare-playing
+      passed: true
+- id: course-masks
+  feature_id: masks
+  title: 5. Give the phrase an ending
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays pattern 1, trigs on steps 1, 5, 9 and 13, over steps 1 to 16 at Rate /1 and
+      90 BPM. Its channel masks are Note C3 (60), Vel 80 and Len 1/2, and the NOTE MASKS page is open;
+      no step has a mask yet. Playback is stopped.
+    assertion:
+      kind: manual-course-midi
+      stage: build-a-phrase-compare
+      passed: true
+  - id: masks-open
+    title: Find the channel default
+    caption: With no step held, turn E2 to Note. NOTE MASKS CH01 shows Note C3 in the highlighted cell.
+      With no step number in the title row, C3 is the default for every step of the channel; no step has
+      a mask of its own yet.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-open
+      passed: true
+  - id: masks-hold
+    title: Select the last beat
+    caption: 'Hold (13,4), the fourth trig, and keep holding it. The title row changes to CH01 ST13: from
+      now the screen edits step 13 only, and its Note still reads C3 because step 13 has no exception
+      yet.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-hold
+      passed: true
+  - id: masks-edit
+    title: Raise the last note
+    caption: 'While you hold (13,4), turn E3 right two detents. NOTE MASKS CH01 ST13 shows Note D3: a
+      pitch for step 13 only, two semitones above the default.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-edit
+      passed: true
+  - id: masks-release
+    title: Release the step
+    caption: 'Release (13,4). The title row returns to CH01 and Note shows the channel default C3 again.
+      Step 13 still keeps D3: hold (13,4) again to see it, or listen in the next step.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-release
+      passed: true
+  - id: masks-release-rehold
+    title: Hold the step again
+    caption: 'Hold (13,4) again. The title row returns to CH01 ST13 and Note reads D3: step 13 kept its
+      own note when you let go, and holding it is how you see it. Release (13,4) before the next step.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-release-rehold
+      passed: true
+  - id: masks-listen
+    title: Hear the new ending
+    caption: 'Tap Play (1,8), listen to two passes, then tap Play to stop. The screen is back on the channel
+      defaults, the Play pad (1,8) is lit and a dim playhead cell moves along row 4. The MIDI strip shows
+      C, C, C, D: steps 1, 5 and 9 sound note 60 and step 13 sounds note 62, all at velocity 80, one beat
+      apart.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-listen-playing
+      passed: true
+  - id: masks-quiet-held
+    title: Make the ending softer
+    caption: 'Select Vel with E2, hold (13,4) and turn E3 left 30 detents. While you hold it, NOTE MASKS
+      CH01 ST13 shows Vel 50 and Note D3: both belong to step 13 alone. Keep holding for this frame, then
+      release (13,4).'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-quiet-held
+      passed: true
+  - id: masks-quiet
+    title: Hear the softer ending
+    caption: After you release (13,4) the screen shows the channel default Vel 80 again. Play two passes
+      and stop. The Play pad (1,8) is lit while it plays. The MIDI strip shows notes 60, 60, 60 at velocity
+      80 and note 62 at velocity 50.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-quiet-playing
+      passed: true
+  - id: masks-default-set
+    title: Set the channel default to G3
+    caption: 'With no step held, select Note with E2 and turn E3 right seven detents to G3 (MIDI 67, seven
+      semitones above C). NOTE MASKS CH01 shows Note G3: the default for the whole channel changed.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-default-set
+      passed: true
+  - id: masks-default-held
+    title: Check step 13 kept its own note
+    caption: 'Hold (13,4) again. NOTE MASKS CH01 ST13 still shows Note D3 and Vel 50: step 13 keeps its
+      own values whatever the channel default says. Release (13,4).'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-default-held
+      passed: true
+  - id: masks-default
+    title: Hear the new default
+    caption: 'Play two passes and stop. The Play pad (1,8) is lit while it plays. The MIDI strip shows
+      67, 67, 67 on steps 1, 5 and 9 and 62 at velocity 50 on step 13: you hear G, G, G, D because step
+      13 keeps its own note.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-default-g-playing
+      passed: true
+  - id: masks-default-restore-field
+    title: Restore the channel default
+    caption: Turn E3 left seven detents. The NOTE MASKS screen now shows the channel Note default as C3.
+      Step 13 keeps its own D3 and velocity 50 exception.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-default-restore-field
+      passed: true
+  - id: masks-default-restore
+    title: Hear the restored default
+    caption: Play two passes and stop. The MIDI strip shows 60, 60, 60, 62 again, and step 13 is still
+      at velocity 50.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-default-restored-playing
+      passed: true
+    expect:
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 50
+  - id: masks-clear-before
+    title: Hold step 13 before clearing
+    caption: Hold (13,4) and keep holding it. NOTE MASKS CH01 ST13 shows Note D3 and Vel 50, the exceptions
+      you built for this step.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-clear-before
+      passed: true
+  - id: masks-clear-after
+    title: Clear it with K2
+    caption: 'While you still hold (13,4), press K2. The tooltip reads Masks for step 13 cleared and the
+      screen shows Note C3 and Vel 80, the channel defaults: K2 on a held step removes every mask on that
+      step and leaves the channel defaults alone. Release (13,4).'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-clear-after
+      passed: true
+  - id: masks-clear
+    title: Hear the cleared step
+    caption: Play two passes and stop. The Play pad (1,8) is lit while it plays. The MIDI strip shows
+      60 at velocity 80 on all four steps.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-clear-playing
+      passed: true
+  - id: masks-keep-note
+    title: 'Rebuild: raise step 13 to D3'
+    caption: 'Rebuild the ending with the two edits you already know. Select Note, hold (13,4) and turn
+      E3 right two detents: NOTE MASKS CH01 ST13 shows Note D3 while you hold.'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-keep-note
+      passed: true
+  - id: masks-keep-held
+    title: 'Rebuild: step 13 velocity 50'
+    caption: 'Release, select Vel, hold (13,4) and turn E3 left 30 detents: NOTE MASKS CH01 ST13 shows
+      Note D3 and Vel 50 together. Release (13,4).'
+    assertion:
+      kind: manual-course-ui
+      stage: masks-keep-held
+      passed: true
+  - id: masks-keep
+    title: Hear the rebuilt ending
+    caption: Play two passes and stop. The Play pad (1,8) is lit while it plays. The MIDI strip shows
+      60, 60, 60 at velocity 80 and 62 at velocity 50.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-keep-playing
+      passed: true
+- id: course-sequence-composition
+  feature_id: sequence-composition
+  title: 6. Add a second part
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays C, C, C, D over 16 steps at 90 BPM: step 13 has Note D3 (62) and Vel 50,
+      the other trigs use C3 at 80. Channel 2, pattern 2 and a second MIDI output are still to be set
+      up.'
+    assertion:
+      kind: manual-course-midi
+      stage: masks-keep
+      passed: true
+  - id: sequence-composition-bass-trigs
+    title: Enter two bass trigs
+    caption: Pattern 2 starts empty. Tap Pattern (5,8), choose pattern 2 at (2,1) and tap (1,4) and (9,4)
+      for two trigs. PATTERN TRIG PAT02 CH01 shows the two trigs as bright squares on steps 1 and 9, and
+      the tooltip reads Pattern 2 selected.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-trigs
+      passed: true
+  - id: sequence-composition-bass-pattern
+    title: Give them notes
+    caption: 'Tap Pattern (5,8) again to open the note view, then tap (1,7) for degree 0 on step 1 and
+      (9,3) for degree 4 on step 9. PATTERN NOTE PAT02 shows the tooltip Step 9 note set to 4. Only those
+      two note taps are yours: the bright band along row 7 is the note view''s degree 0 baseline, and
+      the extra pad at (13,6) is not one of your notes and does not play. It is the note view also showing
+      what channel 1 last played on step 13, D3 (degree 1); pattern 2 has no trig there.'
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-pattern
+      passed: true
+  - id: sequence-composition-bass-tasks
+    title: Open Channel tasks for channel 2
+    caption: Turn E1 clockwise to open the channel-2 task list.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-tasks
+      passed: true
+  - id: sequence-composition-bass-device-selected
+    title: Select Device for channel 2
+    caption: Move E2 to Device. The selected row reads OPEN >.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-device-selected
+      passed: true
+      selected_field:
+        layout: detail
+        label: Device
+        value: OPEN >
+  - id: sequence-composition-bass-open-device
+    title: Open channel 2's Device page
+    caption: Open the Device page for channel 2. The visible value is None; the channel and port selectors
+      appear after a device is chosen.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-open-device
+      passed: true
+      device_configuration:
+        device: None
+  - id: sequence-composition-bass-device-choice
+    title: Choose the instrument
+    caption: Turn E3 clockwise once to choose CC Device. Channel 2 will use its own MIDI channel and port.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-device-choice
+      passed: true
+      device_configuration:
+        device: CC Device
+        midi_channel: CC1
+        midi_port: OUT 1
+  - id: sequence-composition-bass-device-channel
+    title: Give the bass its own MIDI channel
+    caption: Select MIDI Channel with E2, then turn E3 clockwise once to CC2. The visible route now reads
+      CC Device, CC2, OUT 1.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-device-channel
+      passed: true
+      device_configuration:
+        device: CC Device
+        midi_channel: CC2
+        midi_port: OUT 1
+  - id: sequence-composition-bass-device-port
+    title: Set the bass output port
+    caption: Select MIDI Port with E2, then turn E3 clockwise once to OUT 2. The selected value reads
+      OUT 2; the Device row is above this scrolled view.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-device-port
+      passed: true
+      selected_field:
+        layout: detail
+        label: MIDI port
+        value: OUT 2
+  - id: sequence-composition-bass-device
+    title: Apply the second output
+    caption: Press K3 to apply the route. The visible values remain CC Device, CC2, OUT 2, and the last
+      line reads OK.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-device
+      passed: true
+      device_configuration:
+        device: CC Device
+        midi_channel: CC2
+        midi_port: OUT 2
+  - id: sequence-composition-bass-assign
+    title: Assign pattern 2
+    caption: Tap (2,2) to give channel 2 pattern 2. MERGE MODES for CH02 shows Patterns 02 and the tooltip
+      reads Pattern 2 added to ch. 2.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-assign
+      passed: true
+  - id: sequence-composition-bass-range
+    title: Loop 16 steps
+    caption: 'Set the range, a gesture and not a trig: hold (1,4), tap (16,4) and release (1,4), so channel
+      2 loops the same 16 steps as channel 1. The tooltip reads Channel 2 length changed.'
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-range
+      passed: true
+  - id: sequence-composition-bass-route
+    title: Drop it an octave
+    caption: 'Tap (9,8) for octave -1. The screen reads NOTE MASKS CH02 OCT-1 and the tooltip shows Ch.
+      2 octave: -1; (2,2) and (9,8) are lit.'
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-route
+      passed: true
+  - id: sequence-composition-both
+    title: Hear the two parts
+    caption: 'Tap Play (1,8), let two passes run, then tap Play to stop. While it plays the screen stays
+      on NOTE MASKS CH02 OCT-1 and the Play pad (1,8) is lit. The MIDI strip shows channel 1 on port 1:
+      notes 60, 60, 60 at velocity 80 and 62 at velocity 50, a beat apart. Channel 2 is on port 2: note
+      48 on step 1 and note 55 on step 9, both at velocity 100. That is the phrase above a low C and G.'
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-both-playing
+      passed: true
+  - id: sequence-composition-merge-skip
+    title: Add pattern 2 to channel 1 (Skip)
+    caption: 'Optional detour. Select channel 1 at (1,1) and tap pattern slot (2,2) to add pattern 2 next
+      to pattern 1: MERGE MODES shows Patterns 01 02 and Strategy SKIP, the default. Play two passes and
+      stop. Skip plays a step only when exactly one assigned pattern has a trig there, so with both patterns
+      trigging steps 1 and 9, only steps 5 and 13 stay bright on row 4. The MIDI strip shows channel 1
+      sounding only 60 and 62 at velocity 50; the bass (48, 55) is unchanged.'
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-merge-skip-playing
+      passed: true
+  - id: sequence-composition-merge-only
+    title: Press the merge button once
+    caption: 'Tap (14,8) once. MERGE MODES shows Strategy ONLY with the tooltip ONLY APPLIED, and the
+      (14,8) button changes brightness. The button steps through Skip, Only, All and further strategies.
+      Only plays a step only when more than one assigned pattern has a trig there: on row 4 just steps
+      1 and 9 stay bright.'
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Strategy
+      value: ONLY
+      matched: true
+  - id: sequence-composition-merge-only-listen
+    title: Hear Only
+    caption: Play two passes and stop, with Strategy still ONLY. While it plays the Play pad (1,8) is
+      lit and a dim playhead cell moves along row 4. The MIDI strip shows channel 1 sounding only note
+      60 at velocity 80, on steps 1 and 9, two beats apart; the bass (48, 55) is unchanged. These are
+      exactly the steps Skip silenced.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-merge-only-playing
+      passed: true
+  - id: sequence-composition-merge-all
+    title: Merge mode All
+    caption: 'Tap (14,8) once more: Strategy reads ALL and all four trigs on row 4 light again. Play two
+      passes and stop. The MIDI strip shows channel 1 sounding 60, 60, 60, 62 (velocity 80, 80, 80, 50):
+      channel 1''s Note and Vel masks supply the pitch and velocity, whichever pattern''s trig fires.'
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-merge-all-playing
+      passed: true
+  - id: sequence-composition-merge
+    title: Remove pattern 2 again
+    caption: Tap (2,2) to remove pattern 2 from channel 1, then play two passes and stop. MERGE MODES
+      now shows Patterns 01. Channel 1 plays pattern 1 alone, 60, 60, 60, 62, and channel 2 keeps 48 and
+      55. Strategy stays on ALL, which makes no difference with one pattern. Another tap of (14,8) would
+      move on to a different strategy this course does not use, so leave it.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-merge-restored-playing
+      passed: true
+- id: course-harmony-design
+  feature_id: harmony-design
+  title: 7. Change harmony without changing the rhythm
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 alone, C, C, C, D, from channel and step masks: Note C3 (60),
+      Vel 80, and on step 13 Note D3 (62) at Vel 50; NOTE MASKS CH01 is open. Channel 2 plays pattern
+      2 (degrees 0 and 4, octave -1) as MIDI 48 and 55. The merge Strategy is still All, which changes
+      nothing with one pattern. Scale slot 1 is C major and the tempo is 90 BPM.'
+    assertion:
+      kind: ui-confirm
+      page: masks
+      channel: 1
+    occurrence: 3
+  - id: harmony-design-note-x
+    title: Let the pattern notes through
+    caption: 'Turn E2 to Note and turn E3 left until it reads X (no mask). NOTE MASKS CH01 shows Note
+      X: the channel no longer decides the pitch, the pattern notes will.'
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-note-x
+      passed: true
+  - id: harmony-design-quiet-held
+    title: Restore the quiet ending
+    caption: 'Hold (13,4) and press K2: the tooltip reads Masks for step 13 cleared, and K2 removes every
+      mask on the step, so its Note 62 and Vel 50 both go. Then select Vel, turn E3 left 30 detents to
+      50 while still holding: NOTE MASKS CH01 ST13 shows Note X and Vel 50, the quiet ending back on step
+      13 alone. Release (13,4).'
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-quiet-held
+      passed: true
+  - id: harmony-design-inherit
+    title: Back to the channel defaults
+    caption: Release (13,4). NOTE MASKS CH01 shows Note X and Vel 80 (the channel defaults); step 13's
+      own Vel 50 only shows while you hold it.
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-inherit
+      passed: true
+  - id: harmony-design-relative-notes
+    title: Write the melody as degrees
+    caption: 'Tap Pattern (5,8), choose pattern 1 at (1,1), tap Pattern (5,8) again for the note view
+      and tap (1,7), (5,7), (9,7) and (13,6): degree 0 on steps 1, 5 and 9, and degree 1, one row up and
+      the next note of the scale, on step 13. PATTERN NOTE PAT01 CH01 shows the tooltip Step 13 note set
+      to 1.'
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-relative-notes
+      passed: true
+  - id: harmony-design-relative
+    title: Play it from the pattern
+    caption: Tap Channel (3,8), play two passes and stop. While it plays the Play pad (1,8) is lit and
+      a dim playhead cell moves along row 4. The MIDI strip shows channel 1 sounding 60, 60, 60, 62 from
+      the pattern's own notes, step 13 at velocity 50, and channel 2 sounding 48 and 55.
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-relative-playing
+      passed: true
+  - id: harmony-design-draft-before
+    title: Prepare a second scale
+    caption: 'Tap Scale (4,8) to open the scale page, tap scale slot 2 at (2,3), then play two passes
+      and stop. While it plays the screen shows SCALE SLOT 02 with Root C and Scale Major. Slot 2 holds
+      C major like slot 1, so nothing changes: the MIDI strip shows 60, 60, 60, 62 on channel 1 and 48
+      and 55 on channel 2. Ignore the Degree and Transpose rows on this page; they stay at I and 0.'
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-draft-playing
+      passed: true
+  - id: harmony-design-draft
+    title: Draft D as the root
+    caption: Turn E2 to Root and turn E3 right two detents to D. SCALE SLOT 02 shows Root D, Scale Major
+      and the line Press K3 to confirm. The change is only a draft until K3, so playback would still use
+      C major.
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-draft-scale
+      passed: true
+  - id: harmony-design-check-scale
+    title: Check the Scale row
+    caption: 'Turn E2 down to Scale. SCALE SLOT 02 shows Scale Major beside the draft Root D, and Press
+      K3 to confirm is still on screen: nothing is applied yet.'
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Scale
+      value: Major
+      matched: true
+  - id: harmony-design-apply
+    title: Apply D major
+    caption: 'Press K3 to apply: the Press K3 to confirm line disappears. Play two passes and stop. While
+      it plays SCALE SLOT 02 shows Root D and the Play pad (1,8) is lit. The MIDI strip shows channel
+      1 sounding 62, 62, 62, 64 (the last at velocity 50) and channel 2 sounding 50 and 57: the same rhythm
+      in D major.'
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-apply-d-playing
+      passed: true
+  - id: harmony-design-restore-c
+    title: Return to C major
+    caption: Tap scale slot 1 at (1,3), press K3 to apply, then play two passes and stop. SCALE SLOT 01
+      shows Root C. The MIDI strip shows channel 1 back on 60, 60, 60, 62 and channel 2 on 48 and 55.
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-apply-restored-playing
+      passed: true
+- id: course-modulation-movement-and-interest
+  feature_id: modulation-movement-and-interest
+  title: 8. Add a pickup
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'The project at the end of chapter 7: channel 1 plays degrees 0, 0, 0, 1 from pattern 1 with
+      step 13 at velocity 50, channel 2 plays its bass, and C major is applied. Step 15 has no trig. Playback
+      is stopped.'
+    assertion:
+      kind: manual-course-midi
+      stage: harmony-design-apply-restored
+      passed: true
+  - id: modulation-movement-and-interest-pickup
+    title: Add the late trig
+    caption: Choose pattern 1, tap (15,4) on Pattern Trig to add a trig on step 15, press Pattern (5,8)
+      once to open the note view and tap (15,7) for degree 0. PATTERN NOTE PAT01 CH01 shows the tooltip
+      Step 15 note set to 0 and a trig stripe on steps 1, 5, 9, 13 and 15.
+    assertion:
+      kind: manual-course-ui
+      stage: modulation-movement-and-interest-pickup
+      passed: true
+  - id: modulation-movement-and-interest-open-masks
+    title: Open Masks
+    caption: 'Tap Channel (3,8), turn E1 right three detents to Channel tasks, turn E2 to Masks and press
+      K3. NOTE MASKS CH01 shows Note X (the pattern notes decide pitch), Vel 80 and Len 1/2: the channel
+      defaults the new trig will use until you give step 15 its own velocity.'
+    assertion:
+      kind: ui-confirm
+      page: masks
+      channel: 1
+    occurrence: 4
+  - id: modulation-movement-and-interest-held
+    title: Set step 15 to velocity 35
+    caption: Select Vel with E2, hold (15,4) and turn E3 left 45 detents until Vel reads 35. While you
+      hold the step, NOTE MASKS CH01 ST15 shows Vel 35, that step's own value. Keep holding for this frame,
+      then release (15,4).
+    assertion:
+      kind: manual-course-ui
+      stage: modulation-movement-and-interest-held
+      passed: true
+  - id: modulation-movement-and-interest-level
+    title: Hear the quiet pickup
+    caption: After you release, the screen shows the channel default Vel 80 again. Play two passes and
+      stop. While it plays the Play pad (1,8) is lit and a dim playhead cell moves along row 4. The MIDI
+      strip shows the phrase (60 at velocity 80, then 62 at 50) and a quiet 60 at velocity 35 on step
+      15, just before the bar restarts.
+    assertion:
+      kind: manual-course-ui
+      stage: modulation-movement-and-interest-level-playing
+      passed: true
+- id: course-song-composition
+  feature_id: song-composition
+  title: 9. Arrange two sections
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: Slot 1 holds the whole project, including the pickup on step 15 at velocity 35. Global length
+      is the default 64, Repeats is 1 and Song mode is On; slots 2 and 3 are empty. Playback is stopped.
+    assertion:
+      kind: manual-course-midi
+      stage: modulation-movement-and-interest-level
+      passed: true
+  - id: song-composition-copy
+    title: Copy the complete section
+    caption: 'Tap Song (6,8), hold slot 1 at (1,1), tap slot 2 at (2,1), release slot 1 and tap (2,1)
+      again to select slot 2. Holding slot 1 while you tap slot 2 copies the whole section (patterns,
+      channel settings, masks and mutes). The screen reads SLOT SETUP, SONG 02, the tooltip says Song
+      sequence 2 selected, and (2,1) is the bright slot button. The next two steps check the copy: slot
+      2 stays audible when slot 1 is muted.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-copy
+      passed: true
+  - id: song-composition-sparse-muted
+    title: Mute channel 1 in slot 1
+    caption: 'Select slot 1 at (1,1), tap Channel (3,8), then hold K1, tap (1,1) and release K1. K1 is
+      the shift key from chapter 1: K1 plus a channel button mutes that channel in this slot only. The
+      title reads CH01 MUTE and the tooltip says Channel 1 muted: slot 1 will play the bass alone.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-sparse-muted
+      passed: true
+  - id: song-composition-sparse
+    title: Check slot 2 stays full
+    caption: 'Tap Song (6,8), select slot 2 at (2,1) and tap Channel (3,8). The title reads CH01 S02 with
+      no MUTE: channel 1 is audible in slot 2, so slot 2 keeps the full phrase.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-sparse-copy
+      passed: true
+  - id: song-composition-global-length-slot1
+    title: Set slot 1 to one bar
+    caption: 'Tap Song (6,8), select slot 1 at (1,1), tap (3,7) on the length fader, then tap (8,7) three
+      times. The fader is row 7, columns 1 to 8: (3,7) jumps to 13 steps and each tap of (8,7) adds one,
+      so 13 + 3 = 16. SONG PLAYBACK, SONG 01 shows Global length 16; Song mode reads AUTO there, which
+      means Song mode is on and advancing.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-global-length-slot1
+      page: song
+      params:
+        song_slot: 1
+      dashboard_rows:
+      - row: 4
+        label: Global length
+        value: '16'
+      leds:
+      - x: 1
+        y: 7
+        level: 7
+      - x: 2
+        y: 7
+        level: 2
+      - x: 3
+        y: 7
+        level: 9
+      - x: 4
+        y: 7
+        level: 2
+      - x: 5
+        y: 7
+        level: 2
+      - x: 6
+        y: 7
+        level: 2
+      - x: 7
+        y: 7
+        level: 2
+      - x: 8
+        y: 7
+        level: 7
+      passed: true
+  - id: song-composition-length-slot1
+    title: 'Optional: check Repeats for slot 1'
+    caption: 'Optional check. Open Slot setup from Song tasks (E1 right one detent, E2 to Slot setup,
+      K3), select Repeats, turn E3 left until it reads 1 and press K3. Repeats already starts at 1: SLOT
+      SETUP, SONG 01 shows Repeats 1.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-length-slot1
+      passed: true
+  - id: song-composition-global-length-slot2
+    title: Set slot 2 to one bar
+    caption: 'Tap Song (6,8), select slot 2 at (2,1), tap (3,7), then tap (8,7) three times: 13 + 3 =
+      16 again. SONG PLAYBACK, SONG 02 shows Global length 16.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-global-length-slot2
+      page: song
+      params:
+        song_slot: 2
+      dashboard_rows:
+      - row: 4
+        label: Global length
+        value: '16'
+      leds:
+      - x: 1
+        y: 7
+        level: 7
+      - x: 2
+        y: 7
+        level: 2
+      - x: 3
+        y: 7
+        level: 9
+      - x: 4
+        y: 7
+        level: 2
+      - x: 5
+        y: 7
+        level: 2
+      - x: 6
+        y: 7
+        level: 2
+      - x: 7
+        y: 7
+        level: 2
+      - x: 8
+        y: 7
+        level: 7
+      passed: true
+  - id: song-composition-length-slot2
+    title: 'Optional: check Repeats for slot 2'
+    caption: Optional check. Open Slot setup, select Repeats, turn E3 left until it reads 1 and press
+      K3. SLOT SETUP, SONG 02 shows Repeats 1, the default.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-length-slot2
+      passed: true
+  - id: song-composition-length-mode-selected
+    title: Read Song mode before confirming
+    caption: Check SLOT SETUP, SONG 02 shows Song mode On before pressing K3.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-length-mode-selected
+      passed: true
+  - id: song-composition-length
+    title: 'Optional: check Song mode'
+    caption: 'Optional check. In Slot setup select Song mode, turn E3 right to On and press K3. SLOT SETUP,
+      SONG 02 shows Song mode On, the default: the song moves from slot 1 to slot 2 and wraps to slot
+      1 because slot 3 is empty.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-length-mode
+      passed: true
+  - id: song-composition-transition
+    title: Hear slot 1
+    caption: 'Select slot 1, tap Play (1,8) and listen to slot 1 first. SLOT SETUP, SONG 01 stays on screen
+      with Song mode On, the slot button (1,1) is bright, and the MIDI strip shows only the bass (port
+      2: note 48, then 55, velocity 100) because channel 1 is muted in this slot.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-transition-playing
+      passed: true
+  - id: song-composition-transition-slot2
+    title: Hear slot 2 join
+    caption: Keep listening for the second section (about 2.7 s later) and then tap Play to stop; four
+      16-step sections run in all (about 10.7 s). The screen follows the song to SLOT SETUP, SONG 02 and
+      the bright slot button moves to (2,1). The MIDI strip now shows the phrase on port 1 (60, 60, 60
+      at velocity 80, 62 at 50 and the pickup 60 at 35) joining the bass, only in the sections that play
+      slot 2.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-transition-playing-slot2
+      passed: true
+- id: course-keep-your-work
+  feature_id: keep-your-work
+  title: 10. Save, reload and perform
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: start
+    title: Starting point
+    caption: Slot 1 has channel 1 muted and slot 2 has both channels audible, each 16 steps with Repeats
+      1 and Song mode On. The project has not been saved under a name yet and playback is stopped.
+    assertion:
+      kind: manual-course-midi
+      stage: song-composition-transition
+      passed: true
+  - id: keep-your-work-menu
+    title: Open Save project
+    caption: Tap K1 briefly for the norns menu, turn E1 to PARAMS and press K3, open MOSAIC and turn E2
+      to < Save project. The norns menu lists Pattern project management with Save project selected.
+    assertion:
+      kind: selected-menu-label
+      text: < Save project
+    occurrence: 1
+  - id: keep-your-work-save
+    title: Save the arrangement
+    caption: 'Press K3 on < Save project. The norns text entry screen opens with the suggested name new:
+      press K3 on DEL to delete it, then turn E2 to each character of Four notes and press K3 to enter
+      it, and confirm. Saving writes Four notes.ptn and Four notes.pset. Tap K1 to return to Mosaic, which
+      still shows SLOT SETUP, SONG 01; the text entry itself is on the norns menu, not on this frame.'
+    assertion:
+      kind: manual-course-persistence
+      stage: keep-your-work-save
+      passed: true
+  - id: keep-your-work-temporary-edit
+    title: Make an unsaved change
+    caption: 'Tap Channel (3,8), then hold K1, tap (1,1) and release K1. The title reads CH01 with no
+      MUTE and the tooltip says Channel 1 unmuted: slot 1 now plays the phrase. This change is not saved.'
+    assertion:
+      kind: manual-course-ui
+      stage: keep-your-work-temporary-edit
+      passed: true
+  - id: keep-your-work-load-menu
+    title: Open Load project
+    caption: Tap K1, open PARAMS > MOSAIC and turn E2 to > Load project. The norns menu shows Load project
+      selected; K2 would cancel the dialog.
+    assertion:
+      kind: selected-menu-label
+      text: '> Load project'
+    occurrence: 1
+  - id: keep-your-work-reload-selected
+    title: Select Four notes
+    caption: Turn E2 until Four notes.ptn is highlighted. Confirm the filename before pressing K3 to load
+      it.
+    assertion:
+      kind: selected-menu-label
+      text: Four notes.ptn
+  - id: keep-your-work-reload
+    title: Reload the saved version
+    caption: 'Press K3 on > Load project, turn E2 to Four notes in the file list and press K3, then tap
+      K1 to return to Mosaic and tap Channel (3,8). The title reads CH01 MUTE again: the unsaved change
+      is gone and slot 1 is bass alone.'
+    assertion:
+      kind: manual-course-ui
+      stage: keep-your-work-reload
+      passed: true
+  - id: keep-your-work-perform
+    title: Replay slot 1
+    caption: Select slot 1, tap Play (1,8) and listen. SLOT SETUP, SONG 01 is on screen and the bass alone
+      (48, 55) sounds, as before the save.
+    assertion:
+      kind: manual-course-ui
+      stage: keep-your-work-perform-playing
+      passed: true
+  - id: keep-your-work-perform-slot2
+    title: Replay slot 2
+    caption: 'Keep listening: the screen follows the song to SONG 02 and the phrase and pickup join the
+      bass, as in chapter 9. Let four 16-step sections run, then tap Play to stop. The MIDI strip lists
+      the same notes as the arrangement in chapter 9.'
+    assertion:
+      kind: manual-course-ui
+      stage: keep-your-work-perform-playing-slot2
+      passed: true

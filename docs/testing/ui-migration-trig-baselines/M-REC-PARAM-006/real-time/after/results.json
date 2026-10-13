@@ -1,0 +1,322 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "live-parameter-recording-dirty-value",
+    "expected": [],
+    "actual": [],
+    "meaning": "Active edited values emit immediately and on eligible steps; Off remains silent."
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000201285,
+        "error_ms": 0.20128500000016203
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999502384,
+        "error_ms": -0.49761600000008954
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.998936677,
+        "error_ms": -1.0633229999998939
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0002052,
+        "error_ms": 0.20519999999990546
+      }
+    ]
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "65"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000454508,
+        "error_ms": 0.4545079999997981
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.998695609,
+        "error_ms": -1.3043910000001269
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000451853,
+        "error_ms": 0.45185300000039064
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.998965538,
+        "error_ms": -1.0344619999997917
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999892312,
+        "error_ms": -0.10768799999993917
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000040953,
+        "error_ms": 0.04095300000006574
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999521131,
+        "error_ms": -0.4788690000001594
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999756565,
+        "error_ms": -0.243434999999792
+      }
+    ]
+  },
+  {
+    "kind": "recorded-parameter-disarmed-replay",
+    "values": [
+      24,
+      -1,
+      -1,
+      -1,
+      24,
+      -1,
+      -1,
+      -1,
+      24
+    ],
+    "distinct_patch_default": 65,
+    "passed": true
+  }
+]

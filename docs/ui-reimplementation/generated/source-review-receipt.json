@@ -1,0 +1,3280 @@
+{
+  "baseline_sha256": "12f18458ae9f6a3b93c782a65f81b93649bea0db5372a75a1a22f4240e855ca2",
+  "files": {
+    "lib/m_grid.lua": {
+      "sha256": "3abd77f7360344bb799525614e0b6f74d8b8a3c2ec696ee6776dfe2cf2691386",
+      "meaning": "Read-only post-owner grid outcome/hold/disconnect notifications added; original64callbacks retain their existing branches. Hold targeting includes Note/Velocity page offsets. Native UI ownership regressions and held-step tests are separate evidence."
+    },
+    "lib/pages/channel_edit_page/channel_edit_clock_controls.lua": {
+      "sha256": "4c76afe36435bf16b161e528414684beb5bfbe0b711c35f8cf5dae15ce9b8132",
+      "meaning": "Added stable read-only field metadata matching existing Rate/Feel/Swing/Shuffle control order; existing setters/navigation retained."
+    },
+    "lib/pages/channel_edit_page/channel_edit_history.lua": {
+      "sha256": "4c83ed3ea18e21bc11151a95315fb39a39c17aaedca19884edb70166a15dbdd3",
+      "meaning": "Added stable history descriptor IDs; existing undo/redo owner and event history retained."
+    },
+    "lib/pages/channel_edit_page/channel_edit_masks.lua": {
+      "sha256": "020dcc2693ec16e6f49b204bdd8d34d471eacaeb1388cacb42d3e4e8d13f8627",
+      "meaning": "Added stable descriptor IDs/short labels/sentinels for eight existing mask controls; no old handler/body changes."
+    },
+    "lib/pages/channel_edit_page/channel_edit_navigation.lua": {
+      "sha256": "158fc5a26c68e0ac6da4b86e5e2b848d803bcfb5f6828b6719ce0be9f92ea54e",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page.lua": {
+      "sha256": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+      "meaning": "Old grid three-state branch replaced by shared request; Fragments prevents legacy note/velocity/length cycle and direct pattern assignment; shared validated editor transaction keeps retained legacy settings."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui.lua": {
+      "sha256": "5ecd63e70de462af8e94db01143835dc5bebb3f9f0cf3b445c2c252bc4cc2228",
+      "meaning": "Added adapter_owners exposing existing objects/selectors/controller instances; no copied ownership or repeated input handlers."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua": {
+      "sha256": "f5e2035cec55c7ab568802dd595e6b9ac779384305c70de4fb2551a64a96dde6",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua": {
+      "sha256": "4d29c5aafc271747c7f46abc25465e5d25a69954cdc3806ae481efb3c706b3ae",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_parameters.lua": {
+      "sha256": "435fe1841f32efc06cf8a09bfadddb9ca8c366f106d02d5b0105f69cf6a911f5",
+      "meaning": "Added ten-slot stable IDs, Device metadata and current control accessor. Existing trig locks, assignment and setters retain ownership."
+    },
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": {
+      "sha256": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+      "meaning": "Merge root Strategy read-only; selector action reload discards unapplied draft before route; parameter editing/apply owner remains transactional."
+    },
+    "lib/pages/note_edit_page/note_edit_page.lua": {
+      "sha256": "d4658759c6ee301ebf301f2219d22b4a00f4f0b12405f367800896199e5b03b0",
+      "meaning": "Added read-only step offset accessor for held fader targeting; unchanged registered inputs."
+    },
+    "lib/pages/note_edit_page/note_edit_page_ui.lua": {
+      "sha256": "d9718ed3b571d9338a81dc088d6113dd15066b93071ead60cdc619778d726e9f",
+      "meaning": "Added accessor exposing existing grid viewer; unchanged next/previous channel owner."
+    },
+    "lib/pages/pages.lua": {
+      "sha256": "6eb2f6d17847e28bd2b3aed2210820bb24b05c5696b1f368ed8555e5c1574e8f",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/scale_edit_page/scale_edit_page.lua": {
+      "sha256": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/scale_edit_page/scale_edit_page_ui.lua": {
+      "sha256": "7c6c6a50a187cc42d8526c927478718ca1bbbd96906adf993f368cc7e2ab3e23",
+      "meaning": "Added accessor exposing existing page/viewer/selectors for live adapters. No old control body changes."
+    },
+    "lib/pages/song_edit_page/song_edit_page.lua": {
+      "sha256": "006fcbbaf05510e0050f9b20a0335b0b9b0303d0b21e6230f5d392fafce0c2c6",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/song_edit_page/song_edit_page_ui.lua": {
+      "sha256": "9228f92c828d709f6f26e63e323018bcacbb9b2bdab7d1b6c8105048edad6755",
+      "meaning": "Added accessor exposing existing song/feel selectors and grid viewer. No old control body changes."
+    },
+    "lib/pages/trigger_edit_page/trigger_edit_page.lua": {
+      "sha256": "45f3b115dafc5d4977d9d0a754620042c1bb7f52e30ab76bf8a28bea26d8dde9",
+      "meaning": "Extracted algorithm_selected helper retains exact Doctor enter/leave guards, refresh, tooltip and paint preview. Grid callback invokes it once; screen select_algorithm uses same path. Added read-only generator/paint/Doctor accessors; record/paint/window callbacks retain original ordered source."
+    },
+    "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua": {
+      "sha256": "a87469638ecbdfce617a5749bb4ff6091b2f9b38fa5431d467d288b3ad87e78d",
+      "meaning": "Added accessor exposing existing Trig selector/pages/viewer; existing grid-view navigation retained."
+    },
+    "lib/pages/velocity_edit_page/velocity_edit_page.lua": {
+      "sha256": "c295bd601c907350f57252eedf6f2a3d7567e0277e78f17676ea74a68e99d207",
+      "meaning": "Added read-only fader page step offset; original registered handlers retained."
+    },
+    "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua": {
+      "sha256": "d06d53fbb4f6e47e7882a75cd53608927ad5a2b012836f63a50959da958fc3dd",
+      "meaning": "Added accessor exposing existing viewer; existing next/previous navigation retained."
+    },
+    "lib/ui.lua": {
+      "sha256": "64870c05585fa02615d1ad6e6e95963153b47687ae4ef1155fd1f2864da5ab28",
+      "meaning": "Live ui_live installation/redraw/encoder/key dispatch replaces legacy page multiplexing; owner adapters and router preserve existing documented musical setters. This is intended live UI architecture, not unchanged draw-only extraction."
+    },
+    "lib/rhythm_doctor/ui_adapter.lua": {
+      "sha256": "ec03592c858ecefb448f9c649e3f711ecefee3539ffd68717a0eb0bcad9eb06e",
+      "meaning": "Record sends confirmed manual_bpm/input_source, never draft. Existing setup draft K2 cancellation/K3 commit remains owner."
+    },
+    "lib/application_parameters.lua": {
+      "sha256": "19de1bd408a242305b20975629facee550b571d157315e12575a74114d4f6290",
+      "meaning": "Native group count39->41 accounts for Screen separator and UI motion option Off/On defaultOn. Existing native parameter IDs retained."
+    },
+    "mosaic.lua": {
+      "sha256": "2a7434f627ec5f7e20ce6a974757683f8f52286d3b9857cbba83f044b1d5ddca",
+      "meaning": "Live redraw/native return detection plus input-preserving splash, idle-autosave resets for norns keys/encoders and bounded GC lifecycle replace historical drawing. Musical clock owners remain independent; historical snapshot is preserved rather than claiming this startup/UI was unchanged."
+    },
+    "README.md": {
+      "sha256": "b4624ee41d639a2712a95c24bb042ac56d5d0bb6da3068a5e0687ec89bf4098d",
+      "meaning": "User-approved overview and unchanged installation/first-sound instructions; explicit affected-test/manual and comprehensive-new-feature policy, controlled local generation, separate PR/on-demand CI and source-matched postmerge artifact deployment. Documentary before/after review receipt /home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/documentary-review-receipt.json SHA256 12c70ef89c9056685b9f04bdba5ce10701dad7972c9f84fa0b893b934c71f70f. Historical capture/source revisions remain unchanged."
+    },
+    "cheat_sheet.html": {
+      "sha256": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+      "meaning": "Regenerated quick reference from current authoritative YAML. Reviewed delta adds accurate Doctor stopped transport, ADC Stereo/L/R routing, lane selection, retained recording Alignment/regular confirmed-tempo Manual Start beat controls; n.b. parent replay source context retained. Generated reference does not qualify pending native evidence."
+    },
+    "lib/ui_live.lua": {
+      "sha256": "bbdee8cf4cef9eedac03bf435095b0324fee31d6fcb81714bc6d7a06e54242ab",
+      "meaning": "Preserves reviewed owner routing/shared Strategy/miniature beat sampler. Bounded truthful P02 hint correction removes inactive K3 APPLY; E3 immediate option edit and K3 no-action handlers unchanged. Existing unrelated footer hints and rendering geometry unchanged."
+    },
+    "lib/ui_render.lua": {
+      "sha256": "b5fb81ede2c3bf2bf562849c73727c71845468807bf20f81688a801ca893cff7",
+      "meaning": "Approved shared vertical renderer plus literal top-right miniatures. Existing Masks/Trig Params cells, semantic labels, exact values, title/scope/row/footer coordinates retained; decoration yields to full title. New report suppresses old corner mark only when miniature draws, and excludes unsafe fallback."
+    },
+    "lib/ui_spec_data.lua": {
+      "sha256": "65b26e5ba2838bbce449d213191d9d881cf11be6c1e1d69c45e9544bae34932e",
+      "meaning": "Generated current declarative registry preserves approved UI controls/routes and selected overflow marquee, adding documentary header miniature bounds/timing. Byte-identical to2444-test full Lua green snapshot."
+    },
+    "lib/rhythm_doctor/file_mailbox.lua": {
+      "sha256": "c580c40f9b562da4c471b19297a5968dcce0d5207a9f6ae2a3dd52720f256b89",
+      "meaning": "Earlier independent path-budget fix accepts absolute long native roots, validates actual direction/temp filenames against4095 bytes; not modified by current Doctor option task."
+    },
+    "lib/ui_adapters/read_only.lua": {
+      "sha256": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+      "meaning": "C09 presents requested Strategy plus Active/Pending/Boundary/Request; owned attribute rows are readonly inactive with SAVED value; editable selector shares same owner."
+    },
+    "lib/musical_merge/strategy.lua": {
+      "sha256": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+      "meaning": "Five shared choices; accepted versus requested cursor, queued boundary, Foundation trig-only/Fragments all-attribute ownership; grid wrapping and screen clamping; refused anchor maps NEEDS ANCHOR without accepted state mutation."
+    },
+    "lib/rhythm_doctor/runtime.lua": {
+      "sha256": "c19a660b367c6f260837a10f619f3975acda1d3e9deb7a89689a9136669f51ca",
+      "meaning": "Validate mode, integer BPM40–240 and stereo/left/right before acquisition; lease snapshot restored on refusal; Manual alignment BPM/origin0 unless explicit correction, Auto detector estimates; project load clears capture settings."
+    },
+    "lib/rhythm_doctor/capture_controller.lua": {
+      "sha256": "8d9fba25659f80f021fcb1633205f252d6658c3858b110dbb612cc5b14496203",
+      "meaning": "Preflight validates input source and sends it to recorder; source does not stay UI-only."
+    },
+    "lib/rhythm_doctor/softcut_recorder.lua": {
+      "sha256": "46e36d8d4bdbef00e43323ff460c2940b9f351e99b75a9bcd807724bfdd1ba95",
+      "meaning": "Stereo ADC1/ADC2 separately; left/right duplicate selected ADC into both buffers; invalid source rejected before arm/acquisition."
+    },
+    "lib/ui_motion.lua": {
+      "sha256": "e8710327daa4a73dec1f7cf45e508fbbf2d581d493e2dc43a65765ec905241d6",
+      "meaning": "Existing motion controls, selected overflow marquee, overview glide and input responsiveness retained. Motion Off clears header beat to acceptedrest; drawn miniature suppresses old tile overlay. Reuses existing12Hz art worker, without changing musical clock scheduling or engine state."
+    },
+    "lib/ui_mini.lua": {
+      "sha256": "629b0e9f3ec1466f74c502ca76753c42602461c74896c69a73d318e23276303c",
+      "meaning": "Read-only validated musical beat sampler and literal raster renderer. Playing onlyactual(lattice.transport-1)/ppqn; stoppedselectedclockgetbeats withpositive finite tempo; Off/error/NaN/missingdata rest, no wallclock/RNG/start/notes. Geometryy0..7 atmaxx96..127 orscope-safe121..127, entireicon yields when titleownsroom. Eightposes over2/4quarter loops; integer groupedfills match independently frozen744 authored bitmaps."
+    },
+    "lib/ui_mini_atlas.lua": {
+      "sha256": "c3437a288ece5198726f77ef50d6335f7ee36ea914cb5e908ed9f6ffed60c871",
+      "meaning": "Literal approved93 page-specific scenes, eight poses each, exactv2 design4b1623dd…; all restingpixels/widths unchanged fromacceptedv1. No generatedID encoding, application values, clock calls or random data; nativeX routes absent. Registered includes dormant/retired variants, not93 publicreachability claim."
+    },
+    "AGENTS.md": {
+      "sha256": "753908e33247686fc4d0c772bfc7e2355545e94326e8f687c9210abfc061b7e2",
+      "meaning": "User-approved YAML authority retained; explicit affected-test/manual updates, comprehensive new-feature coverage, controlled-only local behavior/manual generation with real-time CI qualification and asset-only local wall time; trusted source-matched artifact reuse after main merge. Documentary before/after review receipt /home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/documentary-review-receipt.json SHA256 12c70ef89c9056685b9f04bdba5ce10701dad7972c9f84fa0b893b934c71f70f. Historical capture/source revisions remain unchanged."
+    },
+    "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md": {
+      "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+      "meaning": "Exact finalized full UI reference archivedbefore README overview replacement;125 historical MAN slices retain theiridentity againstactualcomplete frozen text. This archival reference does not replace authoritativecurrentYAML."
+    },
+    "manual/legacy/cheat-sheet-before-authority-6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed.html": {
+      "sha256": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+      "meaning": "Exact finalized full cheat reference archived before YAML-generated quick reference; historical77 rows/aliases remain reviewable, separately fromcurrentgenerated reference."
+    },
+    "manual/book.yaml": {
+      "sha256": "422934c09a9aa2c4b97e223c4d9aaeb4144b30d6be5fa2e43c77461cf43a95cc",
+      "meaning": "Current user-authoritative authored YAML manual index/routes and discoverability. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/course.yaml": {
+      "sha256": "6ffb5e45cb1fedcbee7f48d389267cc37408d13bf540172715e743260e771420",
+      "meaning": "Current user-authoritative authored YAML course structure and explicit teaching handoffs. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: Rate /1 realizes the unchanged intended one-bar 16-step phrase, and the C-major comparison is listened to before preparing Root D; Apply procedure and38 stage IDs remain intact. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate. Explicit authored Song-length correction: use the public grid Global length gesture to persist Length16 for each section before listening to the unchanged two one-bar sections. This is a corrected teaching procedure, not a post-build metadata exception."
+    },
+    "manual/player-routes.yaml": {
+      "sha256": "5e60341faa3c1c354a330d4996d0cfe0b6dc943965038adc1bc1d5e150286b3e",
+      "meaning": "Current user-authoritative authored YAML manual index/routes and discoverability. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/cookbook.yaml": {
+      "sha256": "32e20bf46d47c7b02d9f663f127632af493e19ec98102891cbd7a48cb6dd8f2a",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/first-sound-capture.yaml": {
+      "sha256": "7c6e8a21329ed7a8ef7a308704048d269ab8648d7a73cf734559fecbe53cb85a",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/masks.yaml": {
+      "sha256": "4ee9691bf731f934bba71c86f62c91ec0eab1526f3991449641de0cff70b9a0d",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-channel.yaml": {
+      "sha256": "bef96579573279e6244596a40e721bebdcfff7b81ac3b800f6a84d002188aafd",
+      "meaning": "Reviewed semantic delta: n.b. parent voice-picker replay links three existing scenes/catalogue and explicit subsequent K3/real audio acceptance; no mod-installation, post-apply persistence or hardware routing claim. YAML reformatting elsewhere preserves semantic content."
+    },
+    "manual/features/reference-developer.yaml": {
+      "sha256": "662cbaea52f8a3235054957316ba7f2384288cfa1133abe4bc8a59385aab9fa1",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-learn.yaml": {
+      "sha256": "ded0710cd8c32993bc5ea8644c3f8dadd7e74dd207181f591d4e6d5007e2282d",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: distinguish four researched/pinned voices from three recorded voices; Emplaitress has no recording because MiPlaits is unavailable. No substituted audio claim. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate."
+    },
+    "manual/features/reference-locks.yaml": {
+      "sha256": "89283a2cd968ebb3b99a15c001d708f8d83181b6b47bc869a09971faf430b8c5",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-musical.yaml": {
+      "sha256": "dff7e9290852baac9ccda2f6ca910bc31757f85138a5914658fca3e4f4540363",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit reviewed shared Strategy wording now follows the displayed Foundation/All/Skip and saved inactive Legacy trig setting. Four exact native focused captures qualify their covered examples only; broader manual build and lesson review remain pending."
+    },
+    "manual/features/reference-options.yaml": {
+      "sha256": "85f3f0a06727e60d9bf856091567bd6cc940db8c1ab4f724cbf03134124d9d39",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-pattern.yaml": {
+      "sha256": "f417b2010a2e7deac15168610ee874d41dae7825689f96bf63ee7350ce5146f9",
+      "meaning": "Current YAML intended manual explicitly states E3 saves Tresillo amount immediately, K3 has no apply action, grid re-prime updates preview and grid painting commits pattern; current historical bindings preserved separately. P02 fresh capture remains pending. Editorial precision: E1 opens Trig tasks, E2 selects Options, K3 opens page; page-local K3 has no apply action."
+    },
+    "manual/features/reference-scale.yaml": {
+      "sha256": "68f5389591462169e8b448e900c7f9e07317fbf4e7d6de6fc66077229bfa98d3",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: pressing grid transport cancels the unapplied Scale draft, matching ordinary production press/save behavior. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate."
+    },
+    "manual/features/reference-song.yaml": {
+      "sha256": "93b05f827f6a732a22bd22fefe0fafc68d43c7070f80640d1954bf7cb76397eb",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/reference-workflow.yaml": {
+      "sha256": "a0af2f5068e354dbe3064b1152d5e4ae5578466ec06d305142ca7c4c60be3b28",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: one-bar Rate /1 and baseline-first C listening before the D-major pending draft; final Apply and exact intended MIDI comparisons remain intact. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate. Explicit authored Song-length correction: use the public grid Global length gesture to persist Length16 for each section before listening to the unchanged two one-bar sections. This is a corrected teaching procedure, not a post-build metadata exception. Explicit reviewed shared Strategy wording now follows the displayed Foundation/All/Skip and saved inactive Legacy trig setting. Four exact native focused captures qualify their covered examples only; broader manual build and lesson review remain pending."
+    },
+    "manual/features/scenes-doctor-scenes.yaml": {
+      "sha256": "09bab660df9b7b98bafaa03f7a432dc85602d1c16f7ea0e3ab0b85ced1117359",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-player-routes.yaml": {
+      "sha256": "4d091759c5e5eec9d7fe2a258686619e6674b46e57aa80457a62de7f24c94fba",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-device-scenes.yaml": {
+      "sha256": "55287f34c2c71bc83a673315f66e84a1ef0330622c246b1a9a57e73a30d22557",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-lock-scenes.yaml": {
+      "sha256": "d461fffea62843e1830a4e1f055ce6a8e6725f706521c83d452a9b544edd0438",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-modulation-scenes.yaml": {
+      "sha256": "78d23ca37a52e428b14ed3f17e36f2e6bdc50b6d0fc187eac48b710776686b41",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-musical-scenes.yaml": {
+      "sha256": "04bbf4782e05d26f1cb89a5d414471a57cd091aaaacd83102dffbbe910d4ef00",
+      "meaning": "Exact source-reconstructed frozen-generator bytes from independently audited historical successful controlled partial stage (18 frames) in failed whole build b2efd3; preserved old/new YAML, report, stage, source snapshots and failed manifest. Current-source qualification fails at subsequently changed cases.py; full manual remains incomplete and must receive fresh full controlled generation. Bounded review receipt /home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/bounded-review-receipt.json SHA256 14156022a10daf6e206d619054f910083b79df35754b9fab00317abe2ac16a39."
+    },
+    "manual/features/scenes-reference-navigation-scenes.yaml": {
+      "sha256": "286fcb39d96d00ff3eece722032974281e53ff201204632d3c72c737aca55d02",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-nested-scenes.yaml": {
+      "sha256": "2fe0f2b128916c24effc28890c21a50e3b30b560b9504e707a7dad3e2d9c895d",
+      "meaning": "Exact source-reconstructed frozen-generator bytes from independently audited historical successful controlled partial stage (11 frames) in failed whole build b2efd3; preserved old/new YAML, report, stage, source snapshots and failed manifest. Current-source qualification fails at subsequently changed cases.py; full manual remains incomplete and must receive fresh full controlled generation. Bounded review receipt /home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/bounded-review-receipt.json SHA256 14156022a10daf6e206d619054f910083b79df35754b9fab00317abe2ac16a39."
+    },
+    "manual/features/scenes-reference-option-scenes.yaml": {
+      "sha256": "ec3ad6994e9fa60bda204360e71d96e5a28a2b9d962c0fdd3e7b14f5d08d7da3",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-parameter-scenes.yaml": {
+      "sha256": "602bb4059b30757dceb2f585e38d7b321a39c0850d233d4106b0a44e19871579",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-polymeter-scenes.yaml": {
+      "sha256": "edf572eb89be95baf6ddb4403ef1492895217aa110ac8e656b89b806faed926e",
+      "meaning": "Exact pinned-generator reproduction and strict immutable-source native/semantic audit (1 frames) of historical successful controlled partial stage from failed whole build c267aa2; preserved before/after YAML, stage/native report, source snapshots and failed manifest51904c9d. Current audit rejects subsequently edited live_ui_feedback.py; no current/full qualification claimed. Bounded review receipt /home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/bounded-review-receipt.json SHA256 e8cd0afa8f186d8fdb74266afb16be717e5110f0fdf33edc5afa5bd48f423ad2."
+    },
+    "manual/features/scenes-reference-reason-swing-scenes.yaml": {
+      "sha256": "9c206523acbf747168bec38015827bbe2b8fdc92266fae47eb8485c4a2db5249",
+      "meaning": "Exact pinned-generator reproduction and strict immutable-source native/semantic audit (6 frames) of historical successful controlled partial stage from failed whole build c267aa2; preserved before/after YAML, stage/native report, source snapshots and failed manifest51904c9d. Current audit rejects subsequently edited live_ui_feedback.py; no current/full qualification claimed. Bounded review receipt /home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/bounded-review-receipt.json SHA256 e8cd0afa8f186d8fdb74266afb16be717e5110f0fdf33edc5afa5bd48f423ad2."
+    },
+    "manual/features/scenes-reference-record-scenes.yaml": {
+      "sha256": "60675dfec90321f9699510bd5f5aab0b43299325c796f6b5bad8d00d5a33f517",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-remaining-scenes.yaml": {
+      "sha256": "8c7ecaa953f52f9c5a79a0fdf4e1eef0234f222af2514320c077225aacef4a94",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-scenes.yaml": {
+      "sha256": "039b06d5a7ee9b3cea172782781257da6be7bd0f9d7f9592d99c617378e9f1fc",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-stop-scenes.yaml": {
+      "sha256": "b5c29d403a37963f3ce6dd6d4da7b6acd17ec079a789b993b26595b7f36ed496",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-vertical-list-scenes.yaml": {
+      "sha256": "49d96e0793e08b323b9f314bc559b4b3d5734654d61ad83b1485a82b39f69c85",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/scenes-reference-workflow-scenes.yaml": {
+      "sha256": "a2f58bc29bd6eb9624b33ac7b1bb73ba07c4f6042bc6c1a2a7867e09ede20b30",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified."
+    },
+    "manual/features/tutorials.yaml": {
+      "sha256": "4a900da83f50145373889b69174ff352fc8652d703b77e5f7cf9bb7bb79ab343",
+      "meaning": "Current user-authoritative authored YAML feature/reference prose and explicitly bound scenes. Documentation authority is separate from still-pending native acceptance/capture freshness; this hash does not declare all assertions qualified. Explicit authored correction: set Clock Rate /1 for the already-intended one-bar16step lesson; no musical period or stage identity change. See explicit archived review chain manual/evidence/authored-source-review-20261004-rate-voice-harmony/review-preparation.json. The whole continuous course is now independently qualified in both experimental runtime lanes; broader manual publication and editorial acceptance remain separate."
+    }
+  },
+  "registrations": [
+    {
+      "id": "LEGACY.m_grid.01",
+      "old_line": 98,
+      "line": 98,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.m_grid.02",
+      "old_line": 133,
+      "line": 133,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.m_grid.03",
+      "old_line": 170,
+      "line": 170,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.m_grid.04",
+      "old_line": 185,
+      "line": 185,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.01",
+      "old_line": 151,
+      "line": 169,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.02",
+      "old_line": 164,
+      "line": 182,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.03",
+      "old_line": 176,
+      "line": 194,
+      "kind": "press:register_post("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.04",
+      "old_line": 187,
+      "line": 205,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.05",
+      "old_line": 221,
+      "line": 239,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.06",
+      "old_line": 241,
+      "line": 259,
+      "kind": "press:register_dual("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.07",
+      "old_line": 309,
+      "line": 327,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.08",
+      "old_line": 331,
+      "line": 349,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.09",
+      "old_line": 367,
+      "line": 362,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.10",
+      "old_line": 407,
+      "line": 406,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.11",
+      "old_line": 447,
+      "line": 450,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.12",
+      "old_line": 485,
+      "line": 492,
+      "kind": "press:register_post("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.13",
+      "old_line": 494,
+      "line": 501,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.14",
+      "old_line": 507,
+      "line": 514,
+      "kind": "press:register_dual("
+    },
+    {
+      "id": "LEGACY.channel_edit_page.15",
+      "old_line": 543,
+      "line": 562,
+      "kind": "press:register_pre("
+    },
+    {
+      "id": "LEGACY.note_edit_page.01",
+      "old_line": 86,
+      "line": 89,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.02",
+      "old_line": 131,
+      "line": 134,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.note_edit_page.03",
+      "old_line": 141,
+      "line": 144,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.04",
+      "old_line": 156,
+      "line": 159,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.05",
+      "old_line": 171,
+      "line": 174,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.06",
+      "old_line": 186,
+      "line": 189,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.07",
+      "old_line": 200,
+      "line": 203,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.08",
+      "old_line": 221,
+      "line": 224,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.09",
+      "old_line": 236,
+      "line": 239,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.note_edit_page.10",
+      "old_line": 257,
+      "line": 260,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.scale_edit_page.01",
+      "old_line": 60,
+      "line": 60,
+      "kind": "press:register_dual("
+    },
+    {
+      "id": "LEGACY.scale_edit_page.02",
+      "old_line": 96,
+      "line": 96,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.scale_edit_page.03",
+      "old_line": 121,
+      "line": 121,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.scale_edit_page.04",
+      "old_line": 137,
+      "line": 137,
+      "kind": "press:register_pre("
+    },
+    {
+      "id": "LEGACY.scale_edit_page.05",
+      "old_line": 145,
+      "line": 145,
+      "kind": "press:register_post("
+    },
+    {
+      "id": "LEGACY.scale_edit_page.06",
+      "old_line": 153,
+      "line": 153,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.song_edit_page.01",
+      "old_line": 61,
+      "line": 61,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.song_edit_page.02",
+      "old_line": 135,
+      "line": 135,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.song_edit_page.03",
+      "old_line": 158,
+      "line": 158,
+      "kind": "press:register_dual("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.01",
+      "old_line": 375,
+      "line": 397,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.02",
+      "old_line": 386,
+      "line": 408,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.03",
+      "old_line": 397,
+      "line": 419,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.04",
+      "old_line": 412,
+      "line": 434,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.05",
+      "old_line": 427,
+      "line": 449,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.06",
+      "old_line": 442,
+      "line": 459,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.07",
+      "old_line": 453,
+      "line": 470,
+      "kind": "press:register_pre("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.08",
+      "old_line": 463,
+      "line": 480,
+      "kind": "press:register_post("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.09",
+      "old_line": 471,
+      "line": 488,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.10",
+      "old_line": 493,
+      "line": 510,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.11",
+      "old_line": 558,
+      "line": 575,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.12",
+      "old_line": 579,
+      "line": 596,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.13",
+      "old_line": 604,
+      "line": 621,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.14",
+      "old_line": 628,
+      "line": 645,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.15",
+      "old_line": 653,
+      "line": 670,
+      "kind": "press:register_dual("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.16",
+      "old_line": 668,
+      "line": 685,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.trigger_edit_page.17",
+      "old_line": 676,
+      "line": 693,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.01",
+      "old_line": 114,
+      "line": 117,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.02",
+      "old_line": 153,
+      "line": 156,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.03",
+      "old_line": 163,
+      "line": 166,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.04",
+      "old_line": 178,
+      "line": 181,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.05",
+      "old_line": 193,
+      "line": 196,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.06",
+      "old_line": 208,
+      "line": 211,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.07",
+      "old_line": 222,
+      "line": 225,
+      "kind": "press:register("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.08",
+      "old_line": 242,
+      "line": 245,
+      "kind": "press:register_long("
+    },
+    {
+      "id": "LEGACY.velocity_edit_page.09",
+      "old_line": 264,
+      "line": 267,
+      "kind": "press:register("
+    }
+  ],
+  "branches": [
+    {
+      "id": "m_grid.01.channel_page",
+      "old_lines": "106-128",
+      "lines": "106-128",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.01.scale_page",
+      "old_lines": "106-128",
+      "lines": "106-128",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.01.song_page",
+      "old_lines": "106-128",
+      "lines": "106-128",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.01.pattern_trig_to_note",
+      "old_lines": "110-112",
+      "lines": "110-112",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.01.pattern_note_to_velocity",
+      "old_lines": "113-114",
+      "lines": "113-114",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.01.pattern_velocity_to_trig",
+      "old_lines": "115-116",
+      "lines": "115-116",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.01.pattern_other_to_trig",
+      "old_lines": "117-118",
+      "lines": "117-118",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.02.start",
+      "old_lines": "138-145",
+      "lines": "138-145",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.02.start_with_doctor_open",
+      "old_lines": "143-145",
+      "lines": "143-145",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.02.stop",
+      "old_lines": "146-152",
+      "lines": "146-152",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.02.stop_blocked_by_safety",
+      "old_lines": "147-148",
+      "lines": "147-148",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.02.record_off",
+      "old_lines": "157-160",
+      "lines": "157-160",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.02.record_on",
+      "old_lines": "161-164",
+      "lines": "161-164",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.03.long_stop_with_safety",
+      "old_lines": "174-180",
+      "lines": "174-180",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.03.long_play_without_safety",
+      "old_lines": "174-175",
+      "lines": "174-175",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.04.panic",
+      "old_lines": "188-196",
+      "lines": "188-196",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "m_grid.04.long_current_page_button",
+      "old_lines": "193-193",
+      "lines": "193-193",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.01.leave_feature_editor",
+      "old_lines": "154-155",
+      "lines": "172-173",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.01.k1_toggle_trig_mask",
+      "old_lines": "156-160",
+      "lines": "174-178",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.01.plain_tap_no_feature",
+      "old_lines": "154-155",
+      "lines": "172-173",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.02.k1_long_clear_trig_mask",
+      "old_lines": "167-172",
+      "lines": "185-190",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.02.plain_long_step",
+      "old_lines": "167-168",
+      "lines": "185-186",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.03.step_release_records_locks",
+      "old_lines": "179-184",
+      "lines": "197-202",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.04.k1_unmute",
+      "old_lines": "193-197",
+      "lines": "211-215",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.04.k1_mute",
+      "old_lines": "198-204",
+      "lines": "216-222",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.04.select_channel",
+      "old_lines": "205-217",
+      "lines": "223-235",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.05.long_unmute",
+      "old_lines": "227-230",
+      "lines": "245-248",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.05.long_mute",
+      "old_lines": "231-237",
+      "lines": "249-255",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.range_set",
+      "old_lines": "246-251",
+      "lines": "264-269",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.range_rejected",
+      "old_lines": "246-248",
+      "lines": "264-266",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.octave_lock_set",
+      "old_lines": "253-266",
+      "lines": "271-284",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.octave_lock_clear",
+      "old_lines": "258-262",
+      "lines": "276-280",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.scale_lock_set",
+      "old_lines": "268-278",
+      "lines": "286-296",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.scale_lock_clear",
+      "old_lines": "273-274",
+      "lines": "291-292",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.k1_dual_mute_toggle",
+      "old_lines": "280-304",
+      "lines": "298-322",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.06.two_channels_no_k1",
+      "old_lines": "280-285",
+      "lines": "298-303",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.07.pattern_added",
+      "old_lines": "312-319",
+      "lines": "330-337",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.07.pattern_removed",
+      "old_lines": "320-326",
+      "lines": "338-344",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.08.trig_merge_skip",
+      "old_lines": "339-345",
+      "lines": "355-357",
+      "review": "explicit reviewed behavior replacement: Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.08.trig_merge_only",
+      "old_lines": "346-351",
+      "lines": "355-357",
+      "review": "explicit reviewed behavior replacement: Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.08.trig_merge_all",
+      "old_lines": "352-362",
+      "lines": "355-357",
+      "review": "explicit reviewed behavior replacement: Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.09.note_merge_average",
+      "old_lines": "376-380",
+      "lines": "374-378",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.09.note_merge_up",
+      "old_lines": "381-385",
+      "lines": "379-383",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.09.note_merge_down",
+      "old_lines": "386-390",
+      "lines": "384-388",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.09.note_merge_pattern_wraps_to_average",
+      "old_lines": "391-402",
+      "lines": "389-401",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.10.velocity_merge_average",
+      "old_lines": "416-420",
+      "lines": "418-422",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.10.velocity_merge_up",
+      "old_lines": "421-425",
+      "lines": "423-427",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.10.velocity_merge_down",
+      "old_lines": "426-430",
+      "lines": "428-432",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.10.velocity_merge_pattern_wraps_to_average",
+      "old_lines": "431-441",
+      "lines": "433-444",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.11.length_merge_average",
+      "old_lines": "456-460",
+      "lines": "462-466",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.11.length_merge_up",
+      "old_lines": "461-465",
+      "lines": "467-471",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.11.length_merge_down",
+      "old_lines": "466-470",
+      "lines": "472-476",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.11.length_merge_pattern_wraps_to_average",
+      "old_lines": "471-480",
+      "lines": "477-486",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.12.trig_merge_release_hides_gesture",
+      "old_lines": "488-490",
+      "lines": "495-497",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.12.note_merge_release_hides_gesture",
+      "old_lines": "488-490",
+      "lines": "495-497",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.12.velocity_length_merge_release_hides_gesture",
+      "old_lines": "488-490",
+      "lines": "495-497",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.12.release_after_pattern_priority",
+      "old_lines": "488-490",
+      "lines": "495-497",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.13.channel_octave",
+      "old_lines": "497-504",
+      "lines": "504-511",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.14.note_pattern_priority",
+      "old_lines": "513-521",
+      "lines": "520-532",
+      "review": "explicit reviewed behavior replacement: Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.14.velocity_pattern_priority",
+      "old_lines": "522-530",
+      "lines": "533-545",
+      "review": "explicit reviewed behavior replacement: Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.14.length_pattern_priority",
+      "old_lines": "531-539",
+      "lines": "546-558",
+      "review": "explicit reviewed behavior replacement: Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.14.trig_merge_plus_pattern_inert",
+      "old_lines": "510-512",
+      "lines": "517-519",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "channel_edit_page.15.step_hold_shows_locks",
+      "old_lines": "546-550",
+      "lines": "565-569",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.01.k1_row1_select_pattern",
+      "old_lines": "89-93",
+      "lines": "92-96",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.01.set_note",
+      "old_lines": "95-126",
+      "lines": "98-129",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.01.k1_set_note_all_banks",
+      "old_lines": "113-124",
+      "lines": "116-127",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.02.long_row1_select_pattern",
+      "old_lines": "134-138",
+      "lines": "137-141",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.03.bank_1",
+      "old_lines": "144-152",
+      "lines": "147-155",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.04.bank_2",
+      "old_lines": "159-167",
+      "lines": "162-170",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.05.bank_3",
+      "old_lines": "174-182",
+      "lines": "177-185",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.06.bank_4",
+      "old_lines": "189-197",
+      "lines": "192-200",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.07.note_view_down",
+      "old_lines": "203-217",
+      "lines": "206-220",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.07.note_view_down_at_limit",
+      "old_lines": "203-217",
+      "lines": "206-220",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.08.note_view_centre",
+      "old_lines": "224-232",
+      "lines": "227-235",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.09.note_view_up",
+      "old_lines": "239-253",
+      "lines": "242-256",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.09.note_view_up_at_limit",
+      "old_lines": "239-253",
+      "lines": "242-256",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.10.long_row1_select_pattern",
+      "old_lines": "260-263",
+      "lines": "263-266",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.10.long_view_top",
+      "old_lines": "264-274",
+      "lines": "267-277",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.10.long_view_root",
+      "old_lines": "275-279",
+      "lines": "278-282",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "note_edit_page.10.long_view_bottom",
+      "old_lines": "280-290",
+      "lines": "283-293",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.01.range_set",
+      "old_lines": "64-70",
+      "lines": "64-70",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.01.range_rejected",
+      "old_lines": "64-67",
+      "lines": "64-67",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.01.scale_lock_set",
+      "old_lines": "72-82",
+      "lines": "72-82",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.01.scale_lock_clear",
+      "old_lines": "76-77",
+      "lines": "76-77",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.01.transpose_lock_set",
+      "old_lines": "83-93",
+      "lines": "83-93",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.01.transpose_lock_clear",
+      "old_lines": "87-88",
+      "lines": "87-88",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.02.k1_select_slot_only",
+      "old_lines": "100-102",
+      "lines": "100-102",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.02.set_global_scale",
+      "old_lines": "103-116",
+      "lines": "103-116",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.02.global_scale_off",
+      "old_lines": "111-116",
+      "lines": "111-116",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.03.long_clear_selected",
+      "old_lines": "125-132",
+      "lines": "125-132",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.03.long_select_slot",
+      "old_lines": "130-132",
+      "lines": "130-132",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.04.step_hold_shows_locks",
+      "old_lines": "140-142",
+      "lines": "140-142",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.05.step_release_restores_faders",
+      "old_lines": "148-150",
+      "lines": "148-150",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "scale_edit_page.06.transpose",
+      "old_lines": "156-161",
+      "lines": "156-161",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "song_edit_page.01.queue_slot_while_playing",
+      "old_lines": "118-124",
+      "lines": "118-124",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "song_edit_page.01.select_slot_stopped",
+      "old_lines": "125-131",
+      "lines": "125-131",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "song_edit_page.01.select_slot_stopped_elektron_pc",
+      "old_lines": "126-128",
+      "lines": "126-128",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "song_edit_page.02.global_length_queued",
+      "old_lines": "143-149",
+      "lines": "143-149",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "song_edit_page.02.global_length_immediate",
+      "old_lines": "150-154",
+      "lines": "150-154",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "song_edit_page.03.slot_copy_press_order",
+      "old_lines": "163-174",
+      "lines": "163-174",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "song_edit_page.03.non_slot_pair_refresh_only",
+      "old_lines": "163-175",
+      "lines": "163-175",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.01.select_pattern",
+      "old_lines": "378-382",
+      "lines": "400-404",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.01.select_pattern_discards_stale_doctor_preview",
+      "old_lines": "381-381",
+      "lines": "403-403",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.02.toggle_trig",
+      "old_lines": "389-394",
+      "lines": "411-416",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.03.pattern1_fill_euclid",
+      "old_lines": "400-405",
+      "lines": "422-427",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.03.pattern1",
+      "old_lines": "400-407",
+      "lines": "422-429",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.03.pattern1_inert_doctor",
+      "old_lines": "401-401",
+      "lines": "423-423",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.04.pattern2_length_euclid",
+      "old_lines": "415-420",
+      "lines": "437-442",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.04.pattern2",
+      "old_lines": "415-422",
+      "lines": "437-444",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.04.pattern2_inert_doctor",
+      "old_lines": "416-416",
+      "lines": "438-438",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.05.select_algorithm",
+      "old_lines": "430-438",
+      "lines": "455-455",
+      "review": "callback invokes extracted helper with original guarded Doctor enter/leave actions",
+      "implementation_lines": "258-259"
+    },
+    {
+      "id": "trigger_edit_page.05.enter_doctor",
+      "old_lines": "434-434",
+      "lines": "455-455",
+      "review": "callback invokes extracted helper with original guarded Doctor enter/leave actions",
+      "implementation_lines": "258-259"
+    },
+    {
+      "id": "trigger_edit_page.05.leave_doctor",
+      "old_lines": "435-435",
+      "lines": "455-455",
+      "review": "callback invokes extracted helper with original guarded Doctor enter/leave actions",
+      "implementation_lines": "258-259"
+    },
+    {
+      "id": "trigger_edit_page.06.select_bank_mask",
+      "old_lines": "446-449",
+      "lines": "463-466",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.06.bank_mask_inert",
+      "old_lines": "446-446",
+      "lines": "463-463",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.07.record_start_capture",
+      "old_lines": "456-458",
+      "lines": "473-475",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.07.record_finish",
+      "old_lines": "456-458",
+      "lines": "473-475",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.07.record_cancel_prompt",
+      "old_lines": "456-458",
+      "lines": "473-475",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.07.record_blocked_playing",
+      "old_lines": "456-458",
+      "lines": "473-475",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.07.record_blocked_setup",
+      "old_lines": "456-458",
+      "lines": "473-475",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.08.record_release_consumed",
+      "old_lines": "466-467",
+      "lines": "483-484",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.09.select_lane",
+      "old_lines": "479-484",
+      "lines": "496-501",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.09.select_lane_repreviews_paint",
+      "old_lines": "485-488",
+      "lines": "502-505",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.09.non_lane_cell_inert",
+      "old_lines": "479-480",
+      "lines": "496-497",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.10.arm_paint",
+      "old_lines": "537-544",
+      "lines": "554-561",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.10.commit_paint",
+      "old_lines": "545-553",
+      "lines": "562-570",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.10.doctor_arm_paint",
+      "old_lines": "500-513",
+      "lines": "517-530",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.10.doctor_arm_paint_unavailable",
+      "old_lines": "501-505",
+      "lines": "518-522",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.10.doctor_commit_paint",
+      "old_lines": "515-535",
+      "lines": "532-552",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.10.doctor_commit_failed",
+      "old_lines": "522-525",
+      "lines": "539-542",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.11.cancel_paint",
+      "old_lines": "564-572",
+      "lines": "581-589",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.11.doctor_cancel_paint",
+      "old_lines": "564-572",
+      "lines": "581-589",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.11.cancel_idle",
+      "old_lines": "573-575",
+      "lines": "590-592",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.12.doctor_step_left",
+      "old_lines": "588-590",
+      "lines": "605-607",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.12.shift_left",
+      "old_lines": "592-597",
+      "lines": "609-614",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.12.left_idle",
+      "old_lines": "598-600",
+      "lines": "615-617",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.13.doctor_phrase_start",
+      "old_lines": "613-615",
+      "lines": "630-632",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.13.shift_reset",
+      "old_lines": "617-621",
+      "lines": "634-638",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.13.centre_idle",
+      "old_lines": "622-624",
+      "lines": "639-641",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.14.doctor_step_right",
+      "old_lines": "637-639",
+      "lines": "654-656",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.14.shift_right",
+      "old_lines": "641-646",
+      "lines": "658-663",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.14.right_idle",
+      "old_lines": "647-649",
+      "lines": "664-666",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.15.length_forward",
+      "old_lines": "656-662",
+      "lines": "673-679",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.15.length_wraps",
+      "old_lines": "656-662",
+      "lines": "673-679",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.15.held_step_without_trig",
+      "old_lines": "658-661",
+      "lines": "675-678",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.16.doctor_previous_phrase",
+      "old_lines": "671-672",
+      "lines": "688-689",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.16.doctor_next_phrase",
+      "old_lines": "671-673",
+      "lines": "688-690",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.16.long_shift_button_non_doctor",
+      "old_lines": "671-671",
+      "lines": "688-688",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.17.reset_length",
+      "old_lines": "679-685",
+      "lines": "696-702",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "trigger_edit_page.17.reset_length_no_trig",
+      "old_lines": "679-685",
+      "lines": "696-702",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.01.k1_row1_select_pattern",
+      "old_lines": "117-120",
+      "lines": "120-123",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.01.set_velocity",
+      "old_lines": "122-147",
+      "lines": "125-150",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.01.k1_set_velocity_all_banks",
+      "old_lines": "134-145",
+      "lines": "137-148",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.02.long_row1_select_pattern",
+      "old_lines": "156-160",
+      "lines": "159-163",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.03.bank_1",
+      "old_lines": "166-174",
+      "lines": "169-177",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.04.bank_2",
+      "old_lines": "181-189",
+      "lines": "184-192",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.05.bank_3",
+      "old_lines": "196-204",
+      "lines": "199-207",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.06.bank_4",
+      "old_lines": "211-219",
+      "lines": "214-222",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.07.velocity_view_down",
+      "old_lines": "225-239",
+      "lines": "228-242",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.07.velocity_view_down_at_limit",
+      "old_lines": "225-239",
+      "lines": "228-242",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.08.long_view_high",
+      "old_lines": "245-252",
+      "lines": "248-255",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.08.long_view_low",
+      "old_lines": "253-260",
+      "lines": "256-263",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.09.velocity_view_up",
+      "old_lines": "267-281",
+      "lines": "270-284",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    },
+    {
+      "id": "velocity_edit_page.09.velocity_view_up_at_limit",
+      "old_lines": "267-281",
+      "lines": "270-284",
+      "review": "original source lines retained in order; only comments or explicitly reviewed shape-in-use tooltip insertion",
+      "implementation_lines": null
+    }
+  ],
+  "controllers": [
+    {
+      "id": "lib/m_grid.lua::m_grid.get_pressed_keys",
+      "old_line": 62,
+      "line": 62
+    },
+    {
+      "id": "lib/m_grid.lua::register_draws",
+      "old_line": 66,
+      "line": 66
+    },
+    {
+      "id": "lib/m_grid.lua::register_press",
+      "old_line": 88,
+      "line": 88
+    },
+    {
+      "id": "lib/m_grid.lua::g.key",
+      "old_line": 239,
+      "line": 239
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.get_swing_shuffle_type_selector_value",
+      "old_line": 5,
+      "line": 17
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.get_shuffle_feel_selector_value",
+      "old_line": 9,
+      "line": 21
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.get_shuffle_basis_selector_value",
+      "old_line": 13,
+      "line": 25
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.set_swing_shuffle_type_selector_value",
+      "old_line": 17,
+      "line": 29
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.set_shuffle_feel_selector_value",
+      "old_line": 21,
+      "line": 33
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.set_shuffle_basis_selector_value",
+      "old_line": 25,
+      "line": 37
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.handle_increment",
+      "old_line": 227,
+      "line": 239
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_clock_controls.lua::controller.handle_decrement",
+      "old_line": 265,
+      "line": 277
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_history.lua::refresh_selected_channel",
+      "old_line": 14,
+      "line": 22
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_history.lua::history.handle_page_change",
+      "old_line": 48,
+      "line": 56
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::held_step_keys",
+      "old_line": 5,
+      "line": 23
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_trig_mask_change",
+      "old_line": 14,
+      "line": 32
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_note_mask_change",
+      "old_line": 66,
+      "line": 84
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_velocity_mask_change",
+      "old_line": 119,
+      "line": 137
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_length_mask_change",
+      "old_line": 171,
+      "line": 189
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_chord_mask_one_change",
+      "old_line": 246,
+      "line": 264
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_chord_mask_two_change",
+      "old_line": 298,
+      "line": 316
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_chord_mask_three_change",
+      "old_line": 349,
+      "line": 367
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_chord_mask_four_change",
+      "old_line": 400,
+      "line": 418
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_masks.lua::handlers.handle_mask_page_change",
+      "old_line": 453,
+      "line": 471
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::grid_key_is_held",
+      "old_line": 17,
+      "line": 17
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::cancel_feature_drafts_for_legacy_workspace",
+      "old_line": 31,
+      "line": 31
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.set_device_map_selector",
+      "old_line": 37,
+      "line": 37
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.enc",
+      "old_line": 45,
+      "line": 45
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.key",
+      "old_line": 105,
+      "line": 105
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.handle_encoder_one_positive",
+      "old_line": 123,
+      "line": 123
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.handle_encoder_one_negative",
+      "old_line": 133,
+      "line": 133
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.handle_key_two_pressed",
+      "old_line": 143,
+      "line": 143
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.handle_key_three_pressed",
+      "old_line": 196,
+      "line": 196
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_page",
+      "old_line": 226,
+      "line": 226
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.get_selected_page",
+      "old_line": 232,
+      "line": 232
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_mask_page",
+      "old_line": 236,
+      "line": 236
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_trig_page",
+      "old_line": 244,
+      "line": 244
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_memory_page",
+      "old_line": 251,
+      "line": 251
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_clock_mods_page",
+      "old_line": 258,
+      "line": 258
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_midi_config_page",
+      "old_line": 270,
+      "line": 270
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_note_dashboard_page",
+      "old_line": 277,
+      "line": 277
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_merge_shape_page",
+      "old_line": 283,
+      "line": 283
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_harmony_page",
+      "old_line": 290,
+      "line": 290
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.leave_feature_editor_for_grid",
+      "old_line": 297,
+      "line": 297
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_scales_quantizer_page",
+      "old_line": 315,
+      "line": 315
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_navigation.lua::controller.select_channel_page_by_index",
+      "old_line": 321,
+      "line": 321
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page.lua::channel_edit_page.register_draws",
+      "old_line": 91,
+      "line": 109
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page.lua::channel_edit_page.register_press",
+      "old_line": 149,
+      "line": 167
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.get_swing_shuffle_type_selector_value",
+      "old_line": 40,
+      "line": 40
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.get_shuffle_feel_selector_value",
+      "old_line": 44,
+      "line": 44
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.get_shuffle_basis_selector_value",
+      "old_line": 48,
+      "line": 48
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.set_swing_shuffle_type_selector_value",
+      "old_line": 52,
+      "line": 52
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.set_shuffle_feel_selector_value",
+      "old_line": 56,
+      "line": 56
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.set_shuffle_basis_selector_value",
+      "old_line": 60,
+      "line": 60
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::configure_note_value_selector",
+      "old_line": 180,
+      "line": 180
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::configure_note_page_velocity_length_value_selector",
+      "old_line": 193,
+      "line": 193
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::configure_mask_length_selector",
+      "old_line": 199,
+      "line": 199
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::configure_swing_selector",
+      "old_line": 205,
+      "line": 205
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::configure_chord_value_selector",
+      "old_line": 211,
+      "line": 211
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::configure_note_trig_selector",
+      "old_line": 221,
+      "line": 221
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.register_ui_draws",
+      "old_line": 447,
+      "line": 447
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_trig_lock_param_change_by_direction",
+      "old_line": 501,
+      "line": 501
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.enc",
+      "old_line": 507,
+      "line": 507
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.key",
+      "old_line": 510,
+      "line": 510
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.refresh_device_selector",
+      "old_line": 543,
+      "line": 543
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_memory_navigator",
+      "old_line": 569,
+      "line": 569
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_trig_mask_change",
+      "old_line": 575,
+      "line": 575
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_note_mask_change",
+      "old_line": 579,
+      "line": 579
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_velocity_mask_change",
+      "old_line": 583,
+      "line": 583
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_length_mask_change",
+      "old_line": 587,
+      "line": 587
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_chord_mask_one_change",
+      "old_line": 591,
+      "line": 591
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_chord_mask_two_change",
+      "old_line": 595,
+      "line": 595
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_chord_mask_three_change",
+      "old_line": 599,
+      "line": 599
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_chord_mask_four_change",
+      "old_line": 603,
+      "line": 603
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_mask_page_change",
+      "old_line": 607,
+      "line": 607
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_memory_page_change",
+      "old_line": 611,
+      "line": 611
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_clock_mods_page_increment",
+      "old_line": 616,
+      "line": 616
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_clock_mods_page_decrement",
+      "old_line": 619,
+      "line": 619
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_midi_config_page_increment",
+      "old_line": 623,
+      "line": 623
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_midi_config_page_decrement",
+      "old_line": 627,
+      "line": 627
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_encoder_one_positive",
+      "old_line": 631,
+      "line": 631
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_encoder_one_negative",
+      "old_line": 635,
+      "line": 635
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_key_two_pressed",
+      "old_line": 639,
+      "line": 639
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.handle_key_three_pressed",
+      "old_line": 643,
+      "line": 643
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_page",
+      "old_line": 647,
+      "line": 647
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.get_selected_page",
+      "old_line": 651,
+      "line": 651
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_mask_page",
+      "old_line": 655,
+      "line": 655
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_trig_page",
+      "old_line": 659,
+      "line": 659
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_memory_page",
+      "old_line": 663,
+      "line": 663
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_clock_mods_page",
+      "old_line": 667,
+      "line": 667
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_midi_config_page",
+      "old_line": 671,
+      "line": 671
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_note_dashboard_page",
+      "old_line": 675,
+      "line": 675
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_merge_shape_page",
+      "old_line": 679,
+      "line": 679
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_harmony_page",
+      "old_line": 683,
+      "line": 683
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.leave_feature_editor_for_grid",
+      "old_line": 687,
+      "line": 687
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_scales_quantizer_page",
+      "old_line": 699,
+      "line": 699
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui.lua::channel_edit_page_ui.select_channel_page_by_index",
+      "old_line": 703,
+      "line": 703
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua::get_swing_shuffle_type_selector_value",
+      "old_line": 5,
+      "line": 5
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua::channel_edit_page_ui_handlers.handle_encoder_two_positive",
+      "old_line": 9,
+      "line": 9
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua::channel_edit_page_ui_handlers.handle_encoder_two_negative",
+      "old_line": 66,
+      "line": 66
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua::channel_edit_page_ui_handlers.handle_trig_locks_page_change",
+      "old_line": 133,
+      "line": 133
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_parameters.lua::get_value_using_handler_param",
+      "old_line": 5,
+      "line": 21
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_parameters.lua::controller.handle_trig_lock_param_change_by_direction",
+      "old_line": 108,
+      "line": 124
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_parameters.lua::controller.set_device_map_selector",
+      "old_line": 267,
+      "line": 283
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_parameters.lua::controller.handle_assignment_page_change",
+      "old_line": 303,
+      "line": 326
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_parameters.lua::controller.refresh_device_selector",
+      "old_line": 326,
+      "line": 349
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_parameters.lua::controller.handle_midi_config_page_increment",
+      "old_line": 346,
+      "line": 369
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_edit_parameters.lua::controller.handle_midi_config_page_decrement",
+      "old_line": 372,
+      "line": 395
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::degree_source_key",
+      "old_line": 87,
+      "line": 97
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::selected_role",
+      "old_line": 173,
+      "line": 281
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::selected_bass",
+      "old_line": 182,
+      "line": 290
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::select_ensemble_group",
+      "old_line": 183,
+      "line": 291
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::self:enc",
+      "old_line": 393,
+      "line": 525
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::self:apply",
+      "old_line": 398,
+      "line": 533
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::self:key",
+      "old_line": 432,
+      "line": 581
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::self:encoder_one",
+      "old_line": 436,
+      "line": 585
+    },
+    {
+      "id": "lib/pages/channel_edit_page/channel_feature_editor.lua::self:cancel_for_grid",
+      "old_line": 440,
+      "line": 589
+    },
+    {
+      "id": "lib/pages/note_edit_page/note_edit_page.lua::note_edit_page.register_draws",
+      "old_line": 30,
+      "line": 33
+    },
+    {
+      "id": "lib/pages/note_edit_page/note_edit_page.lua::note_edit_page.register_press",
+      "old_line": 83,
+      "line": 86
+    },
+    {
+      "id": "lib/pages/note_edit_page/note_edit_page_ui.lua::note_edit_page_ui.register_ui_draws",
+      "old_line": 17,
+      "line": 17
+    },
+    {
+      "id": "lib/pages/note_edit_page/note_edit_page_ui.lua::note_edit_page_ui.enc",
+      "old_line": 29,
+      "line": 29
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page.lua::scale_edit_page.register_draws",
+      "old_line": 37,
+      "line": 37
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page.lua::scale_edit_page.register_press",
+      "old_line": 58,
+      "line": 58
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.register_ui_draws",
+      "old_line": 43,
+      "line": 43
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.update_scale",
+      "old_line": 74,
+      "line": 74
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.enc",
+      "old_line": 119,
+      "line": 119
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.key",
+      "old_line": 156,
+      "line": 156
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_quantizer_page_increment",
+      "old_line": 205,
+      "line": 205
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_quantizer_page_decrement",
+      "old_line": 221,
+      "line": 221
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_scales_clock_mods_page_increment",
+      "old_line": 237,
+      "line": 237
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_scales_clock_mods_page_decrement",
+      "old_line": 246,
+      "line": 246
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_encoder_one_positive",
+      "old_line": 258,
+      "line": 258
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_encoder_one_negative",
+      "old_line": 265,
+      "line": 265
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_encoder_two_positive",
+      "old_line": 271,
+      "line": 271
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_encoder_two_negative",
+      "old_line": 294,
+      "line": 294
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_key_two_pressed",
+      "old_line": 317,
+      "line": 317
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_key_three_pressed",
+      "old_line": 331,
+      "line": 331
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.select_scales_quantizer_page",
+      "old_line": 339,
+      "line": 339
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.select_scales_clock_mods_page",
+      "old_line": 345,
+      "line": 345
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.select_grid_viewer_page",
+      "old_line": 350,
+      "line": 350
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.select_scale_page_by_index",
+      "old_line": 354,
+      "line": 354
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page.lua::song_edit_page.register_draws",
+      "old_line": 30,
+      "line": 30
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page.lua::song_edit_page.register_press",
+      "old_line": 59,
+      "line": 59
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page_ui.lua::song_edit_page_ui.register_ui_draws",
+      "old_line": 72,
+      "line": 72
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page_ui.lua::get_visible_selectors",
+      "old_line": 87,
+      "line": 87
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page_ui.lua::song_edit_page_ui.enc",
+      "old_line": 98,
+      "line": 98
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page_ui.lua::song_edit_page_ui.handle_key_two_pressed",
+      "old_line": 375,
+      "line": 375
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page_ui.lua::song_edit_page_ui.handle_key_three_pressed",
+      "old_line": 383,
+      "line": 383
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page_ui.lua::song_edit_page_ui.key",
+      "old_line": 391,
+      "line": 391
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.paint_target_moved",
+      "old_line": 34,
+      "line": 34
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::discard_stale_rhythm_doctor_paint",
+      "old_line": 39,
+      "line": 39
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.register_draws",
+      "old_line": 47,
+      "line": 47
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::shift_table",
+      "old_line": 169,
+      "line": 169
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::build_paint_pattern",
+      "old_line": 182,
+      "line": 182
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::save_paint_pattern",
+      "old_line": 253,
+      "line": 253
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::rhythm_doctor_target",
+      "old_line": 274,
+      "line": 296
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::rhythm_doctor_preview_grid",
+      "old_line": 279,
+      "line": 301
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::refresh_rhythm_doctor_paint",
+      "old_line": 298,
+      "line": 320
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::rhythm_doctor_window_feedback",
+      "old_line": 308,
+      "line": 330
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::rhythm_doctor_jump_to_phrase_start",
+      "old_line": 322,
+      "line": 344
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::rhythm_doctor_browse",
+      "old_line": 333,
+      "line": 355
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::rhythm_doctor_nudge_window",
+      "old_line": 345,
+      "line": 367
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::rhythm_doctor_page_window",
+      "old_line": 349,
+      "line": 371
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::preview_rhythm_doctor_paint",
+      "old_line": 353,
+      "line": 375
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::cancel_rhythm_doctor_paint",
+      "old_line": 367,
+      "line": 389
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.register_press",
+      "old_line": 373,
+      "line": 395
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.get_rhythm_doctor_lane",
+      "old_line": 736,
+      "line": 753
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.get_rhythm_doctor_model",
+      "old_line": 743,
+      "line": 787
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.handle_rhythm_doctor_key",
+      "old_line": 747,
+      "line": 791
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.handle_rhythm_doctor_encoder",
+      "old_line": 751,
+      "line": 804
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page.lua::trigger_edit_page.disconnect_rhythm_doctor",
+      "old_line": 755,
+      "line": 808
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua::doctor_is_clear",
+      "old_line": 40,
+      "line": 40
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua::trigger_edit_page_ui.register_ui_draws",
+      "old_line": 66,
+      "line": 66
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua::trigger_edit_page_ui.enc",
+      "old_line": 146,
+      "line": 146
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua::trigger_edit_page_ui.key",
+      "old_line": 191,
+      "line": 191
+    },
+    {
+      "id": "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua::trigger_edit_page_ui.enc:grid_viewer.next_prev_channel",
+      "old_line": 156,
+      "line": 156
+    },
+    {
+      "id": "lib/pages/velocity_edit_page/velocity_edit_page.lua::velocity_edit_page.register_draws",
+      "old_line": 60,
+      "line": 63
+    },
+    {
+      "id": "lib/pages/velocity_edit_page/velocity_edit_page.lua::velocity_edit_page.register_press",
+      "old_line": 111,
+      "line": 114
+    },
+    {
+      "id": "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua::velocity_edit_page_ui.register_ui_draws",
+      "old_line": 9,
+      "line": 9
+    },
+    {
+      "id": "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua::velocity_edit_page_ui.enc",
+      "old_line": 21,
+      "line": 21
+    },
+    {
+      "id": "lib/ui.lua::ui.enc",
+      "old_line": 49,
+      "line": 47
+    },
+    {
+      "id": "lib/ui.lua::ui.key",
+      "old_line": 65,
+      "line": 51
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::lanes_of",
+      "old_line": 41,
+      "line": 46
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::current_lane",
+      "old_line": 51,
+      "line": 56
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::lane_valid",
+      "old_line": 57,
+      "line": 62
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::stopped",
+      "old_line": 66,
+      "line": 71
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::bounded_bpm",
+      "old_line": 70,
+      "line": 75
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::source_label",
+      "old_line": 75,
+      "line": 80
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::setup_available",
+      "old_line": 81,
+      "line": 86
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::setup_values",
+      "old_line": 86,
+      "line": 91
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::begin_setup",
+      "old_line": 92,
+      "line": 97
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::select_index",
+      "old_line": 108,
+      "line": 113
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::policy_index",
+      "old_line": 113,
+      "line": 118
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::position_label",
+      "old_line": 118,
+      "line": 123
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::touch_window",
+      "old_line": 123,
+      "line": 128
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::phrase_beat_index",
+      "old_line": 132,
+      "line": 137
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::begin_alignment",
+      "old_line": 144,
+      "line": 149
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::alignment_payload",
+      "old_line": 159,
+      "line": 164
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::modal_copy",
+      "old_line": 170,
+      "line": 175
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::hit_count",
+      "old_line": 182,
+      "line": 187
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::sync_modal",
+      "old_line": 192,
+      "line": 197
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:set_capture_mode",
+      "old_line": 218,
+      "line": 223
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:enc",
+      "old_line": 236,
+      "line": 240
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:confirm_setup",
+      "old_line": 321,
+      "line": 331
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:cancel_setup",
+      "old_line": 330,
+      "line": 340
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:confirm_alignment",
+      "old_line": 336,
+      "line": 346
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:cancel_alignment",
+      "old_line": 357,
+      "line": 367
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:select_lane",
+      "old_line": 363,
+      "line": 373
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:lanes",
+      "old_line": 375,
+      "line": 385
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:lane_cells",
+      "old_line": 387,
+      "line": 397
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:lane_at",
+      "old_line": 400,
+      "line": 410
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:paint_context",
+      "old_line": 407,
+      "line": 417
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::move_window",
+      "old_line": 428,
+      "line": 438
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::step_window",
+      "old_line": 445,
+      "line": 455
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:jump_to_phrase_start",
+      "old_line": 452,
+      "line": 462
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:nudge_window",
+      "old_line": 465,
+      "line": 475
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:page_window",
+      "old_line": 472,
+      "line": 482
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:invalidate_paint_preview",
+      "old_line": 476,
+      "line": 486
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:shift_paint",
+      "old_line": 481,
+      "line": 491
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:reset_paint_shift",
+      "old_line": 489,
+      "line": 499
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:paint_target",
+      "old_line": 496,
+      "line": 506
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:paint_preview",
+      "old_line": 505,
+      "line": 515
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:paint_commit",
+      "old_line": 514,
+      "line": 524
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:paint_undo",
+      "old_line": 522,
+      "line": 532
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:paint_redo",
+      "old_line": 528,
+      "line": 538
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:set_capture_progress",
+      "old_line": 536,
+      "line": 546
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:finish_eligible",
+      "old_line": 548,
+      "line": 558
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter.readable",
+      "old_line": 572,
+      "line": 583
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:set_status",
+      "old_line": 577,
+      "line": 588
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:enter",
+      "old_line": 584,
+      "line": 595
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:record_pressed",
+      "old_line": 592,
+      "line": 603
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:record_released",
+      "old_line": 615,
+      "line": 627
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:grid_key",
+      "old_line": 624,
+      "line": 636
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:key",
+      "old_line": 638,
+      "line": 650
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:transport_started",
+      "old_line": 670,
+      "line": 685
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:transport_stopped",
+      "old_line": 680,
+      "line": 695
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:disconnect",
+      "old_line": 685,
+      "line": 700
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:leave",
+      "old_line": 689,
+      "line": 704
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:poll",
+      "old_line": 692,
+      "line": 707
+    },
+    {
+      "id": "lib/rhythm_doctor/ui_adapter.lua::Adapter:screen_model",
+      "old_line": 699,
+      "line": 714
+    },
+    {
+      "id": "lib/application_parameters.lua::application_parameters.register",
+      "old_line": 3,
+      "line": 3
+    },
+    {
+      "id": "PARAM.save_p",
+      "old_line": 7,
+      "line": 7
+    },
+    {
+      "id": "PARAM.load_p",
+      "old_line": 14,
+      "line": 14
+    },
+    {
+      "id": "PARAM.new",
+      "old_line": 21,
+      "line": 21
+    },
+    {
+      "id": "PARAM.global_swing_shuffle_type",
+      "old_line": 28,
+      "line": 28
+    },
+    {
+      "id": "PARAM.global_swing",
+      "old_line": 38,
+      "line": 38
+    },
+    {
+      "id": "PARAM.global_shuffle_feel",
+      "old_line": 47,
+      "line": 47
+    },
+    {
+      "id": "PARAM.global_shuffle_basis",
+      "old_line": 56,
+      "line": 56
+    },
+    {
+      "id": "PARAM.global_shuffle_amount",
+      "old_line": 65,
+      "line": 65
+    },
+    {
+      "id": "PARAM.record",
+      "old_line": 75,
+      "line": 75
+    },
+    {
+      "id": "PARAM.stop_safety",
+      "old_line": 76,
+      "line": 76
+    },
+    {
+      "id": "PARAM.song_mode",
+      "old_line": 77,
+      "line": 77
+    },
+    {
+      "id": "PARAM.wrap_param_slides",
+      "old_line": 78,
+      "line": 78
+    },
+    {
+      "id": "PARAM.reset_on_end_of_pattern_repeat",
+      "old_line": 85,
+      "line": 85
+    },
+    {
+      "id": "PARAM.reset_on_song_pattern_transition",
+      "old_line": 86,
+      "line": 86
+    },
+    {
+      "id": "PARAM.elektron_program_changes",
+      "old_line": 87,
+      "line": 87
+    },
+    {
+      "id": "PARAM.elektron_program_change_channel",
+      "old_line": 88,
+      "line": 88
+    },
+    {
+      "id": "PARAM.midi_lock_lead_time",
+      "old_line": 90,
+      "line": 90
+    },
+    {
+      "id": "PARAM.trigless_locks",
+      "old_line": 98,
+      "line": 98
+    },
+    {
+      "id": "PARAM.repeat_unchanged_locks",
+      "old_line": 103,
+      "line": 103
+    },
+    {
+      "id": "PARAM.quantiser_act_on_note_masks",
+      "old_line": 106,
+      "line": 106
+    },
+    {
+      "id": "PARAM.quantiser_fully_act_on_note_masks",
+      "old_line": 107,
+      "line": 107
+    },
+    {
+      "id": "PARAM.quantiser_trig_lock_hold",
+      "old_line": 108,
+      "line": 108
+    },
+    {
+      "id": "PARAM.all_scales_lock_to_pentatonic",
+      "old_line": 109,
+      "line": 109
+    },
+    {
+      "id": "PARAM.random_lock_to_pentatonic",
+      "old_line": 110,
+      "line": 110
+    },
+    {
+      "id": "PARAM.merged_lock_to_pentatonic",
+      "old_line": 111,
+      "line": 111
+    },
+    {
+      "id": "PARAM.tresillo_amount",
+      "old_line": 113,
+      "line": 113
+    },
+    {
+      "id": "PARAM.rhythm_doctor_server",
+      "old_line": 125,
+      "line": 125
+    },
+    {
+      "id": "PARAM.rhythm_doctor_use_server",
+      "old_line": 126,
+      "line": 126
+    },
+    {
+      "id": "PARAM.midi_scale_mapped_to_white_keys",
+      "old_line": 128,
+      "line": 128
+    },
+    {
+      "id": "PARAM.midi_honour_rotation",
+      "old_line": 129,
+      "line": 129
+    },
+    {
+      "id": "PARAM.midi_honour_degree",
+      "old_line": 130,
+      "line": 130
+    },
+    {
+      "id": "PARAM.midi_honour_transpose",
+      "old_line": 131,
+      "line": 131
+    },
+    {
+      "id": "mosaic.lua::rhythm_doctor_server_endpoint",
+      "old_line": 71,
+      "line": 76
+    },
+    {
+      "id": "mosaic.lua::enc",
+      "old_line": 313,
+      "line": 345
+    },
+    {
+      "id": "mosaic.lua::key",
+      "old_line": 317,
+      "line": 353
+    },
+    {
+      "id": "mosaic.lua::transport_started_by_user",
+      "old_line": 329,
+      "line": 367
+    },
+    {
+      "id": "mosaic.lua::clock.transport:start",
+      "old_line": 333,
+      "line": 371
+    },
+    {
+      "id": "mosaic.lua::clock.transport:stop",
+      "old_line": 338,
+      "line": 376
+    },
+    {
+      "id": "lib/pages/note_edit_page/note_edit_page_ui.lua::note_edit_page_ui.enc:grid_viewer.next_prev_channel",
+      "old_line": 34,
+      "line": 34
+    },
+    {
+      "id": "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua::velocity_edit_page_ui.enc:grid_viewer.next_prev_channel",
+      "old_line": 26,
+      "line": 26
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_encoder_two_positive:grid_viewer.next_channel",
+      "old_line": 291,
+      "line": 291
+    },
+    {
+      "id": "lib/pages/scale_edit_page/scale_edit_page_ui.lua::scale_edit_page_ui.handle_encoder_two_negative:grid_viewer.prev_channel",
+      "old_line": 314,
+      "line": 314
+    },
+    {
+      "id": "lib/pages/song_edit_page/song_edit_page_ui.lua::song_edit_page_ui.enc:grid_viewer.next_prev_channel",
+      "old_line": 157,
+      "line": 157
+    }
+  ],
+  "manual_source": {
+    "file": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+    "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+    "meaning": "Keep125 historical MAN IDs bound to exactly frozen full UI README8e93de46 after user-approved thin-overview migration. Current intendedmanualauthority isbook/course/features YAML; no historicalheading is fabricated fromoverview."
+  }
+}

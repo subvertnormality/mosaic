@@ -1,0 +1,35 @@
+{
+  "name": "first-sound-controlled",
+  "command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+    "--source",
+    "/home/andy/mosaic-manual-1.4.0/manual/features/first-sound-capture.yaml",
+    "--visuals-only",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--controlled-local"
+  ],
+  "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+  "exclusive_lock": true,
+  "action": null,
+  "passed": true,
+  "executed_command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+    "--source",
+    "/home/andy/mosaic-manual-1.4.0/manual/features/first-sound-capture.yaml",
+    "--visuals-only",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--controlled-local"
+  ],
+  "returncode": 0,
+  "started_utc": "2026-10-04T09:06:06.522398+00:00",
+  "finished_utc": "2026-10-04T09:06:26.865358+00:00",
+  "log_sha256": "2e728cecf13c66faf32a710ef17bbb0e8f6a06b99722206599acd376e66d1040"
+}

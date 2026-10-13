@@ -1,0 +1,21 @@
+........EE........................
+======================================================================
+ERROR: test_failed_or_diagnostic_doctor_report_cannot_be_published (test_manual_publication_verify.DoctorPublicationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 238, in test_failed_or_diagnostic_doctor_report_cannot_be_published
+    with self.assertRaisesRegex(ValueError,'Doctor acceptance'):audit.check_doctor_scope(report)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_doctor_scope'
+
+======================================================================
+ERROR: test_setup_preview_and_commit_leds_are_native_acceptance (test_manual_publication_verify.DoctorPublicationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 242, in test_setup_preview_and_commit_leds_are_native_acceptance
+    audit.check_doctor_grids(steps)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_doctor_grids'
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.014s
+
+FAILED (errors=2)

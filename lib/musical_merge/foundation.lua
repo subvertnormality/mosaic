@@ -1,0 +1,192 @@
+local foundation = {}
+
+local function round_half_up(value)
+  return math.floor(value + 0.5)
+end
+
+-- FNV-1a is sequential: hashing a text continued from the hash of a prefix
+-- equals hashing the whole concatenation.
+local function fnv1a_continue(hash, text)
+  for index = 1, #text do
+    hash = ((hash ~ string.byte(text, index)) * 16777619) & 0xffffffff
+  end
+  return hash
+end
+
+local function fnv1a(text)
+  return fnv1a_continue(2166136261, text)
+end
+
+local function loop_steps(first, last)
+  local steps = {}
+  local step = first
+  while true do
+    steps[#steps + 1] = step
+    if step == last then break end
+    step = step == 64 and 1 or step + 1
+    if #steps > 64 then error("invalid Foundation loop") end
+  end
+  return steps
+end
+
+local function circular_distance(index_a, index_b, length)
+  local distance = math.abs(index_a - index_b)
+  return math.min(distance, length - distance)
+end
+
+-- The hash of the identity prefix "version|seed|slot|channel|binding|phrase|"
+-- shared by every candidate of one plan.
+local function rank_prefix(args)
+  return fnv1a(table.concat({
+    args.ranking_version or 1,
+    args.seed or 0,
+    args.song_slot or 1,
+    args.channel or 1,
+    args.binding or "",
+    args.phrase or 0,
+    ""
+  }, "|"))
+end
+
+-- fnv1a(table.concat({version, seed, slot, channel, binding, phrase, step}, "|")).
+-- tostring and table.concat format a number identically (luaO_tostring).
+local function rank_key(args, step, prefix)
+  return fnv1a_continue(prefix or rank_prefix(args), tostring(step))
+end
+
+local function addition_velocity(value, accent)
+  if value == nil then value = 100 end
+  if value <= 0 then return value end
+  local scaled = round_half_up(value * accent / 100)
+  if scaled < 1 then scaled = 1 end
+  if scaled > 127 then scaled = 127 end
+  return scaled
+end
+
+function foundation.plan(args)
+  args = args or {}
+  if (args.ranking_version or 1) ~= 1 then
+    return {status = "unsupported_version", reason = "ranking_version"}
+  end
+  local source_trigs = args.source_trigs or {}
+  local anchor_trigs = source_trigs[args.anchor]
+  if type(anchor_trigs) ~= "table" then
+    return {status = "anchor_missing", reason = "anchor_missing"}
+  end
+
+  local steps = loop_steps(args.start_step or 1, args.end_step or 64)
+  local position = {}
+  for index, step in ipairs(steps) do position[step] = index end
+
+  local result = {
+    status = "ok",
+    trigs = {},
+    roles = {},
+    reasons = {},
+    velocities = {},
+    sources = {},
+    eligible_count = 0,
+    admitted_count = 0
+  }
+  for step = 1, 64 do result.trigs[step] = 0 end
+
+  local anchors = {}
+  for _, step in ipairs(steps) do
+    if anchor_trigs[step] == true or anchor_trigs[step] == 1 then
+      anchors[#anchors + 1] = step
+      result.trigs[step] = 1
+      result.roles[step] = "anchor"
+      result.sources[step] = {args.anchor}
+      local velocities = args.source_velocities and args.source_velocities[args.anchor]
+      result.velocities[step] = velocities and velocities[step] or
+        (args.merged_velocities and args.merged_velocities[step])
+    end
+  end
+
+  -- Ordered candidate filters; nil when none is configured (Off stays exact).
+  local filters = args.filters
+  if filters then result.reason_lists = {} end
+
+  local candidates = {}
+  local prefix
+  for _, step in ipairs(steps) do
+    if not result.roles[step] then
+      local contributors = {}
+      for source, trigs in pairs(source_trigs) do
+        if source ~= args.anchor and (trigs[step] == true or trigs[step] == 1) then
+          contributors[#contributors + 1] = source
+        end
+      end
+      table.sort(contributors)
+      if #contributors > 0 then
+        local blocked = false
+        local gap = args.gap or 0
+        if gap > 0 then
+          for _, anchor_step in ipairs(anchors) do
+            if circular_distance(position[step], position[anchor_step], #steps) <= gap then
+              blocked = true
+              break
+            end
+          end
+        end
+        -- Plan §3 candidate pipeline: gap, then each candidate filter
+        -- (Interlock) evaluated independently against the same
+        -- immutable inputs; every applicable reason is kept, in that order.
+        local list
+        if filters then
+          list = blocked and {"gap"} or {}
+          for _, filter in ipairs(filters) do
+            if filter.blocked[step] then list[#list + 1] = filter.reason end
+          end
+          blocked = #list > 0
+        end
+        if blocked then
+          result.reasons[step] = list and list[1] or "gap"
+          if list then result.reason_lists[step] = list end
+          result.sources[step] = contributors
+        else
+          prefix = prefix or rank_prefix(args)
+          candidates[#candidates + 1] = {
+            step = step,
+            rank = rank_key(args, step, prefix),
+            sources = contributors
+          }
+        end
+      end
+    end
+  end
+
+  result.eligible_count = #candidates
+  table.sort(candidates, function(left, right)
+    if left.rank ~= right.rank then return left.rank < right.rank end
+    return left.step < right.step
+  end)
+
+  local accent = args.accent == nil and 70 or args.accent
+  local amount = args.amount == nil and 100 or args.amount
+  local admitted = accent == 0 and 0 or round_half_up(amount * #candidates / 100)
+  if admitted < 0 then admitted = 0 end
+  if admitted > #candidates then admitted = #candidates end
+  result.admitted_count = admitted
+
+  for index, candidate in ipairs(candidates) do
+    local step = candidate.step
+    result.sources[step] = candidate.sources
+    if index <= admitted then
+      result.trigs[step] = 1
+      result.roles[step] = "addition"
+      result.velocities[step] = addition_velocity(
+        args.merged_velocities and args.merged_velocities[step], accent)
+    else
+      result.reasons[step] = accent == 0 and "accent" or "amount"
+      if filters then result.reason_lists[step] = {result.reasons[step]} end
+    end
+  end
+
+  return result
+end
+
+foundation.round_half_up = round_half_up
+foundation.fnv1a = fnv1a
+
+return foundation

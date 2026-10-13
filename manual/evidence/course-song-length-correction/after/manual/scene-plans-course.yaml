@@ -1,0 +1,420 @@
+schema_version: 1
+status: authoring-contract-not-captured
+scope: One empty-start public-input project across all chapters. Native acceptance remains pending final
+  source freeze and strict independent audit. Additional comparisons are checkpoints within that same
+  project, never independent fixtures.
+scenes:
+- id: course-getting-started
+  feature_id: getting-started
+  title: 1. Meet Mosaic
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: getting-started-objects
+    title: Follow the musical path
+    caption: We will keep one project through this course, changing one musical decision at a time.
+    assertion:
+      kind: manual-course-ui
+      stage: getting-started-objects
+      passed: true
+  - id: getting-started-notation
+    title: Locate the controls
+    caption: You can identify each control before operating it.
+    assertion:
+      kind: manual-course-ui
+      stage: getting-started-notation
+      passed: true
+- id: course-setup
+  feature_id: setup
+  title: 2. Choose one sound
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: setup-route
+    title: Open Device
+    caption: Device opens for channel 1.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-route
+      passed: true
+  - id: setup-apply
+    title: Apply one output
+    caption: The selected output becomes active. Selecting a draft alone does not apply it.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-apply
+      passed: true
+  - id: setup-tempo
+    title: Set the tempo
+    caption: The project uses 90 BPM. With ClockMod /1, each channel step lasts one sixth of a second.
+    assertion:
+      kind: manual-course-ui
+      stage: setup-tempo
+      passed: true
+- id: course-first-sound
+  feature_id: first-sound
+  title: 3. Make four equal notes
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: first-sound-attacks
+    title: Enter four attacks
+    caption: Four active attacks light on row 4.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-attacks
+      passed: true
+  - id: first-sound-assign
+    title: Assign and shorten
+    caption: Pattern 1 feeds channel 1 across a four-step range.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-assign
+      passed: true
+  - id: first-sound-defaults
+    title: Give the attacks a pitch and level
+    caption: All four attacks share pitch, velocity and duration.
+    assertion:
+      kind: manual-course-ui
+      stage: first-sound-defaults
+      passed: true
+  - id: first-sound-hear
+    title: Play and stop
+    caption: Four equal C notes repeat. Playback stops with notes released.
+    assertion:
+      kind: manual-course-midi
+      stage: first-sound-hear
+      passed: true
+- id: course-build-a-phrase
+  feature_id: build-a-phrase
+  title: 4. Spread the rhythm across a bar
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: build-a-phrase-range
+    title: Extend the range
+    caption: The channel traverses16 steps before repeating.
+    assertion:
+      kind: manual-course-ui
+      stage: build-a-phrase-range
+      passed: true
+  - id: build-a-phrase-rhythm
+    title: Move the attacks
+    caption: Four attacks now sit on the four beats. The old attacks have been removed explicitly.
+    assertion:
+      kind: manual-course-ui
+      stage: build-a-phrase-rhythm
+      passed: true
+  - id: build-a-phrase-compare
+    title: Hear the longer phrase
+    caption: C–C–C–C remains the pitch sequence; the space between attacks has increased.
+    assertion:
+      kind: manual-course-midi
+      stage: build-a-phrase-compare
+      passed: true
+- id: course-masks
+  feature_id: masks
+  title: 5. Give the phrase an ending
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: masks-open
+    title: Find the channel default
+    caption: C3 (MIDI 60) is the common pitch.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-open
+      passed: true
+  - id: masks-hold
+    title: Select the last beat
+    caption: The screen now describes step 13.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-hold
+      passed: true
+  - id: masks-edit
+    title: Raise the last note
+    caption: Only step 13 receives the note exception.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-edit
+      passed: true
+  - id: masks-release
+    title: Return to the default view
+    caption: The screen returns to C3; step 13 retains D3.
+    assertion:
+      kind: manual-course-ui
+      stage: masks-release
+      passed: true
+  - id: masks-listen
+    title: Compare the ending
+    caption: C–C–C–D replaces C–C–C–C at the same attack positions.
+    assertion:
+      kind: manual-course-midi
+      stage: masks-listen
+      passed: true
+  - id: masks-quiet
+    title: Reduce the final emphasis
+    caption: The last D is quieter; pitch and timing stay the same.
+    assertion:
+      kind: manual-course-midi
+      stage: masks-quiet
+      passed: true
+  - id: masks-default
+    title: Compare a changed default
+    caption: G–G–G–D demonstrates that an exception survives a changed default. C–C–C–D is restored.
+    assertion:
+      kind: manual-course-midi
+      stage: masks-default-restored
+      passed: true
+  - id: masks-clear
+    title: Remove both exceptions
+    caption: C–C–C–C at velocity 80 returns. K2 cleared both Note and Vel, not only the selected field.
+    assertion:
+      kind: manual-course-midi
+      stage: masks-clear
+      passed: true
+  - id: masks-keep
+    title: Keep the answering note
+    caption: The outgoing phrase is C–C–C–D, final velocity 50.
+    assertion:
+      kind: manual-course-midi
+      stage: masks-keep
+      passed: true
+  - id: masks-default-g
+    title: Masks default g
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-midi
+      stage: masks-default-g
+      passed: true
+- id: course-sequence-composition
+  feature_id: sequence-composition
+  title: 6. Add a second part
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: sequence-composition-bass-pattern
+    title: Enter two bass notes
+    caption: Pattern 2 supplies a root and fifth.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-pattern
+      passed: true
+  - id: sequence-composition-bass-route
+    title: Route channel2
+    caption: The bass uses MIDI 48 and55 in the default C-major scale. Both channels repeat in16 steps.
+    assertion:
+      kind: manual-course-ui
+      stage: sequence-composition-bass-route
+      passed: true
+  - id: sequence-composition-both
+    title: Hear the two parts
+    caption: C–C–C–D sounds above a C–G bass pulse. Both parts retain independent settings.
+    assertion:
+      kind: manual-course-midi
+      stage: sequence-composition-both
+      passed: true
+  - id: sequence-composition-merge
+    title: Compare overlapping rhythms
+    caption: Skip removes overlapping attacks 1 and9, leaving5 and13. All restores the four attacks. The
+      existing Note 60 default and step 13Note62 exception keep the pitch comparison fixed. Unassigning
+      pattern 2 returns the original phrase; CH02 keeps its bass pattern.
+    assertion:
+      kind: manual-course-midi
+      stage: sequence-composition-merge-restored
+      passed: true
+  - id: sequence-composition-merge-skip
+    title: Sequence composition merge skip
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-midi
+      stage: sequence-composition-merge-skip
+      passed: true
+  - id: sequence-composition-merge-all
+    title: Sequence composition merge all
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-midi
+      stage: sequence-composition-merge-all
+      passed: true
+- id: course-harmony-design
+  feature_id: harmony-design
+  title: 7. Change harmony without changing the rhythm
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: harmony-design-inherit
+    title: Restore note inheritance
+    caption: All Note exceptions are cleared. K2 also cleared the velocity exception, which is deliberately
+      restored.
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-inherit
+      passed: true
+  - id: harmony-design-relative
+    title: Retain the same melody in the pattern
+    caption: C–C–C–D returns through relative notes. The quieter ending stays in the channel mask.
+    assertion:
+      kind: manual-course-midi
+      stage: harmony-design-relative
+      passed: true
+  - id: harmony-design-draft
+    title: Prepare a second scale
+    caption: Hear C–C–C–D and bass C–G before editing the second scale.
+    assertion:
+      kind: manual-course-midi
+      stage: harmony-design-draft
+      passed: true
+  - id: harmony-design-draft-scale
+    title: Harmony design draft scale
+    caption: Root D and Major are prepared in slot 2. Press K3 before using the grid.
+    assertion:
+      kind: manual-course-ui
+      stage: harmony-design-draft-scale
+      passed: true
+  - id: harmony-design-apply-d
+    title: Harmony design apply d
+    caption: After K3, the same rhythm becomes D–D–D–E with bass D–A.
+    assertion:
+      kind: manual-course-midi
+      stage: harmony-design-apply-d
+      passed: true
+  - id: harmony-design-apply
+    title: Compare the transposition
+    caption: The phrase becomes D–D–D–E and bass D–A. Rhythm and velocity are preserved. C major is restored
+      for the arrangement.
+    assertion:
+      kind: manual-course-midi
+      stage: harmony-design-apply-restored
+      passed: true
+- id: course-modulation-movement-and-interest
+  feature_id: modulation-movement-and-interest
+  title: 8. Add a pickup
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: modulation-movement-and-interest-pickup
+    title: Add the late attack
+    caption: A C pickup falls halfway between the last beat and the next bar.
+    assertion:
+      kind: manual-course-ui
+      stage: modulation-movement-and-interest-pickup
+      passed: true
+  - id: modulation-movement-and-interest-level
+    title: Reduce the pickup level
+    caption: The pickup is quieter than the main beats and the D ending. Probability and parameter slides
+      are optional follow-up guides; this version remains deterministic.
+    assertion:
+      kind: manual-course-midi
+      stage: modulation-movement-and-interest-level
+      passed: true
+- id: course-song-composition
+  feature_id: song-composition
+  title: 9. Arrange two sections
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: song-composition-copy
+    title: Copy the complete section
+    caption: Slot 2 stores the same phrase, bass and channel settings.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-copy
+      passed: true
+  - id: song-composition-sparse
+    title: Make the first section sparse
+    caption: Slot 1 contains bass only; slot 2 adds the upper phrase and pickup.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-sparse-copy
+      passed: true
+  - id: song-composition-length
+    title: Set the section boundary
+    caption: 'Both slots show Global length 16 and Repeats 1. Song mode is On: each section lasts one
+      16-step bar.'
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-length-mode
+      passed: true
+  - id: song-composition-transition
+    title: Hear the arrangement
+    caption: Bass alone → bass and phrase → bass alone → bass and phrase. The highlighted Song slot changes
+      at each boundary.
+    assertion:
+      kind: manual-course-midi
+      stage: song-composition-transition
+      passed: true
+  - id: song-composition-sparse-muted
+    title: Song composition sparse muted
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-sparse-muted
+      passed: true
+  - id: song-composition-length-slot2
+    title: Song composition length slot2
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-length-slot2
+      passed: true
+  - id: song-composition-length-slot1
+    title: Song composition length slot1
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-ui
+      stage: song-composition-length-slot1
+      passed: true
+- id: course-keep-your-work
+  feature_id: keep-your-work
+  title: 10. Save, reload and perform
+  behaviour_case: M-MANUAL-COURSE-001
+  citation: README.md#typical-workflow
+  session_ordinal: 0
+  steps:
+  - id: keep-your-work-save
+    title: Save the arrangement
+    caption: The named project stores the two-section arrangement.
+    assertion:
+      kind: manual-course-persistence
+      stage: keep-your-work-save
+      passed: true
+  - id: keep-your-work-reload
+    title: Prove the saved version
+    caption: Slot 1 returns to bass alone; the temporary change is removed.
+    assertion:
+      kind: manual-course-ui
+      stage: keep-your-work-reload
+      passed: true
+  - id: keep-your-work-perform
+    title: Replay the restored sections
+    caption: The saved bass-only/full-phrase alternation is restored. Continue with merge, recording or
+      modulation task guides without replacing this saved version.
+    assertion:
+      kind: manual-course-midi
+      stage: keep-your-work-perform
+      passed: true
+  - id: keep-your-work-temporary-edit
+    title: Keep your work temporary edit
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-ui
+      stage: keep-your-work-temporary-edit
+      passed: true
+  - id: keep-your-work-loaded-files
+    title: Keep your work loaded files
+    caption: Compare the setting or phrase before continuing in the same project.
+    assertion:
+      kind: manual-course-persistence
+      stage: keep-your-work-loaded-files
+      passed: true

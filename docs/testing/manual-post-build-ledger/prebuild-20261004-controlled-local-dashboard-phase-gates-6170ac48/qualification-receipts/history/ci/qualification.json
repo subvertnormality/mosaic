@@ -1,0 +1,59 @@
+{
+  "scope": "Manual CI producer/publisher and requested developer documentation policy; local contract and source-tree package checks, not an executed remote CI build or deployment",
+  "source_sha256": {
+    "AGENTS.md": "753908e33247686fc4d0c772bfc7e2355545e94326e8f687c9210abfc061b7e2",
+    "README.md": "b4624ee41d639a2712a95c24bb042ac56d5d0bb6da3068a5e0687ec89bf4098d",
+    "manual/BUILD.md": "377059de6d6c86e0e346396a3c367e5d541bf848828d8ed1377c1c03962df7c9",
+    ".github/workflows/manual-build.yml": "a3aa1d41578e1fc4886278c9c02ced8e605ba38ee809922a5f96904f1759049d",
+    ".github/workflows/manual-publish.yml": "af1b701f693a7066f827be27698a12f3b1a8bf55924a77ee09d356c3e8f0f597",
+    ".github/scripts/manual-build.sh": "daa921e910d9298ec908ba38b0e7094427140882940127e7aaec041fecfdd401",
+    ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
+    ".github/scripts/manual_runtime.py": "b9fc9bc69c011262e3b014483dfe561b63bd3fa7745b09a12905d435381761e2",
+    ".github/scripts/manual-site-smoke.cjs": "2a09e7cf8add42bb76f918335b67f582206fa65117bb2825505813f96310595b",
+    ".github/scripts/publish_manual.py": "1bf377e658ac6c38006ec42654d433d17760526533ac9e49753bf1ba420286df",
+    "tests/manual_ci/test_build_manual.py": "35fe1fd286a69982f11518e71fafb7e3f08d598d415bcae35ada3c435ce58276",
+    "tests/manual_ci/test_publish_manual.py": "a34f1798a2dd008bdb5d30c89dcbfbcab6d046890cc95dc5b3285d182d472950"
+  },
+  "root_checks": {
+    "ci_contract_tests": {
+      "passed": true,
+      "tests": 26
+    },
+    "manual_authority_tests": {
+      "passed": true,
+      "tests": 22
+    },
+    "manual_authority_transition_tests": {
+      "passed": true,
+      "tests": 21
+    },
+    "fixture_module_tests": {
+      "passed": true,
+      "tests": 26
+    },
+    "reconciler_tests": {
+      "passed": true,
+      "tests": 57
+    }
+  },
+  "producer_agent_checks": {
+    "shell_python_node_syntax": "passed",
+    "real_current_source_package_smoke": {
+      "files": 25,
+      "json": 4,
+      "media": 11,
+      "qualified_release": false
+    }
+  },
+  "focused_native_recording_case": {
+    "run": "0952872266de47ad98e51fa01109746b",
+    "report_sha256": "9bc6bca677426c65388e06da7e4666f5cbf9c3a69dc7aa630b8c9723a5aca8ee",
+    "strict_current_source_frames": 3,
+    "passed": true,
+    "clock_mode": "controlled-experimental",
+    "complete_regression_run": false
+  },
+  "remote_ci_executed": false,
+  "deployed": false,
+  "complete_regression_run": false
+}

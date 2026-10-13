@@ -1,0 +1,1572 @@
+schema_version: 1
+fixture_kind: behaviour-case
+trace_contract: The original pinned case replays public inputs and verifies every
+  authored semantic selector; per-scene deltas include native encoder units and waits.
+scenes:
+- id: player-apply-oilcan
+  feature_id: mods-and-software-devices
+  title: Apply Oilcan to the percussion channel
+  behaviour_case: M-MANUAL-PLAYER-APPLY-001
+  requirements: &id001
+  - CH-DEVICE
+  profile: manual-player-ui
+  session_ordinal: 0
+  setup:
+    fixture: behaviour-case
+    case: M-MANUAL-PLAYER-APPLY-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: device-start
+    title: Open the Device page
+    caption: 'Starting point: Channel 1''s Device page is open. Read the Device row
+      before changing it.'
+    citation: manual:mods-and-software-devices
+    inputs:
+    - &id002
+      type: grid
+      x: 1
+      y: 1
+      state: 1
+    - &id003
+      type: grid
+      x: 1
+      y: 1
+      state: 0
+    - &id004
+      type: wait
+      seconds: 0.06
+    - &id005
+      type: wait
+      seconds: 0.05
+    - &id006
+      type: enc
+      n: 1
+      delta: 2
+    - &id007
+      type: wait
+      seconds: 0.05
+    - &id008
+      type: enc
+      n: 1
+      delta: 2
+    - &id009
+      type: wait
+      seconds: 0.05
+    - &id010
+      type: enc
+      n: 1
+      delta: 2
+    - &id011
+      type: wait
+      seconds: 0.15
+    - &id012
+      type: wait
+      seconds: 0.05
+    - &id013
+      type: enc
+      n: 2
+      delta: -2
+    - &id014
+      type: wait
+      seconds: 0.05
+    - &id015
+      type: enc
+      n: 2
+      delta: -2
+    - &id016
+      type: wait
+      seconds: 0.05
+    - &id017
+      type: enc
+      n: 2
+      delta: -2
+    - &id018
+      type: wait
+      seconds: 0.05
+    - &id019
+      type: enc
+      n: 2
+      delta: -2
+    - &id020
+      type: wait
+      seconds: 0.05
+    - &id021
+      type: enc
+      n: 2
+      delta: -2
+    - &id022
+      type: wait
+      seconds: 0.05
+    - &id023
+      type: enc
+      n: 2
+      delta: -2
+    - &id024
+      type: wait
+      seconds: 0.05
+    - &id025
+      type: enc
+      n: 2
+      delta: -2
+    - &id026
+      type: wait
+      seconds: 0.05
+    - &id027
+      type: enc
+      n: 2
+      delta: -2
+    - &id028
+      type: wait
+      seconds: 0.05
+    - &id029
+      type: enc
+      n: 2
+      delta: -2
+    - &id030
+      type: wait
+      seconds: 0.15
+    - &id031
+      type: wait
+      seconds: 0.05
+    - &id032
+      type: enc
+      n: 2
+      delta: 2
+    - &id033
+      type: wait
+      seconds: 0.05
+    - &id034
+      type: enc
+      n: 2
+      delta: 2
+    - &id035
+      type: wait
+      seconds: 0.05
+    - &id036
+      type: enc
+      n: 2
+      delta: 2
+    - &id037
+      type: wait
+      seconds: 0.05
+    - &id038
+      type: enc
+      n: 2
+      delta: 2
+    - &id039
+      type: wait
+      seconds: 0.05
+    - &id040
+      type: enc
+      n: 2
+      delta: 2
+    - &id041
+      type: wait
+      seconds: 0.05
+    - &id042
+      type: enc
+      n: 2
+      delta: 2
+    - &id043
+      type: wait
+      seconds: 0.05
+    - &id044
+      type: enc
+      n: 2
+      delta: 2
+    - &id045
+      type: wait
+      seconds: 0.15
+    - &id046
+      type: key
+      n: 3
+      state: 1
+    - &id047
+      type: key
+      n: 3
+      state: 0
+    - &id048
+      type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-start
+        citation: manual:mods-and-software-devices
+        channel: 1
+        page: midi_config
+        field: Device
+        passed: true
+  - id: oilcan-pending
+    title: Choose Oilcan 1
+    caption: "Turn E3 until the Device row reads Oilcan 1. The footer says \u201C\
+      Press K3 to confirm\u201D, so this is still a draft."
+    citation: manual:mods-and-software-devices
+    inputs:
+    - &id049
+      type: wait
+      seconds: 0.05
+    - &id050
+      type: enc
+      n: 3
+      delta: 2
+    - &id051
+      type: wait
+      seconds: 0.15
+    - &id052
+      type: wait
+      seconds: 0.05
+    - &id053
+      type: enc
+      n: 3
+      delta: 2
+    - &id054
+      type: wait
+      seconds: 0.15
+    - &id055
+      type: wait
+      seconds: 0.05
+    - &id056
+      type: enc
+      n: 3
+      delta: 2
+    - &id057
+      type: wait
+      seconds: 0.15
+    - &id058
+      type: wait
+      seconds: 0.05
+    - &id059
+      type: enc
+      n: 3
+      delta: 2
+    - &id060
+      type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: manual-player-apply-pending
+        citation: manual:mods-and-software-devices
+        channel: 1
+        field: Device
+        value: Oilcan 1
+        confirmation_prompt: Press K3 to confirm
+        passed: true
+  - id: oilcan-applied
+    title: Apply Oilcan 1
+    caption: Press K3 to apply Oilcan 1. The Device row remains Oilcan 1 and the confirmation
+      prompt clears.
+    citation: manual:mods-and-software-devices
+    inputs:
+    - &id061
+      type: key
+      n: 3
+      state: 1
+    - &id062
+      type: key
+      n: 3
+      state: 0
+    - &id063
+      type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-applied
+        citation: manual:mods-and-software-devices
+        channel: 1
+        page: midi_config
+        field: Device
+        value: Oilcan 1
+        confirmation_prompt_absent: true
+        passed: true
+  - id: oilcan-reopened
+    title: Reopen and verify Oilcan 1
+    caption: "Open Channel tasks \u2192 Device again. The Device row still reads Oilcan\
+      \ 1 without a confirmation prompt."
+    citation: manual:mods-and-software-devices
+    inputs:
+    - &id064
+      type: wait
+      seconds: 0.05
+    - &id065
+      type: enc
+      n: 1
+      delta: 2
+    - &id066
+      type: wait
+      seconds: 0.05
+    - &id067
+      type: enc
+      n: 1
+      delta: 2
+    - &id068
+      type: wait
+      seconds: 0.05
+    - &id069
+      type: enc
+      n: 1
+      delta: 2
+    - &id070
+      type: wait
+      seconds: 0.15
+    - &id071
+      type: wait
+      seconds: 0.05
+    - &id072
+      type: enc
+      n: 2
+      delta: -2
+    - &id073
+      type: wait
+      seconds: 0.05
+    - &id074
+      type: enc
+      n: 2
+      delta: -2
+    - &id075
+      type: wait
+      seconds: 0.05
+    - &id076
+      type: enc
+      n: 2
+      delta: -2
+    - &id077
+      type: wait
+      seconds: 0.05
+    - &id078
+      type: enc
+      n: 2
+      delta: -2
+    - &id079
+      type: wait
+      seconds: 0.05
+    - &id080
+      type: enc
+      n: 2
+      delta: -2
+    - &id081
+      type: wait
+      seconds: 0.05
+    - &id082
+      type: enc
+      n: 2
+      delta: -2
+    - &id083
+      type: wait
+      seconds: 0.05
+    - &id084
+      type: enc
+      n: 2
+      delta: -2
+    - &id085
+      type: wait
+      seconds: 0.05
+    - &id086
+      type: enc
+      n: 2
+      delta: -2
+    - &id087
+      type: wait
+      seconds: 0.05
+    - &id088
+      type: enc
+      n: 2
+      delta: -2
+    - &id089
+      type: wait
+      seconds: 0.15
+    - &id090
+      type: wait
+      seconds: 0.05
+    - &id091
+      type: enc
+      n: 2
+      delta: 2
+    - &id092
+      type: wait
+      seconds: 0.05
+    - &id093
+      type: enc
+      n: 2
+      delta: 2
+    - &id094
+      type: wait
+      seconds: 0.05
+    - &id095
+      type: enc
+      n: 2
+      delta: 2
+    - &id096
+      type: wait
+      seconds: 0.05
+    - &id097
+      type: enc
+      n: 2
+      delta: 2
+    - &id098
+      type: wait
+      seconds: 0.05
+    - &id099
+      type: enc
+      n: 2
+      delta: 2
+    - &id100
+      type: wait
+      seconds: 0.05
+    - &id101
+      type: enc
+      n: 2
+      delta: 2
+    - &id102
+      type: wait
+      seconds: 0.05
+    - &id103
+      type: enc
+      n: 2
+      delta: 2
+    - &id104
+      type: wait
+      seconds: 0.15
+    - &id105
+      type: key
+      n: 3
+      state: 1
+    - &id106
+      type: key
+      n: 3
+      state: 0
+    - &id107
+      type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-reopened
+        citation: manual:mods-and-software-devices
+        channel: 1
+        page: midi_config
+        field: Device
+        value: Oilcan 1
+        confirmation_prompt_absent: true
+        passed: true
+- id: player-apply-polyperc
+  feature_id: mods-and-software-devices
+  title: Apply Polyperc to the bass channel
+  behaviour_case: M-MANUAL-PLAYER-APPLY-001
+  requirements: *id001
+  profile: manual-player-ui
+  session_ordinal: 0
+  setup:
+    fixture: behaviour-case
+    case: M-MANUAL-PLAYER-APPLY-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: device-start
+    title: Open the Device page
+    caption: 'Starting point: Channel 2''s Device page is open. Read the Device row
+      before changing it.'
+    citation: manual:mods-and-software-devices
+    inputs:
+    - *id002
+    - *id003
+    - *id004
+    - *id005
+    - *id006
+    - *id007
+    - *id008
+    - *id009
+    - *id010
+    - *id011
+    - *id012
+    - *id013
+    - *id014
+    - *id015
+    - *id016
+    - *id017
+    - *id018
+    - *id019
+    - *id020
+    - *id021
+    - *id022
+    - *id023
+    - *id024
+    - *id025
+    - *id026
+    - *id027
+    - *id028
+    - *id029
+    - *id030
+    - *id031
+    - *id032
+    - *id033
+    - *id034
+    - *id035
+    - *id036
+    - *id037
+    - *id038
+    - *id039
+    - *id040
+    - *id041
+    - *id042
+    - *id043
+    - *id044
+    - *id045
+    - *id046
+    - *id047
+    - *id048
+    - *id049
+    - *id050
+    - *id051
+    - *id052
+    - *id053
+    - *id054
+    - *id055
+    - *id056
+    - *id057
+    - *id058
+    - *id059
+    - *id060
+    - *id061
+    - *id062
+    - *id063
+    - *id064
+    - *id065
+    - *id066
+    - *id067
+    - *id068
+    - *id069
+    - *id070
+    - *id071
+    - *id072
+    - *id073
+    - *id074
+    - *id075
+    - *id076
+    - *id077
+    - *id078
+    - *id079
+    - *id080
+    - *id081
+    - *id082
+    - *id083
+    - *id084
+    - *id085
+    - *id086
+    - *id087
+    - *id088
+    - *id089
+    - *id090
+    - *id091
+    - *id092
+    - *id093
+    - *id094
+    - *id095
+    - *id096
+    - *id097
+    - *id098
+    - *id099
+    - *id100
+    - *id101
+    - *id102
+    - *id103
+    - *id104
+    - *id105
+    - *id106
+    - *id107
+    - &id108
+      type: grid
+      x: 2
+      y: 1
+      state: 1
+    - &id109
+      type: grid
+      x: 2
+      y: 1
+      state: 0
+    - &id110
+      type: wait
+      seconds: 0.06
+    - &id111
+      type: wait
+      seconds: 0.05
+    - &id112
+      type: enc
+      n: 1
+      delta: 2
+    - &id113
+      type: wait
+      seconds: 0.05
+    - &id114
+      type: enc
+      n: 1
+      delta: 2
+    - &id115
+      type: wait
+      seconds: 0.05
+    - &id116
+      type: enc
+      n: 1
+      delta: 2
+    - &id117
+      type: wait
+      seconds: 0.15
+    - &id118
+      type: wait
+      seconds: 0.05
+    - &id119
+      type: enc
+      n: 2
+      delta: -2
+    - &id120
+      type: wait
+      seconds: 0.05
+    - &id121
+      type: enc
+      n: 2
+      delta: -2
+    - &id122
+      type: wait
+      seconds: 0.05
+    - &id123
+      type: enc
+      n: 2
+      delta: -2
+    - &id124
+      type: wait
+      seconds: 0.05
+    - &id125
+      type: enc
+      n: 2
+      delta: -2
+    - &id126
+      type: wait
+      seconds: 0.05
+    - &id127
+      type: enc
+      n: 2
+      delta: -2
+    - &id128
+      type: wait
+      seconds: 0.05
+    - &id129
+      type: enc
+      n: 2
+      delta: -2
+    - &id130
+      type: wait
+      seconds: 0.05
+    - &id131
+      type: enc
+      n: 2
+      delta: -2
+    - &id132
+      type: wait
+      seconds: 0.05
+    - &id133
+      type: enc
+      n: 2
+      delta: -2
+    - &id134
+      type: wait
+      seconds: 0.05
+    - &id135
+      type: enc
+      n: 2
+      delta: -2
+    - &id136
+      type: wait
+      seconds: 0.15
+    - &id137
+      type: wait
+      seconds: 0.05
+    - &id138
+      type: enc
+      n: 2
+      delta: 2
+    - &id139
+      type: wait
+      seconds: 0.05
+    - &id140
+      type: enc
+      n: 2
+      delta: 2
+    - &id141
+      type: wait
+      seconds: 0.05
+    - &id142
+      type: enc
+      n: 2
+      delta: 2
+    - &id143
+      type: wait
+      seconds: 0.05
+    - &id144
+      type: enc
+      n: 2
+      delta: 2
+    - &id145
+      type: wait
+      seconds: 0.05
+    - &id146
+      type: enc
+      n: 2
+      delta: 2
+    - &id147
+      type: wait
+      seconds: 0.05
+    - &id148
+      type: enc
+      n: 2
+      delta: 2
+    - &id149
+      type: wait
+      seconds: 0.05
+    - &id150
+      type: enc
+      n: 2
+      delta: 2
+    - &id151
+      type: wait
+      seconds: 0.15
+    - &id152
+      type: key
+      n: 3
+      state: 1
+    - &id153
+      type: key
+      n: 3
+      state: 0
+    - &id154
+      type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-start
+        citation: manual:mods-and-software-devices
+        channel: 2
+        page: midi_config
+        field: Device
+        passed: true
+  - id: polyperc-pending
+    title: Choose Polyperc 1
+    caption: "Turn E3 until the Device row reads Polyperc 1. The footer says \u201C\
+      Press K3 to confirm\u201D, so this is still a draft."
+    citation: manual:mods-and-software-devices
+    inputs:
+    - &id155
+      type: wait
+      seconds: 0.05
+    - &id156
+      type: enc
+      n: 3
+      delta: 2
+    - &id157
+      type: wait
+      seconds: 0.15
+    - &id158
+      type: wait
+      seconds: 0.05
+    - &id159
+      type: enc
+      n: 3
+      delta: 2
+    - &id160
+      type: wait
+      seconds: 0.15
+    - &id161
+      type: wait
+      seconds: 0.05
+    - &id162
+      type: enc
+      n: 3
+      delta: 2
+    - &id163
+      type: wait
+      seconds: 0.15
+    - &id164
+      type: wait
+      seconds: 0.05
+    - &id165
+      type: enc
+      n: 3
+      delta: 2
+    - &id166
+      type: wait
+      seconds: 0.15
+    - &id167
+      type: wait
+      seconds: 0.05
+    - &id168
+      type: enc
+      n: 3
+      delta: 2
+    - &id169
+      type: wait
+      seconds: 0.15
+    - &id170
+      type: wait
+      seconds: 0.05
+    - &id171
+      type: enc
+      n: 3
+      delta: 2
+    - &id172
+      type: wait
+      seconds: 0.15
+    - &id173
+      type: wait
+      seconds: 0.05
+    - &id174
+      type: enc
+      n: 3
+      delta: 2
+    - &id175
+      type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: manual-player-apply-pending
+        citation: manual:mods-and-software-devices
+        channel: 2
+        field: Device
+        value: Polyperc 1
+        confirmation_prompt: Press K3 to confirm
+        passed: true
+  - id: polyperc-applied
+    title: Apply Polyperc 1
+    caption: Press K3 to apply Polyperc 1. The Device row remains Polyperc 1 and the
+      confirmation prompt clears.
+    citation: manual:mods-and-software-devices
+    inputs:
+    - &id176
+      type: key
+      n: 3
+      state: 1
+    - &id177
+      type: key
+      n: 3
+      state: 0
+    - &id178
+      type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-applied
+        citation: manual:mods-and-software-devices
+        channel: 2
+        page: midi_config
+        field: Device
+        value: Polyperc 1
+        confirmation_prompt_absent: true
+        passed: true
+  - id: polyperc-reopened
+    title: Reopen and verify Polyperc 1
+    caption: "Open Channel tasks \u2192 Device again. The Device row still reads Polyperc\
+      \ 1 without a confirmation prompt."
+    citation: manual:mods-and-software-devices
+    inputs:
+    - &id179
+      type: wait
+      seconds: 0.05
+    - &id180
+      type: enc
+      n: 1
+      delta: 2
+    - &id181
+      type: wait
+      seconds: 0.05
+    - &id182
+      type: enc
+      n: 1
+      delta: 2
+    - &id183
+      type: wait
+      seconds: 0.05
+    - &id184
+      type: enc
+      n: 1
+      delta: 2
+    - &id185
+      type: wait
+      seconds: 0.15
+    - &id186
+      type: wait
+      seconds: 0.05
+    - &id187
+      type: enc
+      n: 2
+      delta: -2
+    - &id188
+      type: wait
+      seconds: 0.05
+    - &id189
+      type: enc
+      n: 2
+      delta: -2
+    - &id190
+      type: wait
+      seconds: 0.05
+    - &id191
+      type: enc
+      n: 2
+      delta: -2
+    - &id192
+      type: wait
+      seconds: 0.05
+    - &id193
+      type: enc
+      n: 2
+      delta: -2
+    - &id194
+      type: wait
+      seconds: 0.05
+    - &id195
+      type: enc
+      n: 2
+      delta: -2
+    - &id196
+      type: wait
+      seconds: 0.05
+    - &id197
+      type: enc
+      n: 2
+      delta: -2
+    - &id198
+      type: wait
+      seconds: 0.05
+    - &id199
+      type: enc
+      n: 2
+      delta: -2
+    - &id200
+      type: wait
+      seconds: 0.05
+    - &id201
+      type: enc
+      n: 2
+      delta: -2
+    - &id202
+      type: wait
+      seconds: 0.05
+    - &id203
+      type: enc
+      n: 2
+      delta: -2
+    - &id204
+      type: wait
+      seconds: 0.15
+    - &id205
+      type: wait
+      seconds: 0.05
+    - &id206
+      type: enc
+      n: 2
+      delta: 2
+    - &id207
+      type: wait
+      seconds: 0.05
+    - &id208
+      type: enc
+      n: 2
+      delta: 2
+    - &id209
+      type: wait
+      seconds: 0.05
+    - &id210
+      type: enc
+      n: 2
+      delta: 2
+    - &id211
+      type: wait
+      seconds: 0.05
+    - &id212
+      type: enc
+      n: 2
+      delta: 2
+    - &id213
+      type: wait
+      seconds: 0.05
+    - &id214
+      type: enc
+      n: 2
+      delta: 2
+    - &id215
+      type: wait
+      seconds: 0.05
+    - &id216
+      type: enc
+      n: 2
+      delta: 2
+    - &id217
+      type: wait
+      seconds: 0.05
+    - &id218
+      type: enc
+      n: 2
+      delta: 2
+    - &id219
+      type: wait
+      seconds: 0.15
+    - &id220
+      type: key
+      n: 3
+      state: 1
+    - &id221
+      type: key
+      n: 3
+      state: 0
+    - &id222
+      type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-reopened
+        citation: manual:mods-and-software-devices
+        channel: 2
+        page: midi_config
+        field: Device
+        value: Polyperc 1
+        confirmation_prompt_absent: true
+        passed: true
+- id: player-apply-doubledecker
+  feature_id: mods-and-software-devices
+  title: Apply Doubledecker to the chord channel
+  behaviour_case: M-MANUAL-PLAYER-APPLY-001
+  requirements: *id001
+  profile: manual-player-ui
+  session_ordinal: 0
+  setup:
+    fixture: behaviour-case
+    case: M-MANUAL-PLAYER-APPLY-001
+    input_units: native; encoder units are twice the detents
+  steps:
+  - id: device-start
+    title: Open the Device page
+    caption: 'Starting point: Channel 3''s Device page is open. Read the Device row
+      before changing it.'
+    citation: manual:mods-and-software-devices
+    inputs:
+    - *id002
+    - *id003
+    - *id004
+    - *id005
+    - *id006
+    - *id007
+    - *id008
+    - *id009
+    - *id010
+    - *id011
+    - *id012
+    - *id013
+    - *id014
+    - *id015
+    - *id016
+    - *id017
+    - *id018
+    - *id019
+    - *id020
+    - *id021
+    - *id022
+    - *id023
+    - *id024
+    - *id025
+    - *id026
+    - *id027
+    - *id028
+    - *id029
+    - *id030
+    - *id031
+    - *id032
+    - *id033
+    - *id034
+    - *id035
+    - *id036
+    - *id037
+    - *id038
+    - *id039
+    - *id040
+    - *id041
+    - *id042
+    - *id043
+    - *id044
+    - *id045
+    - *id046
+    - *id047
+    - *id048
+    - *id049
+    - *id050
+    - *id051
+    - *id052
+    - *id053
+    - *id054
+    - *id055
+    - *id056
+    - *id057
+    - *id058
+    - *id059
+    - *id060
+    - *id061
+    - *id062
+    - *id063
+    - *id064
+    - *id065
+    - *id066
+    - *id067
+    - *id068
+    - *id069
+    - *id070
+    - *id071
+    - *id072
+    - *id073
+    - *id074
+    - *id075
+    - *id076
+    - *id077
+    - *id078
+    - *id079
+    - *id080
+    - *id081
+    - *id082
+    - *id083
+    - *id084
+    - *id085
+    - *id086
+    - *id087
+    - *id088
+    - *id089
+    - *id090
+    - *id091
+    - *id092
+    - *id093
+    - *id094
+    - *id095
+    - *id096
+    - *id097
+    - *id098
+    - *id099
+    - *id100
+    - *id101
+    - *id102
+    - *id103
+    - *id104
+    - *id105
+    - *id106
+    - *id107
+    - *id108
+    - *id109
+    - *id110
+    - *id111
+    - *id112
+    - *id113
+    - *id114
+    - *id115
+    - *id116
+    - *id117
+    - *id118
+    - *id119
+    - *id120
+    - *id121
+    - *id122
+    - *id123
+    - *id124
+    - *id125
+    - *id126
+    - *id127
+    - *id128
+    - *id129
+    - *id130
+    - *id131
+    - *id132
+    - *id133
+    - *id134
+    - *id135
+    - *id136
+    - *id137
+    - *id138
+    - *id139
+    - *id140
+    - *id141
+    - *id142
+    - *id143
+    - *id144
+    - *id145
+    - *id146
+    - *id147
+    - *id148
+    - *id149
+    - *id150
+    - *id151
+    - *id152
+    - *id153
+    - *id154
+    - *id155
+    - *id156
+    - *id157
+    - *id158
+    - *id159
+    - *id160
+    - *id161
+    - *id162
+    - *id163
+    - *id164
+    - *id165
+    - *id166
+    - *id167
+    - *id168
+    - *id169
+    - *id170
+    - *id171
+    - *id172
+    - *id173
+    - *id174
+    - *id175
+    - *id176
+    - *id177
+    - *id178
+    - *id179
+    - *id180
+    - *id181
+    - *id182
+    - *id183
+    - *id184
+    - *id185
+    - *id186
+    - *id187
+    - *id188
+    - *id189
+    - *id190
+    - *id191
+    - *id192
+    - *id193
+    - *id194
+    - *id195
+    - *id196
+    - *id197
+    - *id198
+    - *id199
+    - *id200
+    - *id201
+    - *id202
+    - *id203
+    - *id204
+    - *id205
+    - *id206
+    - *id207
+    - *id208
+    - *id209
+    - *id210
+    - *id211
+    - *id212
+    - *id213
+    - *id214
+    - *id215
+    - *id216
+    - *id217
+    - *id218
+    - *id219
+    - *id220
+    - *id221
+    - *id222
+    - type: grid
+      x: 3
+      y: 1
+      state: 1
+    - type: grid
+      x: 3
+      y: 1
+      state: 0
+    - type: wait
+      seconds: 0.06
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-start
+        citation: manual:mods-and-software-devices
+        channel: 3
+        page: midi_config
+        field: Device
+        passed: true
+  - id: doubledecker-pending
+    title: Choose Doubledecker
+    caption: "Turn E3 until the Device row reads Doubledecker. The footer says \u201C\
+      Press K3 to confirm\u201D, so this is still a draft."
+    citation: manual:mods-and-software-devices
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 3
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    expect:
+      assertion:
+        kind: manual-player-apply-pending
+        citation: manual:mods-and-software-devices
+        channel: 3
+        field: Device
+        value: Doubledecker
+        confirmation_prompt: Press K3 to confirm
+        passed: true
+  - id: doubledecker-applied
+    title: Apply Doubledecker
+    caption: Press K3 to apply Doubledecker. The Device row remains Doubledecker and
+      the confirmation prompt clears.
+    citation: manual:mods-and-software-devices
+    inputs:
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-applied
+        citation: manual:mods-and-software-devices
+        channel: 3
+        page: midi_config
+        field: Device
+        value: Doubledecker
+        confirmation_prompt_absent: true
+        passed: true
+  - id: doubledecker-reopened
+    title: Reopen and verify Doubledecker
+    caption: "Open Channel tasks \u2192 Device again. The Device row still reads Doubledecker\
+      \ without a confirmation prompt."
+    citation: manual:mods-and-software-devices
+    inputs:
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 1
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: -2
+    - type: wait
+      seconds: 0.15
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.05
+    - type: enc
+      n: 2
+      delta: 2
+    - type: wait
+      seconds: 0.15
+    - type: key
+      n: 3
+      state: 1
+    - type: key
+      n: 3
+      state: 0
+    - type: wait
+      seconds: 0.06
+    expect:
+      assertion:
+        kind: manual-player-apply-reopened
+        citation: manual:mods-and-software-devices
+        channel: 3
+        page: midi_config
+        field: Device
+        value: Doubledecker
+        confirmation_prompt_absent: true
+        passed: true

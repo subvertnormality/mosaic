@@ -1,0 +1,19 @@
+{
+  "review_id":"source18-astra-scoped-review-20261008-01",
+  "reader":"http://localhost:8928/manual/",
+  "status":"actual_picker_milestones_pass",
+  "reader_approval":true,
+  "scores":{"readability":8,"comprehensibility":8,"flow":8,"understandability":8,"user_friendliness":8,"usefulness_of_interactive_examples":8,"cohesion":8},
+  "blocking_findings":[],
+  "viewports":[[1440,900],[390,844]],
+  "checks":{"fresh_feature_picker_degree_11_steps_all_counters":true,"same_page_picker_rotation_3_steps_all_counters":true,"first_loop_owner_6_steps_all_counters":true,"picker_hash_updates":true,"document_overflow":false,"browser_errors":0},
+  "observations":8,
+  "total_frame_counter_observations":40,
+  "parity":{"reader_index_exact_source17":true,"manual_js_css_html_quickref_unchanged":true,"changed_asset":"book.js"},
+  "original_f01_f11":"Source16 bounded reader conclusions plus source17 Panic outcome closure retained; F03/F07 picker path newly checked",
+  "pins":{"book_owner_supplied":"db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e","reader_index":"300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52","book_js":"11f6a0c42082d6f0f79da17d49f88ffee0813247f7e5d9fea878518127a830a4","manual_js":"474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436","css":"1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309","index_html":"2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482","quick_reference":"6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"},
+  "blanket_native_pcm_runtime_ci_accessibility_closure":false,
+  "whole133_or425_review_repeated":false,
+  "prior_reports_preserved":true,
+  "production_mutations":false,"native_audio_rerun":false,"listened":false,"owned_browsers_closed":true
+}

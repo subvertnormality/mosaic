@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "90b3a9cd4dfc4ce2476a1c649980552c732ff7cd",
+  "after_sha": "34f1a901fda2f6297f3a66889e7ff971ac4fb99f",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-NAV-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract/navigation_matrix.py",
+      "tests/behaviour/test_ui_layer.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract/navigation_matrix.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-NAV-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-NAV-001/real-time/before/493babc89d394c5f9fd71e7a587932ab/manifest.json",
+              "manifest_sha256": "db041067c2e870833dacdfc4ee7b58ca0606781405271898c9e44de6fcbb1c51"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-NAV-001/real-time/after/344cab901bd54b6181f5710891a2b8ee/manifest.json",
+              "manifest_sha256": "d422a56e85151930c67642f1d49af58aa2a2504992d166356a9a67cbd83e1de6"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-NAV-001/controlled-experimental/before/b1e42a108430474f9bfe51a17b504629/manifest.json",
+              "manifest_sha256": "1fd2ad6965914845817e45d1e398d73f220dba66ff8741883e028ccce067326a"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-NAV-001/controlled-experimental/after/5903758a9d014c84bd01c48122ac614a/manifest.json",
+              "manifest_sha256": "396246d39bad831cfc7a0767578dc10468ebb20ac75164115000b79174953027"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

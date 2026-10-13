@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "focused_tests": 22,
+  "source_after": {
+    "tests/behaviour/manual_authority.py": "02a730b973a1ce986cdab643aee388d143a78f2bbde0c8b1330257b7a4c8d88c",
+    "tests/behaviour/test_manual_authority.py": "9c33f4471870f742ec3099b5a0137f06ec764f2fdcdddcaa88865a6710262fb4"
+  },
+  "red_log_sha256": "3050aab3bb83c0168bb3e249a2a9b68125471548bcecb63debf8340034bfef07",
+  "green_log_sha256": "c05c9aa2acd587d673334ed75ae1bf930929fee3f93a4c9d98f0e63858dfadce",
+  "authority_activation": false,
+  "complete_regression_run": false
+}

@@ -1,0 +1,2771 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "independent-probability-oracle",
+    "seed": 42,
+    "probability": 1,
+    "draws": [
+      32,
+      69,
+      42,
+      20,
+      25,
+      63,
+      86,
+      30,
+      2,
+      36,
+      76,
+      31,
+      13,
+      10,
+      76,
+      8,
+      55,
+      56,
+      74,
+      98,
+      21,
+      45,
+      51,
+      57,
+      55,
+      72,
+      62,
+      79,
+      58,
+      27,
+      82,
+      91,
+      96,
+      25,
+      11,
+      21,
+      88,
+      98,
+      51,
+      91,
+      34,
+      28,
+      23,
+      48,
+      38,
+      99,
+      56,
+      94,
+      55,
+      30,
+      92,
+      77,
+      76,
+      44,
+      34,
+      31,
+      16,
+      97,
+      11,
+      75,
+      25,
+      94,
+      66,
+      21,
+      19,
+      78,
+      43,
+      8,
+      77,
+      95,
+      99,
+      11,
+      23,
+      23,
+      60,
+      62,
+      22,
+      16,
+      56,
+      77,
+      47,
+      48,
+      55,
+      24,
+      92,
+      90,
+      56,
+      9,
+      88,
+      67,
+      84,
+      13,
+      62,
+      51,
+      35,
+      81,
+      30,
+      78,
+      90,
+      7,
+      73,
+      90,
+      19,
+      97,
+      13,
+      79,
+      59,
+      35,
+      96,
+      15,
+      13,
+      44,
+      64,
+      68,
+      68,
+      57,
+      59,
+      24,
+      66,
+      47,
+      91,
+      51,
+      61,
+      53,
+      2,
+      96,
+      35,
+      33,
+      75,
+      25,
+      40,
+      49,
+      15,
+      59,
+      46,
+      29,
+      38,
+      6,
+      64,
+      34,
+      22,
+      77,
+      78,
+      86,
+      46,
+      47,
+      43,
+      5,
+      71,
+      10,
+      53,
+      63,
+      61,
+      14,
+      17,
+      64,
+      10,
+      52,
+      97,
+      85,
+      78,
+      37,
+      34,
+      94,
+      97,
+      81,
+      23,
+      35,
+      87,
+      87,
+      70,
+      9,
+      65,
+      49,
+      95,
+      11,
+      96,
+      39,
+      17,
+      67,
+      49,
+      70,
+      31,
+      11,
+      84,
+      48,
+      76,
+      95,
+      0,
+      73,
+      81,
+      79,
+      11,
+      16,
+      73,
+      8,
+      97,
+      96,
+      44,
+      84,
+      84,
+      15,
+      94,
+      50,
+      64,
+      90,
+      62,
+      61,
+      30,
+      79,
+      28,
+      79,
+      50,
+      59,
+      91,
+      35,
+      8,
+      67,
+      30,
+      8,
+      41,
+      12,
+      87,
+      53,
+      28,
+      61,
+      61,
+      25,
+      58,
+      6,
+      10,
+      42,
+      21,
+      5,
+      92,
+      86,
+      95,
+      54,
+      47,
+      25,
+      34,
+      76,
+      5,
+      85,
+      36,
+      96,
+      20,
+      44,
+      64,
+      51,
+      53,
+      5,
+      63,
+      41,
+      58,
+      91,
+      2,
+      20,
+      17,
+      61,
+      27,
+      27,
+      3,
+      49,
+      32,
+      96,
+      35,
+      28,
+      51,
+      83,
+      53,
+      86,
+      60,
+      59,
+      71,
+      96,
+      55,
+      91,
+      41,
+      20,
+      43,
+      94,
+      25,
+      6,
+      36,
+      84,
+      97,
+      39,
+      5,
+      14,
+      0,
+      32,
+      42,
+      4,
+      81,
+      75,
+      0,
+      17,
+      3,
+      52,
+      0,
+      57,
+      38,
+      60,
+      16,
+      10,
+      57,
+      72,
+      1,
+      98,
+      93,
+      45,
+      93,
+      18,
+      51,
+      30,
+      3,
+      49,
+      69,
+      8,
+      64
+    ],
+    "accepted_zero_based_steps": [
+      188,
+      290,
+      296,
+      300
+    ],
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "source": "Separate lua5.3 native math.random; no startup draws expected from non-yielding Mosaic init. Never fit a draw offset to MIDI."
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15,
+      15
+    ],
+    "actual": [
+      15,
+      15
+    ]
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Trig Probability",
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      }
+    ]
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      }
+    ]
+  },
+  {
+    "kind": "seeded-probability-reference-midi",
+    "probability": 1,
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "accepted_zero_based_steps": [
+      188,
+      290,
+      296,
+      300
+    ],
+    "reference_count": 321,
+    "reference_timing_errors": [
+      0.0,
+      3.333333331578814e-10,
+      6.666666663157628e-10,
+      9.999999717180685e-10,
+      3.33333360913457e-10,
+      6.666666108046115e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      0.0,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      1.000000082740371e-09,
+      3.33333360913457e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10,
+      9.999965300266922e-10,
+      3.333369136271358e-10,
+      6.66666721826914e-10
+    ],
+    "accepted_alignment_errors": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "passed": true,
+    "scope": "Every native reference opportunity through closing onset; first acceptance and rejected tail are checked."
+  }
+]

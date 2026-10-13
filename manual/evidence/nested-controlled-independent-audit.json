@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "complete_regression_run": false,
+  "hardware_timing_verified": false,
+  "publication": "/home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa/reference-scenes.json",
+  "publication_sha256": "a76a8f6ea2b124d05fcf98dd2523ffaa23387937fc17e77d62d09363e583a748",
+  "clock_mode": "controlled-experimental",
+  "scenes": 3,
+  "frames": 11,
+  "participants": [
+    {
+      "case": "M-MAP-001",
+      "ordinal": 0,
+      "context_sha256": "102ee881c2276301a276f440c877399857325f5be1d293d4c788b9140a4cf01f",
+      "path": "/home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa/M-MAP-001-base-midi"
+    },
+    {
+      "case": "M-MAP-001",
+      "ordinal": 1,
+      "context_sha256": "46fb16d072a5c6b4d463e60261378d39a36142a66a885b72766f6e680c33924b",
+      "path": "/home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa/M-MAP-001-base-midi/mapping"
+    },
+    {
+      "case": "M-OPT-ELEK-001",
+      "ordinal": 0,
+      "context_sha256": "7c8b7cd5d95f5d41bf21216279498d51d0885e7848cd2098092c682b7bc60da4",
+      "path": "/home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa/M-OPT-ELEK-001-base-midi"
+    },
+    {
+      "case": "M-OPT-ELEK-001",
+      "ordinal": 1,
+      "context_sha256": "d06dafb614699a75824517a436ca36ec9e878c51882524faba2d65207b83d694",
+      "path": "/home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa/M-OPT-ELEK-001-base-midi/elektron"
+    }
+  ],
+  "participant_count": 4
+}

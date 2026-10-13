@@ -1,0 +1,23 @@
+E..................F..................
+======================================================================
+ERROR: test_all_generic_real_profiles_use_qualified_install_but_audio_stays_separate (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 65, in test_all_generic_real_profiles_use_qualified_install_but_audio_stays_separate
+    stages=build.plan(self.options(),['scene-plans.yaml','scene-plans-options.yaml','scene-plans-readability.yaml'])
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_build.py", line 81, in plan
+    if not mod_root:raise ValueError("Modulation plans require --modulation-code-root separately from voice sources")
+ValueError: Modulation plans require --modulation-code-root separately from voice sources
+
+======================================================================
+FAIL: test_generic_real_captures_require_explicit_qualified_installation (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 63, in test_generic_real_captures_require_explicit_qualified_installation
+    with self.assertRaisesRegex(ValueError,'real.*installation'):build.plan(options,['scene-plans.yaml'])
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 38 tests in 0.871s
+
+FAILED (failures=1, errors=1)

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "446a00870f9489cc78d64342288b6fa28b8b1dc3",
+  "selected_cases": [
+    "M-PARAM-012",
+    "M-PARAM-013",
+    "M-PARAM-014",
+    "M-PARAM-015",
+    "M-PARAM-016",
+    "M-PARAM-017",
+    "M-PARAM-018",
+    "M-PARAM-019"
+  ],
+  "selected_modules": {
+    "tests/behaviour/trig_parameter_interactions.py": "M-PARAM-012"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/trig_parameter_interactions.py",
+      "case": "M-PARAM-012",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-a90b4b1b4184472485c0280ac739aedb/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-a90b4b1b4184472485c0280ac739aedb/manifest.json",
+      "manifest_sha256": "b63f03bb8704aeadb0c421afab1d5c47c41aeae5d84360b51698aeebd38c1114",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

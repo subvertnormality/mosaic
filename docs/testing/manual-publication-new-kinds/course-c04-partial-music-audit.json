@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "scope": "Partial failed whole-course capture: eight completed native MIDI windows only; causal UI observations reviewed separately",
+  "course_complete": false,
+  "whole_capture_passed": false,
+  "failed_run": "/home/andy/mosaic-manual-runs/c04df836b6f54dc1873d94bf7708bbaf",
+  "failed_report_sha256": "8046afe7cdbea580222c568e63228e41d37fe8e3260b29c853415c6eb46f6588",
+  "music": [
+    {
+      "stage": "first-sound-hear",
+      "passed": true,
+      "midi_start_index": 10,
+      "midi_end_index": 65
+    },
+    {
+      "stage": "build-a-phrase-compare",
+      "passed": true,
+      "midi_start_index": 70,
+      "midi_end_index": 221
+    },
+    {
+      "stage": "masks-listen",
+      "passed": true,
+      "midi_start_index": 226,
+      "midi_end_index": 377
+    },
+    {
+      "stage": "masks-quiet",
+      "passed": true,
+      "midi_start_index": 382,
+      "midi_end_index": 533
+    },
+    {
+      "stage": "masks-default-g",
+      "passed": true,
+      "midi_start_index": 538,
+      "midi_end_index": 689
+    },
+    {
+      "stage": "masks-default-restored",
+      "passed": true,
+      "midi_start_index": 694,
+      "midi_end_index": 845
+    },
+    {
+      "stage": "masks-clear",
+      "passed": true,
+      "midi_start_index": 850,
+      "midi_end_index": 1001
+    },
+    {
+      "stage": "masks-keep",
+      "passed": true,
+      "midi_start_index": 1006,
+      "midi_end_index": 1157
+    }
+  ],
+  "causal_frames": [
+    {
+      "observation_index": 109,
+      "passed": false,
+      "error": "Native literal screen header mismatch"
+    },
+    {
+      "observation_index": 110,
+      "passed": false,
+      "error": "Native literal screen header mismatch"
+    },
+    {
+      "observation_index": 111,
+      "passed": false,
+      "error": "Native literal screen header mismatch"
+    }
+  ],
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

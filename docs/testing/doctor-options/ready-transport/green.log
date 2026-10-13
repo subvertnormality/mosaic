@@ -1,0 +1,8 @@
+test_after_stop_original_mask_and_bank_tempo_are_observed (test_doctor_ready_transport.ReadyTransportCoverage.test_after_stop_original_mask_and_bank_tempo_are_observed) ... ok
+test_failed_held_route_observation_releases_record_and_stops (test_doctor_ready_transport.ReadyTransportCoverage.test_failed_held_route_observation_releases_record_and_stops) ... ok
+test_public_record_press_and_release_are_exercised_while_playing (test_doctor_ready_transport.ReadyTransportCoverage.test_public_record_press_and_release_are_exercised_while_playing) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.012s
+
+OK

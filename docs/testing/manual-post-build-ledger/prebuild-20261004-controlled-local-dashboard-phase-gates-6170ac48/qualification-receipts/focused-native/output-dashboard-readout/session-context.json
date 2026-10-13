@@ -1,0 +1,14 @@
+{
+  "session_ordinal": 0,
+  "clock_mode": "controlled-experimental",
+  "profile": "base-midi",
+  "app_root": "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa/application",
+  "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+  "session_id": "98640694507a4ce4b635def734973d69",
+  "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
+  "application_identity_sha256": "5d6e5d60536ff98c42659f00cb5f8f57c14b20252a6548698ef195fcc58c81c9",
+  "finished": true,
+  "held_inputs": [],
+  "cleanup_verified": true
+}

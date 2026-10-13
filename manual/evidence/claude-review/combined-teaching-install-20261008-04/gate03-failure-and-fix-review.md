@@ -1,0 +1,14 @@
+Gate03 terminal failure and serialization-fix review
+
+Scope: read-only inspection. No compilation, native/audio validation, source checkout mutation, or installation was performed in this review.
+
+Failure preservation. The orchestrator reports gate03 session 4646 terminated with exit 1 before any mutation. The exact diagnostic was the only unexpected checked-in/current-base index diff: `canonical_inputs.book_json_sha256`. No raw terminal transcript was present in the retained work directory, so this report preserves the status and diagnostic as relayed by the orchestrator; it does not claim to be a captured terminal log. Preserved work path: `/home/andy/mosaic-manual-build-operators/combined-teaching-install-20261008-03/`. The preserved reserialized baseline book is `current-base-book.json`, SHA-256 `4d97c108ea5cb78f9f39ddcf5bfbbfc19803a068c7712945fd7a4de48d903368`; its base reader index is `current-base-projection/reader-index.json`, SHA-256 `8d44db2bbe9ae453f2692ac3e3149435875c0a026681e6ad99511e06ccef0399`. That index records `canonical_inputs.book_json_sha256` as the reserialized book hash above.
+
+Narrow correction review. The failed helper snapshot `qualify_text_batch.gate03-failed.py` has SHA-256 `93e9ff37ca5ec9c82d7169ba3cfaa71e863459f1797ca53b1b730afde5775708`. Current external helper `qualify_text_batch.py` has SHA-256 `7752cf769fa71e8b1566039fb89b7b2af1b454ca61aafbd984b8264e117c92dd`. A unified diff shows the sole change is in `make_projection`: for label `current-base`, read exact retained generated book bytes, assert `json.loads(raw) == book`, and write those raw bytes to the staging book; candidate serialization is unchanged. This directly fixes the provenance mismatch without relaxing any comparison or changing source/generated files.
+
+Current authoring-root and publication-root generated preimage checks:
+- Authoring root `/home/andy/mosaic-manual-1.4.0/manual/generated/book.json`: SHA-256 `54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5`; `authoring_identity.sha256` `80cc81d39ab276c32da0561588cafad4ac3f4123b065043573a78b1483312d46`; `source_sha256` `ebd18854567cd372790c1f6d5aa72b8f052f9e0ebc1a8ed25bc0e129cf05d0bb`.
+- Publication snapshot `/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/generated/book.json`: same three hashes.
+- Both roots’ `manual/generated/reader-index.json`: SHA-256 `39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf`.
+
+The gate03 reserialized base book hash differs from the unchanged authoring/publication book bytes, while both live roots retain the same authoring identity, source hash, generated-book hash, and reader-index hash. This is consistent with the reported pre-mutation failure and confirms no installation occurred in either root.

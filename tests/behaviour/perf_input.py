@@ -21,6 +21,7 @@ import urllib.request
 import uuid
 import traceback
 from pathlib import Path
+from ui import Ui
 
 BEHAVIOUR = Path(__file__).resolve().parent
 REPO = BEHAVIOUR.parents[1]
@@ -162,6 +163,7 @@ class Controls:
         self.http = http
         self.action_latencies_ns = []
         self.trace = []
+        self.ui = Ui.for_action_sink(self.action, lambda delay: time.sleep(delay), encoder_pause=.03)
 
     def action(self, value):
         started = time.monotonic_ns()
@@ -171,75 +173,49 @@ class Controls:
         self.trace.append(value)
         return response
 
-    def tap(self, x, y):
-        self.action(dict(type='grid', x=x, y=y, state=1))
-        self.action(dict(type='grid', x=x, y=y, state=0))
-        time.sleep(.06)
-
-    def key(self, n):
-        self.action(dict(type='key', n=n, state=1))
-        self.action(dict(type='key', n=n, state=0))
-        time.sleep(.06)
-
-    def enc(self, n, delta):
-        self.action(dict(type='enc', n=n, delta=delta))
-        time.sleep(.03)
-
     def configure_pattern(self):
         # Same documented grid/menu path used by the normal behaviour driver:
         # four trigs in pattern 1 routed to configured MIDI channel 1.
-        self.tap(3, 8)
+        self.ui.menu('channel_editor')
         for _ in range(4):
-            self.enc(1, 2)
-        self.enc(3, 2); self.key(3); self.tap(5, 8)
-        for x in range(1, 5):
-            self.tap(x, 4)
-        self.tap(5, 8)
-        for x, y in ((1, 7), (2, 6), (3, 5), (4, 4)):
-            self.tap(x, y)
-        self.tap(5, 8)
-        for x, y in ((1, 1), (2, 2), (3, 3), (4, 4)):
-            self.tap(x, y)
-        self.tap(3, 8); self.tap(1, 2)
-        self.action(dict(type='grid', x=1, y=4, state=1))
-        self.tap(4, 4)
-        self.action(dict(type='grid', x=1, y=4, state=0))
+            self.ui.turn(1, 2)
+        self.ui.set_value(2); self.ui.press_key(3); self.ui.pattern_editor()
+        for step in range(1, 5):
+            self.ui.tap_step(step)
+        self.ui.pattern_editor('note', 'trigger')
+        for step, degree in ((1, 0), (2, 1), (3, 2), (4, 3)):
+            self.ui.tap_control('pattern_note_degree', (step, degree))
+        self.ui.pattern_editor('velocity', 'note')
+        for step, level in ((1, 7), (2, 6), (3, 5), (4, 4)):
+            self.ui.tap_control('pattern_velocity_level', (step, level))
+        self.ui.menu('channel_editor'); self.ui.tap_control('pattern_slot', 1)
+        self.ui.control_edge('step', True, 1)
+        self.ui.tap_step(4)
+        self.ui.control_edge('step', False, 1)
 
     def external_clock_port_one(self, diagnostics):
         # Actual norns parameter menu traversal.  The root position is queried
         # only to find the public CLOCK item; it does not inspect Mosaic data.
-        self.key(1)
-        for _ in range(4):
-            self.enc(1, 2)
-        self.key(3)
-        roots = diagnostics['parameter_roots']
-        position = next(index for index, root in enumerate(roots) if root['name'] == 'CLOCK')
-        for _ in range(position):
-            self.enc(2, 2)
-        self.key(3)                 # CLOCK >, source = internal
-        self.enc(3, 2)              # midi
-        for _ in range(11):
-            self.enc(2, 2)
-        self.enc(3, 2)              # selected input: Emulator MIDI
+        self.ui.performance_external_clock_port_one(diagnostics)
 
     def playback_pressure(self):
         # 160 encoder, 40 grid and 16 key events.  Grid taps/combos occur in
         # even pairs, restoring the edited cells before transport ends.
         pressure_start = len(self.action_latencies_ns)
         for index in range(80):
-            self.action(dict(type='enc', n=1, delta=1))
-            self.action(dict(type='enc', n=1, delta=-1))
+            self.ui.encoder_event(1, 1)
+            self.ui.encoder_event(1, -1)
         for _ in range(12):
-            self.action(dict(type='grid', x=16, y=4, state=1))
-            self.action(dict(type='grid', x=16, y=4, state=0))
+            self.ui.control_edge('step', True, 16)
+            self.ui.control_edge('step', False, 16)
         for _ in range(4):
-            self.action(dict(type='grid', x=15, y=4, state=1))
-            self.action(dict(type='grid', x=16, y=4, state=1))
-            self.action(dict(type='grid', x=16, y=4, state=0))
-            self.action(dict(type='grid', x=15, y=4, state=0))
+            self.ui.control_edge('step', True, 15)
+            self.ui.control_edge('step', True, 16)
+            self.ui.control_edge('step', False, 16)
+            self.ui.control_edge('step', False, 15)
         for _ in range(8):
-            self.action(dict(type='key', n=1, state=1))
-            self.action(dict(type='key', n=1, state=0))
+            self.ui.key_edge(1, True)
+            self.ui.key_edge(1, False)
         pressure_latencies = self.action_latencies_ns[pressure_start:]
         assert len(pressure_latencies) == INPUT_ACTIONS, len(pressure_latencies)
         return pressure_latencies
@@ -328,7 +304,7 @@ def run_one(image, output):
         controls = Controls(http)
         controls.configure_pattern()
         controls.external_clock_port_one(http.request('/snapshot')['state']['diagnostics'])
-        controls.tap(5, 8)  # trig editor: physical edits now affect real grid/frame output.
+        controls.ui.pattern_editor()  # physical edits now affect real grid/frame output.
         before = http.request('/snapshot')
         recording = http.request('/performance/start', dict(period_ms=10, maximum_seconds=25))
         time.sleep(1.0)

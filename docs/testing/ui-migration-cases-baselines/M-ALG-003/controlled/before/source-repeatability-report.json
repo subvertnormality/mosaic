@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "1a79e82a320625b61af29dd9be0a82c02c5d0fb3",
+  "selected_cases": [
+    "M-ALG-003",
+    "M-ALG-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-ALG-003"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-ALG-003",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-c237469d07f74238841734e2de936d80/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-c237469d07f74238841734e2de936d80/manifest.json",
+      "manifest_sha256": "ab03a895e0efc15f78b6cf6355a2535410322baafcd90a4de52398e5581477f2",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

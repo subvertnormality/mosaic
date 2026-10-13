@@ -1,0 +1,13 @@
+E.....
+======================================================================
+ERROR: test_child_sessions_inherit_frozen_application_and_restore_constructor (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 33, in test_child_sessions_inherit_frozen_application_and_restore_constructor
+    with module.freeze_child_drivers([case],original,"/frozen"):
+AttributeError: module 'manual_case_capture' has no attribute 'freeze_child_drivers'
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.019s
+
+FAILED (errors=1)

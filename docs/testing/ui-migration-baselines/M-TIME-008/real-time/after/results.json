@@ -1,0 +1,910 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "clock_mods",
+    "channel": 1
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500149289,
+        "error_ms": 0.14928900000010792
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499121401,
+        "error_ms": -0.8785989999999799
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499505699,
+        "error_ms": -0.4943010000000303
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500169208,
+        "error_ms": 0.16920799999997627
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499033586,
+        "error_ms": -0.966414000000082
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.49964191,
+        "error_ms": -0.3580899999999776
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499320525,
+        "error_ms": -0.679475000000096
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499454998,
+        "error_ms": -0.5450019999999611
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499567211,
+        "error_ms": -0.432788999999989
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499502384,
+        "error_ms": -0.49761600000008954
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499262569,
+        "error_ms": -0.7374309999998996
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500233028,
+        "error_ms": 0.233028000000024
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499077832,
+        "error_ms": -0.922168000000001
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499563518,
+        "error_ms": -0.4364820000000158
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499371684,
+        "error_ms": -0.6283160000000176
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499747303,
+        "error_ms": -0.25269700000007944
+      }
+    ]
+  },
+  {
+    "kind": "native-repeat-reset-policy",
+    "song_mode": true,
+    "transition_reset": false,
+    "repeat_reset": false,
+    "onsets": 17,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1728,
+      1944,
+      2160,
+      2376,
+      2592,
+      2808,
+      3024,
+      3240,
+      3456
+    ],
+    "max_phase_error_seconds": 0.0006934310000001886,
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499899768,
+        "error_ms": -0.10023200000008892
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498593219,
+        "error_ms": -1.4067810000000236
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499710108,
+        "error_ms": -0.2898920000000693
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499544212,
+        "error_ms": -0.4557880000000125
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499622464,
+        "error_ms": -0.37753600000001164
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.49899812,
+        "error_ms": -1.0018800000000105
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500044987,
+        "error_ms": 0.04498700000010736
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499521955,
+        "error_ms": -0.478044999999927
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499508691,
+        "error_ms": -0.49130900000005084
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499103533,
+        "error_ms": -0.8964670000000119
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499663458,
+        "error_ms": -0.33654200000010626
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499399035,
+        "error_ms": -0.6009650000000644
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499451424,
+        "error_ms": -0.5485759999999118
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499585588,
+        "error_ms": -0.41441200000003064
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499895647,
+        "error_ms": -0.10435300000000147
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.4986173,
+        "error_ms": -1.382699999999959
+      }
+    ]
+  },
+  {
+    "kind": "native-repeat-reset-policy",
+    "song_mode": true,
+    "transition_reset": true,
+    "repeat_reset": false,
+    "onsets": 17,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1728,
+      1944,
+      2160,
+      2376,
+      2592,
+      2808,
+      3024,
+      3240,
+      3456
+    ],
+    "max_phase_error_seconds": 0.001439221000000046,
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499748366,
+        "error_ms": -0.2516340000000561
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500175602,
+        "error_ms": 0.17560200000010795
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499162751,
+        "error_ms": -0.8372489999999289
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499539745,
+        "error_ms": -0.4602549999999095
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499594002,
+        "error_ms": -0.405997999999963
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498801362,
+        "error_ms": -1.1986379999999741
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500288127,
+        "error_ms": 0.28812699999991587
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499628535,
+        "error_ms": -0.37146499999995974
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.50024223,
+        "error_ms": 0.24223000000000994
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498982462,
+        "error_ms": -1.017537999999929
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499654645,
+        "error_ms": -0.34535500000010266
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499341954,
+        "error_ms": -0.6580460000000787
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.49900922,
+        "error_ms": -0.9907799999999689
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499712045,
+        "error_ms": -0.2879549999998954
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500428792,
+        "error_ms": 0.42879199999990014
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499400844,
+        "error_ms": -0.5991560000000451
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499951136,
+        "error_ms": -0.04886400000003732
+      }
+    ]
+  },
+  {
+    "kind": "native-repeat-reset-policy",
+    "song_mode": true,
+    "transition_reset": false,
+    "repeat_reset": true,
+    "onsets": 18,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1536,
+      1752,
+      1968,
+      2184,
+      2400,
+      2616,
+      2832,
+      3048,
+      3072,
+      3288
+    ],
+    "max_phase_error_seconds": 0.0009880323333320007,
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500464885,
+        "error_ms": 0.46488499999997046
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498641391,
+        "error_ms": -1.358608999999955
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499651932,
+        "error_ms": -0.3480680000000902
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499806803,
+        "error_ms": -0.1931969999999783
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499795239,
+        "error_ms": -0.20476099999999775
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498733441,
+        "error_ms": -1.266559000000056
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500242994,
+        "error_ms": 0.24299399999994087
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499858058,
+        "error_ms": -0.1419419999999505
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499179995,
+        "error_ms": -0.8200050000000125
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498720073,
+        "error_ms": -1.279926999999903
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499970329,
+        "error_ms": -0.029671000000064396
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499671217,
+        "error_ms": -0.32878300000005467
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499898815,
+        "error_ms": -0.10118499999989261
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498735042,
+        "error_ms": -1.2649579999999272
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500241021,
+        "error_ms": 0.2410209999998969
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499495108,
+        "error_ms": -0.5048919999999235
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498707938,
+        "error_ms": -1.2920620000000937
+      }
+    ]
+  },
+  {
+    "kind": "native-repeat-reset-policy",
+    "song_mode": true,
+    "transition_reset": true,
+    "repeat_reset": true,
+    "onsets": 18,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1536,
+      1752,
+      1968,
+      2184,
+      2400,
+      2616,
+      2832,
+      3048,
+      3072,
+      3288
+    ],
+    "max_phase_error_seconds": 0.0011755393333334752,
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499844106,
+        "error_ms": -0.15589399999993425
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499859757,
+        "error_ms": -0.14024299999992884
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498769843,
+        "error_ms": -1.230156999999954
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500065636,
+        "error_ms": 0.06563599999998004
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499123509,
+        "error_ms": -0.8764910000000903
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499638239,
+        "error_ms": -0.3617609999999605
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499797862,
+        "error_ms": -0.20213799999990734
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499939137,
+        "error_ms": -0.060863000000077605
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.49942163,
+        "error_ms": -0.5783699999999392
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.49946865,
+        "error_ms": -0.5313499999999305
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499191357,
+        "error_ms": -0.8086430000000533
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499650928,
+        "error_ms": -0.3490719999998948
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499347854,
+        "error_ms": -0.6521459999999646
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499358792,
+        "error_ms": -0.6412080000000042
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499409542,
+        "error_ms": -0.5904580000000159
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499231334,
+        "error_ms": -0.7686659999999179
+      }
+    ]
+  },
+  {
+    "kind": "native-repeat-reset-policy",
+    "song_mode": false,
+    "transition_reset": true,
+    "repeat_reset": true,
+    "onsets": 17,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1728,
+      1944,
+      2160,
+      2376,
+      2592,
+      2808,
+      3024,
+      3240,
+      3456
+    ],
+    "max_phase_error_seconds": 0.0007919610000008959,
+    "passed": true
+  }
+]

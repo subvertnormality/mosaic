@@ -1,0 +1,790 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "masks",
+    "channel": 2
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "masks",
+    "channel": 1
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082472786,
+        "error_ms": -0.8605473333333225
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.206926802,
+        "error_ms": -1.4065313333333496
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082459666,
+        "error_ms": -0.8736673333333278
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082110738,
+        "error_ms": -1.2225953333333262
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082338923,
+        "error_ms": -0.9944103333333343
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.207651431,
+        "error_ms": -0.6819023333333452
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082165541,
+        "error_ms": -1.167792333333334
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.081810058,
+        "error_ms": -1.5232753333333238
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-other-channel-isolation",
+    "stage": "both-step-overrides",
+    "expected_notes": [
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        81,
+        60
+      ],
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        79,
+        40
+      ]
+    ],
+    "observed_onsets": 13,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166552826,
+        "error_ms": -0.11384066666667025
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165341537,
+        "error_ms": -1.3251296666666468
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166267703,
+        "error_ms": -0.3989636666666685
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166206481,
+        "error_ms": -0.46018566666666816
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165075735,
+        "error_ms": -1.5909316666666562
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166082248,
+        "error_ms": -0.5844186666666695
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166278658,
+        "error_ms": -0.38800866666666156
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16540027,
+        "error_ms": -1.2663966666666693
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-attribute",
+    "attribute": "note",
+    "chord_slot": 1,
+    "defaults": true,
+    "stage": "both-step-overrides",
+    "active_step_overrides": [
+      1,
+      2
+    ],
+    "expected_phrase": [
+      [
+        1,
+        [
+          144,
+          72,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          97
+        ]
+      ]
+    ],
+    "expected_lengths": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083646303,
+        "error_ms": 0.31296966666667647
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.207217694,
+        "error_ms": -1.1156393333333348
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083025232,
+        "error_ms": -0.30810133333332435
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083386809,
+        "error_ms": 0.05347566666667747
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083134767,
+        "error_ms": -0.1985663333333304
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.207754614,
+        "error_ms": -0.5787193333333385
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082272206,
+        "error_ms": -1.0611273333333282
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082558407,
+        "error_ms": -0.7749263333333284
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-other-channel-isolation",
+    "stage": "clear-first-step",
+    "expected_notes": [
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        81,
+        60
+      ],
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        79,
+        40
+      ]
+    ],
+    "observed_onsets": 13,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166548928,
+        "error_ms": -0.11773866666664468
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165818644,
+        "error_ms": -0.8480226666666701
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165752223,
+        "error_ms": -0.9144436666666533
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166181101,
+        "error_ms": -0.4855656666666597
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166061399,
+        "error_ms": -0.605267666666659
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166243331,
+        "error_ms": -0.4233356666666632
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16541978,
+        "error_ms": -1.246886666666669
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166458015,
+        "error_ms": -0.20865166666667045
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-attribute",
+    "attribute": "note",
+    "chord_slot": 1,
+    "defaults": true,
+    "stage": "clear-first-step",
+    "active_step_overrides": [
+      2
+    ],
+    "expected_phrase": [
+      [
+        1,
+        [
+          144,
+          67,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          97
+        ]
+      ]
+    ],
+    "expected_lengths": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083938689,
+        "error_ms": 0.6053556666666682
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.207635087,
+        "error_ms": -0.6982463333333466
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082445065,
+        "error_ms": -0.8882683333333308
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082429885,
+        "error_ms": -0.9034483333333343
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082672533,
+        "error_ms": -0.6608003333333223
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.20730857,
+        "error_ms": -1.024763333333345
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082732039,
+        "error_ms": -0.6012943333333354
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.08190594,
+        "error_ms": -1.4273933333333322
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-other-channel-isolation",
+    "stage": "repeat-clear-first-step",
+    "expected_notes": [
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        81,
+        60
+      ],
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        79,
+        40
+      ]
+    ],
+    "observed_onsets": 13,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166926042,
+        "error_ms": 0.2593753333333393
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166077938,
+        "error_ms": -0.5887286666666491
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165969107,
+        "error_ms": -0.6975596666666528
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165731265,
+        "error_ms": -0.9354016666666687
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166657267,
+        "error_ms": -0.00939966666665959
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165469839,
+        "error_ms": -1.19682766666665
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166291454,
+        "error_ms": -0.3752126666666522
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165106153,
+        "error_ms": -1.560513666666652
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-attribute",
+    "attribute": "note",
+    "chord_slot": 1,
+    "defaults": true,
+    "stage": "repeat-clear-first-step",
+    "active_step_overrides": [
+      2
+    ],
+    "expected_phrase": [
+      [
+        1,
+        [
+          144,
+          67,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          74,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          97
+        ]
+      ]
+    ],
+    "expected_lengths": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082951222,
+        "error_ms": -0.3821113333333237
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.206998246,
+        "error_ms": -1.3350873333333457
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082550715,
+        "error_ms": -0.782618333333332
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083614614,
+        "error_ms": 0.28128066666667506
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082778922,
+        "error_ms": -0.5544113333333239
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.207074827,
+        "error_ms": -1.2585063333333535
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082759415,
+        "error_ms": -0.5739183333333259
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082438345,
+        "error_ms": -0.8949883333333325
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-other-channel-isolation",
+    "stage": "clear-channel-step-overrides",
+    "expected_notes": [
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        81,
+        60
+      ],
+      [
+        145,
+        79,
+        40
+      ],
+      [
+        145,
+        79,
+        40
+      ]
+    ],
+    "observed_onsets": 13,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167199624,
+        "error_ms": 0.5329573333333337
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16545685,
+        "error_ms": -1.2098166666666688
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165660902,
+        "error_ms": -1.0057646666666586
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16674016,
+        "error_ms": 0.07349333333334096
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166025725,
+        "error_ms": -0.6409416666666445
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16521354,
+        "error_ms": -1.4531266666666653
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166340588,
+        "error_ms": -0.326078666666646
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165707511,
+        "error_ms": -0.9591556666666556
+      }
+    ]
+  },
+  {
+    "kind": "mask-clear-attribute",
+    "attribute": "note",
+    "chord_slot": 1,
+    "defaults": true,
+    "stage": "clear-channel-step-overrides",
+    "active_step_overrides": [],
+    "expected_phrase": [
+      [
+        1,
+        [
+          144,
+          67,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          97
+        ]
+      ]
+    ],
+    "expected_lengths": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "passed": true
+  }
+]

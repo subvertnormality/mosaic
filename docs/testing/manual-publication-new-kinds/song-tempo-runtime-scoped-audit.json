@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "scope": "read-only Song source-equal runtime capability diagnosis; no final publication promotion",
+  "passed_scoped_review": true,
+  "source_maps_equal": [
+    "case_sources",
+    "capture_sources",
+    "fixture_sources",
+    "plan_files"
+  ],
+  "application_digest_equal": "936ad016565c810fe5695c9f38731e29a52ac83c1d7e9c8914966ad97bbaa877",
+  "runs": [
+    {
+      "run": "823fc58f3b434376818775592ef1bc47",
+      "scope": "stock real strict failure preserved",
+      "actual_clock": "real-time",
+      "first_gate_seconds": 0.617488352,
+      "expected_seconds": 0.5,
+      "gate_error_seconds": 0.11748835199999996,
+      "selected_tempo": [
+        {
+          "visible": 30,
+          "native": 90.0,
+          "index": 45
+        }
+      ],
+      "cleanup": true
+    },
+    {
+      "run": "3f9108686dc64c6abe975f0e858be6f7",
+      "scope": "qualified runtime scoped native musical acceptance",
+      "actual_clock": "real-time",
+      "stages": 6,
+      "onsets": 54,
+      "releases": 54,
+      "max_onset_error_seconds": 0.0012959613333333175,
+      "max_regular_gate_error_seconds": 0.0015159696666666445,
+      "tolerance_seconds": 0.01,
+      "visible_native_tempos": [
+        {
+          "visible": 30,
+          "native": 30.0,
+          "index": 46
+        },
+        {
+          "visible": 30,
+          "native": 30.0,
+          "index": 52
+        },
+        {
+          "visible": 300,
+          "native": 300.0,
+          "index": 57
+        },
+        {
+          "visible": 300,
+          "native": 300.0,
+          "index": 63
+        },
+        {
+          "visible": 90,
+          "native": 90.0,
+          "index": 68
+        },
+        {
+          "visible": 90,
+          "native": 90.0,
+          "index": 74
+        }
+      ],
+      "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+      "experimental_unadmitted": true,
+      "cleanup": true
+    },
+    {
+      "run": "1c61648106b14b91aee003293a13b56f",
+      "scope": "qualified runtime scoped native musical acceptance",
+      "actual_clock": "controlled-experimental",
+      "stages": 6,
+      "onsets": 54,
+      "releases": 54,
+      "max_onset_error_seconds": 1.000000082740371e-09,
+      "max_regular_gate_error_seconds": 9.999999994736442e-10,
+      "tolerance_seconds": 2e-09,
+      "visible_native_tempos": [
+        {
+          "visible": 30,
+          "native": 30.0,
+          "index": 44
+        },
+        {
+          "visible": 30,
+          "native": 30.0,
+          "index": 50
+        },
+        {
+          "visible": 300,
+          "native": 300.0,
+          "index": 55
+        },
+        {
+          "visible": 300,
+          "native": 300.0,
+          "index": 61
+        },
+        {
+          "visible": 90,
+          "native": 90.0,
+          "index": 66
+        },
+        {
+          "visible": 90,
+          "native": 90.0,
+          "index": 72
+        }
+      ],
+      "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+      "experimental_unadmitted": true,
+      "cleanup": true
+    }
+  ],
+  "full_final_publication": false,
+  "hardware_timing_equivalent": false,
+  "original_stock_failure": {
+    "run": "ca11089961ce4497b04526a0747df3f1",
+    "first_gate_seconds": 0.630763992,
+    "expected_seconds": 0.5,
+    "visible_tempo": 30,
+    "native_tempo": 90,
+    "same_epoch_native_beat_regressions": [
+      [
+        {
+          "beats": 37.337125,
+          "tempo": 90.0,
+          "clock_epoch": 0,
+          "monotonic_ns": 454723662981931
+        },
+        {
+          "beats": 37.315291667,
+          "tempo": 30.0,
+          "clock_epoch": 0,
+          "monotonic_ns": 454723735501105
+        }
+      ]
+    ],
+    "source_identity_sha256": "4f6dc43302798ea58dba481baf1e0a207e64a542ae9b25a090564fef590b605f",
+    "results_sha256": "d1695b287bd21675f1de44712159fea2842cc6475203df6a74398606885eb54b"
+  }
+}

@@ -1,0 +1,13 @@
+.....................E....
+======================================================================
+ERROR: test_native_pulses_pitch_velocity_and_absent_step_are_independent (test_manual_publication_verify.ReasonMidiIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 195, in test_native_pulses_pitch_velocity_and_absent_step_are_independent
+    audit.check_reason_midi(row,events,'controlled-experimental')
+AttributeError: module 'manual_publication_verify' has no attribute 'check_reason_midi'
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.054s
+
+FAILED (errors=1)

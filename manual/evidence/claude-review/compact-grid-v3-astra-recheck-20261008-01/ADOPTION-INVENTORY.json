@@ -1,0 +1,915 @@
+{
+  "schema": 1,
+  "scope": "Final Astra reader review and complete relevant content/V1/V2 evidence packages; no staging or commit",
+  "packages": [
+    "compact-grid-v3-astra-recheck-20261008-01",
+    "compact-grid-v2-astra-recheck-20261008-01",
+    "compact-grid-astra-recheck-20261008-01",
+    "locks-c07-1-astra-final-recheck-20261008-01"
+  ],
+  "payload_files": 173,
+  "payload_bytes": 9976732,
+  "source_pins_verified_in_both_roots": {
+    "manual/generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+    "manual/manual.css": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a",
+    "manual/manual.js": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2",
+    "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1"
+  },
+  "omitted_duplicate_snapshots": [
+    {
+      "package": "compact-grid-v3-astra-recheck-20261008-01",
+      "omitted_file": "reader-index.json",
+      "verified_repository_reference": "manual/generated/reader-index.json",
+      "sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+      "bytes": 13902305
+    },
+    {
+      "package": "compact-grid-v2-astra-recheck-20261008-01",
+      "omitted_file": "reader-index.json",
+      "verified_repository_reference": "manual/generated/reader-index.json",
+      "sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+      "bytes": 13902305
+    },
+    {
+      "package": "compact-grid-astra-recheck-20261008-01",
+      "omitted_file": "reader-index.json",
+      "verified_repository_reference": "manual/generated/reader-index.json",
+      "sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+      "bytes": 13902305
+    },
+    {
+      "package": "locks-c07-1-astra-final-recheck-20261008-01",
+      "omitted_file": "reader-index.json",
+      "verified_repository_reference": "manual/generated/reader-index.json",
+      "sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+      "bytes": 13902305
+    }
+  ],
+  "inventory": [
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/ARCHIVE-REFERENCES.json",
+      "bytes": 986,
+      "sha256": "59a47a11cb2defc3e78ba82ed6ff1aa814c785fb602bd179b44d80a698574984"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/book.js",
+      "bytes": 75043,
+      "sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/check.cjs",
+      "bytes": 3262,
+      "sha256": "a1a776b3525121bd3d3aabfb2d74ffde0dc8ec8bce75ad72618aeffcefc82181"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/enlarged-original.cjs",
+      "bytes": 1685,
+      "sha256": "70d4c8317f6dbc018d5a249a3037b4491b8f6a365214b5b121f3f6f7e4ae733d"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/enlarged-original.json",
+      "bytes": 2344,
+      "sha256": "c24f03728dc3c12f7f1cfae6e661394f0bb961c1a59e3d2ab0017bb03739c31a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/finalize.cjs",
+      "bytes": 2000,
+      "sha256": "8a383378d3db0f942b94923f7156da457d79c395bc8ef80b6bd5a480e1934212"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1121-enlarged.png",
+      "bytes": 96777,
+      "sha256": "c762eaf2569466513bb6b320da7a51c0253297fab26c2fc667656ef79088a758"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1121-original-enlarged.png",
+      "bytes": 82023,
+      "sha256": "06d2c2260ff7c319f5921d0c19106ee1f0e9a44895f9c06e2fac5feb29ed264a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1121-original.png",
+      "bytes": 109514,
+      "sha256": "4f8948d6abd67aac9351bf2e31c80db5b53ff24f84612beb0bd65e993acdc09c"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1121-shield.png",
+      "bytes": 106652,
+      "sha256": "2a394409b466f04ed3e27e9b342f1251b972880595f02ea29d13d27d2574f6af"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1280-enlarged.png",
+      "bytes": 97575,
+      "sha256": "9659e4e36f511e8414b5044c67bb1b6a4ed76fb483fbbb5f52922abc20cc7469"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1280-original-enlarged.png",
+      "bytes": 95340,
+      "sha256": "2dbdc6fd2215233eda95730fbbeb5e38262434a17e60495590b565696d69f2a2"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1280-original.png",
+      "bytes": 126798,
+      "sha256": "defa2b25edbb90d77a5d9e7dec9b95df385f23f67f1a6ee3faacdb1308af2dc4"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1280-shield.png",
+      "bytes": 127638,
+      "sha256": "89906a8a8b1115841871918637e2b29c3aa0d3d7fabcb1d43c069ef3b8c78732"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1440-enlarged.png",
+      "bytes": 98168,
+      "sha256": "f7bb26060c5a9527af5da18bbeda2a3ff096cb69cd85ff410c391957b4b1dad5"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1440-original-enlarged.png",
+      "bytes": 98946,
+      "sha256": "33506fa1ade8d60dc5922bae0c980e5ddf1f88a2e6589d80b32279a32a3e6b17"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1440-original.png",
+      "bytes": 127828,
+      "sha256": "8854d7706e2a34223bae240177f139fc399f43d92da37b84064e1f83b3663743"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-1440-shield.png",
+      "bytes": 130144,
+      "sha256": "6cf6c273868d2975b0851e6a40f955522394d05accf4a1348b4bfa6344da5cbc"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-390-enlarged.png",
+      "bytes": 31019,
+      "sha256": "81625e34d74316587b3236a3792c6db2d3abc210ebd587b75ee554362c044af1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-390-original-enlarged.png",
+      "bytes": 33897,
+      "sha256": "2c7d6bb558a743293518f0c2ddcb2c6396f5328ef9f473f0d9f1f5242e2e56e4"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-390-original.png",
+      "bytes": 40748,
+      "sha256": "9d0080f907da4eb890dedbdf88d4fe34798a4e00213bee026151d81ad3b5afa1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-390-shield.png",
+      "bytes": 37654,
+      "sha256": "885792ba40afb70c510ab3bc180b692fe92b276ca0bfb146052bc90c25162ded"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-768-enlarged.png",
+      "bytes": 34958,
+      "sha256": "d906392d6072156a72e2cad1a537c925c939ebd65e012bb73fea6f8bf0324f58"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-768-original-enlarged.png",
+      "bytes": 37554,
+      "sha256": "d5bdccbb0aa150d6a6881a27a58c99db0a5ff2e91fb49e745258bdfd64752815"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-768-original.png",
+      "bytes": 37780,
+      "sha256": "eeeb44cb4eddf591ce0b094f9ac3818f0fcdaa12ee10c101f476c61f8e30dd8d"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/lesson-768-shield.png",
+      "bytes": 33749,
+      "sha256": "162faabf4dc8f7293c74e7ec51a751cf1a4465be8d1d7bd323060dfa44db4fa9"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/manual.css",
+      "bytes": 36504,
+      "sha256": "c664709772996b542460a5c55a9c2eaf54e633170a29ce90685b78b10645cbcc"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/manual.js",
+      "bytes": 99263,
+      "sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/observations.json",
+      "bytes": 167561,
+      "sha256": "3b8496b934837793347960873dc5f16f25210481af7031f0b607dbc5c3550e08"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/review.json",
+      "bytes": 2607,
+      "sha256": "395ab7ce3b52a487753f1bc8501e0a49f6fe401b5416a1a15c9f47f06eb7c354"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/review.md",
+      "bytes": 5403,
+      "sha256": "7ac8f0389d25ecc761e7f76eba01c29a5add5deb23df43d24a2a62a6f6205a37"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1121-enlarged.png",
+      "bytes": 52643,
+      "sha256": "d3a7516d88d84c81158ed2cd4db18d2da0399a6ab5ed6b2bed884396188dc191"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1121-original-enlarged.png",
+      "bytes": 52502,
+      "sha256": "f35f4faa4f5d4422f7ac2210b1caf643b0575498ac09f657516106353b416645"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1121-original.png",
+      "bytes": 94816,
+      "sha256": "3f600424f407fc9b36c77172ac7eec0d9295fd2edbb67fac256fe8d8d01b58e8"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1121-shield.png",
+      "bytes": 90996,
+      "sha256": "91b5405cdb1dc874b71f7076ab54868e679886ddabace9e0c59156820fff96c3"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1280-enlarged.png",
+      "bytes": 53347,
+      "sha256": "bf724f732f3cd565ae29113080a8246a32a8924379195d0e281f46f5d16aaabe"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1280-original-enlarged.png",
+      "bytes": 52964,
+      "sha256": "f4703bb75f2263e0a4ea1942194ea4c0a6aa937000736abd6c2e545f51866745"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1280-original.png",
+      "bytes": 96242,
+      "sha256": "6275378b0fda11de0c0bc9853d9eb8bfeb66ac6a5b238dd5d95dba0a948eb58e"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1280-shield.png",
+      "bytes": 87422,
+      "sha256": "f150de4a099296b1db0e97aed9d2651357cb2439f03bd7463fae989bf42a58ee"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1440-enlarged.png",
+      "bytes": 54456,
+      "sha256": "28a3bd3bf8ce3425efb24037b12e55ad7fd981659eaf74fc3c0baaaf02239095"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1440-original-enlarged.png",
+      "bytes": 53941,
+      "sha256": "3653ac65436c27621befb2ca07d3168ebe8eb208808cf3a79f8e7df6b583d00f"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1440-original.png",
+      "bytes": 97590,
+      "sha256": "120f85530e8f816a62b179d87e04688b7b324c60dd953b8e3c49f5fecd1cebde"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-1440-shield.png",
+      "bytes": 86411,
+      "sha256": "cab4be7001e4f5d0f866da439c357fea42e54b8230d47eb385d63ff01a8bda94"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-390-enlarged.png",
+      "bytes": 33419,
+      "sha256": "46f4659ef05f55b4dad1732b655ee42678e6ea4615acd37768c77632e22492d8"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-390-original-enlarged.png",
+      "bytes": 37019,
+      "sha256": "d943128c383b813a777d08c1dca76424cc817a0f112a8fe5e464a13f9ef8a814"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-390-original.png",
+      "bytes": 44122,
+      "sha256": "2da6c38ef80e5fa14083e880f952a6705e616c63af1e2b0144a57ea75d45fa47"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-390-shield.png",
+      "bytes": 39422,
+      "sha256": "faf7039ec456a64cff6ee24a63a8d314cd493dad7ad371f509dcd416e059f2eb"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-768-enlarged.png",
+      "bytes": 38751,
+      "sha256": "b0ac823d8f669b11cc6a9d697022619388705ada53f6dee4bc84dfca733568df"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-768-original-enlarged.png",
+      "bytes": 40128,
+      "sha256": "237c119bc06862b26ed58718070bbd98ea6406a24b7bf3d2245e28ee74fcf5e4"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-768-original.png",
+      "bytes": 40012,
+      "sha256": "977e28afa3a53458504fac7766a4bf3ce4473ad475b618548632b1ac258f1184"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-astra-recheck-20261008-01/rhythm-768-shield.png",
+      "bytes": 35668,
+      "sha256": "8f13397a063ec0acf719beb8549c08011b2df09d3c2bb58b14e32ed016da7529"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/ARCHIVE-REFERENCES.json",
+      "bytes": 986,
+      "sha256": "764bd9d74a68868ce7644b6e86af786c933687473892bbedc254594dc11c5295"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/book.js",
+      "bytes": 75043,
+      "sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/check.cjs",
+      "bytes": 4208,
+      "sha256": "5216ba2e70004f11f49c6a213accd1e504d346a9ea61f4ae81e4e63eed5a34b3"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/finalize.cjs",
+      "bytes": 2184,
+      "sha256": "96a848480a1c8416a6e823e064aa1a66172185195a1ee0c9d5966a1ca07a1bed"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1121-original-enlarged.png",
+      "bytes": 63108,
+      "sha256": "d881a7f876f7e3fe85c53323f18b0f47a2992e0a50eb88b9f4b3f1f50aeae4ee"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1121-original.png",
+      "bytes": 95831,
+      "sha256": "32e5241bea3ba870addca2e822cb4fbb5d028f8e5b793712883851e846d1ac20"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1121-shield-enlarged.png",
+      "bytes": 63615,
+      "sha256": "21d84c5b333698b95488d090eaff344bfedc43ce191375c7a791ffc30407e9c5"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1121-shield.png",
+      "bytes": 88289,
+      "sha256": "862e5463680f858a621b220c45033a70ce99665c5318c75dc6c9540a3b718bcd"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1280-guide.png",
+      "bytes": 85701,
+      "sha256": "f57be87759c2e394ee78ca6ea1d7e3e700aafa1f1d4ef695eed9a25d5e3e5724"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1280-original-enlarged.png",
+      "bytes": 63050,
+      "sha256": "baa1d4e134ce0e625a05934310a8bca10ce408c4a5f68d4c6dc95e0db57e1fed"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1280-original.png",
+      "bytes": 98457,
+      "sha256": "111bc589fc334e8eaabcef1248c0b8ffcae92a71ff24afc89c6123e42f3bbb7a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1280-shield-enlarged.png",
+      "bytes": 64334,
+      "sha256": "f2c08805538d4d3adb692def851b104386a58691269831205a60df7ae63a3544"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1280-shield.png",
+      "bytes": 92204,
+      "sha256": "ccef556517e7a13a1764b4bf450afb9907d68825bcd40fd2b5cf9e657fd2cad8"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1440-guide.png",
+      "bytes": 115494,
+      "sha256": "62a122ba73ce6a62a528be0c0675683c7604281f1c950379b1290c254e97f034"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1440-original-enlarged.png",
+      "bytes": 98051,
+      "sha256": "e56e84de9d72578c615a16ce9ec5c1cab7c309a7746e68d1fc32f09d50157437"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1440-original.png",
+      "bytes": 130041,
+      "sha256": "597dcade9b9f88cbc8bc65517fff6157c40db61a2dd32839a84f2aece3021587"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1440-shield-enlarged.png",
+      "bytes": 99658,
+      "sha256": "5d71028e6e7cd23676948e7cb46c048b0b88bf60d3eb74ba57a05cff1e47d979"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-1440-shield.png",
+      "bytes": 131145,
+      "sha256": "c9cd77a9cb567a8082febd93b2ca3c46c58676f445251aa2e41a8c2288427895"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-390-original-enlarged.png",
+      "bytes": 30826,
+      "sha256": "e1b7035fad5647ef98ef8333b4554f266d6bf86dc32c6bf9ebb1a8cdf9d60601"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-390-original.png",
+      "bytes": 40748,
+      "sha256": "9d0080f907da4eb890dedbdf88d4fe34798a4e00213bee026151d81ad3b5afa1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-390-shield-enlarged.png",
+      "bytes": 31019,
+      "sha256": "81625e34d74316587b3236a3792c6db2d3abc210ebd587b75ee554362c044af1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-390-shield.png",
+      "bytes": 37654,
+      "sha256": "885792ba40afb70c510ab3bc180b692fe92b276ca0bfb146052bc90c25162ded"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-768-original-enlarged.png",
+      "bytes": 33392,
+      "sha256": "7b224d0c5d7491d14c1d0324bc6cfb307ddb725b413f645f3a5471f96a5f4d94"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-768-original.png",
+      "bytes": 37780,
+      "sha256": "eeeb44cb4eddf591ce0b094f9ac3818f0fcdaa12ee10c101f476c61f8e30dd8d"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-768-shield-enlarged.png",
+      "bytes": 34958,
+      "sha256": "d906392d6072156a72e2cad1a537c925c939ebd65e012bb73fea6f8bf0324f58"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/lesson-768-shield.png",
+      "bytes": 33749,
+      "sha256": "162faabf4dc8f7293c74e7ec51a751cf1a4465be8d1d7bd323060dfa44db4fa9"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/manual.css",
+      "bytes": 37943,
+      "sha256": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/manual.js",
+      "bytes": 99263,
+      "sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/observations.json",
+      "bytes": 75890,
+      "sha256": "540c25d75c6f5a8f0af56826f9a4f8da145d842c6775e35d05c2217739a0f4fb"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/review.json",
+      "bytes": 2785,
+      "sha256": "a17f8228e1c64712b1016bce66c9df90db0f5702fd01949b4dd5e76996ac45a4"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/review.md",
+      "bytes": 5428,
+      "sha256": "e46bb13bbf9dfb3d6ce63560d8b56d1d06ce29bcafe060f9d188f3c283078938"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1121-original-enlarged.png",
+      "bytes": 50145,
+      "sha256": "47f3b0a2edc650064b55654fc5414def06c2c1d9cd311d35d83d4ccfbfd5ac3f"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1121-original-settled-column16.png",
+      "bytes": 51698,
+      "sha256": "003c51c0774d12140ac46dacffdb0800ee84ee2a4a28c676b4edbbca349d294e"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1121-original.png",
+      "bytes": 96919,
+      "sha256": "7b202b5dd7e443047645cd1ccf0469ccccf37f20557007cbcc5ce580902722fb"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1121-shield-enlarged.png",
+      "bytes": 52593,
+      "sha256": "0d62dc6110155622e26e63459819a47f1bf097aa42e9046c9be89a484def1cdc"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1121-shield-settled-column16.png",
+      "bytes": 43699,
+      "sha256": "6d5a940c8ace66b779e20153d7ff683840b7e187020b523c834a136ea6b4aa9b"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1121-shield.png",
+      "bytes": 86843,
+      "sha256": "837b14eafd81efcbc857e7c2a9fafa08e50b5cb4bd23ffff4446b89235f7d388"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1280-original-enlarged.png",
+      "bytes": 51268,
+      "sha256": "43b886710ebadc5c96864116289a8466e2733411f9d164a57410ed8afb7d4b87"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1280-original.png",
+      "bytes": 100312,
+      "sha256": "6ff56f2dbccee433d63c0f37b9660bd5e9981913c84ae9f3b6155a715fa86c54"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1280-shield-enlarged.png",
+      "bytes": 53146,
+      "sha256": "660bf099fb277c8c2c68c7b729e20e91a6df31472814f12646cd73b67ab21583"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1280-shield.png",
+      "bytes": 92516,
+      "sha256": "43880a45af0e59bb8ce57af75e7bddcf5c0a52b19085a6dad5521047c40f10c3"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1440-original-enlarged.png",
+      "bytes": 52712,
+      "sha256": "ed92a3b778bd6152eaf17837d6b1562d0ad22ca315a94475696d4796f06a62ae"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1440-original.png",
+      "bytes": 97832,
+      "sha256": "2ebb1a9d3c6f02bf220cbf37be355f747b3e25c7e22304f38768d3a5d0c902ca"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1440-shield-enlarged.png",
+      "bytes": 54456,
+      "sha256": "28a3bd3bf8ce3425efb24037b12e55ad7fd981659eaf74fc3c0baaaf02239095"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-1440-shield.png",
+      "bytes": 89289,
+      "sha256": "dc89ab725e3d6b4ca8f4e44a1a4810b6fa41020e73758d543aaa16e79cb9bc91"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-390-original-enlarged.png",
+      "bytes": 29011,
+      "sha256": "df976ec58c5c8f08f286e375d59fc2d4d5861208ae978483a1e26b975e94c30a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-390-original.png",
+      "bytes": 44122,
+      "sha256": "2da6c38ef80e5fa14083e880f952a6705e616c63af1e2b0144a57ea75d45fa47"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-390-shield-enlarged.png",
+      "bytes": 33419,
+      "sha256": "46f4659ef05f55b4dad1732b655ee42678e6ea4615acd37768c77632e22492d8"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-390-shield.png",
+      "bytes": 39422,
+      "sha256": "faf7039ec456a64cff6ee24a63a8d314cd493dad7ad371f509dcd416e059f2eb"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-768-original-enlarged.png",
+      "bytes": 37296,
+      "sha256": "d267fe09b94f92eb274381ff1a8593996d1e15fc8d595bb4bd7cb90478a51dea"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-768-original.png",
+      "bytes": 40012,
+      "sha256": "977e28afa3a53458504fac7766a4bf3ce4473ad475b618548632b1ac258f1184"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-768-shield-enlarged.png",
+      "bytes": 38751,
+      "sha256": "b0ac823d8f669b11cc6a9d697022619388705ada53f6dee4bc84dfca733568df"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/rhythm-768-shield.png",
+      "bytes": 35668,
+      "sha256": "8f13397a063ec0acf719beb8549c08011b2df09d3c2bb58b14e32ed016da7529"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/settled-check.cjs",
+      "bytes": 2383,
+      "sha256": "0c29ea8bfeabd6362c04014c1eb429b1b11dd97b7c7e0033f297f9da13d82227"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/settled-diagnostic.cjs",
+      "bytes": 2351,
+      "sha256": "50200b26c6e0341d0c09912d6f74d99628f6a8b0b7110caf32d3155b0aff4189"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/settled-diagnostic.json",
+      "bytes": 1267,
+      "sha256": "852f2ef8fffac7d3e44ebcda06e7e2eaf84d285f862732030a27eb62f8cb468c"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/ARCHIVE-REFERENCES.json",
+      "bytes": 986,
+      "sha256": "64fdc01a3ed08155cb175d3921dd536e43ea7fbe4d3ec9216882d1f64eb39caf"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/book.js",
+      "bytes": 75043,
+      "sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/check.cjs",
+      "bytes": 4832,
+      "sha256": "fe370c1b9d71f87935780d0d4bc073aec72188f657d93d151c14cfe290c66c06"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/finalize.cjs",
+      "bytes": 2593,
+      "sha256": "ccafccdad2cbba3e365591ff47b59ef2c1b7bb2a99b9257fa2672a88038d9edf"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1121-original-enlarged.png",
+      "bytes": 63924,
+      "sha256": "c9d3e7369c2b0adaba4e5c71b6c250dfcc28c93cf269e328e0c6528a4af19a2d"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1121-original.png",
+      "bytes": 95831,
+      "sha256": "32e5241bea3ba870addca2e822cb4fbb5d028f8e5b793712883851e846d1ac20"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1121-shield-enlarged.png",
+      "bytes": 63091,
+      "sha256": "b2ae014cc076bb8a98e608d6d05df2d713514ee988e0a08bc694dc7f2ffe9418"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1121-shield.png",
+      "bytes": 88289,
+      "sha256": "862e5463680f858a621b220c45033a70ce99665c5318c75dc6c9540a3b718bcd"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1280-original-enlarged.png",
+      "bytes": 63816,
+      "sha256": "68d054f97959e4866c0e88d6bafa0ffee8b85b7701cb45719813dd11da4a1f3b"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1280-original.png",
+      "bytes": 98457,
+      "sha256": "111bc589fc334e8eaabcef1248c0b8ffcae92a71ff24afc89c6123e42f3bbb7a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1280-shield-enlarged.png",
+      "bytes": 63549,
+      "sha256": "af40782a6b4ffde17dbecd4ae565530f01c4a86b26514159266816902fc08ec4"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1280-shield.png",
+      "bytes": 92204,
+      "sha256": "ccef556517e7a13a1764b4bf450afb9907d68825bcd40fd2b5cf9e657fd2cad8"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1440-original-enlarged.png",
+      "bytes": 99357,
+      "sha256": "33326ff449871620ecb527cd48157b6cc3d8fb33077db4da0f6f76404cd0bb54"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1440-original.png",
+      "bytes": 130041,
+      "sha256": "597dcade9b9f88cbc8bc65517fff6157c40db61a2dd32839a84f2aece3021587"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1440-shield-enlarged.png",
+      "bytes": 99098,
+      "sha256": "fadbee46c316ed2a1c91dda4d1e78306461fe0dfdf6e07d272cc7a09fe0bf4a8"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-1440-shield.png",
+      "bytes": 131145,
+      "sha256": "c9cd77a9cb567a8082febd93b2ca3c46c58676f445251aa2e41a8c2288427895"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-390-original-enlarged.png",
+      "bytes": 32019,
+      "sha256": "475f0f3724680097278fec533141be7be8089b8efb3f027258789d682cc03e2a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-390-original.png",
+      "bytes": 40748,
+      "sha256": "9d0080f907da4eb890dedbdf88d4fe34798a4e00213bee026151d81ad3b5afa1"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-390-shield-enlarged.png",
+      "bytes": 29036,
+      "sha256": "3f548a73567debcb22282f3c405944f611c802f5612d0bc2eecad6ae237569e3"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-390-shield.png",
+      "bytes": 37654,
+      "sha256": "885792ba40afb70c510ab3bc180b692fe92b276ca0bfb146052bc90c25162ded"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-768-original-enlarged.png",
+      "bytes": 33848,
+      "sha256": "e767f2594230174e56782c9b511a5a92a386bd933aad584c6b3e2a7a2a18ada2"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-768-original.png",
+      "bytes": 37780,
+      "sha256": "eeeb44cb4eddf591ce0b094f9ac3818f0fcdaa12ee10c101f476c61f8e30dd8d"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-768-shield-enlarged.png",
+      "bytes": 33901,
+      "sha256": "48d7f8335479418226512a931eb0d215907790c60ac246d069e071cfa343d5d6"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/lesson-768-shield.png",
+      "bytes": 33749,
+      "sha256": "162faabf4dc8f7293c74e7ec51a751cf1a4465be8d1d7bd323060dfa44db4fa9"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/manual.css",
+      "bytes": 38580,
+      "sha256": "9612881156f6229ede39deb3da0bef94fc31d541c79d27986b4d87fb6972ea8a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/manual.js",
+      "bytes": 99336,
+      "sha256": "2bd5d3b995cc357f68a09a61f5d1522e780c66d6e4404bbcd3037418bb95b9f2"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/observations.json",
+      "bytes": 17474,
+      "sha256": "98c43dce9371825287de836190dd727b26b44d41950d9c740bfc696afc4bb3e7"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/review.json",
+      "bytes": 2978,
+      "sha256": "fd3228b6f54aa176a6164ff9cb7f4c94243cc47c05c99cff298d11db5c8e0bf7"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/review.md",
+      "bytes": 5516,
+      "sha256": "3684a17a5a7d027a409a291535855f059bdc9338c84a5e85dc6a224690929030"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1121-original-enlarged.png",
+      "bytes": 51019,
+      "sha256": "ea8707ed79f40e2e1c37bc4bc7f59e3f0975f45f52d70329de297dfe9e816dda"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1121-original.png",
+      "bytes": 96919,
+      "sha256": "7b202b5dd7e443047645cd1ccf0469ccccf37f20557007cbcc5ce580902722fb"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1121-shield-enlarged.png",
+      "bytes": 51095,
+      "sha256": "065e04d97f744054cb656dbc028cb85a89c12cb7490866f274446eed58c1c0fb"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1121-shield.png",
+      "bytes": 86843,
+      "sha256": "837b14eafd81efcbc857e7c2a9fafa08e50b5cb4bd23ffff4446b89235f7d388"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1280-original-enlarged.png",
+      "bytes": 52298,
+      "sha256": "b0abe15f15fab5e943f95fdbc62a70ce2defda08979953a8345470bd21fe6e5b"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1280-original.png",
+      "bytes": 100312,
+      "sha256": "6ff56f2dbccee433d63c0f37b9660bd5e9981913c84ae9f3b6155a715fa86c54"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1280-shield-enlarged.png",
+      "bytes": 52382,
+      "sha256": "18dd07a755e4e30b47d0bac1f8b26b2d299427761bedcb5c14e7f04925f0d2f3"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1280-shield.png",
+      "bytes": 92516,
+      "sha256": "43880a45af0e59bb8ce57af75e7bddcf5c0a52b19085a6dad5521047c40f10c3"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1440-original-enlarged.png",
+      "bytes": 53327,
+      "sha256": "697d78a125cd5b3742103ab76d097fbac0896d42ae8132662adeca05a1e071ee"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1440-original.png",
+      "bytes": 97501,
+      "sha256": "aac2e0b3cc1e99d4ac300de9e58ecc4f263486e793048e169861482273927182"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1440-shield-enlarged.png",
+      "bytes": 53720,
+      "sha256": "98cd0978f70c4c4efac705e62d95e88c3333c826d2b46d35e18d0b07de34039a"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-1440-shield.png",
+      "bytes": 89289,
+      "sha256": "dc89ab725e3d6b4ca8f4e44a1a4810b6fa41020e73758d543aaa16e79cb9bc91"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-390-original-enlarged.png",
+      "bytes": 30620,
+      "sha256": "dd8a7a88940481424750fcf4c5b3a84ed54b857a71af17ea4bb0fc9aaccfda14"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-390-original.png",
+      "bytes": 44122,
+      "sha256": "2da6c38ef80e5fa14083e880f952a6705e616c63af1e2b0144a57ea75d45fa47"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-390-shield-enlarged.png",
+      "bytes": 29852,
+      "sha256": "337a5647f1e95be6856e0f1117dbb060a8f0783b4427961e41d744c544e9fc8b"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-390-shield.png",
+      "bytes": 39422,
+      "sha256": "faf7039ec456a64cff6ee24a63a8d314cd493dad7ad371f509dcd416e059f2eb"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-768-original-enlarged.png",
+      "bytes": 37658,
+      "sha256": "e1bc61cb41fb48c0faeefbc05485bde12c6990fde64096d24085f282724466ce"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-768-original.png",
+      "bytes": 40012,
+      "sha256": "977e28afa3a53458504fac7766a4bf3ce4473ad475b618548632b1ac258f1184"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-768-shield-enlarged.png",
+      "bytes": 37859,
+      "sha256": "588a6b8d3d484fb309f3cd5096ca64ce6cf4ee22eea3fcf62d70b76704e793e0"
+    },
+    {
+      "path": "manual/evidence/claude-review/compact-grid-v3-astra-recheck-20261008-01/rhythm-768-shield.png",
+      "bytes": 35668,
+      "sha256": "8f13397a063ec0acf719beb8549c08011b2df09d3c2bb58b14e32ed016da7529"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/ARCHIVE-REFERENCES.json",
+      "bytes": 986,
+      "sha256": "36486f2b020fedd376514b0367bf8f06dd6763680ff711868b2963f24f5b13fe"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/bass-1440.png",
+      "bytes": 105263,
+      "sha256": "d011293514ea4674880be844f8355c5fbae166a5d06bb0f23fdc2931dd6e9376"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/bass-390.png",
+      "bytes": 46491,
+      "sha256": "7b28e90ec803217dc0e1d942cc9f7f12c8a62d395a9f88bbfd3fc0e75096038c"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/book.js",
+      "bytes": 75043,
+      "sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/cheat_sheet.html",
+      "bytes": 86244,
+      "sha256": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/chord-1440.png",
+      "bytes": 97473,
+      "sha256": "bb637d57c45d225fdcb46bbd20be54d620768f9803e85b7b6760307a2d4feb5c"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/chord-390.png",
+      "bytes": 47206,
+      "sha256": "16c782719a4a0d0591ec4631f70d7aab7c622cbdcc3efa2a6c626f48b50a0276"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/decay-1440.png",
+      "bytes": 160610,
+      "sha256": "845bea8db63b4e9872a30477d9b81cb9aac3f83f6d7e15ddabd0d7bbf2d6bc46"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/decay-390.png",
+      "bytes": 50869,
+      "sha256": "2a02be690d8d4a3be258d6be9fb79b414d97227dd86b84e6cf40023463c5ab17"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/finalize.cjs",
+      "bytes": 3168,
+      "sha256": "9acde809bbb8cf81c8fbbca0119f5ccd5b61087373c4ab9711bf9e1c60cec8a9"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/index.html",
+      "bytes": 8437,
+      "sha256": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/manual.css",
+      "bytes": 35424,
+      "sha256": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/manual.js",
+      "bytes": 99263,
+      "sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/observations.json",
+      "bytes": 42352,
+      "sha256": "b716206cf32fb15d50fc1a1ede640a7e9230c08509a11ccab12f867f158ac62a"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/recheck.cjs",
+      "bytes": 4156,
+      "sha256": "cd1e54a9927e5a22ff38affa1e399964ba5fcbfc46f5c7730adf4e20d50251db"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/review.json",
+      "bytes": 4451,
+      "sha256": "c84cb0994000d8810f27fe58319a20c99fe9dd8a3f9f7544d5bd3d69c3fe0be0"
+    },
+    {
+      "path": "manual/evidence/claude-review/locks-c07-1-astra-final-recheck-20261008-01/review.md",
+      "bytes": 8732,
+      "sha256": "c704b486fc630f6826a4ccc0de39a8dcf47578e3ea850f2d892a7493a0ad1909"
+    }
+  ]
+}

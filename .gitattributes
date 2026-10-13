@@ -2,3 +2,68 @@
 * text=auto eol=lf
 *.{cmd,[cC][mM][dD]} text eol=crlf
 *.{bat,[bB][aA][tT]} text eol=crlf
+
+# Preserve exact bytes of reviewed receipts and their source-pinned fixtures.
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-shared-reader-audit-20261008-01/README-v06.md -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-shared-reader-audit-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v06-RECEIPT.json -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source16-shared-reader-audit-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v06.json -text
+test-fixtures/retained-pilot-midi-v1/DERIVATION.json -text
+test-fixtures/retained-pilot-midi-v1/README.md -text
+test-fixtures/retained-pilot-midi-v1/native/identity.json -text
+test-fixtures/retained-pilot-midi-v1/native/native-events.jsonl -text
+test-fixtures/retained-pilot-midi-v1/observations.json -text
+test-fixtures/retained-pilot-midi-v1/results.json -text
+test-fixtures/retained-pilot-midi-v1/scene.json -text
+tests/manual_ci/test_manual_pilot_midi.py -text
+tests_manual_ci/test_manual_native_midi_integer_sequence.py -text
+tools/manual_pilot_midi.py -text
+manual/case-scenes.schema.json -text
+
+# Preserve exact bytes of individually reviewed evidence paths.
+manual/evidence/claude-review/ci-test-corrections-20261008-01/audit.json -text
+manual/evidence/claude-review/ci-test-corrections-20261008-01/audit.md -text
+manual/evidence/claude-review/combined-teaching-install-20261008-04/gate03-failure-and-fix-review.md -text
+manual/evidence/claude-review/course-output-prerequisites-20261008-01/MANIFEST-v02.json -text
+manual/evidence/claude-review/course-output-prerequisites-20261008-01/MANIFEST.json -text
+manual/evidence/claude-review/course-output-prerequisites-20261008-01/fresh-review-v02.json -text
+manual/evidence/claude-review/course-output-prerequisites-20261008-01/fresh-review-v02.md -text
+manual/evidence/claude-review/course-output-prerequisites-20261008-01/fresh-review.json -text
+manual/evidence/claude-review/course-output-prerequisites-20261008-01/fresh-review.md -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/README.md -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v07.json -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/fresh-review-v02-manifest.json -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/fresh-review-v02.json -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/fresh-review-v02.md -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/ledger-refresh-manifest.json -text
+manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/source-v06-ledger.json -text
+manual/evidence/claude-review/locks-c07-1-followup-install-20261008-01/ADOPTION-STATUS.md -text
+manual/evidence/claude-review/locks-c07-1-followup-install-20261008-01/SOURCE-INSTALLER-USAGE.md -text
+manual/evidence/claude-review/locks-c07-1-followup-install-20261008-01/manifest-5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41.json -text
+manual/evidence/claude-review/locks-c07-1-followup-install-20261008-01/qualify_locks_c07_1-8b54db5b1f735063f974c5982b8b7e5fb769202c499624de8b29d85b4800c0b6.py -text
+manual/evidence/claude-review/locks-c07-1-followup-install-20261008-01/quick-reference-NO-IMPACT-FOLLOWUP.json -text
+manual/evidence/claude-review/postinstall-rendered-review-20261008-04/postinstall-rendered-review-20261008-04.cjs -text
+manual/evidence/claude-review/postinstall-rendered-review-20261008-04/postinstall-rendered-review-receipt-20261008-04.json -text
+manual/evidence/claude-review/proposal-review-20261008-01/locks-v04-supplement.json -text
+manual/evidence/claude-review/proposal-review-20261008-01/locks-v04-supplement.md -text
+manual/evidence/claude-review/proposal-review-20261008-01/review.json -text
+manual/evidence/claude-review/proposal-review-20261008-01/review.md -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v06-source-review.json -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/locks-v04-supplement.json -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/locks-v04-supplement.md -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/review.json -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/review.md -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/v05-two-scalar-supplement.json -text
+manual/evidence/claude-review/proposal-source-only-pass-20261008-01/v05-two-scalar-supplement.md -text
+manual/evidence/claude-review/final-425-reader-ledger-20261008-01/fe378-baseline-425-ledger.json -text
+manual/evidence/claude-review/final-425-reader-ledger-20261008-01/final-rendered-followup-receipt.json -text
+manual/evidence/claude-review/final-425-reader-ledger-20261008-01/postinstall-followup-review.cjs -text
+manual/evidence/claude-review/final-425-reader-ledger-20261008-01/source-v07-review.json -text
+manual/evidence/claude-review/reader-425-route-gate-20261008-01/manifest-handoffs.py -text
+manual/evidence/claude-review/combined-candidate07-astra-recheck-20261008-01/POSTINSTALL-READER-PINS.json -text
+manual/evidence/claude-review/combined-candidate07-astra-recheck-20261008-01/browser.cjs -text
+manual/evidence/claude-review/combined-candidate07-astra-recheck-20261008-01/collect.cjs -text
+manual/evidence/claude-review/combined-candidate07-astra-recheck-20261008-01/interactions.cjs -text
+manual/evidence/claude-review/compact-grid-v2-astra-recheck-20261008-01/settled-diagnostic.cjs -text
+manual/evidence/claude-review/reader-425-route-gate-cg2-20261008-01/root-independent-audit-aa02-result.json -text
+manual/evidence/claude-review/reader-425-route-gate-cg2-20261008-01/root-independent-audit-aa02.py -text

@@ -1,0 +1,13 @@
+{
+  "kind": "RD-02 Candidate A full-development diagnostic",
+  "acceptance_claimed": false,
+  "status": "quality_failure_and_incomplete_corpus",
+  "evaluator_source_sha256": "01f3b4f71c109db1a96728a78a1f28778fd517bf83b9e8afc3d05e92d7e3f12c",
+  "model_sha256": "c20f3fd6a2001cd55db293ee114d42c710691ee6fbd7e49e2c9134acd391aec1",
+  "archive_sha256": "6490dc83d8b59ccbe7e9e0304023af8e585d2065f9a5f5921952a273fac4a9b0",
+  "development": "all nine frozen source songs (181.89–313.75 seconds)",
+  "held": "eleven source-disjoint songs, first 60 seconds each",
+  "held_event_f1": {"BD": 0.728251, "SD": 0.545665, "HH": 0.703444, "TOM": 0.0, "BASS": 0.560993},
+  "diagnosis": "TOM has good development recall (0.840476) but zero held true positives; timing offsets are small and do not show a constant-delay cause.",
+  "raw_artifacts": "tests/rhythm_doctor/artifacts/detector-full-dev-v1/ (ignored; model and raw predictions retained there)"
+}

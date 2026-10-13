@@ -1,0 +1,13 @@
+...E....
+======================================================================
+ERROR: test_current_owner_reassessment_resolves_drift_without_rewriting_baseline (test_manual_inventory_merge.InventoryMergeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_inventory_merge.py", line 96, in test_current_owner_reassessment_resolves_drift_without_rewriting_baseline
+    self.assertTrue(result["current_review"]["source_drift_reassessed"])
+KeyError: 'source_drift_reassessed'
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.004s
+
+FAILED (errors=1)

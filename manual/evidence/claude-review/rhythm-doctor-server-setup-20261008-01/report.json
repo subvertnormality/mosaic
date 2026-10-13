@@ -1,0 +1,21 @@
+{
+  "url": "http://localhost:8785/manual/#rhythm-doctor",
+  "results": [
+    {
+      "width": 1440,
+      "passed": true,
+      "code_blocks": 7,
+      "errors": [],
+      "visible_setup_text": true,
+      "page_width": 1440
+    },
+    {
+      "width": 390,
+      "passed": true,
+      "code_blocks": 7,
+      "errors": [],
+      "visible_setup_text": true,
+      "page_width": 390
+    }
+  ]
+}

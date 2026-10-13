@@ -1,0 +1,14 @@
+--- manual/features/reference-musical.yaml before
++++ manual/features/reference-musical.yaml after
+@@ -108,8 +108,9 @@
+   summary: Foundation and Fragments reshape merged output without rewriting patterns. Harmony places output
+     voices; its default is Off.
+   prose: 'Merge Shape changes a channel’s merged rhythm. Harmony places output notes in specified registers.
+-    Neither feature rewrites source patterns. Older projects with Merge Shape Off use their saved legacy
+-    strategy and retain its original MIDI, timing and random behavior.
++    Neither feature rewrites source patterns. Older projects restore their saved Skip, Only or All Strategy
++    and retain its original MIDI, timing and random behavior. Foundation and Fragments are other exclusive
++    choices of the same Strategy selector.
+ 
+ 
+     Merge modes, Merge Shape and Harmony are consecutive Channel tasks. Merge Shape and Voice leading

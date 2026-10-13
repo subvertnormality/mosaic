@@ -31,8 +31,8 @@ REPLAY = {
 
 
 def recorded_same_key_sources(c, scenario):
-    c.configure(); c.tap(2, 8)                          # arm recording through the grid
-    marker = c.snapshot()['midi_count']; c.tap(1, 8)
+    c.ui.configure(); c.ui.tap_control('record')       # arm recording through the grid
+    marker = c.snapshot()['midi_count']; c.ui.play()
     controlled = c.clock_mode == 'controlled-experimental'
     field = 'logical_ns' if controlled else 'monotonic_ns'
     state = c.wait(lambda state: any(m['index'] > marker and m['port'] == 1 and m['bytes'] == [144, 60, 127] for m in state['midi']))
@@ -47,10 +47,10 @@ def recorded_same_key_sources(c, scenario):
     if controlled: c.elapse((origin + 510000000 - c.logical_ns) / 1e9)
     else: c.wait(lambda state: len(state['midi_input_schedule']['delivered']) == len(events), timeout=2)
     state = c.snapshot()
-    c.tap(2, 8)                                         # disarm after the final release
+    c.ui.tap_control('record')                           # disarm after the final release
     c.results.append(dict(kind='scheduled-same-key-sources', scenario=scenario, events=events, delivered=state['midi_input_schedule']['delivered']))
-    c.tap(1, 8); c.wait(lambda state: not state['midi_capture']['outstanding'])
-    marker = c.snapshot()['midi_count']; c.tap(1, 8)
+    c.ui.stop(); c.wait(lambda state: not state['midi_capture']['outstanding'])
+    marker = c.snapshot()['midi_count']; c.ui.play()
     def notes(state): return [m for m in state['midi'] if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0]
     phrase = REPLAY[scenario]
     state = c.wait(lambda state: len(notes(state)) >= 3 * len(phrase) + 1, timeout=5)
@@ -68,4 +68,4 @@ def recorded_same_key_sources(c, scenario):
     c.results.append(dict(kind='same-key-sources-length', scenario=scenario, expected=.5, actual=durations))
     # README 239: one shared length from the first key press to the final key release (0.5 s).
     assert durations and all(abs(value - .5) <= tolerance for value in durations), dict(scenario=scenario, expected=.5, durations=durations)
-    c.tap(1, 8); c.wait(lambda state: not state['midi_capture']['outstanding'])
+    c.ui.stop(); c.wait(lambda state: not state['midi_capture']['outstanding'])

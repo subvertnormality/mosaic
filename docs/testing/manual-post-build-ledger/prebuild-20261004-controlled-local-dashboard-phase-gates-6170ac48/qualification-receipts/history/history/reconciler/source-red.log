@@ -1,0 +1,39 @@
+EEE
+======================================================================
+ERROR: test_controlled_publication_cannot_masquerade_as_real_time (test_reconcile_manual_build.ControlledGenerationSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 234, in test_controlled_publication_cannot_masquerade_as_real_time
+    with self.assertRaisesRegex(ValueError,'Controlled generation report scope'):tool.reproduced_scenes(root,root,m)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 116, in reproduced_scenes
+    doctor=read(root/'manual/generated/doctor-scenes.json')
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 15, in read
+    def read(path):return json.loads(Path(path).read_bytes())
+  File "/usr/lib/python3.8/pathlib.py", line 1225, in read_bytes
+    with self.open(mode='rb') as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1218, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1074, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpftd6zlem/manual/generated/doctor-scenes.json'
+
+======================================================================
+ERROR: test_controlled_scene_publication_reproduces_exact_native_bytes (test_reconcile_manual_build.ControlledGenerationSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 228, in test_controlled_scene_publication_reproduces_exact_native_bytes
+    scene=yaml.safe_load(result['manual/features/scenes-reference-example.yaml'])['scenes'][0];self.assertNotIn('evidence',scene);self.assertNotIn('output',scene['steps'][0]);self.assertEqual(scene['steps'][0]['expect'],{'led':1})
+KeyError: 'manual/features/scenes-reference-example.yaml'
+
+======================================================================
+ERROR: test_local_metadata_requires_scoped_binding_receipt (test_reconcile_manual_build.ControlledGenerationSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 239, in test_local_metadata_requires_scoped_binding_receipt
+    with self.assertRaisesRegex(ValueError,'generation binding scope'):tool.check_metadata(f.name,before,after,f.build,controlled_local=True)
+TypeError: check_metadata() got an unexpected keyword argument 'controlled_local'
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.044s
+
+FAILED (errors=3)

@@ -1,0 +1,10 @@
+{
+  "run": "/home/andy/mosaic-behaviour-runs/mini-header-baseline-controlled-experimental/f1dafbf517164490aa6857a84850318d",
+  "accepted_as_feature_red": false,
+  "reason": "Native Screen category separator on row22 mismatches blank selected-label primitive; every actual UI motion glyph exactly matches the existing top23 first-row convention",
+  "frame_sha256": "072e114aa945489da9a6b53103e279b83cb0f6eaa6e1d3c31729f54b75424a14",
+  "old_top22_matches": false,
+  "top23_matches": true,
+  "only_mismatching_row": 22,
+  "application_stage_identity": "fccfe004003cfba93460f643ff06346233f5c91b71ba911a3855b26699bb08ae"
+}

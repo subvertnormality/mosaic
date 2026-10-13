@@ -1,0 +1,454 @@
+schema_version: 1
+status: source-plan-not-yet-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: Existing public-input behaviour cases. Only post-assertion result rows are capture checkpoints.
+  These plans do not establish native evidence until the full cited case passes. Musical pitches are MIDI
+  numbers to avoid octave-label ambiguity.
+scenes:
+- id: transpose-explicit-zero-and-clear
+  feature_id: transposition-locks
+  title: Lock transposition without losing the global setting
+  behaviour_case: M-TRANS-001
+  citation: README.md#transposition-locks
+  related:
+  - scale-editor
+  - scale-locks
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step melody through a MIDI device: trigs on steps 1 to 4 on pattern
+      degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65. The Scale page is open on the
+      transposition fader along the bottom row. Global transposition is +4 (set at (13,8)). Scale-track
+      step 2 has a transposition lock of 0, the fader''s centre at (12,8), and step 1 has a lock of -12,
+      the lowest value at (9,8). The MIDI strip reads 48, 62, 64, 65: step 1 sounds an octave below its
+      written note, while steps 2 to 4 ignore the global +4 because the zero lock on step 2 holds for
+      the rest of the loop. This is how you keep one part of a song at its written pitch while the rest
+      is transposed.'
+    assertion:
+      kind: transpose-lock-value
+      value: -12
+      passed: true
+  - id: zero
+    title: Walk step 1 up to an explicit zero
+    caption: 'Hold scale-track step 1 and press the right end of the fader, (16,8), twelve times, playing
+      as you go if you like. Each press adds one semitone, from -12 up to 0. A lock of 0 is an explicit
+      lock: it overrides the global +4, so step 1 plays MIDI 60 and not 64.'
+    assertion:
+      kind: transpose-lock-value
+      value: 0
+      passed: true
+  - id: octave-up
+    title: Walk on up to +12
+    caption: Keep holding step 1 and press (16,8) twelve more times. Each press adds one semitone, up
+      to +12. The first note jumps an octave to MIDI 72. Steps 2 to 4 still follow the zero lock on step
+      2 and stay at MIDI 62, 64 and 65.
+    assertion:
+      kind: transpose-lock-value
+      value: 12
+      passed: true
+  - id: clear
+    title: Clear the lock on step 1
+    caption: Hold scale-track step 1 and press K2 to remove its lock. Step 1 now follows the global +4
+      and plays MIDI 64. The zero lock on step 2 is still active for steps 2 to 4, so the loop plays MIDI
+      64, 62, 64 and 65.
+    assertion:
+      kind: transpose-lock-clear
+      global_transpose: 4
+      explicit_zero_step: 2
+      restored_pitches:
+      - 64
+      - 62
+      - 64
+      - 65
+      passed: true
+- id: transpose-lock-direct-taps
+  feature_id: transposition-locks
+  title: Jump a transposition lock straight to a value
+  behaviour_case: M-TRANS-011
+  citation: README.md#transposition-locks
+  related:
+  - scale-editor
+  - transpose-explicit-zero-and-clear
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step melody through a MIDI device: trigs on steps 1 to 4 on pattern
+      degrees 1 to 4 of scale slot 1 (C major), so MIDI 60, 62, 64 and 65. The Scale page is open on the
+      transposition fader along the bottom row. Global transposition is +4. Scale-track step 2 has a
+      transposition lock of 0, the fader''s centre at (12,8), and step 1 has just been locked to -12 with
+      one tap on the lowest value, (9,8), while it was held. The MIDI strip reads 48, 62, 64, 65.'
+    assertion:
+      kind: transpose-lock-value
+      value: -12
+      direct: true
+      passed: true
+  - id: zero
+    title: Jump to an explicit zero
+    caption: Hold scale-track step 1 and tap the centre of the fader, (12,8), once. The lock moves from
+      -12 straight to 0 with no walking. A lock of 0 overrides the global +4, so step 1 plays MIDI 60
+      and not 64.
+    assertion:
+      kind: transpose-lock-value
+      value: 0
+      direct: true
+      passed: true
+  - id: octave-up
+    title: Jump up an octave
+    caption: Hold step 1 and tap (15,8) once. The lock jumps to +12, and the first note sounds an octave
+      up at MIDI 72. Steps 2 to 4 still follow the zero lock on step 2, MIDI 62, 64 and 65.
+    assertion:
+      kind: transpose-lock-value
+      value: 12
+      direct: true
+      passed: true
+  - id: clear
+    title: Clear the lock on step 1
+    caption: Hold scale-track step 1 and press K2 to remove its lock. Step 1 follows the global +4 again
+      and plays MIDI 64, so the loop plays 64, 62, 64 and 65.
+    assertion:
+      kind: transpose-lock-clear
+      direct: true
+      global_transpose: 4
+      explicit_zero_step: 2
+      restored_pitches:
+      - 64
+      - 62
+      - 64
+      - 65
+      passed: true
+- id: octave-local-over-global
+  feature_id: octave-locks
+  title: Place one step in another octave
+  behaviour_case: M-OCT-002
+  citation: README.md#octave-locks
+  related:
+  - channel-editor
+  - transposition-locks
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step melody through a MIDI device: trigs on steps 1 to 4 on pattern
+      degrees 1 to 4 of scale slot 1 (C major), so MIDI notes 60, 62, 64 and 65. The channel octave is
+      0 and no step has an octave lock. The Device page is showing. The octave buttons sit along the bottom
+      row, (8,8) for -2 up to (12,8) for +2, with (10,8) the written octave.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: channel-octave
+    title: Drop the channel two octaves, and lock step 2 to the same
+    caption: 'Turn E1 to Channel tasks, choose Trig params with E2 and press K3. With no step held, tap
+      octave -2 at (8,8): the channel octave is -2 and the whole melody will drop two octaves. Hold step
+      2 and tap (8,8) too, then keep holding step 2: (8,8) is lit, showing that step''s octave.'
+    assertion:
+      kind: grid
+      cells:
+      - - 8
+        - 8
+      - - 9
+        - 8
+      - - 10
+        - 8
+      - - 11
+        - 8
+      - - 12
+        - 8
+      expected:
+      - 15
+      - 2
+      - 2
+      - 2
+      - 2
+    occurrence: 1
+  - id: hear-equal
+    title: A lock equal to the channel octave sounds the same
+    caption: Release step 2, press Play (1,8), then Stop. The MIDI strip reads 36, 38, 40 and 41 (C1,
+      D1, E1, F1). A lock equal to the channel octave changes nothing you can hear. A low channel octave
+      suits a bass line.
+    assertion:
+      kind: octave-phrase
+      phase: override--2--2
+      octaves:
+      - -2
+      - -2
+      - -2
+      - -2
+      passed: true
+  - id: lock-minus-one
+    title: Lock step 2 one octave higher
+    caption: 'Hold step 2 and press K2 to clear its lock; play and stop, and all four steps follow the
+      channel octave again. Then hold step 2 and tap octave -1 at (9,8), and keep it held: (9,8) lights
+      while the step is held. Play, then Stop: step 2 sounds at MIDI 50, one octave above the channel
+      setting, and the other steps stay at 36, 40 and 41.'
+    assertion:
+      kind: octave-phrase
+      phase: override--2--1
+      octaves:
+      - -2
+      - -1
+      - -2
+      - -2
+      passed: true
+  - id: override
+    title: A local octave overrides the channel
+    caption: 'Hold step 2, press K2 to clear its lock, play and stop. Then hold step 2 and tap octave
+      0 at (10,8). 0 is a lock like any other: step 2 returns to its written octave and sounds two octaves
+      above its neighbours. MIDI 36, 62, 40 and 41.'
+    assertion:
+      kind: octave-phrase
+      phase: override--2-0
+      octaves:
+      - -2
+      - 0
+      - -2
+      - -2
+      passed: true
+  - id: clear
+    title: K2 restores the channel octave
+    caption: 'Hold step 2 and press K2 to clear its octave lock. All four steps follow the channel octave
+      -2 again: MIDI 36, 38, 40 and 41.'
+    assertion:
+      kind: octave-phrase
+      phase: cleared--2-0
+      octaves:
+      - -2
+      - -2
+      - -2
+      - -2
+      passed: true
+  - id: lock-plus-one
+    title: Lock a step above the written octave
+    caption: Hold step 2 and tap octave +1 at (11,8). Step 2 sounds at MIDI 74, an octave above its written
+      note, while the other steps stay at 36, 40 and 41.
+    assertion:
+      kind: octave-phrase
+      phase: override--2-1
+      octaves:
+      - -2
+      - 1
+      - -2
+      - -2
+      passed: true
+- id: scale-lock-scope-and-lifetime
+  feature_id: scale-locks
+  title: Let a scale lock last for the phrase
+  behaviour_case: M-SCALE-LOCK-003
+  citation: README.md#scale-locks
+  related:
+  - scales-lock-until-pattern-end
+  - scale-editor
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step melody through a MIDI device: trigs on pattern degrees 1 to
+      4 of C major, so MIDI 60, 62, 64 and 65 in the plain scale. The scale track is four steps long.
+      Scale slot 2 (D major) is applied, slot 3 is E major (root up four semitones) and slot 4 is G major
+      (root up seven). A global scale lock puts slot 4 on scale-track step 2, and a channel lock puts
+      slot 3 on channel step 1. Scales lock until ptn end is On, its default, so the channel lock beats
+      the global lock for the whole pattern. The MIDI strip reads 64, 66, 68, 69: E major.'
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-on-channel-over-global
+      slots:
+      - 3
+      - 3
+      - 3
+      - 3
+      pitches:
+      - 64
+      - 66
+      - 68
+      - 69
+      passed: true
+  - id: next-trig
+    title: Turn the lifetime option off, then play
+    caption: 'Press K1, open PARAMS > MOSAIC and turn Scales lock until ptn end Off. Return and Play.
+      The channel lock now ends at the next trig that plays. Step 2 clears it, so steps 2 to 4 follow
+      the global G-major lock: the strip reads MIDI 64, 69, 71 and 72.'
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-off-next-trig-clears
+      slots:
+      - 3
+      - 4
+      - 4
+      - 4
+      pitches:
+      - 64
+      - 69
+      - 71
+      - 72
+      passed: true
+- id: scale-lock-skipped-trig
+  feature_id: scale-locks
+  title: Keep a scale lock through a silent step
+  behaviour_case: M-SCALE-LOCK-003
+  citation: README.md#scale-locks
+  related:
+  - scale-lock-scope-and-lifetime
+  steps:
+  - id: start
+    title: Starting point
+    caption: >-
+      Starting point: channel 1 plays the same four-step melody (MIDI 60, 62, 64, 65
+      in plain C major) through a MIDI device. Slot 3 (E major) is locked on channel
+      step 1, slot 4 (G major) is locked globally on scale-track step 2, and Scales
+      lock until ptn end is On. The channel lock takes precedence through all four
+      steps, so the strip reads MIDI 64, 66, 68 and 69 (E3, F#3, G#3 and A3).
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-on-channel-over-global
+      slots:
+      - 3
+      - 3
+      - 3
+      - 3
+      pitches:
+      - 64
+      - 66
+      - 68
+      - 69
+      passed: true
+  - id: next-played-trig-clears
+    title: The next played trig clears the channel lock
+    caption: >-
+      Turn Scales lock until ptn end Off, then play the same four-step phrase. The
+      channel E-major lock applies on step 1 and ends when step 2 plays; the global
+      G-major lock governs steps 2–4. The strip reads MIDI 64, 69, 71 and 72 (E3,
+      A3, B3 and C4).
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-off-next-trig-clears
+      slots:
+      - 3
+      - 4
+      - 4
+      - 4
+      pitches:
+      - 64
+      - 69
+      - 71
+      - 72
+      passed: true
+  - id: rejected
+    title: A trig that does not play keeps the lock
+    caption: Open Trig params and assign Trig Probability to a slot. Hold step 2 and set its probability
+      to 0, so step 2 is silent, then Play. A trig that does not play does not clear the lock; step 3
+      is the next trig that plays and clears it. The strip reads MIDI 64, 71 and 72, with a gap where
+      step 2 was.
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-off-rejected-trig-keeps-lock
+      slots:
+      - 3
+      - null
+      - 4
+      - 4
+      pitches:
+      - 64
+      - 71
+      - 72
+      passed: true
+  - id: probability-clear
+    title: Clear the probability lock
+    caption: Hold step 2 and press K2 on Trig params to remove its probability lock, then Play. Step 2
+      plays again and clears the channel lock, so the notes return to MIDI 64, 69, 71 and 72.
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-off-probability-cleared
+      slots:
+      - 3
+      - 4
+      - 4
+      - 4
+      pitches:
+      - 64
+      - 69
+      - 71
+      - 72
+      passed: true
+  - id: rest
+    title: A rest also leaves the lock in place
+    caption: Open the Pattern editor with (5,8), choose pattern 1 at (1,1) and press step 2 to remove
+      its trig, then return to the Channel editor with (3,8) and Play. A rest does not clear the lock
+      either; the next trig that plays does. The strip reads MIDI 64, 71 and 72.
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-off-rest-keeps-lock
+      slots:
+      - 3
+      - null
+      - 4
+      - 4
+      pitches:
+      - 64
+      - 71
+      - 72
+      passed: true
+- id: scale-lock-replacement
+  feature_id: scale-locks
+  title: Replace a scale lock with a later one
+  behaviour_case: M-SCALE-LOCK-003
+  citation: README.md#scale-locks
+  related:
+  - scale-lock-scope-and-lifetime
+  - scales-lock-until-pattern-end
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays the four-step melody through a MIDI device with the scale locks from the last
+      scenes: slot 3 (E major) locked on channel step 1, slot 4 (G major) locked globally on scale-track
+      step 2, and Scales lock until ptn end Off. Step 2 is a rest, so the strip reads MIDI 64, 71 and 72
+      with a gap where step 2 was.'
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-off-rest-keeps-lock
+      slots:
+      - 3
+      - null
+      - 4
+      - 4
+      pitches:
+      - 64
+      - 71
+      - 72
+      passed: true
+  - id: replacement-off
+    title: A new channel lock replaces the old one
+    caption: Put the trig back on step 2. Hold channel step 3 and press scale slot 2 at (2,3) to lock
+      it to D major, then Play. With the option Off, E major applies at step 1 and ends at step 2, and
+      D major applies at step 3 and ends at step 4. The strip reads MIDI 64, 69, 66 and 72.
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-off-replacement
+      slots:
+      - 3
+      - 4
+      - 2
+      - 4
+      pitches:
+      - 64
+      - 69
+      - 66
+      - 72
+      passed: true
+  - id: replacement-on
+    title: Turn the option back on, then play
+    caption: Press K1, open PARAMS > MOSAIC and turn Scales lock until ptn end On, then return and Play.
+      The E-major lock now lasts until the step 3 lock replaces it, and the D-major lock lasts to the
+      end of the pattern. The strip reads MIDI 64, 66, 66 and 67.
+    assertion:
+      kind: scale-lock-precedence
+      stage: hold-on-replacement
+      slots:
+      - 3
+      - 3
+      - 2
+      - 2
+      pitches:
+      - 64
+      - 66
+      - 66
+      - 67
+      passed: true

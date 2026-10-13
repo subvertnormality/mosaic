@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "167b7ceff0927a4c8b499113070b31442d115499",
+  "selected_cases": [
+    "M-REC-PARAM-007",
+    "M-REC-PARAM-008",
+    "M-REC-PARAM-009",
+    "M-REC-PARAM-010",
+    "M-REC-PARAM-011",
+    "M-REC-PARAM-012",
+    "M-REC-PARAM-013"
+  ],
+  "selected_modules": {
+    "tests/behaviour/recording_lifetimes.py": "M-REC-PARAM-007",
+    "tests/behaviour/contract/recording_lifetimes.py": "M-REC-PARAM-010"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/recording_lifetimes.py",
+      "case": "M-REC-PARAM-007",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-1efe0f9911f749e3868ecf6cdd38a7d1/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-1efe0f9911f749e3868ecf6cdd38a7d1/manifest.json",
+      "manifest_sha256": "cd4b5d117d1ee0237edc0b85a115891921b705a25d5e1adc61ce00cc0b446713",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/recording_lifetimes.py",
+      "case": "M-REC-PARAM-010",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-a9f8c72cbf9d4605bf6836fd918a0f62/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-a9f8c72cbf9d4605bf6836fd918a0f62/manifest.json",
+      "manifest_sha256": "1d7b38e38add9325b0037060e059dee88cbe19ddd1b5a71c718a436be714948d",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

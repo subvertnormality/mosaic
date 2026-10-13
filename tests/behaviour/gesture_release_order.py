@@ -11,15 +11,23 @@ PHRASE_VELOCITY = [127, 117, 107, 97]
 
 def gesture_release_order(c):
     c.configure()
-    c.tap(4, 8); c.tap(3, 3); c.enc(2, -1); c.enc(3, 4); c.key(3); c.tap(1, 3); c.tap(3, 8)   # slot 3 E major; slot 1 applied
+    c.ui.scale_editor()
+    c.ui.tap_control("scale_slot", 3)
+    c.ui.turn(2, -1)
+    c.ui.set_value(4)
+    c.ui.press_key(3)
+    c.ui.tap_control("scale_slot", 1)
+    c.ui.menu("channel_editor")   # slot 3 E major; slot 1 applied
     def phrase(stage, notes):
         c.playback([(1, [144, n, v]) for n, v in zip(notes, PHRASE_VELOCITY)], cycles=2)
         c.results.append(dict(kind='gesture-release-order', stage=stage, notes=notes, passed=True))
     phrase('no-lock', [60, 62, 64, 65])
-    c.action(type='grid', x=3, y=4, state=1); c.elapse(.05)       # press step 3
-    c.action(type='grid', x=3, y=3, state=1); c.elapse(.05)       # press slot 3
-    c.action(type='grid', x=3, y=4, state=0); c.elapse(.05)       # release the step first
-    c.action(type='grid', x=3, y=3, state=0); c.elapse(.1)
+    c.ui.gesture([("step", 3)], []); c.elapse(.05)                 # press step 3
+    c.ui.gesture([("scale_slot", 3)], []); c.elapse(.05)           # press slot 3
+    c.ui.gesture([], [("step", 3)]); c.elapse(.05)                 # release the step first
+    c.ui.gesture([], [("scale_slot", 3)]); c.elapse(.1)
     phrase('step-released-first-sets-no-lock', [60, 62, 64, 65])
-    c.hold_tap((3, 4), (3, 3)); c.elapse(.1)                       # hold step 3, tap slot 3
+    with c.ui.hold_step(3):
+        c.ui.tap_control("scale_slot", 3)                           # hold step 3, tap slot 3
+    c.elapse(.1)
     phrase('hold-step-tap-slot-locks', [60, 62, 68, 69])

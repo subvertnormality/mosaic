@@ -1,0 +1,44 @@
+{
+  "scope": "Explicit root-approved documentary development/CI policy update only; not behavioral acceptance or capture source relabeling",
+  "created_utc": "2026-10-04T10:29:06.892052+00:00",
+  "authorization": "Root migration task approves ONLY README.md/AGENTS.md review entries and strict ledger refresh",
+  "applied_policy_receipt": {
+    "path": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-applied-20261004/receipt.json",
+    "sha256": "9b98553d16f321ce67d88619a1e86648861deb81e4009b4691072f68032e60d6"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "before_sha256": "a06498ce330b93157ddbf3c853a528d9c87a3c61d8e7f9cd5c4af543945bb5c9",
+      "after_sha256": "b4624ee41d639a2712a95c24bb042ac56d5d0bb6da3068a5e0687ec89bf4098d",
+      "before": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/before/README.md",
+      "after": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/after/README.md"
+    },
+    {
+      "path": "AGENTS.md",
+      "before_sha256": "2b45240fc4350c6de0c47bf8c442728783f8bf6f497eeaf482df29113ca2bd5b",
+      "after_sha256": "753908e33247686fc4d0c772bfc7e2355545e94326e8f687c9210abfc061b7e2",
+      "before": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/before/AGENTS.md",
+      "after": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/after/AGENTS.md"
+    }
+  ],
+  "prior_ledgers": {
+    "docs/ui-reimplementation/current-source-review.json": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+    "docs/ui-reimplementation/source-inventory.json": "1937390840e6b95048681d1642c8e2ef11ad825db4e5a2b331ba0b59af338904",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "f763065ccf4d115dc6350d2fe400d1b3189ec027b6904a8db35b754057b0b804"
+  },
+  "claims": [
+    "Affected feature changes update tests and YAML manual in the same change",
+    "New features need comprehensive public-input/boundary/failure/interaction coverage and full teaching sections",
+    "Local behavior/manual generation controlled; required real-time behavior qualification runs in CI",
+    "Separate PR/on-demand generation and post-main-merge deployment reuse source-matched validated artifact"
+  ],
+  "inspection": {
+    "first_sound_and_installation_unchanged": true,
+    "original_legacy_citations_preserved": true,
+    "manual_source_descriptor_unchanged": true,
+    "review_membership_unchanged": true
+  },
+  "complete_regression_run": false,
+  "authority_activation": false
+}

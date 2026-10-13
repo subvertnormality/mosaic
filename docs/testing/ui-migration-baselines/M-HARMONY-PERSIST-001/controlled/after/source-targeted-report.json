@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "8f32825ab959b172d047dc2b524ddf1231a17875",
+  "after_sha": "1773f44961147f33cc0d8428280170da56b45f4c",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-HARMONY-PERSIST-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-HARMONY-PERSIST-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PERSIST-001/real-time/before/d7d2fce054124701afae4c46e33797a7/manifest.json",
+              "manifest_sha256": "44e329cb51cbc835139fad134e46c2d3d26f883ad9e9fc64d47054ce42386e55"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PERSIST-001/real-time/after/37d951b0e269401ab2c1f952e87dc8b1/manifest.json",
+              "manifest_sha256": "1f077002b550a13784d5ca692142a92720e63e7c3cbc9cb6b1ad7fdb0f860329"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PERSIST-001/controlled-experimental/before/ce52f84bea9a47f58f07b9743f76328d/manifest.json",
+              "manifest_sha256": "09bae0e356bc8c4dc282fe435fad6e6e7a9bf5a70bcdaf7e9567503de30222ec"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PERSIST-001/controlled-experimental/after/0b9ff2406ed34f84ae4450651d95c717/manifest.json",
+              "manifest_sha256": "8d4377653bf42a3daa53a71a07c7041d8ef80ffb2252841aba9b4ea1e5d73f8f"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

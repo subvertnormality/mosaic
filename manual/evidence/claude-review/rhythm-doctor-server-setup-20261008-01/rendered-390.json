@@ -1,0 +1,120 @@
+{
+  "text": "Skip to the content\nDark mode\n01\nOverview\n02\nMake your first piece\n03\nTry an idea\n04\nFind a control\n05\nQuick controls\n06\nMusical examples\nManual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing and painting all read a finished bank and write to a pattern, which is what the rest of the Trigger Editor already lets you do while playing. Starting the sequencer cancels an unfinished capture or analysis and closes a capture-setup or alignment draft, but keeps an armed paint preview, so you can arm Paint, start the sequencer and commit. Rhythm Doctor does not start or stop the sequencer for you.\n\nOn an empty bank, press grid column 1, row 2 to begin Record; the press starts the action and its release is consumed. Press Record again to stop, or press K3: either finishes the capture once the screen says ENOUGH / REC OR K3. Until it does, the screen says MORE AUDIO NEEDED, and pressing Record then asks whether to abandon the take instead. Pressing Record on an occupied bank asks whether to clear its capture bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that were already painted. In a ready bank, use E2 to choose Window bar, Window step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to edit the chosen item. Window bar moves by 16 steps and Window step by one; both view the same bounded timeline. Alignment shows OPEN >: choose it and press K3 (or turn E3) to open its tempo, start-beat, and fine-start settings; K2 cancels and K3 applies the draft.\n\nBefore recording, use E2/E3 to open and edit the setup draft for Auto or Manual tempo, manual BPM (40–240), and Stereo/L/R input. Press K3 to confirm the settings for the take, or K2 to discard the draft. Record uses the confirmed settings.\n\nStereo records left and right separately. L records the left input into both recorded channels; R records the right input into both. Auto estimates tempo and phrase start from the recording. Manual uses the selected integer BPM and starts the phrase at the beginning of recording. Applying an explicit Alignment draft later replaces that capture timing.\n\nTo paint a ready lane, select the destination pattern with the top row, press Paint (column 16, row 8) to preview, then press it again to commit. Cancel (column 14, row 8) discards the preview. Toggle is the default paint policy; Add and Replace are selectable on the Rhythm Doctor screen. Painting does not alter the captured bank.\n\nPrime, Cancel and the preview-shift buttons work the same way in every algorithm; see Adding Trigs. In Rhythm Doctor the buttons at (10,8), (11,8) and (12,8) browse the recording instead (see Finding the phrase below).\n\nWatch: Pattern editor trig page demo\n\nSet up the analysis server\nPrerequisites\n\nInstall Git and Python on the computer that will run the server. The Windows steps below were checked on Windows 10/11 with Python 3.10. On Linux or macOS, use an installed Python 3.9 or newer.\n\nGet the Mosaic checkout and enter the server folder:\n\ngit clone --branch codex/1.4.0 https://github.com/subvertnormality/mosaic.git\ncd mosaic\ncd tools/rhythm_doctor_server\n\nInstall the server\n\nWindows PowerShell:\n\npy -3.10 -m venv .venv\n.\\.venv\\Scripts\\python -m pip install -r requirements.txt pyyaml\n\n\nLinux or macOS:\n\npython3 -m venv .venv\n.venv/bin/python -m pip install -r requirements.txt pyyaml\n\n\nDemucs and Beat This fetch and cache their model weights when first used. Let that first model load finish before analysing a capture.\n\nThe server provides six lanes without LarsNet: DRUMS, BASS, GUITAR, PIANO, VOCALS and OTHER. To keep six lanes, skip the optional LarsNet commands below and leave LARSNET_ROOT unset. To split the kit into ten lanes, install LarsNet as well. Its checkpoint archive is about 562 MB and is licensed CC BY-NC 4.0; read that licence before using it, especially for commercial work. The following commands fetch the published archive and verify its SHA-256.\n\nWindows PowerShell:\n\ngit clone https://github.com/polimi-ispl/larsnet .\\larsnet\n.\\.venv\\Scripts\\python -m pip install gdown\n.\\.venv\\Scripts\\python fetch_models.py --larsnet-root .\\larsnet --sha256 dd785d77f66413c5acbd3a4cedac02951578c838496d059930c43f159647c907\n$env:LARSNET_ROOT = \"$PWD\\larsnet\"\n\n\nLinux or macOS:\n\ngit clone https://github.com/polimi-ispl/larsnet ./larsnet\n.venv/bin/python -m pip install gdown\n.venv/bin/python fetch_models.py --larsnet-root ./larsnet --sha256 dd785d77f66413c5acbd3a4cedac02951578c838496d059930c43f159647c907\nexport LARSNET_ROOT=\"$PWD/larsnet\"\n\nStart and check the server\n\nFrom tools/rhythm_doctor_server, start it on all network interfaces at port 8420:\n\nWindows PowerShell:\n\n.\\.venv\\Scripts\\python server.py --host 0.0.0.0 --port 8420\n\n\nLinux or macOS:\n\n.venv/bin/python server.py --host 0.0.0.0 --port 8420\n\n\nOn Windows, allow the firewall prompt on private networks. The startup log should report ready=True. On the computer, open http://127.0.0.1:8420/v1/health in a browser; the response should contain \"ready\": true and a lane list. Only read the lane count when ready is true: ten lanes means LarsNet loaded, six means it did not. If required Demucs or Beat This models are missing, the server normally exits. The diagnostic option --allow-missing-models keeps it running with ready:false; analysis is unavailable in that state. Keep the terminal and server running while using Rhythm Doctor; press Ctrl+C in that terminal to stop it.\n\nConnect Mosaic on norns\n\nFind the computer’s IPv4 address with ipconfig on Windows, or the network settings on Linux/macOS. If the norns is providing the access point, use the computer address on its 10.42.0.x subnet. Otherwise use the address on the same network as the norns. In PARAMS > MOSAIC > Rhythm Doctor, set Analysis server to the computer’s reachable address, such as http://192.168.1.50:8420, and turn Use analysis server on. Enter the reachable computer address, not 0.0.0.0 or 127.0.0.1.\n\nIf the server is enabled and reachable, a successful capture uses its six or ten lanes. Turn Use analysis server off to keep its address saved and use on-device analysis. If the remote request fails, Mosaic falls back only if its local analysis backend is available; otherwise it reports ANALYSIS_BACKEND_UNAVAILABLE and creates no bank. If you see only BD, SD and CYM, check the switch, address, health response, network and firewall.\n\nBeat This estimates tempo and phrase start from the mix before separation. Treat them as estimates and adjust Alignment when needed.\n\nTry this step\nInteractive examples\nChoose an interaction\nRecord audio and paint detected attacks\nRecord audio in Auto mode and paint detected attacks\n\nStarting point: Channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps 1-64), and playback is stopped. The audio input will receive a synthetic test recording, 29 seconds of a short thump on every beat at 120 BPM, once Record starts. Tempo will be set to Manual at 120 BPM.\n\nExample\n01 / 07\nNORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nAfter\nRecord audio and paint detected attacks\n\nStarting point: channel 1 has a MIDI device on OUT 1 with pattern 1 assigned (range steps 1-64) and playback is stopped. Play a steady loop into the norns audio input, with a short thump on every beat at 120 BPM; the example uses a 29-second loop, so use one at least that long. Press Pattern (5,8) and choose the Rhythm Doctor algorithm at (16,2). Rhythm Doctor opens on the norns: Record READY, Tempo AUTO, Manual BPM 120, Input STEREO. The bank is EMPTY, so no lane buttons are lit yet.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none.\n\nNEXT ACTION\n\nTurn E2 to Tempo and E3 to MANUAL, then press K3 to confirm: Manual BPM reads 120, so you tell Doctor the tempo instead of letting it estimate. Tap Record at (1,2). Doctor starts listening to the audio input; the screen reads CAPTURE, MORE AUDIO NEEDED, RECORDING.\n\n← Back\nAuto-play\nView next result →\n01\n02\n03\n04\n05\n06\n07\n\nUse Before and Show result to compare the recorded states, or follow the example on your instrument.\n\nMUSICAL USE\n\nRecord a percussion phrase into an empty bank. Select a lane and an unused destination pattern. Adjust sensitivity and paint policy, preview the result, then paint it.\n\n03 / QUICK REFERENCE\nControls\nDense view\nYOUR GESTURE\tWHAT HAPPENS\nWith the sequencer stopped, choose Rhythm Doctor at grid (16,2).\tOpen capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.\nEmpty bank: grid (1,2)\tStart Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.\nRecord before enough audio, or Record on an occupied bank\tOpen an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.\nBefore capture: E2/E3 edit setup → K3 confirm; K2 cancels.\tRecord uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.\nReady bank: select a lane, then E2 field → E3\tBrowse Window bar/step, sensitivity or paint policy.\nIn a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).\tSelect BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.\nReady bank: select Alignment → K3\tOpen the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.\nGrid (10,8) / (12,8); hold for a phrase\tMove the recording window one step backward / forward, or a whole four-bar phrase.\nGrid (11,8)\tReturn the window to its calculated phrase start.\nSelect destination pattern in row 1 → grid (16,8) twice\tPreview the selected lane, then paint it; grid (14,8) cancels the preview.\nIf local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.\tNo bank is created. See If local analysis fails for the norns setup needed to retry.\nLanes\nFinding the phrase and Alignment\nAnalysis server (advanced)\nLocal analysis and availability\nRecording and playback\nCapture and analysis results\nPaint destination\nIf local analysis fails\nVertical list controls\nConfirmed capture setup\nStart beat and retained recording\nRelated features\nAdding Trigs\n\nFollow these links for related controls and musical tasks.",
+  "codes": [
+    "git clone --branch codex/1.4.0 https://github.com/subvertnormality/mosaic.git\ncd mosaic\ncd tools/rhythm_doctor_server\n",
+    "py -3.10 -m venv .venv\n.\\.venv\\Scripts\\python -m pip install -r requirements.txt pyyaml\n",
+    "python3 -m venv .venv\n.venv/bin/python -m pip install -r requirements.txt pyyaml\n",
+    "git clone https://github.com/polimi-ispl/larsnet .\\larsnet\n.\\.venv\\Scripts\\python -m pip install gdown\n.\\.venv\\Scripts\\python fetch_models.py --larsnet-root .\\larsnet --sha256 dd785d77f66413c5acbd3a4cedac02951578c838496d059930c43f159647c907\n$env:LARSNET_ROOT = \"$PWD\\larsnet\"\n",
+    "git clone https://github.com/polimi-ispl/larsnet ./larsnet\n.venv/bin/python -m pip install gdown\n.venv/bin/python fetch_models.py --larsnet-root ./larsnet --sha256 dd785d77f66413c5acbd3a4cedac02951578c838496d059930c43f159647c907\nexport LARSNET_ROOT=\"$PWD/larsnet\"\n",
+    ".\\.venv\\Scripts\\python server.py --host 0.0.0.0 --port 8420\n",
+    ".venv/bin/python server.py --host 0.0.0.0 --port 8420\n"
+  ],
+  "links": [
+    {
+      "text": "Skip to the content",
+      "href": "#manual-content"
+    },
+    {
+      "text": "",
+      "href": "#home"
+    },
+    {
+      "text": "01\nOverview",
+      "href": "#home"
+    },
+    {
+      "text": "02\nMake your first piece",
+      "href": "#learn"
+    },
+    {
+      "text": "03\nTry an idea",
+      "href": "#workflow"
+    },
+    {
+      "text": "04\nFind a control",
+      "href": "#reference"
+    },
+    {
+      "text": "05\nQuick controls",
+      "href": "#quick"
+    },
+    {
+      "text": "06\nMusical examples",
+      "href": "#cookbook"
+    },
+    {
+      "text": "Cheat sheet ↗",
+      "href": "../cheat_sheet.html"
+    },
+    {
+      "text": "Device configuration ↗",
+      "href": "../config_creator.html"
+    },
+    {
+      "text": "About this guide",
+      "href": "#about"
+    },
+    {
+      "text": "Manual",
+      "href": "#home"
+    },
+    {
+      "text": "Pattern",
+      "href": "#reference"
+    },
+    {
+      "text": "Dig Deeper",
+      "href": "#dig-deeper"
+    },
+    {
+      "text": "Pattern Editor",
+      "href": "#pattern-editor"
+    },
+    {
+      "text": "Adding Trigs",
+      "href": "#adding-trigs"
+    },
+    {
+      "text": "← Adding Trigs",
+      "href": "#adding-trigs"
+    },
+    {
+      "text": "Adding Notes →",
+      "href": "#adding-notes"
+    },
+    {
+      "text": "Captured examples",
+      "href": "#rhythm-doctor/section-explore"
+    },
+    {
+      "text": "Controls",
+      "href": "#rhythm-doctor/section-reference"
+    },
+    {
+      "text": "Pattern editor trig page demo",
+      "href": "https://youtu.be/J1ckUZvhFJ0?t=668"
+    },
+    {
+      "text": "Git",
+      "href": "https://git-scm.com/downloads/"
+    },
+    {
+      "text": "Python",
+      "href": "https://www.python.org/downloads/"
+    },
+    {
+      "text": "Install and choose a sound source",
+      "href": "../README.md#getting-started"
+    },
+    {
+      "text": "make your first pattern",
+      "href": "../README.md#adding-trigs"
+    },
+    {
+      "text": "Adding Trigs",
+      "href": "#adding-trigs"
+    }
+  ],
+  "width": 390,
+  "scrollWidth": 390
+}

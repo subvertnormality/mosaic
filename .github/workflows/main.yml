@@ -3,7 +3,10 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    # Stacked release branches are gated too: a pull request into a release
+    # branch is reviewed on the same evidence as one into main, and without
+    # this a stacked PR shows no checks at all rather than showing red.
+    branches: [ main, codex/1.4.0, codex/rhythm-doctor-phrase ]
 
 jobs:
   Run-tests-on-Ubuntu:
@@ -14,4 +17,27 @@ jobs:
       - uses: leafo/gh-actions-lua@v10
         with:
           luaVersion: "5.3"
+      - name: Prepare pinned norns Lua test source
+        run: bash .github/scripts/prepare-lua-test-source.sh
       - run: ./test.sh
+
+  Manual-publisher-contract:
+    name: Manual publisher contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install PyYAML==6.0.2 jsonschema==4.23.0
+      - name: Check behaviour test registration
+        env:
+          PYTHONPATH: tests/behaviour
+        run: python -m unittest test_suite.CollectionTests
+      - run: python -m unittest tests.manual_ci.test_publish_manual tests.manual_ci.test_audio_bundle_reuse
+      - name: Check caption tests with the native runner import path
+        working-directory: tests/behaviour
+        env:
+          PYTHONPATH: ''
+          MONOME_EMULATOR: ''
+        run: python -m unittest -v test_manual_caption_overlay

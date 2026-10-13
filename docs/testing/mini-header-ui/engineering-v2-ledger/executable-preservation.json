@@ -1,0 +1,18 @@
+{
+  "lua_checked": 509,
+  "lua_changed": [],
+  "spec_changed_top_keys": [
+    "authority"
+  ],
+  "runtime_export_unchanged": true,
+  "engineering_only": true,
+  "source_validator": "PASS without skips",
+  "prior_full_lua": "2444/2444",
+  "documentary_delta_receipt": "reviewed-documentary-delta.json",
+  "files": {
+    "docs/ui-reimplementation/current-source-review.json": "6896d748b1f2d603769f896fee345d0883781989ec28cb2e67d2fdc1f50e036d",
+    "docs/ui-reimplementation/source-inventory.json": "074c0dba2ac7ebafb83853132309fcfc2f46b851c90dc20d95723759df94ec1f",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "a760f44c34173e7e9012797f1c7b029c671104f65794fc13e2bb4f30d0d5f97f",
+    "docs/ui-reimplementation/spec.json": "dc8a262685386bc9e94fb07702bfdc5a25e19cc8926e5eb1b7bbc4bc1101af39"
+  }
+}

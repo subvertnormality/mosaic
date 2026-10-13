@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "purpose": "Interim layout gallery; historical qualified source, not final current-source acceptance",
+  "run_id": "38e4b70259734bf0bd4b831d64b52302",
+  "case": "M-UIACC-A18-001",
+  "clock_mode": "real-time",
+  "manifest_sha256": "254b32f2a784d0f44c691f7714d27a45cc85f36efa0ae79ac57cd1a5e0d5d420",
+  "results_sha256": "282b34ac57af79719047356b1b5c161127913c6d255fad0dff1cbcddf7ce1f16",
+  "mosaic_revision": "69df623e06efd6721e1cc53e961a1dd845d2a48c",
+  "complete_regression_run": false,
+  "images": [
+    {
+      "image": "images/ui-preview/mosaic-clock-vertical.png",
+      "sha256": "3a44d9b462440f4381db1fdaeac4c40857581d066fcdbeee9abaf1fb3db875a9",
+      "source_frame": "024-C04.png",
+      "assertions": [
+        {
+          "kind": "a18-screen",
+          "screen": "C04",
+          "title": "CLOCK",
+          "scope": "CH01",
+          "layout": "vertical_list",
+          "field": [
+            "Rate",
+            "/1"
+          ],
+          "rows": null,
+          "checks": {
+            "header": true,
+            "no_overflow": true,
+            "footer": true,
+            "field": true
+          },
+          "frame": "024-C04.png",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "image": "images/ui-preview/mosaic-scale-vertical.png",
+      "sha256": "34e1ea4a36924558b64847b0f7a545adf49b1faa7f8f11460924733b6c9d19ae",
+      "source_frame": "192-S01.png",
+      "assertions": [
+        {
+          "kind": "a18-screen",
+          "screen": "S01",
+          "title": "SCALE",
+          "scope": "SLOT 01",
+          "layout": "vertical_list",
+          "field": [
+            "Scale",
+            "Major"
+          ],
+          "rows": null,
+          "checks": {
+            "header": true,
+            "no_overflow": true,
+            "footer": true,
+            "field": true
+          },
+          "frame": "192-S01.png",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "image": "images/ui-preview/mosaic-slot-vertical.png",
+      "sha256": "c3e92fe5ee954e97d68880e3d366effa4a214547f0effd555743551ec16a8846",
+      "source_frame": "206-A01.png",
+      "assertions": [
+        {
+          "kind": "a18-screen",
+          "screen": "A01",
+          "title": "SLOT SETUP",
+          "scope": "SONG 01",
+          "layout": "vertical_list",
+          "field": [
+            "Repeats",
+            "1"
+          ],
+          "rows": null,
+          "checks": {
+            "header": true,
+            "no_overflow": true,
+            "footer": true,
+            "field": true
+          },
+          "frame": "206-A01.png",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "image": "images/ui-preview/mosaic-masks-overview.png",
+      "sha256": "f6baf0b2fe88af3e2f2892eac36fc7d597568546588d20e43f8289965f2a679f",
+      "source_frame": "002-C01.png",
+      "assertions": [
+        {
+          "kind": "a18-screen",
+          "screen": "C01",
+          "title": "NOTE MASKS",
+          "scope": "CH01",
+          "layout": "overview_masks",
+          "field": [
+            "Note",
+            "X"
+          ],
+          "rows": null,
+          "checks": {
+            "header": true,
+            "no_overflow": true,
+            "footer": true,
+            "field": true
+          },
+          "frame": "002-C01.png",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "image": "images/ui-preview/doctor-list-top.png",
+      "sha256": "b610318cdcf5516a0c78bc4a8d1dac43e73799d2e1e2d21ebc607163ec988088",
+      "source_frame": "236-R01.png",
+      "assertions": [
+        {
+          "kind": "a18-screen",
+          "screen": "R01",
+          "title": "RHYTHM DR",
+          "scope": "CH01",
+          "layout": "vertical_list",
+          "field": [
+            "Record",
+            "READY"
+          ],
+          "rows": null,
+          "checks": {
+            "header": true,
+            "no_overflow": true,
+            "footer": true,
+            "field": true
+          },
+          "frame": "236-R01.png",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "image": "images/ui-preview/doctor-list-lower.png",
+      "sha256": "df7b9872183cfbd3059fadc03cd28be6f115ef05b85035b840268eb2b67333bc",
+      "source_frame": "242-R01.png",
+      "assertions": [
+        {
+          "kind": "a18-screen",
+          "screen": "R01",
+          "title": "RHYTHM DR",
+          "scope": "CH01",
+          "layout": "vertical_list",
+          "field": [
+            "Record",
+            "READY"
+          ],
+          "rows": null,
+          "checks": {
+            "header": true,
+            "no_overflow": true,
+            "footer": true,
+            "field": true
+          },
+          "frame": "242-R01.png",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

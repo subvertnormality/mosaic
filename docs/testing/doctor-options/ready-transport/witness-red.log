@@ -1,0 +1,17 @@
+test_after_stop_original_mask_and_bank_tempo_are_observed (test_doctor_ready_transport.ReadyTransportCoverage) ... ok
+test_failed_held_route_observation_releases_record_and_stops (test_doctor_ready_transport.ReadyTransportCoverage) ... ok
+test_public_record_press_and_release_are_exercised_while_playing (test_doctor_ready_transport.ReadyTransportCoverage) ... ok
+test_record_refusal_witnesses_bind_exact_observations_and_input_prefixes (test_doctor_ready_transport.ReadyTransportCoverage) ... FAIL
+
+======================================================================
+FAIL: test_record_refusal_witnesses_bind_exact_observations_and_input_prefixes (test_doctor_ready_transport.ReadyTransportCoverage)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_ready_transport.py", line 123, in test_record_refusal_witnesses_bind_exact_observations_and_input_prefixes
+    self.assertIn('witnesses', row, 'Record acceptance lacks independently bound native witnesses')
+AssertionError: 'witnesses' not found in {'kind': 'doctor-options', 'check': 'playing-record-refused', 'contract': 'README.md#rhythm-doctor', 'route': 'R05', 'released': True, 'bank_bpm': 120, 'steps': [10]} : Record acceptance lacks independently bound native witnesses
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.019s
+
+FAILED (failures=1)

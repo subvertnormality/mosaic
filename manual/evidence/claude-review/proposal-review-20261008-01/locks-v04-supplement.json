@@ -1,0 +1,16 @@
+{
+  "review_id":"locks-v04-navigation-supplement-2026-10-08",
+  "prior_review":"review.json",
+  "candidate_manifest_path":"C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\doc-language-cleanup-20261008-01\\candidate-v04\\manifest.json",
+  "candidate_manifest_sha256":"dc33f9a76726fe78481852350c8c74b308efc8142c2c45975f08f52dd3585a91",
+  "locks_yaml_sha256":"b5846fc8cd57bb62a15133ab77b031700cb3e6b0d319ab137f54bf4c09094698",
+  "unit":"feature:locks:recipes[4]",
+  "scores":{"coherence":9,"usefulness":8,"understandability":8,"representation":9,"granularity":8,"flow":7,"integration":8,"vocabulary":8,"naming":8,"canonical_home":9},
+  "decision":"HOLD",
+  "blockers":[
+    "After the copy instruction, explicitly tap/select Song slot 2 before editing its length or step locks; otherwise the text does not tell the reader to leave the source slot.",
+    "Before each A/B playback, explicitly select Song slot 1 as the start point; the current text leaves slot 2 selected after editing. Selecting slot 1 only after playback does not fix the start.",
+    "Make the Pattern 1 setup navigation explicit: open Channel with Grid (3,8), select channel 1 on row 1, then assign Pattern 1 on the second-from-top row before playback."
+  ],
+  "resolved_from_v03":["review/production framing replaced by player-facing comparison language","PolyPerc install/enable prerequisite added","Pattern 1 assignment added","relative-turn and device starting-value caveats retained"]
+}

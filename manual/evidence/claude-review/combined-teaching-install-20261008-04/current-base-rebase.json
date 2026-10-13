@@ -1,0 +1,119 @@
+{
+  "checked_in_book_sha256": "54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+  "checked_in_index_sha256": "39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf",
+  "current_base_book_sha256": "54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+  "current_base_index_sha256": "98535823f22543f4d59ec3ee445a46a24a2dfb06800730ae39bdefb83b621229",
+  "retained_midi_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a",
+  "root_audio_scenes_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+  "current_base_projection_chunks": 167,
+  "full_validate_projection_passed": true,
+  "all_167_current_base_chunks_byte_identical_to_checked_in": true,
+  "native_scene_and_audio_chunk_semantics_unchanged": true,
+  "exact_rebase_leaf_count": 8,
+  "exact_rebase_leaves": [
+    {
+      "path": [
+        "features",
+        18,
+        "teaching_bindings",
+        0,
+        "native_transition_contract_sha256"
+      ],
+      "checked_in_value": "97be2dfba79b0c6ec36527869aed0ea4af5cf4ccdefb5df8cbbc109274137c36",
+      "current_producer_value": "f2cfdaebfd006e6410d6b46cf80372c5316c8a7a9d716d408bf8338d4dbae20f"
+    },
+    {
+      "path": [
+        "features",
+        18,
+        "teaching_bindings",
+        0,
+        "panic_release_receipts",
+        0,
+        "adapter_source_sha256"
+      ],
+      "checked_in_value": "03256bba4004cde78631b18b7611fa31a692663f77d1c256ca247a568b72349f",
+      "current_producer_value": "f6617a9544c33f1f88e124c44bc29fca45f0d9b571965f6b164e053cd645aec9"
+    },
+    {
+      "path": [
+        "features",
+        8,
+        "teaching_bindings",
+        0,
+        "native_transition_contract_sha256"
+      ],
+      "checked_in_value": "788aab406412226fcd8ca9e6e0323c27292ef779ac7eae0d541fb1cbbcfebe89",
+      "current_producer_value": "7f0792f1db9e11d896ac5d7de949e2739f42e3225173677c2bc1031b0e206d5c"
+    },
+    {
+      "path": [
+        "features",
+        8,
+        "teaching_bindings",
+        0,
+        "player_device_readout_receipts",
+        0,
+        "adapter_source_sha256"
+      ],
+      "checked_in_value": "58e0dd2e687dd3a0a01cdd972085f24bfa4bb36a773c90b2845c4ead32253b94",
+      "current_producer_value": "bfe8f32507e5efef4e9f3ae7c3a0fbed4a738c58a34cdb465acd428ebc7084b4"
+    },
+    {
+      "path": [
+        "teaching_contracts",
+        "feature:midi-panic:play-panic-stops-sounding-note-note-sounding",
+        "native_transition_contract_sha256"
+      ],
+      "checked_in_value": "97be2dfba79b0c6ec36527869aed0ea4af5cf4ccdefb5df8cbbc109274137c36",
+      "current_producer_value": "f2cfdaebfd006e6410d6b46cf80372c5316c8a7a9d716d408bf8338d4dbae20f"
+    },
+    {
+      "path": [
+        "teaching_contracts",
+        "feature:midi-panic:play-panic-stops-sounding-note-note-sounding",
+        "panic_release_receipts",
+        0,
+        "adapter_source_sha256"
+      ],
+      "checked_in_value": "03256bba4004cde78631b18b7611fa31a692663f77d1c256ca247a568b72349f",
+      "current_producer_value": "f6617a9544c33f1f88e124c44bc29fca45f0d9b571965f6b164e053cd645aec9"
+    },
+    {
+      "path": [
+        "teaching_contracts",
+        "feature:mods-and-software-devices:play-polyperc-apply-confirm",
+        "native_transition_contract_sha256"
+      ],
+      "checked_in_value": "788aab406412226fcd8ca9e6e0323c27292ef779ac7eae0d541fb1cbbcfebe89",
+      "current_producer_value": "7f0792f1db9e11d896ac5d7de949e2739f42e3225173677c2bc1031b0e206d5c"
+    },
+    {
+      "path": [
+        "teaching_contracts",
+        "feature:mods-and-software-devices:play-polyperc-apply-confirm",
+        "player_device_readout_receipts",
+        0,
+        "adapter_source_sha256"
+      ],
+      "checked_in_value": "58e0dd2e687dd3a0a01cdd972085f24bfa4bb36a773c90b2845c4ead32253b94",
+      "current_producer_value": "bfe8f32507e5efef4e9f3ae7c3a0fbed4a738c58a34cdb465acd428ebc7084b4"
+    }
+  ],
+  "producer_recomputed_receipts": {
+    "feature:mods-and-software-devices:play-polyperc-apply-confirm": {
+      "adapter_file": "tools/manual_player_device_readout.py",
+      "checked_in_adapter_source_sha256": "58e0dd2e687dd3a0a01cdd972085f24bfa4bb36a773c90b2845c4ead32253b94",
+      "live_adapter_source_sha256": "bfe8f32507e5efef4e9f3ae7c3a0fbed4a738c58a34cdb465acd428ebc7084b4",
+      "checked_in_native_transition_sha256": "788aab406412226fcd8ca9e6e0323c27292ef779ac7eae0d541fb1cbbcfebe89",
+      "live_native_transition_sha256": "7f0792f1db9e11d896ac5d7de949e2739f42e3225173677c2bc1031b0e206d5c"
+    },
+    "feature:midi-panic:play-panic-stops-sounding-note-note-sounding": {
+      "adapter_file": "tools/manual_panic_release_readout.py",
+      "checked_in_adapter_source_sha256": "03256bba4004cde78631b18b7611fa31a692663f77d1c256ca247a568b72349f",
+      "live_adapter_source_sha256": "f6617a9544c33f1f88e124c44bc29fca45f0d9b571965f6b164e053cd645aec9",
+      "checked_in_native_transition_sha256": "97be2dfba79b0c6ec36527869aed0ea4af5cf4ccdefb5df8cbbc109274137c36",
+      "live_native_transition_sha256": "f2cfdaebfd006e6410d6b46cf80372c5316c8a7a9d716d408bf8338d4dbae20f"
+    }
+  }
+}

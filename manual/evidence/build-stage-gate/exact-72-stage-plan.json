@@ -1,0 +1,1345 @@
+[
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+      "--mod-code-root",
+      "/home/andy/mosaic-manual-voices",
+      "--audio-emulator",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+      "--audio-install",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--ffmpeg",
+      "/home/andy/mosaic-manual-tools/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": true,
+    "name": "masks-real"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+      "--visuals-only",
+      "--verify-only",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": true,
+    "name": "masks-controlled"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+      "--source",
+      "/home/andy/mosaic-manual-1.4.0/manual/features/first-sound-capture.yaml",
+      "--visuals-only",
+      "--clock-mode",
+      "real-time",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": true,
+    "name": "first-sound-real"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+      "--source",
+      "/home/andy/mosaic-manual-1.4.0/manual/features/first-sound-capture.yaml",
+      "--visuals-only",
+      "--verify-only",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": true,
+    "name": "first-sound-controlled"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-closure.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-closure-scenes.json",
+      "--extra-cases",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_closure_cases.py",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-closure-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-closure.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-closure-scenes.json",
+      "--extra-cases",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_closure_cases.py",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-closure-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-course.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-course-scenes.json",
+      "--extra-cases",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_course_cases.py",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-course-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-course.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-course-scenes.json",
+      "--extra-cases",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_course_cases.py",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-course-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-devices.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-devices-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-devices-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-devices.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-devices-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-devices-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-extra.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-extra-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-extra-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-extra.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-extra-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-extra-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-lead-panic.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-lead-panic-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-lead-panic-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-lead-panic.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-lead-panic-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-lead-panic-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-locks.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-locks-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-locks-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-locks.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-locks-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-locks-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-merge-strategy.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-merge-strategy-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-merge-strategy-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-merge-strategy.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-merge-strategy-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-merge-strategy-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-musical.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-musical-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-musical-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-musical.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-musical-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-musical-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-nested.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-nested-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-nested-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-nested.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-nested-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-nested-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-options.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-options-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-options-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-options.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-options-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-options-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-options.yaml",
+      "--profile",
+      "midi-modulation",
+      "--output",
+      "reference-options-midi-modulation-scenes.json",
+      "--mod-code-root",
+      "/home/andy/projects/mosaic-output-mods",
+      "--mod-patches",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-options-midi-modulation"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-options.yaml",
+      "--profile",
+      "midi-modulation",
+      "--output",
+      "reference-options-midi-modulation-scenes.json",
+      "--mod-code-root",
+      "/home/andy/projects/mosaic-output-mods",
+      "--mod-patches",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-options-midi-modulation"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-parameters.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-parameters-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-parameters-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-parameters.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-parameters-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-parameters-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-polymeter.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-polymeter-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-polymeter-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-polymeter.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-polymeter-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-polymeter-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-readability.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-readability-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-readability-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-readability.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-readability-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-readability-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-reason-swing.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-reason-swing-scenes.json",
+      "--extra-cases",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_reason_swing_cases.py",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-reason-swing-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-reason-swing.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-reason-swing-scenes.json",
+      "--extra-cases",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_reason_swing_cases.py",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-reason-swing-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-remaining.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-remaining-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-remaining-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-remaining.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-remaining-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-remaining-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-vertical-list.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-vertical-list-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-vertical-list-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-vertical-list.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-vertical-list-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-vertical-list-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-workflow.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-workflow-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-workflow-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-workflow.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-workflow-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-workflow-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-scenes.json",
+      "--clock-mode",
+      "real-time",
+      "--publish",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-real-scene-plans-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+      "--plans",
+      "/home/andy/mosaic-manual-1.4.0/manual/scene-plans.yaml",
+      "--profile",
+      "base-midi",
+      "--output",
+      "reference-scenes.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--experimental-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "reference-controlled-scene-plans-base-midi"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_doctor_capture.py",
+      "--source",
+      "/home/andy/mosaic-manual-1.4.0/manual/doctor-scene.yaml",
+      "--audio-install",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--output-root",
+      "{evidence}/doctor-manual"
+    ],
+    "doctor_capture": "manual",
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-manual-real"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_doctor_capture.py",
+      "--source",
+      "/home/andy/mosaic-manual-1.4.0/manual/doctor-auto-probe.yaml",
+      "--audio-install",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--output-root",
+      "{evidence}/doctor-auto"
+    ],
+    "doctor_capture": "auto",
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-auto-real"
+  },
+  {
+    "action": {
+      "doctor_publish": true,
+      "python": "python3"
+    },
+    "command": [],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "doctor-publish"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_capture.py",
+      "--case",
+      "manual_stereo",
+      "--installation",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--clock-mode",
+      "real-time",
+      "--output-root",
+      "{evidence}/doctor-options-manual-stereo"
+    ],
+    "doctor_options": {
+      "case": "manual_stereo",
+      "clock_mode": "real-time",
+      "output_suffix": "doctor-options-manual-stereo"
+    },
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-options-manual-stereo-real"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_capture.py",
+      "--case",
+      "auto_left",
+      "--installation",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--clock-mode",
+      "real-time",
+      "--output-root",
+      "{evidence}/doctor-options-auto-left"
+    ],
+    "doctor_options": {
+      "case": "auto_left",
+      "clock_mode": "real-time",
+      "output_suffix": "doctor-options-auto-left"
+    },
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-options-auto-left-real"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_capture.py",
+      "--case",
+      "manual_right",
+      "--installation",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--clock-mode",
+      "real-time",
+      "--output-root",
+      "{evidence}/doctor-options-manual-right",
+      "--save-ready-fixture"
+    ],
+    "doctor_options": {
+      "case": "manual_right",
+      "clock_mode": "real-time",
+      "output_suffix": "doctor-options-manual-right"
+    },
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-options-manual-right-real"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_capture.py",
+      "--case",
+      "setup_options",
+      "--installation",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--clock-mode",
+      "real-time",
+      "--output-root",
+      "{evidence}/doctor-options-setup-real"
+    ],
+    "doctor_options": {
+      "case": "setup_options",
+      "clock_mode": "real-time",
+      "output_suffix": "doctor-options-setup-real"
+    },
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-options-setup-real"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_capture.py",
+      "--case",
+      "setup_options",
+      "--installation",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--output-root",
+      "{evidence}/doctor-options-setup-controlled"
+    ],
+    "doctor_options": {
+      "case": "setup_options",
+      "clock_mode": "controlled-experimental",
+      "output_suffix": "doctor-options-setup-controlled"
+    },
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-options-setup-controlled"
+  },
+  {
+    "action": {
+      "doctor_ready": true
+    },
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_capture.py",
+      "--case",
+      "ready_options",
+      "--installation",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--clock-mode",
+      "real-time",
+      "--output-root",
+      "{evidence}/doctor-options-ready-real"
+    ],
+    "doctor_options": {
+      "case": "ready_options",
+      "clock_mode": "real-time",
+      "output_suffix": "doctor-options-ready-real"
+    },
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-options-ready-real"
+  },
+  {
+    "action": {
+      "doctor_ready": true
+    },
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_capture.py",
+      "--case",
+      "ready_options",
+      "--installation",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+      "--clock-mode",
+      "controlled-experimental",
+      "--output-root",
+      "{evidence}/doctor-options-ready-controlled"
+    ],
+    "doctor_options": {
+      "case": "ready_options",
+      "clock_mode": "controlled-experimental",
+      "output_suffix": "doctor-options-ready-controlled"
+    },
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "doctor-options-ready-controlled"
+  },
+  {
+    "action": {
+      "doctor_options_audit": true,
+      "python": "python3"
+    },
+    "command": [],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "doctor-options-audit"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_audio.py",
+      "--mod-code-root",
+      "/home/andy/mosaic-manual-voices",
+      "--audio-install",
+      "/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/combined-audio-crow-tools-01/installation.json",
+      "--ffmpeg",
+      "/home/andy/mosaic-manual-tools/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2",
+      "--midi-emulator",
+      "/home/andy/projects/monome-emulator-ci-combined",
+      "--midi-real-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+      "--midi-controlled-install",
+      "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "musical-audio"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_player_routes.py"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "player-routes"
+  },
+  {
+    "action": {
+      "outputs": [
+        "reference-closure-scenes.json",
+        "reference-course-scenes.json",
+        "reference-devices-scenes.json",
+        "reference-extra-scenes.json",
+        "reference-lead-panic-scenes.json",
+        "reference-locks-scenes.json",
+        "reference-merge-strategy-scenes.json",
+        "reference-musical-scenes.json",
+        "reference-nested-scenes.json",
+        "reference-options-scenes.json",
+        "reference-options-midi-modulation-scenes.json",
+        "reference-parameters-scenes.json",
+        "reference-polymeter-scenes.json",
+        "reference-readability-scenes.json",
+        "reference-reason-swing-scenes.json",
+        "reference-remaining-scenes.json",
+        "reference-vertical-list-scenes.json",
+        "reference-workflow-scenes.json",
+        "reference-scenes.json",
+        "doctor-scenes.json",
+        "player-routes.json"
+      ],
+      "plans": [
+        "scene-plans-closure.yaml",
+        "scene-plans-course.yaml",
+        "scene-plans-devices.yaml",
+        "scene-plans-extra.yaml",
+        "scene-plans-lead-panic.yaml",
+        "scene-plans-locks.yaml",
+        "scene-plans-merge-strategy.yaml",
+        "scene-plans-musical.yaml",
+        "scene-plans-nested.yaml",
+        "scene-plans-options.yaml",
+        "scene-plans-parameters.yaml",
+        "scene-plans-polymeter.yaml",
+        "scene-plans-readability.yaml",
+        "scene-plans-reason-swing.yaml",
+        "scene-plans-remaining.yaml",
+        "scene-plans-vertical-list.yaml",
+        "scene-plans-workflow.yaml",
+        "scene-plans.yaml"
+      ]
+    },
+    "command": [],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "refresh-scene-index"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py",
+      "--refresh-editorial",
+      "--ffmpeg",
+      "/home/andy/mosaic-manual-tools/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "refresh-editorial"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py",
+      "--raw-only"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "raw-publication-audit"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_caption_rebind.py",
+      "--evidence",
+      "{evidence}/caption-rebind"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "caption-rebind"
+  },
+  {
+    "action": {
+      "course_bind": true,
+      "python": "python3"
+    },
+    "command": [],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "course-bind"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_feature_bind.py",
+      "--build-evidence",
+      "{evidence}",
+      "--evidence",
+      "{evidence}/feature-bind"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "exclusive_lock": false,
+    "name": "feature-bind"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_inventory.py"
+    ],
+    "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+    "exclusive_lock": false,
+    "name": "inventory"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_book.py"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "compile-book"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_quick_reference.py",
+      "--output",
+      "/home/andy/mosaic-manual-1.4.0/cheat_sheet.html"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "quick-reference"
+  },
+  {
+    "action": null,
+    "command": [
+      "python3",
+      "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "publication-audit"
+  },
+  {
+    "action": null,
+    "command": [
+      "node",
+      "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_inline.cjs"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "browser-manual_inline"
+  },
+  {
+    "action": null,
+    "command": [
+      "node",
+      "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_browser.cjs"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "browser-manual_browser"
+  },
+  {
+    "action": null,
+    "command": [
+      "node",
+      "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_book_browser.cjs"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "browser-manual_book_browser"
+  },
+  {
+    "action": null,
+    "command": [
+      "node",
+      "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_race.cjs"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "browser-manual_audio_race"
+  },
+  {
+    "action": null,
+    "command": [
+      "node",
+      "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_narrative_browser.cjs"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "browser-manual_narrative_browser"
+  },
+  {
+    "action": null,
+    "command": [
+      "node",
+      "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_course_browser.cjs"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "browser-manual_course_browser"
+  },
+  {
+    "action": null,
+    "command": [
+      "node",
+      "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_controls_browser.cjs"
+    ],
+    "emulator": null,
+    "exclusive_lock": false,
+    "name": "browser-manual_controls_browser"
+  }
+]

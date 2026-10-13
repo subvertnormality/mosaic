@@ -1,0 +1,15 @@
+--- 
++++ 
+@@ -4,7 +4,11 @@
+ from contextlib import ExitStack
+ from pathlib import Path
+ import yaml
+-import reconcile_manual_build as tool
++import sys
++ROOT=Path(__file__).resolve().parents[1]
++sys.path.insert(0,str(ROOT/'docs/ui-reimplementation/tools'))
++sys.path.insert(0,str(Path(__file__).resolve().parent))
++import manual_reconcile_build as tool
+ import test_refresh_source_inventory as existing
+ 
+ def write(path,value):

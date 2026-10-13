@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "167b7ceff0927a4c8b499113070b31442d115499",
+  "after_sha": "446a00870f9489cc78d64342288b6fa28b8b1dc3",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-REC-PARAM-002"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/trig_parameter_interactions.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/trig_parameter_interactions.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-REC-PARAM-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-PARAM-002/real-time/before/4999dbbac4ae4bf19bfc06f59f682813/manifest.json",
+              "manifest_sha256": "87f0905a74cb6f5ff1a5969d21b2f0291b0cc7e6a05dad61b33744429beaf751"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-PARAM-002/real-time/after/d2ceacc0c41142a7a4ba1e3555ae5c21/manifest.json",
+              "manifest_sha256": "7a8e9e7a518e9300b7a1aa950248f74f8a7309d1ee3a993577a31464d16766ae"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-PARAM-002/controlled-experimental/before/0ffd35d4ac5a41aebac8f2a00baeef71/manifest.json",
+              "manifest_sha256": "2186aaae87e7f719d23a0c8f11d72b80f21d98de242f3676107bdde6aa59841b"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-PARAM-002/controlled-experimental/after/f84e9557201c469fab651509c21adc1c/manifest.json",
+              "manifest_sha256": "5dac224200447dc3e95eab7605a2c4e95663bb0bb1d2e42af8149028ba969c78"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

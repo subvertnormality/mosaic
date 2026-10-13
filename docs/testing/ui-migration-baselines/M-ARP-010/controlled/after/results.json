@@ -1,0 +1,78 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "128",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Note Arpeggio",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Pattern",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Mute Chord Root",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Velocity Mod",
+    "passed": true
+  },
+  {
+    "kind": "muted-sparse-reverse-arp",
+    "shape": 2,
+    "onsets": 3,
+    "releases": 3,
+    "velocity_ordinals": [
+      0,
+      5,
+      10
+    ],
+    "passed": true
+  }
+]

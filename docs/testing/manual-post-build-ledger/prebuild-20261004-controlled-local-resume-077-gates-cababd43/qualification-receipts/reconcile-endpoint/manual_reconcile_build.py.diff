@@ -1,0 +1,12 @@
+--- 
++++ 
+@@ -7,7 +7,8 @@
+ from types import SimpleNamespace
+ from pathlib import Path
+ import yaml
+-ROOT=Path(__file__).resolve().parents[3]
++ROOT=Path(__file__).resolve().parents[1]
++sys.path.insert(0,str(ROOT/'docs/ui-reimplementation/tools'))
+ sys.path.insert(0,str(ROOT/'tools'))
+ import refresh_source_inventory as refresher
+ 

@@ -1,0 +1,13 @@
+{
+  "installed_files": {
+    "tools/manual_build.py": "7ec922bb6a8118e174aaadbe8483a6aa164bf00e95c483778b8df54df4cd053e",
+    "tools/manual_publication_verify.py": "0b53fa7eda495dbd4520880099ccf2a99d111badf95bd418c7c6646175de4d61",
+    "tools/resume_adoption.py": "78c977b9b6f5087ea24bc5df58f7328cbb99d99e5ad17eff76043b537d8d54c3",
+    "tools/test_manual_resume_adoption.py": "9f5eb95ed7b8b1c5d1de2d796e08343e39034503c28efad5be3e8d73bc724168"
+  },
+  "qualification_receipt_sha256": "d14faf4efd93d7386028b1a77dbaa426a18a6fd2bf4416ddae31889a2eb31690",
+  "installed_test_returncode": 0,
+  "log_sha256": "f13e0fab01180daf6cd406e83f61b6e32ed03ea0aab7b2903ec7408d749085d9",
+  "strict_oracles_ast_unchanged": true,
+  "native_launched": false
+}

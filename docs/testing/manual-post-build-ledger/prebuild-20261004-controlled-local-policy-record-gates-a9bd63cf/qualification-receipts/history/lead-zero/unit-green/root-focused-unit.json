@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_lock_lead_owner",
+    "test_lead_timing_oracle"
+  ],
+  "exit_code": 0,
+  "log": "/home/andy/mosaic-manual-build-operators/lead-zero-correction-green-29c4a79494d64757ba196100a6078ebe/root-focused-unit.log",
+  "log_sha256": "9152c4b22786ad7719e67c86efd59e316ada23d50cb5b9ed9aabc36dc172031d",
+  "changed_definitions": [
+    "lock_lead_clock_matrix"
+  ],
+  "timing_oracle_definitions_unchanged": true
+}

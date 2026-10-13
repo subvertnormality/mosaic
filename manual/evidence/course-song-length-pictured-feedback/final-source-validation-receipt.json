@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "checkpoint_count": 50,
+  "teaching_stage_count": 38,
+  "builder_stage_count": 72,
+  "focused_tests": 28,
+  "source_sha256": {
+    "tools/manual_course_bind.py": "accc616d62db234edd7d6862c7fbafb52e2daffc702823cc5ef6f33f9a4d7883",
+    "tools/manual_course_cases.py": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5",
+    "tests/behaviour/test_manual_course_bind.py": "c5045b7e98984e1909091b670c49da26fc78fac3355a6695e05c65fe5c658f5f",
+    "manual/scene-plans-course.yaml": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad",
+    "manual/BUILD.md": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089"
+  },
+  "green_log": "docs/testing/mini-header-ui/course-song-length-green.log",
+  "green_log_sha256": "8c495adc088daacae985633b214241540072a980dfe201f0240f9bd9a1983f7b",
+  "owner_receipt": "docs/testing/mini-header-ui/course-song-length-fixture-rgr.json",
+  "native_acceptance_claimed": false
+}

@@ -1,0 +1,2952 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock merged to pent.",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Lock merged to pent.",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Quantise note masks",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Quantise note masks",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Snap note masks to scale",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Snap note masks to scale",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166473187,
+        "error_ms": -0.19347966666666272
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165763527,
+        "error_ms": -0.9031396666666636
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166396137,
+        "error_ms": -0.2705296666666579
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16595126,
+        "error_ms": -0.7154066666666681
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166207854,
+        "error_ms": -0.4588126666666692
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166370745,
+        "error_ms": -0.29592166666667086
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165392742,
+        "error_ms": -1.2739246666666482
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167078735,
+        "error_ms": 0.4120683333333486
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "snap-ignores-degree-and-rotation",
+    "pitches": [
+      60,
+      64,
+      69,
+      71
+    ],
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Quantise note masks",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Quantise note masks",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166936975,
+        "error_ms": 0.27030833333333004
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166071513,
+        "error_ms": -0.5951536666666535
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166432438,
+        "error_ms": -0.2342286666666693
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165314131,
+        "error_ms": -1.3525356666666544
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166472398,
+        "error_ms": -0.19426866666666376
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166380467,
+        "error_ms": -0.2861996666666533
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166055632,
+        "error_ms": -0.6110346666666489
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166095022,
+        "error_ms": -0.5716446666666486
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "global-full-degree-and-rotation",
+    "pitches": [
+      62,
+      65,
+      71,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Quantise Note Mask",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167280272,
+        "error_ms": 0.6136053333333502
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165953038,
+        "error_ms": -0.7136286666666602
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166267833,
+        "error_ms": -0.39883366666665365
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166157454,
+        "error_ms": -0.5092126666666474
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16600904,
+        "error_ms": -0.6576266666666608
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16601848,
+        "error_ms": -0.6481866666666614
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166522738,
+        "error_ms": -0.14392866666665394
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165926,
+        "error_ms": -0.7406666666666673
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "channel-off-overrides-global-on",
+    "pitches": [
+      60,
+      64,
+      69,
+      71
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166447179,
+        "error_ms": -0.21948766666665676
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166149613,
+        "error_ms": -0.5170536666666559
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167030514,
+        "error_ms": 0.36384733333333363
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165980409,
+        "error_ms": -0.686257666666662
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166229413,
+        "error_ms": -0.4372536666666649
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165653694,
+        "error_ms": -1.0129726666666672
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166350246,
+        "error_ms": -0.31642066666665025
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166031211,
+        "error_ms": -0.6354556666666455
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "step-on-overrides-channel-off",
+    "pitches": [
+      60,
+      65,
+      69,
+      71
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167259727,
+        "error_ms": 0.5930603333333395
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165277219,
+        "error_ms": -1.3894476666666544
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166198193,
+        "error_ms": -0.46847366666666335
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166457059,
+        "error_ms": -0.20960766666666686
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166008489,
+        "error_ms": -0.6581776666666483
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166278657,
+        "error_ms": -0.38800966666666103
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166018491,
+        "error_ms": -0.6481756666666671
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167178568,
+        "error_ms": 0.5119013333333422
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "channel-unset-inherits-global",
+    "pitches": [
+      62,
+      65,
+      71,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167158048,
+        "error_ms": 0.4913813333333461
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165472593,
+        "error_ms": -1.1940736666666563
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167113067,
+        "error_ms": 0.4464003333333466
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166057533,
+        "error_ms": -0.6091336666666503
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165975001,
+        "error_ms": -0.6916656666666465
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166357636,
+        "error_ms": -0.30903066666665424
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16600933,
+        "error_ms": -0.6573366666666469
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166174303,
+        "error_ms": -0.492363666666662
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "step-off-overrides-global-on",
+    "pitches": [
+      60,
+      65,
+      71,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Quantise note masks",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Quantise note masks",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167070588,
+        "error_ms": 0.4039213333333347
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165850698,
+        "error_ms": -0.8159686666666666
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16658727,
+        "error_ms": -0.07939666666664791
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166228435,
+        "error_ms": -0.4382316666666497
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165647215,
+        "error_ms": -1.0194516666666709
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166728152,
+        "error_ms": 0.06148533333333317
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165554096,
+        "error_ms": -1.1125706666666457
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166325566,
+        "error_ms": -0.3411006666666494
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "global-off-preserves-step-on",
+    "pitches": [
+      60,
+      65,
+      69,
+      71
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166779504,
+        "error_ms": 0.11283733333333767
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166362059,
+        "error_ms": -0.30460766666665084
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165663827,
+        "error_ms": -1.002839666666644
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166490761,
+        "error_ms": -0.1759056666666703
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166315098,
+        "error_ms": -0.35156866666666287
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16648573,
+        "error_ms": -0.18093666666665897
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166305898,
+        "error_ms": -0.36076866666664986
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166216676,
+        "error_ms": -0.4499906666666498
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "channel-on-overrides-global-off",
+    "pitches": [
+      60,
+      65,
+      71,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166503321,
+        "error_ms": -0.16334566666664774
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166234586,
+        "error_ms": -0.43208066666666767
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166313778,
+        "error_ms": -0.35288866666666197
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166330828,
+        "error_ms": -0.3358386666666713
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166230877,
+        "error_ms": -0.4357896666666583
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166027114,
+        "error_ms": -0.639552666666654
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166278598,
+        "error_ms": -0.38806866666665774
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166119065,
+        "error_ms": -0.5476016666666472
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "clear-step-off-restores-channel-on",
+    "pitches": [
+      62,
+      65,
+      71,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166468421,
+        "error_ms": -0.1982456666666521
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166880067,
+        "error_ms": 0.21340033333333563
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166244167,
+        "error_ms": -0.42249966666665917
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166204357,
+        "error_ms": -0.4623096666666604
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166369759,
+        "error_ms": -0.29690766666665147
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16518416,
+        "error_ms": -1.4825066666666609
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166320236,
+        "error_ms": -0.34643066666664724
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166579121,
+        "error_ms": -0.08754566666666075
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "explicit-step-X-uses-global-off",
+    "pitches": [
+      60,
+      65,
+      71,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166810196,
+        "error_ms": 0.1435293333333365
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166786133,
+        "error_ms": 0.11946633333334566
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165241892,
+        "error_ms": -1.424774666666656
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16656353,
+        "error_ms": -0.10313666666666998
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166109845,
+        "error_ms": -0.5568216666666514
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166434999,
+        "error_ms": -0.23166766666665728
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165554415,
+        "error_ms": -1.112251666666647
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166277277,
+        "error_ms": -0.3893896666666563
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "clear-X-restores-channel-on",
+    "pitches": [
+      62,
+      65,
+      71,
+      60
+    ],
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Quantise note masks",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Quantise note masks",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167014163,
+        "error_ms": 0.34749633333333585
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16617295,
+        "error_ms": -0.4937166666666437
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166428925,
+        "error_ms": -0.23774166666665209
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165329965,
+        "error_ms": -1.336701666666662
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16607556,
+        "error_ms": -0.5911066666666465
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166269443,
+        "error_ms": -0.3972236666666684
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166076062,
+        "error_ms": -0.5906046666666609
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166121199,
+        "error_ms": -0.5454676666666602
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "explicit-step-X-uses-global-on-over-channel-off",
+    "pitches": [
+      60,
+      65,
+      71,
+      71
+    ],
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166740418,
+        "error_ms": 0.07375133333334394
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166313663,
+        "error_ms": -0.35300366666665695
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166389064,
+        "error_ms": -0.27760266666665423
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166307804,
+        "error_ms": -0.3588626666666539
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165177356,
+        "error_ms": -1.48931066666666
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167235937,
+        "error_ms": 0.5692703333333438
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165290667,
+        "error_ms": -1.3759996666666552
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165957668,
+        "error_ms": -0.7089986666666548
+      }
+    ]
+  },
+  {
+    "kind": "full-mask-quantisation",
+    "stage": "clear-X-restores-channel-off",
+    "pitches": [
+      60,
+      65,
+      69,
+      71
+    ],
+    "passed": true
+  }
+]

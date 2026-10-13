@@ -1,0 +1,69 @@
+--- a/tests/behaviour/test_manual_recording_review_fixes.py
++++ b/tests/behaviour/test_manual_recording_review_fixes.py
+@@ -55,32 +55,45 @@
+         self.assertNotRegex(description, r"onsteps|and9|and13")
+ 
+     def test_decay_recipe_replays_recorded_gestures_and_separates_endpoint_practice(self):
++        import re
+         feature = next(x for x in read_yaml("features/reference-locks.yaml")["features"] if x["id"] == "locks")
+         recipe = feature["recipes"][4]
+-        text = recipe["text"]
+-        self.assertIn("Recorded comparison — replay the captured relative gestures", text)
+-        self.assertIn("hold step 1 and replay the captured +200-detent E3 gesture", text)
+-        self.assertIn("hold step 5 and replay the captured +40-detent gesture", text)
+-        self.assertIn("Separate endpoint practice — a contextual contrast, not a reconstruction", text)
+-        self.assertIn("until the displayed Decay reaches its 0.1 s minimum", text)
+-        self.assertIn("3.2 s maximum", text)
+-        self.assertIn("steps 1 and 9 form the longer-tail group", text)
+-        self.assertIn("steps 5 and 13 form the shorter-tail group", text)
+-        self.assertIn("The retained capture records these encoder gestures, not displayed Decay values", text)
+-        self.assertNotIn("E3 event 126", text)
+-        self.assertNotIn("at detent 126", text)
+-        self.assertNotRegex(text, r"Inslot|holdstep|untilDecay|onsteps|200 detents|2\.1 s")
++        text = re.sub(r"\s+", " ", recipe["text"]).casefold()
++        self.assertRegex(text, r"select slot 1.{0,100}?32 steps with no parameter locks.{0,120}?copy slot 1 to slot 2.{0,100}?32 steps.{0,100}?tap slot 2 before editing.{0,120}?assign decay to slot 1")
++        self.assertRegex(text, r"hold step 1.{0,120}?turn e3 clockwise by 200 detents.{0,100}?repeat.{0,60}?200-detent turn on step 9")
++        self.assertRegex(text, r"hold step 5.{0,120}?turn e3 clockwise by 40 detents.{0,100}?repeat.{0,60}?40-detent turn on step 13")
++        self.assertRegex(text, r"steps 1 and 9.{0,60}?longer-tail group")
++        self.assertRegex(text, r"steps 5 and 13.{0,60}?shorter-tail group")
++        self.assertRegex(text, r"the note pattern stays fixed")
++        endpoint = re.search(r"displayed decay reaches its 0\.1 s minimum", text)
++        self.assertIsNotNone(endpoint)
++        first_gesture = text.index("turn e3 clockwise by 200 detents")
++        last_relative_gesture = text.index("turn e3 clockwise by 40 detents")
++        self.assertLess(first_gesture, endpoint.start())
++        self.assertLess(last_relative_gesture, endpoint.start())
++        self.assertRegex(text[endpoint.start():], r"0\.1 s minimum.{0,120}?3\.2 s maximum")
++        self.assertRegex(text[endpoint.start():], r"3\.2 s setting on step 9")
++        self.assertRegex(text[endpoint.start():], r"0\.1 s on steps 5 and 13")
++        self.assertRegex(text, r"select slot 1 to restore the unmodified line")
++        self.assertRegex(text, r"stop and return to the separate course project")
++        self.assertNotRegex(text, r"2\.1\s*s")
+         recording = next(x for x in read_yaml("recordings.yaml")["recordings"] if x["id"] == "param-lock-comparison")
+         relation, = [r for r in recording["lesson_relations"] if r.get("recipe_index") == 5]
++        self.assertEqual(relation["feature_id"], "locks")
++        self.assertEqual(relation["recipe_title"], recipe["title"])
+         self.assertEqual(relation["relationship"], "exact")
+-        self.assertIn("dedicated replay of this recorded +200/+40-detent comparison", relation["explanation"])
+-        self.assertIn("separate endpoint-practice contrast", relation["explanation"])
+-        self.assertTrue(any("E3 event 126" in limit and "+200 and +40 detents" in limit
+-                            and "displayed Decay values" in limit
+-                            for limit in recording["limits"]))
+-        self.assertTrue(any("+200-detent E3 gesture" in step for step in recording["build_steps"]))
+-        self.assertTrue(any("+40-detent E3 gesture" in step for step in recording["build_steps"]))
+-        self.assertFalse(any("2.1" in step for step in recording["build_steps"]))
++        self.assertRegex(relation["explanation"].casefold(), r"\+200/\+40-detent comparison from this recording")
++        self.assertRegex(relation["explanation"].casefold(), r"separate.{0,40}endpoint[- ]practice")
++        self.assertRegex(relation["explanation"].casefold(), r"does not (?:show|include|capture).{0,40}absolute decay values?")
++        build = " ".join(recording["build_steps"]).casefold()
++        self.assertRegex(build, r"step 1.{0,100}?\+200-detent e3 gesture.{0,100}?step 9")
++        self.assertRegex(build, r"step 5.{0,100}?\+40-detent e3 gesture.{0,100}?step 13")
++        self.assertRegex(build, r"select slot 1.{0,100}?restore the no-lock line")
++        self.assertNotRegex(build, r"2\.1\s*s")
++        limits = " ".join(recording["limits"]).casefold()
++        self.assertRegex(limits, r"e3 event 126.{0,120}?\+200 and \+40 detents")
++        self.assertRegex(limits, r"does not record.{0,80}?displayed decay values")
++        self.assertRegex(limits, r"not a reconstruction of those unseen values")
+ 
+ 
+ if __name__ == "__main__":

@@ -1,0 +1,54 @@
+{
+  "run": "e7c3f6db2473405dad9cf41427672a0f",
+  "stage": "0e016344c2beb1b0f825c4925b3fe8feed25394d86b17d4faa02ec03e89d5983",
+  "clock_mode": "real-time",
+  "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+  "result": "Failed strict240BPM musical-phase bracket, not accepted",
+  "clock_before_index": 776,
+  "clock_after_index": 777,
+  "clock_before": {
+    "beats": 344.121455208,
+    "tempo": 240.0,
+    "monotonic_ns": 450334435824846,
+    "clock_epoch": 0
+  },
+  "clock_after": {
+    "beats": 345.009371875,
+    "tempo": 240.0,
+    "monotonic_ns": 450334657788461,
+    "clock_epoch": 0
+  },
+  "native_clock_seconds": 0.221963615,
+  "pose_widths": 3.5516666680000526,
+  "allowed_pose_widths": 3,
+  "host_context": "Concurrent WSL service connection outage and low Windows free RAM reported by parent; service recovered without restart. No kernel OOM events found.",
+  "cleanup": [
+    {
+      "service": "matron",
+      "pid": 31501,
+      "returncode": 0,
+      "seconds": 0.3673118790029548
+    },
+    {
+      "service": "sclang",
+      "pid": 31394,
+      "returncode": -15,
+      "seconds": 0.11577738303458318
+    },
+    {
+      "service": "crone",
+      "pid": 31383,
+      "returncode": 0,
+      "seconds": 0.001086356001906097
+    },
+    {
+      "service": "jack",
+      "pid": 31379,
+      "returncode": 0,
+      "seconds": 0.0640834349906072
+    }
+  ],
+  "native_process_inventory": "empty after recovered read-only ps comm filter",
+  "oracle_changes": false,
+  "partial_scope": "9 earlier stopped mini rows passed; 240 and playing finalsummary absent"
+}

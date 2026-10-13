@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "d7ded214fcb165d11d2e57ed5caffdaf53f70938",
+  "after_sha": "83fbee75fdce2ac1ecfa18d3191f92794664a15e",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TRANS-003"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_verb_sources.json"
+    ],
+    "historical_tooling_paths": [
+      "tests/behaviour/ci/compare_ptn_graph.lua",
+      "tests/behaviour/ci/targeted-ui-migration.py",
+      "tests/behaviour/ui_migration_gate.py"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TRANS-003",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-003/real-time/before/8d8d02bc29534b2d89a33a9e4c27abce/manifest.json",
+              "manifest_sha256": "b52e4affab6412087a94f4f4f6dba4269445689c9ba99d13f6ae161b3909e59b",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-003/real-time/after/d0c0a048b9d54ef6a37379e1410da1cb/manifest.json",
+              "manifest_sha256": "05f4ae73b97ea3b73771453853d6e7790958b57a599d4a76c6c831d287f11545",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-003/controlled-experimental/before/82ae76c91ec7450cab4b57a246b86be7/manifest.json",
+              "manifest_sha256": "75d080528bc5be08fe976449b5e02112ea944d98742a51b92cd8a55fccb6424a",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-003/controlled-experimental/after/1fd17cec4201441c95b2dfd1d3b3ad8f/manifest.json",
+              "manifest_sha256": "300378b6cb1ba11d6bf0d971ba1b145f7c6797f993f48757ce5f55a8693f3977",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "tooling": {
+    "sha": "3e6943cd94c70d08fa052a7af9bb652512dfd036",
+    "sha256": {
+      "tests/behaviour/ui_migration_gate.py": "1112d792cfa99d1f73118348b8be77ade4d66381d1b32fc8fa3733c64629a45e",
+      "tests/behaviour/ci/targeted-ui-migration.py": "b33afab0d2f59ba826968d0aa4f3bfb8fcce2762d8b4365191d612752dd196f9",
+      "tests/behaviour/ci/compare_ptn_graph.lua": "2c5f793815d0bc4a580a34d8849b3713db22aa055391d6a2cd12962eff23b000"
+    }
+  }
+}

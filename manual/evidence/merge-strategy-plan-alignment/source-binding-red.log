@@ -1,0 +1,29 @@
+
+======================================================================
+FAIL: test_authored_strategy_checkpoints_bind_actual_native_result_fields (test_manual_case_capture.Checkpoints) (step='skip')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_case_capture.py", line 76, in test_authored_strategy_checkpoints_bind_actual_native_result_fields
+    self.assertTrue(module.Selector(step["assertion"],step.get("occurrence",1)).accept(actual),"authored checkpoint must match the actual shared Strategy result, preserving its value")
+AssertionError: False is not true : authored checkpoint must match the actual shared Strategy result, preserving its value
+
+======================================================================
+FAIL: test_authored_strategy_checkpoints_bind_actual_native_result_fields (test_manual_case_capture.Checkpoints) (step='only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_case_capture.py", line 76, in test_authored_strategy_checkpoints_bind_actual_native_result_fields
+    self.assertTrue(module.Selector(step["assertion"],step.get("occurrence",1)).accept(actual),"authored checkpoint must match the actual shared Strategy result, preserving its value")
+AssertionError: False is not true : authored checkpoint must match the actual shared Strategy result, preserving its value
+
+======================================================================
+FAIL: test_authored_strategy_checkpoints_bind_actual_native_result_fields (test_manual_case_capture.Checkpoints) (step='all')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_case_capture.py", line 76, in test_authored_strategy_checkpoints_bind_actual_native_result_fields
+    self.assertTrue(module.Selector(step["assertion"],step.get("occurrence",1)).accept(actual),"authored checkpoint must match the actual shared Strategy result, preserving its value")
+AssertionError: False is not true : authored checkpoint must match the actual shared Strategy result, preserving its value
+
+----------------------------------------------------------------------
+Ran 1 test in 0.062s
+
+FAILED (failures=3)

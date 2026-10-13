@@ -1,0 +1,16 @@
+.........................F
+======================================================================
+FAIL: test_stopped_song_selection_checkpoint_uses_slot_setup_and_selected_led (test_manual_course_bind.CourseSongSelectionRouteRecipe)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 227, in test_stopped_song_selection_checkpoint_uses_slot_setup_and_selected_led
+    self.assertEqual(ast.literal_eval(call.args[2]),'song_setup','stopped slot selection follows G36 to Slot Setup, not Song Playback')
+AssertionError: 'song' != 'song_setup'
+- song
++ song_setup
+ : stopped slot selection follows G36 to Slot Setup, not Song Playback
+
+----------------------------------------------------------------------
+Ran 26 tests in 3.812s
+
+FAILED (failures=1)

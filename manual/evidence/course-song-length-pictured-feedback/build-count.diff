@@ -1,0 +1,11 @@
+--- before/manual/BUILD.md
++++ after/manual/BUILD.md
+@@ -142,7 +142,7 @@
+ The build records exact terminal capture report paths and hashes for both clock
+ lanes. Caption receipt refresh preserves native publication bytes and desired
+ wording. Course binding requires the complete continuous project: ten scenes,
+-48 checkpoints and all 38 teaching stages in both lanes. Feature binding uses
++50 checkpoints and all 38 teaching stages in both lanes. Feature binding uses
+ successful current build receipts and the independently audited native scenes.
+ Each binding stage stores immutable before/after sources and audit receipts in
+ its own new evidence directory. A completed build additionally requires the

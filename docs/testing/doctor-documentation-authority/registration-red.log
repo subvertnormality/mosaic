@@ -1,0 +1,37 @@
+FFFF
+======================================================================
+FAIL: test_manifest_is_bound_to_actual_adc_role_and_exact_checkpoints (test_doctor_qualification_registration.DoctorQualificationRegistrationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 18, in test_manifest_is_bound_to_actual_adc_role_and_exact_checkpoints
+    self.assertTrue(hasattr(runner,'qualification_registration'),'Runner lacks immutable qualification registration')
+AssertionError: False is not true : Runner lacks immutable qualification registration
+
+======================================================================
+FAIL: test_stable_id_and_manual_citation_are_not_global_case_registration (test_doctor_qualification_registration.DoctorQualificationRegistrationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 12, in test_stable_id_and_manual_citation_are_not_global_case_registration
+    self.assertEqual(getattr(procedure,'CASE_ID',None),'MA-DOCTOR-MANUAL-START-BEAT-001')
+AssertionError: None != 'MA-DOCTOR-MANUAL-START-BEAT-001'
+
+======================================================================
+FAIL: test_unknown_membership_and_invalid_full_lane_fail (test_doctor_qualification_registration.DoctorQualificationRegistrationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 37, in test_unknown_membership_and_invalid_full_lane_fail
+    self.assertTrue(hasattr(runner,'qualification_registration'),'Runner lacks immutable qualification registration')
+AssertionError: False is not true : Runner lacks immutable qualification registration
+
+======================================================================
+FAIL: test_unrelated_role_does_not_claim_start_beat_acceptance (test_doctor_qualification_registration.DoctorQualificationRegistrationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 31, in test_unrelated_role_does_not_claim_start_beat_acceptance
+    self.assertTrue(hasattr(runner,'qualification_registration'),'Runner lacks immutable qualification registration')
+AssertionError: False is not true : Runner lacks immutable qualification registration
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+FAILED (failures=4)

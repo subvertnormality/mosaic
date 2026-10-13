@@ -1,0 +1,880 @@
+{
+  "source_root": "/home/andy/mosaic-manual-1.4.0",
+  "source_commit": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+  "scene_plan_sha256_unchanged": "b7737e5eb4d56ec27b695b9050fe34e85ebd0c08681ee9bf9e18a2f3336ebb9e",
+  "files": [
+    {
+      "path": "manual/features/cookbook.yaml",
+      "before_sha256": "5f5935095bd5ad13849bfede00671c213231ebc490ef3edacd6d2505e2091ba0",
+      "after_sha256": "40e2bc5823c8f256c46ed66d039bbb496962e4285ff1832b30ac8c1a0d4cdc26"
+    },
+    {
+      "path": "manual/features/masks.yaml",
+      "before_sha256": "b1b5e01e17479e813d51e6931fd510424fe7f6d6f1a34a6c072b0c10a52f8052",
+      "after_sha256": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de"
+    },
+    {
+      "path": "manual/features/reference-channel.yaml",
+      "before_sha256": "f1959ad4521ab1df2703b6d73ee2d45ad33571ba60e2f3e24c68c7a7c1c098bd",
+      "after_sha256": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d"
+    },
+    {
+      "path": "manual/features/reference-learn.yaml",
+      "before_sha256": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+      "after_sha256": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7"
+    },
+    {
+      "path": "manual/features/reference-locks.yaml",
+      "before_sha256": "79e92135fb4a8ca5ce4ce8b5d33c9fe1bd03e68e660d8f0da1e6329f862d5404",
+      "after_sha256": "54dae03014a823c2c68965849b2a9c97d85927c86c2dc106e5a195f22fb22189"
+    },
+    {
+      "path": "manual/features/reference-musical.yaml",
+      "before_sha256": "b998d2666b7f7f207cc0da58bcaebbed8dfa31d96dff77bb1250751e0251b600",
+      "after_sha256": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7"
+    },
+    {
+      "path": "manual/features/reference-options.yaml",
+      "before_sha256": "bad51a3d8b0637651973b296500d9cd10843599847af3ef1e6848d5af1795134",
+      "after_sha256": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff"
+    },
+    {
+      "path": "manual/features/reference-scale.yaml",
+      "before_sha256": "5b7a7a5dffd350a3326c03881688496d62be43e6d8f64925148ed23f1385747e",
+      "after_sha256": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38"
+    },
+    {
+      "path": "manual/features/reference-song.yaml",
+      "before_sha256": "612fcf0de656c7ee07fbd536510d1078adacfb0be06c843a4d627cd7b95eb2cc",
+      "after_sha256": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9"
+    },
+    {
+      "path": "manual/recordings.yaml",
+      "before_sha256": "d60e5962d3c96b90c46d45c581193660f635e7a395e1f7eb7bdc5b49c2a8d3fe",
+      "after_sha256": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585"
+    },
+    {
+      "path": "manual/scene-captions.yaml",
+      "before_sha256": "40c8d33cabc50a1f292083202c28ff1632790cdce24222d89b087f9c7e56f822",
+      "after_sha256": "78400a80e122d38f85333bc1230ecc1320c2d6dfcaae25cc67bf8d0f9a475d8b"
+    }
+  ],
+  "parsed_yaml": [
+    {
+      "path": "manual/features/cookbook.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/masks.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/reference-channel.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/reference-learn.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/reference-locks.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/reference-musical.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/reference-options.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/reference-scale.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/features/reference-song.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/recordings.yaml",
+      "parsed": true
+    },
+    {
+      "path": "manual/scene-captions.yaml",
+      "parsed": true
+    }
+  ],
+  "caption_overlay_count_before": 106,
+  "caption_overlay_count_after": 107,
+  "caption_overlay_identity": {
+    "scene_id": "chord-strum-a-timed-chord",
+    "step_id": "assign-strum",
+    "contract_sha256": "c35c9ad783cebf90827eeefbf5dcc2ecfcf37107acd4b7fdfa5efe234e1cce46"
+  },
+  "proposal_inputs": [
+    "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/recipe-text-overlay-20261008-01/PATCH.diff",
+    "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/practical-small-recipe-corrections-20261008-01/proposed.patch",
+    "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/doc-language-cleanup-20261008-01/candidate-v07/proposed.patch"
+  ],
+  "parsed_allowlist": [
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        1,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: an empty project with playback stopped and channel 1 selected. The numbers 1–64 are step numbers across four bars: bar 1 is steps 1–16, bar 2 is 17–32, bar 3 is 33–48 and bar 4 is 49–64. The grid shows sixteen steps at a time, so move to the sixteen-step page of the bar you are editing.\n\n\nSetup (steps 1 to 3 prepare the instrument; do them once).\n\n1. Assign Oilcan 1 to channel 1 and set its range to steps 1–64 (see Channel Length). Leave Rate at /1.\n\n2. Set 90 BPM: open Song tasks, choose Tempo & feel, turn E3 to 90 and press K3.\n\n3. Open PARAMS > MOSAIC and set Snap note masks to scale to Off, then return to Mosaic. MIDI 37 (C#1) is not in C major and would otherwise be snapped to a scale note.\n\n\nMain hits (steps 4 to 7 build and audition the bar without ghost notes).\n\n4. Add the main hits. Open Pattern Trig on pattern 1 and tap steps 1, 5, 9 and 13 in each bar: bar 1 uses 1, 5, 9, 13; bar 2 uses 17, 21, 25, 29; bar 3 uses 33, 37, 41, 45; bar 4 uses 49, 53, 57, 61. Sixteen trigs are lit.\n\n5. Open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). With no step held, select Note and set MIDI 36 (C1), select Vel and set 90, select Len and set ½. All sixteen hits now play MIDI 36 at velocity 90.\n\n6. Select Note. Hold step 5 and turn E3 to MIDI 37 (C#1), then release. Do the same for steps 13, 21, 29, 37, 45, 53 and 61, so that the second and fourth beat of each bar play MIDI 37.\n\n7. Press Play and listen to four bars of main hits only, then press Stop. You hear two timbres alternating on beats 1 to 4 of every bar.\n\n\nGhost notes (steps 8 to 10 add the quiet hit to bars 3 and 4).\n\n8. Return to Pattern Trig and tap step 44 (step 12 of bar 3) and step 60 (step 12 of bar 4).\n\n9. Open Masks and hold step 44. Select Note and turn E3 to MIDI 38 (D1), then select Vel and set 35, then release step 44. Repeat both edits on step 60: first Note 38, then Vel 35.\n\n10. Press Play. Bars 1 and 2 are unchanged. In bars 3 and 4 you hear a quiet third timbre one step before each MIDI 37 accent. Press Stop.\n\n\nUndo (step 11 returns to the main-only phrase).\n\n11. Open Masks, hold step 44 or 60 and press K2 to remove the values you set, then remove its trig on Pattern Trig.",
+      "after": "Starting point: an empty project with playback stopped and channel 1 selected. If Oilcan 1 is missing from the Device picker, install and enable `nb_oilcan` in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b). The numbers 1–64 are step numbers across four bars: bar 1 is steps 1–16, bar 2 is 17–32, bar 3 is 33–48 and bar 4 is 49–64. For Masks and Pattern Trig, all 64 steps are visible together: row 4 is steps 1–16, row 5 is 17–32, row 6 is 33–48 and row 7 is 49–64; the column is 1 + (step−1) modulo 16. These screens do not page.\n\n\nSetup (steps 1 to 3 prepare the instrument; do them once).\n\n1. Assign Oilcan 1 to channel 1 and set its range to steps 1–64 (see Channel Length). Leave Rate at /1.\n\n2. Set 90 BPM: open Song tasks, choose Tempo & feel, turn E3 to 90 and press K3.\n\n3. Open PARAMS > MOSAIC and set Snap note masks to scale to Off, then return to Mosaic. MIDI 37 (C#1) is not in C major and would otherwise be snapped to a scale note. Open Channel (3,8), select channel 1 on row 1, then tap pattern slot (1,2) to assign pattern 1 to the channel.\n\n\nMain hits (steps 4 to 7 build and audition the bar without ghost notes).\n\n4. Add the main hits. Open Pattern Trig on pattern 1 and tap steps 1, 5, 9 and 13 in each bar: bar 1 uses 1, 5, 9, 13; bar 2 uses 17, 21, 25, 29; bar 3 uses 33, 37, 41, 45; bar 4 uses 49, 53, 57, 61. Sixteen trigs are lit.\n\n5. Open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). With no step held, select Note and set MIDI 36 (C1), select Vel and set 90, select Len and set ½. All sixteen hits now play MIDI 36 at velocity 90.\n\n6. Select Note. Hold step 5 and turn E3 to MIDI 37 (C#1), then release. Do the same for steps 13, 21, 29, 37, 45, 53 and 61, so that the second and fourth beat of each bar play MIDI 37.\n\n7. Press Play and listen to four bars of main hits only, then press Stop. You hear two timbres alternating on beats 1 to 4 of every bar.\n\n\nGhost notes (steps 8 to 10 add the quiet hit to bars 3 and 4).\n\n8. Return to Pattern Trig and tap step 44 (step 12 of bar 3) and step 60 (step 12 of bar 4).\n\n9. Open Masks and hold step 44. Select Note and turn E3 to MIDI 38 (D1), then select Vel and set 35, then release step 44. Repeat both edits on step 60: first Note 38, then Vel 35.\n\n10. Press Play. Bars 1 and 2 are unchanged. In bars 3 and 4 you hear a quiet third timbre one step before each MIDI 37 accent. Press Stop.\n\n\nUndo (step 11 returns to the main-only phrase).\n\n11. Open Masks, hold step 44 or 60 and press K2 to remove the values you set, then remove its trig on Pattern Trig."
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        1,
+        "recipes",
+        1,
+        "text"
+      ],
+      "before": "Starting point: Finish the ghost-note comparison above with ghost trigs on steps 44 and 60. This is an optional, player-run probability exercise, not a reconstruction of the recording. At probability 50, each ghost onset may play or be skipped on each pass, so evaluate the range of outcomes over several loops instead of expecting a fixed recording.\n\n**Set a dependable main beat.** Select channel 1 and open Channel tasks → Trig params. Turn E2 to a slot, press K2, turn E3 to Trig Probability, press K3. With no step held, set the channel default to 100. Check: every main hit remains eligible on every pass.\n\n**Check both boundaries.** Move to the sixteen-step page for steps 33–48, hold step 44, set its probability to 0, and release. Move to steps 49–64 and set step 60 to 0 the same way. Play: neither ghost note sounds in bars 3 or 4; the main hits continue. Stop. Set both ghost steps to 100 and play again: both ghost notes play on every pass, matching the fixed comparison. Stop.\n\n**Try the optional variation.** Set steps 44 and 60 to 50 and play several loops. The musical result to listen for is a quiet pickup that appears on some passes and leaves space on others, while the main hits stay present. Which ghost hit appears can differ each loop; no particular pass or captured result is promised.\n\nRestore the fixed comparison by setting both steps to 100, or remove a lock by holding its step and pressing K2. For a captured 0/100 probability example, see Trig Probability, “Turn chance into explicit rests.”",
+      "after": "Starting point: Finish the ghost-note comparison above with ghost trigs on steps 44 and 60. This is an optional, player-run probability exercise, not a reconstruction of the recording. At probability 50, each ghost onset may play or be skipped on each pass, so evaluate the range of outcomes over several loops instead of expecting a fixed recording.\n\n**Set a dependable main beat.** Select channel 1 and open Channel tasks → Trig params. Turn E2 to a slot, press K2, turn E3 to Trig Probability, press K3. With no step held, set the channel default to 100. Check: every main hit remains eligible on every pass.\n\n**Check both boundaries.** On the full Trig Params grid, hold step 44 at (12,6), set its probability to 0, and release. Hold step 60 at (12,7), set it to 0 the same way. Play: neither ghost note sounds in bars 3 or 4; the main hits continue. Stop. Set both ghost steps to 100 and play again: both ghost notes play on every pass, matching the fixed comparison. Stop.\n\n**Try the optional variation.** Set steps 44 and 60 to 50 and play several loops. The musical result to listen for is a quiet pickup that appears on some passes and leaves space on others, while the main hits stay present. Which ghost hit appears can differ each loop; no particular pass or captured result is promised.\n\nRestore the fixed comparison by setting both steps to 100, or remove a lock by holding its step and pressing K2. For a captured 0/100 probability example, see Trig Probability, “Turn chance into explicit rests.”"
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        0,
+        "prose"
+      ],
+      "before": "Build a four-bar loop on three channels: Oilcan 1 plays drums on channel 1, Polyperc 1 plays a bass line on channel 2 and Doubledecker plays chords on channel 3. The drum and bass phrases repeat unchanged in every bar. Only the chord roots change, in bar 4, so you hear the harmony move while the groove stays put. Play \"Rhythm, bass and a changing chord\" under Listen to hear the finished result first.\n\nBefore you start:\n\n1. Set 90 BPM in Song tasks → Tempo & feel (E3, then K3). Keep the default Rate /1 on every channel: one step is a sixteenth note, 16 steps are one bar and 64 steps are four bars.\n\n2. Set the range of channels 1–3 to steps 1–64.\n\n3. Open PARAMS > MOSAIC and set Snap note masks to scale to Off, so that MIDI 37 (C#1) in the drum channel is not snapped to C major.\n\nHow notes are entered in these recipes: open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). E2 chooses the value (Trig, Note, Vel, Len, Chd1–Chd4). With no step held, E3 sets the channel default, which every step uses unless it has its own value. Hold K1 and tap a step to add or remove a trig on it. Hold a step and turn E3 to give that step its own value. Hold a step and press K2 to remove its own values. The grid shows sixteen steps at a time: bar 1 is steps 1–16, bar 2 is steps 17–32, bar 3 is steps 33–48 and bar 4 is steps 49–64, so move to the right sixteen-step page before you tap steps in a later bar. In bars after the first, add 16 to each step number of bar 1.\n\nBuild the channels in order: Percussion Channel, Bass Channel, Chord Channel. Press Play after each one to hear the loop grow before you add the next channel.\n\nFinish with a contrasting section: open the Song Editor, copy the song slot and mute one channel in the copy (see Song Composition). Numeric MIDI notes are used throughout, because Masks shows MIDI 36, 48 and 60 as C1, C2 and C3 while other controls label octaves differently. Each n.b. player is unique: Polyperc 1 cannot be assigned to another channel once it is assigned to the bass.",
+      "after": "Build a four-bar loop on three channels: Oilcan 1 plays drums on channel 1, Polyperc 1 plays a bass line on channel 2 and Doubledecker plays chords on channel 3. The drum and bass phrases repeat unchanged in every bar. Only the chord roots change, in bar 4, so you hear the harmony move while the groove stays put. Play \"Rhythm, bass and a changing chord\" under Listen to hear the finished result first.\n\nBefore you start:\n\n1. Set 90 BPM in Song tasks → Tempo & feel (E3, then K3). Keep the default Rate /1 on every channel: one step is a sixteenth note, 16 steps are one bar and 64 steps are four bars.\n\n2. Set the range of channels 1–3 to steps 1–64.\n\n3. Open PARAMS > MOSAIC and set Snap note masks to scale to Off, so that MIDI 37 (C#1) in the drum channel is not snapped to C major.\n\nHow notes are entered in these recipes: open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). E2 chooses the value (Trig, Note, Vel, Len, Chd1–Chd4). With no step held, E3 sets the channel default, which every step uses unless it has its own value. Hold K1 and tap a step to add or remove a trig on it. Hold a step and turn E3 to give that step its own value. Hold a step and press K2 to remove its own values. For Masks and Pattern Trig, all 64 steps are visible together: row 4 is steps 1–16, row 5 is 17–32, row 6 is 33–48 and row 7 is 49–64; the column is 1 + (step−1) modulo 16. For example, step 33 is (1,6) and step 61 is (13,7). These screens do not page. Pattern Note and Velocity use 16-step pages.\n\nIf Oilcan 1, Polyperc 1 or Doubledecker is missing from the Device picker, install and enable its `nb_oilcan`, `nb_polyperc` or `nb_doubledecker` mod in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b).\nBuild the channels in order: Percussion Channel, Bass Channel, Chord Channel. Press Play after each one to hear the loop grow before you add the next channel.\n\nFinish with a contrasting section: open the Song Editor, copy the song slot and mute one channel in the copy (see Song Composition). Numeric MIDI notes are used throughout, because Masks shows MIDI 36, 48 and 60 as C1, C2 and C3 while other controls label octaves differently. Each n.b. player is unique: Polyperc 1 cannot be assigned to another channel once it is assigned to the bass."
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: the three settings under Before you start are done (90 BPM, steps 1-64, Snap note masks to scale Off) and channel 1 is empty. The steps below build a six-hit drum bar and repeat it in all four bars.\n\n1. Select channel 1 (1,1). Press E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Oilcan 1 and press K3 to assign it.\n\n2. Open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). With no step held, turn E2 to Note and turn E3 to MIDI 36 (C1). Turn E2 to Vel and set 38. Turn E2 to Len and set ½ step. Every trig you add now plays MIDI 36 at velocity 38 for half a step. In the default Oilcan kit MIDI 36, 37 and 38 trigger three different drum timbres.\n\n3. In bar 1 (steps 1-16), hold K1 and tap steps 1, 4, 5, 9, 12 and 13. Six trigs light on the grid.\n\n4. Turn E2 back to Note. Hold step 4 and turn E3 to MIDI 38 (D1), then release. Do the same for step 12. Hold step 5 and turn E3 to MIDI 37 (C#1), then release, and do the same for step 13. Steps 1 and 9 keep the default MIDI 36.\n\n5. Listen: press Play and hear bar 1 loop. MIDI 36 falls on beats 1 and 3, MIDI 37 on beats 2 and 4, and each MIDI 38 hit sounds one step before a MIDI 37 hit. Press Stop.\n\n6. Repeat steps 3 and 4 in each of the other three bars, moving the grid to that bar's sixteen-step page first. Each pair below is a step number and its MIDI note:\nBar 2: 17/36, 20/38, 21/37, 25/36, 28/38, 29/37.\nBar 3: 33/36, 36/38, 37/37, 41/36, 44/38, 45/37.\nBar 4: 49/36, 52/38, 53/37, 57/36, 60/38, 61/37.\n\nThe channel now has 24 trigs in a repeating one-bar (four-beat) drum figure. Press Play and listen before you continue: the same bar repeats four times. Press Stop.",
+      "after": "Starting point: the three settings under Before you start are done (90 BPM, steps 1-64, Snap note masks to scale Off) and channel 1 is empty. The steps below build a six-hit drum bar and repeat it in all four bars.\n\n1. Select channel 1 (1,1). Turn E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Oilcan 1 and press K3 to assign it. Open Channel (3,8), select channel 1 on row 1, then tap pattern slot (1,2) to assign Pattern 1 to channel 1.\n\n2. Open Masks (grid (3,8), E1 to tasks, E2 to Masks, K3). With no step held, turn E2 to Note and turn E3 to MIDI 36 (C1). Turn E2 to Vel and set 38. Turn E2 to Len and set ½ step. Every trig you add now plays MIDI 36 at velocity 38 for half a step. In the default Oilcan kit MIDI 36, 37 and 38 trigger three different drum timbres.\n\n3. In bar 1 (steps 1-16), hold K1 and tap steps 1, 4, 5, 9, 12 and 13. Six trigs light on the grid.\n\n4. Turn E2 back to Note. Hold step 4 and turn E3 to MIDI 38 (D1), then release. Do the same for step 12. Hold step 5 and turn E3 to MIDI 37 (C#1), then release, and do the same for step 13. Steps 1 and 9 keep the default MIDI 36.\n\n5. Listen: press Play and hear bar 1, then three silent bars because bars 2–4 are still empty. In bar 1, MIDI 36 falls on beats 1 and 3, MIDI 37 on beats 2 and 4, and each MIDI 38 hit sounds one step before a MIDI 37 hit. Press Stop.\n\n6. Repeat steps 3 and 4 in each of the other three bars, using the full grid: steps 17–32 are row 5, 33–48 row 6 and 49–64 row 7; the column is 1 + (step−1) modulo 16. Masks and Pattern Trig do not page. Each pair below is a step number and its MIDI note:\nBar 2: 17/36, 20/38, 21/37, 25/36, 28/38, 29/37.\nBar 3: 33/36, 36/38, 37/37, 41/36, 44/38, 45/37.\nBar 4: 49/36, 52/38, 53/37, 57/36, 60/38, 61/37.\n\nThe channel now has 24 trigs in a repeating one-bar (four-beat) drum figure. Press Play and listen before you continue: the same bar repeats four times. Press Stop."
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        1,
+        "text"
+      ],
+      "before": "Starting point: channel 1 plays the drums and channel 2 is empty. Masks work as in the percussion recipe: E2 chooses the value, E3 sets it, and holding a step gives that step its own value.\n\n1. Select channel 2 (2,1). Press E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Polyperc 1 and press K3 to assign it.\n\n2. Open Masks. With no step held, turn E2 to Note and set MIDI 48 (C2), turn E2 to Vel and set 42, and turn E2 to Len and set ½ step.\n\n3. In bar 1, hold K1 and tap steps 1, 5, 9 and 13.\n\n4. Select Note with E2, hold step 9 and turn E3 to MIDI 55 (G2), then release. Steps 1, 5 and 13 keep the default MIDI 48.\n\n5. Listen: press Play. The bass plays C2 on beats 1, 2 and 4 and G2 on beat 3, under the drums. Press Stop.\n\n6. Repeat steps 3 and 4 in bars 2 to 4, adding 16 to each step number of bar 1. Each trig list is followed by the step that takes MIDI 55:\nBar 2: trigs on 17, 21, 25, 29; 25 is MIDI 55.\nBar 3: trigs on 33, 37, 41, 45; 41 is MIDI 55.\nBar 4: trigs on 49, 53, 57, 61; 57 is MIDI 55.\n\nListen for the pitch pattern C, C, G, C repeating once per bar under the drums.",
+      "after": "Starting point: channel 1 plays the drums and channel 2 is empty. Masks work as in the percussion recipe: E2 chooses the value, E3 sets it, and holding a step gives that step its own value.\n\n1. Select channel 2 (2,1). Turn E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Polyperc 1 and press K3 to assign it. Open Channel (3,8), select channel 2 on row 1, then tap pattern slot (2,2) to assign Pattern 2 to channel 2.\n\n2. Open Masks. With no step held, turn E2 to Note and set MIDI 48 (C2), turn E2 to Vel and set 42, and turn E2 to Len and set ½ step.\n\n3. In bar 1, hold K1 and tap steps 1, 5, 9 and 13.\n\n4. Select Note with E2, hold step 9 and turn E3 to MIDI 55 (G2), then release. Steps 1, 5 and 13 keep the default MIDI 48.\n\n5. Listen: press Play. In bar 1, the bass plays C2 on beats 1, 2 and 4 and G2 on beat 3 under the bar-1 drums; bars 2–4 remain silent until you enter them. Press Stop.\n\n6. Repeat steps 3 and 4 in bars 2 to 4, adding 16 to each step number of bar 1. Each trig list is followed by the step that takes MIDI 55:\nBar 2: trigs on 17, 21, 25, 29; 25 is MIDI 55.\nBar 3: trigs on 33, 37, 41, 45; 41 is MIDI 55.\nBar 4: trigs on 49, 53, 57, 61; 57 is MIDI 55.\n\nListen for the pitch pattern C, C, G, C repeating once per bar under the drums."
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        2,
+        "text"
+      ],
+      "before": "Starting point: channels 1 and 2 play the drums and bass; channel 3 is empty. Use Doubledecker for the chord because it plays several notes at once. The grid shows sixteen steps at a time: bar 1 is steps 1–16, bar 2 is 17–32, bar 3 is 33–48 and bar 4 is 49–64. Move to each bar’s page before entering its steps. Hold K1 and tap to add or remove a trig; hold a step and turn E3 to give it its own value.\n\n1. Select channel 3 (3,1). Press E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Doubledecker and press K3 to assign it.\n\n2. Open Masks. With no step held, set Note to MIDI 60 (C3), Vel to 26 and Len to 3 steps. Select Chd1 and set 3rd; select Chd2 and set 5th. Every chord now plays the root plus the notes a third and a fifth above it in the scale.\n\n3. In bar 1, hold K1 and tap steps 1 and 9. Select Note, hold step 9 and turn E3 to MIDI 62 (D3), then release. Step 1 keeps the default MIDI 60. Press Play: the chord alternates C-E-G and D-F-A, two chords a bar, quietly above the bass. Press Stop.\n\n4. Bar 2: add trigs on steps 17 and 25.\n\n5. Set step 25 to MIDI 62 as in step 3.\n\n6. Bar 3: add trigs on steps 33 and 41.\n\n7. Set step 41 to MIDI 62.\n\n8. Bar 4: hold K1 and tap steps 49 and 57.\n\n9. Hold step 49 and set Note to MIDI 67 (G3). Step 57 keeps the default MIDI 60.\n\n10. Result check: listen to the whole four bars: press Play and wait for bar 4. The drums and bass repeat unchanged, but the chords move to G-B-D and then back to C-E-G. The chord intervals follow the C-major scale, so the 3rd above D is F and the 3rd above G is B. Press Stop.",
+      "after": "Starting point: channels 1 and 2 play the drums and bass; channel 3 is empty. Use Doubledecker for the chord because it plays several notes at once. On Masks and Pattern Trig, all 64 steps are visible together: row 4 is steps 1–16, row 5 is 17–32, row 6 is 33–48 and row 7 is 49–64; the column is 1 + (step−1) modulo 16. These screens do not page. Pattern Note and Velocity use 16-step pages. Hold K1 and tap to add or remove a trig; hold a step and turn E3 to give it its own value.\n\n1. Select channel 3 (3,1). Turn E1 to Channel tasks, turn E2 to Device, press K3, turn E3 to Doubledecker and press K3 to assign it. Open Channel (3,8), select channel 3 on row 1, then tap pattern slot (3,2) to assign Pattern 3 to channel 3.\n\n2. Open Masks. With no step held, set Note to MIDI 60 (C3), Vel to 26 and Len to 3 steps. Select Chd1 and set 3rd; select Chd2 and set 5th. Every chord now plays the root plus the notes a third and a fifth above it in the scale.\n\n3. In bar 1, hold K1 and tap steps 1 and 9. Select Note, hold step 9 and turn E3 to MIDI 62 (D3), then release. Step 1 keeps the default MIDI 60. Press Play: in bar 1 the chord alternates C-E-G and D-F-A, two chords a bar, quietly above the bass; bars 2–4 remain silent until you enter them. Press Stop.\n\n4. Bar 2: add trigs on steps 17 and 25.\n\n5. Set step 25 to MIDI 62 as in step 3.\n\n6. Bar 3: add trigs on steps 33 and 41.\n\n7. Set step 41 to MIDI 62.\n\n8. Bar 4: hold K1 and tap steps 49 and 57.\n\n9. Hold step 49 and set Note to MIDI 67 (G3). Step 57 keeps the default MIDI 60.\n\n10. Result check: listen to the whole four bars: press Play and wait for bar 4. The drums and bass repeat unchanged, but the chords move to G-B-D and then back to C-E-G. The chord intervals follow the C-major scale, so the 3rd above D is F and the 3rd above G is B. Press Stop."
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        2,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: an empty project with playback stopped. Part 1 builds the upper phrase on channel 1, part 2 builds the bass on channel 2, part 3 prepares the second key and part 4 performs the change. In the note page, the column is the step and the row is the degree: y=7 is degree 0 (I), y=6 is degree 1 (II) and y=3 is degree 4 (V).\n\nPart 1: upper phrase\n\n1. Set 90 BPM (Song tasks, Tempo & feel, E3, K3). Leave Rate at /1.\n\n2. Open the Scale editor (4,8). Slot 1 at (1,3) is the applied slot. Check Root C and Scale Major on the Scale screen; if you change either, press K3 to save it.\n\n3. Assign Doubledecker to channel 1. Open Pattern Trig, select pattern 1 and tap steps 1, 5, 9 and 13.\n\n4. Open Pattern Note (tap Pattern (5,8) until Note is shown) and set the degrees: tap (1,7), (5,7) and (9,7) for degree 0, and (13,6) for degree 1. Set the channel range to steps 1-16.\n\n5. Open Masks. Leave Note at X. Set Vel to 80 and Len to ½. Hold step 13 and set Vel to 50, then release. The phrase ends with a softer last note. Checkpoint: press Play and listen. In C major the upper phrase is MIDI 60, 60, 60, 62. Press Stop before building the bass channel.\n\nPart 2: bass\n\n6. Assign Polyperc 1 to channel 2 and select pattern 2 for the channel. On pattern 2, tap steps 1 and 9 on Pattern Trig, then on Pattern Note tap (1,7) for degree 0 and (9,3) for degree 4. Set the range to steps 1-16 and the channel octave to -1 with (9,8).\n\n7. Open Masks with channel 2 selected, leave Note at X, set Vel to 60 and Len ½. Checkpoint: press Play. The bass adds MIDI 48 on beat 1 and MIDI 55 on beat 3 under the upper phrase. Press Stop before preparing slot 2.\n\nPart 3: prepare the second key\n\n8. While stopped, open the Scale editor. Hold K1 and press slot 2 at (2,3) to select it for editing without applying it. On the Scale screen set Root to D and Scale to Major with E2 and E3, and press K3 to save the slot. Slot 1 stays applied, so playback is still C major.\n\nPart 4: perform the change (choose one)\n\n9a. Stopped: play two bars in C major and stop. Short-press slot 2 at (2,3) to apply D major and play two more bars.\n\n9b. Live: while playing, short-press slot 2 at (2,3) at the end of bar 2.\n\nResult check: in D major the upper phrase becomes MIDI 62, 62, 62, 64 and the bass becomes MIDI 50 and 57: the same rhythm moved up a whole tone. Short-press slot 1 at (1,3) to restore C major.",
+      "after": "Starting point: an empty project with playback stopped. If Doubledecker or Polyperc 1 is missing from the Device picker, install and enable its corresponding `nb_doubledecker` or `nb_polyperc` mod in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b). Part 1 builds the upper phrase on channel 1, part 2 builds the bass on channel 2, part 3 prepares the second key and part 4 performs the change. In the note page, the column is the step and the row is the degree: y=7 is degree 0 (I), y=6 is degree 1 (II) and y=3 is degree 4 (V).\n\nPart 1: upper phrase\n\n1. Set 90 BPM (Song tasks, Tempo & feel, E3, K3). Leave Rate at /1.\n\n2. Open the Scale editor (4,8). Slot 1 at (1,3) is the applied slot. Check Root C and Scale Major on the Scale screen; if you change either, press K3 to save it.\n\n3. Assign Doubledecker to channel 1. Open Channel (3,8), select channel 1 on row 1 and tap pattern slot (1,2) to assign pattern 1 to the channel. Open Pattern Trig, select pattern 1 and tap steps 1, 5, 9 and 13.\n\n4. Open Pattern Note (tap Pattern (5,8) until Note is shown) and set the degrees: tap (1,7), (5,7) and (9,7) for degree 0, and (13,6) for degree 1. Set the channel range to steps 1-16.\n\n5. Open Masks. Leave Note at X. Set Vel to 80 and Len to ½. Hold step 13 and set Vel to 50, then release. The phrase ends with a softer last note. Checkpoint: press Play and listen. In C major the upper phrase is MIDI 60, 60, 60, 62. Press Stop before building the bass channel.\n\nPart 2: bass\n\n6. Assign Polyperc 1 to channel 2 and select pattern 2 for the channel. On pattern 2, tap steps 1 and 9 on Pattern Trig, then on Pattern Note tap (1,7) for degree 0 and (9,3) for degree 4. Set the range to steps 1-16 and the channel octave to -1 with (9,8).\n\n7. Open Masks with channel 2 selected, leave Note at X, set Vel to 60 and Len ½. Checkpoint: press Play. The bass adds MIDI 48 on beat 1 and MIDI 55 on beat 3 under the upper phrase. Press Stop before preparing slot 2.\n\nPart 3: prepare the second key\n\n8. While stopped, open the Scale editor. Hold K1 and press slot 2 at (2,3) to select it for editing without applying it. On the Scale screen set Root to D and Scale to Major with E2 and E3, and press K3 to save the slot. Slot 1 stays applied, so playback is still C major.\n\nPart 4: perform the change (choose one)\n\n9a. Stopped: play two bars in C major and stop. Short-press slot 2 at (2,3) to apply D major and play two more bars.\n\n9b. Live: while playing, short-press slot 2 at (2,3) at the end of bar 2.\n\nResult check: in D major the upper phrase becomes MIDI 62, 62, 62, 64 and the bass becomes MIDI 50 and 57: the same rhythm moved up a whole tone. Short-press slot 1 at (1,3) to restore C major."
+    },
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        3,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: the numbered setup in Combining Four-Step and Three-Step Loops is complete and playback is stopped. Both channels run at the same rate. At 90 BPM and Rate /1 one step is a sixth of a second, so you can count 12 steps in two seconds.\n\n1. Press Play and count steps. Channel 1 plays MIDI 60, 62, 64, 65 and then repeats, so it completes three phrases in 12 steps. Channel 2 plays MIDI 79, 81, 79 and repeats, so it completes four phrases in the same 12 steps.\n\n2. Listen at step 1: MIDI 60 and MIDI 79 sound together. They do not coincide again on steps 2 to 12: for example, on step 4 channel 1 plays MIDI 65 while channel 2 starts a new phrase with MIDI 79.\n\n3. Listen at step 13, two seconds after step 1: MIDI 60 and MIDI 79 sound together again, and the pattern repeats every 12 steps. Press Stop when you have heard the alignment.\n\n4. Optional extra check, unrelated to the alignment: with both channels playing, try a reversed range on channel 1. Hold step 4 as the start, press step 2 as the end and release both. The reversed range is rejected with a message, the ranges stay 1–4 and 1–3, and neither phrase changes timing.",
+      "after": "Starting point: the numbered setup in Combining Four-Step and Three-Step Loops is complete and playback is stopped. Both channels run at the same rate. At 90 BPM and Rate /1 one step is a sixth of a second, so you can count 12 steps in two seconds.\n\n1. Press Play and count steps. Channel 1 plays MIDI 60, 62, 64, 65 and then repeats, so it completes three phrases in 12 steps. Channel 2 plays MIDI 79, 81, 79 and repeats, so it completes four phrases in the same 12 steps.\n\n2. Listen at step 1: MIDI 60 and MIDI 79 sound together. This same pitch pair also occurs at step 9, so it is not unique. Count phrase starts: after step 1, the two loops next realign at step 13. On step 4, channel 1 plays MIDI 65 while channel 2 starts a new phrase with MIDI 79.\n\n3. Listen at step 13, two seconds after step 1: MIDI 60 and MIDI 79 sound together again, and the pattern repeats every 12 steps. Press Stop when you have heard the alignment.\n\n4. Optional extra check, unrelated to the alignment: with both channels playing, try a reversed range on channel 1. Hold step 4 as the start, press step 2 as the end and release both. The reversed range is rejected with a message, the ranges stay 1–4 and 1–3, and neither phrase changes timing."
+    },
+    {
+      "file": "manual/features/masks.yaml",
+      "path": [
+        "feature",
+        "recipes",
+        4,
+        "text"
+      ],
+      "before": "Starting point: Use an empty project at 90 BPM, Rate /1 and C major. Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. Set both channel ranges and Song slot 1 to 64 steps; set Song tempo to 90 and apply Rate /1 on both channels with K3. Check: Song slot 1 shows 64 steps and playback is stopped.\n\nControls and step map: Open Channel (3,8), select a channel on row 1, use E1 for tasks and E2 to choose Device, Masks or Clock; K3 opens the task. On Masks, E2 chooses Note, Vel, Len, Chd1 or Chd2 and E3 changes the value. Hold K1 while tapping a step to add a trig; hold a step and turn E3 to edit its value. Hold the first step and tap the last to set a channel range. The grid shows 16 steps per page in rows 4–7: steps 1–16 are row 4, 17–32 row 5, 33–48 row 6 and 49–64 row 7. Step 33 is (1,6) and step 61 is (13,7); move to the page containing the bar before editing it. Open Song (6,8): slots 1–3 are on row 1; the length fader at (7,7) sets 64 steps.\n\nCheckpoint 1 — bass. On channel 1 set default Note MIDI 48, Vel 70 and Len ½. Add trigs at steps 1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49, 53, 57 and 61. Set steps 9, 25, 41 and 57 to MIDI 43; the other bass trigs stay at MIDI 48. Check the Masks readout at one normal step (48) and one low step (43); the bass line now spans all four bars.\n\nCheckpoint 2 — chord layer. On channel 2 set default Note MIDI 60, Vel 45 and Len 3 steps. Set Chd1=3rd and Chd2=5th. Add trigs at steps 1, 9, 17, 25, 33, 41, 49 and 57; each chord root stays MIDI 60. Check that the chord tones are the scale third and fifth above each root.\n\nCheckpoint 3 — hear the layer change. Press Play for four bars. Hold K1 and tap channel 2 selector (2,1) to mute the chords; check that the bass remains. Tap (2,1) again with K1 held to restore the chords; check that the same four-bar bass continues under them. Stop playback.\n\nRestore: Leave channel 2 unmuted and playback stopped. Keep this four-bar extension in its separate project; the course Masks phrases use different notes.",
+      "after": "Starting point: Use an empty project at 90 BPM, Rate /1 and C major. Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. If either player is missing from the Device picker, install and enable its `nb_polyperc` or `nb_doubledecker` mod in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b). Set both channel ranges and Song slot 1 to 64 steps; set Song tempo to 90 and apply Rate /1 on both channels with K3. Check: Song slot 1 shows 64 steps and playback is stopped. Before editing, open Channel (3,8), select channel 1 at (1,1) and tap pattern slot (1,2) to assign Pattern 1; select channel 2 at (2,1) and tap (2,2) to assign Pattern 2.\n\nControls and step map: Open Channel (3,8), select a channel on row 1, use E1 for tasks and E2 to choose Device, Masks or Clock; K3 opens the task. On Masks, E2 chooses Note, Vel, Len, Chd1 or Chd2 and E3 changes the value. Hold K1 while tapping a step to add a trig; hold a step and turn E3 to edit its value. Hold the first step and tap the last to set a channel range. On Masks and Pattern Trig, all 64 steps are visible together: row 4 is steps 1–16, row 5 is 17–32, row 6 is 33–48 and row 7 is 49–64; the column is 1 + (step−1) modulo 16. Step 33 is (1,6) and step 61 is (13,7). These screens do not page; Pattern Note and Velocity use 16-step pages. Open Song (6,8): slots 1–3 are on row 1; the length fader at (7,7) sets 64 steps.\n\nCheckpoint 1 — bass. On channel 1 set default Note MIDI 48, Vel 70 and Len ½. Add trigs at steps 1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49, 53, 57 and 61. Set steps 9, 25, 41 and 57 to MIDI 43; the other bass trigs stay at MIDI 48. Check the Masks readout at one normal step (48) and one low step (43); the bass line now spans all four bars.\n\nCheckpoint 2 — chord layer. On channel 2 set default Note MIDI 60, Vel 45 and Len 3 steps. Set Chd1=3rd and Chd2=5th. Add trigs at steps 1, 9, 17, 25, 33, 41, 49 and 57; each chord root stays MIDI 60. Check that the chord tones are the scale third and fifth above each root.\n\nCheckpoint 3 — hear the layer change. Press Play for four bars. Hold K1 and tap channel 2 selector (2,1) to mute the chords; check that the bass remains. Tap (2,1) again with K1 held to restore the chords; check that the same four-bar bass continues under them. Stop playback.\n\nRestore: Leave channel 2 unmuted and playback stopped. Keep this four-bar extension in its separate project; the course Masks phrases use different notes."
+    },
+    {
+      "file": "manual/features/reference-channel.yaml",
+      "path": [
+        "features",
+        12,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: use an empty project at 90 BPM, Rate /1, C major and playback stopped. Assign Polyperc 1 to channel 1, give it range 1–16 and assign patterns 1 and 2. Turn Lock merged to pent. Off.\n\nPrepare the two-slot comparison: Open Channel (3,8), select channel 1 on row 1, then use E1 for tasks and E2 to choose a task; K3 opens it. In Pattern Trig and Pattern Note, choose patterns from row 1 and edit their steps. On Masks, E2 selects a value row and E3 changes it; hold K1 while tapping a step to add a trig. Open Song (6,8), copy slot 1 to slot 2 by holding (1,1) and tapping (2,1), then select slot 2. Set the selected slot length to 32 with the length fader at (4,7). Set Song tempo to 90 in Song tasks → Tempo & feel; set channel Rate to /1 on Clock and apply with K3.\n\nPurpose: compare the same two source patterns under two note-merge rules. Average combines overlapping notes by their mean; Higher adds the range between their highest and lowest values to that mean. Notes from only one pattern should stay the same in both slots.\n\n1. In Pattern Trig, pattern 1, tap steps 1, 3, 5, 7, 9 and 13. In Pattern Note, set degrees 0, 2, 4, 2, 0 and 4 at those steps.\n\n2. In Pattern Trig, pattern 2, tap steps 1, 5, 9, 11, 13 and 15. In Pattern Note, set degrees 2, 6, 3, 3, 0 and 5. On the Note grid, row 7 is degree 0 and each row above is one degree higher.\n\n3. On channel 1 Masks, leave Note and Trig at X so the patterns supply pitches and trigs. Set Vel to 80 and Len to half a step. These are the recorded channel masks.\n\n4. Open Channel tasks → Merge modes. Select Strategy with E2 and turn E3 until the screen reads ALL. Select Note mode with E2 and turn E3 until the screen reads AVERAGE. Set Song slot 1 length to 32.\n\n5. Copy slot 1 to slot 2 and select slot 2. Keep its length at 32; on Merge modes choose Note mode and set it to UP (Higher). Play the slots in order, then stop and select slot 1 to restore Average.\n\nListen for: The trig pattern and notes from a single contributing pattern stay the same in both slots. Only notes where the patterns overlap change.\n\nRestore: Select slot 1 for Average. Keep Lock merged to pent. Off and Trig Merge All for this recording, then return to the separate course project.\n",
+      "after": "Starting point: use an empty project at 90 BPM, Rate /1, C major and playback stopped. If Polyperc 1 is missing from the Device picker, install and enable `nb_polyperc` in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b). Assign Polyperc 1 to channel 1, give it range 1–16 and assign patterns 1 and 2. Turn Lock merged to pent. Off.\n\nPrepare the two-slot comparison with slot 1 selected. Open Channel (3,8), select channel 1 on row 1, then use E1 for tasks and E2 to choose a task; K3 opens it. In Pattern Trig and Pattern Note, choose patterns from row 1 and edit their steps. On Masks, E2 selects a value row and E3 changes it; hold K1 while tapping a step to add a trig. Open Song (6,8), leave slot 1 selected, and set its length to 32 with the length fader at (4,7). Keep slot 1 selected while preparing both patterns and setting Average. Copy slot 1 to slot 2 only after that setup, as described in step 5. Set Song tempo to 90 in Song tasks → Tempo & feel; set channel Rate to /1 on Clock and apply with K3.\n\nPurpose: compare the same two source patterns under two note-merge rules. Average combines overlapping notes by their mean; Higher adds the range between their highest and lowest values to that mean. Notes from only one pattern should stay the same in both slots.\n\n1. In Pattern Trig, pattern 1, tap steps 1, 3, 5, 7, 9 and 13. In Pattern Note, set degrees 0, 2, 4, 2, 0 and 4 at those steps.\n\n2. In Pattern Trig, pattern 2, tap steps 1, 5, 9, 11, 13 and 15. In Pattern Note, set degrees 2, 6, 3, 3, 0 and 5. On the Note grid, row 7 is degree 0 and each row above is one degree higher.\n\n3. On channel 1 Masks, leave Note and Trig at X so the patterns supply pitches and trigs. Set Vel to 80 and Len to half a step. These are the recorded channel masks.\n\n4. Open Channel tasks → Merge modes. Select Strategy with E2 and turn E3 until the screen reads ALL. Select Note mode with E2 and turn E3 until the screen reads AVERAGE. Set Song slot 1 length to 32.\n\n5. Copy slot 1 to slot 2 and select slot 2. Keep its length at 32; on Merge modes choose Note mode and set it to UP (Higher). Select slot 1 at (1,1) to return to Average, then play the slots in order. Stop playback when you have heard the comparison.\n\nListen for: The trig pattern and notes from a single contributing pattern stay the same in both slots. Only notes where the patterns overlap change.\n\nRestore: Select slot 1 for Average. Keep Lock merged to pent. Off and Trig Merge All for this recording, then return to the separate course project.\n"
+    },
+    {
+      "file": "manual/features/reference-learn.yaml",
+      "path": [
+        "features",
+        18,
+        "details",
+        0,
+        "title"
+      ],
+      "before": "Evidence: release coverage",
+      "after": "Panic and connected devices"
+    },
+    {
+      "file": "manual/features/reference-learn.yaml",
+      "path": [
+        "features",
+        18,
+        "details",
+        0,
+        "text"
+      ],
+      "before": "The silent gesture examples verify the full all-notes-off message stream and no unmatched notes. The separate long-note example verifies musical cutoff. These captures do not establish physical-device timing or receiver-specific release behaviour.",
+      "after": "After Panic sends its Note Off sweep, the connected instrument determines how quickly its sound releases. Use Play/Stop separately to stop playback; Panic does not stop the sequencer or cancel scheduled strum and arpeggio voices."
+    },
+    {
+      "file": "manual/features/reference-learn.yaml",
+      "path": [
+        "features",
+        7,
+        "prose"
+      ],
+      "before": "Some synths smooth incoming CC values. A filter or level change sent at the same moment as a note then arrives late and glides through the start of the note. Lock lead time sends each step's lock values slightly before the step so they have settled when the note sounds. The notes themselves keep their timing.\n\n1. Tap K1 briefly and open the norns PARAMS menu.\n2. Open MOSAIC and select **Lock lead time (ms)** in the Parameter locks section.\n3. Turn E3 to set the required lead time. The menu displays the selected value.\n4. Return to Mosaic to compare playback.\n\nWorked values at 130 BPM, where one clock pulse lasts about 4.8 ms. A lead of 0 sends each lock value with its note. A lead of 25 sends it about 28.8 ms ahead (6 pulses). A lead of 50 sends it about 52.9 ms ahead (11 pulses). Listen for the filter or parameter change landing before the note starts instead of sweeping through its attack.\nThis global setting accepts 0–50 ms and defaults to **25 ms**. It gives MIDI CC/NRPN\nparameter locks time to settle before the note attack, particularly on devices\nthat smooth incoming controllers. Set it to **0** to send each value at its own\nstep, which is the original output timing. The value is saved with Mosaic's\nproject settings.\n\nA step's parameter values leave ahead of the step, in an earlier clock pulse.\nNothing is delayed to achieve this: note-ons, note-offs, live MIDI-thru, outgoing\nMIDI Clock, Start, Continue, Stop and song position all keep the timing they have\nat a lead of 0, and gate lengths are unchanged. N.b. players are unaffected.\n\nBecause a value leaves on a clock pulse, the wait it achieves is the setting\nrounded **up** to the next whole pulse, so a value never leaves with less lead\nthan was asked for. At 130 bpm a pulse is about 4.8 ms, so a 25 ms setting\ndelivers about 28.8 ms; at 200 bpm it delivers 25 ms exactly. The figure follows\nthe tempo, and every value of a step leaves on the same pulse, so what you hear\nstays consistent between events rather than fixed to the number in the menu.\n\nNo step is looked ahead musically: probability, conditions, fills, random notes,\nstrum, arps and micro-timing still make their decisions at their own times. Only\nthe parameter values a step will send are resolved early.\n\nEvery note sounds with its own step's values. When two notes on the same MIDI\nchannel are less than twice the lead apart (a fast tempo, a fast channel clock,\nor swing and shuffle bringing steps together), a value does not take the whole\nlead: it waits until halfway between the previous sounding note and its own step.\nThe previous note keeps its value through the first half of the gap, and the new\nvalue settles in the second half. A trigless step sounds nothing, so it is not\nthe note a later value waits behind. A strummed chord's later voices are sounding\nnotes, so the next step's values wait behind the last of them.\n\nAn address that more than one slot writes, whether two slots of one channel or\ntwo channels addressing one device parameter, is not sent early: its values leave\nat their own step, in the order the step would send them at a lead of 0.\n\nTwo cases give no lead at all. The first step after Play resolves its lock on the\ntransport's own first pulse, so there is no earlier pulse for its values to leave\nin and they leave with the note. A parameter that is mid-slide keeps its slide\nuntil the slide's destination step, so that step's lock arrives with the step\nrather than before it. Nothing is delayed to hide either case.\n\nThe lead covers the time a receiver takes for a parameter change to take effect,\nso every value follows the same rule whether or not its step has a note: trigless\nlocks, assigned values and slide values leave ahead of the step they belong to and\ntake effect as that step is heard.\n\nEditing a lock that has already left changes what the next pass sends, and the\nedited value is sent again at its own step, so the receiver is corrected rather\nthan left holding the superseded value. Mosaic restores its output hooks on\ncleanup; stop and panic release held voices without leaving queued output behind.",
+      "after": "Some synths smooth incoming CC values. A filter or level change sent at the same moment as a note then arrives late and glides through the start of the note. Lock lead time sends each step's lock values slightly before the step so they have settled when the note sounds. The notes themselves keep their timing.\n\n1. Tap K1 briefly and open the norns PARAMS menu.\n2. Open MOSAIC and select **Lock lead time (ms)** in the Parameter locks section.\n3. Turn E3 to set the required lead time. The menu displays the selected value.\n4. Return to Mosaic to compare playback.\n\nWorked values at 130 BPM, where one clock pulse lasts about 4.8 ms. A lead of 0 sends each lock value with its note. A lead of 25 sends it about 28.8 ms ahead (6 pulses). A lead of 50 sends it about 52.9 ms ahead (11 pulses). Listen for the filter or parameter change landing before the note starts instead of sweeping through its attack.\nThis global setting accepts 0–50 ms and defaults to **25 ms**. It gives MIDI CC/NRPN\nparameter locks time to settle before the note attack, particularly on devices\nthat smooth incoming controllers. Set it to **0** to send each value at its own\nstep, which is the original output timing. The value is saved with Mosaic's\nproject settings.\n\nA step's parameter values leave ahead of the step, in an earlier clock pulse.\nNothing is delayed to achieve this: note-ons, note-offs, live MIDI-thru, outgoing\nMIDI Clock, Start, Continue, Stop and song position all keep the timing they have\nat a lead of 0, and gate lengths are unchanged. N.b. players are unaffected.\n\nBecause a value leaves on a clock pulse, the wait it achieves is the setting\nrounded **up** to the next whole pulse, so a value never leaves with less lead\nthan was asked for. At 130 bpm a pulse is about 4.8 ms, so a 25 ms setting\ndelivers about 28.8 ms; at 200 bpm it delivers 25 ms exactly. The figure follows\nthe tempo, and every value of a step leaves on the same pulse, so what you hear\nstays consistent between events rather than fixed to the number in the menu.\n\nNo step is looked ahead musically: probability, conditions, fills, random notes,\nstrum, arps and micro-timing still make their decisions at their own times. Only\nthe parameter values a step will send are resolved early.\n\nEvery note sounds with its own step's values. When two notes on the same MIDI\nchannel are less than twice the lead apart (a fast tempo, a fast channel clock,\nor swing and shuffle bringing steps together), a value does not take the whole\nlead: it waits until halfway between the previous sounding note and its own step.\nThe previous note keeps its value through the first half of the gap, and the new\nvalue settles in the second half. A trigless step sounds nothing, so it is not\nthe note a later value waits behind. A strummed chord's later voices are sounding\nnotes, so the next step's values wait behind the last of them.\n\nAn address that more than one slot writes, whether two slots of one channel or\ntwo channels addressing one device parameter, is not sent early: its values leave\nat their own step, in the order the step would send them at a lead of 0.\n\nTwo cases give no lead at all. The first step after Play resolves its lock on the\ntransport's own first pulse, so there is no earlier pulse for its values to leave\nin and they leave with the note. A parameter that is mid-slide keeps its slide\nuntil the slide's destination step, so that step's lock arrives with the step\nrather than before it. Nothing is delayed to hide either case.\n\nThe lead covers the time a receiver takes for a parameter change to take effect,\nso every value follows the same rule whether or not its step has a note: trigless\nlocks, assigned values and slide values leave ahead of the step they belong to and\ntake effect as that step is heard.\n\nEditing a lock that has already left changes what the next pass sends, and the\nedited value is sent again at its own step, so the receiver is corrected rather\nthan left holding the superseded value. Stopping playback or using Panic releases held voices and clears pending parameter-lock output."
+    },
+    {
+      "file": "manual/features/reference-locks.yaml",
+      "path": [
+        "features",
+        0,
+        "details",
+        0,
+        "title"
+      ],
+      "before": "Evidence: transpose output scope",
+      "after": "After clearing a transpose lock"
+    },
+    {
+      "file": "manual/features/reference-locks.yaml",
+      "path": [
+        "features",
+        0,
+        "details",
+        0,
+        "text"
+      ],
+      "before": "The held-step readout establishes the explicit zero value. The intermediate MIDI stream is truncated and is not evidence of a complete phrase. The final clear checkpoint includes the complete phrase and preserves step 2’s separate zero lock.",
+      "after": "After you clear the selected transpose lock, the full phrase plays again while the separate zero lock at step 2 remains."
+    },
+    {
+      "file": "manual/features/reference-locks.yaml",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        4,
+        "text"
+      ],
+      "before": "Comparison purpose: keep the note pattern fixed while only the Decay envelope changes. This recipe has two clearly separate exercises: first replay the retained recording's relative lock gestures; then try the separate endpoint contrast. Use a separate project so neither changes your course arrangement.\n\nStarting point: use an empty project at 90 BPM, Rate /1 and playback stopped. Assign Polyperc 1 to channel 1 with range 1–16. In Masks set default velocity 70 and Len ½; add odd-step trigs and notes 1/48, 3/55, 5/52, 7/55, 9/48, 11/55, 13/53 and 15/55.\n\nControls and step map: press Channel at (3,8), select its number on row 1, then turn E1 to Channel tasks. Use E2 to highlight Device, Masks, Clock, Trig params or Harmony and K3 to open it. On Device use E2 for the row, E3 for the named sound and K3 to apply. On Masks, E2 selects Note, Vel, Len or Chd1/Chd2; E3 changes the value. Hold a step while turning E3 for a local exception, then release it. To add a trig mask, hold K1, tap that step and release K1. Steps 1–16 are row 4, 17–32 row 5, 33–48 row 6 and 49–64 row 7. Column is the position within that group. For Song slots, press Song at (6,8); slots 1–3 are (1,1)–(3,1). Hold the source slot, tap the destination and release; then tap the destination to edit it. Set Song Tempo to 90 and each channel Rate to /1, applying changes with K3. In Trig params, E2 selects a slot, K2 opens its assignment list, E3 highlights a parameter, K3 assigns it and K2 returns. Hold a step and turn E3 to set its lock. K2 clears a held-step lock.\n\nRecorded comparison — replay the captured relative gestures. Slot 1 is two bars (32 steps) with no parameter locks; it is the straight reference. Copy slot 1 to slot 2 and keep slot 2 at 32 steps. Open Channel tasks → Trig params and assign Decay to slot 1. In slot 2, hold step 1 and replay the captured +200-detent E3 gesture; release it. Repeat the +200-detent gesture on step 9 and release. Then hold step 5 and replay the captured +40-detent gesture; release it. Repeat on step 13 and release. Check: steps 1 and 9 form the longer-tail group; steps 5 and 13 form the shorter-tail group, while the note pattern stays fixed. The retained capture records these encoder gestures, not displayed Decay values, so do not infer absolute values. Play slots 1 and 2, stop, then select slot 1 to restore the plain line.\n\nSeparate endpoint practice — a contextual contrast, not a reconstruction. In Song set slot 1 to 32 steps with no parameter locks. Copy slot 1 to slot 2 and set its length to 32. In slot 2, hold step 1 and turn E3 anticlockwise until the displayed Decay reaches its 0.1 s minimum, then clockwise to the displayed 3.2 s maximum; release the step. Repeat the 3.2 s setting on step 9. Set Decay to 0.1 s on steps 5 and 13, releasing each step afterward. Check the Trig params readout for the long settings on 1 and 9 and short settings on 5 and 13. Play slots 1 and 2, stop and select slot 1. On your instrument, compare the tails while the notes stay in the same order; the reader did not listen to a captured sound example.\n\nRestore: Select slot 1 to restore the unmodified line. Stop and return to the separate course project when finished.",
+      "after": "Comparison purpose: keep the note pattern fixed while only the Decay envelope changes. This recipe has two exercises: compare longer and shorter Decay tails with relative turns, then try the 0.1 s and 3.2 s endpoints. Use a separate project so neither changes your course arrangement.\n\nStarting point: use an empty project at 90 BPM, Rate /1 and playback stopped. Make sure n.b. PolyPerc is installed and enabled using [Sound Sources with n.b.](#norns-sound-sources-with-n-b); assign Polyperc 1 to channel 1 with range 1–16. In Masks set default velocity 70 and Len ½. Add trig masks on odd steps by holding K1, tapping each odd step and releasing K1. Select Note with E2; for each odd step, hold it and turn E3 to set the absolute MIDI note: step 1=48, 3=55, 5=52, 7=55, 9=48, 11=55, 13=53 and 15=55. Press Channel at (3,8), select channel 1 on row 1, then tap Pattern 1 in the second-from-top grid row to assign it before playing; an empty project has no pattern assigned by default.\n\nControls and step map: press Channel at (3,8), select its number on row 1, then turn E1 to Channel tasks. Use E2 to highlight Device, Masks, Clock, Trig params or Harmony and K3 to open it. On Device use E2 for the row, E3 for the named sound and K3 to apply. On Masks, E2 selects Note, Vel, Len or Chd1/Chd2; E3 changes the value. Hold a step while turning E3 for a local exception, then release it. To add a trig mask, hold K1, tap that step and release K1. Steps 1–16 are row 4, 17–32 row 5, 33–48 row 6 and 49–64 row 7. Column is the position within that group. For Song slots, press Song at (6,8); slots 1–3 are (1,1)–(3,1). Hold the source slot, tap the destination and release; then tap the destination to edit it. Set Song Tempo to 90 and each channel Rate to /1, applying changes with K3. In Trig params, E2 selects a slot, K2 opens its assignment list, E3 highlights a parameter, K3 assigns it and K2 returns. Hold a step and turn E3 to set its lock. K2 clears a held-step lock.\n\nRelative-turn comparison — compare longer and shorter Decay tails while keeping the note pattern fixed. In Song, select slot 1 and set its length to 32 steps with no parameter locks; this is the two-bar straight reference. Copy slot 1 to slot 2 and keep slot 2 at 32 steps. Tap slot 2 before editing its locks. Open Channel tasks → Trig params and assign Decay to slot 1. In slot 2, hold step 1 and turn E3 clockwise by 200 detents; release it. Repeat the 200-detent turn on step 9 and release. Then hold step 5 and turn E3 clockwise by 40 detents; release it. Repeat the 40-detent turn on step 13 and release. Check: steps 1 and 9 form the longer-tail group; steps 5 and 13 form the shorter-tail group, while the note pattern stays fixed. These turns are relative to the current setting; the absolute Decay value shown depends on its starting value and your device. Select slot 1 before comparing the two slots. Play slots 1 and 2, then stop and select slot 1 to restore the plain line.\n\nSeparate endpoint practice — try the 0.1 s and 3.2 s endpoints. In Song set slot 1 to 32 steps with no parameter locks. Copy slot 1 to slot 2 and set its length to 32. Tap slot 2 before editing its locks. In slot 2, hold step 1 and turn E3 anticlockwise until the displayed Decay reaches its 0.1 s minimum, then clockwise to the displayed 3.2 s maximum; release the step. Repeat the 3.2 s setting on step 9. Set Decay to 0.1 s on steps 5 and 13, releasing each step afterward. Check the Trig params readout for the long settings on 1 and 9 and short settings on 5 and 13. Select slot 1 before comparing the two slots. Play slots 1 and 2, then stop and select slot 1. On your instrument, compare the tails while the notes stay in the same order.\n\nRestore: Select slot 1 to restore the unmodified line. Stop and return to the separate course project when finished."
+    },
+    {
+      "file": "manual/features/reference-locks.yaml",
+      "path": [
+        "features",
+        7,
+        "details",
+        0,
+        "text"
+      ],
+      "before": "Open [Enter a project name and keep the arrangement](#save-and-load/lesson/save-named-arrangement) for the complete name-entry demonstration. The sequencer is stopped with SONG 01 selected. This separate demonstration loads a copy of the finished course arrangement and opens Slot setup through the public Song grid control. It begins with the first Save attempt already cancelled and < Save project selected. It is not a continuation of the original course recording.\n\n1. Stop playback and select SONG 01. Open the Song editor with its grid control. Turn E1 clockwise to open Song tasks, select Slot setup with E2 and press K3. SLOT SETUP / SONG 01 is the starting screen.\n2. Press K1, open PARAMS > MOSAIC and select Save project with E2. Press K3 to open name entry. Press K2 to cancel this first attempt. The Save project menu returns without creating a named file.\n3. Press K3 to open name entry again. The suggested name is new, with OK selected.\n4. Turn E2 left to DEL. Press K3 three times to remove the suggested name. The name is empty.\n5. Turn E3 left to the character row. Turn E2 until F is the bright character, then press K3. F appears in the name.\n6. Select o, u and r with E2, pressing K3 after each character. Select the blank space and press K3. Select n, o, t, e and s in the same way. The name reads Four notes.\n7. Turn E3 right to the DEL / OK row, then turn E2 right to OK. Press K3 to save. Press K1 to return to Mosaic. SLOT SETUP / SONG 01 returns.\n8. Press K1 to return to PARAMS > MOSAIC. Select Load project with E2 and press K3. Turn E2 until Four notes.ptn is selected. This confirms that the named project is available; leave it selected without loading a different project.\n9. Press K2 to cancel the picker, then K1 to return to Mosaic. The same arrangement remains open.\n\nSaved Four notes: the named project retains the complete decoded arrangement and its parameter file. Four notes.ptn is available in the Load picker; cancelling the picker leaves SLOT SETUP / SONG 01 open.\n\nSaving under an existing name replaces that save. Use a distinct name when retaining an earlier version. If loading leaves the norns tasks unresponsive, tap the Song editor grid control before opening Song tasks; the demonstration uses this explicit public starting navigation.",
+      "after": "Open [Enter a project name and keep the arrangement](#save-and-load/lesson/save-named-arrangement) for the complete name-entry demonstration. The sequencer is stopped with SONG 01 selected. This separate demonstration loads a copy of the finished course arrangement and opens Slot setup through the public Song grid control. It begins with the first Save attempt already cancelled and < Save project selected. It is not a continuation of the original course recording.\n\n1. Stop playback and select SONG 01. Open the Song editor with its grid control. Turn E1 clockwise to open Song tasks, select Slot setup with E2 and press K3. SLOT SETUP / SONG 01 is the starting screen.\n2. Press K1, open PARAMS > MOSAIC and select Save project with E2. Press K3 to open name entry. Press K2 to cancel this first attempt. The Save project menu returns without creating a named file.\n3. Press K3 to open name entry again. The suggested name is new, with OK selected.\n4. Turn E2 left to DEL. Press K3 three times to remove the suggested name. The name is empty.\n5. Turn E3 left to the character row. Turn E2 until F is the bright character, then press K3. F appears in the name.\n6. Select o, u and r with E2, pressing K3 after each character. Select the blank space and press K3. Select n, o, t, e and s in the same way. The name reads Four notes.\n7. Turn E3 right to the DEL / OK row, then turn E2 right to OK. Press K3 to save. Press K1 to return to Mosaic. SLOT SETUP / SONG 01 returns.\n8. Press K1 to return to PARAMS > MOSAIC. Select Load project with E2 and press K3. Turn E2 until Four notes.ptn is selected. This confirms that the named project is available; leave it selected without loading a different project.\n9. Press K2 to cancel the picker, then K1 to return to Mosaic. The same arrangement remains open.\n\nSaved Four notes: the named project retains the complete arrangement and its parameter file. Four notes.ptn is available in the Load picker; cancelling the picker leaves SLOT SETUP / SONG 01 open.\n\nSaving under an existing name replaces that save. Use a distinct name when retaining an earlier version. If loading leaves the norns tasks unresponsive, tap the Song editor grid control before opening Song tasks; the demonstration uses this explicit public starting navigation."
+    },
+    {
+      "file": "manual/features/reference-locks.yaml",
+      "path": [
+        "features",
+        7,
+        "teaching_bindings",
+        0,
+        "teaching_binding",
+        "human_outcome"
+      ],
+      "before": "Saved Four notes: the named project retains the complete decoded arrangement and its parameter file. Four notes.ptn is available in the Load picker; cancelling the picker leaves SLOT SETUP / SONG 01 open.",
+      "after": "Saved Four notes: the named project retains the complete arrangement and its parameter file. Four notes.ptn is available in the Load picker; cancelling the picker leaves SLOT SETUP / SONG 01 open."
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        18,
+        "details",
+        0,
+        "title"
+      ],
+      "before": "Evidence: keyboard output scope",
+      "after": "Read the option-enabled phrase"
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        18,
+        "details",
+        0,
+        "text"
+      ],
+      "before": "The enabled keyboard phrase is complete. The earlier startup output is truncated and is not the acceptance target; compare the dedicated option-enabled playback window. Each reference example begins with its own stated Degree, Rotation and Transpose settings.",
+      "after": "For each example, set Degree, Rotation and Transpose as shown, enable the option, and play the full phrase before comparing its notes. Read the MIDI strip after that phrase finishes; the earlier startup notes belong to a separate part of the demonstration."
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        20,
+        "details",
+        1,
+        "title"
+      ],
+      "before": "Evidence: keyboard output scope",
+      "after": "Read the option-enabled phrase"
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        20,
+        "details",
+        1,
+        "text"
+      ],
+      "before": "The enabled keyboard phrase is complete. The earlier startup output is truncated and is not the acceptance target; compare the dedicated option-enabled playback window. Each reference example begins with its own stated Degree, Rotation and Transpose settings.",
+      "after": "For each example, set Degree, Rotation and Transpose as shown, enable the option, and play the full phrase before comparing its notes. Read the MIDI strip after that phrase finishes; the earlier startup notes belong to a separate part of the demonstration."
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        22,
+        "details",
+        1,
+        "title"
+      ],
+      "before": "Evidence: keyboard output scope",
+      "after": "Read the option-enabled phrase"
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        22,
+        "details",
+        1,
+        "text"
+      ],
+      "before": "The enabled keyboard phrase is complete. The earlier startup output is truncated and is not the acceptance target; compare the dedicated option-enabled playback window. Each reference example begins with its own stated Degree, Rotation and Transpose settings.",
+      "after": "For each example, set Degree, Rotation and Transpose as shown, enable the option, and play the full phrase before comparing its notes. Read the MIDI strip after that phrase finishes; the earlier startup notes belong to a separate part of the demonstration."
+    },
+    {
+      "file": "manual/features/reference-musical.yaml",
+      "path": [
+        "features",
+        8,
+        "details",
+        0,
+        "text"
+      ],
+      "before": "The 110 BPM Doubledecker example comes from testing on version 1.1.1. It is not a universal current limit. Host and emulator timing do not establish physical norns scheduling accuracy.",
+      "after": "Try demanding arrangements on the norns you use. If playback begins to slow, reduce simultaneous voices or simplify strumming and arpeggios."
+    },
+    {
+      "file": "manual/features/reference-song.yaml",
+      "path": [
+        "features",
+        2,
+        "recipes",
+        1,
+        "text"
+      ],
+      "before": "1. In Song view, set the song length to two steps and copy slot 1 into slot 2.\n2. Select channel 1 and raise its octave for slot 2.\n3. Compare the copied slot’s stored motif and octave setting with slot 1.\nOutcome: Slot 2 begins as a copy of slot 1, then its channel octave is set to +1. The captured checkpoint proves slot state; it does not claim audible playback from the stopped copy.",
+      "after": "1. Stop playback. In Song view, set the song length to two steps and copy slot 1 into slot 2. Select slot 2 at (2,1) before channel editing.\n2. Select channel 1 and raise its octave for slot 2.\n3. Compare the copied slot’s stored motif and octave setting with slot 1.\nOutcome: Slot 2 begins as a copy of slot 1, then its channel octave is set to +1."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        0,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        1,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        2,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        2,
+        "lesson_relations",
+        1,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        2,
+        "lesson_relations",
+        2,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        3,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        4,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        7,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The recipe uses this recording’s authored notes, voices and arrangement.",
+      "after": "This recipe uses the same notes, voices and arrangement as the recording."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        5,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The appended recipe follows the retained authored recording setup; it is independent of the course project.",
+      "after": "This recipe follows the recording’s setup in a separate project, apart from the course project."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        6,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The appended recipe follows the retained authored recording setup; it is independent of the course project.",
+      "after": "This recipe follows the recording’s setup in a separate project, apart from the course project."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        8,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The appended recipe follows the retained authored recording setup; it is independent of the course project.",
+      "after": "This recipe follows the recording’s setup in a separate project, apart from the course project."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        9,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The appended recipe follows the retained authored recording setup; it is independent of the course project.",
+      "after": "This recipe follows the recording’s setup in a separate project, apart from the course project."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        11,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The appended recipe follows the retained authored recording setup; it is independent of the course project.",
+      "after": "This recipe follows the recording’s setup in a separate project, apart from the course project."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        21,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The appended recipe follows the retained authored recording setup; it is independent of the course project.",
+      "after": "This recipe follows the recording’s setup in a separate project, apart from the course project."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        12,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        13,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        14,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        15,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        16,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        17,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        18,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        19,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        20,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The retained recording was made from this course stage’s verified outgoing project.",
+      "after": "This recording matches the project at the end of this course stage."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        10,
+        "lesson_relations",
+        0,
+        "explanation"
+      ],
+      "before": "The linked Locks recipe has a dedicated replay of this recorded +200/+40-detent comparison, followed by a separate endpoint-practice contrast. The source does not retain displayed Decay values, so neither section claims absolute recorded settings.",
+      "after": "The Locks recipe replays the +200/+40-detent comparison from this recording, then offers a separate endpoint-practice contrast. The recording does not show absolute Decay values; use the values displayed by your device for the separate practice."
+    },
+    {
+      "file": "manual/recordings.yaml",
+      "path": [
+        "recordings",
+        10,
+        "build_steps",
+        4
+      ],
+      "before": "Play slots 1 and 2, then stop and select slot 1 to restore the no-lock line. The retained input trace does not preserve displayed Decay values, so the detent counts do not establish absolute settings.",
+      "after": "Play slots 1 and 2, then stop and select slot 1 to restore the no-lock line. The +200 and +40 turns adjust Decay relative to its current setting; the absolute value shown depends on your device."
+    },
+    {
+      "file": "manual/features/reference-musical.yaml",
+      "path": [
+        "features",
+        8,
+        "prose"
+      ],
+      "before": "Channel count, clock rate, trig locks, parameter slides and n.b. devices affect Mosaic’s workload. Heavy workload can delay sequencing and make external clock synchronization unreliable.\n\n- Use greater care with high clock rates, trig locks, parameter slides and n.b. devices as channel count increases.\n- High clock rates and multipliers increase sequencer workload.\n- Use global parameter slides sparingly. Use step parameter slides when global sliding is unnecessary, and limit the total number of slides.\n- Disable trigless locks when the additional modulation granularity is not needed.\n- Limit the number of n.b. devices.\n\nA test on version 1.1.1 found unreliable external synchronization with one Doubledecker n.b. device at 110 BPM, trigless parameters, locks on most steps for all 10 trig parameters across four channels, and 40 parameters using global parameter sliding. Other combinations can produce different results. This earlier example does not specify a universal limit for the current version.",
+      "after": "Channel count, clock rate, trig locks, parameter slides and n.b. devices affect Mosaic’s workload. Heavy workload can delay sequencing and make external clock synchronization unreliable.\n\n- Use greater care with high clock rates, trig locks, parameter slides and n.b. devices as channel count increases.\n- High clock rates and multipliers increase sequencer workload.\n- Use global parameter slides sparingly. Use step parameter slides when global sliding is unnecessary, and limit the total number of slides.\n- Disable trigless locks when the additional modulation granularity is not needed.\n- Limit the number of n.b. devices."
+    },
+    {
+      "file": "manual/features/reference-musical.yaml",
+      "path": [
+        "features",
+        8,
+        "details",
+        0,
+        "title"
+      ],
+      "before": "Earlier timing test",
+      "after": "When playback slows"
+    },
+    {
+      "file": "manual/features/reference-scale.yaml",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: use a channel with a four-step melody on pattern degrees 1 to 4 and scale slot 1 applied as C major. It sounds MIDI 60, 62, 64 and 65 (C, D, E, F). If you need to build that pattern, follow [Build a phrase](#build-a-phrase). The captured examples below start from the same setup: Save D major, then apply it follows steps 1 to 5, and Prepare a scale before applying it adds browsing a slot with a long press, editing the applied slot and turning the global scale Off.\n\n1. Press Grid (4, 8) to open the Scale Editor. Slot 1, the left button on row 3, is bright.\n\n2. Hold K1, press slot 2 at (2, 3), then release both. The title row names slot 2 and a dim indicator marks it. Playback is still in C major.\n\n3. Prepare slot 2: turn E2 to Root and turn E3 two clicks to D. Release all grid keys and press K3 to save the draft. Checkpoint: tap Play (1,8), listen, then tap Stop. The melody still plays C, D, E, F because slot 1 remains applied.\n\n4. Apply the draft: short-press slot 2 at (2, 3). It becomes the bright applied slot. Tap Play (1,8), listen, then tap Stop: the melody plays D, E, F sharp, G (MIDI 62, 64, 66, 67). The rhythm has not changed.\n\n5. Restore the comparison: short-press slot 1 at (1, 3), tap Play and listen. C, D, E, F are restored.",
+      "after": "Starting point: channel 1 has Pattern 1 assigned and plays a four-step melody in C major with Pattern Note degrees 0, 1, 2 and 3; its channel Note mask is X. It sounds MIDI 60, 62, 64 and 65 (C, D, E, F). To build it, follow [Dig Deeper](#dig-deeper): assign Pattern 1 to channel 1, add trigs on steps 1–4, set Pattern Note to degrees 0, 1, 2 and 3 in order, leave the channel Note mask at X, and apply C major in scale slot 1. The captured examples below start from the same setup: Save D major, then apply it follows steps 1 to 5, and Prepare a scale before applying it adds browsing a slot with a long press, editing the applied slot and turning the global scale Off.\n\n1. Press Grid (4, 8) to open the Scale Editor. Slot 1, the left button on row 3, is bright.\n\n2. Hold K1, press slot 2 at (2, 3), then release both. The title row names slot 2 and a dim indicator marks it. Playback is still in C major.\n\n3. Prepare slot 2: turn E2 to Root and turn E3 two clicks to D. Release all grid keys and press K3 to save the draft. Checkpoint: tap Play (1,8), listen, then tap Stop. The melody still plays C, D, E, F because slot 1 remains applied.\n\n4. Apply the draft: short-press slot 2 at (2, 3). It becomes the bright applied slot. Tap Play (1,8), listen, then tap Stop: the melody plays D, E, F sharp, G (MIDI 62, 64, 66, 67). The rhythm has not changed.\n\n5. Restore the comparison: short-press slot 1 at (1, 3), tap Play and listen. C, D, E, F are restored."
+    },
+    {
+      "file": "manual/features/reference-song.yaml",
+      "path": [
+        "features",
+        0,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: slot 1 holds a four-step motif on channel 1 (C D E F, MIDI 60, 62, 64, 65; build it as in Creating a First Loop), playback is stopped and Song mode is On (the default; Song Playback shows it as AUTO). Slots 2 and 3 are empty and dim at (2,1) and (3,1).\n\n1. Press Song (6,8). Slot 1 at (1,1) is bright because it is selected. A slot plays 64 steps by default, about eleven seconds at 90 BPM with Rate /1, so shorten the audition first: tap (2,7) to set the global length to 1 step, then tap (8,7) three times to make it 4 steps. The length belongs to the slot, so the copy in step 2 keeps it.\n\n2. Hold slot 1 at (1,1), press slot 2 at (2,1), then release both. Slot 2 turns mid-bright: it is a full copy of slot 1.\n\n3. Tap slot 2 at (2,1). It turns bright and slot 1 drops to mid-bright.\n\n4. Press Channel (3,8), tap channel 1 at (1,1) and tap octave +1 at (11,8). Slot 2 now plays the motif an octave higher. Slot 1 is unchanged. Change a rhythm or a mask instead of the octave if you prefer.\n\n5. Press Song (6,8) and look at slot 3 at (3,1). It stays dim because it is empty, and an empty slot ends the group after slot 2.\n\n6. Tap slot 1 at (1,1) and press Play (1,8). Slot 1 plays the motif (60, 62, 64, 65), then slot 2 plays it an octave higher (72, 74, 76, 77), then playback returns to slot 1 and repeats.\n\nEach slot plays for its global length times its Repeats, so with the length left at 64 a slot lasts about eleven seconds. Check or change Song mode in Song tasks > Slot setup (see Song Mode Operations). The captured example Loop a song group or hold one slot, below, plays two groups built this way (slots 1-2 and 4-5) and what happens when Song mode is turned Off.",
+      "after": "Starting point: slot 1 holds a four-step motif on channel 1 (C, D, E, F; MIDI 60, 62, 64, 65). To build it, assign Pattern 1 to channel 1, add trigs on steps 1–4, set Pattern Note to degrees 0, 1, 2 and 3 in C major, and leave the channel Note mask at X; see [Dig Deeper](#dig-deeper) for the Pattern Editor reference. Playback is stopped and Song mode is On (the default; Song Playback shows it as AUTO). Slots 2 and 3 are empty and dim at (2,1) and (3,1).\n\n1. Press Song (6,8). Slot 1 at (1,1) is bright because it is selected. A slot plays 64 steps by default, about eleven seconds at 90 BPM with Rate /1, so shorten the audition first: tap (2,7) to set the global length to 1 step, then tap (8,7) three times to make it 4 steps. The length belongs to the slot, so the copy in step 2 keeps it.\n\n2. Hold slot 1 at (1,1), press slot 2 at (2,1), then release both. Slot 2 turns mid-bright: it is a full copy of slot 1.\n\n3. Tap slot 2 at (2,1). It turns bright and slot 1 drops to mid-bright.\n\n4. Press Channel (3,8), tap channel 1 at (1,1) and tap octave +1 at (11,8). Slot 2 now plays the motif an octave higher. Slot 1 is unchanged. Change a rhythm or a mask instead of the octave if you prefer.\n\n5. Press Song (6,8) and look at slot 3 at (3,1). It stays dim because it is empty, and an empty slot ends the group after slot 2.\n\n6. Tap slot 1 at (1,1) and press Play (1,8). Slot 1 plays the motif (60, 62, 64, 65), then slot 2 plays it an octave higher (72, 74, 76, 77), then playback returns to slot 1 and repeats.\n\nEach slot plays for its global length times its Repeats, so with the length left at 64 a slot lasts about eleven seconds. Check or change Song mode in Song tasks > Slot setup (see Song Mode Operations). The captured example Loop a song group or hold one slot, below, plays two groups built this way (slots 1-2 and 4-5) and what happens when Song mode is turned Off."
+    },
+    {
+      "file": "manual/features/reference-song.yaml",
+      "path": [
+        "features",
+        2,
+        "recipes",
+        2,
+        "text"
+      ],
+      "before": "Starting point: Use a separate empty project at 90 BPM, Rate /1 and C major, with playback stopped. Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. Give each channel range 1–16.\n\n**Controls and map.** Press Channel at (3,8), select its number on row 1 and turn E1 to Channel tasks. Use E2 and K3 to open Device, Masks or Trig params. On Device, E2 selects a row, E3 selects the sound and K3 applies it. On Masks, E2 selects Note, Vel or Len and E3 changes the value. Hold a step while turning E3 for a local value; hold K1 and tap a step to add a trig. Steps 1–16 are row 4, 17–32 row 5, 33–48 row 6 and 49–64 row 7; the column is its position within that group (step 33 is (1,6), step 61 is (13,7)). Hold the first step and tap the last to set a channel range, then release. For Song slots, press Song at (6,8); slots 1–3 are (1,1)–(3,1). Hold the source slot, tap the destination, release, then tap the destination to edit it. On the length fader, (3,7) gives 13 steps and three taps at (8,7) give 16; (4,7) gives 32 and (7,7) gives 64. In Song Tempo and feel (E1 tasks, E2 task, K3), set Tempo to 90 and press K3. Set each channel Rate /1 on its Clock page and apply with K3. In Trig params, E2 selects a slot, K2 opens its assignment list, E3 highlights a parameter, K3 assigns it and K2 returns. Hold a step and turn E3 to set its lock; K2 clears a held-step lock. Stop before copying or editing an independent comparison.\n\n**Prepare the two patterns.** On channel 1, create pattern 1 with trigs 1, 5, 9 and 13; set their degrees to 0, 0, 4 and 0. Set channel 1 octave to -1, velocity to 70 and length to half a step. On channel 2, create pattern 2 with trigs 3, 7, 11 and 15; set their degrees to 4, 2, 4 and 6. Set channel 2 octave to 0, velocity to 60 and length to half a step. Checkpoint: in C major the bass is MIDI 48, 48, 55, 48 and the lead is MIDI 67, 64, 67, 71.\n\n**Slot 1 — intro.** In Song Editor set slot 1 length to 16 steps and mute channel 2 with K1 plus its selector (2,1). Check: slot 1 is one bar of bass with the lead muted.\n\n**Slot 2 — verse.** Copy slot 1 to slot 2, set slot 2 length to 32 steps and toggle channel 2 back on. Check: the two-bar verse has both parts; bass remains 48, 48, 55, 48 and lead remains 67, 64, 67, 71.\n\n**Slot 3 — outro.** Copy slot 2 to slot 3 and set slot 3 length to 16 steps. Set channel 2 octave to +1 and channel 1 Velocity to 40. Check: the one-bar outro keeps the same four bass pitches at lower velocity and raises the lead to MIDI 79, 76, 79, 83.\n\nPlay the three slots in order, then Stop and select slot 1. The arrangement is intro (bass only), verse (bass and lead), outro (higher lead and softer bass). This is a separate arrangement example; return to the continuing course project when finished.",
+      "after": "Starting point: Use a separate empty project at 90 BPM, Rate /1 and C major, with playback stopped. If Polyperc 1 or Doubledecker is missing from the Device picker, install and enable the corresponding `nb_polyperc` or `nb_doubledecker` mod in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b). Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. Give each channel range 1–16.\n\n**Controls and map.** Press Channel at (3,8), select its number on row 1 and turn E1 to Channel tasks. Use E2 and K3 to open Device, Masks or Trig params. On Device, E2 selects a row, E3 selects the sound and K3 applies it. On Masks, E2 selects Note, Vel or Len and E3 changes the value. Hold a step while turning E3 for a local value; hold K1 and tap a step to add a trig. Steps 1–16 are row 4, 17–32 row 5, 33–48 row 6 and 49–64 row 7; the column is its position within that group (step 33 is (1,6), step 61 is (13,7)). Hold the first step and tap the last to set a channel range, then release. For Song slots, press Song at (6,8); slots 1–3 are (1,1)–(3,1). Hold the source slot, tap the destination, release, then tap the destination to edit it. On the length fader, (3,7) gives 13 steps and three taps at (8,7) give 16; (4,7) gives 32 and (7,7) gives 64. In Song Tempo and feel (E1 tasks, E2 task, K3), set Tempo to 90 and press K3. Set each channel Rate /1 on its Clock page and apply with K3. In Trig params, E2 selects a slot, K2 opens its assignment list, E3 highlights a parameter, K3 assigns it and K2 returns. Hold a step and turn E3 to set its lock; K2 clears a held-step lock. Stop before copying or editing an independent comparison.\n\n**Prepare the two patterns.** On channel 1, create pattern 1 with trigs 1, 5, 9 and 13; set their degrees to 0, 0, 4 and 0. Set channel 1 octave to -1, velocity to 70 and length to half a step. On channel 2, create pattern 2 with trigs 3, 7, 11 and 15; set their degrees to 4, 2, 4 and 6. Set channel 2 octave to 0, velocity to 60 and length to half a step. Checkpoint: in C major the bass is MIDI 48, 48, 55, 48 and the lead is MIDI 67, 64, 67, 71.\n**Assign the patterns.** Before arranging, press Channel (3,8), select channel 1 at (1,1) and tap pattern slot 1 at (1,2). Select channel 2 at (2,1) and tap pattern slot 2 at (2,2).\n\n**Slot 1 — intro.** In Song Editor set slot 1 length to 16 steps and mute channel 2 with K1 plus its selector (2,1). Check: slot 1 is one bar of bass with the lead muted.\n\n**Slot 2 — verse.** Copy slot 1 to slot 2, set slot 2 length to 32 steps and toggle channel 2 back on. Check: the two-bar verse has both parts; bass remains 48, 48, 55, 48 and lead remains 67, 64, 67, 71.\n\n**Slot 3 — outro.** Copy slot 2 to slot 3 and set slot 3 length to 16 steps. Set channel 2 octave to +1 and channel 1 Velocity to 40. Check: the one-bar outro keeps the same four bass pitches at lower velocity and raises the lead to MIDI 79, 76, 79, 83.\n\nPlay the three slots in order, then Stop and select slot 1. The arrangement is intro (bass only), verse (bass and lead), outro (higher lead and softer bass). This is a separate arrangement example; return to the continuing course project when finished."
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        16,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Lock random to pent. is On by default. This recipe lets you hear what it does by switching it Off and On with Random Note at 4. Random Note chooses its offsets at random, so listen to several loops: a short run may not include every note.\n\nStarting point: channel 1 plays pattern 1 (C, D, E, F on steps 1 to 4) in C major; no Trig params slot is assigned yet.\n\n1. Assign Random Note. Select channel 1 and turn E1 to Channel tasks, turn E2 to Trig params and press K3. Press K2 to open the parameter list, turn E3 to Random Note, press K3 to assign it to the first slot and press K2 to return. The slot reads 0 and the pattern still plays C, D, E, F.\n\n2. Set the amount. With the Random Note slot selected (E2), turn E3 four detents right to 4. Each note is now offset by -2, -1, 0, +1 or +2 scale degrees at random. A step that draws offset 0 keeps its own note.\n\n3. Open PARAMS > MOSAIC, select Lock random to pent. and turn E3 to Off. Close the menu, tap Play and listen to several loops: F and B join the random notes, and one of them will turn up within a few passes. Tap Play to stop.\n\n4. Turn Lock random to pent. On and play several loops again. The random notes now stay on C, D, E, G and A. A step that draws offset 0 keeps its own note, so a plain F in the pattern can still sound. The random stream is not reset between the two runs, so the two runs will not start with the same notes; compare which notes occur, not the order.",
+      "after": "Lock random to pent. is On by default. This recipe lets you hear what it does by switching it Off and On with Random Note at 4. Random Note chooses its offsets at random, so listen to several loops: a short run may not include every note.\n\nStarting point: channel 1 plays pattern 1 (C, D, E, F on steps 1 to 4) in C major; no Trig params slot is assigned yet.\n\n1. Assign Random Note. Select channel 1 and turn E1 to Channel tasks, turn E2 to Trig params and press K3. Press K2 to open the parameter list, turn E3 to Random Note, press K3 to assign it to the first slot and press K2 to return. The slot reads 0 and the pattern still plays C, D, E, F.\n\n2. Set the amount. With the Random Note slot selected (E2), turn E3 four detents right to 4. Each note is now offset by -2, -1, 0, +1 or +2 scale degrees at random. A step that draws offset 0 keeps its own note.\n\n3. Open PARAMS > MOSAIC, select Lock random to pent. and turn E3 to Off. Close the menu, tap Play and listen to several loops: F and B may join the random notes, but neither is guaranteed to appear in a short run. Tap Play to stop.\n\n4. Turn Lock random to pent. On and play several loops again. The random notes now stay on C, D, E, G and A. A step that draws offset 0 keeps its own note, so a plain F in the pattern can still sound. The random stream is not reset between the two runs, so the two runs will not start with the same notes; compare which notes occur, not the order."
+    },
+    {
+      "file": "manual/features/reference-options.yaml",
+      "path": [
+        "features",
+        15,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Use this option to keep generated, random or merged material consonant: with Lock all to pent. On, every note lands on the five-note version of the scale. The seven-note walk below is a diagnostic rather than a phrase, so you can hear exactly which degrees are replaced. Starting point: channel 1 plays pattern 1 (C, D, E, F on steps 1 to 4) in C major.\n\n1. Build seven degrees. Press Pattern (5,8), select pattern 1 (1,1) and tap trigs on steps 5, 6 and 7 at (5,4), (6,4) and (7,4). Press Pattern (5,8) again for the note page and tap (5,3), (6,2) and (7,1) to put steps 5 to 7 on degrees V, VI and VII: steps 1 to 7 now form a rising diagonal.\n\n2. Set the range. Press Channel (3,8), hold step 1 (1,4), tap step 7 (7,4) and release both. Tap Play (1,8) and listen: 60, 62, 64, 65, 67, 69, 71. Tap Play to stop.\n\n3. Restrict the notes. Tap K1, open PARAMS > MOSAIC, select Lock all to pent. and turn E3 to On. Close the menu and tap Play: 60, 62, 64, 64, 67, 69, 72. F falls to E and B rises to C because only C D E G A are allowed. Tap Play to stop.\n\n4. Change the scale. Open the Scale Editor (4,8), turn E3 to another scale, press K3 and return to Channel (3,8). Play again: each scale has its own five notes. Natural minor, for example, gives 60, 63, 63, 65, 67, 67, 70.\n\n5. Turn the option Off in PARAMS > MOSAIC to restore all seven degrees of the current scale.",
+      "after": "Use this option to keep generated, random or merged material consonant: with Lock all to pent. On, every note lands on the five-note version of the scale. The seven-note walk below is a diagnostic rather than a phrase, so you can hear exactly which degrees are replaced. Starting point: channel 1 plays pattern 1 (C, D, E, F on steps 1 to 4) in C major.\n\n1. Build seven degrees. Press Pattern (5,8), select pattern 1 (1,1) and tap trigs on steps 5, 6 and 7 at (5,4), (6,4) and (7,4). Press Pattern (5,8) again for the note page and tap (5,3), (6,2) and (7,1) to put steps 5 to 7 on degrees V, VI and VII: steps 1 to 7 now form a rising diagonal.\n\n2. Set the range. Press Channel (3,8), hold step 1 (1,4), tap step 7 (7,4) and release both. Tap Play (1,8) and listen: 60, 62, 64, 65, 67, 69, 71. Tap Play to stop.\n\n3. Restrict the notes. Tap K1, open PARAMS > MOSAIC, select Lock all to pent. and turn E3 to On. Close the menu and tap Play: 60, 62, 64, 64, 67, 69, 72. F falls to E and B rises to C because only C D E G A are allowed. Tap Play to stop.\n\n4. Change the scale. Open the Scale Editor (4,8), turn E2 to Scale, then turn E3 to Minor (natural minor). Release all grid keys and press K3 to apply the draft, then return to Channel (3,8). Play again: the five-note selection follows the new scale. Minor gives 60, 63, 63, 65, 67, 67, 70.\n\n5. Turn the option Off in PARAMS > MOSAIC to restore all seven degrees of the current scale."
+    },
+    {
+      "file": "manual/scene-captions.yaml",
+      "path": [
+        "overlays",
+        106
+      ],
+      "before": null,
+      "after": {
+        "scene_id": "chord-strum-a-timed-chord",
+        "step_id": "assign-strum",
+        "caption": "From the half-step Strum slot, turn E2 to the next slot, press K2 and turn E3 to Chord Pattern.",
+        "baseline_caption": "From the verified half-step Strum slot, turn E2 to the next slot, press K2 and turn E3 to Chord Pattern.",
+        "contract_sha256": "c35c9ad783cebf90827eeefbf5dcc2ecfcf37107acd4b7fdfa5efe234e1cce46"
+      }
+    }
+  ],
+  "existing_caption_overlays_preserved": true,
+  "proposal_manifest_sha256": {
+    "recipe": "028bc97f51da6985a88df7f2b7cecb75351974da948685ba081892b0b4048851",
+    "metadata": "a413fd03553aa48d6ab2e0f301d74f084398f04cf2e38d1882e9bff3dd0d7bcb",
+    "practical": "df4b7c868b605207274019c7807d80074af6a785a7d6b15fa614dad00389d51a"
+  },
+  "validation": {
+    "v06_to_v07_exact_delta": "passed: exactly three parsed recipe text scalars, exact before/after values match",
+    "source_root_exact_parsed_diff": "passed for both modified source YAML files against parsed_allowlist; remaining candidate files are byte-identical to audited v06",
+    "scene_plan": "unchanged SHA256 b7737e5eb4d56ec27b695b9050fe34e85ebd0c08681ee9bf9e18a2f3336ebb9e",
+    "original_caption_overlays": "106 preserved; guarded overlay remains appended as item 107",
+    "compile": "not run",
+    "raw_patch": "git apply --check passed against pinned source"
+  },
+  "base_candidate_manifest_sha256": "10ad7cbd1e0534d94e588e98fd8c893cafb838c9a5757876e06cc9e822e52e29",
+  "revision": "v07: exactly three recipe text scalars revised from sealed v06",
+  "delta_from_v06": [
+    {
+      "file": "manual/features/cookbook.yaml",
+      "path": [
+        "features",
+        2,
+        "recipes",
+        0,
+        "text"
+      ],
+      "before": "Starting point: an empty project with playback stopped. Part 1 builds the upper phrase on channel 1, part 2 builds the bass on channel 2, part 3 prepares the second key and part 4 performs the change. In the note page, the column is the step and the row is the degree: y=7 is degree 0 (I), y=6 is degree 1 (II) and y=3 is degree 4 (V).\n\nPart 1: upper phrase\n\n1. Set 90 BPM (Song tasks, Tempo & feel, E3, K3). Leave Rate at /1.\n\n2. Open the Scale editor (4,8). Slot 1 at (1,3) is the applied slot. Check Root C and Scale Major on the Scale screen; if you change either, press K3 to save it.\n\n3. Assign Doubledecker to channel 1. Open Channel (3,8), select channel 1 on row 1 and tap pattern slot (1,2) to assign pattern 1 to the channel. Open Pattern Trig, select pattern 1 and tap steps 1, 5, 9 and 13.\n\n4. Open Pattern Note (tap Pattern (5,8) until Note is shown) and set the degrees: tap (1,7), (5,7) and (9,7) for degree 0, and (13,6) for degree 1. Set the channel range to steps 1-16.\n\n5. Open Masks. Leave Note at X. Set Vel to 80 and Len to ½. Hold step 13 and set Vel to 50, then release. The phrase ends with a softer last note. Checkpoint: press Play and listen. In C major the upper phrase is MIDI 60, 60, 60, 62. Press Stop before building the bass channel.\n\nPart 2: bass\n\n6. Assign Polyperc 1 to channel 2 and select pattern 2 for the channel. On pattern 2, tap steps 1 and 9 on Pattern Trig, then on Pattern Note tap (1,7) for degree 0 and (9,3) for degree 4. Set the range to steps 1-16 and the channel octave to -1 with (9,8).\n\n7. Open Masks with channel 2 selected, leave Note at X, set Vel to 60 and Len ½. Checkpoint: press Play. The bass adds MIDI 48 on beat 1 and MIDI 55 on beat 3 under the upper phrase. Press Stop before preparing slot 2.\n\nPart 3: prepare the second key\n\n8. While stopped, open the Scale editor. Hold K1 and press slot 2 at (2,3) to select it for editing without applying it. On the Scale screen set Root to D and Scale to Major with E2 and E3, and press K3 to save the slot. Slot 1 stays applied, so playback is still C major.\n\nPart 4: perform the change (choose one)\n\n9a. Stopped: play two bars in C major and stop. Short-press slot 2 at (2,3) to apply D major and play two more bars.\n\n9b. Live: while playing, short-press slot 2 at (2,3) at the end of bar 2.\n\nResult check: in D major the upper phrase becomes MIDI 62, 62, 62, 64 and the bass becomes MIDI 50 and 57: the same rhythm moved up a whole tone. Short-press slot 1 at (1,3) to restore C major.",
+      "after": "Starting point: an empty project with playback stopped. If Doubledecker or Polyperc 1 is missing from the Device picker, install and enable its corresponding `nb_doubledecker` or `nb_polyperc` mod in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b). Part 1 builds the upper phrase on channel 1, part 2 builds the bass on channel 2, part 3 prepares the second key and part 4 performs the change. In the note page, the column is the step and the row is the degree: y=7 is degree 0 (I), y=6 is degree 1 (II) and y=3 is degree 4 (V).\n\nPart 1: upper phrase\n\n1. Set 90 BPM (Song tasks, Tempo & feel, E3, K3). Leave Rate at /1.\n\n2. Open the Scale editor (4,8). Slot 1 at (1,3) is the applied slot. Check Root C and Scale Major on the Scale screen; if you change either, press K3 to save it.\n\n3. Assign Doubledecker to channel 1. Open Channel (3,8), select channel 1 on row 1 and tap pattern slot (1,2) to assign pattern 1 to the channel. Open Pattern Trig, select pattern 1 and tap steps 1, 5, 9 and 13.\n\n4. Open Pattern Note (tap Pattern (5,8) until Note is shown) and set the degrees: tap (1,7), (5,7) and (9,7) for degree 0, and (13,6) for degree 1. Set the channel range to steps 1-16.\n\n5. Open Masks. Leave Note at X. Set Vel to 80 and Len to ½. Hold step 13 and set Vel to 50, then release. The phrase ends with a softer last note. Checkpoint: press Play and listen. In C major the upper phrase is MIDI 60, 60, 60, 62. Press Stop before building the bass channel.\n\nPart 2: bass\n\n6. Assign Polyperc 1 to channel 2 and select pattern 2 for the channel. On pattern 2, tap steps 1 and 9 on Pattern Trig, then on Pattern Note tap (1,7) for degree 0 and (9,3) for degree 4. Set the range to steps 1-16 and the channel octave to -1 with (9,8).\n\n7. Open Masks with channel 2 selected, leave Note at X, set Vel to 60 and Len ½. Checkpoint: press Play. The bass adds MIDI 48 on beat 1 and MIDI 55 on beat 3 under the upper phrase. Press Stop before preparing slot 2.\n\nPart 3: prepare the second key\n\n8. While stopped, open the Scale editor. Hold K1 and press slot 2 at (2,3) to select it for editing without applying it. On the Scale screen set Root to D and Scale to Major with E2 and E3, and press K3 to save the slot. Slot 1 stays applied, so playback is still C major.\n\nPart 4: perform the change (choose one)\n\n9a. Stopped: play two bars in C major and stop. Short-press slot 2 at (2,3) to apply D major and play two more bars.\n\n9b. Live: while playing, short-press slot 2 at (2,3) at the end of bar 2.\n\nResult check: in D major the upper phrase becomes MIDI 62, 62, 62, 64 and the bass becomes MIDI 50 and 57: the same rhythm moved up a whole tone. Short-press slot 1 at (1,3) to restore C major."
+    },
+    {
+      "file": "manual/features/reference-song.yaml",
+      "path": [
+        "features",
+        2,
+        "recipes",
+        1,
+        "text"
+      ],
+      "before": "1. Stop playback. In Song view, set the song length to two steps and copy slot 1 into slot 2.\n2. Select channel 1 and raise its octave for slot 2.\n3. Compare the copied slot’s stored motif and octave setting with slot 1.\nOutcome: Slot 2 begins as a copy of slot 1, then its channel octave is set to +1.",
+      "after": "1. Stop playback. In Song view, set the song length to two steps and copy slot 1 into slot 2. Select slot 2 at (2,1) before channel editing.\n2. Select channel 1 and raise its octave for slot 2.\n3. Compare the copied slot’s stored motif and octave setting with slot 1.\nOutcome: Slot 2 begins as a copy of slot 1, then its channel octave is set to +1."
+    },
+    {
+      "file": "manual/features/reference-song.yaml",
+      "path": [
+        "features",
+        2,
+        "recipes",
+        2,
+        "text"
+      ],
+      "before": "Starting point: Use a separate empty project at 90 BPM, Rate /1 and C major, with playback stopped. Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. Give each channel range 1–16.\n\n**Controls and map.** Press Channel at (3,8), select its number on row 1 and turn E1 to Channel tasks. Use E2 and K3 to open Device, Masks or Trig params. On Device, E2 selects a row, E3 selects the sound and K3 applies it. On Masks, E2 selects Note, Vel or Len and E3 changes the value. Hold a step while turning E3 for a local value; hold K1 and tap a step to add a trig. Steps 1–16 are row 4, 17–32 row 5, 33–48 row 6 and 49–64 row 7; the column is its position within that group (step 33 is (1,6), step 61 is (13,7)). Hold the first step and tap the last to set a channel range, then release. For Song slots, press Song at (6,8); slots 1–3 are (1,1)–(3,1). Hold the source slot, tap the destination, release, then tap the destination to edit it. On the length fader, (3,7) gives 13 steps and three taps at (8,7) give 16; (4,7) gives 32 and (7,7) gives 64. In Song Tempo and feel (E1 tasks, E2 task, K3), set Tempo to 90 and press K3. Set each channel Rate /1 on its Clock page and apply with K3. In Trig params, E2 selects a slot, K2 opens its assignment list, E3 highlights a parameter, K3 assigns it and K2 returns. Hold a step and turn E3 to set its lock; K2 clears a held-step lock. Stop before copying or editing an independent comparison.\n\n**Prepare the two patterns.** On channel 1, create pattern 1 with trigs 1, 5, 9 and 13; set their degrees to 0, 0, 4 and 0. Set channel 1 octave to -1, velocity to 70 and length to half a step. On channel 2, create pattern 2 with trigs 3, 7, 11 and 15; set their degrees to 4, 2, 4 and 6. Set channel 2 octave to 0, velocity to 60 and length to half a step. Checkpoint: in C major the bass is MIDI 48, 48, 55, 48 and the lead is MIDI 67, 64, 67, 71.\n**Assign the patterns.** Before arranging, press Channel (3,8), select channel 1 at (1,1) and tap pattern slot 1 at (1,2). Select channel 2 at (2,1) and tap pattern slot 2 at (2,2).\n\n**Slot 1 — intro.** In Song Editor set slot 1 length to 16 steps and mute channel 2 with K1 plus its selector (2,1). Check: slot 1 is one bar of bass with the lead muted.\n\n**Slot 2 — verse.** Copy slot 1 to slot 2, set slot 2 length to 32 steps and toggle channel 2 back on. Check: the two-bar verse has both parts; bass remains 48, 48, 55, 48 and lead remains 67, 64, 67, 71.\n\n**Slot 3 — outro.** Copy slot 2 to slot 3 and set slot 3 length to 16 steps. Set channel 2 octave to +1 and channel 1 Velocity to 40. Check: the one-bar outro keeps the same four bass pitches at lower velocity and raises the lead to MIDI 79, 76, 79, 83.\n\nPlay the three slots in order, then Stop and select slot 1. The arrangement is intro (bass only), verse (bass and lead), outro (higher lead and softer bass). This is a separate arrangement example; return to the continuing course project when finished.",
+      "after": "Starting point: Use a separate empty project at 90 BPM, Rate /1 and C major, with playback stopped. If Polyperc 1 or Doubledecker is missing from the Device picker, install and enable the corresponding `nb_polyperc` or `nb_doubledecker` mod in SYSTEM > MODS; see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b). Assign Polyperc 1 to channel 1 and Doubledecker to channel 2. Give each channel range 1–16.\n\n**Controls and map.** Press Channel at (3,8), select its number on row 1 and turn E1 to Channel tasks. Use E2 and K3 to open Device, Masks or Trig params. On Device, E2 selects a row, E3 selects the sound and K3 applies it. On Masks, E2 selects Note, Vel or Len and E3 changes the value. Hold a step while turning E3 for a local value; hold K1 and tap a step to add a trig. Steps 1–16 are row 4, 17–32 row 5, 33–48 row 6 and 49–64 row 7; the column is its position within that group (step 33 is (1,6), step 61 is (13,7)). Hold the first step and tap the last to set a channel range, then release. For Song slots, press Song at (6,8); slots 1–3 are (1,1)–(3,1). Hold the source slot, tap the destination, release, then tap the destination to edit it. On the length fader, (3,7) gives 13 steps and three taps at (8,7) give 16; (4,7) gives 32 and (7,7) gives 64. In Song Tempo and feel (E1 tasks, E2 task, K3), set Tempo to 90 and press K3. Set each channel Rate /1 on its Clock page and apply with K3. In Trig params, E2 selects a slot, K2 opens its assignment list, E3 highlights a parameter, K3 assigns it and K2 returns. Hold a step and turn E3 to set its lock; K2 clears a held-step lock. Stop before copying or editing an independent comparison.\n\n**Prepare the two patterns.** On channel 1, create pattern 1 with trigs 1, 5, 9 and 13; set their degrees to 0, 0, 4 and 0. Set channel 1 octave to -1, velocity to 70 and length to half a step. On channel 2, create pattern 2 with trigs 3, 7, 11 and 15; set their degrees to 4, 2, 4 and 6. Set channel 2 octave to 0, velocity to 60 and length to half a step. Checkpoint: in C major the bass is MIDI 48, 48, 55, 48 and the lead is MIDI 67, 64, 67, 71.\n**Assign the patterns.** Before arranging, press Channel (3,8), select channel 1 at (1,1) and tap pattern slot 1 at (1,2). Select channel 2 at (2,1) and tap pattern slot 2 at (2,2).\n\n**Slot 1 — intro.** In Song Editor set slot 1 length to 16 steps and mute channel 2 with K1 plus its selector (2,1). Check: slot 1 is one bar of bass with the lead muted.\n\n**Slot 2 — verse.** Copy slot 1 to slot 2, set slot 2 length to 32 steps and toggle channel 2 back on. Check: the two-bar verse has both parts; bass remains 48, 48, 55, 48 and lead remains 67, 64, 67, 71.\n\n**Slot 3 — outro.** Copy slot 2 to slot 3 and set slot 3 length to 16 steps. Set channel 2 octave to +1 and channel 1 Velocity to 40. Check: the one-bar outro keeps the same four bass pitches at lower velocity and raises the lead to MIDI 79, 76, 79, 83.\n\nPlay the three slots in order, then Stop and select slot 1. The arrangement is intro (bass only), verse (bass and lead), outro (higher lead and softer bass). This is a separate arrangement example; return to the continuing course project when finished."
+    }
+  ]
+}

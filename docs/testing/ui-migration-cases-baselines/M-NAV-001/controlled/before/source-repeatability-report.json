@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "34f1a901fda2f6297f3a66889e7ff971ac4fb99f",
+  "selected_cases": [
+    "M-NAV-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/navigation_matrix.py": "M-NAV-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/navigation_matrix.py",
+      "case": "M-NAV-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-4f3753d1ab3e4f6a8ac6eaadb9d35fc1/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-4f3753d1ab3e4f6a8ac6eaadb9d35fc1/manifest.json",
+      "manifest_sha256": "8ae069fde9f7a65f181c47abda932048fe64830d77a038ae69d0d0d5db2dc9fb",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

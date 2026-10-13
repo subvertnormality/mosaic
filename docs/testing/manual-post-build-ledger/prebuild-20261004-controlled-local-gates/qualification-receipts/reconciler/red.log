@@ -1,0 +1,61 @@
+EFFF.
+======================================================================
+ERROR: test_explicit_completed_generation_not_full_qualification (test_reconcile_manual_build.ControlledGenerationManifestTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 205, in test_explicit_completed_generation_not_full_qualification
+    f=self.fixture();self.assertEqual(self.verify(f)['realtime_qualification'],'pending-ci')
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 203, in verify
+    return tool.verify_manifest(f.root,f.build,f.pin)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 42, in verify_manifest
+    require(m.get('passed') is True and m.get('build_complete') is True and m.get('renderer_validated') is True and m.get('complete_regression_run') is False,'Incomplete build receipt')
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 21, in require
+    if not ok:raise ValueError(message)
+ValueError: Incomplete build receipt
+
+======================================================================
+FAIL: test_generation_cannot_claim_full_build (test_reconcile_manual_build.ControlledGenerationManifestTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 211, in test_generation_cannot_claim_full_build
+    with self.assertRaisesRegex(ValueError,'qualification'):self.verify(f)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 203, in verify
+    return tool.verify_manifest(f.root,f.build,f.pin)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/reconcile_manual_build.py", line 58, in verify_manifest
+    verify_doctor_completion(m['stages'])
+  File "/usr/lib/python3.8/unittest/mock.py", line 1081, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1085, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 1140, in _execute_mock_call
+    raise effect
+AssertionError: Full qualification must not be inferred
+
+======================================================================
+FAIL: test_generation_cannot_claim_real_time_qualified (test_reconcile_manual_build.ControlledGenerationManifestTests)
+----------------------------------------------------------------------
+ValueError: Incomplete build receipt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 214, in test_generation_cannot_claim_real_time_qualified
+    with self.assertRaisesRegex(ValueError,'qualification'):self.verify(f)
+AssertionError: "qualification" does not match "Incomplete build receipt"
+
+======================================================================
+FAIL: test_generation_missing_canonical_phase_rejected (test_reconcile_manual_build.ControlledGenerationManifestTests)
+----------------------------------------------------------------------
+ValueError: Incomplete build receipt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 218, in test_generation_missing_canonical_phase_rejected
+    with self.assertRaisesRegex(ValueError,'canonical plan'):tool.verify_manifest(f.root,f.build,f.pin)
+AssertionError: "canonical plan" does not match "Incomplete build receipt"
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.086s
+
+FAILED (failures=3, errors=1)

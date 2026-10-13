@@ -21,7 +21,6 @@ def map_line(param, cc, channel):
 
 
 def midi_cc_page_return(c):
-    from frame_oracle import header, matches
     c.configure(); c.finish()
     seed = c.out/'mapping-seed'; (seed/'config').mkdir(parents=True)
     shutil.copy(REPO/'tests/behaviour/config/emu-midi.json', seed/'config/emu-midi.json')
@@ -33,11 +32,11 @@ def midi_cc_page_return(c):
         for channel, param, cc in MAPS:
             e.action(type='midi', port=1, bytes=[175 + channel, cc, 65])
             # characterisation, not manual text: a selected-channel mask map shows the mask page.
-            e.screen_header('Ch. 1 Note Masks')
+            e.ui.expect_header('masks', channel=1)
             e.elapse(2.5)
             # characterisation, not manual text (human decision 2026-09-11 for channels 2-16):
             # two seconds after the CC the channel editor returns to the page it was on.
-            returned = matches(e.snapshot(), header('Ch. 1 Device Config'))
+            returned = e.ui.matches_header('midi_config', channel=1)
             e.results.append(dict(kind='cc-page-return', midi_channel=channel, param=param, cc=cc, returned=returned))
             assert returned, 'CC %d on MIDI channel %d switched to Note Masks and never returned to Device Config' % (cc, channel)
     finally:

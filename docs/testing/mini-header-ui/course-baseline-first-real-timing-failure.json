@@ -1,0 +1,29 @@
+{
+  "run": "/home/andy/mosaic-manual-runs/01d9f47a711a4aaa98c51fa1a45e55cd",
+  "helper_sha256": "27c4149db11c6469595dbe0321a99c5535d91e0be293c482ef5deb29314d37d3",
+  "plan_sha256": "b407ebaa9e761ce5c7faf7652403a1e2f497809aa24777b5a36b15f05c0e91f8",
+  "failure_sha256": "a7ff30535543d55eaf3239706cc10f7b940290a115f8b2f4548c0424a155d525",
+  "native_events_sha256": "30771c1b686fa0d6e5b40217609cce58a9589a8f8194baf5cc20e7807da2798d",
+  "cleanup_sha256": "6fb441fc6cd324f7e0ca770c588e7a7b65bb8c3f023a1d09a1d6d944d14f741b",
+  "phase": "harmony-design-apply-d",
+  "exact_note_tuples_passed": true,
+  "unchanged_tolerance_seconds": 0.01,
+  "step16_onset_seconds": 2.852294985,
+  "expected_seconds": 2.6666666666666665,
+  "error_seconds": 0.18562831833333338,
+  "both_voices_delayed": true,
+  "frame_gap_ns": 295652474,
+  "midi_gap_ns": 352007756,
+  "diagnostic_gap_ns": 275399405,
+  "later_onsets_seconds": [
+    3.333844829,
+    4.000386825,
+    4.667560874
+  ],
+  "native_tempo": 90,
+  "diagnosis": "Coincident native frame/MIDI/diagnostic stall with both voice onsets delayed then nominal phase recovering; no tuple/routing defect. Shared scheduling delay evident, precise host cause not established.",
+  "all_native_services_closed": true,
+  "controlled_not_started": true,
+  "whole_course_passed": false,
+  "oracles_and_source_unchanged": true
+}

@@ -1,0 +1,62 @@
+{
+  "scope": "Device runtime dependency probe only. NOT inference, latency, RSS, xrun, cancellation or acceptance evidence. No model was executed.",
+  "date": "2026-09-19",
+  "host": "we@10.42.0.1 (physical Norns, isolated 10.42.0.0/24 hotspot)",
+  "device": {
+    "uname": "Linux norns 5.10.92-18-g458e2253667a #1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022 armv7l",
+    "python": "3.9.2",
+    "sysconfig_platform": "linux-armv7l",
+    "glibc": "2.31 (Debian GLIBC 2.31-13+rpt2+rpi1+deb11u2, bullseye)",
+    "lua": "5.1.5",
+    "mem_total_mb": 976,
+    "mem_available_mb_at_probe": 469,
+    "swap_mb": 0,
+    "root_free": "17G of 29G",
+    "passwordless_sudo": true,
+    "clock_skew": "device UTC clock read 2026-09-19T12:59:45Z while the host was ~2.5 h ahead; device timestamps are not authoritative"
+  },
+  "preinstalled_python_runtime": {
+    "numpy": "ABSENT", "pip": "ABSENT", "onnxruntime": "ABSENT", "torch": "ABSENT",
+    "python3-pkg-resources": "present",
+    "libblas3": "absent", "liblapack3": "absent", "libgfortran5": "absent"
+  },
+  "network": {
+    "device_internet": "NONE. Default route is wlan0 10.42.0.0/24 only; DNS does not resolve and 1.1.1.1 is unreachable.",
+    "consequence": "apt install cannot run on the device. Every dependency must be staged from a host and copied over."
+  },
+  "installation_method": {
+    "principle": "Nothing was installed into device system directories. All files were unpacked into /tmp/rd-runtime and used through PYTHONPATH and LD_LIBRARY_PATH, so removal is rm -rf of one directory.",
+    "pythonpath": "/tmp/rd-runtime/usr/lib/python3/dist-packages:/tmp/rd-runtime",
+    "ld_library_path": "/tmp/rd-runtime/usr/lib/arm-linux-gnueabihf{,/blas,/lapack}",
+    "tree_size": "42 MB"
+  },
+  "results": {
+    "numpy": {
+      "source": "OFFICIAL Debian bullseye armhf python3-numpy 1:1.19.5-1 with libblas3/liblapack3/libgfortran5",
+      "status": "IMPORTS AND COMPUTES on device",
+      "note": "numpy publishes no armv7l wheel on PyPI; the Debian armhf package is the supported route. The BLAS/LAPACK alternatives subdirectories must be on LD_LIBRARY_PATH because the alternatives symlinks are not unpacked."
+    },
+    "onnxruntime": {
+      "source": "UNOFFICIAL community build: github.com/nknytk/built-onnxruntime-for-raspberrypi-linux, wheels/bullseye/onnxruntime-1.16.0-cp39-cp39-linux_armv7l.whl",
+      "sha256": "346b7a8238e55f971549fa72e873178352b6221887037aa84d74c5a2ef44bda0",
+      "status": "IMPORTS on device and reports version 1.16.0 with providers ['CPUExecutionProvider']",
+      "significance": "This is the first direct evidence that an ONNX Runtime CPython 3.9 armv7l binary loads on this Norns. It does NOT establish that any pinned Rhythm Doctor graph runs, nor its memory, latency or correctness.",
+      "caveats": [
+        "UNOFFICIAL, no warranty, no published provenance chain, not reproducible from a pinned source build here.",
+        "Microsoft has never published an armv7l ONNX Runtime binary (see armv7-onnxruntime-availability-2026-09-19.json).",
+        "Redistribution and supply-chain acceptability of this artifact are UNRESOLVED and it must not be treated as a shipping dependency on this evidence alone."
+      ]
+    }
+  },
+  "blocked": {
+    "action": "Executing the unofficial onnxruntime binary further on the device (numpy interop check and any model load).",
+    "reason": "Refused by the local agent policy classifier as untrusted code integration. Not retried or worked around.",
+    "outstanding": "A pinned-graph load, 45-second RSS/latency measurement, cancellation, xrun and routing behaviour all remain UNMEASURED on the device."
+  },
+  "still_unresolved": [
+    "UMXHQ BASS separation currently requires PyTorch, which is absent and is not a credible armv7l deployment dependency; an ONNX export with parity tests is still required.",
+    "Desktop peak RSS for one 8-second drum inference was 383,268 KiB and the full corpus process peaked at 893,052 KiB, against 469 MB available and zero swap on this device. Feasibility of the full chain at 45 seconds is doubtful and unmeasured.",
+    "Omnizart Keras-to-ONNX fixed-audio parity remains unproven: no Keras checkpoint and no TensorFlow are present in the evaluation environment."
+  ],
+  "cleanup": "Staged tree removed from the device after the probe; see cleanup verification in the session record."
+}

@@ -1,0 +1,148 @@
+{
+  "run_id": "mosaic-rd-core-b81d21983e044dbabb936da29fd8c041",
+  "profile": "physical-norns",
+  "device": "Linux armv7l\nLua 5.1.5  Copyright (C) 1994-2012 Lua.org, PUC-Rio\n",
+  "source_sha256": {
+    "lib/rhythm_doctor/bank.lua": "31e37de9ee68a09913130d49e3b2a64830ad12fdc4001d2f1f87e6f855ff93eb",
+    "lib/rhythm_doctor/state_machine.lua": "b69cea1cccf69f6bee0a49dcc87571fbb7750694e9adbe53bc7176930abbc8d8",
+    "lib/rhythm_doctor/paint.lua": "18960c97e5d34de6c135c018913f853cd12da05615161bf8abbf98d0f1662f11",
+    "lib/rhythm_doctor/paint_journal.lua": "163f6abc3dbfe70cfe6031a8e08bc66a6450b158710be4fc7833edf381b296fa",
+    "lib/rhythm_doctor/paint_transactions.lua": "8f545bdaaf5334b438ac6832929c0dbc5fed507ad54f26bd7810fc77c77d0398",
+    "lib/rhythm_doctor/assets.lua": "65a122350c95caaace1834b7a45fd124c2a765aa53beee5fd1b39801db31da55",
+    "lib/rhythm_doctor/capture_controller.lua": "fcd2c0bbfab11ff81506a7f0c7afcab8ad6a02604995344ff1a9556358d646ee",
+    "lib/rhythm_doctor/analysis_controller.lua": "9dfa32ee23ccc9bc46a5635c4b0e04ffff4659d11427ee3902f4423b7e53417c",
+    "lib/rhythm_doctor/runtime.lua": "77fc058ddf82daabb4dddb12552eb48395b350a4ad919a9d86dc61ef0d540f31",
+    "lib/rhythm_doctor/ui_adapter.lua": "bb5e6a38777f73849f9e253d2a3a203565384124eda412340acced974430e73b",
+    "lib/rhythm_doctor/worker_host.lua": "8c2229b5aeea79fb16cd989658c902ab690d70ef73619c85e934fe00909aac6f",
+    "lib/rhythm_doctor/bank_persistence.lua": "0f5cf694e89cb9e466870db8871485dd8d24ac83b1e6e238c53e4f693b4c3f6c",
+    "lib/rhythm_doctor/analysis_worker_host.lua": "1516e1ebeb9196e7b35f1aefcb8e591b7b5886792e8819915f817d2795fb3fd4",
+    "lib/project_lifecycle.lua": "d94cdaa5fa82ce9a63ea2e920e8fa77309c5ad294063f97b8c2e8f59c5b4179e",
+    "lib/ui.lua": "60512bb63bf600c78b53b1c7669ab5b414744549b6a0383e4a81031d57e42ccc",
+    "lib/pages/trigger_edit_page/trigger_edit_page.lua": "729318fdacb9270ff9731b94261b248d921e18b8cc77c0b9214113bba7ef50c3",
+    "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua": "bd1e5eb92a2935400129047e028133abdf391481737967951810369a08dc9d60",
+    "tests/rhythm_doctor/test_core.lua": "dc657c852371d136eb4a220834dc52d93120dc925a32b59c13ad0ed5bf1c6fc4",
+    "tests/rhythm_doctor/test_integration.lua": "82c0b410f893432996db70e28b0b0c9238276f52b7514f87d184781d8df4e1f0",
+    "tests/rhythm_doctor/test_lifecycle.lua": "bbfce21ca5938197129ad774014ea8fdbc201d4b44605fdd561c7a4a7cda23d1",
+    "tests/rhythm_doctor/test_journal.lua": "1ecbdac4dcdeedbb35249189b165b7a16f32b248c1d3579c0fac87fd3304c2a2",
+    "tests/rhythm_doctor/test_bank_schema.lua": "1a874132b83aca9af4766e54fe6ba940fa857a30972942f8d341941e19d3f56d",
+    "tests/rhythm_doctor/test_paint_boundaries.lua": "3cea8766ee10583c6249641792f4c6332a50bbe0d0faa34315431a6f11cc07d5",
+    "tests/rhythm_doctor/test_paint_transactions.lua": "fb902d4516e0b1b182fc15f070b0d6590a9ebdf95e83fa0e606eafb7639fdbe4",
+    "tests/rhythm_doctor/test_capture_transitions.lua": "c3956d04ee16e45d72f4272379661b6e4346ab24542a177bb54f523ffa41211e",
+    "tests/rhythm_doctor/test_assets.lua": "f11d9e7d5032312f2a99d4d115218955609399afb44007eeffa17327cc8fb183",
+    "tests/rhythm_doctor/test_capture_controller.lua": "8f30b1de35d50f522ec158fa32972dd902097c27c1cce52ac288f3853546715a",
+    "tests/rhythm_doctor/test_analysis_controller.lua": "1cd459352b9d904acec2ee890560e0273b3345108b8edee4069093629dd4b7ee",
+    "tests/rhythm_doctor/test_analysis_runtime.lua": "756ddef13a1152e67a18a94e5e20618d0eb90f4fddfccde6ba824234651602b7",
+    "tests/rhythm_doctor/test_runtime.lua": "4bd0b2161f6566d02b9012cac60a1f3810758039dd4b1079e4ee903c23b4ce5e",
+    "tests/rhythm_doctor/test_project_lifecycle_runtime.lua": "35da34569db81ac290f2016e269afb01a75fd4ab783c6b5f6527d86a7418afd2",
+    "tests/rhythm_doctor/test_ui_adapter.lua": "869835d5c130451db02e82502b878f4348c248eefba0a49424509b76f19ca4f4",
+    "tests/rhythm_doctor/test_worker_host.lua": "0bc5050b3fa6ad4e06f295cbe39eb0622f2b15184ba0610c889845f7881389b4",
+    "tests/rhythm_doctor/test_app_surface.lua": "fc11893e2c687d0de35030a2e37b0520a50907ce0b8fc83036926023e5e2b84e"
+  },
+  "tests": [
+    {
+      "test": "tests/rhythm_doctor/test_core.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor core: 68 assertions passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_integration.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor integration: 9 assertions passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_lifecycle.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor lifecycle: 7 tests passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_journal.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor journal: intervening-edit transaction passed\nrhythm_doctor journal: global bound and token generation passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_bank_schema.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor schema: 15 malformed banks rejected\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_paint_boundaries.lua",
+      "exit_code": 0,
+      "stdout": "paint boundaries: 5437 assertions passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_paint_transactions.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor paint transactions: 31 checks\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_capture_transitions.lua",
+      "exit_code": 0,
+      "stdout": "9 capture transition cases passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_assets.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor assets: 78 checks\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_capture_controller.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor capture_controller: 11 tests passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_analysis_controller.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor analysis_controller: 5 tests passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_analysis_runtime.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor analysis_runtime: 1 test passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_runtime.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor runtime: 6 tests passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_project_lifecycle_runtime.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor project lifecycle runtime: 1 tests passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_ui_adapter.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor ui adapter: 16 tests passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_worker_host.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor worker_host: 1 test passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_app_surface.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor app surface: 6 tests passed\n",
+      "stderr": ""
+    }
+  ],
+  "passed": true,
+  "scope": "pure Lua component tests only",
+  "full_feature_acceptance": false
+}

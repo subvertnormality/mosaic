@@ -1,0 +1,88 @@
+{
+  "binary": {
+    "path": "canonical-runtime/bin/lua5.3",
+    "sha256": "d1f097e2c68d962ccce6d580cae6e9c95bcc7222cbcc81d8d287298cf5e4d753"
+  },
+  "libraries": [
+    {
+      "path": "canonical-runtime/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "09d4dc50d7b31bca5fbbd60efebe4ce2ce698c46753a7f643337a303c58db541"
+    },
+    {
+      "path": "canonical-runtime/lib/x86_64-linux-gnu/libdl.so.2",
+      "sha256": "6441e37b1be25239c01447f7cfcbb52011ebc19ab24f87b43170bbe0b867c6ce"
+    },
+    {
+      "path": "canonical-runtime/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "e8a6150c2467528fc9a1d03f0e372cc1bc673e04e71adebfb43b11fb9e599555"
+    },
+    {
+      "path": "canonical-runtime/lib/x86_64-linux-gnu/libreadline.so.8",
+      "sha256": "ec45cd672d0236a8b5249e3b351cb9f69d1580073fb359ffc5792a60ba132db6"
+    },
+    {
+      "path": "canonical-runtime/lib/x86_64-linux-gnu/libtinfo.so.6",
+      "sha256": "3d79a61fb19fd7597c1ba90e85e4e25310f885c82f8b91f04fb62658de126f58"
+    }
+  ],
+  "version": "Lua 5.3.3  Copyright (C) 1994-2016 Lua.org, PUC-Rio",
+  "tabutil": {
+    "origin": "norns/lua/lib/tabutil.lua",
+    "relative": "canonical-runtime/lua/lib/tabutil.lua",
+    "sha256": "1e0c553bb30a924148566f76d2a8fdc2e3289f952029b5540f2505c6025fc57b"
+  },
+  "loader": {
+    "path": "canonical-runtime/lib64/ld-linux-x86-64.so.2",
+    "sha256": "96493303ba8ba364a8da6b77fbb9f04d0f170cbecbc6bbacca616161bd0f0008"
+  },
+  "library_path": "canonical-runtime/lib/x86_64-linux-gnu",
+  "platform": {
+    "distribution": "Ubuntu 20.04 (focal)",
+    "architecture": "amd64"
+  },
+  "packages": [
+    {
+      "package": "lua5.3",
+      "source_package": "lua5.3",
+      "version": "5.3.3-1.1ubuntu2",
+      "origin": "Ubuntu focal/universe",
+      "license": "canonical-runtime/licenses/lua5.3.copyright",
+      "bundled_files": [
+        "canonical-runtime/bin/lua5.3"
+      ]
+    },
+    {
+      "package": "libc6",
+      "source_package": "glibc",
+      "version": "2.31-0ubuntu9.2",
+      "origin": "Ubuntu focal-updates/main",
+      "license": "canonical-runtime/licenses/libc6.copyright",
+      "bundled_files": [
+        "canonical-runtime/lib64/ld-linux-x86-64.so.2",
+        "canonical-runtime/lib/x86_64-linux-gnu/libc.so.6",
+        "canonical-runtime/lib/x86_64-linux-gnu/libdl.so.2",
+        "canonical-runtime/lib/x86_64-linux-gnu/libm.so.6"
+      ]
+    },
+    {
+      "package": "libreadline8",
+      "source_package": "readline",
+      "version": "8.0-4",
+      "origin": "Ubuntu focal/main",
+      "license": "canonical-runtime/licenses/libreadline8.copyright",
+      "bundled_files": [
+        "canonical-runtime/lib/x86_64-linux-gnu/libreadline.so.8"
+      ]
+    },
+    {
+      "package": "libtinfo6",
+      "source_package": "ncurses",
+      "version": "6.2-0ubuntu2.1",
+      "origin": "Ubuntu focal-updates/main",
+      "license": "canonical-runtime/licenses/libtinfo6.copyright",
+      "bundled_files": [
+        "canonical-runtime/lib/x86_64-linux-gnu/libtinfo.so.6"
+      ]
+    }
+  ]
+}

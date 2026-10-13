@@ -1,0 +1,5 @@
+FAIL source drift README.md
+FAIL source drift AGENTS.md
+FAIL source drift manual/features/scenes-reference-musical-scenes.yaml
+FAIL source drift manual/features/scenes-reference-nested-scenes.yaml
+FAIL contract validation

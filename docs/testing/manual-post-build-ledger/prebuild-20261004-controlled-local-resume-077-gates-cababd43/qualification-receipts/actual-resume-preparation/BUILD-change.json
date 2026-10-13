@@ -1,0 +1,6 @@
+{
+  "before_sha256": "377059de6d6c86e0e346396a3c367e5d541bf848828d8ed1377c1c03962df7c9",
+  "after_sha256": "e7c2024f3037cd3d54817bfae6a7b0005647f823d2f21d17fb310e9cc2b1c15a",
+  "purpose": "Document qualified opt-in checkpoint recovery and final inventory order",
+  "native_source_changed": false
+}

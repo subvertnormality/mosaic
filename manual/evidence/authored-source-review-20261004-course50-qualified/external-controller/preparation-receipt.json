@@ -1,0 +1,58 @@
+{
+  "active_source_modified": false,
+  "external_requirements": [
+    "independent pinned operator plan",
+    "fresh whole-next-stage host-memory attestation",
+    "independent cleanup review for unsupported reports",
+    "root exclusive native scheduling discipline"
+  ],
+  "files": [
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/controller.py",
+      "sha256": "d12d98fc1741cedcf7eef03c3d4f22a0e74ab2f733f54018963dd260a199bfc4"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/test_controller.py",
+      "sha256": "ca82986257a8848259ade9d2687fa4de0d0592f272eaa2539e1d9b42f87e7646"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/README.md",
+      "sha256": "700ffca0b645924e850b417e295a5df9552467c13e0360d89d673d2537945b27"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/synthetic-green.log",
+      "sha256": "ef6700bfdbf0405483b819d8c4b23c05762d75609494a60c265bd5e2cef3d94a"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/review-regressions-red.log",
+      "sha256": "23952f0cb381c670b27e9683f403f076ec247c1eac7203ded2fa4f8b3358b913"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/controller/review-regression-baseline/controller.py",
+      "sha256": "2459134f5e6219ed87f1291ef5d97465c1b591ab00e9ce6e67be3d931ea4efb5"
+    }
+  ],
+  "native_actions": false,
+  "prepared_utc": "2026-10-04T03:17:08.647487+00:00",
+  "publication": false,
+  "schema_version": 1,
+  "tests": {
+    "count": 31,
+    "passed": true,
+    "review_regressions": {
+      "baseline_failures": 4,
+      "baseline_kind": "reconstructed-pre-review-preparation",
+      "candidate_passed": true
+    }
+  },
+  "unchanged_inputs": [
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/candidate/tools/manual_build.py",
+      "sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8"
+    },
+    {
+      "path": "/tmp/mosaic-build-stage-gate-preparation/CONTROLLER.md",
+      "sha256": "97ae4b307b925ce3f52a8f26e3737baf593feca314f57a0ce798a630612026ca"
+    }
+  ]
+}

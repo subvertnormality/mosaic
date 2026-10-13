@@ -1,0 +1,13 @@
+..................E...
+======================================================================
+ERROR: test_edited_derived_inputs_are_rejected_before_regeneration (__main__.StartSourcesAndExtraCases)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 211, in test_edited_derived_inputs_are_rejected_before_regeneration
+    module.validate_derived_inputs(root,{"route"})
+AttributeError: module 'manual_case_capture' has no attribute 'validate_derived_inputs'
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.159s
+
+FAILED (errors=1)

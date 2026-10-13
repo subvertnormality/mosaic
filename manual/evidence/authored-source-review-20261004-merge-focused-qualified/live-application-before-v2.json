@@ -1,0 +1,19 @@
+{
+  "before": {
+    "docs/ui-reimplementation/current-source-review.json": {
+      "sha256": "655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/live-application-before-v2/655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741-current-source-review.json"
+    },
+    "docs/ui-reimplementation/source-inventory.json": {
+      "sha256": "33650042daa49e1f7d8adad05d185b1b9a16f3e962adde5660bfaf0fb965017a",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/live-application-before-v2/33650042daa49e1f7d8adad05d185b1b9a16f3e962adde5660bfaf0fb965017a-source-inventory.json"
+    },
+    "docs/ui-reimplementation/generated/source-review-receipt.json": {
+      "sha256": "7624dcc6b512aa349e39f3f0ac85ba33d1d631fb980c5d6d5a1977107c7d26c7",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/live-application-before-v2/7624dcc6b512aa349e39f3f0ac85ba33d1d631fb980c5d6d5a1977107c7d26c7-source-review-receipt.json"
+    }
+  },
+  "approved_proposal_sha256": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+  "authorization": "Root /root APPROVES exact final proposed-v2 bytes, actual2ledger members only, strict UIchecks and fresh81snapshot; no native/os.sync/WSLrestart",
+  "complete_regression_run": false
+}

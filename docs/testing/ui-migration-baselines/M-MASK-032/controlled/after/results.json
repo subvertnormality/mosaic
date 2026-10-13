@@ -1,0 +1,388 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "pending-note-mask-song-transition-input-validity",
+    "lane": "controlled-experimental",
+    "boundary_ns": 8246666667,
+    "planned_ns": [
+      8215666667,
+      8216666667
+    ],
+    "callback_completed_ns": [
+      8215666667,
+      8216666667
+    ],
+    "press_and_encoder_completed_before_boundary": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "pending-note-mask-song-transition-replay",
+    "stage": "gesture-owner-song-a",
+    "slot": 1,
+    "pitches": [
+      60,
+      62,
+      64,
+      0
+    ],
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "pending-note-mask-song-transition-replay",
+    "stage": "song-b-unchanged",
+    "slot": 2,
+    "pitches": [
+      72,
+      74,
+      76,
+      77
+    ],
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "pending-note-mask-song-transition-replay",
+    "stage": "song-a-history-undo",
+    "slot": 1,
+    "pitches": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "pending-note-mask-song-transition-replay",
+    "stage": "song-a-history-redo",
+    "slot": 1,
+    "pitches": [
+      60,
+      62,
+      64,
+      0
+    ],
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "pending-note-mask-song-transition-replay",
+    "stage": "song-b-after-song-a-undo-redo",
+    "slot": 2,
+    "pitches": [
+      72,
+      74,
+      76,
+      77
+    ],
+    "passed": true
+  },
+  {
+    "kind": "pending-note-mask-song-transition",
+    "held_step": 4,
+    "mask_note": 0,
+    "owner_song": 1,
+    "selected_after_transition": 2,
+    "passed": true
+  }
+]

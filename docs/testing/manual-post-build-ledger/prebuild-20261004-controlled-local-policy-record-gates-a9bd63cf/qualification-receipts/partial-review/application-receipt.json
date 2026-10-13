@@ -1,0 +1,70 @@
+{
+  "authorization": "Root explicitly approved only two exact independently reproduced partial-stage generated member updates",
+  "before_ledgers": {
+    "docs/ui-reimplementation/current-source-review.json": "0ba7e99852de0b6102929ada630122b7cfe1f28d6ca1e839895e236d34981d21",
+    "docs/ui-reimplementation/source-inventory.json": "1937390840e6b95048681d1642c8e2ef11ad825db4e5a2b331ba0b59af338904",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "f763065ccf4d115dc6350d2fe400d1b3189ec027b6904a8db35b754057b0b804"
+  },
+  "after_ledgers": {
+    "docs/ui-reimplementation/current-source-review.json": "f89e402cfdb5bac9417045d07b75c5774fb56a55bf667ce77e4d783c6f9ed35e",
+    "docs/ui-reimplementation/source-inventory.json": "d7ce9161ccb379c1ac63081e009a7ceaec6fa38616937d7e78b1a2a92d7004d7",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "3395071c88fd9b6ed0c4f9f6c21019d66a793a0ee788d3d07214daf69dd2ca5a"
+  },
+  "bounded_receipt": {
+    "path": "/home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/bounded-review-receipt.json",
+    "sha256": "14156022a10daf6e206d619054f910083b79df35754b9fab00317abe2ac16a39"
+  },
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "docs/ui-reimplementation/tools/refresh_source_inventory.py",
+        "--review",
+        "docs/ui-reimplementation/current-source-review.json"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/strict-1.log",
+      "sha256": "83df7e932109b64aae88f776dee0bf6b6abe55ea3c710cfb85e2bf3cd27a2a7c"
+    },
+    {
+      "command": [
+        "python3",
+        "docs/ui-reimplementation/tools/refresh_source_inventory.py",
+        "--review",
+        "docs/ui-reimplementation/current-source-review.json",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/strict-2.log",
+      "sha256": "83df7e932109b64aae88f776dee0bf6b6abe55ea3c710cfb85e2bf3cd27a2a7c"
+    },
+    {
+      "command": [
+        "python3",
+        "docs/ui-reimplementation/tools/validate.py"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/strict-3.log",
+      "sha256": "e689a30017065f041e8fd6eb76a56415876e025c4083369297a5172df1ec7848"
+    },
+    {
+      "command": [
+        "python3",
+        "tests/behaviour/reconcile_manual.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/strict-4.log",
+      "sha256": "babe161140943cb9ce4a67dd09d31dc5be86e37ac4641f8872a786820880043d"
+    }
+  ],
+  "counts": {
+    "files": 78,
+    "manual_sections": 125,
+    "callbacks": 64,
+    "branches": 164
+  },
+  "whole_manual_complete": false,
+  "current_native_qualification": false,
+  "authority_activation": false
+}

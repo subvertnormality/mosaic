@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "scope": "Both full continuous-course lanes independently audited; neither complete repository campaign nor editorial lesson review",
+  "course_scenes": 10,
+  "authored_teaching_stages": 38,
+  "checkpoints_per_lane": 50,
+  "musical_windows_per_lane": 19,
+  "lanes": [
+    {
+      "lane": "real",
+      "clock_mode": "real-time",
+      "audit_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/course-604-whole-real-audit.json",
+      "audit_sha256": "49379a4055a8d905ae1e58720926bc28e379bd436bdd77c0ba863e9223beada0",
+      "report": "/home/andy/mosaic-manual-runs/604bf5d6d5d24822b5d9f41eb7f0b958/reference-scenes.json",
+      "report_sha256": "9a5c53fb862462407dffcfd0dc700bf8f768d686ad5a22844cceff8e11e1edbf",
+      "continuous_case": "/home/andy/mosaic-manual-runs/604bf5d6d5d24822b5d9f41eb7f0b958/M-MANUAL-COURSE-001-base-midi",
+      "one_participant": true,
+      "frames": 50,
+      "musical_windows": 19,
+      "public_length_gestures": [
+        {
+          "recipe_indices": [
+            1459,
+            1460,
+            1461,
+            1462,
+            1463,
+            1464,
+            1465,
+            1466
+          ],
+          "native_sequences": [
+            3714,
+            3715,
+            3716,
+            3717,
+            3718,
+            3719,
+            3720,
+            3721
+          ],
+          "interleaved_public_clock_advances": []
+        },
+        {
+          "recipe_indices": [
+            1569,
+            1570,
+            1571,
+            1572,
+            1573,
+            1574,
+            1575,
+            1576
+          ],
+          "native_sequences": [
+            3831,
+            3832,
+            3833,
+            3834,
+            3835,
+            3836,
+            3837,
+            3838
+          ],
+          "interleaved_public_clock_advances": []
+        }
+      ],
+      "identity_sha256": "7cfa7b50513dc1b8d43fffd497857a923a30258f349b0dc6218465f6a79fca1d",
+      "cleanup_sha256": "2f3981e07cd286ee370d7f5f43bb0ac5049201039d83e71c775b421541806f94",
+      "runtime_status": null
+    },
+    {
+      "lane": "controlled",
+      "clock_mode": "controlled-experimental",
+      "audit_path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-publication-new-kinds/course-439-whole-controlled-audit.json",
+      "audit_sha256": "a59f3c1ec5201a4b5a7872fefdf7a509e52e7aeade48b6a9b3e5a3cbc8b06209",
+      "report": "/home/andy/mosaic-manual-runs/439d9e93bfb0400e9eaaf4c1b7606cd9/reference-scenes.json",
+      "report_sha256": "90e2d766beaeca8da391389ee5dd0f1fad34d83addb135dbfdb8c73819b8ad2a",
+      "continuous_case": "/home/andy/mosaic-manual-runs/439d9e93bfb0400e9eaaf4c1b7606cd9/M-MANUAL-COURSE-001-base-midi",
+      "one_participant": true,
+      "frames": 50,
+      "musical_windows": 19,
+      "public_length_gestures": [
+        {
+          "recipe_indices": [
+            11443,
+            11444,
+            11446,
+            11447,
+            11449,
+            11450,
+            11452,
+            11453
+          ],
+          "native_sequences": [
+            20189,
+            20190,
+            20192,
+            20193,
+            20195,
+            20196,
+            20198,
+            20199
+          ],
+          "interleaved_public_clock_advances": [
+            {
+              "recipe_index": 11445,
+              "action": {
+                "type": "advance",
+                "nanoseconds": 60000000
+              }
+            },
+            {
+              "recipe_index": 11448,
+              "action": {
+                "type": "advance",
+                "nanoseconds": 60000000
+              }
+            },
+            {
+              "recipe_index": 11451,
+              "action": {
+                "type": "advance",
+                "nanoseconds": 60000000
+              }
+            }
+          ]
+        },
+        {
+          "recipe_indices": [
+            11660,
+            11661,
+            11663,
+            11664,
+            11666,
+            11667,
+            11669,
+            11670
+          ],
+          "native_sequences": [
+            20413,
+            20414,
+            20416,
+            20417,
+            20419,
+            20420,
+            20422,
+            20423
+          ],
+          "interleaved_public_clock_advances": [
+            {
+              "recipe_index": 11662,
+              "action": {
+                "type": "advance",
+                "nanoseconds": 60000000
+              }
+            },
+            {
+              "recipe_index": 11665,
+              "action": {
+                "type": "advance",
+                "nanoseconds": 60000000
+              }
+            },
+            {
+              "recipe_index": 11668,
+              "action": {
+                "type": "advance",
+                "nanoseconds": 60000000
+              }
+            }
+          ]
+        }
+      ],
+      "identity_sha256": "a07455c8433eab01b6be951041aea28ee7586a5ea9458e5c5fbf8f49e1e44e24",
+      "cleanup_sha256": "55e19586f5a6fd732dbf438cb0e72c4fda82426370785c12c7e320dfb709c4a5",
+      "runtime_status": null
+    }
+  ],
+  "shared_frozen_sources": [
+    "plan_files",
+    "case_sources",
+    "capture_sources",
+    "fixture_sources"
+  ],
+  "auditor_sha256": "10b339ed62fd08b12926abffb67e72f2dce466a84f3b714e0d6b7a05703974a9",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "formal_editorial_review": false
+}

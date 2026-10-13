@@ -1,0 +1,15 @@
+test_default_energy_and_specdiff_are_measured_on_the_same_pcm (test_tempo_native.TempoNativeTests) ... ok
+test_half_double_fixture_reports_candidate_comparison (test_tempo_native.TempoNativeTests) ... ok
+test_onset_ac_half_double_stress_is_not_accuracy_evidence (test_tempo_native.TempoNativeTests)
+A denser offbeat pattern can establish 120 pulses, not musical meter. ... ok
+test_onset_autocorrelation_dev_envelope_excludes_halfdouble_from_accuracy (test_tempo_native.TempoNativeTests) ... ok
+test_silence_is_uncertain_and_never_claims_a_region (test_tempo_native.TempoNativeTests) ... ok
+test_steady_120_bpm_actual_pcm_candidate_is_in_bounds (test_tempo_native.TempoNativeTests) ... ok
+test_syncopated_actual_pcm_has_no_out_of_bounds_ready_region (test_tempo_native.TempoNativeTests) ... ok
+test_tempo_drift_is_uncertain (test_tempo_native.TempoNativeTests) ... ok
+test_unseen_accented_syncopation_with_record_phase_acquires_steady_tempo (test_tempo_native.TempoNativeTests) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 2.567s
+
+OK

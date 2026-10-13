@@ -1,0 +1,10 @@
+test_controlled_lane_reason_distinguishes_setup_ready_and_actual_audio (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) ... ok
+test_manifest_is_bound_to_actual_adc_role_and_exact_checkpoints (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) ... ok
+test_stable_id_and_manual_citation_are_not_global_case_registration (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) ... ok
+test_unknown_membership_and_invalid_full_lane_fail (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) ... ok
+test_unrelated_role_does_not_claim_start_beat_acceptance (test_doctor_qualification_registration.DoctorQualificationRegistrationTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.045s
+
+OK

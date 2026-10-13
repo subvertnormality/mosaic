@@ -3,17 +3,21 @@ def sparse_song_lengths(c):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(6,8)
+    ui = c.ui
+    ui.configure()
+    with ui.hold_step(1):
+        ui.tap_step(64)
+    ui.song_editor()
     for length in (1,2,63,64,2):
-        c.tap(7 if length>=63 else 2,7)
-        if length==63:c.tap(1,7)
-        elif length==2:c.tap(8,7)
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
+        ui.tap_step(55 if length>=63 else 50)
+        if length==63:ui.tap_step(49)
+        elif length==2:ui.tap_step(56)
+        capture=MidiWindow(c.snapshot()['midi_count']);ui.play()
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=25)
         assert len(capture.note_ons())==9,'Observation missed intended stop window'
         controlled=c.clock_mode=='controlled-experimental'
         lower=c.logical_ns if controlled else time.monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        ui.gesture([('play_stop', None)], [('play_stop', None)])
         upper=c.logical_ns if controlled else time.monotonic_ns()
         c.elapse(.06);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         notes=capture.note_ons();assert len(notes)==9,'Extra onset before Stop'

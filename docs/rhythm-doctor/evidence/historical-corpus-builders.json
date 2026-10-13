@@ -1,0 +1,8 @@
+{
+  "source_sha256": {
+    "build_clean_v8.py": "1d89058dba23662118963b443e9c85f52a6e7faaa7d53bd4b4c3343cc2dd6952",
+    "build_v5_hydrogen.py": "170e7c07173357658606c3a8a332286931da8488ddedde6cbed3f9e23b0c37ce"
+  },
+  "scope": "superseded exploratory renderers retained locally; not the qualified v11 renderer",
+  "location": "tests/rhythm_doctor/artifacts/historical-corpus-builders"
+}

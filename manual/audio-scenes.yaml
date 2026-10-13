@@ -1,0 +1,4361 @@
+schema_version: 1
+examples:
+- id: oilcan-pocket
+  title: Three sounds, one pocket
+  feature_ids:
+  - pocket-rhythm
+  - rhythm-section-design
+  description: 'Oilcan 1 on channel 1 plays eight drum hits per bar for four bars at 90 BPM, all at velocity
+    48. In every bar the hits fall on steps 1 (MIDI 36), 4 (38), 5 (37), 7 (38), 9 (36), 12 (38), 13 (37)
+    and 15 (38). Oilcan is a drum voice: each MIDI note number picks a different pad of its default kit,
+    so 36, 37 and 38 are three different drum sounds, here called timbres, played one after another on a
+    single channel. Listen for the pad on MIDI 36 on beats 1 and 3, the pad on 37 on beats 2 and 4 and the
+    pad on 38 filling the gaps. Every hit has the same velocity. Next, try muting the 38 hits by clearing
+    their trigs and hear how the other two pads carry the pocket. Build it with the Separate fixed percussion
+    example recipe.'
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Oilcan 1
+    note: 36
+    velocity: 48
+    length_detents: 8
+    phrase:
+    - - 1
+      - 36
+    - - 4
+      - 38
+    - - 5
+      - 37
+    - - 7
+      - 38
+    - - 9
+      - 36
+    - - 12
+      - 38
+    - - 13
+      - 37
+    - - 15
+      - 38
+  purpose: inspiration
+- id: bass-and-intervals
+  title: A bass with room above it
+  feature_ids:
+  - masks
+  - adding-chords
+  - tilting-harmony
+  description: 'Polyperc 1 on channel 1 plays a bass at velocity 48: MIDI 48 on steps 1, 5 and 13 and MIDI
+    55 on step 9 of each bar. Doubledecker on channel 2 plays chords (velocity 32, three steps long) on
+    steps 1 and 9 with root MIDI 60 then 62, Chd1 set to 3rd and Chd2 set to 5th, which gives C-E-G and
+    D-F-A in C major. Four bars at 90 BPM, a four-step cycle that repeats every bar. Listen for the C-E-G chord on step 1 and the D-F-A chord on step 9. The bass plays C2 on steps 1, 5 and 13 and G2 on step 9. Build it with the Separate fixed bass-and-chord example recipe.'
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 48
+    velocity: 48
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 5
+      - 48
+    - - 9
+      - 55
+    - - 13
+      - 48
+  - channel: 2
+    voice: Doubledecker
+    note: 60
+    velocity: 32
+    length_detents: 22
+    chords:
+    - 2
+    - 4
+    phrase:
+    - - 1
+      - 60
+    - - 9
+      - 62
+  purpose: inspiration
+- id: three-voice-conversation
+  title: Rhythm, bass and a changing chord
+  feature_ids:
+  - small-hours
+  - mods-and-software-devices
+  description: Oilcan 1, Polyperc 1 and Doubledecker play on channels 1, 2 and 3 for four bars at 90 BPM;
+    a bar lasts about 2.7 seconds. Drums at velocity 38 hit steps 1/36, 4/38, 5/37, 9/36, 12/38 and 13/37
+    of every bar. The bass at velocity 42 plays MIDI 48 on steps 1, 5 and 13 and MIDI 55 on step 9. The
+    chords (velocity 26, three steps long, Chd1 3rd, Chd2 5th) have roots MIDI 60 on step 1 and 62 on step
+    9 in bars 1 to 3, and MIDI 67 on step 49 and 60 on step 57 in bar 4. Listen for the chord changing at
+    the start of bar 4, about 8 seconds in, over drums and bass that stay exactly the same. The drums are
+    the loudest layer and the bass is the quietest. Build it with the three Four-Bar Percussion, Bass and
+    Chord recipes.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Oilcan 1
+    note: 36
+    velocity: 38
+    length_detents: 8
+    phrase:
+    - - 1
+      - 36
+    - - 4
+      - 38
+    - - 5
+      - 37
+    - - 9
+      - 36
+    - - 12
+      - 38
+    - - 13
+      - 37
+  - channel: 2
+    voice: Polyperc 1
+    note: 48
+    velocity: 42
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 5
+      - 48
+    - - 9
+      - 55
+    - - 13
+      - 48
+  - channel: 3
+    voice: Doubledecker
+    note: 60
+    velocity: 26
+    length_detents: 22
+    chords:
+    - 2
+    - 4
+    phrase:
+    - - 1
+      - 60
+    - - 9
+      - 62
+    final_bar:
+    - - 1
+      - 67
+    - - 9
+      - 60
+  purpose: inspiration
+- id: ghost-note-comparison
+  title: Adding a Ghost Note
+  purpose: lesson-comparison
+  feature_ids:
+  - pocket-rhythm
+  - adding-velocity
+  description: 'Bars 1 and 2 play only the main hits: Oilcan 1 plays MIDI 36 on steps 1 and 9 and MIDI 37
+    on steps 5 and 13, all at velocity 90. Bars 3 and 4 add one quiet hit, MIDI 38 at velocity 35, on step
+    12 of each bar, one step before the MIDI 37 accent. MIDI 38 is a different pad of the Oilcan kit, so
+    the ghost note is both softer and a different drum sound than the main hits. 90 BPM, all notes half
+    a step long. Listen for the soft extra hit that appears in the third bar, about 5 seconds in; it is
+    much quieter than the main hits and the main hits do not change. Build it with the Make the recorded
+    ghost-note comparison recipe.'
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Oilcan 1
+    note: 36
+    velocity: 90
+    length_detents: 8
+    phrase: &id001
+    - &id002
+      - 1
+      - 36
+    - &id003
+      - 5
+      - 37
+    - &id004
+      - 9
+      - 36
+    - &id005
+      - 13
+      - 37
+    bar_phrases:
+    - *id001
+    - *id001
+    - &id006
+      - *id002
+      - *id003
+      - *id004
+      - - 12
+        - 38
+      - *id005
+    - *id006
+    velocity_overrides:
+    - - 44
+      - 35
+    - - 60
+      - 35
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 35
+      step: 43
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 90
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 35
+      step: 59
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 90
+      step: 60
+      length: 0.5
+- id: scale-slot-comparison
+  title: Changing Harmony with Scale Slots
+  purpose: lesson-comparison
+  mode: relative-scale-slots
+  feature_ids:
+  - harmony-design
+  - tilting-harmony
+  description: 'The same relative-note patterns play under C major (scale slot 1) for bars 1 and
+    2 and D major (scale slot 2) for bars 3 and 4, at 90 BPM. Doubledecker on channel 1 plays
+    degrees 0, 0, 0 and 1 on steps 1, 5, 9 and 13, with the last note softer (velocity 50): MIDI
+    60, 60, 60, 62 in C and 62, 62, 62, 64 in D. Polyperc 1 on channel 2 plays degrees 0 and 4
+    at octave minus 1 on steps 1 and 9: MIDI 48 and 55 in C and 50 and 57 in D. Note masks stay
+    X, and rhythm and velocity do not change. Listen for the whole texture stepping up a whole
+    tone at bar 3. Build it with the Make the relative-note scale comparison recipe.'
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Doubledecker
+    pattern: 1
+    octave: 0
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 0
+    - - 5
+      - 0
+    - - 9
+      - 0
+    - - 13
+      - 1
+    velocity_overrides:
+    - - 13
+      - 50
+  - channel: 2
+    voice: Polyperc 1
+    pattern: 2
+    octave: -1
+    velocity: 60
+    length_detents: 8
+    phrase:
+    - - 1
+      - 0
+    - - 9
+      - 4
+  scale_slots:
+  - slot: 1
+    root: C
+    root_detents: 0
+  - slot: 2
+    root: D
+    root_detents: 2
+  phase_changes:
+  - at_step: 32
+    scale_slot: 2
+    root: D
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 12
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 0
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 28
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 16
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 50
+      step: 44
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 50
+      velocity: 60
+      step: 32
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 57
+      velocity: 60
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 50
+      step: 60
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 50
+      velocity: 60
+      step: 48
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 57
+      velocity: 60
+      step: 56
+      length: 0.5
+# Contract derivation (hand-derived; models in tools/test_manual_audio_lessons.py):
+# README.md#clocks-swing-and-shuffle - Swing moves notes off the grid. Swing 25 delays the second step of each
+# pair by 25% of a step (+6/24, literal pulse table 0/30/48/78 of M-MANUAL-SWING-001). Slot 1 is straight.
+# Gate under swing is a characterisation outside the manual (lib/clock/m_lattice.lua pending_deadline): a
+# gate below one step is the fraction 0.5 of the step's own swung interval, 1.25 steps (gate 0.625) for the
+# first step of a pair and 0.75 steps (gate 0.375) for the second.
+- id: swing-comparison
+  title: Straight, then swung
+  purpose: lesson-comparison
+  feature_ids:
+  - clocks-swing-and-shuffle
+  description: Oilcan 1 on channel 1 and Polyperc 1 on channel 2 play the same groove for four bars at
+    90 BPM, straight in bars 1 and 2 and swung in bars 3 and 4. Oilcan plays MIDI 36 on steps 1 and 9,
+    MIDI 38 on steps 5 and 13 and MIDI 37 on steps 2, 6, 10 and 14, all at velocity 80. Polyperc plays
+    MIDI 48 on steps 1 and 9 and MIDI 55 on steps 4 and 12 at velocity 60. In bars 3 and 4 both channels
+    carry Swing 25, so every second step of a pair lands a quarter of a step late, about 0.04 seconds,
+    while the first step of each pair stays on the grid. Listen for the small 37 hits and the 55 bass
+    notes starting to trail the beat at bar 3, about 5.3 seconds in; the 36, 38 and 48 downbeats do not
+    move.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Oilcan 1
+    note: 36
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 36
+    - - 2
+      - 37
+    - - 5
+      - 38
+    - - 6
+      - 37
+    - - 9
+      - 36
+    - - 10
+      - 37
+    - - 13
+      - 38
+    - - 14
+      - 37
+  - channel: 2
+    voice: Polyperc 1
+    note: 48
+    velocity: 60
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 4
+      - 55
+    - - 9
+      - 52
+    - - 12
+      - 55
+  setup: swing-comparison
+  sections:
+  - slot: 1
+    global_length: 32
+    changes: []
+  - slot: 2
+    global_length: 32
+    changes:
+    - kind: swing
+      amount: 25
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 1
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 5
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 9
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 13
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 17
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 21
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 25
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 29
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 32
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 33.25
+      length: 0.375
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 36
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 37.25
+      length: 0.375
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 40
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 41.25
+      length: 0.375
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 44
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 45.25
+      length: 0.375
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 48
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 49.25
+      length: 0.375
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 52
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 53.25
+      length: 0.375
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 56
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 57.25
+      length: 0.375
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 60
+      length: 0.625
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 61.25
+      length: 0.375
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 0
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 3
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 8
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 11
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 16
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 19
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 24
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 27
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 32
+      length: 0.625
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 35.25
+      length: 0.375
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 40
+      length: 0.625
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 43.25
+      length: 0.375
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 48
+      length: 0.625
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 51.25
+      length: 0.375
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 56
+      length: 0.625
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 59.25
+      length: 0.375
+# Contract derivation (hand-derived; models in tools/test_manual_audio_lessons.py):
+# README.md#note-merge-modes - Average rounds half up (1.5 -> 2); Higher = rounded average + (highest - lowest);
+# one contributor passes through. README.md#trig-merge-modes - All plays a trig present in any assigned pattern.
+# README.md#lock-merged-to-pentatonic - 'Lock merged to pent.' is off, so degrees map through plain C major (60 62 64 65 67 69 71, +12 per 7).
+- id: note-merge-modes
+  title: Average, then Higher
+  purpose: lesson-comparison
+  mode: relative-scale-slots
+  feature_ids:
+  - note-merge-modes
+  - trig-merge-modes
+  - lock-merged-to-pentatonic
+  description: 'Polyperc 1 on channel 1 plays one melody at 90 BPM, velocity 80, built from two patterns
+    assigned to the same channel with trig merge All and the pentatonic lock off, in C major. Pattern
+    1 has degrees 0, 2, 4, 2, 0 and 4 on steps 1, 3, 5, 7, 9 and 13; pattern 2 has degrees 2, 6, 3, 3,
+    0 and 5 on steps 1, 5, 9, 11, 13 and 15. Steps 1, 5, 9 and 13 are in both patterns, so the note merge
+    mode decides them. Bars 1 and 2 use Average and play MIDI 62, 69, 64 and 64 there; bars 3 and 4 use
+    Higher and play MIDI 65, 72, 69 and 71. Steps 3, 7, 11 and 15 belong to one pattern each and sound
+    the same in both halves: MIDI 64, 64, 65 and 69. Listen for the shared steps jumping higher at bar
+    3, about 5.3 seconds in, while the in-between notes stay put.'
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    octave: 0
+    velocity: 80
+    length_detents: 8
+    patterns:
+    - pattern: 1
+      phrase:
+      - - 1
+        - 0
+      - - 3
+        - 2
+      - - 5
+        - 4
+      - - 7
+        - 2
+      - - 9
+        - 0
+      - - 13
+        - 4
+    - pattern: 2
+      phrase:
+      - - 1
+        - 2
+      - - 5
+        - 6
+      - - 9
+        - 3
+      - - 11
+        - 3
+      - - 13
+        - 0
+      - - 15
+        - 5
+  scale_slots:
+  - slot: 1
+    root: C
+    root_detents: 0
+  - slot: 2
+    root: D
+    root_detents: 2
+  setup: note-merge-modes
+  sections:
+  - slot: 1
+    global_length: 32
+    changes:
+    - kind: trig_merge
+      mode: all
+  - slot: 2
+    global_length: 32
+    changes:
+    - kind: note_merge
+      mode: higher
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 2
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 6
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 10
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 14
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 18
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 22
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 26
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 30
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 34
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 72
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 38
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 42
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 71
+      velocity: 80
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 46
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 50
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 72
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 54
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 58
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 71
+      velocity: 80
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 62
+      length: 0.5
+# Contract derivation (hand-derived; models in tools/test_manual_audio_lessons.py):
+# README.md#channel-length - each channel loops its own range within the 64-step sequence; ranges 16 and 12
+# first start together again after lcm(16, 12) = 48 steps. README.md#reset-at-pattern-repeat is off by default,
+# so only the first 64-step pass is asserted; the closing onset at step 64 is the drums' step 1.
+- id: polymeter
+  title: Sixteen steps against twelve
+  purpose: lesson-comparison
+  feature_ids:
+  - channel-length
+  - loops-that-meet
+  description: Oilcan 1 on channel 1 loops a 16-step range and Polyperc 1 on channel 2 loops a 12-step
+    range, together for four bars at 90 BPM. Oilcan plays MIDI 36 on steps 1 and 9, MIDI 37 on steps 5
+    and 13 and MIDI 38 on step 15 at velocity 80; Polyperc plays MIDI 48 on step 1, MIDI 55 on steps 4
+    and 10 and MIDI 52 on step 7 at velocity 60, so its four notes fall every third step. The two loops
+    start together on step 1, drift apart, and meet again at step 49, after 48 steps, the first count
+    that both 16 and 12 divide into; the bass is then cut off four steps into its next loop when the four
+    bars end. Listen for the bass phrase landing in a different place against the drums in each bar of
+    bars 2 and 3, and for the pair snapping back together at the start of bar 4, about 8 seconds in.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Oilcan 1
+    note: 36
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 36
+    - - 5
+      - 37
+    - - 9
+      - 36
+    - - 13
+      - 37
+    - - 15
+      - 38
+    range_last: 16
+  - channel: 2
+    voice: Polyperc 1
+    note: 48
+    velocity: 60
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 4
+      - 55
+    - - 7
+      - 52
+    - - 10
+      - 55
+    range_last: 12
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 14
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 30
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 46
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 36
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 37
+      velocity: 80
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 38
+      velocity: 80
+      step: 62
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 0
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 3
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 6
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 9
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 12
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 15
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 18
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 21
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 24
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 27
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 30
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 33
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 36
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 39
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 42
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 45
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 48
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 51
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 52
+      velocity: 60
+      step: 54
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 57
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 60
+      step: 60
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 60
+      step: 63
+      length: 0.5
+# Contract derivation (hand-derived; models in tools/test_manual_audio_lessons.py):
+# README.md#song-mode-operations - slots play in turn; README.md#adjusting-song-sequence-length - each slot's
+# global length (16, 32, 16); README.md#muting-channels - mute is per sequence; channel octave adds 12 per octave
+# (README.md#octave-locks; composition_workflow); README.md#masks - velocity mask. Slot n is slot n-1 plus its changes.
+- id: song-sections
+  title: Intro, verse and outro
+  purpose: lesson-comparison
+  mode: relative-scale-slots
+  feature_ids:
+  - song-mode-operations
+  - adjusting-song-sequence-length
+  - muting-channels
+  description: Polyperc 1 on channel 1 and Doubledecker on channel 2 play a four-bar song at 90 BPM from
+    three song slots of 16, 32 and 16 steps, in C major. The bass plays degrees 0, 0, 4 and 0 at octave
+    minus 1 on steps 1, 5, 9 and 13, MIDI 48, 48, 55 and 48. The lead plays degrees 4, 2, 4 and 6 on steps
+    3, 7, 11 and 15 at velocity 60, MIDI 67, 64, 67 and 71. In the one-bar intro the lead channel is muted
+    and the bass plays alone at velocity 70. In the two-bar verse the lead is unmuted. In the final bar
+    the lead moves up an octave, MIDI 79, 76, 79 and 83, and the bass velocity mask drops to 40. Listen
+    for the lead entering after the first bar, about 2.7 seconds in, and for the last bar, about 8 seconds
+    in, sounding higher on top and softer underneath.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    pattern: 1
+    octave: -1
+    velocity: 70
+    length_detents: 8
+    phrase:
+    - - 1
+      - 0
+    - - 5
+      - 0
+    - - 9
+      - 4
+    - - 13
+      - 0
+  - channel: 2
+    voice: Doubledecker
+    pattern: 2
+    octave: 0
+    velocity: 60
+    length_detents: 8
+    phrase:
+    - - 3
+      - 4
+    - - 7
+      - 2
+    - - 11
+      - 4
+    - - 15
+      - 6
+  scale_slots:
+  - slot: 1
+    root: C
+    root_detents: 0
+  - slot: 2
+    root: D
+    root_detents: 2
+  setup: song-sections
+  sections:
+  - slot: 1
+    global_length: 16
+    changes:
+    - kind: mute
+      channel: 2
+  - slot: 2
+    global_length: 32
+    changes:
+    - kind: mute
+      channel: 2
+  - slot: 3
+    global_length: 16
+    changes:
+    - kind: octave
+      channel: 2
+      value: 1
+    - kind: mask
+      channel: 1
+      field: velocity
+      value: 40
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 16
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 67
+      velocity: 60
+      step: 18
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 20
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 64
+      velocity: 60
+      step: 22
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 24
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 67
+      velocity: 60
+      step: 26
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 28
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 71
+      velocity: 60
+      step: 30
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 32
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 67
+      velocity: 60
+      step: 34
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 36
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 64
+      velocity: 60
+      step: 38
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 40
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 67
+      velocity: 60
+      step: 42
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 44
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 71
+      velocity: 60
+      step: 46
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 40
+      step: 48
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 79
+      velocity: 60
+      step: 50
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 40
+      step: 52
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 76
+      velocity: 60
+      step: 54
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 40
+      step: 56
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 79
+      velocity: 60
+      step: 58
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 40
+      step: 60
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 83
+      velocity: 60
+      step: 62
+      length: 0.5
+# Contract derivation (hand-derived; model in tools/test_manual_audio_lessons.py, HarmonyStrumArp):
+# README.md#adding-chords - Chd1 = 3rd (mask 2) and Chd2 = 5th (mask 4) above each root in C major, so the
+# roots 60, 57, 65, 67 give C-E-G, A-C-E, F-A-C, G-B-D on steps 1, 5, 9, 13 of every bar (length 2 steps).
+# README.md#chord-strum / #chord-acceleration / #chord-spread - gap before chord slot k is d + s*(1 + (k-1)*a)
+# channel steps, first slot at the trigger. Strum d = 1, Spread s = 1, Acceleration a = -1: gap 1 = 1 + 1*1 = 2,
+# gap 2 = 1 + 1*(1 + 1*(-1)) = 1, so root, Chd1 and Chd2 sound at 0, 2 and 3 steps. Bar 1 (slot 1) has no Strum:
+# block chords. A strummed note keeps the selected length (2 steps) from its own onset ("do not change the
+# selected note length"); every strum onset is a whole step. README.md#chord-arpeggio - slot 3 adds Arp 1/2
+# on top of the slot 2 Strum, Spread and Acceleration; the arp overrules the strum. Gaps: 1/2 + 1*1 = 3/2 and
+# 1/2 + 1*(1 + 1*(-1)) = 1/2, so the slots fall at 0, 3/2 and 2; the note at 2 would start at the original
+# endpoint, where the manual says no further arp note starts, so only the root and Chd1 sound. Each arp note
+# lasts one division (1/2 step) from its onset, shortened when necessary to finish at the endpoint.
+# The values are step trig locks on steps 1, 5, 9 and 13 (README.md#trig-param-locks), made in the slot they
+# belong to: from the lowest value of each parameter, Strum "1" is 14 detents up, Spread "1" is 14, Acceleration
+# -1 is 4 (range -5..5) and Arp "1/2" is 8 (division list X, 1/24, 1/12, 1/8, 1/6, 1/4, 1/3, 3/8, 1/2, ...).
+- id: harmony-strum-arp
+  title: Block chords, strummed, then arpeggiated
+  purpose: lesson-comparison
+  feature_ids:
+  - adding-chords
+  - chord-strum
+  - chord-acceleration
+  - chord-spread
+  - chord-arpeggio
+  - trig-param-locks
+  description: Doubledecker on channel 1 plays a four-chord progression, C, A minor, F and G in C major,
+    on steps 1, 5, 9 and 13 of every bar for four bars at 90 BPM, as triads at velocity 80 with Chd1 on the
+    3rd and Chd2 on the 5th, each chord two steps long. In bar 1 the chords are blocks, all three notes
+    together. In bars 2 and 3 Chord Strum 1 is locked on each chord step with Spread 1 and Acceleration
+    minus 1, so the root sounds first, the 3rd two steps later and the 5th a step after that, a strum that
+    speeds up, about half a second end to end. In bar 4 Chord Arp 1/2 is locked on as well and takes over
+    from the strum, so each chord becomes just two short notes, the root and then the 3rd a step and a half
+    later. Listen for the chords opening up into a quickening strum at bar 2, about 2.7 seconds in, and
+    for the strum turning into a sparse, detached two-note figure at bar 4, about 8 seconds in.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Doubledecker
+    note: 60
+    velocity: 80
+    length_detents: 18
+    range_last: 16
+    chords:
+    - 2
+    - 4
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 57
+    - - 9
+      - 65
+    - - 13
+      - 67
+  setup: harmony-strum-arp
+  sections:
+  - slot: 1
+    global_length: 16
+    changes: []
+  - slot: 2
+    global_length: 32
+    changes:
+    - kind: trig_param
+      param: chord_note_strum
+      slot: 1
+      locks:
+      - - 1
+        - 14
+        - '1'
+      - - 5
+        - 14
+        - '1'
+      - - 9
+        - 14
+        - '1'
+      - - 13
+        - 14
+        - '1'
+    - kind: trig_param
+      param: chord_spread
+      slot: 2
+      locks:
+      - - 1
+        - 14
+        - '1'
+      - - 5
+        - 14
+        - '1'
+      - - 9
+        - 14
+        - '1'
+      - - 13
+        - 14
+        - '1'
+    - kind: trig_param
+      param: chord_accel_mod
+      slot: 3
+      locks:
+      - - 1
+        - 4
+        - '-1'
+      - - 5
+        - 4
+        - '-1'
+      - - 9
+        - 4
+        - '-1'
+      - - 13
+        - 4
+        - '-1'
+  - slot: 3
+    global_length: 16
+    changes:
+    - kind: trig_param
+      param: chord_note_arpeggio
+      slot: 4
+      locks:
+      - - 1
+        - 8
+        - 1/2
+      - - 5
+        - 8
+        - 1/2
+      - - 9
+        - 8
+        - 1/2
+      - - 13
+        - 8
+        - 1/2
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 2
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 0
+      length: 2
+    - port: 1
+      status: 144
+      note: 67
+      velocity: 80
+      step: 0
+      length: 2
+    - port: 1
+      status: 144
+      note: 57
+      velocity: 80
+      step: 4
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 2
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 4
+      length: 2
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 8
+      length: 2
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 8
+      length: 2
+    - port: 1
+      status: 144
+      note: 72
+      velocity: 80
+      step: 8
+      length: 2
+    - port: 1
+      status: 144
+      note: 67
+      velocity: 80
+      step: 12
+      length: 2
+    - port: 1
+      status: 144
+      note: 71
+      velocity: 80
+      step: 12
+      length: 2
+    - port: 1
+      status: 144
+      note: 74
+      velocity: 80
+      step: 12
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 2
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 18
+      length: 2
+    - port: 1
+      status: 144
+      note: 67
+      velocity: 80
+      step: 19
+      length: 2
+    - port: 1
+      status: 144
+      note: 57
+      velocity: 80
+      step: 20
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 22
+      length: 2
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 23
+      length: 2
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 24
+      length: 2
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 26
+      length: 2
+    - port: 1
+      status: 144
+      note: 72
+      velocity: 80
+      step: 27
+      length: 2
+    - port: 1
+      status: 144
+      note: 67
+      velocity: 80
+      step: 28
+      length: 2
+    - port: 1
+      status: 144
+      note: 71
+      velocity: 80
+      step: 30
+      length: 2
+    - port: 1
+      status: 144
+      note: 74
+      velocity: 80
+      step: 31
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 32
+      length: 2
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 34
+      length: 2
+    - port: 1
+      status: 144
+      note: 67
+      velocity: 80
+      step: 35
+      length: 2
+    - port: 1
+      status: 144
+      note: 57
+      velocity: 80
+      step: 36
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 38
+      length: 2
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 39
+      length: 2
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 40
+      length: 2
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 42
+      length: 2
+    - port: 1
+      status: 144
+      note: 72
+      velocity: 80
+      step: 43
+      length: 2
+    - port: 1
+      status: 144
+      note: 67
+      velocity: 80
+      step: 44
+      length: 2
+    - port: 1
+      status: 144
+      note: 71
+      velocity: 80
+      step: 46
+      length: 2
+    - port: 1
+      status: 144
+      note: 74
+      velocity: 80
+      step: 47
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 80
+      step: 49.5
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 57
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 53.5
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 65
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 69
+      velocity: 80
+      step: 57.5
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 67
+      velocity: 80
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 71
+      velocity: 80
+      step: 61.5
+      length: 0.5
+# Contract derivation (hand-derived; model in tools/test_manual_audio_lessons.py, ParamLockComparison):
+# README.md#trig-param-locks - holding a step and adjusting a parameter locks its value to that step. Slot 1 has
+# no locks. Slot 2 locks a Polyperc voice parameter (Decay) and, on the MIDI witness channel, CC 1 on steps 1, 5, 9
+# and 13. A voice-parameter lock changes no MIDI note, so the notes are identical in both slots (an eighth-note
+# line, one 0.5-step note on every odd step); the CC 1 rows prove lock timing on a controller, NOT the voice
+# parameter: each value leaves at its own step (README.md#lock-lead-time: lead 0 sends each value at its own
+# step; the behaviour harness runs at lead 0) and ahead of that step's note-on. The CC rows exist only in
+# slot 2, steps 32-63. A CC lock is turned value+1 detents up from its Off end (11 detents lock the value 10).
+- id: param-lock-comparison
+  title: Parameter locks on and off
+  purpose: lesson-comparison
+  feature_ids:
+  - trig-param-locks
+  description: Polyperc 1 on channel 1 plays an eighth-note line for four bars at 90 BPM, MIDI 48, 55, 52,
+    55, 48, 55, 53 and 55 on the odd steps of every bar at velocity 70, short notes half a step long. In
+    bars 1 and 2 nothing is locked. In bars 3 and 4 the Decay parameter is locked on steps 1, 5, 9 and 13
+    of each bar, so those four notes ring with a different decay from the notes between them while the
+    notes themselves stay exactly the same. Listen for the plucks on the beat lengthening against the plain
+    ones after them from bar 3, about 5.3 seconds in, and for the line sounding even again at the end of
+    the cycle.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 48
+    velocity: 70
+    length_detents: 8
+    range_last: 16
+    phrase:
+    - - 1
+      - 48
+    - - 3
+      - 55
+    - - 5
+      - 52
+    - - 7
+      - 55
+    - - 9
+      - 48
+    - - 11
+      - 55
+    - - 13
+      - 53
+    - - 15
+      - 55
+  setup: param-lock-comparison
+  sections:
+  - slot: 1
+    global_length: 32
+    changes: []
+  - slot: 2
+    global_length: 32
+    changes:
+    - kind: trig_param
+      target: voice
+      label: Decay
+      slot: 1
+      locks:
+      - - 1
+        - 200
+      - - 5
+        - 40
+      - - 9
+        - 200
+      - - 13
+        - 40
+    - kind: trig_param
+      target: midi
+      param: stored_patch_cc1
+      slot: 1
+      locks:
+      - - 1
+        - 11
+        - '10'
+      - - 5
+        - 41
+        - '40'
+      - - 9
+        - 71
+        - '70'
+      - - 13
+        - 101
+        - '100'
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 2
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 70
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 6
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 10
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 53
+      velocity: 70
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 14
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 18
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 70
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 22
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 26
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 53
+      velocity: 70
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 30
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 34
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 70
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 38
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 42
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 53
+      velocity: 70
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 46
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 50
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 70
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 54
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 70
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 58
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 53
+      velocity: 70
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 70
+      step: 62
+      length: 0.5
+    controls:
+    - port: 1
+      status: 176
+      controller: 1
+      value: 10
+      step: 32
+    - port: 1
+      status: 176
+      controller: 1
+      value: 40
+      step: 36
+    - port: 1
+      status: 176
+      controller: 1
+      value: 70
+      step: 40
+    - port: 1
+      status: 176
+      controller: 1
+      value: 100
+      step: 44
+    - port: 1
+      status: 176
+      controller: 1
+      value: 10
+      step: 48
+    - port: 1
+      status: 176
+      controller: 1
+      value: 40
+      step: 52
+    - port: 1
+      status: 176
+      controller: 1
+      value: 70
+      step: 56
+    - port: 1
+      status: 176
+      controller: 1
+      value: 100
+      step: 60
+# Contract derivation (hand-derived; model in tools/test_manual_audio_invariants.py):
+# README.md#adding-chords - Chd1 = 3rd (mask 2) and Chd2 = 5th (mask 4) above each root in C major, so the
+# roots 48, 45, 53, 55 give C-E-G, A-C-E, F-A-C, G-B-D on steps 1, 5, 9, 13 of every bar (length 2 steps).
+# Slot 1 (steps 0..31) has Harmony Off, which README.md#harmony says "follows the ordinary Mosaic pitch
+# path exactly": its notes are the literal block triads below. Slot 2 (steps 32..63) has Harmony Revoice.
+# README.md#harmony does not fix the notes Revoice chooses ("legal octaves and assignments" inside
+# Register ranges the manual does not state), so the contract does not list them. The `revoice` invariant
+# is made only of README statements: Revoice takes the root and chord-mask voices "preserving their pitch
+# classes and sounding count" (rules sounding-count and pitch-classes, and the same onset steps because
+# only pitch is revoiced), "Bass can be Root" (rule bass-root: the lowest note is the chord root, with the
+# Bass Mode row read as ROOT on the screen). "Smooth prioritises literal common tones and economical
+# movement" is not made a rule: the README defines neither a voice identity nor a measure of movement, and a
+# run showed Mosaic giving up a common pitch (G, from the bass of G to the root C of the next chord) for a
+# root bass. Register defaults are not stated either. The roots sit an octave below the strum lesson's: a
+# first run with roots 65 and 67 (above the High of 60 the Register screen shows for the first voice) left
+# those chords silent, as README.md#harmony says a frame with no solution silences its voices by default.
+# The literal Revoice chords a run captured are kept as characterisation in its receipt, never as the oracle.
+- id: voice-leading-revoice
+  title: Block chords, then Revoice
+  purpose: lesson-comparison
+  feature_ids:
+  - harmony
+  - adding-chords
+  - musical-merge-and-voice-leading
+  description: Doubledecker on channel 1 plays a four-chord progression, C, A minor, F and G in C major,
+    on steps 1, 5, 9 and 13 of every bar for four bars at 90 BPM, as triads at velocity 80 with Chd1 on the
+    3rd and Chd2 on the 5th, each chord two steps long. In the first two bars Harmony is Off, so the chords
+    sound exactly as written, each in root position. In the last two bars Harmony Revoice is on. It keeps
+    the same chords, with the same pitch classes, number of notes and rhythm, and only re-places the notes
+    in other octaves, with each chord's root lowest. Listen for the same four chords being re-voiced at bar
+    3, about 5.3 seconds in, while the harmony stays the same.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Doubledecker
+    note: 48
+    velocity: 80
+    length_detents: 18
+    range_last: 16
+    chords:
+    - 2
+    - 4
+    phrase:
+    - - 1
+      - 48
+    - - 5
+      - 45
+    - - 9
+      - 53
+    - - 13
+      - 55
+  setup: voice-leading-revoice
+  sections:
+  - slot: 1
+    global_length: 32
+    changes: []
+  - slot: 2
+    global_length: 32
+    changes:
+    - kind: harmony
+      channel: 1
+      mode: revoice
+  midi_contract:
+    cycle_steps: 64
+    invariants:
+    - kind: revoice
+      channel: 1
+      reference_start_step: 0
+      revoiced_start_step: 32
+      length_steps: 32
+    notes:
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 80
+      step: 0
+      length: 2
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 80
+      step: 0
+      length: 2
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 80
+      step: 0
+      length: 2
+    - port: 1
+      status: 144
+      note: 45
+      velocity: 80
+      step: 4
+      length: 2
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 80
+      step: 4
+      length: 2
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 80
+      step: 4
+      length: 2
+    - port: 1
+      status: 144
+      note: 53
+      velocity: 80
+      step: 8
+      length: 2
+    - port: 1
+      status: 144
+      note: 57
+      velocity: 80
+      step: 8
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 2
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 80
+      step: 12
+      length: 2
+    - port: 1
+      status: 144
+      note: 59
+      velocity: 80
+      step: 12
+      length: 2
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 12
+      length: 2
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 80
+      step: 16
+      length: 2
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 80
+      step: 16
+      length: 2
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 80
+      step: 16
+      length: 2
+    - port: 1
+      status: 144
+      note: 45
+      velocity: 80
+      step: 20
+      length: 2
+    - port: 1
+      status: 144
+      note: 48
+      velocity: 80
+      step: 20
+      length: 2
+    - port: 1
+      status: 144
+      note: 52
+      velocity: 80
+      step: 20
+      length: 2
+    - port: 1
+      status: 144
+      note: 53
+      velocity: 80
+      step: 24
+      length: 2
+    - port: 1
+      status: 144
+      note: 57
+      velocity: 80
+      step: 24
+      length: 2
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 2
+    - port: 1
+      status: 144
+      note: 55
+      velocity: 80
+      step: 28
+      length: 2
+    - port: 1
+      status: 144
+      note: 59
+      velocity: 80
+      step: 28
+      length: 2
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 28
+      length: 2
+# Course listening clips (setup: course-stage). Each plays one "hear" stage of the course
+# (manual/course.yaml) and is judged by the course's own independent contract, tools/manual_course_cases.py
+# CONTRACTS[contract_key] (steps relative to one period, derived there from README.md#typical-workflow, masks,
+# merge and song behaviour), tiled to this example's four 90 BPM bars (course_contract in
+# tools/manual_audio.py); validate() refuses a midi_contract that differs from the tiled one. The state is the
+# course's own: the setup replays tools/manual_course_cases.course through the public grid, key and encoder
+# input from an empty project up to the stage, so the clip is a recording of what the learner has just
+# built. `tracks` only names the channels the stage sounds on and the voices a future audio capture would
+# give them; the course routes both to MIDI, where the controlled MIDI lane proves the stage.
+- id: course-first-sound-hear
+  title: Four equal notes
+  purpose: lesson-comparison
+  feature_ids:
+  - first-sound
+  description: Four equal notes from the first-sound steps. At 90 BPM, for four bars, the course project at this
+    stage plays C3 on steps 1 to 4 of a four-step cycle, each at velocity 80 and half a step long, so six identical
+    notes sound every second. Listen for an even pulse of identical notes with no accent, rest or change of pitch.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    range_last: 4
+    phrase:
+    - - 1
+      - 60
+    - - 2
+      - 60
+    - - 3
+      - 60
+    - - 4
+      - 60
+  course:
+    stage: first-sound-hear
+    contract_key: first-sound-hear
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 1
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 2
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 3
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 5
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 6
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 7
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 9
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 10
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 11
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 13
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 14
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 15
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 17
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 18
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 19
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 21
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 22
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 23
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 25
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 26
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 27
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 29
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 30
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 31
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 33
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 34
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 35
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 37
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 38
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 39
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 41
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 42
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 43
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 45
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 46
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 47
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 49
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 50
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 51
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 53
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 54
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 55
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 57
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 58
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 59
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 61
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 62
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 63
+      length: 0.5
+- id: course-build-a-phrase-compare
+  title: Four notes across a bar
+  purpose: lesson-comparison
+  feature_ids:
+  - build-a-phrase
+  description: Four notes spread across a bar. At 90 BPM, for four bars, the course project at this stage plays
+    C3 on steps 1, 5, 9 and 13 of each bar at velocity 80, half a step long, so the same note falls once every two
+    thirds of a second. Listen for the pulse thinning out from the six notes a second of the first stage to a slow,
+    even four in a bar.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 60
+    - - 9
+      - 60
+    - - 13
+      - 60
+  course:
+    stage: build-a-phrase-compare
+    contract_key: build-a-phrase-compare
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 60
+      length: 0.5
+- id: course-masks-listen
+  title: Raising the last note
+  purpose: lesson-comparison
+  feature_ids:
+  - masks
+  description: The last note of the bar raised. At 90 BPM, for four bars, the course project at this stage plays
+    C3 on steps 1, 5 and 9 and D3 on step 13 of each bar, all at velocity 80 and half a step long. Listen for the
+    bar's last note stepping up from C3 to D3 while the other three stay put.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 60
+    - - 9
+      - 60
+    - - 13
+      - 62
+  course:
+    stage: masks-listen
+    contract_key: masks-listen
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 60
+      length: 0.5
+- id: course-masks-keep
+  title: Quieter last note
+  purpose: lesson-comparison
+  feature_ids:
+  - masks
+  description: The last note raised and softened. At 90 BPM, for four bars, the course project at this stage plays
+    C3 on steps 1, 5 and 9 at velocity 80 and D3 on step 13 at velocity 50, each half a step long. Listen for the
+    bar's last note, D3, sounding clearly softer than the three C3 notes before it.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 60
+    - - 9
+      - 60
+    - - 13
+      - 62
+  course:
+    stage: masks-keep
+    contract_key: masks-keep
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 60
+      length: 0.5
+- id: course-sequence-composition-both
+  title: A bass under the phrase
+  purpose: lesson-comparison
+  feature_ids:
+  - sequence-composition
+  description: A bass part under the phrase. At 90 BPM, for four bars, the course project at this stage plays the
+    phrase of C3, C3, C3 and a softer D3 on steps 1, 5, 9 and 13, plus a second channel playing a bass at velocity
+    100, C2 on step 1 and G2 on step 9, each one step long. Listen for a low note arriving with the first C3 and
+    answering at the half bar, under the melody.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 60
+    - - 9
+      - 60
+    - - 13
+      - 62
+  - channel: 2
+    voice: Doubledecker
+    note: 48
+    velocity: 100
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 9
+      - 55
+  course:
+    stage: sequence-composition-both
+    contract_key: sequence-composition-both
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 12
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 0
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 8
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 28
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 16
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 24
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 44
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 32
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 40
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 60
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 48
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 56
+      length: 1
+- id: course-harmony-design-apply
+  title: The phrase moved to D
+  purpose: lesson-comparison
+  feature_ids:
+  - harmony-design
+  description: The same phrase after the scale is changed to D. At 90 BPM, for four bars, the course project at
+    this stage plays D3, D3, D3 and a softer E3 on steps 1, 5, 9 and 13 with the bass D2 on step 1 and A2 on step
+    9, the phrase and bass of the last stage moved up a tone by applying a D major scale slot. Listen for the whole
+    part sounding a whole tone higher while keeping its rhythm and its shape.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 62
+    - - 5
+      - 62
+    - - 9
+      - 62
+    - - 13
+      - 64
+  - channel: 2
+    voice: Doubledecker
+    note: 48
+    velocity: 100
+    length_detents: 8
+    phrase:
+    - - 1
+      - 50
+    - - 9
+      - 57
+  course:
+    stage: harmony-design-apply
+    contract_key: harmony-design-apply-d
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 50
+      step: 12
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 50
+      velocity: 100
+      step: 0
+      length: 1
+    - port: 2
+      status: 145
+      note: 57
+      velocity: 100
+      step: 8
+      length: 1
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 50
+      step: 28
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 50
+      velocity: 100
+      step: 16
+      length: 1
+    - port: 2
+      status: 145
+      note: 57
+      velocity: 100
+      step: 24
+      length: 1
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 50
+      step: 44
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 50
+      velocity: 100
+      step: 32
+      length: 1
+    - port: 2
+      status: 145
+      note: 57
+      velocity: 100
+      step: 40
+      length: 1
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 64
+      velocity: 50
+      step: 60
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 50
+      velocity: 100
+      step: 48
+      length: 1
+    - port: 2
+      status: 145
+      note: 57
+      velocity: 100
+      step: 56
+      length: 1
+- id: course-modulation-movement-and-interest-level
+  title: A quiet pickup
+  purpose: lesson-comparison
+  feature_ids:
+  - modulation-movement-and-interest
+  description: A quiet pickup into the next bar. At 90 BPM, for four bars, the course project at this stage plays
+    the phrase and bass with one extra C3 on step 15 at velocity 35, so a faint note leads into each bar. Listen
+    for a much softer note just before the bar line leading into the downbeat.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 60
+    - - 9
+      - 60
+    - - 13
+      - 62
+    - - 15
+      - 60
+  - channel: 2
+    voice: Doubledecker
+    note: 48
+    velocity: 100
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 9
+      - 55
+  course:
+    stage: modulation-movement-and-interest-level
+    contract_key: modulation-movement-and-interest-level
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 0
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 4
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 8
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 12
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 14
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 0
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 8
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 30
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 16
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 24
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 32
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 36
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 40
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 44
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 46
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 32
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 40
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 62
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 48
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 56
+      length: 1
+- id: course-song-composition-transition
+  title: Two song sections
+  purpose: lesson-comparison
+  feature_ids:
+  - song-composition
+  description: A bare first section, then the full part. At 90 BPM, for four bars, the course project at this stage
+    plays a first section of 16 steps with only the bass and a second of 16 steps with the bass, the phrase and
+    the quiet pickup, repeating as a song. Listen for the bass alone for the first bar, then the melody entering
+    over it at the second bar, and the two sections looping.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 60
+    - - 9
+      - 60
+    - - 13
+      - 62
+    - - 15
+      - 60
+  - channel: 2
+    voice: Doubledecker
+    note: 48
+    velocity: 100
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 9
+      - 55
+  course:
+    stage: song-composition-transition
+    contract_key: song-composition-transition
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 0
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 8
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 30
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 16
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 24
+      length: 1
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 32
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 40
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 62
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 48
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 56
+      length: 1
+- id: course-keep-your-work-perform
+  title: The saved song, reloaded
+  purpose: lesson-comparison
+  feature_ids:
+  - keep-your-work
+  description: The song as saved and reloaded. At 90 BPM, for four bars, the course project at this stage plays
+    the same two sections as the song stage, the bass alone and then the full part, played from the reloaded project.
+    Listen for the reloaded song sounding note for note as it did before it was saved.
+  bars: 4
+  bpm: 90
+  profile: manual-trio
+  tracks:
+  - channel: 1
+    voice: Polyperc 1
+    note: 60
+    velocity: 80
+    length_detents: 8
+    phrase:
+    - - 1
+      - 60
+    - - 5
+      - 60
+    - - 9
+      - 60
+    - - 13
+      - 62
+    - - 15
+      - 60
+  - channel: 2
+    voice: Doubledecker
+    note: 48
+    velocity: 100
+    length_detents: 8
+    phrase:
+    - - 1
+      - 48
+    - - 9
+      - 55
+  course:
+    stage: keep-your-work-perform
+    contract_key: keep-your-work-perform
+  setup: course-stage
+  midi_contract:
+    cycle_steps: 64
+    notes:
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 0
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 8
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 16
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 20
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 24
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 28
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 30
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 16
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 24
+      length: 1
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 32
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 40
+      length: 1
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 48
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 52
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 80
+      step: 56
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 62
+      velocity: 50
+      step: 60
+      length: 0.5
+    - port: 1
+      status: 144
+      note: 60
+      velocity: 35
+      step: 62
+      length: 0.5
+    - port: 2
+      status: 145
+      note: 48
+      velocity: 100
+      step: 48
+      length: 1
+    - port: 2
+      status: 145
+      note: 55
+      velocity: 100
+      step: 56
+      length: 1

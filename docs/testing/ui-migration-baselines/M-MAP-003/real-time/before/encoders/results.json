@@ -1,0 +1,320 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "mapping-target-session",
+    "mapped": false,
+    "edits": [
+      [
+        176,
+        1,
+        64
+      ],
+      [
+        176,
+        1,
+        65
+      ]
+    ],
+    "stream": [
+      [
+        -0.0,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        -0.0,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        0.0,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        0.17,
+        [
+          128,
+          72,
+          90
+        ]
+      ],
+      [
+        0.17,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        0.17,
+        [
+          144,
+          12,
+          117
+        ]
+      ],
+      [
+        0.25,
+        [
+          128,
+          12,
+          117
+        ]
+      ],
+      [
+        0.33,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        0.33,
+        [
+          144,
+          12,
+          107
+        ]
+      ],
+      [
+        0.42,
+        [
+          128,
+          12,
+          107
+        ]
+      ],
+      [
+        0.5,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        0.5,
+        [
+          144,
+          12,
+          97
+        ]
+      ],
+      [
+        0.58,
+        [
+          128,
+          12,
+          97
+        ]
+      ],
+      [
+        0.67,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        0.67,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        0.83,
+        [
+          128,
+          72,
+          90
+        ]
+      ],
+      [
+        0.83,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        0.83,
+        [
+          144,
+          12,
+          117
+        ]
+      ],
+      [
+        0.92,
+        [
+          128,
+          12,
+          117
+        ]
+      ],
+      [
+        1.0,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        1.0,
+        [
+          144,
+          12,
+          107
+        ]
+      ],
+      [
+        1.08,
+        [
+          128,
+          12,
+          107
+        ]
+      ],
+      [
+        1.17,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        1.17,
+        [
+          144,
+          12,
+          97
+        ]
+      ],
+      [
+        1.25,
+        [
+          128,
+          12,
+          97
+        ]
+      ],
+      [
+        1.33,
+        [
+          176,
+          1,
+          65
+        ]
+      ],
+      [
+        1.33,
+        [
+          144,
+          72,
+          90
+        ]
+      ],
+      [
+        1.47,
+        [
+          128,
+          72,
+          90
+        ]
+      ]
+    ]
+  }
+]

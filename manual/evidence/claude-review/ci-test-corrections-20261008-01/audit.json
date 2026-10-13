@@ -1,0 +1,98 @@
+{
+  "source_tree": "13bc90a62d0e176d2ab8d80c9e091cf90aa28534",
+  "tests": [
+    {
+      "independently_rerun": true,
+      "runtime": "Python 3.8.5",
+      "result": "62 passed",
+      "name": "test_manual_build.py"
+    },
+    {
+      "independently_rerun": true,
+      "runtime": "Python 3.11.9",
+      "result": "62 passed",
+      "name": "test_manual_build.py"
+    },
+    {
+      "independently_rerun": true,
+      "runtime": "Python 3.8.5",
+      "result": "63 passed",
+      "name": "test_manual_reconcile_build.py"
+    },
+    {
+      "independently_rerun": true,
+      "runtime": "Python 3.8.5",
+      "result": "73 passed, 2 MONOME_EMULATOR-only skipped",
+      "name": "test_manual_publication_verify.py"
+    },
+    {
+      "independently_rerun": false,
+      "runtime": "Python 3.8.5",
+      "source": "candidate v04 manifest; unchanged from v03",
+      "result": "2 passed in 75.6s",
+      "name": "test_manual_controlled_generation_integrity.py"
+    }
+  ],
+  "source_commit": "9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0",
+  "source_evidence": {
+    "fresh_target_producer_contract": "full-mode-only; target roots confined beneath the current build evidence, per-scene files hashed, current run/session/application identity bound, producer stage/log/source and manifest SHA rechecked at publication",
+    "save_dialog_acceptance": "/home/andy/mosaic-manual-build-operators/round4-qa-remediation-20261007-01/save-package05-independent-native-02/ACCEPTANCE.json",
+    "fresh_target_producer_sha256": "a1b3e3f56f62afa0982a3f094ad2cfb2a583868c090a287f43816c15f6adb82b",
+    "retained_target_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a",
+    "save_dialog_acceptance_sha256": "27dcdde32a229ff4dd1644b8a0e6218bc75f0f63239333c933bd5c492090514c",
+    "save_dialog_acceptance_scope": "passed strict audit, 9 checkpoints, 259 cache files; explicitly supplementary single controlled scene only, not full campaign or realtime qualification",
+    "save_dialog_plan_sha256": "e1a7a6aafc5730805131177bf29e8b0d50b850fe7ca0926828e2512927af86ec"
+  },
+  "review_id": "ci-stage-ast-audit-20261008-01",
+  "ast_sha256": {
+    "python311": {
+      "stage_command": "33bf4501400164ff560fcaeac4d116b7498ba94f6e35f36bcd439cc68738f5e0",
+      "run_stage": "45e39ed119b3eafc264bf891046f380f6fcac75d7cfd015e2f9f641e32f7289c",
+      "plan": "9eba758e7929c0a1a07d62d4696032ab07b219d2dea273bb8f5b8b8d3b6f3450"
+    },
+    "python38": {
+      "stage_command": "22493e17bf42d6d3f55b23e5dd811ae88b11e2c294d1d9157511f5113b405ca6",
+      "run_stage": "1e9e336208e2984f2398337a64016ec12d3f3b78cee671a992905480c654bd4e",
+      "plan": "bb30ac13547f93247bc0f3e7a578c99405ddf5c11d0daf6423479f01ccb6f030"
+    }
+  },
+  "status": "accepted-for-strict-test-guard-repin-only",
+  "candidate": {
+    "production_source_changes": 0,
+    "manifest": "/home/andy/mosaic-manual-build-operators/ci-diagnosis-37763159972-01/candidate-v04-manifest.json",
+    "manifest_sha256": "5a2e9adfef1c9c44fc73e4945ec0d715c0ed668028e20789a9ed9acde98c93e7",
+    "patch_sha256": "258ee8664fb6ef4afd011234a07f77fbab8f5f4b05d71d0bba0c32a92da330dc",
+    "path": "/home/andy/mosaic-manual-build-operators/ci-diagnosis-37763159972-01/candidate-v04",
+    "patch": "/home/andy/mosaic-manual-build-operators/ci-diagnosis-37763159972-01/test-corrections-v04.patch"
+  },
+  "minus23": {
+    "passed": true,
+    "stage_records": 48,
+    "manual_generation_complete": true,
+    "selected_plan_files": 21,
+    "manifest": "/home/andy/mosaic-manual-build-runs/full-controlled-local-20261006-23/64c23dd9bab4498092f9a0bddd43dfbe/manifest.json",
+    "save_dialog_plan_present": false,
+    "build_complete": false,
+    "sha256": "a8a3d59ade436592ee118658b6b720943c7551f4dd3f1a203b5bbe8737b42b0b"
+  },
+  "schema_version": 1,
+  "limitations": [
+    "The -23 run did not exercise Save Dialog or the fresh target producer and is not a complete full-build qualification.",
+    "The Save Dialog acceptance is supplementary-only and realtime remains pending CI.",
+    "I found no dedicated tests importing manual_fresh_target_midi.py; source and publication binding guards were inspected, but producer behavior is not independently test-covered by this focused patch.",
+    "Do not claim the full campaign is complete or passed from this audit."
+  ],
+  "current_plan": {
+    "full_stage_count": 82,
+    "controlled_local_additions": [
+      "reference-controlled-scene-plans-save-dialog-base-midi"
+    ],
+    "plan_files": 22,
+    "full_additions": [
+      "fresh-target-midi-producer",
+      "reference-real-scene-plans-save-dialog-base-midi",
+      "reference-controlled-scene-plans-save-dialog-base-midi"
+    ],
+    "controlled_local_stage_count": 49
+  }
+}

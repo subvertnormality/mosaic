@@ -1,0 +1,58 @@
+{
+  "run_id": "mosaic-rd-core-2bb8459fccd8450fb5d1db563abb7d05",
+  "profile": "physical-norns",
+  "device": "Linux armv7l\nLua 5.1.5  Copyright (C) 1994-2012 Lua.org, PUC-Rio\n",
+  "source_sha256": {
+    "lib/rhythm_doctor/bank.lua": "6bbc342ef64dd74a06dc0388b82daa0651a0bc249ae362c3c4394eea155345d9",
+    "lib/rhythm_doctor/state_machine.lua": "218c025b13d8968edcff3113c3b1e0dd7361881a8482eb4227f345470ef6adcc",
+    "lib/rhythm_doctor/paint.lua": "1d5a837a909323b8d99f8b860cf3b041b08186930d3f512d25820008d0fe7e4e",
+    "lib/rhythm_doctor/paint_journal.lua": "6bdec9e7676c13a264510901ffe4f812890ed7335fc61712ac3d0403e1b94fe2",
+    "tests/rhythm_doctor/test_core.lua": "15b53a1edcf68eee86d8329d18171214e237a4bac170bd32c36ebeebabc253f0",
+    "tests/rhythm_doctor/test_integration.lua": "856b746d10efbb60a79b8a235d87094fb1f47c190dbc8c2b5f3fa6b6eaae7961",
+    "tests/rhythm_doctor/test_lifecycle.lua": "7393c03da977f0ab203edbbc8b0147d3f6f2cc84effa0c64bf2a4870c09e8374",
+    "tests/rhythm_doctor/test_journal.lua": "c4e94b54b42e2b0b8a15ead0fdc345049a85c423555203a96c19af0ac2fa8fbf",
+    "tests/rhythm_doctor/test_bank_schema.lua": "ec1d943091cabd549af3e49057722a06bab3af97a55f8bbb5ef12d6489b4c195",
+    "tests/rhythm_doctor/test_paint_boundaries.lua": "f876dab130c7d0a7522ef9e89783cb7843256e80bdfe7a00a9bc237b10008492"
+  },
+  "tests": [
+    {
+      "test": "tests/rhythm_doctor/test_core.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor core: 68 assertions passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_integration.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor integration: 9 assertions passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_lifecycle.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor lifecycle: 4 tests passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_journal.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor journal: intervening-edit transaction passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_bank_schema.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor schema: 14 malformed banks rejected\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_paint_boundaries.lua",
+      "exit_code": 0,
+      "stdout": "paint boundaries: 5433 assertions passed\n",
+      "stderr": ""
+    }
+  ],
+  "passed": true,
+  "scope": "pure Lua component tests only",
+  "full_feature_acceptance": false
+}

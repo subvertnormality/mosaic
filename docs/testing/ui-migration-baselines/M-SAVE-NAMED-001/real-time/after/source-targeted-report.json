@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "before_sha": "914609a2bb2a5beadec888ebb71790621e17f16a",
+  "after_sha": "5fb3c37796c2bc356eeef97e3f8281dda7d303af",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-SAVE-NAMED-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/named_save.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/named_save.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-SAVE-NAMED-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SAVE-NAMED-001/real-time/before/6ee85dd49de84766924bfd3a1775780d/manifest.json",
+              "manifest_sha256": "efb27ad79d7236aae5cc1af3fcdf3c6aebe91f3021485dd10106ddab920cf752"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SAVE-NAMED-001/real-time/after/ea6ee4038e0b42c6a8b027c064bf19e5/manifest.json",
+              "manifest_sha256": "39f3ad79dea3b1a1bd350e3bcabb4beea627a9e14c3ab6020971d3372784d637"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SAVE-NAMED-001/controlled-experimental/before/838f7ea2f9e044a9bdd1171de5bea544/manifest.json",
+              "manifest_sha256": "021c3987a193c0fa9b89dd61ab8670769b0c3325a63e07a4d1978dec5019d11d"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SAVE-NAMED-001/controlled-experimental/after/51e17261b8b9487fa98e59d31a7f7054/manifest.json",
+              "manifest_sha256": "f892bea2ec83527078df8fa06667a583f616b1410e2fd6562f22d412ebd39c9b"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

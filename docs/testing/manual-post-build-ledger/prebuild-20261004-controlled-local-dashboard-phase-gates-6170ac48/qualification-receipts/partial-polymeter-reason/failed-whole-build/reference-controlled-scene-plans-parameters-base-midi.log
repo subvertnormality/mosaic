@@ -1,0 +1,21 @@
+Verified M-PARAM-016 / fixed-note-default-and-locks trig-parameter-locks locks-default-versus-local
+Verified M-PARAM-015 / quantised-fixed-note-default-and-locks
+Verified M-PARAM-018 / probability-endpoints
+Verified M-PARAM-037 / random-note-seeded-offsets
+Verified M-PARAM-038 / random-twos-note-seeded-offsets
+Verified M-PARAM-001 / chord-strum-division-selector trig-params-assignment-and-selection
+Verified M-PARAM-002 / chord-arpeggio-division-selector
+Verified M-PARAM-003 / chord-spread-division-selector
+Verified M-CHORDSHAPE-001 / chord-strum-a-timed-chord chord-shape-forward chord-velocity-ordinal
+Verified M-CHORDSHAPE-009 / chord-arpeggio-timed-gates
+Verified M-CHORDSHAPE-003 / chord-shape-reverse
+Verified M-CHORDSHAPE-002 / mute-root-retains-slot
+Verified M-CHORDSHAPE-257 / chord-acceleration-termination
+Verified M-SPREAD-006 / chord-spread-separate-gap
+Verified M-PATCH-017 / global-parameter-slide
+Verified M-PATCH-033 / local-parameter-slide
+Verified M-SLIDE-STEP-001 / slide-wrap-boundary
+Verified M-MASK-021 / full-quantisation-precedence
+Verified M-MASK-007 / mask-locks-clear-neighbours
+Verified M-PARAM-CHORD-X-001 / chord-pattern-x-is-off
+/home/andy/mosaic-manual-runs/deb0d4df7e1f4b7a814e44fafc59b2a1

@@ -23,7 +23,9 @@ local trig_merge_mode_button =
   {
     {"Skip trig merge mode on", 2},
     {"Only trig merge mode on", 5},
-    {"All trig merge mode on", 8}
+    {"All trig merge mode on", 8},
+    {"Foundation merge strategy on", 11},
+    {"Fragments merge strategy on", 15}
   }
 )
 local note_merge_mode_button =
@@ -61,6 +63,22 @@ local length_merge_mode_button =
 )
 local channel_octave_fader = fader:new(8, 8, 5, 5)
 local channel_scale_fader = fader:new(1, 3, 16, 16)
+local merge_display -- lib/musical_merge/display, loaded on first use
+local merge_strategy = include("mosaic/lib/musical_merge/strategy")
+
+-- Merge Shape takes over some merge buttons (Foundation: trig; Fragments:
+-- trig, note, velocity and length). The button still saves its mode, which
+-- applies again when Merge Shape is off; the tooltip says which is in charge.
+local function shape_in_use(target_channel, kind)
+  merge_display = merge_display or include("mosaic/lib/musical_merge/display")
+  local owner = merge_display.shape_owner(target_channel.musical_merge and target_channel.musical_merge.mode, kind)
+  if owner then
+    local mode = target_channel[kind .. "_merge_mode"]
+    local number = tostring(mode):match("^pattern_number_(%d+)$")
+    tooltip:show(kind:sub(1, 1):upper() .. kind:sub(2) .. " merge " .. (number and ("pattern " .. number) or mode) ..
+      ": " .. owner .. " in use")
+  end
+end
 
 function channel_edit_page.init()
 
@@ -152,6 +170,7 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui.leave_feature_editor_for_grid()
         if is_key1_down then
           channel_edit_page_sequencer:press(x, y)
           local channel = program.get_selected_channel()
@@ -333,31 +352,9 @@ function channel_edit_page.register_press()
       if trig_merge_mode_button:is_this(x, y) then
         local target_song = program.get_selected_song_pattern()
         local target_channel = program.get_selected_channel()
-        trig_merge_mode_button:press(x, y)
-
-        if trig_merge_mode_button:get_state() == 1 then
-
-          target_channel.trig_merge_mode = "skip"
-
-          tooltip:show(
-            "Skip trig merge mode"
-          )
-        elseif trig_merge_mode_button:get_state() == 2 then
-
-          target_channel.trig_merge_mode = "only"
-          tooltip:show(
-            "Only trig merge mode"
-          )
-        elseif trig_merge_mode_button:get_state() == 3 then
-
-          target_channel.trig_merge_mode = "all"
-          tooltip:show(
-            "All trig merge mode"
-          )
-        end
-
-        target_song.active = true
-        pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        local next_strategy = merge_strategy.step(target_song, target_channel, 1, true)
+        channel_edit_page.set_merge_strategy(next_strategy)
+        channel_edit_page_ui.show_merge_gesture("STRATEGY " .. string.upper(next_strategy))
 
       end
     end
@@ -369,6 +366,9 @@ function channel_edit_page.register_press()
         local target_song = program.get_selected_song_pattern()
         local target_channel = program.get_selected_channel()
 
+        if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, "note") then
+          tooltip:show("FRAGMENTS NOTE INACTIVE"); return
+        end
         note_merge_mode_button:press(x, y)
 
         if note_merge_mode_button:get_state() == 1 then
@@ -397,6 +397,8 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        shape_in_use(target_channel, "note")
+        channel_edit_page_ui.show_merge_gesture("NOTE " .. string.upper(target_channel.note_merge_mode))
 
       end
     end
@@ -408,6 +410,9 @@ function channel_edit_page.register_press()
         local target_song = program.get_selected_song_pattern()
         local target_channel = program.get_selected_channel()
 
+        if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, "velocity") then
+          tooltip:show("FRAGMENTS VELOCITY INACTIVE"); return
+        end
         velocity_merge_mode_button:press(x, y)
 
         if velocity_merge_mode_button:get_state() == 1 then
@@ -435,6 +440,8 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        shape_in_use(target_channel, "velocity")
+        channel_edit_page_ui.show_merge_gesture("VELOCITY " .. string.upper(target_channel.velocity_merge_mode))
 
       end
     end
@@ -447,6 +454,9 @@ function channel_edit_page.register_press()
         local target_song = program.get_selected_song_pattern()
         local target_channel = program.get_selected_channel()
 
+        if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, "length") then
+          tooltip:show("FRAGMENTS LENGTH INACTIVE"); return
+        end
         length_merge_mode_button:press(x, y)
 
         if length_merge_mode_button:get_state() == 1 then
@@ -474,6 +484,17 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        shape_in_use(target_channel, "length")
+        channel_edit_page_ui.show_merge_gesture("LENGTH " .. string.upper(target_channel.length_merge_mode))
+      end
+    end
+  )
+  press:register_post(
+    "channel_edit_page",
+    function(x, y)
+      if trig_merge_mode_button:is_this(x,y)or note_merge_mode_button:is_this(x,y)or
+        velocity_merge_mode_button:is_this(x,y)or length_merge_mode_button:is_this(x,y)then
+        channel_edit_page_ui.hide_merge_gesture()
       end
     end
   )
@@ -497,6 +518,9 @@ function channel_edit_page.register_press()
         local target_song = program.get_selected_song_pattern()
         local target_channel = program.get_selected_channel()
         if note_merge_mode_button:is_this(x, y) then
+          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, "note") then
+            tooltip:show("FRAGMENTS NOTE INACTIVE"); return
+          end
           target_channel.note_merge_mode = "pattern_number_" .. x2
           note_merge_mode_button:set_state(4)
           target_song.active = true
@@ -504,8 +528,12 @@ function channel_edit_page.register_press()
           tooltip:show(
             "Note merge mode pattern " ..x2
           )
+          shape_in_use(target_channel, "note")
         end
         if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then
+          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, "velocity") then
+            tooltip:show("FRAGMENTS VELOCITY INACTIVE"); return
+          end
           target_channel.velocity_merge_mode = "pattern_number_" .. x2
           velocity_merge_mode_button:set_state(4)
           target_song.active = true
@@ -513,8 +541,12 @@ function channel_edit_page.register_press()
           tooltip:show(
             "Velocity merge mode pattern " ..x2
           )
+          shape_in_use(target_channel, "velocity")
         end
         if length_merge_mode_button:is_this(x, y) and is_key1_down then
+          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, "length") then
+            tooltip:show("FRAGMENTS LENGTH INACTIVE"); return
+          end
           target_channel.length_merge_mode = "pattern_number_" .. x2
           length_merge_mode_button:set_state(4)
           target_song.active = true
@@ -522,6 +554,7 @@ function channel_edit_page.register_press()
           tooltip:show(
             "Length merge mode pattern " ..x2
           )
+          shape_in_use(target_channel, "length")
         end
       end
     end
@@ -538,18 +571,51 @@ function channel_edit_page.register_press()
   )
 end
 
+-- Sets the selected channel's merge mode from the norns screen (Merge modes,
+-- C09) exactly as its grid merge button or held button + pattern does: the
+-- channel's mode, the button's state and the working patterns follow.
+-- kind: "trig", "note", "velocity" or "length"; mode: "skip" / "only" / "all"
+-- for trig, "average" / "up" / "down" / "pattern_number_<n>" for the others.
+-- One validated commit path for the grid and norns effective selector.
+function channel_edit_page.set_merge_strategy(selected)
+  local song, channel = program.get_selected_song_pattern(), program.get_selected_channel()
+  local ok, status = merge_strategy.request(song, channel, selected, function(choice)
+    local owner = include("mosaic/lib/pages/channel_edit_page/channel_feature_editor").new("merge")
+    owner:enter()
+    local shape = (choice == "foundation" or choice == "fragments") and choice or "off"
+    if owner.draft.mode ~= shape then
+      owner.draft.mode, owner.dirty = shape, true
+      if not owner:apply() then return false, owner.status end
+    end
+    if shape == "off" and channel.trig_merge_mode ~= choice then channel_edit_page.set_merge_mode("trig", choice) end
+    return true, owner.status ~= "" and owner.status or "APPLIED"
+  end)
+  channel_edit_page.refresh_merge_buttons()
+  tooltip:show(ok and (string.upper(selected) .. " " .. status) or status)
+  fn.dirty_grid(true); fn.dirty_screen(true)
+  return ok, status
+end
+
+function channel_edit_page.set_merge_mode(kind, mode)
+  local target_song = program.get_selected_song_pattern()
+  local target_channel = program.get_selected_channel()
+  if kind ~= "trig" and merge_strategy.owned(target_song, target_channel, kind) then return false, "INACTIVE" end
+  target_channel[kind .. "_merge_mode"] = mode
+  channel_edit_page.refresh_merge_buttons()
+  target_song.active = true
+  pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+  fn.dirty_grid(true)
+end
+
 function channel_edit_page.refresh_merge_buttons()
   local trig_merge_mode = program.get_selected_channel().trig_merge_mode
   local note_merge_mode = program.get_selected_channel().note_merge_mode
   local velocity_merge_mode = program.get_selected_channel().velocity_merge_mode
   local length_merge_mode = program.get_selected_channel().length_merge_mode
 
-  if trig_merge_mode == "skip" then
-    trig_merge_mode_button:set_state(1)
-  elseif trig_merge_mode == "only" then
-    trig_merge_mode_button:set_state(2)
-  elseif trig_merge_mode == "all" then
-    trig_merge_mode_button:set_state(3)
+  local selected = merge_strategy.snapshot(program.get_selected_song_pattern(), program.get_selected_channel()).selected
+  for index, choice in ipairs(merge_strategy.choices) do
+    if selected == choice then trig_merge_mode_button:set_state(index) end
   end
 
   if note_merge_mode == "average" then

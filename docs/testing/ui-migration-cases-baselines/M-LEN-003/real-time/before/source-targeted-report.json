@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "912cf7a8fd6bdf7756547eca8e1266a908c5760d",
+  "after_sha": "9b355094ecc623844577c327bb79e0079e6d2844",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-LEN-003"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-LEN-003",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-LEN-003/real-time/before/226a7a5e7508436995d0720be9863d74/manifest.json",
+              "manifest_sha256": "90cf62f43e0aa222b19a23d3cf40a17512fe0fde2a5030264535ce966313bd73"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-LEN-003/real-time/after/ffffeb3089564ebeb724657c6a8c04ae/manifest.json",
+              "manifest_sha256": "6e4ae4f01db64261546805cc5e1753db40f355cd0d9a39297f63736113fe4323"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-LEN-003/controlled-experimental/before/49829b1717b14d3191cec112f82ec4de/manifest.json",
+              "manifest_sha256": "ec1e19fd825f09534ae20216758836973eb8d6a844e4b9dc9a05c7c9cfdc4a98"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-LEN-003/controlled-experimental/after/0c01fa2b14694720a6bf540a6ad105a9/manifest.json",
+              "manifest_sha256": "3b25c2eca8712cf59a48a4c1bd9c7d3ceb03dec7911375fe990bcce14b1f8923"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

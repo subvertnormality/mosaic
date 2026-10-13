@@ -1,0 +1,210 @@
+{
+  "passed": true,
+  "features": 133,
+  "references": [
+    {
+      "feature": "getting-started",
+      "target": "#setup"
+    },
+    {
+      "feature": "getting-started",
+      "target": "#first-sound"
+    },
+    {
+      "feature": "getting-started",
+      "target": "#build-a-phrase"
+    },
+    {
+      "feature": "getting-started",
+      "target": "#keep-your-work"
+    },
+    {
+      "feature": "install",
+      "target": "#setup"
+    },
+    {
+      "feature": "midi-device-configuration",
+      "target": "#stock-devices"
+    },
+    {
+      "feature": "midi-device-configuration",
+      "target": "#adding-custom-devices"
+    },
+    {
+      "feature": "adding-custom-devices",
+      "target": "https://subvertnormality.github.io/mosaic/config_creator.html"
+    },
+    {
+      "feature": "lock-lead-time",
+      "target": "images/lock-lead-time.png"
+    },
+    {
+      "feature": "cheat-sheet",
+      "target": "../cheat_sheet.html"
+    },
+    {
+      "feature": "typical-workflow",
+      "target": "#build-a-phrase"
+    },
+    {
+      "feature": "adding-notes",
+      "target": "#harmony-design"
+    },
+    {
+      "feature": "adding-notes",
+      "target": "#masks"
+    },
+    {
+      "feature": "midi-sound-sources",
+      "target": "https://github.com/sixolet/nb/tree/main"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/sixolet/nb/tree/main"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/sixolet/nb_ansible"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/sixolet/emplaitress/"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/sixolet/nb_jf"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/sixolet/nb_crow"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/entzmingerc/nb_drumcrow"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/dstroud/nb_polyperc"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/entzmingerc/nb_rudiments"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/sixolet/doubledecker"
+    },
+    {
+      "feature": "norns-sound-sources-with-n-b",
+      "target": "https://github.com/zjb-s/oilcan"
+    },
+    {
+      "feature": "device-parameters",
+      "target": "docs/testing/NRPN_COMPATIBILITY.md"
+    },
+    {
+      "feature": "adding-chords",
+      "target": "#chord-strum"
+    },
+    {
+      "feature": "adding-chords",
+      "target": "#chord-velocity-modifier"
+    },
+    {
+      "feature": "note-dashboard",
+      "target": "#harmony"
+    },
+    {
+      "feature": "clocks-swing-and-shuffle",
+      "target": "https://github.com/21echoes/cyrene"
+    },
+    {
+      "feature": "channel-length",
+      "target": "#options"
+    },
+    {
+      "feature": "trig-parameters",
+      "target": "#locks"
+    },
+    {
+      "feature": "scale-editor",
+      "target": "#scale-locks"
+    },
+    {
+      "feature": "transposition",
+      "target": "#transposition-locks"
+    },
+    {
+      "feature": "sinfonion-connect",
+      "target": "https://github.com/subvertnormality/norns2sinfonion"
+    },
+    {
+      "feature": "lfos-and-modulation",
+      "target": "https://github.com/sixolet/matrix"
+    },
+    {
+      "feature": "lfos-and-modulation",
+      "target": "https://github.com/sixolet/toolkit"
+    },
+    {
+      "feature": "merge-shape",
+      "target": "images/merge-shape-phrase.png"
+    },
+    {
+      "feature": "merge-shape",
+      "target": "images/merge-shape-foundation.png"
+    },
+    {
+      "feature": "fragments",
+      "target": "images/merge-shape-fragments.png"
+    },
+    {
+      "feature": "interlock",
+      "target": "images/merge-shape-interlock.png"
+    },
+    {
+      "feature": "structure",
+      "target": "images/merge-shape-structure.png"
+    },
+    {
+      "feature": "harmony",
+      "target": "images/harmony-register.png"
+    },
+    {
+      "feature": "harmony",
+      "target": "images/harmony-tone-map.png"
+    },
+    {
+      "feature": "harmony",
+      "target": "images/harmony-no-voicing.png"
+    },
+    {
+      "feature": "first-sound",
+      "target": "#build-a-phrase"
+    },
+    {
+      "feature": "no-sound",
+      "target": "#first-sound"
+    }
+  ],
+  "image_targets": [
+    "images/harmony-no-voicing.png",
+    "images/harmony-register.png",
+    "images/harmony-tone-map.png",
+    "images/lock-lead-time.png",
+    "images/merge-shape-foundation.png",
+    "images/merge-shape-fragments.png",
+    "images/merge-shape-interlock.png",
+    "images/merge-shape-phrase.png",
+    "images/merge-shape-structure.png"
+  ],
+  "invalid_targets": [],
+  "published_source": {
+    "url": "https://github.com/subvertnormality/mosaic/blob/54d7b871358fcc68b7166847603cc9fb1461d0b6/docs/testing/NRPN_COMPATIBILITY.md",
+    "base": "54d7b871358fcc68b7166847603cc9fb1461d0b6",
+    "unchanged": true,
+    "sha256": "b6eaf17438f74800b2b7d07d957fb0fca9a45ecfc7c1c9d4168e196e2f875721",
+    "http_status": 200
+  },
+  "source_policy": "Unstaged lib/tests/tools/docs links render as plain evidence paths; only explicitly verified source maps become public permalinks."
+}

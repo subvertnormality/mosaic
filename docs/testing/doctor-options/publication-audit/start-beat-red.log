@@ -1,0 +1,69 @@
+test_adc_requires_actual_twelve_second_public_transport_window (test_doctor_options_audit.DoctorCompleteWindowIntegrity) ... ok
+test_ready_fixture_cannot_skip_held_browse_boundary (test_doctor_options_audit.DoctorCompleteWindowIntegrity) ... ok
+test_fixture_requires_exact_manual_right_parent_and_real_autosave_origin (test_doctor_options_audit.DoctorFixtureProvenanceIntegrity) ... ok
+test_all_native_frame_checks_supply_the_actual_case_namespace (test_doctor_options_audit.DoctorFrameApiIntegrity) ... ok
+test_selected_input_frame_is_required_for_each_actual_adc_role (test_doctor_options_audit.DoctorInputDocumentationIntegrity) ... FAIL
+test_actual_adc_and_fixture_both_invoke_independent_current_chain (test_doctor_options_audit.DoctorManualStartBeatIntegrity) ... FAIL
+test_exact_current_four_analysis_chain_and_final_restored_analysis (test_doctor_options_audit.DoctorManualStartBeatIntegrity) ... ERROR
+test_start_beat_requires_five_exact_native_documentation_rows (test_doctor_options_audit.DoctorManualStartBeatIntegrity) ... FAIL
+test_setup_lookalikes_outside_explicit_window_are_excluded (test_doctor_options_audit.DoctorMusicalWindowIntegrity) ... ok
+test_whole_phrase_and_release_timing_not_just_positive_attack_count (test_doctor_options_audit.DoctorMusicalWindowIntegrity) ... ok
+test_cli_requires_all_seven_explicit_roles_and_fixture_identity (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_closing_attack_requires_real_release_and_exact_packet_count (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_fixture_digest_is_checked_before_parsing (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_native_observation_cannot_replace_a_real_frame_or_grid (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_report_refuses_a_missing_final_harness_guard_before_any_acceptance (test_doctor_options_audit.DoctorNewApiIntegrity) ... ok
+test_backend_templates_and_runtime_json_are_required_but_manual_outputs_are_not (test_doctor_options_audit.DoctorProductionInventoryIntegrity) ... ok
+test_startup_spec_is_mandatory_harness_dependency (test_doctor_options_audit.DoctorProductionInventoryIntegrity) ... ok
+test_unloaded_production_source_cannot_be_omitted_from_snapshot (test_doctor_options_audit.DoctorProductionInventoryIntegrity) ... ok
+test_actual_stop_time_is_recomputed_from_native_inputs (test_doctor_options_audit.DoctorPublicStopIntegrity) ... ok
+test_exact_zero_velocity_public_stop_release_is_a_real_owned_endpoint (test_doctor_options_audit.DoctorPublicStopIntegrity) ... ok
+test_real_stop_uses_native_monotonic_clock (test_doctor_options_audit.DoctorPublicStopIntegrity) ... ok
+test_shortened_final_gate_cannot_pass_without_actual_public_stop (test_doctor_options_audit.DoctorPublicStopIntegrity) ... ok
+test_all_seven_unique_reports_are_required (test_doctor_options_audit.DoctorScopeIntegrity) ... ok
+test_audio_cannot_claim_controlled_time_or_a_failed_qualification (test_doctor_options_audit.DoctorScopeIntegrity) ... ok
+test_setup_ready_allow_two_ui_lanes_and_require_exact_role (test_doctor_options_audit.DoctorScopeIntegrity) ... ok
+test_input_selection_requires_the_actual_selected_spectrum (test_doctor_options_audit.DoctorSelectedInputIntegrity) ... ok
+
+======================================================================
+ERROR: test_exact_current_four_analysis_chain_and_final_restored_analysis (test_doctor_options_audit.DoctorManualStartBeatIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 169, in test_exact_current_four_analysis_chain_and_final_restored_analysis
+    envelopes,rows=self.chain();self.assertEqual(audit.check_manual_start_beat(envelopes,rows,'wav'),envelopes[-1]['analysis'])
+AttributeError: module 'doctor_options_audit' has no attribute 'check_manual_start_beat'
+
+======================================================================
+FAIL: test_selected_input_frame_is_required_for_each_actual_adc_role (test_doctor_options_audit.DoctorInputDocumentationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 158, in test_selected_input_frame_is_required_for_each_actual_adc_role
+    contract=audit.adc_checkpoint_contract(case);self.assertEqual(len(contract),count);self.assertEqual(contract[1],('setup-input-source',dict(route='R01',label='Input',value=value)))
+AssertionError: 7 != 12
+
+======================================================================
+FAIL: test_actual_adc_and_fixture_both_invoke_independent_current_chain (test_doctor_options_audit.DoctorManualStartBeatIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 189, in test_actual_adc_and_fixture_both_invoke_independent_current_chain
+    self.assertTrue(any(isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='check_manual_start_beat' for n in ast.walk(function)),name+' must bind final restored chain')
+AssertionError: False is not true : audit_adc must bind final restored chain
+
+======================================================================
+FAIL: test_start_beat_requires_five_exact_native_documentation_rows (test_doctor_options_audit.DoctorManualStartBeatIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 183, in test_start_beat_requires_five_exact_native_documentation_rows
+    self.assertEqual(audit.adc_checkpoint_contract('manual_right')[-5:],expected)
+AssertionError: Lists differ: [('window-lower-row', {'route': 'R05', 'labe[383 chars]0'})] != [('start-beat-original1', {'route': 'R06', '[343 chars]ne})]
+
+First differing element 0:
+('window-lower-row', {'route': 'R05', 'label': 'Alignment', 'value': 'OPEN >'})
+('start-beat-original1', {'route': 'R06', 'label': 'Start beat', 'value': '1'})
+
+Diff is 963 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.076s
+
+FAILED (failures=3, errors=1)

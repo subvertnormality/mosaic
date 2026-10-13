@@ -1,0 +1,37 @@
+{
+  "receipt_id": "final-425-ledger-install-20261008-01",
+  "files": {
+    "final-425-ledger.json": "78d46761bfe935c480d50cd5a8aedb26f8b9e9fcd59cf063e824ad4cbbe2f4bc",
+    "all-425-row-audit.json": "4f10c4d1eb2ece9d683fd4f4e32606efab66c5c0a2332d36cdc8442d9ed235eb",
+    "final-425-adoption-receipt.json": "9c2fda877508b8a459d9bd19c27d992700922f2f6c652dd5de9f557f9f00b613",
+    "final-425-adoption-receipt.md": "7d1140965aec3b172c098cbd21eb221a30e781fb48b183e8fe0dbf0379554659",
+    "final-astra-review.json": "c84cb0994000d8810f27fe58319a20c99fe9dd8a3f9f7544d5bd3d69c3fe0be0",
+    "final-astra-review.md": "c704b486fc630f6826a4ccc0de39a8dcf47578e3ea850f2d892a7493a0ad1909",
+    "followup-review.json": "0423e6769944cda6103733b065be49d28659bd8e3e0648592bb291577270f98a",
+    "final-rendered-followup-receipt.json": "1c36a781104d1e5cd33cfa75aed3c96f417efbbc105c8744960726914bf7ab21",
+    "postinstall-followup-review.cjs": "5641df8ac5e5948d59a4084252895e5086bb6692c4883297bbdeaf26e9808d45",
+    "source-v07-review.json": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+    "crosswalk-52-unit-to-425.json": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+    "fe378-baseline-425-ledger.json": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+    "source-only-v07-425-candidate.json": "42e59780fc1ce5987564ccc7f62f4e8ca3a214cdcea927c2498b5cbeb6d86699",
+    "source-only-score-delta.json": "e90c2b2e0761d588967ba57988cc5cc0b187c9ba7e77aa11a5d72bcbd6006cbb"
+  },
+  "base_ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+  "final_ledger_sha256": "78d46761bfe935c480d50cd5a8aedb26f8b9e9fcd59cf063e824ad4cbbe2f4bc",
+  "row_audit_sha256": "4f10c4d1eb2ece9d683fd4f4e32606efab66c5c0a2332d36cdc8442d9ed235eb",
+  "criterion_minima": {
+    "coherence": 8,
+    "usefulness": 8,
+    "understandability": 8,
+    "representation": 8,
+    "granularity": 8,
+    "flow": 8,
+    "integration": 8,
+    "vocabulary": 8,
+    "naming": 8,
+    "canonical_home": 8
+  },
+  "all_425_meet_threshold": true,
+  "all_425_freshly_rated": false,
+  "installed": true
+}

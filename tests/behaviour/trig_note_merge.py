@@ -30,18 +30,20 @@ def trig_steps(mode):
     return [s for s,n in counts.items() if n>0 and {'all':True,'skip':n==1,'only':n>1}[mode]]
 
 def trig_note_merge_matrix(c):
+    ui=c.ui
     # Hand-worked anchors: step 2 and 3 average 3, higher 5, lower 1.
     assert [merged_degree(2,m) for m in ('average','higher','lower')]==[3,5,1]
     assert trig_steps('skip')==[1,4] and trig_steps('only')==[2,3] and trig_steps('all')==[1,2,3,4]
     c.configure()
-    c.tap(5,8);c.tap(1,1);c.tap(4,4)                   # P1: remove the step-4 trig
-    c.tap(5,8);c.tap(2,5);c.tap(3,3);c.tap(4,1)        # P1 degrees 0/2/4/6
-    c.tap(5,8);c.tap(5,8);c.tap(2,1)                   # trig editor, pattern 2
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(5,8)
-    for x,degree in P2.items():c.tap(x,7-degree)
-    c.tap(3,8);c.tap(2,2)                              # assign P2 to channel 1
-    c.hold_tap((16,8),(1,2))                           # velocity priority: pattern 1
+    ui.pattern_editor();ui.tap_control('pattern_select',1);ui.tap_step(4) # P1: remove the step-4 trig
+    ui.pattern_editor(view='note',from_view='trigger')
+    ui.tap_control('pattern_note_degree',(2,2));ui.tap_control('pattern_note_degree',(3,4));ui.tap_control('pattern_note_degree',(4,6)) # P1 degrees 0/2/4/6
+    ui.pattern_editor(view='trigger',from_view='note');ui.tap_control('pattern_select',2) # trig editor, pattern 2
+    for x in (2,3,4):ui.tap_step(x)
+    ui.pattern_editor(view='note',from_view='trigger')
+    for x,degree in P2.items():ui.tap_control('pattern_note_degree',(x,degree))
+    ui.tap_control('channel_editor');ui.tap_control('pattern_slot',2) # assign P2 to channel 1
+    ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1) # velocity priority: pattern 1
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     def phrase(trig_mode,note_mode,pentatonic=True):
@@ -55,18 +57,17 @@ def trig_note_merge_matrix(c):
                               pitches=[e[1][1] for e in expected],passed=True))
     # Trig button (14,8): Skip 2 -> Only 5 -> All 8. Note button (15,8): Average 2 -> Higher 5 -> Lower 8.
     for trig_mode,trig_level in (('skip',2),('only',5),('all',8)):
-        if trig_mode!='skip':c.tap(14,8)
-        c.led_values([(14,8)],[trig_level])
+        if trig_mode!='skip':ui.tap_control('trig_merge_mode')
+        ui.expect_leds({('trig_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[trig_level]})
         for note_mode,note_level in (('average',2),('higher',5),('lower',8)):
-            if note_mode!='average':c.tap(15,8)
-            c.led_values([(15,8)],[note_level])
+            if note_mode!='average':ui.tap_control('note_merge_mode')
+            ui.expect_leds({('note_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[note_level]})
             phrase(trig_mode,note_mode)
-        c.tap(15,8);c.led_values([(15,8)],[2])         # Lower -> Average
+        ui.tap_control('note_merge_mode');ui.expect_leds({('note_merge_mode',None):'off'}) # Lower -> Average
     # Merged-pentatonic Off: the same All matrix plays the unsnapped merge results.
-    from cases import set_mosaic_options
-    set_mosaic_options(c,[('Lock merged to pent.',False)])
-    c.led_values([(14,8)],[8])
+    ui.set_mosaic_option_keys([('lock_merged_to_pentatonic',False)])
+    ui.expect_leds({('trig_merge_mode',None):'medium'})
     for note_mode,note_level in (('average',2),('higher',5),('lower',8)):
-        if note_mode!='average':c.tap(15,8)
-        c.led_values([(15,8)],[note_level])
+        if note_mode!='average':ui.tap_control('note_merge_mode')
+        ui.expect_leds({('note_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[note_level]})
         phrase('all',note_mode,pentatonic=False)

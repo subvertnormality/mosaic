@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "after_sha": "6d47cb7a6c5e9bc2c5fae1a8d342ca142dbc9a6b",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TRANS-006"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TRANS-006",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/real-time/before/9cabe67d9a79408e964b0e7790fefb99/manifest.json",
+              "manifest_sha256": "5f92b6a747b2a4ec5c8e04cf551de3c23fc9e713fff65b31902684e58580cf1f"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/real-time/after/1e5773f5e12445c0a547d39d96930f46/manifest.json",
+              "manifest_sha256": "a5ac6141af79d5297597824adf4638a39be8ddc380b1b728249101d005506885"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/controlled-experimental/before/14c02809396f4119b507416eb3df778e/manifest.json",
+              "manifest_sha256": "798f91dd1c1c2a0a0a6e275028dde1a87e1b695ad06f6d8ae062362b2dccd814"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-006/controlled-experimental/after/b710854d1555403eaaccf31e0a370300/manifest.json",
+              "manifest_sha256": "db5ea075103c52700eccefd675e0febc7759b285639ec957a5134063e1c0f3a3"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

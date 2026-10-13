@@ -1,0 +1,31 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+.................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Saving project as absent.v2
+Loading project /tmp/lua_O9Uq5W/absent.v2.ptn
+Loading project /tmp/lua_O9Uq5W/absent.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Saving project as explicit_off.v2
+Loading project /tmp/lua_S3eAjY/explicit_off.v2.ptn
+Loading project /tmp/lua_S3eAjY/explicit_off.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Saving project as foundation.v2
+Loading project /tmp/lua_3AmOSY/foundation.v2.ptn
+Loading project /tmp/lua_3AmOSY/foundation.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Saving project as foundation_harmony_pattern.v2
+Loading project /tmp/lua_kFbo3X/foundation_harmony_pattern.v2.ptn
+Loading project /tmp/lua_kFbo3X/foundation_harmony_pattern.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Saving project as unknown_keys.v2
+Loading project /tmp/lua_5hykZZ/unknown_keys.v2.ptn
+Loading project /tmp/lua_5hykZZ/unknown_keys.v2.ptn
+.......................................................................................................................................................................................................................................................................................................................................................................................................................................ls: cannot access '/tmp/lua_ZYamZW/config': No such file or directory
+......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Ran 2436 tests in 79.440 seconds, 2436 successes, 0 failures
+OK

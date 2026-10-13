@@ -1,0 +1,17 @@
+test_changed_drum_weight_fails_before_onnx_session_execution (test_pretrained_composite_backend.CompositeBackendTests.test_changed_drum_weight_fails_before_onnx_session_execution) ... ok
+test_composes_raw_drum_heads_and_pinned_bass_into_one_worker_valid_five_lane_result (test_pretrained_composite_backend.CompositeBackendTests.test_composes_raw_drum_heads_and_pinned_bass_into_one_worker_valid_five_lane_result) ... ok
+test_digital_silence_paints_no_drum_events_without_running_the_omnizart_frontend (test_pretrained_composite_backend.CompositeBackendTests.test_digital_silence_paints_no_drum_events_without_running_the_omnizart_frontend)
+A silent capture must be analysable and paint nothing, not fail closed. ... ok
+test_digital_silence_still_fails_closed_on_a_changed_drum_weight (test_pretrained_composite_backend.CompositeBackendTests.test_digital_silence_still_fails_closed_on_a_changed_drum_weight)
+Silence must not become a route around the pinned-artifact check. ... ok
+test_executable_cli_writes_only_the_complete_result (test_pretrained_composite_backend.CompositeBackendTests.test_executable_cli_writes_only_the_complete_result) ... ok
+test_fixed_four_frame_window_uses_one_bounded_drum_window_and_one_bass_inference (test_pretrained_composite_backend.CompositeBackendTests.test_fixed_four_frame_window_uses_one_bounded_drum_window_and_one_bass_inference) ... ok
+test_phase_inverted_stereo_paints_no_drum_events_without_running_the_frontend (test_pretrained_composite_backend.CompositeBackendTests.test_phase_inverted_stereo_paints_no_drum_events_without_running_the_frontend)
+An exactly inverted stereo pair cancels to silence in the mono downmix. ... ok
+test_pin_mismatch_fails_closed_without_returning_a_four_lane_fallback (test_pretrained_composite_backend.CompositeBackendTests.test_pin_mismatch_fails_closed_without_returning_a_four_lane_fallback) ... ok
+test_subprocess_factory_is_the_same_request_result_abi_consumed_by_analysis_worker (test_pretrained_composite_backend.CompositeBackendTests.test_subprocess_factory_is_the_same_request_result_abi_consumed_by_analysis_worker) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.182s
+
+OK

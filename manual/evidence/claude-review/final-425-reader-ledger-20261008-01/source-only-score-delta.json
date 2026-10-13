@@ -1,0 +1,1995 @@
+{
+  "base_ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+  "v07_report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+  "v07_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+  "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+  "direct_target_count": 38,
+  "changes": [
+    {
+      "id": "recipe:interacting-with-slots:2-copy-a-song-slot-then-raise-the-copy-by-one-octa",
+      "review_unit_ids": [
+        "doc-language-cleanup:feature:interacting-with-slots:recipes[1]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-08.json",
+          "report_sha256": "a4fa1e545443c7962f28c6836a3c7466bacf247d438be872b1599eda891703b4"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 8,
+          "usefulness": 8,
+          "understandability": 8,
+          "representation": 8,
+          "granularity": 8,
+          "flow": 8,
+          "integration": 8,
+          "vocabulary": 8,
+          "naming": 8,
+          "canonical_home": 8
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:feature:interacting-with-slots:recipes[1]",
+          "mapped_public_unit_id": "recipe:interacting-with-slots:2-copy-a-song-slot-then-raise-the-copy-by-one-octa",
+          "mapping_basis": "Feature interacting-with-slots, authored recipes[1] mapped to one-based ledger ordinal 2.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "fresh source review of the exact v07 three-leaf delta"
+        }
+      }
+    },
+    {
+      "id": "recipe:interacting-with-slots:3-build-the-recording-intro-verse-and-outro",
+      "review_unit_ids": [
+        "practical-small:interacting-with-slots:recipes[2]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 8,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "source07 fresh review; source08 unchanged content and placement",
+        "score_evidence": {
+          "report_path": "/home/andy/mosaic-manual-build-operators/source07-v03-review-dispatch-20261008-01/reports/job-03.json",
+          "report_sha256": "16fc195a4053a99b02c74a8b629114f08dbe42fe7d776873622d51b06c260cc1"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "practical-small:interacting-with-slots:recipes[2]",
+          "mapped_public_unit_id": "recipe:interacting-with-slots:3-build-the-recording-intro-verse-and-outro",
+          "mapping_basis": "Feature interacting-with-slots, authored recipes[2] mapped to one-based ledger ordinal 3.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "fresh source review of the exact v07 three-leaf delta"
+        }
+      }
+    },
+    {
+      "id": "recipe:lock-all-to-pentatonic:1-hear-every-note-restricted",
+      "review_unit_ids": [
+        "practical-small:lock-all-to-pentatonic:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-02.json",
+          "report_sha256": "dea0af5e1f2e0af6368d6ebdcbe5fd94254a86cc0218539cd7a1aec1c6a70584"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "practical-small:lock-all-to-pentatonic:recipes[0]",
+          "mapped_public_unit_id": "recipe:lock-all-to-pentatonic:1-hear-every-note-restricted",
+          "mapping_basis": "Feature lock-all-to-pentatonic, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:lock-random-to-pentatonic:1-compare-random-notes-with-and-without-the-filter",
+      "review_unit_ids": [
+        "practical-small:lock-random-to-pentatonic:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-02.json",
+          "report_sha256": "dea0af5e1f2e0af6368d6ebdcbe5fd94254a86cc0218539cd7a1aec1c6a70584"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "practical-small:lock-random-to-pentatonic:recipes[0]",
+          "mapped_public_unit_id": "recipe:lock-random-to-pentatonic:1-compare-random-notes-with-and-without-the-filter",
+          "mapping_basis": "Feature lock-random-to-pentatonic, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+      "review_unit_ids": [
+        "doc-language-cleanup:feature:locks:recipes[4]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "Source14 freshly rates the exact locks recipe route and linked recording context; mapped to the frozen public ID by exact canonical route/title identity; previous score evidence preserved.",
+        "score_evidence": {
+          "book_sha256": "e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe",
+          "kind": "source14_locks-fresh-reviewed-pass",
+          "mapped_public_unit_id": "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+          "mapping_basis": "Canonical route #locks/recipe/5 and exact title match the fifth compiled locks recipe; the review ID omits its title slug, while the frozen public ID includes it.",
+          "reader_index_sha256": "984dc86e198f71fb2594dac82add5fe03afbd706f30cded8f5f84f5189a44d6c",
+          "recording_route": "#recording/param-lock-comparison",
+          "report_path": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/source14-locks-recipe-recheck-20261008-01/reports/source14-locks-recipe-recheck.json",
+          "report_sha256": "dc8a928dd7ef3e1ae566f96dbfedcb81792ac68caf3847c7812f77015d90bae1",
+          "review_unit_id": "recipe:locks:5",
+          "reviewed_at_utc": "2026-10-08T08:19:30.46Z",
+          "source_identity_sha256": "da8b8d63986e46f1432278cc0cd8bdc800db727154c07bf18be05bd093e91049"
+        },
+        "poststyle_review_status": "fresh exact-unit review mapped",
+        "previous_basis": "source07 fresh review; source08 unchanged content and placement",
+        "previous_score_evidence": {
+          "report_path": "/home/andy/mosaic-manual-build-operators/source07-v03-review-dispatch-20261008-01/reports/job-02.json",
+          "report_sha256": "8b21a00597be04cff1ea38ba4f293cf7f7afa35ec56c4271cda6b7b4d1226f8f"
+        }
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 8,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:feature:locks:recipes[4]",
+          "mapped_public_unit_id": "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+          "mapping_basis": "Feature locks, authored recipes[4] mapped to one-based ledger ordinal 5.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:loops-that-meet:1-comparing-the-loop-alignment",
+      "review_unit_ids": [
+        "recipe-text-overlay:loops-that-meet:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-08.json",
+          "report_sha256": "a4fa1e545443c7962f28c6836a3c7466bacf247d438be872b1599eda891703b4"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:loops-that-meet:recipes[0]",
+          "mapped_public_unit_id": "recipe:loops-that-meet:1-comparing-the-loop-alignment",
+          "mapping_basis": "Feature loops-that-meet, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:masks:5-build-the-recording-small-hours-four-bars-in-c-m",
+      "review_unit_ids": [
+        "recipe-text-overlay:masks:recipes[4]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "source07 fresh review; source08 unchanged content and placement",
+        "score_evidence": {
+          "report_path": "/home/andy/mosaic-manual-build-operators/source07-v03-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "9390e4c09c6dffd96cacc4caf991a75a666db081c5cbbb18633067bb4c56ccf6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 8,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:masks:recipes[4]",
+          "mapped_public_unit_id": "recipe:masks:5-build-the-recording-small-hours-four-bars-in-c-m",
+          "mapping_basis": "Feature masks, authored recipes[4] mapped to one-based ledger ordinal 5.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:note-merge-modes:1-build-the-recording-average-then-higher",
+      "review_unit_ids": [
+        "recipe-text-overlay:note-merge-modes:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "source07 fresh review; source08 unchanged content and placement",
+        "score_evidence": {
+          "report_path": "/home/andy/mosaic-manual-build-operators/source07-v03-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "9390e4c09c6dffd96cacc4caf991a75a666db081c5cbbb18633067bb4c56ccf6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 8,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:note-merge-modes:recipes[0]",
+          "mapped_public_unit_id": "recipe:note-merge-modes:1-build-the-recording-average-then-higher",
+          "mapping_basis": "Feature note-merge-modes, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:pocket-rhythm:1-make-the-recorded-ghost-note-comparison",
+      "review_unit_ids": [
+        "recipe-text-overlay:pocket-rhythm:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-08.json",
+          "report_sha256": "a4fa1e545443c7962f28c6836a3c7466bacf247d438be872b1599eda891703b4"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 8,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:pocket-rhythm:recipes[0]",
+          "mapped_public_unit_id": "recipe:pocket-rhythm:1-make-the-recorded-ghost-note-comparison",
+          "mapping_basis": "Feature pocket-rhythm, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:pocket-rhythm:2-optional-probability-variation",
+      "review_unit_ids": [
+        "recipe-text-overlay:pocket-rhythm:recipes[1]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 8,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "source07 fresh review; source08 unchanged content and placement",
+        "score_evidence": {
+          "report_path": "/home/andy/mosaic-manual-build-operators/source07-v03-review-dispatch-20261008-01/reports/job-02.json",
+          "report_sha256": "8b21a00597be04cff1ea38ba4f293cf7f7afa35ec56c4271cda6b7b4d1226f8f"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:pocket-rhythm:recipes[1]",
+          "mapped_public_unit_id": "recipe:pocket-rhythm:2-optional-probability-variation",
+          "mapping_basis": "Feature pocket-rhythm, authored recipes[1] mapped to one-based ledger ordinal 2.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:scale-editor:1-prepare-and-apply-a-second-scale",
+      "review_unit_ids": [
+        "practical-small:scale-editor:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 10,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-05.json",
+          "report_sha256": "214c0e5d6bc190e267a4423456409ff39506bee1156529e22bbeb7a92bdb34a0"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "practical-small:scale-editor:recipes[0]",
+          "mapped_public_unit_id": "recipe:scale-editor:1-prepare-and-apply-a-second-scale",
+          "mapping_basis": "Feature scale-editor, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:small-hours:1-percussion-channel",
+      "review_unit_ids": [
+        "recipe-text-overlay:small-hours:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-08.json",
+          "report_sha256": "a4fa1e545443c7962f28c6836a3c7466bacf247d438be872b1599eda891703b4"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 8,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:small-hours:recipes[0]",
+          "mapped_public_unit_id": "recipe:small-hours:1-percussion-channel",
+          "mapping_basis": "Feature small-hours, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:small-hours:2-bass-channel",
+      "review_unit_ids": [
+        "recipe-text-overlay:small-hours:recipes[1]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-08.json",
+          "report_sha256": "a4fa1e545443c7962f28c6836a3c7466bacf247d438be872b1599eda891703b4"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 8,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:small-hours:recipes[1]",
+          "mapped_public_unit_id": "recipe:small-hours:2-bass-channel",
+          "mapping_basis": "Feature small-hours, authored recipes[1] mapped to one-based ledger ordinal 2.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:small-hours:3-chord-channel",
+      "review_unit_ids": [
+        "recipe-text-overlay:small-hours:recipes[2]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 10,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 8,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-05.json",
+          "report_sha256": "214c0e5d6bc190e267a4423456409ff39506bee1156529e22bbeb7a92bdb34a0"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 8,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:small-hours:recipes[2]",
+          "mapped_public_unit_id": "recipe:small-hours:3-chord-channel",
+          "mapping_basis": "Feature small-hours, authored recipes[2] mapped to one-based ledger ordinal 3.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:song-editor:1-create-a-two-slot-group",
+      "review_unit_ids": [
+        "practical-small:song-editor:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-08.json",
+          "report_sha256": "a4fa1e545443c7962f28c6836a3c7466bacf247d438be872b1599eda891703b4"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 8,
+          "integration": 8,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "practical-small:song-editor:recipes[0]",
+          "mapped_public_unit_id": "recipe:song-editor:1-create-a-two-slot-group",
+          "mapping_basis": "Feature song-editor, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recipe:tilting-harmony:1-make-the-relative-note-scale-comparison",
+      "review_unit_ids": [
+        "recipe-text-overlay:tilting-harmony:recipes[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 10,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-05.json",
+          "report_sha256": "214c0e5d6bc190e267a4423456409ff39506bee1156529e22bbeb7a92bdb34a0"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 8,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "recipe-text-overlay:tilting-harmony:recipes[0]",
+          "mapped_public_unit_id": "recipe:tilting-harmony:1-make-the-relative-note-scale-comparison",
+          "mapping_basis": "Feature tilting-harmony, authored recipes[0] mapped to one-based ledger ordinal 1.",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "fresh source review of the exact v07 three-leaf delta"
+        }
+      }
+    },
+    {
+      "id": "recording:bass-and-intervals",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:bass-and-intervals:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:bass-and-intervals:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:bass-and-intervals",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-build-a-phrase-compare",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-build-a-phrase-compare:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-build-a-phrase-compare:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-build-a-phrase-compare",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-first-sound-hear",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-first-sound-hear:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 8,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 8,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-first-sound-hear:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-first-sound-hear",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-harmony-design-apply",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-harmony-design-apply:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 8,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 8,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 8,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-harmony-design-apply:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-harmony-design-apply",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-keep-your-work-perform",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-keep-your-work-perform:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-keep-your-work-perform:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-keep-your-work-perform",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-masks-keep",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-masks-keep:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 8,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-masks-keep:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-masks-keep",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-masks-listen",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-masks-listen:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 8,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-masks-listen:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-masks-listen",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-modulation-movement-and-interest-level",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-modulation-movement-and-interest-level:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 8,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 8,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 8,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-modulation-movement-and-interest-level:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-modulation-movement-and-interest-level",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-sequence-composition-both",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-sequence-composition-both:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-sequence-composition-both:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-sequence-composition-both",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:course-song-composition-transition",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:course-song-composition-transition:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:course-song-composition-transition:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:course-song-composition-transition",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:ghost-note-comparison",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:ghost-note-comparison:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 8,
+          "coherence": 8,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 8,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 8,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-re-review-impact-audit-20261007-01/source05-review-dispatch-01/reports/job-01.json",
+          "report_sha256": "99c6a5e1fbd7afaf6fa5689b37fd8e774a2a096a7a7fda2b59eb307f1f55d102"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:ghost-note-comparison:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:ghost-note-comparison",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:harmony-strum-arp",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:harmony-strum-arp:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:harmony-strum-arp:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:harmony-strum-arp",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:masks-small-hours",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:masks-small-hours:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:masks-small-hours:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:masks-small-hours",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:note-merge-modes",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:note-merge-modes:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 10,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 9,
+          "representation": 9,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "source07 fresh review; source08 unchanged content and placement",
+        "score_evidence": {
+          "report_path": "/home/andy/mosaic-manual-build-operators/source07-v03-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "9390e4c09c6dffd96cacc4caf991a75a666db081c5cbbb18633067bb4c56ccf6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:note-merge-modes:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:note-merge-modes",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:oilcan-pocket",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:oilcan-pocket:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-next-review-preflight-20261007-01/review-dispatch-v02-20261007-01/reports/audio-recordings-01.json",
+          "report_sha256": "1f2b7eaebf7698804d6956159c7c5e8ff02684933e8f75875c4ee753ede98ad1"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:oilcan-pocket:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:oilcan-pocket",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:param-lock-comparison",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:param-lock-comparison:lesson_relations[0]",
+        "doc-language-cleanup:recording:param-lock-comparison:build_steps[4]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 10,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "source07 fresh review; source08 unchanged content and placement",
+        "score_evidence": {
+          "report_path": "/home/andy/mosaic-manual-build-operators/source07-v03-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "9390e4c09c6dffd96cacc4caf991a75a666db081c5cbbb18633067bb4c56ccf6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 9,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:param-lock-comparison:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:param-lock-comparison",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:polymeter",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:polymeter:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:polymeter:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:polymeter",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:scale-slot-comparison",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:scale-slot-comparison:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:scale-slot-comparison:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:scale-slot-comparison",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:song-sections",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:song-sections:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 8,
+          "granularity": 9,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 9,
+          "usefulness": 9,
+          "vocabulary": 9
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-authorized-historical-carry",
+          "report_path": "/home/andy/mosaic-manual-build-operators/round4-next-review-preflight-20261007-01/review-dispatch-v02-20261007-01/reports/audio-recordings-01.json",
+          "report_sha256": "1f2b7eaebf7698804d6956159c7c5e8ff02684933e8f75875c4ee753ede98ad1"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:song-sections:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:song-sections",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:swing-comparison",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:swing-comparison:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 8,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:swing-comparison:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:swing-comparison",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:three-voice-conversation",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[0]",
+        "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[1]",
+        "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[2]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 8,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 8,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:three-voice-conversation:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:three-voice-conversation",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    },
+    {
+      "id": "recording:voice-leading-revoice",
+      "review_unit_ids": [
+        "doc-language-cleanup:recording:voice-leading-revoice:lesson_relations[0]"
+      ],
+      "before": {
+        "scores": {
+          "canonical_home": 9,
+          "coherence": 9,
+          "flow": 9,
+          "granularity": 8,
+          "integration": 9,
+          "naming": 9,
+          "representation": 8,
+          "understandability": 8,
+          "usefulness": 9,
+          "vocabulary": 8
+        },
+        "basis": "unchanged historical content and placement",
+        "score_evidence": {
+          "kind": "source06b-fresh-reviewed-pass",
+          "report_path": "/home/andy/mosaic-manual-build-operators/source06b-review-dispatch-20261008-01/reports/job-01.json",
+          "report_sha256": "22a4b0f7cb17837bf52f7d432dd3815daaef56960818f9f5fa4927696567f1d6"
+        },
+        "poststyle_review_status": "source10 score retained; shared-reader carry not yet adjudicated"
+      },
+      "after": {
+        "scores": {
+          "coherence": 9,
+          "usefulness": 9,
+          "understandability": 9,
+          "representation": 8,
+          "granularity": 9,
+          "flow": 9,
+          "integration": 9,
+          "vocabulary": 9,
+          "naming": 9,
+          "canonical_home": 9
+        },
+        "score_evidence": {
+          "kind": "source-only-v07-review-not-rendered",
+          "report_path": "manual/evidence/claude-review/proposal-source-only-pass-20261008-01/combined-v07-source-review.json",
+          "report_sha256": "5a0884681073d5fbb3c9b09a3361a21064bc8e156381433aca939c3c7886d170",
+          "candidate_manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+          "review_unit_id": "doc-language-cleanup:recording:voice-leading-revoice:lesson_relations[0]",
+          "mapped_public_unit_id": "recording:voice-leading-revoice",
+          "mapping_basis": "",
+          "crosswalk_sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29",
+          "score_method": "carried from v06 source review; v07 manifest proves this field/context is byte-identical"
+        }
+      }
+    }
+  ]
+}

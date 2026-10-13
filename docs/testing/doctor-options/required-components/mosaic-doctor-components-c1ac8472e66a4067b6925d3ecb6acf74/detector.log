@@ -1,0 +1,17 @@
+test_fixed_source_manifest_is_disjoint (test_detector.Detector.test_fixed_source_manifest_is_disjoint) ... ok
+test_general_midi_hats_are_labeled_as_closed_or_open (test_detector.Detector.test_general_midi_hats_are_labeled_as_closed_or_open) ... ok
+test_literal_metadata_missing_midi_marks_declared_lanes_unknown (test_detector.Detector.test_literal_metadata_missing_midi_marks_declared_lanes_unknown) ... ok
+test_no_declared_bass_is_a_known_empty_negative (test_detector.Detector.test_no_declared_bass_is_a_known_empty_negative) ... ok
+test_onset_frame_targets_is_linear_sized_for_dense_reference_lists (test_detector.Detector.test_onset_frame_targets_is_linear_sized_for_dense_reference_lists) ... ok
+test_onset_frame_targets_marks_only_nearest_frames (test_detector.Detector.test_onset_frame_targets_marks_only_nearest_frames) ... ok
+test_peak_picker_collapses_dense_frames (test_detector.Detector.test_peak_picker_collapses_dense_frames) ... ok
+test_phase_inversion_keeps_magnitude_features (test_detector.Detector.test_phase_inversion_keeps_magnitude_features) ... ok
+test_probability_selects_the_explicit_positive_class_column (test_detector.Detector.test_probability_selects_the_explicit_positive_class_column) ... ok
+test_single_class_probability_uses_the_observed_positive_class (test_detector.Detector.test_single_class_probability_uses_the_observed_positive_class) ... ok
+test_single_negative_class_probability_is_zero (test_detector.Detector.test_single_negative_class_probability_is_zero) ... ok
+test_subsample_keeps_all_positive_rows_when_positive_count_exceeds_cap (test_detector.Detector.test_subsample_keeps_all_positive_rows_when_positive_count_exceeds_cap) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.014s
+
+OK

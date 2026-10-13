@@ -1,0 +1,31 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+.................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Saving project as absent.v2
+Loading project /tmp/lua_RCIoaX/absent.v2.ptn
+Loading project /tmp/lua_RCIoaX/absent.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Saving project as explicit_off.v2
+Loading project /tmp/lua_nYDg6Y/explicit_off.v2.ptn
+Loading project /tmp/lua_nYDg6Y/explicit_off.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Saving project as foundation.v2
+Loading project /tmp/lua_QGvwuW/foundation.v2.ptn
+Loading project /tmp/lua_QGvwuW/foundation.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Saving project as foundation_harmony_pattern.v2
+Loading project /tmp/lua_h7MuXW/foundation_harmony_pattern.v2.ptn
+Loading project /tmp/lua_h7MuXW/foundation_harmony_pattern.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Saving project as unknown_keys.v2
+Loading project /tmp/lua_Ypog8Z/unknown_keys.v2.ptn
+Loading project /tmp/lua_Ypog8Z/unknown_keys.v2.ptn
+......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Ran 2445 tests in 77.808 seconds, 2445 successes, 0 failures
+OK
+find: ‘/home/we/norns/lua/core’: No such file or directory
+ls: cannot access '/tmp/lua_mmdjwY/config': No such file or directory

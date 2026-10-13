@@ -1,0 +1,68 @@
+{
+  "format": "mosaic-doctor-external-fixture-location-review-v1",
+  "scope": "Read-only fixture search and source identity verification; no files copied or tests skipped/changed",
+  "tempo_corpus": {
+    "root": "/home/andy/.cache/rhythm-doctor-corpus/slakh/babyslakh-selected/babyslakh_16k",
+    "files": [
+      {
+        "path": "/home/andy/.cache/rhythm-doctor-corpus/slakh/babyslakh-selected/babyslakh_16k/Track00001/mix.wav",
+        "size_bytes": 7729876,
+        "sha256": "e6590a50b9c4d6aa84d67e03368b42e0d79d56ba4b1244c26c5b9d6ecab89f34",
+        "matches_test_pin": true
+      },
+      {
+        "path": "/home/andy/.cache/rhythm-doctor-corpus/slakh/babyslakh-selected/babyslakh_16k/Track00001/MIDI/S01.mid",
+        "size_bytes": 8692,
+        "sha256": "1fd7413b8f01be812d8b45ab9c7926fa849bdcfd6f6b1fe8763d59a53019bcfb",
+        "matches_test_pin": true
+      },
+      {
+        "path": "/home/andy/.cache/rhythm-doctor-corpus/slakh/babyslakh-selected/babyslakh_16k/Track00005/mix.wav",
+        "size_bytes": 7908948,
+        "sha256": "2ada57d35631b349283bde7e6fa8339091520c956d5cd5f9920651280d63919f",
+        "matches_test_pin": true
+      },
+      {
+        "path": "/home/andy/.cache/rhythm-doctor-corpus/slakh/babyslakh-selected/babyslakh_16k/Track00005/MIDI/S01.mid",
+        "size_bytes": 15377,
+        "sha256": "12b2bc0eeb61e1a25d86bc126c9a71dae231596df501b0932c3e278b67caab29",
+        "matches_test_pin": true
+      }
+    ],
+    "manifest": {
+      "path": "/home/andy/.cache/rhythm-doctor-corpus/slakh/zenodo-4603870-record.json",
+      "size_bytes": 6536,
+      "sha256": "7a0b1943f0f9b8dfe7ad99d3316c7635474b354d1902b34a9dcb7f4ba611301e"
+    },
+    "archive": {
+      "path": "/home/andy/.cache/rhythm-doctor-corpus/slakh/babyslakh_16k.tar.gz",
+      "size_bytes": 882818115,
+      "zenodo_manifest_checksum": "md5:311096dc2bde7d61c97e930edbfc7f78",
+      "archive_rehash_performed": false
+    },
+    "fresh_checkout_execution": "Set RD_TEMPO_CORPUS_ROOT to the recorded root; run tests.rhythm_doctor.test_tempo_corpus with cwd at fresh checkout and no stale PYTHONPATH."
+  },
+  "unavailable_artifacts": [
+    {
+      "name": "bass-rf-precision-operating-point-v4-20260919",
+      "tracked_provenance": "docs/rhythm-doctor/evidence/bass_rf_precision_operating_point_v4.json",
+      "expected_script_sha256": "e58de2f6f1c1a96ba2a70f3c03eab0589c8a4a20fba81453cecf7f4c9abd604a",
+      "status": "No copy found in completed targeted searches; broad cache/tmp/Windows search stopped before completion; not an exhaustive filesystem absence claim."
+    },
+    {
+      "name": "adtof-fullbackbone-priority-v5",
+      "tracked_provenance": "docs/rhythm-doctor/evidence/candidate_b_adtof_fullbackbone_priority_v5.json",
+      "expected_report_sha256": "6ece879668d9396ac3445d3f2d9c14e90dec9efa24c8c9cec661966a9d14e2b9",
+      "status": "Pinned upstream/model.py copy not located in completed targeted searches."
+    }
+  ],
+  "completed_searches": [
+    "Original /home/andy/mosaic and mosaic-review ignored artifact locations",
+    "Windows original /mnt/c/Users/andy/Documents/ChatGPT/mosaic/tests/rhythm_doctor/artifacts",
+    "/home/andy/rd tree excluding VCS, dependencies and Python caches",
+    "Immediate /home/andy project directories at tests/rhythm_doctor/artifacts, mosaic/tests/rhythm_doctor/artifacts, rhythm_doctor/artifacts"
+  ],
+  "safe_recovery": "Only restore or mount independently validated artifact directories at fresh checkout artifact paths; verify pinned provenance before use. Do not add an original repository to PYTHONPATH or substitute stale runtime modules. Unavailable external research checks remain explicit limits.",
+  "mandatory_ci_claim": false,
+  "tests_run": false
+}

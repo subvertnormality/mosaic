@@ -1,0 +1,155 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "4",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Note Arpeggio",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Pattern",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Velocity Mod",
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        3,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        8
+      ]
+    ],
+    "expected": [
+      2,
+      2,
+      2,
+      15
+    ],
+    "actual": [
+      2,
+      2,
+      2,
+      15
+    ]
+  },
+  {
+    "kind": "panic-transport-boundaries",
+    "initial_stops": 0,
+    "starts": 3,
+    "stops": 3,
+    "unexpected": 0,
+    "passed": true
+  },
+  {
+    "kind": "panic-pending-chord",
+    "arp": true,
+    "shape": 1,
+    "sweep_events": 6144,
+    "onsets": 5,
+    "releases": 5,
+    "start_origin": {
+      "action_id": "4520b9f9cd7144708387d60d5afa8e76",
+      "native_sequence": 512,
+      "origin_ns": 558111244328,
+      "applied_ns": 558113522629,
+      "input_to_applied_ns": 2278301,
+      "boundary": "backend-input-submission"
+    },
+    "stop_origin": {
+      "action_id": "316032eb71dd47668bd7d000619dcdc3",
+      "native_sequence": 519,
+      "origin_ns": 561540862097,
+      "applied_ns": 561557951329,
+      "input_to_applied_ns": 17089232,
+      "boundary": "backend-input-submission"
+    },
+    "metrics": {
+      "count": 5,
+      "nearest_rank": 5,
+      "p99_absolute_error_ns": 2152171,
+      "maximum_absolute_error_ns": 2152171,
+      "final_phase_error_ns": 1523749,
+      "scheduling_errors_ns": [
+        2112121,
+        2152171,
+        1641577,
+        2012415,
+        1523749
+      ],
+      "quantisation_offsets_ns": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "interval_residuals_ns": [
+        40050,
+        -510594,
+        370838,
+        -488666
+      ],
+      "within_event_profile": true
+    },
+    "passed": true
+  }
+]

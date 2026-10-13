@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "complete_regression_run": false,
+  "hardware_timing_verified": false,
+  "publication": "/home/andy/mosaic-manual-runs/692565fe07d24d0092fec958502e452d/reference-scenes.json",
+  "publication_sha256": "2fa13cdde43b8920e317f24248152ccb2a77e396494aa190469be9cf4781f265",
+  "clock_mode": "controlled-experimental",
+  "scenes": 3,
+  "frames": 3,
+  "deferred_scene_ids": [
+    "device-sparse-control-domain",
+    "device-stored-value-and-step-lock"
+  ]
+}

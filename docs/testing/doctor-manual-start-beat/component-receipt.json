@@ -1,0 +1,35 @@
+{
+  "status": "component-green-native-candidate-pending",
+  "source_sha256": {
+    "tools/rhythm_doctor/rd_analysis_backend.c": "ff871aa3e1714a011ad7836990990ecc654aad0a0237baf5d50c7eccc4a87a25",
+    "tools/rhythm_doctor/dsp_drum_backend.py": "bc6dc4800e7ffdd984eb39e7efd1e6b4941b6169a08fe4742ff84a4188220272",
+    "tests/rhythm_doctor/test_manual_beat_grid.py": "0c12eec8a92233f59a67312df7d429db94699082b4648650ef7f39f0b018749a",
+    "tests/behaviour/contract/rhythm_doctor_start_beat.py": "fb0a2f8f192a78413ecdc6ccb3415ad81442a4fcc5e58cb838b26007d111cfa1",
+    "tests/behaviour/test_doctor_start_beat.py": "e9f9df948450a0d866391b3f51fb38287f42b36185dd7e93dedc37ac8c5fe91b",
+    "tools/doctor_options_capture.py": "3747c2f578ee641b2b1923eb99679efdf192841e26634d307df603a599b27380"
+  },
+  "baseline_report": "/home/andy/mosaic-doctor-options-runs/7cadc7162f704283b97f2d36715c62a6/report.json",
+  "baseline_report_sha256": "06af421fbd051061631da300c08128287419c8da53c3dcf7615d8c22f843c4ea",
+  "baseline_visible": {
+    "actual": "Start beat 1",
+    "expected": "Start beat 2",
+    "frame_sha256": "beee28146b5834ecd975a53d2ae48830cb6d999ead28ab341c211e6960650835"
+  },
+  "component_tests": {
+    "new_grid": 5,
+    "native_existing": 8,
+    "python_dsp_existing": 47,
+    "passed": true
+  },
+  "full_doctor": {
+    "tests": 275,
+    "failures": 2,
+    "errors": 3,
+    "passed": false,
+    "log": "full-doctor-broad-failure.log"
+  },
+  "controlled_time": {
+    "public_adc_apply_applicable": false,
+    "reason": "Native softcut PCM recording/reanalysis requires real-time audio. Genuine candidate persisted-bank draft boundaries remain applicable in both lanes."
+  }
+}

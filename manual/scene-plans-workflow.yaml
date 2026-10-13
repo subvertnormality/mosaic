@@ -1,0 +1,389 @@
+schema_version: 1
+status: semantic-checkpoint-plan-not-captured
+scope: The full case includes an isolated autosave and fresh-process replay after the displayed stages.
+  Only live parent-session checkpoints are displayed; child identity and native evidence remain under
+  the immutable run.
+scenes:
+- id: workflow-first-phrase
+  feature_id: first-sound
+  title: Enter and play a first phrase
+  behaviour_case: M-WORKFLOW-001
+  citation: README.md#typical-workflow
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+      C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Nothing else exists yet:
+      no second pattern, no scale change and no second channel.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - &id001
+    id: default-skip
+    title: Merge two patterns in Skip mode
+    caption: 'Tap Pattern (5,8), choose pattern 2 and tap steps 1 and 3, then raise their notes on Pattern
+      Note. Tap Scale (4,8), tap slot 2 and set its Root to D, so D major is applied. Tap Channel (3,8)
+      and tap pattern slot (2,2) to assign pattern 2 to channel 1 next to pattern 1. By default overlapping
+      trigs are skipped (Skip merge), so only steps 2 and 4 play: E and G of D major (MIDI 64 and 67)
+      at velocities 117 and 97.'
+    assertion:
+      kind: composition-workflow
+      stage: default-skip
+      passed: true
+- id: workflow-compose-two-channels
+  feature_id: build-a-phrase
+  title: Compose two channels and chain song slots
+  behaviour_case: M-WORKFLOW-001
+  citation: README.md#typical-workflow
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+      C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Nothing else exists yet:
+      no second pattern, no scale change, no second channel and one song slot. Trig merge modes decide
+      what happens when two patterns on one channel both have a trig on a step: Skip (the default) drops
+      those steps, Only keeps only those steps, and All keeps every step.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: default-skip
+    title: Build pattern 2 and hear Skip
+    caption: 'Do these in order. 1) Tap Pattern (5,8), choose pattern 2 at (2,1) and tap steps 1 and 3
+      on Pattern Trig. 2) Tap Pattern (5,8) again for Pattern Note and raise step 1 to (1,3) and step
+      3 to (3,1): degrees 4 and 6. 3) Tap Scale (4,8), tap slot 2 at (2,3), turn E2 to Root and E3 two
+      detents up to D, then press K3: D major is applied. 4) Tap Channel (3,8) and tap pattern slot (2,2)
+      to assign pattern 2 to channel 1 beside pattern 1. 5) Press Play, then Stop. Skip drops steps 1
+      and 3, where both patterns have a trig, so only steps 2 and 4 play: E and G of D major (MIDI 64
+      and 67) at velocities 117 and 97.'
+    assertion:
+      kind: composition-workflow
+      stage: default-skip
+      passed: true
+  - id: trig-merge-all
+    title: Move the trig merge to All
+    caption: Tap the trig merge button (14,8) twice to move from Skip through Only to All. The button
+      lights at medium brightness.
+    assertion:
+      kind: grid
+      cells:
+      - - 14
+        - 8
+      expected:
+      - 8
+      actual:
+      - 8
+  - id: merge-all
+    title: Merge all, with pattern 1 velocities
+    caption: 'Hold the velocity merge button (16,8) and tap pattern 1 at (1,2) to take velocities from
+      pattern 1, then press Play and Stop. All four steps play. Steps 2 and 4 come from pattern 1 alone
+      (E and G, 64 and 67). Steps 1 and 3 have a trig in both patterns, so their notes are the average
+      of the two patterns'' scale degrees: step 1 averages D (degree 0) and A (degree 4) to F# (66), and
+      step 3 averages F# and C# to A (69). The result is MIDI 66, 64, 69, 67 at velocities 127, 117, 107,
+      97.'
+    assertion:
+      kind: composition-workflow
+      stage: merge-all-average
+      passed: true
+  - id: channel-2
+    title: Select channel 2
+    caption: Tap channel 2 at (2,1), turn E1 to Channel tasks, turn E2 to Device and press K3. The Device
+      page now reads CH02.
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH02
+      matched: true
+  - id: channel-2-masks
+    title: Route channel 2 and open its Masks
+    caption: On the Device page choose the same device on MIDI port 2 and MIDI channel 2 (turn E3 or E2
+      to each setting) and press K3 to apply. Tap pattern slot (2,2) for pattern 2, hold step 1 and tap
+      step 4 to give channel 2 the range steps 1-4, then turn E1 to Channel tasks, E2 to Masks and press
+      K3. The screen reads Note Masks for CH02.
+    assertion:
+      kind: screen-header
+      expected: NOTE MASKS CH02
+      matched: true
+  - id: two-channels
+    title: Add a keyboard note to channel 2
+    caption: 'On Masks, hold step 3 and play MIDI note 76 at velocity 90 on a MIDI keyboard or controller
+      to lock it to that step. Tap channel 1 at (1,1) and press Play, then Stop. Both channels sound,
+      each on its own port: channel 1 plays 66, 64, 69, 67 as before, and channel 2 plays pattern 2: MIDI
+      69 (A) on step 1 and your 76 on step 3.'
+    assertion:
+      kind: composition-workflow
+      stage: two-channels-with-melody
+      passed: true
+  - id: chained-song
+    title: Copy slot 1 to slot 2 an octave up
+    caption: 'Do these in order. 1) Tap Song (6,8) and set the global length to 4 steps: tap (2,7), which
+      sets 1, then (8,7) three times. 2) Copy slot 1 to slot 2: hold slot (1,1) and tap (2,1), then tap
+      (2,1) to select slot 2. 3) Tap Channel (3,8), select channel 1 at (1,1) and tap octave-up (11,8),
+      so slot 2 plays an octave higher. 4) Tap Song (6,8), select slot 1 at (1,1) and press Play. The
+      four-step phrase plays, then repeats an octave higher in slot 2: MIDI 66, 64, 69, 67, then 78, 76,
+      81, 79 on channel 1, while channel 2 plays its A and 76 in both slots.'
+    assertion:
+      kind: composition-workflow
+      stage: chained-song
+      passed: true
+- id: workflow-patterns-and-scale
+  feature_id: build-a-phrase
+  title: Add a second pattern in D major
+  behaviour_case: M-WORKFLOW-001
+  citation: README.md#typical-workflow
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes C, D,
+      E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. Nothing else exists yet: no
+      second pattern, no scale change and no second channel.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: pattern-2-trigs
+    title: Add trigs to pattern 2
+    caption: 'Tap Pattern (5,8) to open Pattern Trig, choose pattern 2 at (2,1) and tap steps 1 and 3. Both
+      steps light on the grid.'
+    assertion:
+      kind: composition-step
+      stage: pattern-2-trigs
+      passed: true
+  - id: pattern-2-notes
+    title: Raise their notes
+    caption: 'Tap Pattern (5,8) again for Pattern Note. Raise step 1 to the cell (1,4) and step 3 to (3,6):
+      these are the scale degrees 4 and 6 that pattern 2 plays on those steps. Both cells light.'
+    assertion:
+      kind: composition-step
+      stage: pattern-2-notes
+      passed: true
+  - id: scale-slot-2-d-major
+    title: Apply D major
+    caption: 'Tap Scale (4,8) and tap slot 2 at (2,3). Turn E2 to Root, turn E3 two detents up to D and press
+      K3. The Scale screen names slot 2 and D major is applied.'
+    assertion:
+      kind: composition-step
+      stage: scale-slot-2-d-major
+      passed: true
+  - id: pattern-2-assigned
+    title: Give pattern 2 to channel 1
+    caption: 'Tap Channel (3,8) and tap pattern slot (2,2). Pattern 2 now plays on channel 1 beside pattern 1,
+      and both slot buttons are lit.'
+    assertion:
+      kind: composition-step
+      stage: pattern-2-assigned
+      passed: true
+  - id: default-skip
+    title: Hear Skip
+    caption: 'Press Play, then Stop. By default overlapping trigs are skipped, so steps 1 and 3, where both
+      patterns have a trig, drop out. Only steps 2 and 4 play: look at the MIDI strip, "MIDI sent in
+      this step", for E and G of D major, MIDI 64 and 67, at velocities 117 and 97.'
+    assertion:
+      kind: composition-workflow
+      stage: default-skip
+      passed: true
+- id: workflow-second-channel
+  feature_id: build-a-phrase
+  title: Add a second channel with its own output
+  behaviour_case: M-WORKFLOW-001
+  citation: README.md#typical-workflow
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 has patterns 1 and 2 merged in All mode with pattern 1''s velocities, in D major. All
+      four steps play: MIDI 66, 64, 69, 67 at velocities 127, 117, 107, 97. Channel 2 is not set up
+      yet.'
+    assertion:
+      kind: composition-workflow
+      stage: merge-all-average
+      passed: true
+  - id: channel-2
+    title: Select channel 2
+    caption: 'Tap channel 2 at (2,1), turn E1 to Channel tasks, turn E2 to Device and press K3. The Device page
+      now reads CH02.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH02
+      matched: true
+    occurrence: 1
+  - id: channel-2-routed
+    title: Route channel 2
+    caption: 'On the Device page choose the same device on MIDI port 2 and MIDI channel 2 (turn E3 or E2 to
+      each setting) and press K3 to apply. Tap pattern slot (2,2) for pattern 2, then hold step 1 and
+      tap step 4 to give channel 2 the range steps 1-4. Assigning the pattern brings up Merge modes for CH02 with Patterns 02, and the pattern slot (2,2) stays lit.'
+    assertion:
+      kind: composition-step
+      stage: channel-2-routed
+      passed: true
+  - id: channel-2-masks
+    title: Open its Masks
+    caption: 'Turn E1 to Channel tasks, turn E2 to Masks and press K3. The screen reads Note Masks for CH02.'
+    assertion:
+      kind: screen-header
+      expected: NOTE MASKS CH02
+      matched: true
+  - id: two-channels
+    title: Add a keyboard note to channel 2
+    caption: 'On Masks, hold step 3 and play MIDI note 76 at velocity 90 on a MIDI keyboard or controller to
+      lock it to that step. Tap channel 1 at (1,1) and press Play, then Stop. Both channels sound, each
+      on its own port, in the MIDI strip: channel 1 plays 66, 64, 69, 67 as before, and channel 2 plays
+      pattern 2, MIDI 69 (A) on step 1 and your 76 on step 3.'
+    assertion:
+      kind: composition-workflow
+      stage: two-channels-with-melody
+      passed: true
+- id: workflow-song-chain
+  feature_id: build-a-phrase
+  title: Chain song slots an octave apart
+  behaviour_case: M-WORKFLOW-001
+  citation: README.md#typical-workflow
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Both channels play four steps. Channel 1 plays 66, 64, 69, 67 and channel 2 plays its A (69) and
+      76. The song has one slot, Song 01, at the full global length of 64 steps.'
+    assertion:
+      kind: composition-workflow
+      stage: two-channels-with-melody
+      passed: true
+  - id: song-length-4
+    title: Set the song length to 4
+    caption: 'Tap Song (6,8). Tap (2,7), which jumps to 1 step, then tap (8,7) three times. The Playback screen
+      reads Global length 4: the song is one four-step phrase.'
+    assertion:
+      kind: composition-step
+      stage: song-length-4
+      passed: true
+  - id: slot-2-copied
+    title: Copy slot 1 to slot 2
+    caption: 'Hold slot (1,1) and tap (2,1) to copy slot 1 into slot 2, then tap (2,1) to select slot 2. The Slot setup screen names Song 02 and the footer reads Song sequence 2 selected.'
+    assertion:
+      kind: composition-step
+      stage: slot-2-copied
+      passed: true
+  - id: octave-up
+    title: Raise slot 2 an octave
+    caption: 'Tap Channel (3,8), select channel 1 at (1,1) and tap octave +1 at (11,8). The octave button lights and the footer reads Ch. 1 octave: 1: channel 1 will play one octave higher in this slot.'
+    assertion:
+      kind: composition-step
+      stage: channel-1-octave-plus-1
+      passed: true
+  - id: chained-song
+    title: Hear the chain
+    caption: 'Tap Song (6,8), select slot 1 at (1,1) and press Play, then Stop. The four-step phrase plays,
+      then repeats an octave higher in slot 2. The MIDI strip shows 66, 64, 69, 67, then 78, 76, 81, 79
+      on channel 1, while channel 2 plays its A and 76 in both slots.'
+    assertion:
+      kind: composition-workflow
+      stage: chained-song
+      passed: true
+- id: song-copy-and-compare
+  feature_id: song-mode-operations
+  title: Copy a slot, then change the copy
+  behaviour_case: M-SONG-FLOW-001
+  citation: README.md#interacting-with-slots
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'A fresh session with Song mode On, its default. Channel 1 plays its default phrase through the
+      test device and the norns shows the Device page for channel 1; nothing is playing. The song has
+      one slot, Song 01.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: slot-2-copied
+    title: Copy slot 1 into slot 2
+    caption: 'Open the Song editor with Song (6,8) and set a global length of 2 steps: tap (2,7), which jumps
+      to 1 step, then tap (8,7) once. Hold slot 1 at (1,1) and tap slot 2 at (2,1) to copy it,
+      then tap slot 2. The Slot setup screen names Song 02 and the footer reads Song sequence 2 selected: slot 2 is selected and holds the same two-note motif as slot 1.'
+    assertion:
+      kind: song-slot-copied
+      slot: 2
+      passed: true
+    occurrence: 1
+  - id: slot-2-octave
+    title: Raise the copy an octave
+    caption: 'Tap Channel (3,8), select channel 1 at (1,1) and tap octave +1 at (11,8). The octave button lights and the footer reads Ch. 1 octave: 1. Slot 2 now plays the motif an octave higher than slot 1, and slot 1 is unchanged: each song slot keeps its own octave.'
+    assertion:
+      kind: song-slot-voiced
+      slot: 2
+      octave: 1
+      passed: true
+    occurrence: 1
+- id: song-build-two-groups
+  feature_id: song-mode-operations
+  title: Build two song groups
+  behaviour_case: M-SONG-FLOW-001
+  citation: README.md#song-mode-operations
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'A fresh session with Song mode On, its default. Channel 1 plays its default phrase through the
+      test device and the norns shows the Device page for channel 1; nothing is playing. You will build
+      a two-note motif (MIDI 60, 62) copied into slots 1, 2, 4 and 5, with slots 3 and 6 left empty.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: set-length
+    title: Set the global length to 2
+    caption: 'Tap Song (6,8), tap (2,7), which jumps to 1 step, then tap (8,7) once. The Playback screen reads
+      Global length 2, so every slot plays a two-note motif, 60 and 62.'
+    assertion:
+      kind: dashboard
+      rows:
+      - - Playing
+        - SONG 01
+      - - Next
+        - SONG 01
+      - - Pass
+        - 1 / 1
+      - - Global length
+        - '2'
+      - - Song mode
+        - AUTO
+      passed: true
+    occurrence: 1
+  - id: copy-slot-2
+    title: Copy slot 1 into slot 2
+    caption: 'Hold slot 1 at (1,1) and tap slot 2 at (2,1) to copy it, then tap slot 2. The Slot setup screen names Song 02 and the footer reads Song sequence 2 selected.'
+    assertion:
+      kind: song-slot-copied
+      slot: 2
+      passed: true
+    occurrence: 1
+  - id: voice-slot-2
+    title: Raise slot 2 an octave
+    caption: 'Tap Channel (3,8), select channel 1 at (1,1) and tap octave +1 at (11,8). The footer reads Ch. 1 octave: 1 and slot 2 will sound 72 and 74.'
+    assertion:
+      kind: song-slot-voiced
+      slot: 2
+      octave: 1
+      passed: true
+    occurrence: 1
+  - id: slots-4-and-5
+    title: Add slots 4 and 5
+    caption: 'Repeat for slot 4, leaving slot 3 empty: copy slot 1 into slot 4 and give it octave +2 at (12,8).
+      Then copy slot 1 into slot 5 and give it octave -1 at (9,8). Slots 3 and 6 stay empty, so there
+      are two groups: slots 1 and 2, and slots 4 and 5.'
+    assertion:
+      kind: song-slot-voiced
+      slot: 5
+      octave: -1
+      passed: true
+    occurrence: 1
+  - id: play-group
+    title: Hear the first group loop
+    caption: 'Tap Song (6,8), tap slot 1 at (1,1) and press Play (1,8). Slot 1 sounds 60, 62, then slot 2
+      sounds 72, 74. Slot 3 is empty, so the group ends and playback returns to slot 1: look at the MIDI
+      strip for 60, 62, 72, 74, 60, 62, 72, 74. Press Stop.'
+    assertion:
+      kind: song-mode-flow
+      stage: default-on-group-1
+      passed: true

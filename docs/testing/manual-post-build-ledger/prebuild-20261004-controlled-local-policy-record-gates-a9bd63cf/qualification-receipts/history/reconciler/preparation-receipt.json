@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "focused_tests": 52,
+  "native_launched": false,
+  "ledger_applied": false,
+  "complete_regression_run": false,
+  "validation_scope": "controlled-manual-generation",
+  "realtime_qualification": "pending-ci",
+  "source_after": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": "0087a22c84c909d00e4564784170d5bd27e6272ffb4735c930675d18fce56bdc",
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": "42e47a2b0aba5aabcf7e36a8737169b5342e5c797b101158b8820b99b3b43bbc"
+  },
+  "red_log_sha256": "0f56edb64c0ec03d40da4ea8f0f6a71f600f0ae5201bd56100658426e5217d85",
+  "source_red_log_sha256": "b3a3ac413ced1b40f20aa18017a6c87fa6b2781ba14badc8d8648dd893938981",
+  "green_log_sha256": "1e3a4e1d46d4c9fd72b08b4929299b4dca6240d40dc631aeef7c32756f05b50b",
+  "integration_contract": {
+    "audit": "audit_controlled_manual_generation(build_evidence)",
+    "planner": "manual_build.plan(options, plans, controlled_local=True)",
+    "binder_receipts": "validation_scope + realtime_qualification + complete_regression_run false; exact snapshots/claims/history unchanged"
+  },
+  "source_review_sha256": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+  "snapshot_sha256": "7183c61792a1b17d8769a34e2876bed7e78e47bc49987ae5b229da4bb5152b18"
+}

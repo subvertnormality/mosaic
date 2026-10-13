@@ -1,0 +1,31 @@
+.FF
+======================================================================
+FAIL: test_opt_in_limit_fails_closed_without_unbounded_storage (test_driver_wait.DriverWaitFrameRetentionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_driver_wait.py", line 120, in test_opt_in_limit_fails_closed_without_unbounded_storage
+    d.wait(lambda state:state["ready"])
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_opt_in_retains_original_intermediate_revision_objects (test_driver_wait.DriverWaitFrameRetentionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_driver_wait.py", line 112, in test_opt_in_retains_original_intermediate_revision_objects
+    self.assertEqual(d.observations,[prefix]+frames)
+AssertionError: Lists differ: [{'fr[166 chars]on': 6, 'state': {'ready': True, 'frame': {'sh[22 chars]'}}}] != [{'fr[166 chars]on': 2, 'state': {'ready': False, 'frame': {'s[378 chars]'}}}]
+
+First differing element 2:
+{'frame_revision': 6, 'state': {'ready': True, 'frame': {'sh[21 chars]2'}}}
+{'frame_revision': 2, 'state': {'ready': False, 'frame': {'s[22 chars]1'}}}
+
+Second list contains 4 additional elements.
+First extra element 3:
+{'frame_revision': 3, 'state': {'ready': False, 'frame': {'sha256': 'literal-pose-2'}}}
+
+Diff is 645 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=2)

@@ -1,0 +1,31 @@
+{
+  "staged_root": "/home/andy/mosaic-mini-header-engineering-v10-20261003/mosaic",
+  "identity_path": "/home/andy/mosaic-mini-header-engineering-v10-20261003/identity.json",
+  "identity_sha256": "0e016344c2beb1b0f825c4925b3fe8feed25394d86b17d4faa02ec03e89d5983",
+  "files": 17789,
+  "pre_post_copied_equal": true,
+  "read_only": true,
+  "engineering_only": true,
+  "final_global_qualification": false,
+  "app_strategy_phase_unchanged_v5_files": 388,
+  "strategy_dependencies_unchanged": [
+    "tests/behaviour/contract/merge_strategy_ui.py",
+    "tests/behaviour/contract/merge_extensions.py",
+    "tests/behaviour/merge_strategy_routes.py",
+    "tests/behaviour/driver.py",
+    "tests/behaviour/ui.py",
+    "tests/behaviour/ui_map.py",
+    "tests/behaviour/frame_oracle.py",
+    "tests/behaviour/contract/mini_header_ui.py",
+    "tests/behaviour/contract/mini_header_atlas_v2.json"
+  ],
+  "mini_helper_unchanged_v9": true,
+  "v5_controlled_strategy_scoped_identity_preserved": true,
+  "previous_failed_stage_preserved": "/home/andy/mosaic-mini-header-engineering-v9-20261003/mosaic",
+  "helper_hashes": {
+    "tests/behaviour/contract/merge_strategy_ui.py": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+    "tests/behaviour/contract/ui_readability.py": "a2e2dbfe0623566a5bb35b842d3e3781f7ad6807ec4c8f3af5cbc65d0ab34d45",
+    "tests/behaviour/contract/mini_header_animation_ui.py": "050c7ff3deaaf4401014d148f989075ab03fcac5be050b03e4ad10f0f8ab40b8",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7"
+  }
+}

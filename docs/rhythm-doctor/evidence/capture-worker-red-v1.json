@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "kind": "red_regression_before_native_capture_worker",
+  "baseline_commit": "cffc2be5df916d63712b10c7e29a24a2cd0fccc4",
+  "baseline_tree_check": "git ls-tree returned no tools/rhythm_doctor/rd_capture_worker.c, lib/rhythm_doctor/native_transport.lua, or worker integration tests",
+  "acceptance_written_first": "The acceptance compiles with -Wall -Wextra -Werror, drives strict malformed/stale IPC, captures injected stereo through JACK, publishes and hashes WAV, and executes Machine -> Controller -> LuaJIT transport -> worker -> release cleanup.",
+  "baseline_failure": "The required worker and transport source paths were absent and therefore could not compile or load.",
+  "scope": "Missing executable integration regression only; it does not establish physical ADC, transcription, UI, or full-feature acceptance."
+}

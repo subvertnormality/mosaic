@@ -1,0 +1,1971 @@
+schema_version: 1
+status: authoring-plan-not-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: Only exact semantic checkpoints emitted by existing registered native cases. No assertions from
+  a header alone, no replay or fresh-pass claim. Capture all prerequisites from the cited case. Reuse
+  a case run for sibling scenes only when each exact assertion matches.
+scenes:
+- id: fixed-note-default-and-locks
+  feature_id: fixed-note
+  title: A pitch default with local exceptions
+  behaviour_case: M-PARAM-016
+  citation: README.md#fixed-note
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device on OUT 1: four trigs on steps 1-4 (C, D,
+      E, F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major at 90 BPM, with sixteenth-note
+      steps (Rate /1). All Trig params slots are empty, and the Device page is showing.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: list
+    title: Find Fixed Note
+    caption: Fixed Note makes the channel send one chosen MIDI note while the pattern still decides when.
+      Turn E1 to Channel tasks, choose Trig params with E2 and press K3. Press K2 to open the parameter
+      list and turn E3 until it shows Fixed Note.
+    assertion:
+      kind: parameter-list-label
+      label: Fixed Note
+      passed: true
+  - id: assigned
+    title: Assign Fixed Note to a slot
+    caption: Press K3 to assign Fixed Note to the first slot and K2 to return. Slot 1 reads X, which
+      means Off, so the parameter is assigned but sends nothing yet.
+    assertion:
+      kind: selected-param
+      value: X
+      marker: null
+  - id: default
+    title: Set the channel pitch
+    caption: With no step held, turn E3 to 60 (C3). Slot 1 reads C5, this slot's name for MIDI note 60
+      (it numbers octaves two higher than the C3 used elsewhere in this manual). This is the channel's
+      default pitch, the note every step plays unless it has its own lock.
+    assertion:
+      kind: selected-param
+      value: C5
+      marker: null
+  - id: channel60
+    title: Play the default
+    caption: Tap Play (1,8), then tap it again to stop. The MIDI strip lists four C3 (60) note-ons at
+      velocities 127, 117, 107 and 97. The pitch is fixed and the velocities are not.
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: channel60
+      pitches:
+      - 60
+      - 60
+      - 60
+      - 60
+  - id: step2-override
+    title: Give step 2 another pitch
+    caption: 'Hold step 2 at (2,4), turn E3 to 63 (D#3) and release. A value set on a held step is a lock,
+      and it belongs to step 2 alone. Play, then stop: the strip reads 60, 63, 60, 60 (C3, D#3, C3, C3).'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: step2-override
+      pitches:
+      - 60
+      - 63
+      - 60
+      - 60
+  - id: zero-is-active
+    title: Zero is a note
+    caption: 'Hold step 1 at (1,4), turn E3 down to 0 and release. 0 is a real pitch, the lowest MIDI
+      note (C-2), not Off. Play, then stop: the strip reads 0, 63, 60, 60.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: zero-is-active
+      pitches:
+      - 0
+      - 63
+      - 60
+      - 60
+  - id: default-edit-preserves-locks
+    title: X is no lock; raise the default beneath the locks
+    caption: 'Hold step 4 at (4,4), turn E3 down to X (Off) and release. X on a step means no lock, and
+      step 4 had none, so a Play and Stop still gives 0, 63, 60, 60. Then, with no step held, turn E3
+      up five detents to raise the channel pitch to 65 (F3), and Play and Stop again: steps 3 and 4 follow
+      the new default and steps 1 and 2 keep their locks, 0, 63, 65, 65.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: default-edit-preserves-locks
+      pitches:
+      - 0
+      - 63
+      - 65
+      - 65
+  - id: channel-off-restores-pattern
+    title: Clear a lock, then turn the channel pitch off
+    caption: 'Hold step 2, press K2 and release: its lock is gone, so Play and Stop gives 0, 65, 65, 65.
+      Then, with no step held, turn E3 down to X (Off), and Play and Stop again: steps 2, 3 and 4 return
+      to the written phrase, 62, 64, 65, while step 1 still plays its own lock, 0.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: channel-off-restores-pattern
+      pitches:
+      - 0
+      - 62
+      - 64
+      - 65
+  - id: clear-zero-restores-pattern
+    title: Clear the last lock
+    caption: 'Hold step 1, press K2 and release. With no lock and no channel pitch left, Play and Stop
+      gives the original C, D, E, F phrase again: 60, 62, 64, 65.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: clear-zero-restores-pattern
+      pitches:
+      - 60
+      - 62
+      - 64
+      - 65
+- id: quantised-fixed-note-default-and-locks
+  feature_id: quantised-fixed-note
+  title: 'Quantised pitch: the default and its exceptions'
+  behaviour_case: M-PARAM-015
+  citation: README.md#quantised-fixed-note
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device on OUT 1: four trigs on steps 1-4 (C, D,
+      E, F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major at 90 BPM, with sixteenth-note
+      steps (Rate /1). The Trig params screen is open on its parameter list, showing Quantised Fixed Note;
+      no slot is assigned yet. Quantised Fixed Note works like Fixed Note, but snaps every value to the
+      nearest note of the active scale, here C major.'
+    assertion:
+      kind: parameter-list-label
+      label: Quantised Fixed Note
+      passed: true
+  - id: assigned
+    title: Assign Quantised Fixed Note to a slot
+    caption: Press K3 to assign Quantised Fixed Note to the first slot and K2 to return. Slot 1 reads X,
+      which means Off.
+    assertion:
+      kind: selected-param
+      value: X
+      marker: null
+  - id: default
+    title: Set the channel pitch
+    caption: With no step held, turn E3 to 60 (C3). Slot 1 reads 60, the channel's default pitch.
+    assertion:
+      kind: selected-param
+      value: '60'
+      marker: null
+  - id: channel60
+    title: Play the default
+    caption: Tap Play (1,8), then tap it again to stop. The MIDI strip lists C3 (60) four times at
+      velocities 127, 117, 107 and 97, exactly as in the Fixed Note example, because 60 is in the key.
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: true
+      phase: channel60
+      pitches:
+      - 60
+      - 60
+      - 60
+      - 60
+  - id: step2-override
+    title: Lock step 2 to a pitch outside the key
+    caption: 'Hold step 2 at (2,4), turn E3 to 63 (D#3) and release. 63 is not in C major, so the lock
+      snaps to the nearest scale note; D3 (62) and E3 (64) are equally close and the lower one wins. Play,
+      then stop: the strip reads 60, 62, 60, 60. The Fixed Note example plays 63 here.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: true
+      phase: step2-override
+      pitches:
+      - 60
+      - 62
+      - 60
+      - 60
+  - id: zero-is-active
+    title: Zero is a note
+    caption: 'Hold step 1 at (1,4), turn E3 down to 0 and release. 0 is a real pitch, not Off, and it
+      is in the key. Play, then stop: the strip reads 0, 62, 60, 60.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: true
+      phase: zero-is-active
+      pitches:
+      - 0
+      - 62
+      - 60
+      - 60
+  - id: default-edit-preserves-locks
+    title: Raise the default beneath the locks
+    caption: 'Hold step 4 at (4,4), turn E3 down to X (Off) and release: step 4 had no lock, so nothing
+      changes (0, 62, 60, 60 on Play and Stop). Then, with no step held, turn E3 up five detents to raise
+      the channel pitch to 65 (F3, in the key). Play, then stop: steps 3 and 4 follow it and steps 1 and
+      2 keep their locks, 0, 62, 65, 65. Clearing locks and turning the channel pitch off behave exactly
+      as in the Fixed Note example, A pitch default with local exceptions.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: true
+      phase: default-edit-preserves-locks
+      pitches:
+      - 0
+      - 62
+      - 65
+      - 65
+- id: probability-endpoints
+  feature_id: trig-probability
+  title: Turn chance into explicit rests
+  behaviour_case: M-PARAM-018
+  citation: README.md#trig-probability
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. Every trig has its normal chance
+      of sounding. The Trig params screen is open on its parameter list, showing Fixed Note; no slot is
+      assigned yet. Fixed Note is used here to pin the pitch, so that you hear only which trigs play,
+      not which note.'
+    assertion:
+      kind: parameter-list-label
+      label: Fixed Note
+      passed: true
+  - id: probability-list
+    title: Fix the pitch, then find Trig Probability
+    caption: 'Press K3 to assign Fixed Note to the first slot and K2 to return, then turn E3 to 65 (F3):
+      every note is now F3. Turn E2 to the next slot and open the Trig Probability picker.'
+    assertion:
+      kind: parameter-list-label
+      label: Trig Probability
+      passed: true
+  - id: probability-assigned-checkpoint
+    title: Assign the probability slot
+    caption: 'Press K3 to assign Trig Probability and K2 to return. The selected slot reads X until you set its channel value.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: X
+      marker: null
+      passed: true
+  - id: probability-100-readout
+    title: Confirm the channel probability
+    caption: 'Set the selected Trig Probability slot to 100 and check its readout before auditioning the phrase.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '100'
+      marker: null
+      passed: true
+  - id: always
+    title: 100 plays every trig, and nothing goes above it
+    caption: 'Press K3 to assign Trig Probability and K2 to return, then turn E3 up to 100. Tap Play (1,8)
+      and tap it again to stop: the MIDI strip lists all four steps at pitch 65 with velocities 127, 117,
+      107, 97. Then turn E3 up a few more detents; the value stays at 100. Play and stop again: every
+      trig still sounds.'
+    assertion:
+      kind: probability-endpoint-locked-phrase
+      passed: true
+      phase: upper-clamp100
+      active_steps:
+      - 1
+      - 2
+      - 3
+      - 4
+  - id: probability-zero-readout
+    title: Confirm zero chance on the channel
+    caption: 'With no step held, set Trig Probability to 0 and confirm the slot readout has no L lock marker.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '0'
+      marker: null
+      passed: true
+  - id: zero-play-active
+    title: Start the zero-probability audition
+    caption: 'Tap Play and confirm the transport indicator turns on before the bounded audition window.'
+    assertion:
+      kind: probability-play-led
+      phase: active
+      control: play_stop
+      state: active
+      passed: true
+  - id: zero-play-stopped
+    title: Stop the zero-probability audition
+    caption: 'Tap Play/Stop again and confirm the transport indicator turns off.'
+    assertion:
+      kind: probability-play-led
+      phase: stopped
+      control: play_stop
+      state: 'off'
+      passed: true
+  - id: silent
+    title: 0 is a certain rest
+    caption: 'At 0, none of the four trigs plays a note. Compare this with 100, where every trig plays.'
+    assertion:
+      kind: probability-zero-silence
+      passed: true
+      logical_duration_s: 2.8
+      positive_velocity_note_on_count: 0
+      fixed_pitch: 65
+  - id: step2-lock-readout
+    title: Confirm the step-two override
+    caption: 'While step 2 is held, the Trig Probability slot reads 100 with an L marker.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '100'
+      marker: L
+      passed: true
+  - id: step2-channel-readout
+    occurrence: 2
+    title: Confirm the channel value after release
+    caption: 'After step 2 is released, the channel probability remains 0.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '0'
+      marker: null
+      passed: true
+  - id: step2
+    title: Let one step through
+    caption: 'Hold step 2 at (2,4), turn E3 all the way down and then up to 100, and release. That lock
+      beats the channel''s 0. Tap Play: only step 2 sounds, once per loop, at velocity 117. The channel
+      value is still 0.'
+    assertion:
+      kind: probability-endpoint-locked-phrase
+      passed: true
+      phase: step100-overrides-channel0
+      active_steps:
+      - 2
+  - id: step1-channel-readout
+    occurrence: 2
+    title: Confirm the channel value before the local edit
+    caption: 'The channel Trig Probability is 100 before step 1 receives its own lock.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '100'
+      marker: null
+      passed: true
+  - id: step1-lock-readout
+    title: Confirm the first-step rest lock
+    caption: 'While step 1 is held, the Trig Probability slot reads 0 with an L marker.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '0'
+      marker: L
+      passed: true
+  - id: step1-release-readout
+    occurrence: 3
+    title: Confirm the channel value after release
+    caption: 'After step 1 is released, the channel probability remains 100.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '100'
+      marker: null
+      passed: true
+  - id: reject-first
+    title: Reject one step
+    caption: 'With no step held, turn E3 up to 100 again. Hold step 1 at (1,4), turn E3 all the way down
+      and one detent up to 0, and release. A lock of 0 beats the channel''s 100. Tap Play: step 1 is silent
+      and steps 2, 3 and 4 sound.'
+    assertion:
+      kind: probability-endpoint-locked-phrase
+      passed: true
+      phase: step0-overrides-channel100
+      active_steps:
+      - 2
+      - 3
+      - 4
+  - id: step4-lock-readout
+    occurrence: 2
+    title: Confirm the wrap-step rest lock
+    caption: 'While step 4 is held, the Trig Probability slot reads 0 with an L marker.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '0'
+      marker: L
+      passed: true
+  - id: step4-release-readout
+    occurrence: 4
+    title: Confirm the channel value after release
+    caption: 'After step 4 is released, the channel probability remains 100.'
+    assertion:
+      kind: selected-param
+      field_label: Trig Probability
+      field_slot: 2
+      slot: 2
+      value: '100'
+      marker: null
+      passed: true
+  - id: step4-zero
+    title: Reject a second step
+    caption: 'Hold step 4 at (4,4), set its lock to 0 the same way and release. Tap Play: steps 2 and
+      3 sound; steps 1 and 4 are silent.'
+    assertion:
+      kind: probability-endpoint-locked-phrase
+      passed: true
+      phase: first-and-wrap-step0
+      active_steps:
+      - 2
+      - 3
+  - id: clear
+    title: Clear both locks
+    caption: 'Hold step 1, press K2 and release. Tap Play: steps 1, 2 and 3 sound, and step 4 is still
+      silent. Then hold step 4, press K2 and release. Tap Play: all four steps sound again.'
+    assertion:
+      kind: probability-endpoint-locked-phrase
+      passed: true
+      phase: clear-wrap-zero
+      active_steps:
+      - 1
+      - 2
+      - 3
+      - 4
+- id: random-note-seeded-offsets
+  feature_id: random-note
+  title: Explore a bounded random contour
+  behaviour_case: M-PARAM-037
+  citation: README.md#random-note
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. In PARAMS > MOSAIC, Lock random
+      to pent. and Lock merged to pent. are Off, so offsets can land on any note of the scale. Random
+      Note is already assigned to the first Trig params slot, and the parameter list is open for the second
+      slot, on Twos Random Note (the manual''s Random Twos Note). '
+    assertion:
+      kind: parameter-list-label
+      label: Twos Random Note
+      passed: true
+  - id: domain-0
+    title: Offset 0 leaves the phrase alone
+    caption: 'Press K3 to assign Twos Random Note to the second slot and K2 to return, then press E2 to
+      select the first slot, Random Note. Both slots read 0. Tap Play (1,8), then tap it again to stop:
+      the phrase is unchanged, 60, 62, 64, 65.'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 0
+      twos: 0
+      seed: 42
+      mask: null
+      allowed:
+      - 0
+  - id: value-2
+    title: Turn Random Note up to 1, then 2
+    caption: 'Turn E3 one detent to Random Note 1: each note is its original degree or the next one up
+      the scale. Play and stop (first pass 60, 64, 64, 65). Then turn E3 to 2: each note is its degree,
+      one above or one below. Play and stop (first pass 59, 60, 62, 67). The MIDI strip shows this manual''s
+      fixed random run, which repeats exactly; on your norns the notes change on every pass, but always
+      stay within the offsets named here.'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 2
+      twos: 0
+      seed: 42
+      mask: null
+      allowed:
+      - -1
+      - 0
+      - 1
+  - id: domain-2
+    title: Turn Random Note up to 3, then 4
+    caption: 'Turn E3 to 3: each note may move -1, 0, +1 or +2. Play and stop (first pass 60, 60, 67,
+      69). Then turn E3 to 4: each note may move -2, -1, 0, +1 or +2 scale degrees. Play and stop (first
+      pass 57, 64, 67, 62).'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 4
+      twos: 0
+      seed: 42
+      mask: null
+      allowed:
+      - -2
+      - -1
+      - 0
+      - 1
+      - 2
+  - id: domain-3
+    title: Add Twos Random Note on top
+    caption: 'Turn E2 to the Twos Random Note slot, turn E3 to 4, then turn E2 back and play. The two
+      offsets add, so each note may move anywhere from -6 to +6 scale degrees. First pass: 57, 59, 55,
+      64.'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 4
+      twos: 4
+      seed: 42
+      mask: null
+      allowed:
+      - -6
+      - -5
+      - -4
+      - -3
+      - -2
+      - -1
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+- id: random-twos-note-seeded-offsets
+  feature_id: random-twos-note
+  title: Explore a bounded random contour in thirds
+  behaviour_case: M-PARAM-038
+  citation: README.md#random-twos-note
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. In PARAMS > MOSAIC, Lock random
+      to pent. and Lock merged to pent. are Off, so offsets can land on any note of the scale. Random
+      Note is already assigned to the first Trig params slot, and the parameter list is open for the second
+      slot, on Twos Random Note (the manual''s Random Twos Note), which is the slot you will turn. '
+    assertion:
+      kind: parameter-list-label
+      label: Twos Random Note
+      passed: true
+  - id: domain-0
+    title: Offset 0 leaves the phrase alone
+    caption: 'Press K3 to assign Twos Random Note to the second slot and K2 to return, then press E2 to
+      select the first slot, Random Note. Both slots read 0. Tap Play (1,8), then tap it again to stop:
+      the phrase is unchanged, 60, 62, 64, 65.'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 0
+      twos: 0
+      seed: 42
+      mask: null
+      allowed:
+      - 0
+  - id: value-2
+    title: Turn Twos Random Note up to 1, then 2
+    caption: 'Turn E2 to the second slot, Twos Random Note, turn E3 one detent to 1 and turn E2 back:
+      each note is its original degree or two degrees higher. Play and stop (first pass 60, 65, 64, 65).
+      Then repeat to set 2: each note may move -2, 0 or +2 degrees. Play and stop (first pass 57, 59,
+      60, 69). The MIDI strip shows this manual''s fixed random run, which repeats exactly; on your norns
+      the notes change on every pass, but always stay within the offsets named here.'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 0
+      twos: 2
+      seed: 42
+      mask: null
+      allowed:
+      - -2
+      - 0
+      - 2
+  - id: domain-2
+    title: Turn Twos Random Note up to 3, then 4
+    caption: 'Repeat the E2, E3, E2 turn to set 3: each note may move -2, 0, +2 or +4 degrees. Play and
+      stop (first pass 60, 59, 71, 72). Then set 4: each note may move -4, -2, 0, +2 or +4 degrees, leaps
+      of thirds wider than Random Note''s single steps. Play and stop (first pass 53, 65, 71, 59).'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 0
+      twos: 4
+      seed: 42
+      mask: null
+      allowed:
+      - -4
+      - -2
+      - 0
+      - 2
+      - 4
+  - id: domain-3
+    title: Add Random Note on top
+    caption: 'With the first slot, Random Note, selected, turn E3 to 4, then play. The two offsets add:
+      each note may move anywhere from -6 to +6 scale degrees. First pass: 57, 59, 55, 64.'
+    assertion:
+      kind: random-note-domain
+      passed: true
+      pentatonic: false
+      random: 4
+      twos: 4
+      seed: 42
+      mask: null
+      allowed:
+      - -6
+      - -5
+      - -4
+      - -3
+      - -2
+      - -1
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+- id: chord-strum-division-selector
+  feature_id: chord-strum
+  title: Choose a supported musical division
+  behaviour_case: M-PARAM-001
+  citation: README.md#chord-strum
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. You are on the Trig params screen
+      with the parameter list open on Chord Note Strum; no Trig params slot is assigned yet. Divisions
+      are counted in channel steps, from 1/24 of a step up to 128 steps, and X means Off.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Note Strum
+      passed: true
+  - id: division-0
+    title: 'Assign it: a new slot starts at X'
+    caption: 'Press K3 to assign Chord Note Strum to the first slot, then K2 to return to the slot list.
+      The slot reads X, which means Off: no strum, so a chord''s notes still sound together.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Strum
+      value: X
+    occurrence: 1
+  - id: clamp-low
+    title: X is the lowest setting
+    caption: With no step held, turn E3 down three detents. The slot stays at X; there is nothing below
+      Off.
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Strum
+      value: X
+    occurrence: 2
+  - id: division-1
+    title: 'One detent up: the shortest division'
+    caption: 'Turn E3 one detent up from X. The slot reads 1/24, the shortest division: one twenty-fourth
+      of a channel step.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Strum
+      value: 1/24
+    occurrence: 1
+  - id: division-3
+    title: Top of the range, then one step back
+    caption: 'Hold E3 turning right, about ninety detents, until the slot reads 128 channel steps; further
+      turns leave it at 128. Then turn one detent back: the slot reads 120, the next supported value below
+      the limit. For a musical setting, see Separate a chord into timed voices, which uses a half-step
+      strum.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Strum
+      value: '120'
+    occurrence: 1
+- id: chord-arpeggio-division-selector
+  feature_id: chord-arpeggio
+  title: Choose a supported musical division
+  behaviour_case: M-PARAM-002
+  citation: README.md#chord-arpeggio
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. You are on the Trig params screen
+      with the parameter list open on Chord Note Arpeggio; no Trig params slot is assigned yet. Divisions
+      are counted in channel steps, from 1/24 of a step up to 128 steps, and X means Off.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Note Arpeggio
+      passed: true
+  - id: division-0
+    title: 'Assign it: a new slot starts at X'
+    caption: 'Press K3 to assign Chord Note Arpeggio to the first slot, then K2 to return to the slot
+      list. The slot reads X, which means Off: no arpeggio.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Arpeggio
+      value: X
+    occurrence: 1
+  - id: clamp-low
+    title: X is the lowest setting
+    caption: With no step held, turn E3 down three detents. The slot stays at X; there is nothing below
+      Off.
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Arpeggio
+      value: X
+    occurrence: 2
+  - id: division-1
+    title: 'One detent up: the shortest division'
+    caption: 'Turn E3 one detent up from X. The slot reads 1/24, the shortest division: one twenty-fourth
+      of a channel step.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Arpeggio
+      value: 1/24
+    occurrence: 1
+  - id: division-3
+    title: Top of the range, then one step back
+    caption: 'Hold E3 turning right, about ninety detents, until the slot reads 128 channel steps; further
+      turns leave it at 128. Then turn one detent back: the slot reads 120, the next supported value below
+      the limit. For a musical setting, see Give every arp voice its own gate, which uses a half-step
+      arpeggio.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Note Arpeggio
+      value: '120'
+    occurrence: 1
+- id: chord-spread-division-selector
+  feature_id: chord-spread
+  title: Choose a Spread duration
+  behaviour_case: M-PARAM-003
+  citation: README.md#chord-spread
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. You are on the Trig params screen
+      with the parameter list open on Chord Spread; no Trig params slot is assigned yet. Spread only widens
+      the gaps of a Strum or Arpeggio that is switched on, so nothing is switched on here and you will
+      hear no change. Divisions are counted in channel steps, from 1/24 of a step up to 128 steps, and
+      X means Off.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Spread
+      passed: true
+  - id: division-0
+    title: 'Assign it: a new slot starts at X'
+    caption: 'Press K3 to assign Chord Spread to the first slot, then K2 to return to the slot list. The
+      slot reads X, which means Off: no extra gap is added.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Spread
+      value: X
+    occurrence: 1
+  - id: clamp-low
+    title: X is the lowest setting
+    caption: With no step held, turn E3 down three detents. The slot stays at X; there is nothing below
+      Off.
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Spread
+      value: X
+    occurrence: 2
+  - id: division-1
+    title: 'One detent up: the shortest division'
+    caption: 'Turn E3 one detent up from X. The slot reads 1/24, the shortest division: one twenty-fourth
+      of a channel step.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Spread
+      value: 1/24
+    occurrence: 1
+  - id: division-3
+    title: Top of the range, then one step back
+    caption: 'Hold E3 turning right, about ninety detents, until the slot reads 128 channel steps; further
+      turns leave it at 128. Then turn one detent back: the slot reads 120, the next supported value below
+      the limit. For a musical setting, see Add a constant gap to the strum.'
+    assertion:
+      kind: parameter-division-label
+      passed: true
+      parameter: Chord Spread
+      value: '120'
+    occurrence: 1
+- id: chord-strum-a-timed-chord
+  feature_id: chord-strum
+  title: Separate a chord into timed voices
+  behaviour_case: M-CHORDSHAPE-001
+  citation: README.md#chord-strum
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Chd1 to Chd4 on the Masks page are E, G, A and C (MIDI 64, 67, 69, 72) and the output is polyphonic.
+      Trig params is open on its parameter list, showing Chord Note Strum. No slot is assigned yet, so
+      the five notes would sound together.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Note Strum
+      passed: true
+  - id: strum-value
+    title: Verify the half-step Strum value
+    caption: Press K3 to assign Chord Note Strum to slot 1 and K2 to return. Turn E3 to 1/2. Slot 1
+      now shows 1/2 with no L or S marker; pause here before moving to another slot.
+    assertion:
+      kind: selected-param
+      slot: 1
+      value: 1/2
+      marker: null
+      passed: true
+  - id: assign-strum
+    title: Choose the chord pattern slot
+    caption: From the verified half-step Strum slot, turn E2 to the next slot, press K2 and turn E3 to
+      Chord Pattern.
+    assertion:
+      kind: parameter-list-label
+      label: Chord Pattern
+      passed: true
+  - id: forward
+    title: Hear the strummed chord
+    caption: 'Finish the setup the next examples reuse: assign Chord Pattern and turn E3 one detent to
+      -> (forward); Assign Mute Chord Root and leave it at X so the root still sounds; then assign Chord
+      Velocity Mod and turn E3 to +10 (E2 moves to the next slot, K2 opens the list, E3 browses, K3 assigns,
+      K2 returns). Tap Play (1,8), then tap it again to stop. In the MIDI strip the notes arrive one after
+      another, half a step apart: C3 (60), E3 (64), G3 (67), A3 (69) and C4 (72). With Strum at X they
+      would all start together.'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      arp: false
+      shape: 1
+      muted: false
+      mask_bits: 15
+      onsets: 5
+      release_checks: 5
+- id: chord-arpeggio-timed-gates
+  feature_id: chord-arpeggio
+  title: Give every arp voice its own gate
+  behaviour_case: M-CHORDSHAPE-009
+  citation: README.md#chord-arpeggio
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Chd1 to Chd4 on the Masks page are E, G, A and C (MIDI 64, 67, 69, 72) and the output is polyphonic.
+      Trig params is open on its parameter list, showing Chord Note Arpeggio. No slot is assigned yet.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Note Arpeggio
+      passed: true
+  - id: assign-arp
+    title: Set a half-step Arpeggio
+    caption: Press K3 to assign Chord Note Arpeggio to the first slot and K2 to return, then turn E3 up
+      to 1/2. Turn E2 to the next slot, press K2 and turn E3 to Chord Pattern.
+    assertion:
+      kind: parameter-list-label
+      label: Chord Pattern
+      passed: true
+  - id: arp
+    title: Hear a gate on every voice
+    caption: 'An arpeggio gives every note its own gate: each note lasts one division, here half a step,
+      from its own start. A strummed note is held to the end of the step. Assign Chord Pattern and turn
+      E3 one detent to -> (forward); Assign Mute Chord Root and leave it at X so the root still sounds;
+      then assign Chord Velocity Mod and turn E3 to +10 (E2 moves to the next slot, K2 opens the list,
+      E3 browses, K3 assigns, K2 returns). Tap Play (1,8), then tap it again to stop. In the MIDI strip
+      the five voices start half a step apart: C3 (60), E3 (64), G3 (67), A3 (69) and C4 (72).'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      arp: true
+      shape: 1
+      muted: false
+      mask_bits: 15
+      onsets: 5
+      release_checks: 5
+- id: chord-shape-forward
+  feature_id: chord-shape-modifier
+  title: Order the five chord slots
+  behaviour_case: M-CHORDSHAPE-001
+  citation: README.md#chord-shape-modifier
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Chd1 to Chd4 on the Masks page are E, G, A and C (MIDI 64, 67, 69, 72) and the output is polyphonic.
+      Trig params is open on its parameter list, showing Chord Pattern. Chord Note Strum is already assigned
+      and set to 1/2, half a step.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Pattern
+      passed: true
+  - id: assign-pattern
+    title: Choose forward order
+    caption: Press K3 to assign Chord Pattern and K2 to return, then turn E3 one detent to -> (forward).
+      Turn E2 to the next slot, press K2 and turn E3 to Mute Chord Root.
+    assertion:
+      kind: parameter-list-label
+      label: Mute Chord Root
+      passed: true
+  - id: forward
+    title: Hear the root first
+    caption: 'Assign Mute Chord Root and leave it at X so the root still sounds; then assign Chord Velocity
+      Mod and turn E3 to +10 (E2 moves to the next slot, K2 opens the list, E3 browses, K3 assigns, K2
+      returns). Tap Play (1,8), then tap it again to stop. The five slots are the root and Chd1 to Chd4.
+      The MIDI strip lists them in that order, half a step apart, root first: C3 (60), E3 (64), G3 (67),
+      A3 (69) and C4 (72).'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      arp: false
+      shape: 1
+      muted: false
+      mask_bits: 15
+      onsets: 5
+      release_checks: 5
+- id: chord-shape-reverse
+  feature_id: chord-shape-modifier
+  title: Reverse the slot order
+  behaviour_case: M-CHORDSHAPE-003
+  citation: README.md#chord-shape-modifier
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Chd1 to Chd4 on the Masks page are E, G, A and C (MIDI 64, 67, 69, 72) and the output is polyphonic.
+      Trig params is open on its parameter list, showing Chord Pattern. Chord Note Strum is already assigned
+      and set to 1/2, half a step.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Pattern
+      passed: true
+  - id: assign-pattern
+    title: Choose reverse order
+    caption: Press K3 to assign Chord Pattern and K2 to return, then turn E3 two detents to <- (reverse).
+      Turn E2 to the next slot, press K2 and turn E3 to Mute Chord Root.
+    assertion:
+      kind: parameter-list-label
+      label: Mute Chord Root
+      passed: true
+  - id: reverse
+    title: Hear the root last
+    caption: 'Assign Mute Chord Root and leave it at X so the root still sounds; then assign Chord Velocity
+      Mod and turn E3 to +10 (E2 moves to the next slot, K2 opens the list, E3 browses, K3 assigns, K2
+      returns). Tap Play (1,8), then tap it again to stop. The order flips: C4 (72), A3 (69), G3 (67),
+      E3 (64), then the root C3 (60), still half a step apart. The three Chord Pattern values are X (no
+      shape), -> (forward) and <- (reverse).'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      arp: false
+      shape: 2
+      muted: false
+      mask_bits: 15
+      onsets: 5
+      release_checks: 5
+- id: chord-velocity-ordinal
+  feature_id: chord-velocity-modifier
+  title: Raise velocity up the chord
+  behaviour_case: M-CHORDSHAPE-001
+  citation: README.md#chord-velocity-modifier
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Chd1 to Chd4 on the Masks page are E, G, A and C (MIDI 64, 67, 69, 72) and the output is polyphonic.
+      Trig params is open on its parameter list, showing Chord Velocity Mod. Chord Note Strum (1/2), Chord
+      Pattern (-> forward) and Mute Chord Root (X, off) are already assigned, so the root and four chord
+      notes strum half a step apart.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Velocity Mod
+      passed: true
+  - id: rising
+    title: Raise each voice by 10
+    caption: 'Press K3 to assign Chord Velocity Mod and K2 to return, then turn E3 up ten detents to +10.
+      Tap Play (1,8), then tap it again to stop. In the MIDI strip the notes C3 (60), E3 (64), G3 (67),
+      A3 (69) and C4 (72) carry velocities 50, 60, 70, 80 and 90: each note is 10 louder than the one
+      before, so the chord swells upward.'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      arp: false
+      shape: 1
+      muted: false
+      mask_bits: 15
+      onsets: 5
+      release_checks: 5
+- id: mute-root-retains-slot
+  feature_id: mute-root-note
+  title: Remove the root without collapsing time
+  behaviour_case: M-CHORDSHAPE-002
+  citation: README.md#mute-root-note
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Chd1 to Chd4 on the Masks page are E, G, A and C (MIDI 64, 67, 69, 72) and the output is polyphonic.
+      Trig params is open on its parameter list, showing Mute Chord Root. Chord Note Strum (1/2) and Chord
+      Pattern (-> forward) are already assigned; Mute Chord Root is not.'
+    assertion:
+      kind: parameter-list-label
+      label: Mute Chord Root
+      passed: true
+  - id: assign-mute
+    title: Switch Mute Chord Root On
+    caption: Press K3 to assign Mute Chord Root and K2 to return, then turn E3 one detent to On. Turn
+      E2 to the next slot, press K2 and turn E3 to Chord Velocity Mod.
+    assertion:
+      kind: parameter-list-label
+      label: Chord Velocity Mod
+      passed: true
+  - id: muted
+    title: Play without the root
+    caption: 'Press K3 to assign Chord Velocity Mod and K2 to return, then turn E3 to +10. Tap Play (1,8),
+      then tap it again to stop. The MIDI strip lists four notes, not five: the root C3 (60) is silent,
+      but the chord notes keep their places, E3 (64) half a step in at velocity 60, G3 (67) at one step
+      (70), A3 (69) at 1 1/2 steps (80) and C4 (72) at two steps (90). With Mute Chord Root at X, 60 would
+      sound first at velocity 50.'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      arp: false
+      shape: 1
+      muted: true
+      mask_bits: 15
+      onsets: 4
+      release_checks: 4
+- id: chord-acceleration-termination
+  feature_id: chord-acceleration
+  title: Stop when the next gap closes
+  behaviour_case: M-CHORDSHAPE-257
+  citation: README.md#chord-acceleration
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Only Chd1 (E, 64) and Chd4 (C, 72) are set, so Chd2 and Chd3 are empty slots; the output is polyphonic.
+      Chord Note Strum is 1/2, Chord Pattern is <- (reverse: slot 4, 3, 2, 1, then the root), Mute Chord
+      Root is assigned and left at X, and Chord Velocity Mod is +10. Trig params is open on its parameter
+      list, showing Chord Spread; Spread and Chord Accel Mod are not assigned yet.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Spread
+      passed: true
+  - id: spread
+    title: Set a quarter-step Spread
+    caption: Press K3 to assign Chord Spread and K2 to return, then turn E3 up to 1/4. Each gap is now
+      1/2 + 1/4 = 3/4 step. Acceleration works on Spread, so with Spread at zero it would do nothing.
+      Turn E2 to the next slot, press K2 and turn E3 to Chord Accel Mod.
+    assertion:
+      kind: parameter-list-label
+      label: Chord Accel Mod
+      passed: true
+  - id: negative
+    title: A faster reverse strum can end early
+    caption: 'Press K3 to assign Chord Accel Mod and K2 to return, then turn E3 one detent down to -1:
+      each gap is a quarter step (Spread x 1) shorter than the one before. Tap Play (1,8), then tap it
+      again to stop. The gaps are 3/4, 1/2 and 1/4 step, and the gap after that would be 0, so scheduling
+      stops. Slot 4 (C4, 72) sounds at once, empty slots 3 and 2 pass in silence at 3/4 and 1 1/4 steps,
+      and slot 1 (E3, 64) sounds 1 1/2 steps after the trigger. The MIDI strip lists only those two notes;
+      the root C3 (60) never sounds.'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      arp: false
+      shape: 2
+      muted: false
+      mask_bits: 9
+      onsets: 2
+      release_checks: 2
+- id: chord-acceleration-slowing
+  feature_id: chord-acceleration
+  title: Slow the strum down with Accel +1
+  behaviour_case: M-CHORDSHAPE-260
+  citation: README.md#chord-acceleration
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, held for 4 steps.
+      Only Chd1 (E, 64) and Chd4 (C, 72) are set, so Chd2 and Chd3 are empty slots; the output is polyphonic.
+      Chord Note Strum is 1/2, Chord Pattern is <- (reverse: slot 4, 3, 2, 1, then the root), Mute Chord
+      Root is assigned and left at X, and Chord Velocity Mod is +10. Trig params is open on its parameter
+      list, showing Chord Spread; Spread and Chord Accel Mod are not assigned yet.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Spread
+      passed: true
+  - id: spread
+    title: Set a quarter-step Spread
+    caption: Press K3 to assign Chord Spread and K2 to return, then turn E3 up to 1/4. Each gap is now
+      1/2 + 1/4 = 3/4 step. Turn E2 to the next slot, press K2 and turn E3 to Chord Accel Mod.
+    assertion:
+      kind: parameter-list-label
+      label: Chord Accel Mod
+      passed: true
+  - id: positive
+    title: A positive Accel makes each gap longer
+    caption: 'Press K3 to assign Chord Accel Mod and K2 to return, then turn E3 one detent up to +1: each
+      gap is a quarter step (Spread x 1) longer than the one before. Tap Play (1,8), then tap it again to
+      stop. The gaps are 3/4, 1, 1 1/4 and 1 1/2 steps, so slot 4 (C4, 72) sounds at once, empty slots 3
+      and 2 pass in silence at 3/4 and 1 3/4 steps, slot 1 (E3, 64) sounds at 3 steps and the root C3 (60)
+      at 4 1/2 steps. Look at the MIDI strip "MIDI sent in this step": the three notes arrive further and
+      further apart.'
+    assertion:
+      kind: chord-shape-slots
+      passed: true
+      acceleration: 1
+      arp: false
+      shape: 2
+      muted: false
+      mask_bits: 9
+      onsets: 3
+      release_checks: 3
+- id: chord-spread-separate-gap
+  feature_id: chord-spread
+  title: Slow the strum with Spread
+  behaviour_case: M-SPREAD-006
+  citation: README.md#chord-spread
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays one trig on step 1: root C (MIDI 60, C3) at velocity 50, with Chd1 to Chd4
+      set to 64, 67, 69 and 72; the output is polyphonic. Trig params is open on its parameter list, showing
+      Chord Note Strum. Nothing is assigned yet.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Note Strum
+      passed: true
+  - id: assign-strum
+    title: Set a half-step Strum
+    caption: 'Press K3 to assign Chord Note Strum to the first slot and K2 to return, then turn E3 up
+      to 1/2: the notes will be half a step apart. Turn E2 to the next slot, press K2 and turn E3 to Chord
+      Spread.'
+    assertion:
+      kind: parameter-list-label
+      label: Chord Spread
+      passed: true
+  - id: constant
+    title: Widen each gap for a slow, harp-like roll
+    caption: Press K3 to assign Chord Spread and K2 to return, then turn E3 up to 1/4. Chord Accel Mod
+      is not assigned, so every gap stays the same. Each gap is now 3/4 step (1/2 + 1/4) instead of 1/2.
+      Tap Play (1,8), then tap it again to stop. The MIDI strip lists the root C3 (60) and then E3 (64),
+      G3 (67), A3 (69), C4 (72), evenly spaced 3/4 step apart.
+    assertion:
+      kind: spread-acceleration-contract
+      passed: true
+      arp: false
+      acceleration: 0
+      default_off: true
+      explicit_off: false
+      onsets: 5
+      release_checks: 5
+- id: global-parameter-slide
+  feature_id: param-slides
+  title: Move between parameter locks
+  behaviour_case: M-PATCH-017
+  citation: README.md#param-slides
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays the four-step phrase (C, D, E, F = MIDI 60, 62, 64, 65; velocities 127, 117,
+      107, 97) through a device with MIDI CCs, at 90 BPM with Rate /1, so one step lasts a sixth of a
+      second. PARAMS is open on the device's CC 1 control at its stored value, 63, set in PARAMS > MOSAIC.
+      CC 1 is not assigned to a Trig params slot yet, and parameter slides are off.
+    assertion:
+      kind: selected-menu-value
+      text: '63'
+    occurrence: 1
+  - id: assign-list
+    title: Find CC 1
+    caption: Press K1 to leave PARAMS. Turn E1 to Channel tasks, choose Trig params with E2 and press
+      K3, then press K2 and turn E3 to CC 1 in the parameter list.
+    assertion:
+      kind: parameter-list-label
+      label: CC 1
+      passed: true
+  - id: assigned
+    title: Assign CC 1 to the slot
+    caption: Press K3 to assign CC 1 and K2 to return. Slot 1 now reads 63, the stored value, with no
+      marker in its corner, because no step has a lock for it yet.
+    assertion:
+      kind: selected-param
+      value: '63'
+      marker: null
+  - id: lock-step-1
+    title: Lock step 1 to 24
+    caption: Hold step 1 at (1,4) and turn E3 to 24. Slot 1 shows 24 with an L in its corner while the
+      step is held, so this step now has its own value for CC 1. Release the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: L
+  - id: lock-step-3
+    title: Lock step 3 to 96
+    caption: Hold step 3 at (3,4) and turn E3 to 96. Slot 1 shows 96 with the L. Release the step. Steps
+      1 and 3 now carry different CC 1 values, two steps apart.
+    assertion:
+      kind: selected-param
+      value: '96'
+      marker: L
+  - id: slide-on
+    title: Turn slides on for the parameter
+    caption: With no step held, press K3. Slot 1 reads 63 again and gains an S in its corner, so every
+      lock of CC 1 slides toward the next one.
+    assertion:
+      kind: selected-param
+      value: '63'
+      marker: S
+  - id: play
+    title: Play and watch the glide
+    caption: 'Tap Play (1,8), let two loops play, then tap it again to stop. In the MIDI strip, CC 1 starts
+      at 24 on step 1 and climbs in equal steps of 12, about every 56 ms: 36, 48, 60, 72, 84, reaching
+      96 as step 3''s note starts. The glide fills the two steps between the locks.'
+    assertion:
+      kind: midi
+    occurrence: 1
+  - id: ramp
+    title: The device setting does not change
+    caption: 'Press K1 to open PARAMS. CC 1 still shows its stored value, 63: playback never changes the
+      setting you stored, so the glide exists only in the CC messages that were sent.'
+    assertion:
+      kind: slide-musical-time
+      passed: true
+      from_value: 24
+      to_value: 96
+      step_distance: 2
+      off_middle: false
+      step_local: false
+      swing: null
+      shuffle: null
+      clock_ratio: /1
+    capture_stage: before-finish
+    pre_finish_expect:
+      menu_label:
+        label: CC 1
+      menu_value:
+        value: '63'
+- id: local-parameter-slide
+  feature_id: param-slides
+  title: Slide only one source lock
+  behaviour_case: M-PATCH-033
+  citation: README.md#param-slides
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays the four-step phrase (C, D, E, F = MIDI 60, 62, 64, 65; velocities 127, 117,
+      107, 97) through a device with MIDI CCs, at 90 BPM with Rate /1, so one step lasts a sixth of a
+      second. PARAMS is open on the device's CC 1 control at its stored value, 63, set in PARAMS > MOSAIC.
+      CC 1 is not assigned to a Trig params slot yet, and parameter slides are off. The previous scene
+      turned slides on for the whole parameter; this one turns them on for a single step.
+    assertion:
+      kind: selected-menu-value
+      text: '63'
+    occurrence: 1
+  - id: assign-list
+    title: Find CC 1
+    caption: Press K1 to leave PARAMS. Turn E1 to Channel tasks, choose Trig params with E2 and press
+      K3, then press K2 and turn E3 to CC 1 in the parameter list.
+    assertion:
+      kind: parameter-list-label
+      label: CC 1
+      passed: true
+  - id: assigned
+    title: Assign CC 1 to the slot
+    caption: Press K3 to assign CC 1 and K2 to return. Slot 1 now reads 63, the stored value, with no
+      marker in its corner, because no step has a lock for it yet.
+    assertion:
+      kind: selected-param
+      value: '63'
+      marker: null
+  - id: lock-step-1
+    title: Lock step 1 to 24
+    caption: Hold step 1 at (1,4) and turn E3 to 24. Slot 1 shows 24 with an L in its corner while the
+      step is held. Release the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: L
+  - id: lock-step-3
+    title: Lock step 3 to 96
+    caption: Hold step 3 at (3,4) and turn E3 to 96. Slot 1 shows 96 with the L. Release the step.
+    assertion:
+      kind: selected-param
+      value: '96'
+      marker: L
+  - id: lock-step-4
+    title: Lock step 4 to 48
+    caption: Hold step 4 at (4,4) and turn E3 to 48. Slot 1 shows 48 with the L. Release the step.
+    assertion:
+      kind: selected-param
+      value: '48'
+      marker: L
+  - id: slide-on
+    title: Slide from step 1 only
+    caption: Hold step 1 at (1,4) and press K3. Slot 1 shows 24 with an S in its corner while step 1 is
+      held, so only the slide that starts at step 1 is on. Release the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: S
+  - id: play
+    title: Play and watch the glide stop at step 3
+    caption: 'Tap Play (1,8), let two loops play, then tap it again to stop. In the MIDI strip, CC 1
+      glides from 24 to 96 in equal steps of 12 (36, 48, 60, 72, 84) between steps 1 and 3, then jumps
+      straight to 48 at step 4 with no glide.'
+    assertion:
+      kind: midi
+    occurrence: 1
+  - id: local
+    title: The device setting does not change
+    caption: 'Press K1 to open PARAMS. CC 1 still shows 63, the value you stored: the slide only shapes
+      the messages sent while playing.'
+    assertion:
+      kind: slide-musical-time
+      passed: true
+      from_value: 24
+      to_value: 96
+      step_distance: 2
+      off_middle: false
+      step_local: true
+      swing: null
+      shuffle: null
+      clock_ratio: /1
+    capture_stage: before-finish
+    pre_finish_expect:
+      menu_label:
+        label: CC 1
+      menu_value:
+        value: '63'
+- id: slide-wrap-boundary
+  feature_id: parameter-slides-wrap
+  title: Choose what the final lock slides toward
+  behaviour_case: M-SLIDE-STEP-001
+  citation: README.md#parameter-slides-wrap
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1-4 with
+      notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) and velocities 127, 117, 107 and 97, at the default
+      90 BPM with Rate /1 (sixteenth-note steps, one sixth of a second each); the sequencer is stopped.
+      CC 1 is assigned to a Trig params slot and locked on three steps: 24 on step 1, 96 on step 3 and
+      48 on step 4; step 2 has no lock. Step 1''s slide is off, and step 4''s slide is on. Wrap param
+      slides is Off, so there is no later lock for step 4 to slide toward: CC 1 holds at 48 until the
+      loop restarts and the first lock, 24, is recalled with a jump.'
+    assertion:
+      kind: step-slide
+      passed: true
+      stage: last-lock-no-wrap
+  - id: wrap-on
+    title: Turn on Wrap param slides
+    caption: Press K1 to open PARAMS, go to the MOSAIC group, select Wrap param slides and turn E3 right
+      to On. The row reads On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Wrap param slides
+      value: 'On'
+      matched: true
+  - id: wrap
+    title: Slide back to the first lock
+    caption: Press K1 to leave PARAMS, tap Play (1,8), let two loops play and tap it again to stop. In
+      the MIDI strip, CC 1 now descends from 48 to 24 across the loop boundary, 40, 32, 24 about 56 ms
+      apart, and arrives at 24 together with the first note. A filter or other target sweeps smoothly
+      around the loop.
+    assertion:
+      kind: step-slide
+      passed: true
+      stage: last-lock-wraps
+- id: trig-parameter-locks
+  feature_id: trig-param-locks
+  title: Lock a value, then clear just that step
+  behaviour_case: M-PARAM-016
+  citation: README.md#trig-param-locks
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device on OUT 1: four trigs on steps 1-4 (C, D,
+      E, F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major at 90 BPM, with sixteenth-note
+      steps (Rate /1). The Trig params screen is open on its parameter list, showing Fixed Note; every
+      slot is empty (None).'
+    assertion:
+      kind: parameter-list-label
+      label: Fixed Note
+      passed: true
+  - id: default
+    title: Set the channel default
+    caption: 'Press K3 to assign Fixed Note to the first slot and K2 to return. With no step held, turn
+      E3 to 60 (C3). Play, then stop: the MIDI strip lists C3 (60) on all four steps.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: channel60
+      pitches:
+      - 60
+      - 60
+      - 60
+      - 60
+  - id: lock
+    title: Lock one step
+    caption: 'Hold step 2 at (2,4), turn E3 to 63 (D#3) and release. A value set on a held step is a lock.
+      Play, then stop: step 2 plays 63 and the other steps keep the default, 60, 63, 60, 60.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: step2-override
+      pitches:
+      - 60
+      - 63
+      - 60
+      - 60
+  - id: second-lock
+    title: Lock a second step
+    caption: 'Hold step 1 at (1,4), turn E3 down to 0 and release. Play, then stop: 0, 63, 60, 60. Zero
+      is a real note, not Off.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: zero-is-active
+      pitches:
+      - 0
+      - 63
+      - 60
+      - 60
+  - id: raise-default
+    title: Raise the default beneath the locks
+    caption: 'Hold step 4, turn E3 down to X (Off) and release: a step at X has no lock, so it follows
+      the default. Then, with no step held, turn E3 up five detents to 65. Play, then stop: 0, 63, 65,
+      65. Steps 1 and 2 keep their locks.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: default-edit-preserves-locks
+      pitches:
+      - 0
+      - 63
+      - 65
+      - 65
+  - id: clear
+    title: Let the default apply again
+    caption: 'Hold step 2 at (2,4), press K2 and release: its lock is cleared and step 2 returns to the
+      default. Play, then stop: 0, 65, 65, 65. Step 1 keeps its MIDI 0 lock; steps 2 to 4 follow the default.
+      To lock a CC value the same way, see Brighten the last note with a cutoff lock.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: clear-step2
+      pitches:
+      - 0
+      - 65
+      - 65
+      - 65
+- id: full-quantisation-precedence
+  feature_id: fully-quantise-mask
+  title: Choose which note masks follow the scale
+  behaviour_case: M-MASK-021
+  citation: README.md#fully-quantise-mask
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities 127,
+      117, 107, 97), in a scale with Degree II and Rotation 1; both are already set in the scale editor.
+      In PARAMS > MOSAIC, Snap note masks to scale is On, while Quantise note masks (the global full-quantisation
+      option) and Lock merged to pent. are Off. With Snap alone the masks play as written, 60, 64, 69,
+      71 in the MIDI strip, because Degree and Rotation affect masks only under full quantisation. Quantise
+      Note Mask works on three levels, strongest first: a step lock, then the channel value, then the
+      global option. On follows the scale, Off keeps the written pitch, and X means inherit from the next
+      level down. Each step below lists the state as global / channel / step 1 / step 2. Now: Off / X
+      / X / X.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: snap-ignores-degree-and-rotation
+      pitches:
+      - 60
+      - 64
+      - 69
+      - 71
+  - id: global-full-degree-and-rotation
+    title: 'Global: turn full quantisation On'
+    caption: 'State: On / X / X / X. Press K1, open the Mosaic params and turn Quantise note masks On
+      (the global option). Play, then stop: the same masks now follow Degree II and Rotation 1 and the
+      strip reads 62, 65, 71, 60.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: global-full-degree-and-rotation
+      pitches:
+      - 62
+      - 65
+      - 71
+      - 60
+  - id: channel-off-overrides-global-on
+    title: 'Channel: an Off beats the global On'
+    caption: 'State: On / Off / X / X. Open Channel tasks > Trig params, press K2 and turn E3 to Quantise
+      Note Mask in the parameter list. Press K3 to assign it and K2 to return, then turn E3 one detent
+      to Off. Play, then stop: the written phrase 60, 64, 69, 71 returns, because the channel setting
+      beats the global On.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: channel-off-overrides-global-on
+      pitches:
+      - 60
+      - 64
+      - 69
+      - 71
+  - id: step-on-overrides-channel-off
+    title: 'Step: map just one step'
+    caption: 'State: On / Off / X / On. Hold step 2 and turn E3 to On to lock that step, then release.
+      Play, then stop: only step 2 changes, to 65. The strip reads 60, 65, 69, 71.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: step-on-overrides-channel-off
+      pitches:
+      - 60
+      - 65
+      - 69
+      - 71
+- id: full-quantisation-inherit-and-step-off
+  feature_id: fully-quantise-mask
+  title: Let the channel inherit the global setting
+  behaviour_case: M-MASK-021
+  citation: README.md#fully-quantise-mask
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities 127,
+      117, 107, 97), in a scale with Degree II and Rotation 1. Quantise Note Mask works on three levels,
+      strongest first: a step lock, then the channel value, then the global option. On follows the
+      scale, Off keeps the written pitch, and X means inherit from the next level down. The state is
+      listed as global / channel / step 1 / step 2. Now: On / Off / X / On. The channel Off beats the global
+      On and step 2 has its own On lock, so the strip reads 60, 65, 69, 71.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: step-on-overrides-channel-off
+      pitches:
+      - 60
+      - 65
+      - 69
+      - 71
+  - id: channel-unset-inherits-global
+    title: 'Channel: X inherits the global On'
+    caption: 'State: On / X / X / On. With no step held, turn the channel value down to X (unset). The
+      global On applies again: 62, 65, 71, 60. Step 2 keeps its own On lock.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: channel-unset-inherits-global
+      pitches:
+      - 62
+      - 65
+      - 71
+      - 60
+  - id: step-off
+    title: 'Step: switch one step Off'
+    caption: 'State: On / X / Off / On. Hold step 1, turn E3 one detent up from X to Off and release.
+      Play, then stop: step 1 plays its written note, 60, even though the global option is On. The strip
+      reads 60, 65, 71, 60.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: step-off-overrides-global-on
+      pitches:
+      - 60
+      - 65
+      - 71
+      - 60
+  - id: global-off
+    title: 'Global: turn full quantisation Off'
+    caption: 'State: Off / X / Off / On. Press K1, open the Mosaic params and turn Quantise note masks
+      Off. The channel value is still X, so it follows the global Off. Play, then stop: steps 3 and 4
+      play as written and step 2 keeps its On lock, 60, 65, 69, 71.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: global-off-preserves-step-on
+      pitches:
+      - 60
+      - 65
+      - 69
+      - 71
+- id: full-quantisation-channel-beats-global
+  feature_id: fully-quantise-mask
+  title: Let the channel beat the global setting
+  behaviour_case: M-MASK-021
+  citation: README.md#fully-quantise-mask
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays four trigs with note masks 60, 64, 69 and 71 on steps 1-4 (velocities 127,
+      117, 107, 97), in a scale with Degree II and Rotation 1. Quantise Note Mask works on three levels,
+      strongest first: a step lock, then the channel value, then the global option. On follows the
+      scale, Off keeps the written pitch, and X means inherit from the next level down. The state is
+      listed as global / channel / step 1 / step 2. Now: Off / X / Off / On. The global Off is inherited
+      by the channel, step 1 is Off and step 2 is On, so the strip reads 60, 65, 69, 71.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: global-off-preserves-step-on
+      pitches:
+      - 60
+      - 65
+      - 69
+      - 71
+  - id: channel-on
+    title: 'Channel: On beats the global Off'
+    caption: 'State: Off / On / Off / On. With no step held, turn E3 two detents up to On. Play, then
+      stop: the channel On beats the global Off, so steps 3 and 4 follow the scale again, 60, 65, 71,
+      60.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: channel-on-overrides-global-off
+      pitches:
+      - 60
+      - 65
+      - 71
+      - 60
+  - id: explicit-step-X-uses-global-off
+    title: 'Step: clear an Off, then try an explicit X'
+    caption: 'First hold step 1, press K2 and release: the Off lock clears and the channel On applies.
+      Play, then stop: 62, 65, 71, 60 (state Off / On / X / On). Then hold step 1, turn E3 all the way
+      down to X and release. An explicit step X skips the channel and uses the global option directly,
+      here Off, so step 1 plays its written note: 60, 65, 71, 60.'
+    assertion:
+      kind: full-mask-quantisation
+      passed: true
+      stage: explicit-step-X-uses-global-off
+      pitches:
+      - 60
+      - 65
+      - 71
+      - 60
+- id: mask-locks-clear-neighbours
+  feature_id: mask-locks
+  title: Clear a note mask without clearing its neighbour
+  behaviour_case: M-MASK-007
+  citation: README.md#mask-locks
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. The Masks page (Channel tasks,
+      then Masks) is open on Note. The channel''s Note mask default is 67 (G3), step 1 has its own mask
+      72 and step 2 has 74, so the MIDI strip reads 72, 74, 67, 67.'
+    assertion:
+      kind: mask-clear-attribute
+      passed: true
+      attribute: note
+      chord_slot: 1
+      defaults: true
+      stage: both-step-overrides
+      active_step_overrides:
+      - 1
+      - 2
+  - id: one
+    title: Clear step 1 only
+    caption: 'Hold step 1 at (1,4), press K2 and release. Step 1 falls back to the channel default, 67,
+      but step 2 keeps its 74. Play, then stop: the strip reads 67, 74, 67, 67.'
+    assertion:
+      kind: mask-clear-attribute
+      passed: true
+      attribute: note
+      chord_slot: 1
+      defaults: true
+      stage: clear-first-step
+      active_step_overrides:
+      - 2
+  - id: held-step-wins
+    title: A held step wins over the shift clear
+    caption: 'Hold step 1 again, hold K1 and press K2, then release. With a step held, only that step
+      is cleared, even while K1 is down, and step 1 has nothing left to clear. Play, then stop: the strip
+      still reads 67, 74, 67, 67.'
+    assertion:
+      kind: mask-clear-attribute
+      passed: true
+      attribute: note
+      chord_slot: 1
+      defaults: true
+      stage: repeat-clear-first-step
+      active_step_overrides:
+      - 2
+  - id: all
+    title: Clear every step mask on the channel
+    caption: 'With no step held, hold K1 and press K2. Every step exception clears but the channel default
+      stays. Play, then stop: the strip reads 67, 67, 67, 67.'
+    assertion:
+      kind: mask-clear-attribute
+      passed: true
+      attribute: note
+      chord_slot: 1
+      defaults: true
+      stage: clear-channel-step-overrides
+      active_step_overrides: []
+- id: locks-default-versus-local
+  feature_id: locks
+  title: Keep a default beneath your step edits
+  behaviour_case: M-PARAM-016
+  citation: README.md#locks
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device on OUT 1: four trigs on steps 1-4 (C, D,
+      E, F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major at 90 BPM, with sixteenth-note
+      steps (Rate /1). The Trig params screen is open on its parameter list, showing Fixed Note; every
+      slot is empty (None).'
+    assertion:
+      kind: parameter-list-label
+      label: Fixed Note
+      passed: true
+  - id: default
+    title: Choose a default
+    caption: 'Press K3 to assign Fixed Note to the selected slot and K2 to return. With no step held,
+      turn E3 to 60: the slot''s default is MIDI 60 (C3), used on every step that has no lock of its own.
+      Tap Play (1,8), then Stop: the MIDI strip lists 60, 60, 60, 60.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: channel60
+      pitches:
+      - 60
+      - 60
+      - 60
+      - 60
+  - id: local
+    title: Lock a step
+    caption: 'Hold step 2 at (2,4), turn E3 to 63 and release. That is a lock: it applies to step 2 only.
+      Play, then stop: 60, 63, 60, 60.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: step2-override
+      pitches:
+      - 60
+      - 63
+      - 60
+      - 60
+  - id: second-lock
+    title: Lock step 1 to zero
+    caption: 'Hold step 1 at (1,4), turn E3 down to 0 and release. 0 is a note, not Off. Play, then stop:
+      0, 63, 60, 60.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: zero-is-active
+      pitches:
+      - 0
+      - 63
+      - 60
+      - 60
+  - id: edit-default
+    title: Move the default
+    caption: 'Hold step 4 at (4,4), turn E3 all the way down to X (Off) and release: a step at X has no
+      lock and keeps following the default (0, 63, 60, 60 on Play and Stop). Then, with no step held,
+      turn E3 up five detents to raise the default to 65. Play, then stop: 0, 63, 65, 65. Steps 1 and
+      2 keep their locks; steps 3 and 4 follow the new default.'
+    assertion:
+      kind: stock-pitch-lock-inheritance
+      passed: true
+      quantised: false
+      phase: default-edit-preserves-locks
+      pitches:
+      - 0
+      - 63
+      - 65
+      - 65
+- id: chord-pattern-x-is-off
+  feature_id: chord-shape-modifier
+  title: Return a chord shape to X
+  behaviour_case: M-PARAM-CHORD-X-001
+  citation: README.md#chord-shape-modifier
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1-4 (C, D, E,
+      F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major. On the Masks page Chd1 is set
+      on every step to E, F, G and A (64, 65, 67, 69), and no strum is set. Trig params is open with no
+      slot assigned. When played, each step sends its root first and then its chord note, both at the
+      same moment: the MIDI strip lists C3 then E3, D3 then F3, and so on. Only the order of the two messages
+      differs, so the effect is easy to miss without a Strum.'
+    assertion:
+      kind: chord-pattern-x-root
+      passed: true
+      stage: unassigned
+      root_first:
+      - true
+      - true
+      - true
+      - true
+  - id: assigned
+    title: Assign Chord Pattern and leave it at X
+    caption: 'Press K2 and turn E3 to Chord Pattern in the parameter list, then press K3 to assign it
+      and K2 to return. The slot reads X, which means no shape. Tap Play (1,8), then tap it again to stop:
+      every root still sounds first, as before.'
+    assertion:
+      kind: chord-pattern-x-root
+      passed: true
+      stage: assigned-channel-X
+      root_first:
+      - true
+      - true
+      - true
+      - true
+  - id: reverse
+    title: Reverse the whole channel
+    caption: 'With no step held, turn E3 two detents up to <- (reverse). Tap Play, then stop: on all four
+      steps the chord note''s Note On now comes before the root''s, so the strip lists E3 then C3, F3
+      then D3, and so on. Nothing is strummed, so both still sound together; add a Strum to hear the order.'
+    assertion:
+      kind: chord-pattern-x-root
+      passed: true
+      stage: channel-reverse
+      root_first:
+      - false
+      - false
+      - false
+      - false
+  - id: step-x
+    title: Give two steps an explicit X
+    caption: 'Hold step 1 at (1,4), turn E3 all the way down to X and release; do the same on step 3.
+      A step''s own X beats the channel''s setting. Tap Play, then stop: steps 1 and 3 send the root first
+      again, while steps 2 and 4 keep the reverse order.'
+    assertion:
+      kind: chord-pattern-x-root
+      passed: true
+      stage: step-X-locks-over-reverse
+      root_first:
+      - true
+      - false
+      - true
+      - false
+  - id: channel-x
+    title: Return the channel to X
+    caption: 'With no step held, turn E3 two detents down to X. Steps 1 and 3 already read X; now every
+      step does. Tap Play, then stop: all four roots come first again.'
+    assertion:
+      kind: chord-pattern-x-root
+      passed: true
+      stage: step-X-locks-with-channel-X
+      root_first:
+      - true
+      - true
+      - true
+      - true
+- id: trig-params-assignment-and-selection
+  feature_id: trig-parameters
+  title: Assign one slot and read its value
+  behaviour_case: M-PARAM-001
+  citation: README.md#trig-parameters
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device on OUT 1: four trigs on steps 1-4 (C, D,
+      E, F = MIDI 60, 62, 64, 65; velocities 127, 117, 107, 97) in C major at 90 BPM, with sixteenth-note
+      steps (Rate /1). The Device page is showing, and the ten Trig params slots are all empty (None).
+      Any parameter is assigned the same way; Chord Note Strum is used here only because its values are
+      quick to turn through.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: list
+    title: Open the parameter list
+    caption: Turn E1 to Channel tasks, choose Trig params with E2 and press K3. Press K2 to open the parameter
+      list and turn E3 to Chord Note Strum.
+    assertion:
+      kind: parameter-list-label
+      label: Chord Note Strum
+      passed: true
+  - id: assigned
+    title: An assigned slot starts at X
+    caption: 'Press K3 to assign Chord Note Strum to the first slot and K2 to return. The slot shows its
+      short name (Chrd Strm) and the value X. X means Off: the parameter sends nothing. The next scenes
+      use Fixed Note and CC 1 the same way.'
+    assertion:
+      kind: parameter-division-label
+      parameter: Chord Note Strum
+      value: X
+      passed: true
+    occurrence: 1
+  - id: edit
+    title: Edit the selected slot
+    caption: With no step held, turn E3 down three detents (the slot stays at X), then one detent up.
+      The slot reads 1/24, the shortest strum division. Turn E3 further for other divisions; turning back
+      to X switches the strum off.
+    assertion:
+      kind: parameter-division-label
+      parameter: Chord Note Strum
+      value: 1/24
+      passed: true
+source_proof:
+  stock_pitch_and_probability: tests/behaviour/trig_parameter_interactions.py:64-184
+  random_domains: tests/behaviour/random_note_domains.py:4-145
+  division_labels: tests/behaviour/contract/parameter_divisions.py:4-22
+  chord_schedule: tests/behaviour/contract/chord_shapes.py:55-192
+  spread_schedule: tests/behaviour/cases.py:1424-1461
+  slide_schedule: tests/behaviour/patch_params.py:189-326
+  step_slide_wrap: tests/behaviour/step_slides.py:9-63
+  full_quantisation: tests/behaviour/mask_quantisation.py:37-78
+  mask_clearing: tests/behaviour/mask_clearing.py:3-107
+capture_priority:
+- M-PARAM-016
+- M-PARAM-015
+- M-PARAM-018
+- M-PARAM-001
+- M-PARAM-002
+- M-PARAM-003
+- M-CHORDSHAPE-001
+- M-CHORDSHAPE-002
+- M-CHORDSHAPE-003
+- M-CHORDSHAPE-009
+- M-CHORDSHAPE-257
+- M-PATCH-017
+- M-PATCH-033
+- M-SLIDE-STEP-001
+- M-MASK-021
+- M-PARAM-037
+- M-PARAM-038
+- M-SPREAD-006
+- M-PARAM-CHORD-X-001
+- M-MASK-007

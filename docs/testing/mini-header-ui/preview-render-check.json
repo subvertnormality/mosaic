@@ -1,0 +1,9 @@
+{
+  "kind": "literal JavaScript canvas draw harness, not native application acceptance",
+  "first_frame_earlier_timestamp_safe": true,
+  "draw_operations": 23305,
+  "first_frame_draw_operations": 4661,
+  "controls_modes_exercised": true,
+  "root_CUA_actual_preview_verified": true,
+  "production_wiring": "held for native expected reds and user review"
+}

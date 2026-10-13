@@ -1,0 +1,276 @@
+{
+  "build_manifest_sha256": "a8a3d59ade436592ee118658b6b720943c7551f4dd3f1a203b5bbe8737b42b0b",
+  "inventory_sha256": "a19f7a71c11f989a7a5362fbdad4644361fa08ba2b3891e7c9ee1efd1299a9fd",
+  "readthrough_sha256": "850af7177ce0d7256c6bc2b8c04cca4734bcbf7a5feaccc97673aa32d6b84e2e",
+  "units": [
+    {
+      "id": "course:masks-edit",
+      "scores": {
+        "coherence": {
+          "score": 6,
+          "reason": "Clear musical action is split between prose, a cue workspace and distant audio.",
+          "evidence": "#masks/course offers both \u201cPractice the recorded walkthrough\u201d and \u201cView the captured result\u201d for every stage.",
+          "improvement": "R/A: Make stage instruction, before/after and listening one workspace."
+        },
+        "usefulness": {
+          "score": 8,
+          "reason": "The edit has an immediate musical purpose and a useful recovery rule.",
+          "evidence": "#masks/course: \u201cIf every note changes, you edited the channel default\u201d; held step + K2 clears its masks.",
+          "improvement": "A: Keep this concrete recovery beside the action."
+        },
+        "understandability": {
+          "score": 7,
+          "reason": "Physical gestures are precise, but cue acknowledgement can imply a result that has not happened.",
+          "evidence": "#masks/lesson/masks-edit: clicking \u201cSet the step note to D3: D3\u201d leaves 03/20 and C3 before final \u201cView the captured result\u201d.",
+          "improvement": "R: Label grouped instructions honestly and distinguish before from after."
+        },
+        "representation": {
+          "score": 7,
+          "reason": "Authentic screen/grid checkpoints help, but action feedback is distant and the current result duplicates expected feedback.",
+          "evidence": "#masks/lesson/masks-edit: 03/20 caption says C3 while action expectation says \u201cOnly step 13 now has a Note exception, D3\u201d.",
+          "improvement": "R: Place authentic before/after beside the action and show expectation as future."
+        },
+        "granularity": {
+          "score": 7,
+          "reason": "One small pitch edit is teachable, but the interface adds cue and capture numbering to ten prose stages.",
+          "evidence": "#masks/course: \u201cRaise the last note\u201d is prose stage3 and result04/20.",
+          "improvement": "R: Use learner stages as progress and hide capture numbering in evidence."
+        },
+        "flow": {
+          "score": 6,
+          "reason": "The preceding hold and following release make sense, but repeated route choices break a continuous lesson.",
+          "evidence": "#masks/course: \u201ckeep holding it for the next stage\u201d; raise-note practice enters03/20 then result04/20, Next Action releases.",
+          "improvement": "R/A: Continue between focused stages in the same workspace."
+        },
+        "integration": {
+          "score": 6,
+          "reason": "Matching pitch audio exists but is below the whole demonstration rather than at this pitch action.",
+          "evidence": "#masks/course audio \u201cRaising the last note\u201d describes C3,C3,C3,D3 all velocity80; separate 05 / AUDIO EXAMPLES section.",
+          "improvement": "R/M: Bind and place this existing clip at the raise/listen stage."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Reader-facing build terminology repeatedly interrupts the lesson.",
+          "evidence": "#masks/lesson/masks-edit: \u201cCAPTURED EXAMPLE\u201d, \u201cRecorded walkthrough. No authored practice is available for this transition\u201d.",
+          "improvement": "R: Move implementation status into Evidence and use Show result."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "Musical stage names are good but chapter and navigation names disagree.",
+          "evidence": "#masks/course heading \u201c5. Give the phrase an ending\u201d; browser title \u201cMasks \u00b7 Mosaic\u201d, breadcrumb Masks.",
+          "improvement": "R/A: Use the musical chapter name for course title and crumbs; Masks for reference."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "Practice and result routes plus whole-chapter prose leave several competing lesson surfaces.",
+          "evidence": "#masks/lesson/masks-edit and #masks/course/course-masks/masks-edit are separate links on #masks/course.",
+          "improvement": "R: Resolve aliases to one canonical focused course stage."
+        }
+      }
+    },
+    {
+      "id": "course:masks-listen",
+      "scores": {
+        "coherence": {
+          "score": 7,
+          "reason": "The C,C,C,D goal matches its result and audio, but the learner must assemble them from separate sections.",
+          "evidence": "#masks/lesson/masks-listen result07/20 and audio \u201cRaising the last note\u201d both describe C3,C3,C3,D3 at velocity80.",
+          "improvement": "R/M: Put the matching player in the listening workspace."
+        },
+        "usefulness": {
+          "score": 8,
+          "reason": "A simple listening comparison proves why the exception matters.",
+          "evidence": "#masks/course: \u201cthree beats of C3, then the fourth beat a whole tone higher\u201d.",
+          "improvement": "A: Retain the clear musical comparison."
+        },
+        "understandability": {
+          "score": 7,
+          "reason": "Play/stop instructions are clear; the cue button does not itself play audio.",
+          "evidence": "#masks/lesson/masks-listen: cue \u201cPlay the phrase and hear the D3 ending\u201d; result is shown only after all cues and View result.",
+          "improvement": "R: Separate instruction acknowledgement from actual audio playback."
+        },
+        "representation": {
+          "score": 7,
+          "reason": "The output gives exact notes and timing but the device and audio are not together.",
+          "evidence": "#masks/lesson/masks-listen result07/20 MIDI: C3 vel80 @0,667,1333 ms; D3 vel80 @2000 ms.",
+          "improvement": "R: Keep concise local output and device view alongside playback."
+        },
+        "granularity": {
+          "score": 7,
+          "reason": "Two passes is a useful short check, but review-hold/release cues add extra progress overhead.",
+          "evidence": "#masks/lesson/masks-listen begins05/20 with \u201cHold step 13 to review its exception\u201d, \u201cRelease step 13\u201d, \u201cPlay the phrase\u2026\u201d before07/20.",
+          "improvement": "R/A: Present these as one optional review then one listening step."
+        },
+        "flow": {
+          "score": 7,
+          "reason": "It connects release to the softer ending, while navigation still requires choosing demonstration versus listening.",
+          "evidence": "#masks/lesson/masks-listen result07/20 Next Action selects Vel and sets50; chapter next link precedes examples/audio.",
+          "improvement": "R: Offer Continue immediately after this matched listening result."
+        },
+        "integration": {
+          "score": 7,
+          "reason": "Audio metadata matches this stage precisely, but placement makes the learner find it.",
+          "evidence": "#masks/course/section-listen: \u201call at velocity80\u201d, four bars at90BPM; stage asks two passes.",
+          "improvement": "R/M: Place this clip at stage and clarify preview length versus exercise length."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Reader-facing build terminology repeatedly interrupts the lesson.",
+          "evidence": "#masks/lesson/masks-edit: \u201cCAPTURED EXAMPLE\u201d, \u201cRecorded walkthrough. No authored practice is available for this transition\u201d.",
+          "improvement": "R: Move implementation status into Evidence and use Show result."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "Musical stage names are good but chapter and navigation names disagree.",
+          "evidence": "#masks/course heading \u201c5. Give the phrase an ending\u201d; browser title \u201cMasks \u00b7 Mosaic\u201d, breadcrumb Masks.",
+          "improvement": "R/A: Use the musical chapter name for course title and crumbs; Masks for reference."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "Practice and result routes plus whole-chapter prose leave several competing lesson surfaces.",
+          "evidence": "#masks/lesson/masks-edit and #masks/course/course-masks/masks-edit are separate links on #masks/course.",
+          "improvement": "R: Resolve aliases to one canonical focused course stage."
+        }
+      }
+    },
+    {
+      "id": "course:masks-quiet",
+      "scores": {
+        "coherence": {
+          "score": 5,
+          "reason": "The softened result is undermined by default selection of the unsoftened soundtrack.",
+          "evidence": "#masks/lesson/masks-quiet enters07/20; audio still \u201cRaising the last note\u201d, \u201call at velocity80\u201d, while target is50.",
+          "improvement": "R/M: Select Quieter last note automatically for this stage."
+        },
+        "usefulness": {
+          "score": 8,
+          "reason": "A per-step velocity edit teaches a useful expressive change with clear physical values.",
+          "evidence": "#masks/course: \u201cTurn E3 left30 detents until Vel reads50\u201d; last D softer on velocity-sensitive instrument.",
+          "improvement": "A: Keep gesture and sensitivity condition near the result."
+        },
+        "understandability": {
+          "score": 7,
+          "reason": "The recipe distinguishes default80 from override50 well, but the composite cue is awkward.",
+          "evidence": "#masks/lesson/masks-quiet: \u201cHold step13, choose Velocity, and set it to50 with E2, hold grid column13,row4, then set velocity to50 with E3Current part\u2026\u201d.",
+          "improvement": "R/A: Clean cue composition and show grouped actions once."
+        },
+        "representation": {
+          "score": 7,
+          "reason": "Actual result MIDI supports the softer ending, but default audio demonstrates a different dynamic.",
+          "evidence": "#masks/course/course-masks/masks-quiet result09/20: D3 vel50 @2000ms and4667ms, C3 vel80; default clip vel80.",
+          "improvement": "R/M: Pair result09 and the existing Quieter last note clip."
+        },
+        "granularity": {
+          "score": 7,
+          "reason": "Selecting, holding, editing, releasing and listening belong together, but many display layers obscure that unit.",
+          "evidence": "#masks/lesson/masks-quiet begins07/20; result09/20 contains release/default and softer playback.",
+          "improvement": "R: Make one grouped edit with a held-step checkpoint and a playback checkpoint."
+        },
+        "flow": {
+          "score": 5,
+          "reason": "After making the desired ending, the course sends the learner into changing and undoing defaults.",
+          "evidence": "#masks/course result09/20 Next Action changes channel Note toG3; later clear/rebuild stages precede chapter6.",
+          "improvement": "A/R: Continue to bass after success and move default/clear comparisons to optional extension."
+        },
+        "integration": {
+          "score": 4,
+          "reason": "The selected soundtrack contradicts the stage; the matching recording requires a manual choice.",
+          "evidence": "#masks/lesson/masks-quiet still shows Raising the last note/all80; selecting Quieter last note changes metadata to D3 vel50.",
+          "improvement": "M/R: Bind the existing quieter recording to quiet-stage routes."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Reader-facing build terminology repeatedly interrupts the lesson.",
+          "evidence": "#masks/lesson/masks-edit: \u201cCAPTURED EXAMPLE\u201d, \u201cRecorded walkthrough. No authored practice is available for this transition\u201d.",
+          "improvement": "R: Move implementation status into Evidence and use Show result."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "Musical stage names are good but chapter and navigation names disagree.",
+          "evidence": "#masks/course heading \u201c5. Give the phrase an ending\u201d; browser title \u201cMasks \u00b7 Mosaic\u201d, breadcrumb Masks.",
+          "improvement": "R/A: Use the musical chapter name for course title and crumbs; Masks for reference."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "Practice and result routes plus whole-chapter prose leave several competing lesson surfaces.",
+          "evidence": "#masks/lesson/masks-edit and #masks/course/course-masks/masks-edit are separate links on #masks/course.",
+          "improvement": "R: Resolve aliases to one canonical focused course stage."
+        }
+      }
+    },
+    {
+      "id": "recipe:masks:2-add-a-ghost-note-before-an-accent",
+      "scores": {
+        "coherence": {
+          "score": 4,
+          "reason": "The two visible copies disagree in completeness, and the principal demonstration uses different pitches.",
+          "evidence": "#cookbook omits reads100/35; #masks Recipe02 includes both; ghost demo starts C,D,E,F rather than repeated-note prerequisite.",
+          "improvement": "R/A: One complete canonical recipe and one deliberately matching example."
+        },
+        "usefulness": {
+          "score": 6,
+          "reason": "The musical idea is useful, but the cookbook entry cannot be performed exactly without another page.",
+          "evidence": "#cookbook: \u201cHold step3\u2026until the screen reads\u201d with no target; aggregate velocities80,35,100,80 survive.",
+          "improvement": "R: Preserve targets and actions together and link a complete lesson."
+        },
+        "understandability": {
+          "score": 4,
+          "reason": "Necessary starting and target values vanish in the cookbook placement.",
+          "evidence": "#cookbook says \u201cchannel default Vel\u201d; #masks says \u201cchannel default Vel80\u201d, reads100 and35.",
+          "improvement": "R: Fix extraction as a class and verify visible numerical endings."
+        },
+        "representation": {
+          "score": 5,
+          "reason": "The actual demo has readable override/default results, but its different melody and unrelated audio burden the reader.",
+          "evidence": "#masks/lesson/ghost-note-before-accent frames04/05 show velocity35 then80 and phrase80,35,100,80; audio A bass with room above it.",
+          "improvement": "R/A/M: Put ghost demonstration beside recipe with matching listening or an honest missing-listening note."
+        },
+        "granularity": {
+          "score": 5,
+          "reason": "Four recipe actions are appropriately small at the feature, but cookbook splits sentences into incomplete fragments.",
+          "evidence": "#cookbook splits accent action into \u201cuntil the screen reads\u201d then \u201cRelease the step\u201d; #masks has four complete numbered actions.",
+          "improvement": "R: Retain authored action grouping."
+        },
+        "flow": {
+          "score": 5,
+          "reason": "The next idea is named but not directly linked; cookbook entry opens the full feature rather than the recipe.",
+          "evidence": "#cookbook Add a ghost note link href#masks; #masks ends \u201ccontinue with Make the ghost note intermittent\u201d as prose.",
+          "improvement": "R/A: Link recipe card to its focused lesson and next extension directly."
+        },
+        "integration": {
+          "score": 4,
+          "reason": "Recipe, demonstration and audio do not form one musical example.",
+          "evidence": "#masks Recipe02 references Set a ghost note and an accent (C,D,E,F); feature audio A bass with room above it describes two channels/chords.",
+          "improvement": "R/A/M: Associate exact ghost-note lesson identity with its own matching assets."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Instrument language is good, but build-status language dominates the demonstration.",
+          "evidence": "#masks/lesson/ghost-note-before-accent: \u201cexact MIDI phrase over two cycles\u201d; \u201cNo authored practice is available\u201d.",
+          "improvement": "R/A: Keep player feedback and move capture qualification to Evidence."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "Ghost-note title is clear, but prerequisite points to an old course name and demo has another name.",
+          "evidence": "#masks Recipe02 \u201cMake your first loop\u201d; current home chapter3 \u201cMake four equal notes\u201d; demo \u201cSet a ghost note and an accent\u201d.",
+          "improvement": "A: Use consistent current prerequisite and lesson names."
+        },
+        "canonical_home": {
+          "score": 3,
+          "reason": "A broken flattened copy competes with complete feature recipe and a separately reached demonstration.",
+          "evidence": "#cookbook Add a ghost note href#masks; #masks Recipe02 and #masks/lesson/ghost-note-before-accent are separate homes.",
+          "improvement": "R/A: Curated cookbook card links to one canonical ghost-note lesson."
+        }
+      }
+    }
+  ],
+  "methods": [
+    "Personally browsed live localhost8765 manual in own background in-app browser; followed home chapter5 entry, all three stage practice routes, cue/result actions, quiet result route, audio selector, reference link, cookbook entry and ghost lesson.",
+    "Read complete Astra assessment and handoff; verified readthrough and inventory identity fields in WSL.",
+    "Verified visible recipe numbers with rendered innerText and DOM snapshot on both placements; inspected screenshot of ghost result; closed own tab."
+  ],
+  "limits": [
+    "No sound assessed by ear; audio judgments are selection, wording and placement only. No physical instrument or emulator operation, native capture, recording, rebuild, production edits or service changes.",
+    "Review at default desktop viewport; no responsive audit or complete source/provenance audit. Scores are newcomer experience judgments; layer proposals are triage, not proven root causes."
+  ]
+}

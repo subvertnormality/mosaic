@@ -1,0 +1,33 @@
+# Vertical list UI implementation
+
+Authorized by the user on 3 October 2026: convert horizontal scroll pages to vertical lists; retain Masks with every control on one screen and update behaviour coverage and documentation alongside the UI.
+
+## Scope and visible contract
+
+Seventeen live screens formerly using the focused carousel layout now use one shared `vertical_list` renderer: C04 Clock, S01 Scale, P02 Trig Options, A01 Slot Setup, A02 Global Feel, F01 Clock draft, F08 Parameter Slide, C10 Chord Timing, C12 Mask Detail, C13 Trig Detail, and Rhythm Doctor R01, R02, R04, R05, R06, R08, R09. Single-field screens use the same stable row presentation. Existing vertical detail menus, native PARAMS, pattern diagrams and read-only dashboards retain their established layout.
+
+Masks C01 and Trig Params C02 retain their overview layouts. `candidate-source.json` records an exact unchanged renderer overview branch and exact unchanged C01/C02 declarative screen entries against HEAD; existing overview cell tests pass.
+
+Native coordinates: title baseline7, scope baseline17, row baselines27/36/45/54, selected arrow x0, labels x7, whole values right-aligned at x126, footer baseline63. Selected text level15; neighboring label level7/value level10. More fields than the viewport show selected/total at x118/baseline17. The viewport follows selection with neighboring rows; it shows all four fields where they fit. A selected field whose label and exact value cannot share a row uses separate label/value rows and a three-field viewport. Values never crop; impossible exact values visibly report LAYOUT OVERFLOW. Nonselected values exceeding their row show the established more marker, and selection exposes the exact value.
+
+The new lists do not animate their essential text or value baselines. Existing decorative title mark, splash and animation on the retained musical/overview screens remain. Prev/next horizontal neighbor footer labels have been removed; each converted screen names its existing contextual actions. Child-action rows retain their OPEN hint and existing input ownership. No encoder/key meaning, assignment picker behavior, value domain, musical state setter or sequencer implementation changes.
+
+Doctor status capture/analysis can advance without a key/encoder event. The smallest additional route correction reconciles owner routes before building the read-only view model, so a redraw observes the actual owner route. It does not evaluate or advance music. Isolated capture and READY transitions plus non-Doctor isolation test this correction; actual public-ADC acceptance is separately owned by the Doctor evidence campaign.
+
+## Red, green and retained limits
+
+`lua-baseline-red.log` and `lua-baseline-source.json` preserve the original renderer/source and new six-test regression. Four tests failed for the expected absent vertical_list layout; the motion invariance and overflow characterization already passed. The new renderer suite is now six of six green.
+
+Public native baseline was preserved before production changes: controlled run feec37b4b9c84b269f981322c292f7bc and real-time run4f54d3f22bb64cf8966aef85fc74b5e7 both failed the required simultaneous Clock neighbor rows. Their full source/starts/failure artifacts are independently retained by the behaviour owner. The separate Doctor red evidence under `docs/testing/doctor-route-refresh/` preserves its exact two stale-route failures and full independent staging identity.
+
+`lua-focused-green.log`: 280 selected UI unit/integration tests passed, zero failed (ownership, router, adapters, motion, overview, new lists and Doctor route refresh); 2,127 tests were not selected. This is focused evidence, not a claim that the full Lua or exhaustive behaviour campaign passed. Root coordinates the once-settled full Lua suite and actual native candidate acceptance.
+
+The runtime registry and deterministic router traces are generated from `docs/ui-reimplementation/spec.json`; the bound specimen renderer matches `lib/ui_render.lua`. Replay compilation produced1,639 cases including actual empty layouts and vertical-list overflow. Structural/declarative validation passes with `--skip-source-fingerprints`. Full validation initially detected earlier callback-line/source-inventory drift across legacy owners and documentation; `declarative-validation.log` retains that failure. A separate strict current-source review now regenerates actual callback/controller/manual references from verified immutable source identities, retaining the original inventory unchanged in history. Full validation now passes without skips (`full-validator-green.log`). See `SOURCE-INVENTORY-REVIEW.md` for the semantic review and seven fail-closed tool regressions. The explicitly edited bound screen program fingerprint was updated to its actual candidate bytes.
+
+Manual prose, cheat sheet, public-input screen oracles, fresh captured images and publication receipts are coordinated by separate agents. This implementation report does not establish physical norns timing or hardware readability, replace those semantic tests with screenshots, or claim comprehensive manual completion.
+
+## Semantic label clarity follow-up
+
+Normal vertical-list rows now use the full semantic descriptor label (Rate, Swing type, Root, Scale, Degree, Sensitivity) rather than legacy compact widget names (ClockMod, SwingType, Notes, Quantizer, Roman Analysis, Sens). This is a one-line list-only renderer correction; the Masks/Trig Params overview branch remains byte-identical to HEAD. The new differing-short-label regression failed on the preceding candidate because Rate was absent, then passed for all six representative actual fields after the correction. `semantic-label-red.log` and its exact source identity preserve that baseline; `semantic-label-green.log` shows seven renderer tests green. `semantic-label-focused-green.log` records 281 focused UI tests green. These current screen labels supersede earlier short-label captures; native recapture is separately coordinated. No key/encoder meaning changes.
+
+The selected label uses its whole own line when label/value cannot share a row. The representative converted Clock/Scale/Doctor field names fit the119px label region at the tested8px text size; large exact numeric values retain the existing separate-row fallback. Impossible exact values still fail visibly. The bound specimen renderer and program digest, plus the explicit current-source review receipt, match the corrected renderer; full declaration validation and runtime-export check pass. `semantic-label-candidate-source.json` pins this candidate separately from the prior candidate rather than overwriting that earlier evidence.

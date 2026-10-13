@@ -1,0 +1,158 @@
+[
+  {
+    "case": "M-MASK-007",
+    "cleanup": [
+      {
+        "service": "matron",
+        "pid": 4824,
+        "returncode": 0,
+        "seconds": 0.1139111120137386
+      },
+      {
+        "service": "sclang",
+        "pid": 4735,
+        "returncode": -15,
+        "seconds": 0.11459304997697473
+      },
+      {
+        "service": "crone",
+        "pid": 4724,
+        "returncode": 0,
+        "seconds": 7.340096635743976e-05
+      },
+      {
+        "service": "jack",
+        "pid": 4720,
+        "returncode": 0,
+        "seconds": 0.01565184397622943
+      }
+    ],
+    "outstanding": []
+  },
+  {
+    "case": "M-MASK-008",
+    "cleanup": [
+      {
+        "service": "matron",
+        "pid": 6208,
+        "returncode": 0,
+        "seconds": 0.06384530197829008
+      },
+      {
+        "service": "sclang",
+        "pid": 6116,
+        "returncode": -15,
+        "seconds": 0.11455571197438985
+      },
+      {
+        "service": "crone",
+        "pid": 6108,
+        "returncode": 0,
+        "seconds": 7.134099723771214e-05
+      },
+      {
+        "service": "jack",
+        "pid": 6098,
+        "returncode": 0,
+        "seconds": 0.03164537699194625
+      }
+    ],
+    "outstanding": []
+  },
+  {
+    "case": "M-MASK-010",
+    "cleanup": [
+      {
+        "service": "matron",
+        "pid": 7804,
+        "returncode": 0,
+        "seconds": 0.11393505200976506
+      },
+      {
+        "service": "sclang",
+        "pid": 7712,
+        "returncode": -15,
+        "seconds": 0.11449917202116922
+      },
+      {
+        "service": "crone",
+        "pid": 7704,
+        "returncode": 0,
+        "seconds": 7.093098247423768e-05
+      },
+      {
+        "service": "jack",
+        "pid": 7693,
+        "returncode": 0,
+        "seconds": 0.015499098983127624
+      }
+    ],
+    "outstanding": []
+  },
+  {
+    "case": "M-MASK-005",
+    "cleanup": [
+      {
+        "service": "matron",
+        "pid": 8773,
+        "returncode": 0,
+        "seconds": 0.11407010204857215
+      },
+      {
+        "service": "sclang",
+        "pid": 8668,
+        "returncode": -15,
+        "seconds": 0.11466119304532185
+      },
+      {
+        "service": "crone",
+        "pid": 8657,
+        "returncode": 0,
+        "seconds": 7.880100747570395e-05
+      },
+      {
+        "service": "jack",
+        "pid": 8649,
+        "returncode": 0,
+        "seconds": 0.015593160002026707
+      }
+    ],
+    "outstanding": []
+  },
+  {
+    "case": "manual-audio",
+    "cleanup": [
+      {
+        "service": "matron",
+        "pid": 16428,
+        "returncode": 0,
+        "seconds": 0.11386647098697722
+      },
+      {
+        "service": "crow",
+        "pid": 16427,
+        "returncode": -15,
+        "seconds": 0.0032718880102038383
+      },
+      {
+        "service": "sclang",
+        "pid": 16317,
+        "returncode": -15,
+        "seconds": 0.06430284801172093
+      },
+      {
+        "service": "crone",
+        "pid": 16309,
+        "returncode": 0,
+        "seconds": 7.565197302028537e-05
+      },
+      {
+        "service": "jack",
+        "pid": 16305,
+        "returncode": 0,
+        "seconds": 0.03161169699160382
+      }
+    ],
+    "outstanding": []
+  }
+]

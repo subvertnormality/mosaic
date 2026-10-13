@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "5f77ce9cfe4399d947a78abd41fe1edfa6e95541",
+  "after_sha": "f9b0eab71f7f2c8835302a2ecdccfaa54e202b72",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-SAVE-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-SAVE-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-SAVE-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-34ae65f52814486dbd8f93c351bae042/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-34ae65f52814486dbd8f93c351bae042/manifest.json",
+      "manifest_sha256": "ee8cbf08f1c7354a315385ed286997e4ce6451155cfcc76f6ff60489f595d89a",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

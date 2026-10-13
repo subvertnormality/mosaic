@@ -1,0 +1,612 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "examples"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/example"
+      }
+    }
+  },
+  "definitions": {
+    "phrase": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "integer"
+        }
+      }
+    },
+    "track": {
+      "type": "object",
+      "required": [
+        "channel",
+        "voice",
+        "velocity",
+        "length_detents"
+      ],
+      "properties": {
+        "channel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "voice": {
+          "enum": [
+            "Oilcan 1",
+            "Polyperc 1",
+            "Doubledecker"
+          ]
+        },
+        "note": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "velocity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 127
+        },
+        "length_detents": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "phrase": {
+          "$ref": "#/definitions/phrase"
+        },
+        "final_bar": {
+          "$ref": "#/definitions/phrase"
+        },
+        "bar_phrases": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/definitions/phrase"
+          }
+        },
+        "velocity_overrides": {
+          "$ref": "#/definitions/phrase"
+        },
+        "pattern": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "octave": {
+          "type": "integer",
+          "minimum": -2,
+          "maximum": 2
+        },
+        "chords": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 14
+          }
+        },
+        "range_last": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "patterns": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "required": [
+              "pattern",
+              "phrase"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "pattern": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 16
+              },
+              "phrase": {
+                "$ref": "#/definitions/phrase"
+              }
+            }
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "phrase"
+          ]
+        },
+        {
+          "required": [
+            "patterns"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "phrase"
+                ]
+              },
+              {
+                "required": [
+                  "pattern"
+                ]
+              },
+              {
+                "required": [
+                  "final_bar"
+                ]
+              },
+              {
+                "required": [
+                  "bar_phrases"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "score_note": {
+      "type": "object",
+      "required": [
+        "port",
+        "status",
+        "note",
+        "velocity",
+        "step",
+        "length"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 144,
+          "maximum": 159
+        },
+        "note": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "velocity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 127
+        },
+        "step": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/tick"
+            }
+          ],
+          "minimum": 0,
+          "exclusiveMaximum": 128
+        },
+        "length": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/tick"
+            }
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 128
+        }
+      }
+    },
+    "example": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "feature_ids",
+        "description",
+        "bars",
+        "bpm",
+        "profile",
+        "tracks"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "feature_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "bars": {
+          "enum": [
+            4,
+            8
+          ]
+        },
+        "bpm": {
+          "const": 90
+        },
+        "profile": {
+          "const": "manual-trio"
+        },
+        "mode": {
+          "enum": [
+            "note-masks",
+            "relative-scale-slots"
+          ]
+        },
+        "purpose": {
+          "enum": [
+            "inspiration",
+            "lesson-comparison"
+          ]
+        },
+        "tracks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/track"
+          }
+        },
+        "scale_slots": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "required": [
+              "slot",
+              "root",
+              "root_detents"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "slot": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 16
+              },
+              "root": {
+                "enum": [
+                  "C",
+                  "D"
+                ]
+              },
+              "root_detents": {
+                "type": "integer",
+                "enum": [
+                  0,
+                  2
+                ]
+              }
+            }
+          }
+        },
+        "phase_changes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "at_step",
+              "scale_slot",
+              "root"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "at_step": {
+                "const": 32
+              },
+              "scale_slot": {
+                "const": 2
+              },
+              "root": {
+                "const": "D"
+              }
+            }
+          }
+        },
+        "midi_contract": {
+          "type": "object",
+          "required": [
+            "cycle_steps",
+            "notes"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "cycle_steps": {
+              "enum": [
+                64,
+                128
+              ]
+            },
+            "notes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/score_note"
+              }
+            },
+            "controls": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/score_control"
+              }
+            },
+            "invariants": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "channel",
+                  "reference_start_step",
+                  "revoiced_start_step",
+                  "length_steps"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "const": "revoice"
+                  },
+                  "channel": {
+                    "enum": [
+                      1,
+                      2,
+                      3
+                    ]
+                  },
+                  "reference_start_step": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "revoiced_start_step": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "length_steps": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "setup": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": [
+              "slot",
+              "global_length",
+              "changes"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "slot": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4
+              },
+              "global_length": {
+                "enum": [
+                  16,
+                  32,
+                  48,
+                  64
+                ]
+              },
+              "changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "kind"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "note_merge",
+                        "trig_merge",
+                        "swing",
+                        "octave",
+                        "mute",
+                        "harmony",
+                        "merge_shape",
+                        "trig_param",
+                        "range",
+                        "mask"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "course": {
+          "type": "object",
+          "required": [
+            "stage",
+            "contract_key"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "stage": {
+              "type": "string",
+              "minLength": 1
+            },
+            "contract_key": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "relative-scale-slots"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          },
+          "then": {
+            "required": [
+              "scale_slots",
+              "midi_contract"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "purpose": {
+                "const": "lesson-comparison"
+              }
+            },
+            "required": [
+              "purpose"
+            ]
+          },
+          "then": {
+            "required": [
+              "midi_contract"
+            ]
+          }
+        },
+        {
+          "if": {
+            "not": {
+              "required": [
+                "sections"
+              ]
+            }
+          },
+          "then": {
+            "properties": {
+              "bars": {
+                "const": 4
+              }
+            }
+          }
+        },
+        {
+          "not": {
+            "required": [
+              "sections",
+              "phase_changes"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "phase_changes"
+            ]
+          },
+          "then": {
+            "required": [
+              "scale_slots"
+            ]
+          }
+        }
+      ]
+    },
+    "tick": {
+      "type": "number",
+      "description": "A step count that is a whole multiple of 1/24 step; validate() checks the multiple exactly."
+    },
+    "score_control": {
+      "type": "object",
+      "required": [
+        "port",
+        "status",
+        "controller",
+        "value",
+        "step"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 176,
+          "maximum": 191
+        },
+        "controller": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "step": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/tick"
+            }
+          ],
+          "minimum": 0,
+          "exclusiveMaximum": 128
+        }
+      }
+    }
+  }
+}

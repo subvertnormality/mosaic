@@ -1,0 +1,29 @@
+EEE....
+======================================================================
+ERROR: test_generic_publication_cannot_skip_baseline_case (test_manual_publication_verify.GenericPublicationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 46, in test_generic_publication_cannot_skip_baseline_case
+    audit.check_generic_scope(dict(passed=True,complete_regression_run=False,scene_build_complete=True,behaviour_cases=[]),[dict(behaviour_case='M-PAT-001')])
+AttributeError: module 'manual_publication_verify' has no attribute 'check_generic_scope'
+
+======================================================================
+ERROR: test_generic_scene_requires_exact_semantics_and_citation (test_manual_publication_verify.GenericPublicationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 41, in test_generic_scene_requires_exact_semantics_and_citation
+    audit.check_generic_scene_contract(captured,source)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_generic_scene_contract'
+
+======================================================================
+ERROR: test_unknown_scene_dataset_is_fail_closed (test_manual_publication_verify.GenericPublicationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 49, in test_unknown_scene_dataset_is_fail_closed
+    audit.scene_format(dict(scenes=[dict(id='unknown')]))
+AttributeError: module 'manual_publication_verify' has no attribute 'scene_format'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+FAILED (errors=3)

@@ -1,0 +1,25 @@
+....FF.
+======================================================================
+FAIL: test_retired_layout_tag_fails_closed (test_vertical_list_ui.VerticalListOracle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_vertical_list_ui.py", line 14, in test_retired_layout_tag_fails_closed
+    selected_field_matches(s,'focused','Rate','/1')
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_ui_verb_rejects_stale_layout_before_observation (test_vertical_list_ui.VerticalListOracle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_vertical_list_ui.py", line 21, in test_ui_verb_rejects_stale_layout_before_observation
+    Ui(Driver()).expect_selected_field('focused','Rate','/1')
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/ui.py", line 1416, in expect_selected_field
+    self.driver.wait(lambda state: selected_field_matches(
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_vertical_list_ui.py", line 19, in wait
+    raise AssertionError('stale tag must be rejected before observing')
+AssertionError: stale tag must be rejected before observing
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.007s
+
+FAILED (failures=2)

@@ -1,0 +1,15 @@
+{
+  "source_run": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/M-MERGE-FOUNDATION-001-base-midi",
+  "files": {
+    "foundation-native-identity.json": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/M-MERGE-FOUNDATION-001-base-midi/native/identity.json",
+      "sha256": "4b220eb6d1ddee37189c8b1f8315ca26c159f0d1674e6ed99e0fa92816fe6c0e",
+      "bytes": 168723
+    },
+    "foundation-cleanup.json": {
+      "original_path": "/home/andy/mosaic-manual-runs/630f2a5078824322998691fce24e4a37/M-MERGE-FOUNDATION-001-base-midi/native/cleanup.json",
+      "sha256": "0171a6db90105679e06945831735ca66bf49d0e4e8e7a2ff3452ffed368b519b",
+      "bytes": 436
+    }
+  }
+}

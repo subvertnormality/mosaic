@@ -1,0 +1,6 @@
+{
+  "before_sha256": "8dc33e1419c062f905e5d43b34d61ec6c167084acf077ac586b94495aadfbda6",
+  "after_sha256": "53f677d95b1932ee98462881a46f85af9f9c82978f184326ecaf640e7848c8b3",
+  "regression": "test_player_routes_regenerate_after_audio_and_remain_indexed",
+  "complete_regression_run": false
+}

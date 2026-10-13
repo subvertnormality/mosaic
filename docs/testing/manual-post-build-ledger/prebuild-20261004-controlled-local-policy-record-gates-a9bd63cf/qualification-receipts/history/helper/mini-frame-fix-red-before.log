@@ -1,0 +1,2 @@
+Archived old helper rejected current exact H05 atlas pose as expected:
+{'frame': 'images/harmony-no-voicing.png', 'expected': '52c9016ad80d1d7c92a9e6d8b97109f21b5450f6453cff5758774e552b5eeef2', 'actual': 'dbb0d576f1c694285fbe2ef40aa74a6215b68d336a0f3dc0ebf97074e149a7a5'}

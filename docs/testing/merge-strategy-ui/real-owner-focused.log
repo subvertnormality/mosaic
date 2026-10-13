@@ -1,0 +1,17 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+EF
+Tests with errors:
+------------------
+1) test_merge_strategy_ui_real_owner_queues_and_disables_shape_at_existing_boundary
+../../../mosaic/lib/clock/transport_lifecycle.lua:66: attempt to index a nil value (global 'nb')
+stack traceback:
+
+Failed tests:
+-------------
+1) test_merge_strategy_ui_real_owner_refuses_missing_anchor_then_applies_fragments
+.///lib/merge_strategy_ui_tests.lua:90: NEEDS ANCHOR
+expected: true, actual: false
+stack traceback:
+
+Ran 2 tests in 0.046 seconds, 0 successes, 1 failure, 1 error, 2418 non-selected
+find: ‘/home/we/norns/lua/core’: No such file or directory

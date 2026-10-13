@@ -1,0 +1,6 @@
+{
+  "reason": "Three actual native-captured ledger files restored; snapshot physical-source ledger hashes are no longer current. Approved updated ledger is external overlay only.",
+  "restoration_receipt": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/native-ledger-restoration.json",
+  "sha256": "ea3a661c93e2c7348df85fc75368525ea5e7500d89cd612ecbff8fd7d4c47f6b",
+  "launch_qualified": false
+}

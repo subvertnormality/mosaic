@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "scope": "Partial failed whole-course capture: fourteen completed native MIDI windows only",
+  "course_complete": false,
+  "whole_capture_passed": false,
+  "failed_run": "/home/andy/mosaic-manual-runs/f435a5b46e6643979afd1302951904d1",
+  "failed_report_sha256": "87588978d47db497921e11a604f4e65e107286b29df00219c38b10e5bc8c11cd",
+  "music": [
+    {
+      "stage": "first-sound-hear",
+      "passed": true,
+      "midi_start_index": 10,
+      "midi_end_index": 65
+    },
+    {
+      "stage": "build-a-phrase-compare",
+      "passed": true,
+      "midi_start_index": 70,
+      "midi_end_index": 221
+    },
+    {
+      "stage": "masks-listen",
+      "passed": true,
+      "midi_start_index": 226,
+      "midi_end_index": 377
+    },
+    {
+      "stage": "masks-quiet",
+      "passed": true,
+      "midi_start_index": 382,
+      "midi_end_index": 533
+    },
+    {
+      "stage": "masks-default-g",
+      "passed": true,
+      "midi_start_index": 538,
+      "midi_end_index": 689
+    },
+    {
+      "stage": "masks-default-restored",
+      "passed": true,
+      "midi_start_index": 694,
+      "midi_end_index": 845
+    },
+    {
+      "stage": "masks-clear",
+      "passed": true,
+      "midi_start_index": 850,
+      "midi_end_index": 1001
+    },
+    {
+      "stage": "masks-keep",
+      "passed": true,
+      "midi_start_index": 1006,
+      "midi_end_index": 1157
+    },
+    {
+      "stage": "sequence-composition-both",
+      "passed": true,
+      "midi_start_index": 1162,
+      "midi_end_index": 1321
+    },
+    {
+      "stage": "sequence-composition-merge-skip",
+      "passed": true,
+      "midi_start_index": 1328,
+      "midi_end_index": 1479
+    },
+    {
+      "stage": "sequence-composition-merge-all",
+      "passed": true,
+      "midi_start_index": 1484,
+      "midi_end_index": 1643
+    },
+    {
+      "stage": "sequence-composition-merge-restored",
+      "passed": true,
+      "midi_start_index": 1650,
+      "midi_end_index": 1809
+    },
+    {
+      "stage": "harmony-design-relative",
+      "passed": true,
+      "midi_start_index": 1816,
+      "midi_end_index": 1975
+    },
+    {
+      "stage": "harmony-design-draft",
+      "passed": true,
+      "midi_start_index": 1982,
+      "midi_end_index": 2141
+    }
+  ],
+  "owner_diagnosis_sha256": "50c40f3ad0bf4f54f4347875ce2a3f1b0f82622b6c811030adcf0e2b8e4d3827",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

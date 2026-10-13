@@ -1,0 +1,89 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "after autosave restart (same as before restart)",
+    "expected": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ],
+    "heard": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "mask-off-probe",
+    "stage": "Memory one step back (observation)",
+    "expected": null,
+    "heard": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        50
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  }
+]

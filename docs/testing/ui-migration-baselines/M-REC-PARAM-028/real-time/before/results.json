@@ -1,0 +1,370 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Trigless locks",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Trigless locks",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "live-parameter-recording-dirty-value",
+    "expected": [
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ]
+    ],
+    "meaning": "Active edited values emit immediately and on eligible steps; Off remains silent."
+  },
+  {
+    "kind": "live-parameter-immediate-input",
+    "delay_ns": -147283,
+    "max_abs_delay_ns": 10000000,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000168288,
+        "error_ms": 0.16828800000023847
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999451342,
+        "error_ms": -0.5486580000000352
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999533994,
+        "error_ms": -0.46600599999990777
+      }
+    ]
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "65"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Trigless locks",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Trigless locks",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000049057,
+        "error_ms": 0.049057000000019
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000271982,
+        "error_ms": 0.27198200000011497
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999470493,
+        "error_ms": -0.5295069999999846
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999551231,
+        "error_ms": -0.44876900000012654
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000603935,
+        "error_ms": 0.6039349999999999
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000014292,
+        "error_ms": 0.014292000000359906
+      }
+    ]
+  },
+  {
+    "kind": "recorded-parameter-disarmed-replay",
+    "values": [
+      24,
+      64,
+      96,
+      64,
+      24,
+      64,
+      96,
+      64,
+      24
+    ],
+    "distinct_patch_default": 65,
+    "passed": true
+  }
+]

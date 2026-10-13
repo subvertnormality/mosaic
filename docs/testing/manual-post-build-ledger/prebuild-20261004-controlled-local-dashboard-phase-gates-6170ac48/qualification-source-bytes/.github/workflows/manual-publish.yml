@@ -1,0 +1,94 @@
+name: Publish manual site
+
+on:
+  workflow_run:
+    workflows: ["Build manual site"]
+    types: [completed]
+  # pull_request_target runs this trusted base-branch workflow with repository
+  # permissions after forks merge; the verifier checks out main only and never
+  # checks out or executes PR code.
+  pull_request_target:
+    branches: [main]
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      producer_run_id:
+        description: Successful Build manual site run ID to publish from main
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify completed manual artifact
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+    outputs:
+      publishable: ${{ steps.verify.outputs.publishable }}
+    steps:
+      - name: Check out trusted main publisher code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Verify producer provenance and artifact
+        id: verify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python .github/scripts/publish_manual.py \
+            --event-name "${{ github.event_name }}" \
+            --event-path "${{ github.event_path }}" \
+            --output-dir "${{ runner.temp }}/verified"
+      - name: Stage verified static site
+        if: steps.verify.outputs.publishable == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-manual-site
+          path: ${{ runner.temp }}/verified/manual-site/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+
+  publish:
+    name: Publish verified manual site
+    needs: verify
+    if: needs.verify.outputs.publishable == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Download the verified static site
+        uses: actions/download-artifact@v4
+        with:
+          name: verified-manual-site
+          path: site
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+

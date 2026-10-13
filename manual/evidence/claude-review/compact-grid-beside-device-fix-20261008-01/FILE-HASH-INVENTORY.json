@@ -1,0 +1,139 @@
+{
+  "algorithm": "sha256",
+  "excluded": [
+    "FILE-HASH-INVENTORY.json (self-reference)",
+    "ADOPTION-RECEIPT.json (listed separately; contains the inventory reference)"
+  ],
+  "files": [
+    {
+      "path": "MANIFEST-HISTORICAL-61f0be64676746a586c8fff0ed570186afa1bf1d5c33541ce4676e353043944b.json",
+      "bytes": 2572,
+      "sha256": "61f0be64676746a586c8fff0ed570186afa1bf1d5c33541ce4676e353043944b"
+    },
+    {
+      "path": "MANIFEST.json",
+      "bytes": 2572,
+      "sha256": "61f0be64676746a586c8fff0ed570186afa1bf1d5c33541ce4676e353043944b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1671,
+      "sha256": "58038c927cbb0f15e3ae2e136bff02944b937a5cf275f5f7c4527e259acebed6"
+    },
+    {
+      "path": "baseline/manual.css.c664",
+      "bytes": 36504,
+      "sha256": "c664709772996b542460a5c55a9c2eaf54e633170a29ce90685b78b10645cbcc"
+    },
+    {
+      "path": "harness/layout_regression.cjs",
+      "bytes": 5116,
+      "sha256": "0fd56db8208c901043a584ea3b3e31a4e73a10f750b48f8de507c1c4601fa5ef"
+    },
+    {
+      "path": "history/first-css-fix.diff",
+      "bytes": 5699,
+      "sha256": "003f86bf8766f1f374a7bda525c84d42d19f2fca67ae0d1f80c15e0c2a64fb62"
+    },
+    {
+      "path": "history/first-grid-fix-red.log",
+      "bytes": 42777,
+      "sha256": "d3bdfa92acced2bee510de39f598cb82442e9dd1457fe2f2972906e2aad37d11"
+    },
+    {
+      "path": "history/first-registered-test.diff",
+      "bytes": 15130,
+      "sha256": "32aede14885dbab6447e30f31c6a7aff55480cb6ce137001c5385cf276a366e5"
+    },
+    {
+      "path": "history/manual.css.123afe7d",
+      "bytes": 35424,
+      "sha256": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a"
+    },
+    {
+      "path": "history/manual.css.before-grid-fix-123afe7d",
+      "bytes": 31222,
+      "sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309"
+    },
+    {
+      "path": "history/manual_browser.after-first-grid-fix.7313ace.cjs",
+      "bytes": 30211,
+      "sha256": "7313ace18df11a31449cb7634c40a61f2db6a046f7ea048fd4e0cad3f929a4ba"
+    },
+    {
+      "path": "history/manual_browser.before-grid-fix.d95291.cjs",
+      "bytes": 17972,
+      "sha256": "d95291ce447b91beb1ee80e077cf58337a66184bbeb27bf8e6e1a9dd06cc686e"
+    },
+    {
+      "path": "patch-tests.diff",
+      "bytes": 7070,
+      "sha256": "ba4855c4c8b648b1376b0b3288c4e4bdaa62d71c86298dc473223d5ec7d11138"
+    },
+    {
+      "path": "patch.css.diff",
+      "bytes": 1846,
+      "sha256": "d76128def60df70b998d6201f5bf7d4326a0cd845fcc31ee704bc68c4097ee9f"
+    },
+    {
+      "path": "proof/green-final.json",
+      "bytes": 186649,
+      "sha256": "bc48f8f303826cd78c8ba06cdca9ec2205328d8916114f8f4740405894a20414"
+    },
+    {
+      "path": "proof/green-v2-false-green.json",
+      "bytes": 179448,
+      "sha256": "6fcb5d44dd52a6ec762b3910d532c361cb0b85195f31d468e3f0b2beaaefaa8f"
+    },
+    {
+      "path": "proof/red-final.json",
+      "bytes": 187274,
+      "sha256": "220df5be5d6865d32191aad9dd25706e19acf6bfb344d751b8569dfcd2a56c2f"
+    },
+    {
+      "path": "proof/served-final.json",
+      "bytes": 1763,
+      "sha256": "150bce90a48511cfc7271ce9eb08caed0e7959cc268ea8a9f68ca0f4772a551f"
+    },
+    {
+      "path": "screenshots/served-lesson-1280-original.png",
+      "bytes": 188371,
+      "sha256": "931ce2cab4d8c0260bc12edea56b45961a762e2d8659c4c881b1f326026e6d7d"
+    },
+    {
+      "path": "screenshots/served-lesson-1280-shield.png",
+      "bytes": 184429,
+      "sha256": "bfeae5360b2be9695437f33efff1e8fd93aa19bf158a9e4db3dfa35d865b18d3"
+    },
+    {
+      "path": "screenshots/served-lesson-1440-original.png",
+      "bytes": 215900,
+      "sha256": "5e37ba12dfd0ebee44a74c889c56eb09abbf535187221d7dd77c43f3e498c799"
+    },
+    {
+      "path": "screenshots/served-lesson-1440-shield.png",
+      "bytes": 213723,
+      "sha256": "64c1ec8897bc20faccf9b8d646b2302188d151ed9649a606129ac1fd7ab5c21a"
+    },
+    {
+      "path": "screenshots/served-rhythm-doctor-1121-original.png",
+      "bytes": 146758,
+      "sha256": "52eb6cf54cfedcbcad77dc57a59b3dd56c8b8c4e54e42a5f53c0a9f7382f07db"
+    },
+    {
+      "path": "screenshots/served-rhythm-doctor-1121-shield.png",
+      "bytes": 127604,
+      "sha256": "d337969f79c3074e11ddb183c68bf9625dfaaab374e0e936d0a9c96af5e59d67"
+    },
+    {
+      "path": "screenshots/served-rhythm-doctor-1440-original.png",
+      "bytes": 151536,
+      "sha256": "715150ed8579984190d9406ce7e5fce2ed5881ad35641c5a1a229324e4dfdd23"
+    },
+    {
+      "path": "screenshots/served-rhythm-doctor-1440-shield.png",
+      "bytes": 131516,
+      "sha256": "59b72a44631c38f02b2a6234f61ee859a0f95e0126bd0be58c6fcbe2603c2419"
+    }
+  ]
+}

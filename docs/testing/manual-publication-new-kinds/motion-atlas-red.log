@@ -1,0 +1,21 @@
+.................................EE..................................
+======================================================================
+ERROR: test_full_authored_motion_requires_original_native_mini_proof (test_manual_publication_verify.MotionSampleIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 285, in test_full_authored_motion_requires_original_native_mini_proof
+    audit.check_motion_samples(row,obs,'controlled-experimental',events,results,1)
+TypeError: check_motion_samples() takes 3 positional arguments but 6 were given
+
+======================================================================
+ERROR: test_old_tiny_crop_without_native_phase_is_refused (test_manual_publication_verify.MotionSampleIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 295, in test_old_tiny_crop_without_native_phase_is_refused
+    with self.assertRaises(ValueError):audit.check_motion_samples(dict(enabled=False,samples=[],decorative_mark_changed=False),[],'controlled-experimental',[],[],0)
+TypeError: check_motion_samples() takes 3 positional arguments but 6 were given
+
+----------------------------------------------------------------------
+Ran 69 tests in 2.228s
+
+FAILED (errors=2)

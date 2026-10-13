@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "report": "/home/andy/mosaic-manual-runs/91f4c49c9836462ab7b761dc05e9fc94/reference-scenes.json",
+  "report_sha256": "7cb21a1560133bac2c1ae6aefb453713497863ecf40d846a3673128853d94073",
+  "clock_mode": "controlled-experimental",
+  "scenes": 2,
+  "frames": 6,
+  "start_source_identity_sha256": "30798e0d8988a0a1fa7b0c866f29f3c23bc0bec814d50ba025a2fe104f53bb82",
+  "complete_regression_run": false,
+  "hardware_timing_verified": false
+}

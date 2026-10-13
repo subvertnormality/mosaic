@@ -1,0 +1,10 @@
+{
+  "exit_code": 4,
+  "files": {
+    "lib/ui_render.lua": "42b867fea1375344f3fe44bdaa66e724851bd5265c0f2bc2c1a86374c07c754e",
+    "lib/ui_live.lua": "5236893e4bf75bbf55e6453f4a08f85bedae83aa5862bff6346a6f752dddefe2",
+    "lib/ui_motion.lua": "24f2d865405a1848a789fea4b67a908e8fa958220ee015f5dcd076b4790e81cb",
+    "docs/ui-reimplementation/spec.json": "e8bb1bf1e47494f01ccc106a7a5c2d2881e05e05618e45fa069b4400d8f895c2",
+    "lib/tests/lib/ui_vertical_list_tests.lua": "ea7bf958f5a4af93f7bb7cbe48eab9fd2d5f063346bc157caa7d21339ad0fd44"
+  }
+}

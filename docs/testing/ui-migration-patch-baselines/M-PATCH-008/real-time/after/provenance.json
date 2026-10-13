@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35899411977",
+  "source_run_id": "35899411977",
+  "source_revision": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "case": "M-PATCH-008",
+  "lane": "real-time",
+  "clock_mode": "real-time",
+  "side": "after",
+  "profile": "base-midi",
+  "targeted_report_sha256": "540876123dc64823eacdb5eb8adb70e1d4772d56ad2e187ac0b5859f5c97869d",
+  "repeatability_report_sha256": "5c654593c21083c97f1ce6d2d2f774b1a5bd5bddf13e9a2bb44047bf52ee5be2",
+  "manifest": "M-PATCH-008/real-time/after/564d51a7721840899701b56490935532/manifest.json",
+  "manifest_sha256": "6174fb24a4ecb06b602e610b69cb532b425f902cbb1a9046f2b2b757f1655140",
+  "evidence_sha256": {
+    "recipe.json": "ad1164665b35eafe2454174d2b0fe1574bba3546bbe3cbd9b3b30a819b55cd09",
+    "reloaded/recipe.json": "1abef66d97e7a05236bf2fe185cbff5237036589481dfe578e3e032abff0676b",
+    "reloaded/results.json": "ec680a43b05a07e39dc003cdcf1e9c4e7173c82fdb219eddb86429033c5c6e0e",
+    "results.json": "10b2589fcb9d030f1d88b927bb0dc5955ee84737bc1f3b1161ea2b753bf195e7"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI"
+}

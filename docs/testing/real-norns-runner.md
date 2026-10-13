@@ -82,6 +82,18 @@ python3 tests/behaviour/real_norns.py performance \
   --artifacts ../mosaic-behaviour-runs/perf-002-hw-16-001
 ```
 
+The Interlock device-acceptance cases of `docs/musical-merge-extensions-plan.md` section 1.4 (`PERF-MERGE-HW-STEADY`, `-WORST`, `-EDIT`, `-DENSE`, `-DENSE-EDIT`) run through the same `performance` command on the `dense-16` project at 130 bpm. After the dense preflight the runner sends `merge_device_workload.lua` over Maiden, installs its admission and grid-input recorder, plays one Merge Shape Off window (8 s) and then the configured window (at least three cycles of the slowest follower: 8 s, 22.2 s or 88.6 s) in the same session, with the EDIT cases tapping the leader's step-1 anchor trig on the grid on schedule. `merge_workloads.py` judges the enabled window with the unchanged `TIMING_THRESHOLDS`, every follower admission against the plan's figures, edit propagation, follower wrap alignment and the Start latency against Off (at most `step_jitter_maximum_ns`). These cases have never run on hardware: the device qualification is outstanding and release-gating until source-identified device reports of all five pass (owner: repository maintainer).
+
+```sh
+python3 tests/behaviour/real_norns.py performance \
+  --performance-case PERF-MERGE-HW-WORST \
+  --config-source tests/behaviour/config --device-map-id emu-test \
+  --host norns.local --maiden-url ws://127.0.0.1:15555/ \
+  --osc-host norns.local --maiden-input --synthetic-grid \
+  --source "$PWD" --run-id perf-merge-hw-worst-001 \
+  --artifacts ../mosaic-behaviour-runs/perf-merge-hw-worst-001
+```
+
 `perf_input.py` still needs scheduled external-MIDI ingress with an accepted/delivered ledger and comparable acknowledgement times. `perf_overload.py` still needs a bounded on-device load generator and a revision-based visual recovery oracle. These execution paths remain deferred so emulator-native scheduler logs and container throttling counters are not relabelled as hardware measurements. `perf_storage.py` remains outside the hardware timing suite because its current recipe defines no storage-speed threshold or musical timing correlation.
 
 Running hardware mode interrupts the active script and requires exclusive access to the device. Screenshot file I/O and config seeding occur outside musical timing claims.

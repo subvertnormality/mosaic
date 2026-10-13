@@ -1,0 +1,11 @@
+test_cli_factory_creates_a_generic_worker_compatible_five_lane_result_without_model_download (test_pretrained_bass_backend.PretrainedBassBackendProtocolTests.test_cli_factory_creates_a_generic_worker_compatible_five_lane_result_without_model_download) ... ok
+test_artifact_mismatch_fails_closed_before_either_inference_session_runs (test_pretrained_bass_backend.PretrainedBassPipelineTests.test_artifact_mismatch_fails_closed_before_either_inference_session_runs) ... ok
+test_malformed_bass_onset_rejects_the_whole_result_instead_of_publishing_a_partial_lane (test_pretrained_bass_backend.PretrainedBassPipelineTests.test_malformed_bass_onset_rejects_the_whole_result_instead_of_publishing_a_partial_lane) ... ok
+test_merge_requires_drum_path_to_have_no_bass_fallback_and_keeps_velocity_separate_from_confidence (test_pretrained_bass_backend.PretrainedBassPipelineTests.test_merge_requires_drum_path_to_have_no_bass_fallback_and_keeps_velocity_separate_from_confidence) ... ok
+test_pitch_filter_does_not_turn_non_bass_basic_pitch_notes_into_hits (test_pretrained_bass_backend.PretrainedBassPipelineTests.test_pitch_filter_does_not_turn_non_bass_basic_pitch_notes_into_hits) ... ok
+test_separation_pcm_then_basic_pitch_frame_produces_bass_only_candidate (test_pretrained_bass_backend.PretrainedBassPipelineTests.test_separation_pcm_then_basic_pitch_frame_produces_bass_only_candidate) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.060s
+
+OK

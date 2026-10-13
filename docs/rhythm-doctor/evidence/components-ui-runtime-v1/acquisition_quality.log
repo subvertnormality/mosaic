@@ -1,0 +1,15 @@
+test_ambiguous_requires_assumed_label (test_acquisition_quality.AcquisitionTests) ... ok
+test_boundary_and_gate (test_acquisition_quality.AcquisitionTests) ... ok
+test_controls_are_unconditional_gate (test_acquisition_quality.AcquisitionTests) ... ok
+test_duplicate_and_nonfinite_control_rejected (test_acquisition_quality.AcquisitionTests) ... ok
+test_entire_retained_span_phase_is_checked (test_acquisition_quality.AcquisitionTests) ... ok
+test_malformed_and_no_eligible_rejected (test_acquisition_quality.AcquisitionTests) ... ok
+test_octave_short_phase_and_uncertain_controls (test_acquisition_quality.AcquisitionTests) ... ok
+test_region_must_be_captured_before_decision (test_acquisition_quality.AcquisitionTests) ... ok
+test_unknown_bar_requires_assumed_label (test_acquisition_quality.AcquisitionTests) ... ok
+test_zero_and_negative_values_rejected (test_acquisition_quality.AcquisitionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.002s
+
+OK

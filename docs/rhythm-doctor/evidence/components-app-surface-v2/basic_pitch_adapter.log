@@ -1,0 +1,8 @@
+test_invalid_pitch_and_frame_inputs_rejected (test_basic_pitch_adapter.BasicPitchAdapterTests) ... ok
+test_piano_output_origin_is_midi_21 (test_basic_pitch_adapter.BasicPitchAdapterTests) ... ok
+test_window_boundary_uses_upstream_time_correction (test_basic_pitch_adapter.BasicPitchAdapterTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK

@@ -1,0 +1,60 @@
+{
+  "scope": "Candidate callback footer and cleanup only; entire capture FAILED missing obsolete plan checkpoints",
+  "whole_capture_passed": false,
+  "candidate_qualification_complete": false,
+  "run": "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148",
+  "error": "ValueError(\"Missing checkpoints: ['merge-shape-owns-trigs/shape-only', 'merge-shape-owns-trigs/shape-all']\")",
+  "footer_actual_observations": [
+    55,
+    56,
+    57
+  ],
+  "footer_results": [
+    {
+      "kind": "footer",
+      "text": "SKIP APPLIED",
+      "passed": true
+    }
+  ],
+  "held_inputs": [],
+  "active_notes": 0,
+  "kind11_onsets": 26,
+  "kind11_releases": 26,
+  "cleanup": [
+    {
+      "service": "matron",
+      "pid": 17698,
+      "returncode": 0,
+      "seconds": 0.11389577999943867
+    },
+    {
+      "service": "sclang",
+      "pid": 17598,
+      "returncode": -15,
+      "seconds": 0.11464634299045429
+    },
+    {
+      "service": "crone",
+      "pid": 17590,
+      "returncode": 0,
+      "seconds": 6.718101212754846e-05
+    },
+    {
+      "service": "jack",
+      "pid": 17580,
+      "returncode": 0,
+      "seconds": 0.031607512035407126
+    }
+  ],
+  "pins": {
+    "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148/failure.json": "e84fa18c430100168169389211ce018a536f5c61cffebd2fae31b03cce5bd328",
+    "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148/start-source-identity.json": "9a45eeccd7614ac936bcdc8ef55469159ffcfab5f79bf116bfd506a7ed18bf9b",
+    "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148/M-LIVEUI-SHAPETRIG-001-base-midi/results.json": "d0dec9e4356bf56781997b9a1d0b0d47aaf7e94f66c419dc1ba2a5a70639809a",
+    "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148/M-LIVEUI-SHAPETRIG-001-base-midi/observations.json": "8e38b7766b2d616ff77f94ac226ddf30ba102dd21cf01104f5f95a53adb98331",
+    "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148/M-LIVEUI-SHAPETRIG-001-base-midi/recipe.json": "889c2ae94cd79f1439036063f93538b4fd9edee55eef8bc6583565278b300221",
+    "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148/M-LIVEUI-SHAPETRIG-001-base-midi/native/native-events.jsonl": "10842dd2c24ea672443a9b6edca7a70be4376052aa0d626785f2f7dc0d0f5293",
+    "/home/andy/mosaic-manual-runs/e14ab1f9a2684cb2a45b9c35cdcf6148/M-LIVEUI-SHAPETRIG-001-base-midi/native/cleanup.json": "74c8a7fb8f67708a36a09d1a0f348cddf08d304000466346cc5743503fbe3d90"
+  },
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

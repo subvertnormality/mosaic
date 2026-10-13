@@ -1,0 +1,40 @@
+{
+  "purpose": "Prepared and independently reviewed strict post-build reconciliation; NOT executed on current incomplete publications",
+  "passed": true,
+  "complete_regression_run": false,
+  "source_files": {
+    "docs/ui-reimplementation/tools/reconcile_manual_build.py": "af4d6a9e1660c8de1404a81b9f809c5e0dee700dc81c9e0a409c851489a0906a",
+    "docs/ui-reimplementation/tools/test_reconcile_manual_build.py": "a13557dcc357d61d60444b3c7e823c59c7d5df21bdd05981e4cb1ba9937cc2b2",
+    "docs/ui-reimplementation/tools/refresh_source_inventory.py": "d5915d41fd4df567cea7f6e403d153d294aec6f8d2453334cb572a918dd5fa3f"
+  },
+  "tests": {
+    "total": 40,
+    "new": 24,
+    "existing_retained_source_review_tests": 16,
+    "green_log": "readability-install/green.log",
+    "red_log": "readability-install/red.log"
+  },
+  "independent_review": "manual_course_compiler checked actual schemas/API, all three specific strict gaps closed, no remaining actual API/provenance blocker",
+  "prebuild_snapshot": "prebuild-20261003/snapshot.json",
+  "snapshot_sha256": "cbb6082763d75e3b3e6b9e6359598fbf6563606bd1028f29f0e519d5ca5da1ed",
+  "before_root_cheat_sha256": "a5c70c4b5a6403acaef9284c7aeb62df30d7b5291746a41dce98e544cae10f11",
+  "preserved_counts": {
+    "manual_sections": 125,
+    "callbacks": 64,
+    "branches": 164,
+    "source_files_before": 78
+  },
+  "expected_generated_delta": {
+    "removed": 8,
+    "added": 11,
+    "net": 3,
+    "source_files_after_expected": 81
+  },
+  "authority_activation": false,
+  "actual_post_build_reconciliation": false,
+  "narrow_change": "canonical_stage_names passes readability_real_install=identity to the current builder planning API; test proves only real readability uses explicit experimental installation and remains real-time; exact 72 ordered stage names unchanged.",
+  "previous_prepared_receipt_sha256": "9c7ac5433084e13205affb07f9e287f9be396be77e125a4e7afeeaf753068ffb",
+  "builder_sha256": "0826bdab89d2a6a309854415e69a9ba02ca4b9c8298aa8657e2d3d52220990fd",
+  "strict_current_ledger_check": "pass; 78 current files/125 manual IDs/64 callbacks/164 branches preserved, no-source-skip validator pass",
+  "all_prebuild_snapshot_bytes_still_match": true
+}

@@ -1,0 +1,34 @@
+{
+  "scope": "Desktop x86_64 memory feasibility measurement for segment-bounded Demucs separation. NOT a quality result and NOT an ARM measurement.",
+  "date": "2026-09-19",
+  "question": "Rhythm Doctor must run standalone on the Norns. Demucs is the strongest licence-clean bass separator. Its widely quoted 3-7 GB requirement is for whole-track processing, and it processes in segments, so does peak memory scale with segment length rather than capture length?",
+  "verdict": "NO. Segment length does not bound peak memory in the reference implementation. The hypothesis is refuted and Demucs is not viable on this device as-is.",
+  "method": {
+    "model": "htdemucs (demucs 4.1.0, torch 2.14.0+cpu), 41,984,456 parameters = 167.9 MB fp32",
+    "sources": ["drums", "bass", "other", "vocals"],
+    "input": "v12-acquisition-120.wav, 45.0 s, the product's full capture bound",
+    "call": "apply_model(split=True, overlap=0.25, device=cpu, num_workers=0), torch.set_num_threads(1)",
+    "metric": "resource.getrusage(RUSAGE_SELF).ru_maxrss, one process per configuration",
+    "host": "x86_64 WSL2 desktop"
+  },
+  "measurements": [
+    {"segment_seconds": 7.8, "weights_and_runtime_rss_mb": 484, "peak_rss_mb": 1402, "elapsed_seconds": 27.1, "realtime_factor": 0.60},
+    {"segment_seconds": 5.0, "weights_and_runtime_rss_mb": 483, "peak_rss_mb": 1404, "elapsed_seconds": 31.4, "realtime_factor": 0.70},
+    {"segment_seconds": 3.0, "weights_and_runtime_rss_mb": 483, "peak_rss_mb": 1379, "elapsed_seconds": 45.4, "realtime_factor": 1.01},
+    {"segment_seconds": 2.0, "weights_and_runtime_rss_mb": 483, "peak_rss_mb": 1422, "elapsed_seconds": 73.6, "realtime_factor": 1.64},
+    {"segment_seconds": 1.0, "weights_and_runtime_rss_mb": 483, "peak_rss_mb": 1490, "elapsed_seconds": 141.0, "realtime_factor": 3.13}
+  ],
+  "findings": [
+    "Reducing the segment eightfold, from 7.8 s to 1 s, did not reduce peak RSS at all. Peak stayed within 1379-1490 MB and was HIGHEST at the smallest segment, while elapsed time rose more than fivefold.",
+    "The floor is already disqualifying: 483 MB to load the PyTorch runtime and the model, against roughly 470 MB available on the device with no swap, before any activation is allocated.",
+    "Peak is about three times the entire device budget.",
+    "Time was never the constraint. 27.1 s for a 45 s capture on a single desktop thread, and the product tolerates minutes for a stop-transport capture-and-paint workflow. Memory is the binding constraint."
+  ],
+  "qualifications": [
+    "The 483 MB baseline includes the PyTorch runtime itself. A purpose-built ONNX implementation would not carry PyTorch, and the weights alone are 167.9 MB fp32 or about 84 MB fp16.",
+    "However, roughly 900 MB of activation memory did not respond to segment length, so the reference implementation does not stream. Making it fit would require a bespoke streaming ONNX implementation, which is substantial work with an uncertain outcome.",
+    "This is an x86_64 measurement. It establishes the algorithmic memory scale, not ARMv7 behaviour. PyTorch is in any case unavailable on armv7l, so the deployed path could never be this one.",
+    "No quality measurement was taken. This says nothing about whether Demucs would improve the BASS lane, only that it cannot run on the device in this form."
+  ],
+  "consequence": "Separation-first is blocked on device footprint for the standalone requirement, not on quality or licence. The hypothesis that segment bounding would rescue it is refuted by measurement."
+}

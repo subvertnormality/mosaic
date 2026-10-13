@@ -1,0 +1,1919 @@
+{
+  "status": "design_assets_not_application_capture",
+  "palette": {
+    ".": "transparent",
+    "a": 7,
+    "b": 11,
+    "c": 15
+  },
+  "screens": [
+    {
+      "id": "H01",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......cc......cc......cc....",
+          "......cb......cb......cb....",
+          "......c.......c.......c.....",
+          "...ccc.c...ccc.c...ccc.c....",
+          "..c.c.cc..c.c.cc..c.c.cc....",
+          "...ccc.....ccc.....ccc......",
+          "..a...a...a...a...a...a.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....cc......cc......cc.....",
+          ".....cb......cb......cb.....",
+          ".....c.......c.......c......",
+          "..ccc.c...ccc.c...ccc.c.....",
+          ".c.c.cc..c.c.cc..c.c.cc.....",
+          "..ccc.....ccc.....ccc.......",
+          ".a...a...a...a...a...a......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......cc......cc......cc....",
+          "......cb......cb......cb....",
+          "......c.......c.......c.....",
+          "...ccc.c...ccc.c...ccc.c....",
+          "..c.c.cc..c.c.cc..c.c.cc....",
+          "...ccc.....ccc.....ccc......",
+          "..a...a...a...a...a...a.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".......cc......cc......cc...",
+          ".......cb......cb......cb...",
+          ".......c.......c.......c....",
+          "....ccc.c...ccc.c...ccc.c...",
+          "...c.c.cc..c.c.cc..c.c.cc...",
+          "....ccc.....ccc.....ccc.....",
+          "...a...a...a...a...a...a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Leading choir",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Original note creatures take one small shared step",
+      "rest_pose": "Three creatures resting",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H02",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "....a.............a.....",
+          "....aaaaaaaaccaaaaa.....",
+          "....a.......cb....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.............a.....",
+          "....aaaaaaaaccaaaaa.....",
+          "....a.......cb....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.......cc....a.....",
+          "....aaaaaaaacbaaaaa.....",
+          "....a.......c.....a.....",
+          "....a....ccc.c....a.....",
+          "....aaaacacaccaaaaa.....",
+          "....a....ccc......a.....",
+          "....a...a...a.....a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.............a.....",
+          "....aaaaaaaaccaaaaa.....",
+          "....a.......cb....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ]
+      ],
+      "concept": "Register ladder",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Original register creature climbs one rung and returns",
+      "rest_pose": "Creature on middle rung",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H03",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "....b...c.c.cc...b......",
+          ".....b...ccc....b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "....b...c.c.cc...b......",
+          ".....b...ccc....b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "........c.c.cc..........",
+          "....b....ccc.....b......",
+          ".....b..a.c.a...b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "....b...c.c.cc...b......",
+          ".....b...ccc....b.......",
+          "......bbbbbbbbbb........"
+        ]
+      ],
+      "concept": "Bass anchor",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A bass note creature nods above a fixed anchor",
+      "rest_pose": "Anchor grounded creature upright",
+      "loop_quarter_beats": 2,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H04",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c....cc.....cc...c...",
+          "....ccc.c...cba....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c....cc.....cc...c...",
+          "....ccc.c...cba....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cb...............cb..",
+          ".......c................c...",
+          "....ccc.c...cc.....ccccc.c..",
+          "...c.c.cc...cba....cb.c.cc..",
+          "....ccc.....ca.....c.ccc....",
+          "...a...a.ccc.c..ccc.c...a...",
+          "........c.c.cc.c.c.cc.......",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c....cc.....cc...c...",
+          "....ccc.c...cba....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ]
+      ],
+      "concept": "Ensemble circle",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Four small note heads breathe together around a center",
+      "rest_pose": "Heads evenly spaced",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H05",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          ".......cc...................",
+          ".......cb.............cc....",
+          ".......c..............cb....",
+          "....ccc.c.............c.....",
+          "...c.c.cc..........ccc.c....",
+          "....ccc.......b...c.c.cc....",
+          "...a...a....b......ccc......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          "......cc....................",
+          "......cb...............cc...",
+          "......c................cb...",
+          "...ccc.c...............c....",
+          "..c.c.cc............ccc.c...",
+          "...ccc........b....c.c.cc...",
+          "..a...a.....b.......ccc.....",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          ".......cc...................",
+          ".......cb.............cc....",
+          ".......c..............cb....",
+          "....ccc.c.............c.....",
+          "...c.c.cc..........ccc.c....",
+          "....ccc.......b...c.c.cc....",
+          "...a...a....b......ccc......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          "........cc..................",
+          "........cb...........cc.....",
+          "........c............cb.....",
+          ".....ccc.c...........c......",
+          "....c.c.cc........ccc.c.....",
+          ".....ccc......b..c.c.cc.....",
+          "....a...a...b.....ccc.......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ]
+      ],
+      "concept": "Voice-movement trail",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Two creatures exchange neighboring perches along a short trail",
+      "rest_pose": "Creatures on their own perches",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H06",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          "......cc...........cc...",
+          "......cb...........cb...",
+          "......c............c....",
+          "...ccc.c........ccc.c...",
+          "..c.c.cc.......c.c.cc...",
+          "...ccc..........ccc.....",
+          "..a...a....a...a...a...."
+        ],
+        [
+          "........................",
+          "......cc...........cc...",
+          "......cb...........cb...",
+          "......c............c....",
+          "...ccc.c........ccc.c...",
+          "..c.c.cc.......c.c.cc...",
+          "...ccc..........ccc.....",
+          "..a...a....a...a...a...."
+        ],
+        [
+          "......cc................",
+          "......cb...........cc...",
+          "......c............cb...",
+          "...ccc.c...........c....",
+          "..c.c.cc........ccc.c...",
+          "...ccc.........c.c.cc...",
+          "..a...a.........ccc.....",
+          "...........a...a...a...."
+        ],
+        [
+          "...................cc...",
+          "......cc...........cb...",
+          "......cb...........c....",
+          "......c.........ccc.c...",
+          "...ccc.c.......c.c.cc...",
+          "..c.c.cc........ccc.....",
+          "...ccc.........a...a....",
+          "..a...a....a............"
+        ]
+      ],
+      "concept": "Waiting choir",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Two original note creatures wait with a soft alternating nod",
+      "rest_pose": "Creatures at rest gap between them",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H07",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "..aaa.cc......cc......acca..",
+          ".....acbaa....cbaaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ],
+        [
+          "............................",
+          "..aaa.cc......cc......acca..",
+          ".....acbaa....cbaaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ],
+        [
+          "..............cc............",
+          "..aaa.cc......cb......acca..",
+          ".....acbaa....c.aaaaaa.cb...",
+          "......c...acccac.......c....",
+          "...ccc.c..c.c.cc....ccc.c...",
+          "..c.c.cc...ccc.....c.c.cc...",
+          "...ccc....a...a.....ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "..aaa.cc......cc......acca..",
+          ".....acbaa....cbaaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ]
+      ],
+      "concept": "Member garland",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Connected note creatures nod one after another",
+      "rest_pose": "Garland hanging level",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H08",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          ".....cc.................",
+          ".....cb...c..........cc.",
+          ".....c...aca.........cb.",
+          "..ccc.c.a.c.a........c..",
+          ".c.c.cc..a.a......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb..ca..........cc.",
+          ".....c...aca.........cb.",
+          "..ccc.c.a.c.a........c..",
+          ".c.c.cc..a.a......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb...c..........cc.",
+          ".....c...aca.........cb.",
+          "..ccc.c.a.c.a........c..",
+          ".c.c.cc..a.a......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb...ac.........cc.",
+          ".....c...aca.........cb.",
+          "..ccc.c.a.c.a........c..",
+          ".c.c.cc..a.a......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ]
+      ],
+      "concept": "Voicing compass",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A small compass needle follows two choir perches",
+      "rest_pose": "Needle centered",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H09",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "..........................",
+          ".......cc.......bbbbbbbb..",
+          ".......cb.......b......b..",
+          ".......c........b......b..",
+          "....ccc.c.......b....a.b..",
+          "...c.c.cc.......b......b..",
+          "....ccc.........b......b..",
+          "...a...a........b......b.."
+        ],
+        [
+          "..........................",
+          "......cc........bbbbbbbb..",
+          "......cb........b......b..",
+          "......c.........b......b..",
+          "...ccc.c........b....a.b..",
+          "..c.c.cc........b......b..",
+          "...ccc..........b......b..",
+          "..a...a.........b......b.."
+        ],
+        [
+          "..........................",
+          ".......cc.......bbbbbbbb..",
+          ".......cb.......b......b..",
+          ".......c........b......b..",
+          "....ccc.c.......b....a.b..",
+          "...c.c.cc.......b......b..",
+          "....ccc.........b......b..",
+          "...a...a........b......b.."
+        ],
+        [
+          "..........................",
+          "........cc......bbbbbbbb..",
+          "........cb......b......b..",
+          "........c.......b......b..",
+          ".....ccc.c......b....a.b..",
+          "....c.c.cc......b......b..",
+          ".....ccc........b......b..",
+          "....a...a.......b......b.."
+        ]
+      ],
+      "concept": "Entry doorway",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A note creature leans toward a doorway then returns",
+      "rest_pose": "Creature beside doorway",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H10",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a..b..a....",
+          "......c..........a..b..a....",
+          "...ccc.c......bbbbbccbba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a..b..a....",
+          "......c..........a..b..a....",
+          "...ccc.c......bbbbbccbba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a..b..a....",
+          "......cb.........a..b..a....",
+          "......c..........a.cc..a....",
+          "...ccc.c......bbbbbbbbba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a..b..a....",
+          "......c..........a..b..a....",
+          "...ccc.c......bbbbbccbba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ]
+      ],
+      "concept": "Harmonic well",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A note creature lifts a small note from a well",
+      "rest_pose": "Creature and note at rim",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H11",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......cc....................",
+          "......cb....................",
+          "......c.....................",
+          "...ccc.c....................",
+          "..c.c.cc.....c..............",
+          "...ccc......bbb..bbb..bbb...",
+          "..a...a.....bcb..bcb..bcb...",
+          "............................"
+        ],
+        [
+          ".....cc.....................",
+          ".....cb.....................",
+          ".....c......................",
+          "..ccc.c.....................",
+          ".c.c.cc...........c.........",
+          "..ccc.......bbb..bbb..bbb...",
+          ".a...a......bcb..bcb..bcb...",
+          "............................"
+        ],
+        [
+          "......cc....................",
+          "......cb....................",
+          "......c.....................",
+          "...ccc.c....................",
+          "..c.c.cc...............c....",
+          "...ccc......bbb..bbb..bbb...",
+          "..a...a.....bcb..bcb..bcb...",
+          "............................"
+        ],
+        [
+          ".......cc...................",
+          ".......cb...................",
+          ".......c....................",
+          "....ccc.c...................",
+          "...c.c.cc.........c.........",
+          "....ccc.....bbb..bbb..bbb...",
+          "...a...a....bcb..bcb..bcb...",
+          "............................"
+        ]
+      ],
+      "concept": "Tone-map tiles",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Original choir creature taps three tiny tone tiles in order",
+      "rest_pose": "Creature beside center tile",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H12",
+      "width": 7,
+      "height": 8,
+      "frames": [
+        [
+          "....cc.",
+          "...c...",
+          ".a.c...",
+          "b.ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          "ba.c...",
+          "a.ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          ".a.c...",
+          "b.ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          "ba.c...",
+          "a.ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ]
+      ],
+      "concept": "Pattern-movement wing",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A note with a small wing breathes upward",
+      "rest_pose": "Wing resting",
+      "loop_quarter_beats": 2,
+      "status": "specimen_only"
+    },
+    {
+      "id": "H13",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "..................c.......",
+          "......cc..........c.......",
+          "......cb.........ccc......",
+          "......c...........b.......",
+          "...ccc.c..........b.......",
+          "..c.c.cc..........b.......",
+          "...ccc...........aaa......",
+          "..a...a........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          ".....cc...........c.......",
+          ".....cb..........ccc......",
+          ".....c............b.......",
+          "..ccc.c...........b.......",
+          ".c.c.cc...........b.......",
+          "..ccc............aaa......",
+          ".a...a.........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          "......cc..........c.......",
+          "......cb.........ccc......",
+          "......c...........b.......",
+          "...ccc.c..........b.......",
+          "..c.c.cc..........b.......",
+          "...ccc...........aaa......",
+          "..a...a........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          ".......cc.........c.......",
+          ".......cb........ccc......",
+          ".......c..........b.......",
+          "....ccc.c.........b.......",
+          "...c.c.cc.........b.......",
+          "....ccc..........aaa......",
+          "...a...a.......aa.a.aa...."
+        ]
+      ],
+      "concept": "Pattern-bass root",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Register creature settles beside a rooted note",
+      "rest_pose": "Creature grounded beside root",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "M01",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "....c.....................",
+          "...ccc..........bbbb......",
+          "..cc.cc........bb.b.b.....",
+          "...cbc.........b.b.bb.....",
+          "..aab.......b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          "...c......................",
+          "..ccc...........bbbb......",
+          ".cc.cc.........bb.b.b.....",
+          "..cbc..........b.b.bb.....",
+          "..aa........b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          "....c...........bbbb......",
+          "...ccc.........bb.b.b.....",
+          "..cc.cc........b.b.bb.....",
+          "...cbc..........bbbb......",
+          "..aab.......b..a....a..b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          ".....c....................",
+          "....ccc.........bbbb......",
+          "...cc.cc.......bb.b.b.....",
+          "....cbc........b.b.bb.....",
+          "..aa.b......b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ]
+      ],
+      "concept": "Garden gate",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "Original garden visitor peeks above a little garden gate",
+      "rest_pose": "Visitor at gate",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M02",
+      "width": 30,
+      "height": 8,
+      "frames": [
+        [
+          ".....c.................c......",
+          "....ccc...............ccc.....",
+          "...cc.cc.............cc.cc....",
+          "....cbc...............cbc.....",
+          "...aab....aab..aab...aab......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.................c.......",
+          "...ccc...............ccc......",
+          "..cc.cc.............cc.cc.....",
+          "...cbc...............cbc......",
+          "...aa.....aab..aab...aa.......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          "....ccc...............ccc.....",
+          "...cc.cc.............cc.cc....",
+          "....cbc...............cbc.....",
+          "...aab....aab..aab...aab......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......c.................c.....",
+          ".....ccc...............ccc....",
+          "....cc.cc.............cc.cc...",
+          ".....cbc...............cbc....",
+          "...aa.b...aab..aab...aa.b.....",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Garden shape",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "Original two-flower garden gently sways as a whole",
+      "rest_pose": "Flowers upright",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M03",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "............................",
+          "............aab.............",
+          "....a.b.......a.a...a.b.....",
+          ".....aaaa.....aa.....aaaa...",
+          "......a.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "............aab.............",
+          "...a.b........a.a...a.b.....",
+          "....aaaa......aa.....aaaa...",
+          ".....ab.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "............aab.............",
+          "....a.b.......a.a...a.b.....",
+          ".....aaaa.....aa.....aaaa...",
+          "......a.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "............aab.............",
+          "....a.b.......a.a....a.b....",
+          ".....aaaa.....aa......aaaa..",
+          "......a.......b.......ba....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Rhythm sprouts",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "Three sprouts nod successively over a fixed soil line",
+      "rest_pose": "Sprouts upright",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M04",
+      "width": 30,
+      "height": 8,
+      "frames": [
+        [
+          ".....c.................c......",
+          "....ccc.......b.b.....ccc.....",
+          "...cc.cc.....aab.....cc.cc....",
+          "....cbc........a.a....cbc.....",
+          "...aab.........aa....aab......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c...................c.....",
+          "...ccc........b.b......ccc....",
+          "..cc.cc.....aab.......cc.cc...",
+          "...cbc........a.a......cbc....",
+          "...aa.........aa.....aa.b.....",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          "....ccc.......b.b.....ccc.....",
+          "...cc.cc.....aab.....cc.cc....",
+          "....cbc........a.a....cbc.....",
+          "...aab.........aa....aab......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......c...............c.......",
+          ".....ccc......b.b....ccc......",
+          "....cc.cc.....aab...cc.cc.....",
+          ".....cbc........a.a..cbc......",
+          "...aa.b.........aa...aa.......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Growing shape bed",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "Two original flowers settle around a newly raised middle sprout",
+      "rest_pose": "Middle sprout standing",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "M05",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........aaaaaaaaaa......",
+          "........a.........a.....",
+          ".......a...ab.....a.....",
+          ".....a....bcc..a........",
+          "......bbbbbbabb.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a.........a.....",
+          ".......a...ab.....a.....",
+          ".....a....bcc..a........",
+          "......bbbbbbabb.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a..ab.....a.....",
+          ".......a..bcc.....a.....",
+          ".....a.....ba..a........",
+          "......bbbbbbbbb.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a.........a.....",
+          ".......a...ab.....a.....",
+          ".....a....bcc..a........",
+          "......bbbbbbabb.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ]
+      ],
+      "concept": "Merge-result basket",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A flower seed settles into a small woven basket",
+      "rest_pose": "Seed in basket",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M06",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "......ab..............ba....",
+          ".....bcc......ab......ccb...",
+          "......babb...bcc......abb...",
+          "......bb..bbbbba..bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab..............ba....",
+          ".....bcc......ab......ccb...",
+          "......babb...bcc......abb...",
+          "......bb..bbbbba..bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab......ab......ba....",
+          ".....bcc.....bcc......ccb...",
+          "......babb....ba......abb...",
+          "......bb..bbbb....bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab..............ba....",
+          ".....bcc......ab......ccb...",
+          "......babb...bcc......abb...",
+          "......bb..bbbbba..bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Phrase vine",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A short vine unfurls one curved leaf then rests",
+      "rest_pose": "Leaf open",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M07",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "............c.............",
+          "......a....ccc....a.......",
+          "......aaaaccaccaaaa.......",
+          "......a....cbc....a.......",
+          "......aaaaaabaaaaaa.......",
+          "......a.....a.a...a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "...........c..............",
+          "......a...ccc.....a.......",
+          "......aaaccaccaaaaa.......",
+          "......a...cbc.....a.......",
+          "......aaaaabaaaaaaa.......",
+          "......a....a.a....a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "......a....ccc....a.......",
+          "......aaaaccaccaaaa.......",
+          "......a....cbc....a.......",
+          "......aaaaaabaaaaaa.......",
+          "......a.....a.a...a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".............c............",
+          "......a.....ccc...a.......",
+          "......aaaaaccaccaaa.......",
+          "......a.....cbc...a.......",
+          "......aaaaaaabaaaaa.......",
+          "......a......a.a..a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Pitch vine ladder",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A flower head climbs three vine rungs gently",
+      "rest_pose": "Flower on middle rung",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M08",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          ".......ab.................",
+          "......bcc.................",
+          "......aba.................",
+          "........a.a...............",
+          "........aa........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......ab..................",
+          ".....bcc..................",
+          ".....aba..................",
+          ".......a.a................",
+          ".......aa.........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".......ab.................",
+          "......bcc.................",
+          "......aba.................",
+          "........a.a...............",
+          "........aa........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........ab................",
+          ".......bcc................",
+          ".......aba................",
+          ".........a.a..............",
+          "........baa.......bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Rhythm marker leaf",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A leaf nods beside a stationary anchor stone",
+      "rest_pose": "Leaf upright anchor fixed",
+      "loop_quarter_beats": 2,
+      "status": "specimen_only"
+    },
+    {
+      "id": "M09",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "...........c............",
+          "..........ccc...........",
+          ".........cc.cc..........",
+          "..........cbc...........",
+          ".........aab............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "..........c.............",
+          ".........ccc............",
+          "........cc.cc...........",
+          ".........cbc............",
+          ".........aa.............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "...........c............",
+          "..........ccc...........",
+          ".........cc.cc..........",
+          "..........cbc...........",
+          ".........aab............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "............c...........",
+          "...........ccc..........",
+          "..........cc.cc.........",
+          "...........cbc..........",
+          ".........aa.b...........",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ]
+      ],
+      "concept": "Saved garden pot",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A small potted flower breathes while its rim stays fixed",
+      "rest_pose": "Flower upright in pot",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "M10",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "........ab........ba........",
+          ".......bccb.......ccb.......",
+          "........ba.bbb.bbbab........",
+          "..............b.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".......ab........ba.........",
+          "......bccbb......ccb........",
+          ".......ba..bb..bbab.........",
+          ".............bb.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........ab........ba........",
+          ".......bccb.......ccb.......",
+          "........ba.bbb.bbbab........",
+          "..............b.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".........ab........ba.......",
+          "........bccb......bccb......",
+          ".........ba.bb..bb.ab.......",
+          "..............bb............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Harmony graft",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "Two leaves on a retired garden graft sway together",
+      "rest_pose": "Leaves joined on stem",
+      "loop_quarter_beats": 4,
+      "status": "retired_specimen_only"
+    },
+    {
+      "id": "M11",
+      "width": 30,
+      "height": 8,
+      "frames": [
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab........b......",
+          "....a.a.......a.a....acacaca..",
+          "....aa........aa.....a.a.a.a..",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc.......b......",
+          "..aab.......aab.......b.......",
+          "....a.a.......a.a...acacaca...",
+          "....aa........aa....a.a.a.a...",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab........b......",
+          "....a.a.......a.a....acacaca..",
+          "....aa........aa.....a.a.a.a..",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab.........b.....",
+          "....a.a.......a.a.....acacaca.",
+          "....aa........aa......a.a.a.a.",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Garden tool rest",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A tiny rake rests beside two established flowers and tilts",
+      "rest_pose": "Rake grounded flowers upright",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "H14",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a...cc..........cca....",
+          "...aa....cb..........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ],
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a...cc..........cca....",
+          "...aa....cb..........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ],
+        [
+          "......aaaccaaaaaaaaaacc.....",
+          ".....a...cb..........cba....",
+          "...aa....c...........c..aa..",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......",
+          "............................"
+        ],
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a...cc..........cca....",
+          "...aa....cb..........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ]
+      ],
+      "concept": "Settled choir arch",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "Two choir creatures nod beneath a joined arch",
+      "rest_pose": "Arch complete creatures upright",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "H18",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.........c.....",
+          ".......c..........c.....",
+          "....ccc.c.........c.....",
+          "...c.c.cc.......ccc.....",
+          "....ccc........cc.c.....",
+          "...a...a........cc......"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb........c......",
+          ".......c.........c......",
+          "....ccc.c........c......",
+          "...c.c.cc......ccc......",
+          "....ccc.......cc.c......",
+          "...a...a.......cc......."
+        ],
+        [
+          "........................",
+          ".......cc.........c.....",
+          ".......cb.........c.....",
+          ".......c..........c.....",
+          "....ccc.c.......ccc.....",
+          "...c.c.cc......cc.c.....",
+          "....ccc.........cc......",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb..........c....",
+          ".......c...........c....",
+          "....ccc.c..........c....",
+          "...c.c.cc........ccc....",
+          "....ccc.........cc.c....",
+          "...a...a.........cc....."
+        ]
+      ],
+      "concept": "Event-result note",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A choir creature releases a small note that settles beside it",
+      "rest_pose": "Note resting beside creature",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "H15",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          ".......c..........c.....",
+          "....ccc.c........c......",
+          "...c.c.cc.......c.......",
+          "....ccc.........ccc.....",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          ".......c..........c.....",
+          "....ccc.c........c......",
+          "...c.c.cc.......c.......",
+          "....ccc.........ccc.....",
+          "...a...a................"
+        ],
+        [
+          ".......cc...............",
+          ".......cb...............",
+          ".......c........ccc.....",
+          "....ccc.c.........c.....",
+          "...c.c.cc........c......",
+          "....ccc.........c.......",
+          "...a...a........ccc.....",
+          "........................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          ".......c..........c.....",
+          "....ccc.c........c......",
+          "...c.c.cc.......c.......",
+          "....ccc.........ccc.....",
+          "...a...a................"
+        ]
+      ],
+      "concept": "Quiet choir pause",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A choir creature breathes beside a small rest mark",
+      "rest_pose": "Creature upright rest mark fixed",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "H16",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......cc.............ab.....",
+          "......cb............bccaa...",
+          "......c.............aba.....",
+          "...ccc.c..........aa........",
+          "..c.c.cc........aa..........",
+          "...ccc.........a..aa.ba.....",
+          "..a...a.......a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          ".....cc..............ab.....",
+          ".....cb.............bccaa...",
+          ".....c..............aba.....",
+          "..ccc.c...........aa........",
+          ".c.c.cc.........aa..........",
+          "..ccc..........a..aa.ba.....",
+          ".a...a........a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          "......cc.............ab.....",
+          "......cb............bccaa...",
+          "......c.............aba.....",
+          "...ccc.c..........aa........",
+          "..c.c.cc........aa..........",
+          "...ccc.........a..aa.ba.....",
+          "..a...a.......a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          ".......cc............ab.....",
+          ".......cb...........bccaa...",
+          ".......c............aba.....",
+          "....ccc.c.........aa........",
+          "...c.c.cc.......aa..........",
+          "....ccc........a..aa.ba.....",
+          "...a...a......a.....accb....",
+          ".............a.......abaa..."
+        ]
+      ],
+      "concept": "Local-scale path",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A choir creature steps beside a split leafy path",
+      "rest_pose": "Creature at junction",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only"
+    },
+    {
+      "id": "H17",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb....ccc........cb...",
+          "......c....c...c.......c....",
+          "...ccc.caaaa...aaaaaccc.c...",
+          "..c.c.cc....ccc....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb...ccc.........cb...",
+          "......c...c...c........c....",
+          "...ccc.caaa...aaaaaaccc.c...",
+          "..c.c.cc...ccc.....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb....ccc........cb...",
+          "......c....c...c.......c....",
+          "...ccc.caaaa...aaaaaccc.c...",
+          "..c.c.cc....ccc....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb.....ccc.......cb...",
+          "......c.....c...c......c....",
+          "...ccc.caaaaa...aaaaccc.c...",
+          "..c.c.cc.....ccc...c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ]
+      ],
+      "concept": "Group garland clasp",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A closed clasp tilts between two choir creatures",
+      "rest_pose": "Clasp closed",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M12",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "............................",
+          "...bbbbbb...bcc.............",
+          "..bb....bb.b...c............",
+          "..bb.cc.bbb.....aab.aab.aab.",
+          "...bccccb.........a.a.a.a.a.",
+          "....bbbb..........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "..bbbbbb...bcc..............",
+          ".bb....bb.b...c.............",
+          ".bb.cc.bbb......aab.aab.aab.",
+          "..bccccb..........a.a.a.a.a.",
+          "...bbbb...........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "...bbbbbb...bcc.............",
+          "..bb....bb.b...ca...........",
+          "..bb.cc.bbb.....aab.aab.aab.",
+          "...bccccb.........a.a.a.a.a.",
+          "....bbbb..........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "....bbbbbb...bcc............",
+          "...bb....bb.b...c...........",
+          "...bb.cc.bbb....aab.aab.aab.",
+          "....bccccb........a.a.a.a.a.",
+          ".....bbbb.........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Amount watering can",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A small watering can nods toward three sprouts",
+      "rest_pose": "Can upright sprouts stationary",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M13",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "............c.............",
+          "...........ccc............",
+          "..........cc.cc...........",
+          "...........cbc............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          "...........c..............",
+          "..........ccc.............",
+          ".........cc.cc............",
+          "..........cbc.............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "...........ccc............",
+          "..........cc.cc...........",
+          "...........cbc............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          ".............c............",
+          "............ccc...........",
+          "...........cc.cc..........",
+          "............cbc...........",
+          "...ab.....aabb......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Pitch-target flower",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A flower head leans toward one of three fixed leaves",
+      "rest_pose": "Flower centered",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M14",
+      "width": 7,
+      "height": 8,
+      "frames": [
+        [
+          "...a...",
+          "..bbb..",
+          ".bbbbb.",
+          "bb...bb",
+          "bb...bb",
+          ".bbabb.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".bbabb.",
+          "bb...bb",
+          "bb...bb",
+          ".bbbbb.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".bbbbb.",
+          "bb...bb",
+          "bb...bb",
+          ".bbabb.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".bbabb.",
+          "bb...bb",
+          "bb...bb",
+          ".bbbbb.",
+          "..bbb..",
+          "...a..."
+        ]
+      ],
+      "concept": "Merge-reason seed",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A small split seed opens and closes gently",
+      "rest_pose": "Seed showing its seam",
+      "loop_quarter_beats": 2,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "H19",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          ".......cc....bbbbbbbb...",
+          ".......cb....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc....bbbbbbbb...",
+          ".......cb....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ],
+        [
+          ".......cc...............",
+          ".......cb....bbbbbbbb...",
+          ".......c.....b......b...",
+          "....ccc.c....b......b...",
+          "...c.c.cc...aa......b...",
+          "....ccc...aa.bbbbbbbb...",
+          "...a...a................",
+          "........................"
+        ],
+        [
+          "........................",
+          ".......cc....bbbbbbbb...",
+          ".......cb....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ]
+      ],
+      "concept": "Tone-map slate",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop",
+      "motion": "A choir creature holds a blank small slate and nods",
+      "rest_pose": "Slate level",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M15",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "............................",
+          ".............ab.............",
+          "....ab......bcc.......ba....",
+          "...bcc.......ba.......ccb...",
+          "....ba................ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          "............................",
+          "....ab.......ab.......ba....",
+          "...bcc......bcc.......ccb...",
+          "....ba.......ba.......ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          "....ab.......ab.............",
+          "...bcc......bcc.......ba....",
+          "....ba.......ba.......ccb...",
+          "......................ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          ".............ab.............",
+          "....ab......bcc.............",
+          "...bcc.......ba.......ba....",
+          "....ba................ccb...",
+          "......................ab....",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ]
+      ],
+      "concept": "Fragment leaves",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "Three small detached leaves settle into a short vine pattern",
+      "rest_pose": "Leaves aligned",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M16",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "....ab...............ba.....",
+          "...bccc..............ccb....",
+          "....ba.ccc........ccbab.....",
+          ".......b..cbbbcccc..c.......",
+          "......b....cccbbb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab...............ba.....",
+          "...bcccc............bccb....",
+          "....ba.bcc........bccab.....",
+          "......b..bccb..cccc.c.......",
+          "......b.....cccb.....c......",
+          "......b...............c.....",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab...............ba.....",
+          "...bccc..............ccb....",
+          "....ba.ccc........ccbab.....",
+          ".......b..cbbbcccc..c.......",
+          "......b....cccbbb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab...............ba.....",
+          "...bccc..............ccb....",
+          "....ba.ccbb......ccbbab.....",
+          "........bccbbccccbbc........",
+          ".......b...cc..bb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Interlock stems",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "Two curved stems lean into a gentle alternating link",
+      "rest_pose": "Stems linked",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    },
+    {
+      "id": "M18",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          ".....a......aba........a....",
+          ".....aaaaaabccaaaaaaaaaa....",
+          ".....a......babbb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a.....ab.a........a....",
+          ".....aaaaabccaaaaaaaaaaa....",
+          ".....a.....babbbb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a......aba........a....",
+          ".....aaaaaabccaaaaaaaaaa....",
+          ".....a......babbb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a.......ab........a....",
+          ".....aaaaaaabccaaaaaaaaa....",
+          ".....a......bbabb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Structure trellis",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop",
+      "motion": "A tiny vine climbs a fixed three-post trellis",
+      "rest_pose": "Vine at middle post",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route"
+    }
+  ]
+}

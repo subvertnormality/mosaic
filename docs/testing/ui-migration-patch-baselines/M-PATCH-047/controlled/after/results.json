@@ -1,0 +1,519 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 2",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 3",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 4",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 5",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 6",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 7",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 8",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 9",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 10",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "None",
+    "passed": true
+  },
+  {
+    "kind": "all-ten-native-slide-slots",
+    "slots": 10,
+    "removed_slot": 5,
+    "cycles": 2,
+    "checks": [
+      {
+        "cycle": 0,
+        "slot": 1,
+        "values": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          17
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 2,
+        "values": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          18
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 3,
+        "values": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          19
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 4,
+        "values": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          20
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 6,
+        "values": [
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          22
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 7,
+        "values": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          23
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 8,
+        "values": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          24
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 9,
+        "values": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          25
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 10,
+        "values": [
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          26
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 1,
+        "values": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          17
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 2,
+        "values": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          18
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 3,
+        "values": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          19
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 4,
+        "values": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          20
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 6,
+        "values": [
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          22
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 7,
+        "values": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          23
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 8,
+        "values": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          24
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 9,
+        "values": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          25
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 10,
+        "values": [
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          26
+        ]
+      }
+    ],
+    "passed": true
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "acceptance_claimed": false,
+  "scope": "read-only physical Norns runtime-capacity preflight; no model or dependency installed and no inference executed",
+  "device": {
+    "architecture": "armv7l",
+    "python": "3.9.2",
+    "mem_total_kib": 1000252,
+    "mem_available_kib_observations": [483352, 483800],
+    "swap_total_kib": 0,
+    "root_filesystem_available": "17G",
+    "gcc": "10.2.1",
+    "cmake": "3.18.4",
+    "python_pip_present": false
+  },
+  "comparison": {
+    "desktop_x86_64_combined_peak_rss_kib": 383268,
+    "desktop_x86_64_isolated_inference_peak_rss_kib": 147036,
+    "interpretation": "The bounded batch-one desktop result fits beneath the observed idle available-memory number, but architecture, allocator, dependency, concurrent matron/audio load, 45-second scaling and cancellation behavior can differ. It is not device acceptance."
+  },
+  "runtime_availability": {
+    "official_onnxruntime_linux_arm32v7_build_support": true,
+    "official_prebuilt_python_wheel_verified_for_norns": false,
+    "next_evidence": "Build or independently pin an ARMv7 CPython 3.9 runtime, then execute artifact verification, fixed-audio parity, cold/warm tail, RSS and cancellation on the device without modifying the user Mosaic project."
+  }
+}

@@ -1,6 +1,24 @@
 """Independent fixed-tempo note plan; never infer tempo/phase from emissions."""
 from fractions import Fraction
 
+_CONTROLLED_INPUT_VOLATILE_FIELDS = frozenset({
+    "action_id", "origin_ns", "applied_ns", "input_to_applied_ns",
+})
+
+
+def stable_controlled_input_identity(evidence):
+    """Keep reproducible input identity in results; persist full evidence separately."""
+    assert isinstance(evidence, dict)
+    assert type(evidence.get("native_sequence")) is int
+    assert isinstance(evidence.get("boundary"), str)
+    return {key: value for key, value in evidence.items()
+            if key not in _CONTROLLED_INPUT_VOLATILE_FIELDS}
+
+
+def result_input_evidence(evidence, controlled):
+    """Re-express only controlled results; retain the real-time evidence object."""
+    return stable_controlled_input_identity(evidence) if controlled else evidence
+
 
 def preview_residual(period):
     return period + Fraction(1, 2) - (period + Fraction(49, 100)).__floor__()

@@ -1,0 +1,7 @@
+{
+  "source_sha256": "7c9ffde0543766f2ff0548609d0c1b830ee9a09f1653451048e3713c7813001c",
+  "test_sha256": "906116e6199d22c09171c9da9f551c57bfb63180e92e7497697a080fb7a5f14f",
+  "exit_code": 3,
+  "output": "The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.\nFFF\nFailed tests:\n-------------\n1) test_rhythm_doctor_project_save_blocks_before_transport_and_serialization\n.///lib/project_load_integration_tests.lua:250: LISTENING\nexpected: false, actual: true\nstack traceback:\n\t.///lib/project_load_integration_tests.lua:250: in upvalue 'test_rhythm_doctor_project_save_blocks_before_transport_and_serialization'\n\n2) test_rhythm_doctor_project_save_discards_old_project_deferred_request\n.///lib/project_load_integration_tests.lua:288: expected: 0, actual: 1\nstack traceback:\n\t.///lib/project_load_integration_tests.lua:288: in upvalue 'test_rhythm_doctor_project_save_discards_old_project_deferred_request'\n\n3) test_rhythm_doctor_project_save_release_during_playback_waits_for_stop\n.///lib/project_load_integration_tests.lua:276: expected: 0, actual: 1\nstack traceback:\n\t.///lib/project_load_integration_tests.lua:276: in upvalue 'test_rhythm_doctor_project_save_release_during_playback_waits_for_stop'\n\nRan 3 tests in 0.006 seconds, 0 successes, 3 failures, 1710 non-selected\nfind: \u00e2\u20ac\u02dc/home/we/norns/lua/core\u00e2\u20ac\u2122: No such file or directory\n",
+  "scope": "Actual project lifecycle + capture machine, stubbed IO/transport; not public input or hardware acceptance"
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "authorization": "Root /root explicit ROOTAPPROVES exact33ed-v2, old3liveledger archive, strictUIchecks, new81snapshot plus prior9/current6nonmemberpins; root separately confirms qualified historicalREADME preserved without asserting current equality",
+  "before": {
+    "docs/ui-reimplementation/current-source-review.json": {
+      "sha256": "655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/live-application-before-v2/655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741-current-source-review.json"
+    },
+    "docs/ui-reimplementation/source-inventory.json": {
+      "sha256": "33650042daa49e1f7d8adad05d185b1b9a16f3e962adde5660bfaf0fb965017a",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/live-application-before-v2/33650042daa49e1f7d8adad05d185b1b9a16f3e962adde5660bfaf0fb965017a-source-inventory.json"
+    },
+    "docs/ui-reimplementation/generated/source-review-receipt.json": {
+      "sha256": "7624dcc6b512aa349e39f3f0ac85ba33d1d631fb980c5d6d5a1977107c7d26c7",
+      "archive": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/live-application-before-v2/7624dcc6b512aa349e39f3f0ac85ba33d1d631fb980c5d6d5a1977107c7d26c7-source-review-receipt.json"
+    }
+  },
+  "approved_and_applied_proposal_sha256": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+  "after": {
+    "docs/ui-reimplementation/current-source-review.json": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+    "docs/ui-reimplementation/source-inventory.json": "1937390840e6b95048681d1642c8e2ef11ad825db4e5a2b331ba0b59af338904",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "f763065ccf4d115dc6350d2fe400d1b3189ec027b6904a8db35b754057b0b804"
+  },
+  "strict_refresh_check": true,
+  "strict_UI_source_validation": true,
+  "source_fingerprint_skip": false,
+  "book_catalogue_validation_run": false,
+  "generated_singular_plural_duplicates_preserved_pending_stage56": true,
+  "source_files": 78,
+  "historical_manual_sections": 125,
+  "callbacks": 64,
+  "branches": 164,
+  "snapshot": "docs/testing/manual-post-build-ledger/prebuild-20261004-merge-focused-gates",
+  "snapshot_sha256": "7183c61792a1b17d8769a34e2876bed7e78e47bc49987ae5b229da4bb5152b18",
+  "snapshot_files": 81,
+  "all81_current_and_snapshot_bytes_equal": true,
+  "separate_current_nonmember_pins": 15,
+  "paired_focused_native_qualification": {
+    "path": "manual/evidence/authored-source-review-20261004-merge-focused-qualified/paired-native-qualification-v2.json",
+    "sha256": "298e30097ae7effec6c47476c14fe3cea4174d50ef30c0b1cd8195375d0ddd9d"
+  },
+  "old_course50_snapshot_intact": true,
+  "external_qualified_document_status": [
+    {
+      "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/controller.py",
+      "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/controller.py",
+      "sha256": "d12d98fc1741cedcf7eef03c3d4f22a0e74ab2f733f54018963dd260a199bfc4",
+      "current_original_sha256": "d12d98fc1741cedcf7eef03c3d4f22a0e74ab2f733f54018963dd260a199bfc4",
+      "current_original_matches_qualified_pin": true,
+      "scope": "Current external execution/supporting source unchanged"
+    },
+    {
+      "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/test_controller.py",
+      "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/test_controller.py",
+      "sha256": "ca82986257a8848259ade9d2687fa4de0d0592f272eaa2539e1d9b42f87e7646",
+      "current_original_sha256": "ca82986257a8848259ade9d2687fa4de0d0592f272eaa2539e1d9b42f87e7646",
+      "current_original_matches_qualified_pin": true,
+      "scope": "Current external execution/supporting source unchanged"
+    },
+    {
+      "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/prefix_plan.py",
+      "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/prefix_plan.py",
+      "sha256": "58a957da6d0c83941d5eb3c88241cdf3bee6c125c30056eca921489a7827b992",
+      "current_original_sha256": "58a957da6d0c83941d5eb3c88241cdf3bee6c125c30056eca921489a7827b992",
+      "current_original_matches_qualified_pin": true,
+      "scope": "Current external execution/supporting source unchanged"
+    },
+    {
+      "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/test_prefix_plan.py",
+      "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/test_prefix_plan.py",
+      "sha256": "528d0b5b18f821bcc25c5014df8adf711e34fc6bf7764f168041f615f333ca38",
+      "current_original_sha256": "528d0b5b18f821bcc25c5014df8adf711e34fc6bf7764f168041f615f333ca38",
+      "current_original_matches_qualified_pin": true,
+      "scope": "Current external execution/supporting source unchanged"
+    },
+    {
+      "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/README.md",
+      "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/README.md",
+      "sha256": "1f7b7252f42c23b839bb5cc57a4d20630587f09ceafac3f588318f342c2174d9",
+      "current_original_sha256": "5acbe54e7b7d4aec1509d9c12a9a1b6fd1f4ce5f9422e2c901dd4a436ace47df",
+      "current_original_matches_qualified_pin": false,
+      "scope": "Qualified historical42-test document; current document drift separately recorded, not an execution pin"
+    },
+    {
+      "original_path": "/tmp/mosaic-build-stage-gate-preparation/controller/prefix-synthetic-green.log",
+      "preserved_path": "manual/evidence/authored-source-review-20261004-course50-qualified/external-controller/prefix-synthetic-green.log",
+      "sha256": "257ee3ed597a97d2fd84a61f350119918f0cf97a12b0eb50e26792023d2ca4ea",
+      "current_original_sha256": "257ee3ed597a97d2fd84a61f350119918f0cf97a12b0eb50e26792023d2ca4ea",
+      "current_original_matches_qualified_pin": true,
+      "scope": "Current external execution/supporting source unchanged"
+    }
+  ],
+  "authority_activation": false,
+  "complete_regression_run": false,
+  "native_launched": false,
+  "fullbuild_launched": false,
+  "published": false
+}

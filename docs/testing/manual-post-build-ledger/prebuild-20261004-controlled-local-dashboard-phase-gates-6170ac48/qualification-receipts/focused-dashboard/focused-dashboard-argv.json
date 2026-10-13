@@ -1,0 +1,19 @@
+[
+  "/usr/bin/env",
+  "MONOME_EMULATOR=/home/andy/projects/monome-emulator-ci-combined",
+  "/usr/bin/python3",
+  "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+  "--plans",
+  "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-remaining.yaml",
+  "--profile",
+  "base-midi",
+  "--scene",
+  "output-dashboard-readout",
+  "--clock-mode",
+  "controlled-experimental",
+  "--experimental-install",
+  "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "--controlled-local",
+  "--output",
+  "dashboard-focused.json"
+]

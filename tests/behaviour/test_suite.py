@@ -54,7 +54,10 @@ class FailureClassTests(unittest.TestCase):
     def test_native_startup_is_not_a_case_result(self):
         crone='ContractError: crone exited -6; /x/crone.log; cleanup also failed'
         timeout='ContractError: sclang did not reach AudioContext: initPolls; inspect /x'
-        self.assertEqual([suite.failure_class(dict(failure=f)) for f in (crone,timeout)],['native-startup']*2)
+        supercollider='ContractError: script error: SUPERCOLLIDER FAIL; logs: /tmp/x/sessions/b677'
+        self.assertEqual([suite.failure_class(dict(failure=f)) for f in (crone,timeout,supercollider)],['native-startup']*3)
+        # Any other script error is the case's own.
+        self.assertEqual(suite.failure_class(dict(failure='ContractError: script error: attempt to index nil; logs: /x')),'case')
         for failure in ("AssertionError: ('Onset phase', 0, 19255089)",None,'ContractError: midi_drop'):
             self.assertEqual(suite.failure_class(dict(failure=failure)),'case')
 
@@ -76,6 +79,14 @@ class CollectionTests(unittest.TestCase):
         self.assertEqual(set(python),{p.stem for p in suite.BEHAVIOUR.glob('test_*.py')})
         self.assertEqual(set(lua),{p.name for p in suite.BEHAVIOUR.glob('*.lua')})
 
+    def test_persisted_digest_lua_contract_receives_norns_root_and_project(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(suite, 'run_command') as run:
+                suite.lua_layer(['persisted_digest.lua'], Path(tmp), Path(tmp))
+        command = run.call_args.args[1]
+        self.assertEqual(command[2:], [tmp,
+                          str(suite.BEHAVIOUR/'fixtures/persisted/current/data/autosave.ptn')])
+
     def test_unclassified_or_stale_declarations_fail(self):
         cases=set(suite.case_registry())
         with patch.object(suite,'PYTHON_UNITTEST',suite.PYTHON_UNITTEST-{'test_midi_window'}):
@@ -92,6 +103,55 @@ class TreeIdentityTests(unittest.TestCase):
         self.assertTrue(suite.same_tested_tree(state))
         changed=dict(state,files=dict(state['files'],**{'lib/step.lua':'0'*64}))
         self.assertFalse(suite.same_tested_tree(changed))
+
+class RuntimeIdentityTests(unittest.TestCase):
+    def test_runtime_sources_are_recaptured_as_exact_start_identities(self):
+        emulator=Path('/emulator').resolve();norns=Path('/norns').resolve()
+        expected=dict(emulator={'revision':'e','tree_sha256':'et'},
+                      norns_source={'path':str(norns),'revision':'n','lua_tree_sha256':'nt'})
+        with patch.object(suite,'source_state',return_value=expected['emulator']) as source_state, \
+             patch.object(suite,'git',return_value='n\n') as git, \
+             patch.object(suite,'tree_digest',return_value='nt') as tree_digest:
+            actual=suite.runtime_source_state(emulator,norns)
+        self.assertEqual(actual,expected)
+        source_state.assert_called_once_with(emulator)
+        git.assert_called_once_with('rev-parse','HEAD',cwd=norns)
+        tree_digest.assert_called_once_with(norns/'lua')
+
+    def test_runtime_stability_detects_either_emulator_or_norns_change(self):
+        started=dict(emulator={'revision':'e','tree_sha256':'et'},
+                     norns_source={'path':'/norns','revision':'n','lua_tree_sha256':'nt'})
+        self.assertTrue(suite.same_runtime_sources(started,started))
+        changed_emulator=dict(started,emulator={'revision':'e','tree_sha256':'changed'})
+        self.assertFalse(suite.same_runtime_sources(started,changed_emulator))
+        changed_norns=dict(started,norns_source={'path':'/norns','revision':'n','lua_tree_sha256':'changed'})
+        self.assertFalse(suite.same_runtime_sources(started,changed_norns))
+
+    def test_suite_run_fails_source_stability_when_a_runtime_changes(self):
+        mosaic=dict(files={'mosaic.lua':'m'},runner_sha256='runner')
+        runtime_before=dict(emulator={'revision':'e','tree_sha256':'et'},
+                            norns_source={'path':'/norns','revision':'n','lua_tree_sha256':'nt'})
+        runtime_after=dict(runtime_before,
+                           norns_source={'path':'/norns','revision':'n','lua_tree_sha256':'changed'})
+        with tempfile.TemporaryDirectory() as temporary:
+            output=Path(temporary)/'suite-output'
+            args=SimpleNamespace(output=str(output),emulator='/emulator',output_mod_root=None,
+                norns_source='/norns',experimental_install=None,lanes=['controlled-experimental'],
+                profiles={'base-midi'},case_pattern=None,skip_fast_layers=True,real_time_subset=False,
+                real_time_history=None,durations_from=None,real_time_workers=1,controlled_workers=1,
+                start_interval=0,sequential_lanes=True)
+            with patch.object(suite,'case_registry',return_value={'A':['REQ']}), \
+                 patch.object(suite,'collect',return_value=([],[])), \
+                 patch.object(suite,'source_state',side_effect=[mosaic,mosaic]), \
+                 patch.object(suite,'runtime_source_state',side_effect=[runtime_before,runtime_after]), \
+                 patch.object(suite,'controlled_only_cases',return_value={}), \
+                 patch.object(suite,'real_time_only_cases',return_value={}), \
+                 patch.object(suite,'active_jack_servers',return_value=0), \
+                 patch.object(suite,'execute_lanes'):
+                suite.run(args)
+            report=json.loads((output/'suite.json').read_text())
+        self.assertFalse(report['summary']['runtime_sources_stable'])
+        self.assertFalse(report['summary']['sources_stable'])
 
 class SchedulingTests(unittest.TestCase):
     def test_controlled_only_cases_are_not_applicable_in_real_time(self):
@@ -197,5 +257,24 @@ class SchedulingTests(unittest.TestCase):
         both[0]=False;peak.update(a=0,b=0)
         suite.execute_lanes(jobs,{'a':2,'b':3},run_one,lambda *a:None,concurrent_lanes=False)
         self.assertFalse(both[0]);self.assertEqual(peak,{'a':2,'b':3})
+
+
+class CommandLineRegistrationTests(unittest.TestCase):
+    def test_cli_exit_has_same_registrations_as_import(self):
+        # Execute the real module and its __main__ exit ordering. Replace only
+        # main's body so the probe cannot start any suite or native process.
+        import ast
+        path = Path(suite.__file__)
+        tree = ast.parse(path.read_text(), filename=str(path))
+        for node in tree.body:
+            if isinstance(node, ast.FunctionDef) and node.name == 'main':
+                node.body = [ast.Return(value=ast.Constant(value=0))]
+        ast.fix_missing_locations(tree)
+        cli = {'__name__': '__main__', '__file__': str(path)}
+        with self.assertRaises(SystemExit) as exited:
+            exec(compile(tree, str(path), 'exec'), cli)
+        self.assertEqual(exited.exception.code, 0)
+        self.assertEqual(suite.PYTHON_UNITTEST, cli['PYTHON_UNITTEST'],
+                         'CLI exited before completing unittest registration')
 
 if __name__=='__main__':unittest.main()

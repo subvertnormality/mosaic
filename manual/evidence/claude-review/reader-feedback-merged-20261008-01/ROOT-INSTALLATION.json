@@ -1,0 +1,26 @@
+{
+  "paths": {
+    "manual/index.html": {
+      "baseline": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482",
+      "candidate": "93f9acf8b83257999a88d6db8974b70bd2eee10891cdd869082929ba275a6254"
+    },
+    "manual/manual.js": {
+      "baseline": "044e9eb9317007ff306e894d00cef43dc4e1db258812abec623ba5f41b01624c",
+      "candidate": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4"
+    },
+    "manual/manual.css": {
+      "baseline": "fe941dd362280a148edc9afe20f4e6e05c86df34468d11d48445fdef4c17fe21",
+      "candidate": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a"
+    },
+    "manual/book.js": {
+      "baseline": "6ca93f90d90196ac2c1ee6cbef31ae73bce2e9b065228016f65eae501c68ca18",
+      "candidate": "5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf"
+    },
+    "tests/behaviour/manual_browser.cjs": {
+      "baseline": "b41b3c188784a2463c0af4d603b67876b602a010344295e8d18e91386f45f38a",
+      "candidate": "5022fadb7971dcc08c76fb9fe5c09056218b75c7ab5e1d639e6b6d8ad653377e"
+    }
+  },
+  "native_rebuild": false,
+  "authored_prose_projection": "pending"
+}

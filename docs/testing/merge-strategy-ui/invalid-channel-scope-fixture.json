@@ -1,0 +1,39 @@
+{
+  "immutable_stage_identity_sha256": "f03dfe640aa43306fea298ee533a54be62d6cc9c9b71d0c49a195129dd877c4a",
+  "manifest": "/home/andy/mosaic-mini-header-engineering-v2-qualification-20261003/controlled/1c4848f1d5414d43b0f13dd28090618e/manifest.json",
+  "failure": {
+    "type": "UiMapError",
+    "message": "expected 'MERGE SHAPE CH02', observed '<unmatched framebuffer>'",
+    "traceback": "Traceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 60, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/mosaic-mini-header-engineering-v2-20261003/mosaic/tests/behaviour/contract/merge_strategy_ui.py\", line 169, in selector_workflow\n    c.ui.channel_page(\"merge_shape\",channel=2)\n  File \"/home/andy/mosaic-mini-header-engineering-v2-20261003/mosaic/tests/behaviour/ui.py\", line 144, in channel_page\n    self.confirm_header(page, channel=channel)\n  File \"/home/andy/mosaic-mini-header-engineering-v2-20261003/mosaic/tests/behaviour/ui.py\", line 1301, in confirm_header\n    raise UiMapError(\"expected %r, observed %r\" % (expected, self._observed_title(state)))\nui.UiMapError: expected 'MERGE SHAPE CH02', observed '<unmatched framebuffer>'\n"
+  },
+  "classification": "invalid channel-selection fixture; no whole-case acceptance",
+  "cleanup": [
+    {
+      "service": "matron",
+      "pid": 15873,
+      "returncode": 0,
+      "seconds": 0.1141997929662466
+    },
+    {
+      "service": "sclang",
+      "pid": 15781,
+      "returncode": -15,
+      "seconds": 0.1145480609848164
+    },
+    {
+      "service": "crone",
+      "pid": 15770,
+      "returncode": 0,
+      "seconds": 0.0002357509802095592
+    },
+    {
+      "service": "jack",
+      "pid": 15762,
+      "returncode": 0,
+      "seconds": 0.031660703010857105
+    }
+  ],
+  "correction": "Explicit public Channel editor/select_channel2 and select_channel1; scope arguments remain assertions only",
+  "route_guard_expected_red": "scope argument does not select the channel",
+  "production_changes": false
+}

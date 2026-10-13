@@ -1,0 +1,20 @@
+{
+  "review_id":"source16-astra-final-review-20261008-01",
+  "reader":"http://localhost:8926/manual/",
+  "quick_reference":"http://localhost:8926/cheat_sheet.html",
+  "status":"reader_threshold_pass",
+  "reader_approval":true,
+  "meets_all_seven_at_least_8":true,
+  "scores":{"readability":8,"comprehensibility":8,"flow":8,"understandability":8,"user_friendliness":8,"usefulness_of_interactive_examples":8,"cohesion":8},
+  "blocking_findings":[],
+  "closed_current_finding":"P15-1/F11: ordinary Panic panel now gives only Note Off and silent-start summary, no sweep audit/development prose",
+  "quick_reference_checks":{"public_features":130,"control_rows":292,"missing_public_ids":[],"extra_public_ids":[],"per_feature_row_count_mismatches":[],"private_links":[],"heading_routes_match_ids":true,"svg_logo_loaded":true,"desktop_mobile_spacing":true,"sampled_state_document_overflow":false,"search_queries":["masks","hold K2","Harmony","Rhythm Doctor","save","degree rotation","development","xxyyzz no match"],"slash_focus":true,"escape_clear":true,"clear_button_restores_all_and_focus":true,"theme_switch":true,"masks_keyboard_destination":true,"manual_home_keyboard_destination":true},
+  "optional_improvements":["Rank exact feature-title matches first in standalone quick-reference filter","Persistent local mobile outline on long reference pages"],
+  "original_findings":{"F01":"closed for reader; native separate","F02":"closed for reader","F03":"closed for recorded replay design; not live/exhaustive gesture audit","F04":"closed for reader; native persistence/timing separate","F05":"closed for reader","F06":"closed in reviewed reader scope; no PCM/listening claim","F07":"closed in inspected paths","F08":"closed in inspected paths","F09":"closed for reader including new quickref","F10":"closed for reviewed reader threshold; no exhaustive accessibility certification","F11":"closed for reader; source16 Panic fix verified"},
+  "coverage":{"method":"complete source11 review plus source12-16 exact-parity delta reviews","fresh_initial_observations":6,"fresh_quick_reference_observations":30,"viewports":[[1440,900],[390,844]],"panic_routes_checked":2,"browser_errors":0,"owned_browsers_closed":true,"all425_units_individually_rescored":false},
+  "parity":{"reader_index_exact_source15":true,"book_js_css_html_exact_source15":true,"manual_js_delta":"provenance-specific Panic summary","quick_reference_newly_reviewed":true},
+  "pins":{"book_owner_supplied":"d49d8551e5a18334d23537974d16b18116cfd1a79122edd7a169452e53060202","reader_index":"1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654","book_js":"914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825","manual_js":"474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436","css":"1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309","index_html":"2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482","cheat_sheet":"6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695","generated_quick_owner_supplied":"014408a8ed1a200719c50cefa7b44f77915426e884234192a8f93fb97a8bc3da"},
+  "qualification":{"reader_and_quickref_approved":true,"blanket_original_checklist_closure":false,"blanket_native_audio_runtime_ci_closure":false,"hardware_equivalence_claimed":false,"listened":false,"native_audio_rerun":false},
+  "production_mutations":false,
+  "prior_failures_and_errata_preserved":true
+}

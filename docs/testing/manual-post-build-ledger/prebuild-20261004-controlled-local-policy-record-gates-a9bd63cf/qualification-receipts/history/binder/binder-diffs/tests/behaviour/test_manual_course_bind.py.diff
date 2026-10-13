@@ -1,0 +1,41 @@
+--- before/tests/behaviour/test_manual_course_bind.py
++++ after/tests/behaviour/test_manual_course_bind.py
+@@ -127,9 +127,38 @@
+   (self.root/"manual/course.yaml").write_text(yaml.safe_dump(course))
+   with self.assertRaisesRegex(ValueError,"38 distinct teaching stages"):self.bind()
+ 
++ def test_controlled_local_binds_all_fifty_checkpoints_with_pending_realtime(self):
++  controlled=self.documents[1]
++  document=json.loads(controlled.read_text())
++  document.update(validation_scope="controlled-manual-generation",realtime_qualification="pending-ci")
++  controlled.write_text(json.dumps(document))
++  with patch.object(binder,"audit_reference",return_value=50) as audit:
++   result=binder.bind(None,controlled,self.root/"controlled-proof",root=self.root,controlled_local=True)
++  course=yaml.safe_load((self.root/"manual/course.yaml").read_text())
++  self.assertEqual(course["project"]["capture_status"],"controlled-verified")
++  self.assertTrue(all(stage["binding"]["status"]=="controlled-verified" for chapter in course["learning_path"] for stage in chapter["stages"]))
++  self.assertEqual(result["validation_scope"],"controlled-manual-generation")
++  self.assertEqual(result["realtime_qualification"],"pending-ci")
++  self.assertFalse(result["complete_regression_run"])
++  self.assertEqual(result["lanes"][0]["clock_mode"],"controlled-experimental")
++  self.assertEqual(audit.call_count,1)
++
++ def test_controlled_local_rejects_failed_midi_evidence(self):
++  controlled=self.documents[1];document=json.loads(controlled.read_text())
++  document.update(validation_scope="controlled-manual-generation",realtime_qualification="pending-ci")
++  document["scenes"][0]["steps"][0]["output"]["binding"]["passed"]=False
++  controlled.write_text(json.dumps(document));before=(self.root/"manual/course.yaml").read_bytes()
++  with patch.object(binder,"audit_reference",return_value=50):
++   with self.assertRaisesRegex(ValueError,"semantic proof"):
++    binder.bind(None,controlled,self.root/"bad-proof",root=self.root,controlled_local=True)
++  self.assertEqual(before,(self.root/"manual/course.yaml").read_bytes())
++
++
+ # Course public recipe against the unchanged actual Lua Rate owner.
+ import ast
+ import subprocess
++
++
+ class CourseRateRecipe(unittest.TestCase):
+     def test_bar_recipe_keeps_sixteenth_note_rate_through_actual_owner(self):
+         tree = ast.parse((ROOT / 'tools/manual_course_cases.py').read_text())

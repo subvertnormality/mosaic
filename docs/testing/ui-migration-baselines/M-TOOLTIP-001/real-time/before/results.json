@@ -1,0 +1,154 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "page-Scale Editor",
+    "text": "Scale Editor",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "page-Song Editor",
+    "text": "Song Editor",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "page-Channel Editor",
+    "text": "Channel Editor",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "select-channel-2",
+    "text": "Channel 2 selected",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "select-channel-1",
+    "text": "Channel 1 selected",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "record-on",
+    "text": "Recording started",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "record-off",
+    "text": "Recording stopped",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "memory-apply",
+    "text": "Ch. 1 memory applied",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "memory-undo",
+    "text": "Ch. 1 memory undone",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "before-expiry",
+    "text": "Scale Editor",
+    "passed": true
+  },
+  {
+    "kind": "tooltip-cleared",
+    "stage": "idle-expiry",
+    "measured_lifetime_seconds": 2.965,
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "replaced",
+    "text": "Channel 2 selected",
+    "passed": true
+  },
+  {
+    "kind": "tooltip-cleared",
+    "stage": "replacement-expiry",
+    "measured_lifetime_seconds": 2.979,
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "select-channel-1-again",
+    "text": "Channel 1 selected",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "play",
+    "text": "Starting playback",
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "select-while-playing",
+    "text": "Channel 2 selected",
+    "passed": true
+  },
+  {
+    "kind": "tooltip-cleared",
+    "stage": "playing-expiry",
+    "measured_lifetime_seconds": 2.98,
+    "passed": true
+  },
+  {
+    "kind": "tooltip",
+    "stage": "stop",
+    "text": "Stopping playback",
+    "passed": true
+  }
+]

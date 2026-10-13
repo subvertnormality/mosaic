@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "case": "M-UI-VERTICAL-001",
+  "claim": "Co-visible Clock Mod, Feel source, Swing Type stable list rows absent on immutable original focused UI; old focused Rate/1 independently matches original frozen oracle in both lanes",
+  "characterisation": "new vertical layout outside baseline README",
+  "complete_regression_run": false,
+  "lanes": [
+    {
+      "run": "/home/andy/mosaic-manual-runs/4263bac72a5b4f85b2ac31e12a5b8a4a",
+      "clock_mode": "controlled-experimental",
+      "expected_failure": "AssertionError('vertical-list acceptance: Clock must simultaneously show selected Rate, Feel source and Swing type in stable rows')",
+      "old_focused_rate_1_visible_observation_indices": [
+        23,
+        24,
+        25
+      ],
+      "original_application": "/home/andy/mosaic-manual-runs/feec37b4b9c84b269f981322c292f7bc/application",
+      "files": {
+        "failure.json": "9d29dcd8e65a6b68d5efd264e6ae303723102d4c7b06ffe20c20856fd2125c01",
+        "start-source-identity.json": "14707315db1ab8796d6b8083eaf83541f542560baefee0aa993f2f16dae54ebc",
+        "M-UI-VERTICAL-001-base-midi/native/identity.json": "477473ede3bf18310c3a15483ab5e8937a4146f3c6a5bdff432cd8bad19cdcb4",
+        "M-UI-VERTICAL-001-base-midi/native/cleanup.json": "0edda3d463b8d98d0e44a6f1f000d62da9b9f4b86dd6f59ffd7810db859987c4",
+        "M-UI-VERTICAL-001-base-midi/recipe.json": "01ba2ddc37917ee3e494173de9a54c874a274043e7981eff1f128eeaddaf04fe",
+        "M-UI-VERTICAL-001-base-midi/observations.json": "6582036a4761ded9efdcca3f93d69d18191504132e2372688e0aa9bbaf65ca42"
+      },
+      "cleanup_verified": true
+    },
+    {
+      "run": "/home/andy/mosaic-manual-runs/e2b244c255684e718225c18d57a005f1",
+      "clock_mode": "real-time",
+      "expected_failure": "AssertionError('vertical-list acceptance: Clock must simultaneously show selected Rate, Feel source and Swing type in stable rows')",
+      "old_focused_rate_1_visible_observation_indices": [
+        23,
+        24,
+        25
+      ],
+      "original_application": "/home/andy/mosaic-manual-runs/feec37b4b9c84b269f981322c292f7bc/application",
+      "files": {
+        "failure.json": "f8d42ec4edf24f49275e5e7ba3901e4951cabb157dfa38103ce74053fafc2695",
+        "start-source-identity.json": "adad8db596f422fc3eb1bba0e192b3c38ded110f6d8cfe47c726b282efabc55d",
+        "M-UI-VERTICAL-001-base-midi/native/identity.json": "6ca1f3f11b081378e7867c9c96c0c9084a7c982578b2fa2f62cd0f9ad1896303",
+        "M-UI-VERTICAL-001-base-midi/native/cleanup.json": "ff6b8c289c17ec25946a7b2d17aa600ba13c73c2cecc26fd8e11d95a723f8320",
+        "M-UI-VERTICAL-001-base-midi/recipe.json": "ac66ac8456fc6029e1ff4ab8a053e52849ded4e5fbd6ab5a2378e11da9fe0f47",
+        "M-UI-VERTICAL-001-base-midi/observations.json": "1601dfb8246536e4fa165475a1aad26f0b5aa001593b901ca03cfeb751705168"
+      },
+      "cleanup_verified": true
+    }
+  ],
+  "invalid_fixture_failures": [
+    "feec37b4b9c84b269f981322c292f7bc",
+    "4f54d3f22bb64cf8966aef85fc74b5e7",
+    "7b8d68cd138446238eeca16271867c8a"
+  ],
+  "invalid_recipe_failure": "7b132f30fa934b24830e45bd105a6110",
+  "invalid_reason": "First fixture wrongly expected full Rate rather than list short Clock Mod; later recipe selected Swing instead of Swing type because readonly Feel source is skipped. All original native artifacts retained and none counts as valid baseline."
+}

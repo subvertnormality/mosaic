@@ -1,0 +1,13 @@
+{
+  "files": {
+    "tests/behaviour/cases.py": {
+      "archive": "/home/andy/mosaic-manual-build-operators/encoder-schema-fix-129d1907bee34e508ce3a1e4c9508b9e/before/tests/behaviour/cases.py",
+      "sha256": "71fe6596753fb9b12b419d6e1ad45acc2c908bcfecf597084c65d3458531ea6c"
+    },
+    "tests/behaviour/test_manual_case_capture.py": {
+      "archive": "/home/andy/mosaic-manual-build-operators/encoder-schema-fix-129d1907bee34e508ce3a1e4c9508b9e/before/tests/behaviour/test_manual_case_capture.py",
+      "sha256": "8ced93458e570c039a8ae0864b0f15fa86a72f061992ec2a5f1faf33385425cc"
+    }
+  },
+  "operator_directory": "/home/andy/mosaic-manual-build-operators/encoder-schema-fix-129d1907bee34e508ce3a1e4c9508b9e"
+}

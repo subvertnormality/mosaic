@@ -1,0 +1,29 @@
+..EE..E
+======================================================================
+ERROR: test_current_native_status_uses_bindings_and_preserves_source_baseline (test_manual_inventory_merge.InventoryMergeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_inventory_merge.py", line 65, in test_current_native_status_uses_bindings_and_preserves_source_baseline
+    result=inventory.book_entry(feature,old,captures=captures)
+TypeError: book_entry() got an unexpected keyword argument 'captures'
+
+======================================================================
+ERROR: test_non_native_exception_is_explicit_and_does_not_claim_replay (test_manual_inventory_merge.InventoryMergeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_inventory_merge.py", line 82, in test_non_native_exception_is_explicit_and_does_not_claim_replay
+    result=inventory.book_entry(feature,{},captures={})
+TypeError: book_entry() got an unexpected keyword argument 'captures'
+
+======================================================================
+ERROR: test_verified_badge_cannot_hide_missing_or_failed_native_scenes (test_manual_inventory_merge.InventoryMergeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_inventory_merge.py", line 74, in test_verified_badge_cannot_hide_missing_or_failed_native_scenes
+    result=inventory.book_entry(feature,{},captures={})
+TypeError: book_entry() got an unexpected keyword argument 'captures'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.009s
+
+FAILED (errors=3)

@@ -1,0 +1,32 @@
+schema_version: 1
+scenes:
+- id: matrix-macro-modest-cc
+  feature_id: lfos-and-modulation
+  title: Make a small CC move with Macro 1
+  behaviour_case: M-MANUAL-MODULATION-001
+  requirements: [MOD-ROUTING, MOD-ROUTE-001]
+  citation: README.md#lfos-and-modulation
+  profile: midi-modulation
+  screen_format: gray8-rle
+  session_ordinal: 0
+  steps:
+  - id: route-depth
+    title: Set a small route
+    caption: In Matrix, choose Control 1, select Macro 1, and set its depth to 0.10. With Macro 1 at zero, the selected CC stays at 32.
+    assertion: {kind: manual-modulation-cc-phase, phase: route-depth}
+  - id: zero-source
+    title: Hear the unchanged phrase
+    caption: Start the same C3, D3, E3, F3 phrase. The notes and their one-sixth-second spacing stay the same, and CC 1 remains at 32 while the macro is at zero.
+    assertion: {kind: manual-modulation-cc-phase, phase: zero-source}
+  - id: halfway
+    title: Move CC 1 modestly
+    caption: Set Toolkit Macro 1 to 0.50 and replay. The four notes keep their pitches, velocities, timing and gates; CC 1 reads 38 on each onset.
+    assertion: {kind: manual-modulation-cc-phase, phase: halfway}
+  - id: clear-baseline
+    title: Restore the authored value
+    caption: Clear the Matrix depth and replay. CC 1 returns to 32 while the same four-note phrase continues unchanged.
+    assertion: {kind: manual-modulation-cc-phase, phase: clear-baseline}
+  - id: returned-to-source-baseline
+    title: Leave Macro 1 at zero
+    caption: With the Matrix route still clear, return Toolkit Macro 1 to 0.0 so the setup is left at its starting value.
+    assertion: {kind: manual-modulation-cc-phase, phase: returned-to-source-baseline}

@@ -1,0 +1,28 @@
+{
+  "complete_regression_run": false,
+  "source_unchanged": true,
+  "controlled_time_admitted": false,
+  "valid_passes": {
+    "M-UIACC-A01-001": "18bf72591123441ea6429a88e8ffe3c2",
+    "M-UIACC-A02-001": "58183e74eb4b442899695d3569c581af",
+    "M-UIACC-A03-001": "8495b97318e24d79b1cb070f17c57c9e"
+  },
+  "failed_case": "M-UIACC-A18-001",
+  "failed_run": "/home/andy/mosaic-behaviour-runs/vertical-list-controlled-experimental/8a3011dd1e9142df95c3ef930bb0e1e7",
+  "failure": "native_ack_timeout during H04 wait after H17 cancel",
+  "last_frame_checks": {
+    "header": true,
+    "no_overflow": true,
+    "field": true,
+    "footer": false
+  },
+  "expected_footer": "E3 SET  K3 APPLY  K2 BACK",
+  "actual_footer": "K3 CONFIRM  K2 CANCEL",
+  "frame_sha256": "b4a01f05fc291a5f7061719a570882accea2b5815fd18cdfe33aef1d95abd52d",
+  "cleanup": "all four native sessions stopped; every cleanup service recorded",
+  "files": {
+    "controlled-experimental-affected-start.json": "2033953654b60c5bdc789537762220fabbd6ea1654ff5198c3049d4fd0ed45cd",
+    "controlled-experimental-affected.log": "f31b6dde2c6d402069ae515330e9ae9d2275f9308c84017cd2bbd0d116aa8b30",
+    "controlled-experimental-affected-finish.json": "199fcf4f7320af7a5509ba0a114cfbefc269c9e0bb60137126287fc40dfebcbc"
+  }
+}

@@ -1,0 +1,21 @@
+EE..............
+======================================================================
+ERROR: test_compiled_caption_receipt_preserves_entire_native_contract (test_manual_publication_verify.CompiledCaptionIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 119, in test_compiled_caption_receipt_preserves_entire_native_contract
+    with self.assertRaisesRegex(ValueError,'receipt'):audit.check_compiled_scene_contract(raw,compiled)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_compiled_scene_contract'
+
+======================================================================
+ERROR: test_fresh_desired_caption_needs_no_historic_overlay (test_manual_publication_verify.CompiledCaptionIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 126, in test_fresh_desired_caption_needs_no_historic_overlay
+    audit.check_compiled_scene_contract(raw,copy.deepcopy(raw))
+AttributeError: module 'manual_publication_verify' has no attribute 'check_compiled_scene_contract'
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.013s
+
+FAILED (errors=2)

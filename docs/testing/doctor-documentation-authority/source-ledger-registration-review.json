@@ -1,0 +1,37 @@
+{
+  "scope": "reviewed source-ledger metadata refresh, no acceptance promotion",
+  "previous": {
+    "current-source-review.json": {
+      "sha256": "6896d748b1f2d603769f896fee345d0883781989ec28cb2e67d2fdc1f50e036d",
+      "archive": "docs/ui-reimplementation/reviews/before-doctor-specialized-registration-6896d748b1f2d603769f896fee345d0883781989ec28cb2e67d2fdc1f50e036d-current-source-review.json"
+    },
+    "source-inventory.json": {
+      "sha256": "074c0dba2ac7ebafb83853132309fcfc2f46b851c90dc20d95723759df94ec1f",
+      "archive": "docs/ui-reimplementation/reviews/before-doctor-specialized-registration-074c0dba2ac7ebafb83853132309fcfc2f46b851c90dc20d95723759df94ec1f-source-inventory.json"
+    },
+    "generated/source-review-receipt.json": {
+      "sha256": "a760f44c34173e7e9012797f1c7b029c671104f65794fc13e2bb4f30d0d5f97f",
+      "archive": "docs/ui-reimplementation/reviews/before-doctor-specialized-registration-a760f44c34173e7e9012797f1c7b029c671104f65794fc13e2bb4f30d0d5f97f-source-review-receipt.json"
+    }
+  },
+  "structural_changes": [
+    "rhythm-doctor.sources.code: append tools/doctor-qualification-inventory.json",
+    "rhythm-doctor.review.specialized_qualifications: pending MA-DOCTOR-MANUAL-START-BEAT-001 registration"
+  ],
+  "all_other_authored_structure_equal": true,
+  "original_baseline_and_manual_source_preserved": true,
+  "complete_regression_run": false,
+  "current": {
+    "current-source-review.json": "d924a17d8e88f13e09c10178b25ab08a5b7e67d5e2b87303cfa32c71fd23ee2a",
+    "source-inventory.json": "82e05ac517fed12071e1474ecfb427c78d782582336f18eb274f55c1c41b2205",
+    "generated/source-review-receipt.json": "245e0d55a802272d12b1247f72ccd87afe3c690a3480b9d4a49474efe81d02b2"
+  },
+  "validation": {
+    "refresh_check": "pass",
+    "strict_contract_validation": "pass; no source-fingerprint skip",
+    "manual_sections": 125,
+    "files": 78,
+    "callbacks": 64,
+    "branches": 164
+  }
+}

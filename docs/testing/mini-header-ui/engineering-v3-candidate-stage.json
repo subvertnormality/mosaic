@@ -1,0 +1,18 @@
+{
+  "staged_root": "/home/andy/mosaic-mini-header-engineering-v3-20261003/mosaic",
+  "identity_path": "/home/andy/mosaic-mini-header-engineering-v3-20261003/identity.json",
+  "identity_sha256": "31d4c453f371897d450cbf933247279fb3e12146db60bd1e5e054962bc26e53d",
+  "files": 17782,
+  "pre_post_copied_equal": true,
+  "read_only": true,
+  "engineering_only": true,
+  "final_global_qualification": false,
+  "previous_failed_stage_preserved": "/home/andy/mosaic-mini-header-engineering-v2-20261003/mosaic",
+  "helper_hashes": {
+    "tests/behaviour/contract/merge_strategy_ui.py": "8232fa25f156394c45dffb27b62b52cf8ed88fc9d47c0622e7c75e35b27c6a47",
+    "tests/behaviour/contract/ui_readability.py": "8da121edd9f709d4ed049ce6c73a6909d9156d45bae5acb678c873816079cbc2",
+    "tests/behaviour/contract/mini_header_animation_ui.py": "450dbff89309d6004481b0d9162acd86ae6e359b10f30a861b225289d2d238de",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tools/rhythm_doctor/rd_analysis_backend.c": "ff871aa3e1714a011ad7836990990ecc654aad0a0237baf5d50c7eccc4a87a25"
+  }
+}

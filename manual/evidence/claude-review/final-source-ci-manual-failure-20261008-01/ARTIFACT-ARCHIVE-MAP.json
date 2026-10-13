@@ -1,0 +1,14 @@
+{
+  "archive_sha256": "adffce5b8ca55ce6e08fd4865eb8d7a50341e2d012743bffd96d5b3f7ca869d0",
+  "artifact_id": 11564388695,
+  "original_member_hashes": {
+    "evidence-index.json": "b45745e6e2dcb47e8cb86f024f6b581f8ef65a8ba35f3c4e7c68099a82f295c9",
+    "provisioning.log": "a59a175aa37b5686b47a3e45332df3a5f243179d6792ca923c664ab933f9e092",
+    "source-identity.json": "cb42957b837af77a0ff0e9f1f54f26878c5d1efaad25b56f78100d38ad03351d",
+    "referenced/4627a000042985d15356/book.json": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+    "referenced/c23f7c8369e86c511432/inventory.json": "6b35fb95c01e5ece0333535281d2163908855926a40e9f609db23568f50c1918",
+    "referenced/e2199a8756120e9b21d2/audio-scenes.json": "22d4fe42d42e100d219f14f935234ab81e66cfd7551caad89a7a42e041003a7e"
+  },
+  "expanded_copies_removed_after_exact_verification": true,
+  "external_expanded_original_preserved": "/mnt/c/Users/andy/.codex/visualizations/2026/10/03/01a100e0-e188-7c11-b2f0-748214517bb6/final-source-ci-manual-failure-20261008-01/artifact"
+}

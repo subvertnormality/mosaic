@@ -1,0 +1,17 @@
+{
+  "recipe_sha256": "9a264799d95e9c96d22a28f8039f7f59dd09116cba15e67d646fe5dac7f6b4a9",
+  "test_sha256": "a73006fb29551efa54808db231f9279541aba2f12c51185160f365b3098c1796",
+  "command": [
+    "/usr/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/behaviour",
+    "-p",
+    "test_doctor_ready_routes.py",
+    "-v"
+  ],
+  "exit_code": 1,
+  "scope": "existing independent presentation model plus recipe observer; no native session"
+}

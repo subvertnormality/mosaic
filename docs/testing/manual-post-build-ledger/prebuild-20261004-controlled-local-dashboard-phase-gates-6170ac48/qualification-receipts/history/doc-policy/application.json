@@ -1,0 +1,15 @@
+{
+  "review_path": "docs/ui-reimplementation/current-source-review.json",
+  "before_sha256": "33edec1b0214ceb0a6712245d8e33ad226a25a7a4d5e59c864785d38557e7242",
+  "after_sha256": "0ba7e99852de0b6102929ada630122b7cfe1f28d6ca1e839895e236d34981d21",
+  "documentary_receipt": {
+    "path": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/documentary-review-receipt.json",
+    "sha256": "12c70ef89c9056685b9f04bdba5ce10701dad7972c9f84fa0b893b934c71f70f"
+  },
+  "only_changed_entries": [
+    "README.md",
+    "AGENTS.md"
+  ],
+  "reviewed_members": 78,
+  "native_launched": false
+}

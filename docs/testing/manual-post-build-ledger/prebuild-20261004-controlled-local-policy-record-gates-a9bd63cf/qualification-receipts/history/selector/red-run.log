@@ -1,0 +1,26 @@
+test_all_scene_plan_selectors_use_the_exact_six_image_scope_contract (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... FAIL
+test_captured_foundation_result_matches_scoped_selector_not_legacy_sha (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... FAIL
+test_only_two_selector_metadata_maps_changed_in_musical_plan (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... ok
+test_wrong_baseline_page_or_atlas_is_rejected_by_actual_adapter (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests) ... ok
+
+======================================================================
+FAIL: test_all_scene_plan_selectors_use_the_exact_six_image_scope_contract (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_documentation_frame_selectors.py", line 104, in test_all_scene_plan_selectors_use_the_exact_six_image_scope_contract
+    self.assertEqual(plan,EXPECTED_SCOPE)
+AssertionError: {('fo[123 chars]g', 'sha256': '49ddaad6ba1a77775be8ce7e8d32ff6[271 chars]rue}} != {('fo[123 chars]g', 'baseline_sha256': '49ddaad6ba1a77775be8ce[561 chars]rue}}
+Diff is 1886 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_captured_foundation_result_matches_scoped_selector_not_legacy_sha (tests.behaviour.test_manual_documentation_frame_selectors.DocumentationFrameSelectorTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_documentation_frame_selectors.py", line 90, in test_captured_foundation_result_matches_scoped_selector_not_legacy_sha
+    self.assertTrue(adapter.accept(CAPTURED_FOUNDATION_RESULT))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.669s
+
+FAILED (failures=2)

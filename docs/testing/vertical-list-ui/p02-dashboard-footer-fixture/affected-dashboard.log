@@ -1,0 +1,87 @@
+.EEEEEE
+======================================================================
+ERROR: test_expect_dashboard_checks_the_page_title_scope_and_rows (test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3139, in test_expect_dashboard_checks_the_page_title_scope_and_rows
+    driver = FakeDriver(states=[self.screen(rows, "SCALE OVERVIEW", "SLOT 01")])
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3091, in screen
+    commands.append((1, y, 7, fit(label, 126 - text_width(value) - 4)))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 109, in text_width
+    render([(0,0,0,'')])  # ensure the font face exists
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 26, in render
+    font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'str'
+
+======================================================================
+ERROR: test_expect_dashboard_row_finds_the_row (test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3129, in test_expect_dashboard_row_finds_the_row
+    driver = FakeDriver(states=[self.screen(self.ROWS)])
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3091, in screen
+    commands.append((1, y, 7, fit(label, 126 - text_width(value) - 4)))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 109, in text_width
+    render([(0,0,0,'')])  # ensure the font face exists
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 26, in render
+    font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'str'
+
+======================================================================
+ERROR: test_live_header_puts_a_dashboard_scope_on_the_title_row (test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3150, in test_live_header_puts_a_dashboard_scope_on_the_title_row
+    state = self.screen([])
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3093, in screen
+    return DashboardOracleTests.state(commands + list(extra))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3082, in state
+    return {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 26, in render
+    font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'str'
+
+======================================================================
+ERROR: test_row_levels_are_exact (test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3110, in test_row_levels_are_exact
+    state = self.state([(1, 16, 15, "Preview"), ((None, 127), 16, 15, "OFF")])
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3082, in state
+    return {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 26, in render
+    font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'str'
+
+======================================================================
+ERROR: test_row_matches_only_its_own_label_value_and_row (test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3099, in test_row_matches_only_its_own_label_value_and_row
+    state = self.screen(self.ROWS)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3091, in screen
+    commands.append((1, y, 7, fit(label, 126 - text_width(value) - 4)))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 109, in text_width
+    render([(0,0,0,'')])  # ensure the font face exists
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 26, in render
+    font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'str'
+
+======================================================================
+ERROR: test_whole_dashboard_rejects_a_cursor_extra_row_or_wrong_scope (test_ui.DashboardOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3117, in test_whole_dashboard_rejects_a_cursor_extra_row_or_wrong_scope
+    self.assertTrue(dashboard_matches(self.screen(self.ROWS), "PAINT PREVIEW", "CH01", self.ROWS))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui.py", line 3091, in screen
+    commands.append((1, y, 7, fit(label, 126 - text_width(value) - 4)))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 109, in text_width
+    render([(0,0,0,'')])  # ensure the font face exists
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/frame_oracle.py", line 26, in render
+    font=read_json(ROOT/'.runtime/current.json')['source']+'/resources/norns.ttf'
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'str'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.035s
+
+FAILED (errors=6)

@@ -1,0 +1,2059 @@
+features:
+- id: options
+  title: Options
+  audience: all
+  summary: Configure Mosaic from PARAMS > MOSAIC.
+  prose: Open PARAMS > MOSAIC to configure Mosaic.
+  musical_use: Set playback, parameter-lock, quantiser, MIDI-input and screen options.
+  related:
+  - save-and-load
+  sources:
+    readme: manual/legacy/README-1.4.0.md#options
+    behaviour_cases: []
+    code:
+    - lib/application_parameters.lua
+    - lib/ui_adapters/native.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC
+    result: Access project actions and performance, quantiser, MIDI-input and screen preferences.
+  details: []
+  recipes: []
+  scene_refs:
+  - protect-stop-gesture
+  review:
+    status: verified
+    cases:
+    - M-OPT-STOP-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: protect-stop-gesture
+      data: reference-stop-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/fa19b041ff83422fb56cbf7cf8d500fd
+      data_sha256: 3027bcc85ea333211b21ea12761c48ff541882e05c54009749cc046a941572d0
+      case: M-OPT-STOP-001
+      assertions:
+      - &id001
+        kind: stop-safety
+        stage: default-tap
+        transport: stopped
+        passed: true
+      - &id002
+        kind: stop-safety
+        stage: on-short-tap-ignored
+        transport: playing
+        passed: true
+      - &id003
+        kind: stop-safety
+        stage: on-hold-below-threshold-ignored
+        transport: playing
+        passed: true
+      - &id004
+        kind: stop-safety
+        stage: on-shift-K1-tap-stops
+        transport: stopped
+        passed: true
+      - &id005
+        kind: stop-safety
+        stage: on-long-press-stops
+        transport: stopped
+        passed: true
+      - &id006
+        kind: stop-safety
+        stage: off-again-tap-stops
+        transport: stopped
+        passed: true
+      scope: Overview demonstrates the protected Stop option; child option references retain their own
+        settings and outcomes.
+    applicability: native-ui
+    native_gap: Real-time replay is queued for this controlled diagnostic batch; physical norns scheduling
+      equivalence is not established.
+    rationale: Overview demonstrates the protected Stop option; child option references retain their own
+      settings and outcomes.
+  category: options
+  parent: save-and-load
+  level: 3
+- id: sequencer-options
+  title: Sequencer Options
+  audience: all
+  summary: Set stop protection, song progression, resets, slide wrapping and program changes.
+  prose: Open PARAMS > MOSAIC > Sequencer to set playback and song progression options.
+  musical_use: Set how the sequencer starts, stops and advances through song patterns.
+  related:
+  - options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#sequencer-options
+    behaviour_cases: []
+    code:
+    - lib/application_parameters.lua
+    - lib/ui_adapters/native.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC > Sequencer
+    result: Choose stop protection, song progression, slide wrapping, reset behaviour and program changes.
+  details: []
+  recipes: []
+  scene_refs:
+  - protect-stop-gesture
+  review:
+    status: verified
+    cases:
+    - M-OPT-STOP-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: protect-stop-gesture
+      data: reference-stop-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/fa19b041ff83422fb56cbf7cf8d500fd
+      data_sha256: 3027bcc85ea333211b21ea12761c48ff541882e05c54009749cc046a941572d0
+      case: M-OPT-STOP-001
+      assertions:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      - *id005
+      - *id006
+      scope: Overview demonstrates the protected Stop option; Song mode already has its directly asserted
+        workflow.
+    applicability: native-ui
+    native_gap: Real-time replay is queued for this controlled diagnostic batch; physical norns scheduling
+      equivalence is not established.
+    rationale: Overview demonstrates the protected Stop option; Song mode already has its directly asserted
+      workflow.
+  category: options
+  parent: options
+  level: 4
+- id: shift-press-stop
+  title: Shift press stop
+  audience: all
+  summary: 'Require K1 or a long press to stop playback. Default: Off.'
+  prose: Enable Shift press to stop to prevent a short play/stop press from stopping playback. Hold K1
+    and press play/stop, or use a long press, to stop.
+  musical_use: Enable stop protection before performing.
+  related:
+  - sequencer-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#shift-press-stop
+    behaviour_cases:
+    - M-OPT-STOP-001
+    code:
+    - lib/application_parameters.lua
+    - lib/m_grid.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Shift press to stop. Change its value.
+    result: 'On protects playback from a short unshifted play/stop press; hold K1 or long-press grid play/stop
+      to stop. Default: Off.'
+  details: []
+  recipes: []
+  scene_refs:
+  - protect-stop-gesture
+  review:
+    status: verified
+    cases:
+    - M-OPT-STOP-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: protect-stop-gesture
+      data: reference-stop-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: fdf6d4e78a3141863cf73ed35d571f4d34edec3f619ccba5ca9a69c414efee51
+      case: M-OPT-STOP-001
+      assertions:
+      - kind: stop-safety
+        stage: default-tap
+        transport: stopped
+        passed: true
+      - kind: stop-safety
+        stage: on-short-tap-ignored
+        transport: playing
+        passed: true
+      - kind: stop-safety
+        stage: on-hold-below-threshold-ignored
+        transport: playing
+        passed: true
+      - kind: stop-safety
+        stage: on-shift-K1-tap-stops
+        transport: stopped
+        passed: true
+      - kind: stop-safety
+        stage: on-long-press-stops
+        transport: stopped
+        passed: true
+      - kind: stop-safety
+        stage: off-again-tap-stops
+        transport: stopped
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Real-time replay is queued for this controlled diagnostic batch; physical norns scheduling
+      equivalence is not established.
+    rationale: Default short tap, safety-enabled short/below-threshold tap rejection, K1+tap and long
+      hold stopping, and restored Off behavior.
+  category: options
+  parent: sequencer-options
+  level: 5
+- id: song-mode
+  title: Song Mode
+  audience: all
+  summary: 'Advance through the song sequence automatically. Default: On.'
+  prose: Song mode defaults to On. With On selected, the song advances according to the Song Editor settings.
+    Set Off to advance song patterns manually.
+  musical_use: Set Off to select song patterns manually. Set On to follow the song sequence.
+  related:
+  - sequencer-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#song-mode
+    behaviour_cases:
+    - M-MERGE-INTERLOCK-009
+    - M-SONG-FLOW-001
+    - M-TIME-003
+    - M-TRANS-007
+    code:
+    - lib/application_parameters.lua
+    - lib/song_transition.lua
+    - lib/pages/song_edit_page/song_edit_page_ui.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Song mode. Change its value.
+    result: 'On advances through the song editor sequence; Off leaves progression to manual selection.
+      Default: On.'
+  details: []
+  recipes: []
+  scene_refs:
+  - song-mode-groups-and-selection
+  review:
+    status: verified
+    cases:
+    - M-SONG-FLOW-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: song-mode-groups-and-selection
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-SONG-FLOW-001
+      assertions:
+      - kind: song-mode-flow
+        stage: default-on-group-1
+        slots:
+        - 1
+        - 2
+        - 1
+        - 2
+        notes:
+        - 60
+        - 62
+        - 72
+        - 74
+        - 60
+        - 62
+        - 72
+        - 74
+        passed: true
+      - kind: song-mode-flow
+        stage: queued-selection
+        slots:
+        - 4
+        - 2
+        - 1
+        - 2
+        notes:
+        - 84
+        - 86
+        - 72
+        - 74
+        - 60
+        - 62
+        - 72
+        - 74
+        passed: true
+      - kind: song-mode-flow
+        stage: off-holds-slot
+        slots:
+        - 1
+        - 1
+        - 1
+        - 1
+        notes:
+        - 60
+        - 62
+        - 60
+        - 62
+        - 60
+        - 62
+        - 60
+        - 62
+        passed: true
+      - kind: song-mode-flow
+        stage: off-manual-selection
+        slots:
+        - 1
+        - 2
+        - 2
+        - 2
+        notes:
+        - 60
+        - 62
+        - 72
+        - 74
+        - 72
+        - 74
+        - 72
+        - 74
+        passed: true
+      scope: The cited public workflow and stated native semantic outcomes.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Reference source audit and the cited public native workflow are complete for publication.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: song-mode-groups-and-selection
+      clock_mode: controlled-experimental
+  category: options
+  parent: sequencer-options
+  level: 5
+- id: reset-at-song-editor-pattern-change
+  title: Reset at Song Editor Pattern Change
+  audience: all
+  summary: 'Reset channel positions when the song pattern changes. Default: On.'
+  prose: Reset on song seq change defaults to On. On resets all channel positions when the Song Editor
+    changes to another pattern. Set Off to continue channel phases across the change, including channels
+    with different lengths.
+  musical_use: Set On to restart channel phrases at each section. Set Off to continue their phases.
+  related:
+  - sequencer-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#reset-at-song-editor-pattern-change
+    behaviour_cases:
+    - M-MERGE-INTERLOCK-009
+    - M-TIME-003
+    - M-TIME-005
+    - M-TIME-008
+    - M-TIME-009
+    - M-TIME-013
+    - M-TIME-014
+    code:
+    - lib/application_parameters.lua
+    - lib/song_transition.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Reset on song seq change. Change its value.
+    result: 'On restarts channel positions on a song-pattern transition; Off allows their phases to continue.
+      Default: On.'
+  details: []
+  recipes: []
+  scene_refs:
+  - song-change-reset-policies
+  review:
+    status: pending
+    cases:
+    - M-TIME-005
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: song-change-reset-policies
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-TIME-005
+      assertions:
+      - kind: native-song-transition-reset
+        transition_reset: false
+        repeat_reset: false
+        passed: true
+      - kind: native-song-transition-reset
+        transition_reset: true
+        repeat_reset: false
+        passed: true
+      - kind: native-song-transition-reset
+        transition_reset: true
+        repeat_reset: true
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: options
+  parent: sequencer-options
+  level: 5
+- id: reset-at-pattern-repeat
+  title: Reset at Pattern Repeat
+  audience: all
+  summary: 'Reset channel positions when the song pattern repeats. Default: Off.'
+  prose: Reset on pattern repeat defaults to Off. On resets all channels to their starting steps when
+    the same Song Editor pattern repeats at the end of a song sequence. Channels with custom lengths restart
+    at each repeat. Set Off to retain their phases.
+  musical_use: Set On to restart unequal channel lengths at each pattern repeat.
+  related:
+  - sequencer-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#reset-at-pattern-repeat
+    behaviour_cases:
+    - M-ARP-004
+    - M-SLIDE-RESET-001
+    - M-TIME-003
+    - M-TIME-004
+    - M-TIME-005
+    - M-TIME-008
+    - M-TIME-009
+    - M-TIME-010
+    - M-TIME-011
+    - M-TIME-012
+    code:
+    - lib/application_parameters.lua
+    - lib/song_transition.lua
+    - lib/clock/m_clock.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Reset on pattern repeat. Change its value.
+    result: 'On resets channels to their starting steps when the song pattern repeats. Default: Off.'
+  details: []
+  recipes: []
+  scene_refs:
+  - repeat-reset-policies
+  review:
+    status: pending
+    cases:
+    - M-TIME-003
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: repeat-reset-policies
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-TIME-003
+      assertions:
+      - kind: native-repeat-reset-policy
+        song_mode: true
+        transition_reset: false
+        repeat_reset: false
+        passed: true
+      - kind: native-repeat-reset-policy
+        song_mode: true
+        transition_reset: false
+        repeat_reset: true
+        passed: true
+      - kind: native-repeat-reset-policy
+        song_mode: false
+        transition_reset: true
+        repeat_reset: true
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: options
+  parent: sequencer-options
+  level: 5
+- id: parameter-slides-wrap
+  title: Parameter Slides Wrap
+  audience: all
+  summary: 'Allow the final parameter slide to reach the first lock across a repeating pattern boundary.
+    Default: Off.'
+  prose: Wrap param slides defaults to Off. With On selected and the current song pattern repeating, the
+    final parameter slide can return to the first eligible lock earlier in the sequence. Wrapping follows
+    the effective channel range. On a full 64-step range, this crosses the step-64 boundary described
+    in the archived README.
+  musical_use: Enable wrapping to repeat a parameter transition across the channel range boundary.
+  related:
+  - sequencer-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#parameter-slides-wrap
+    behaviour_cases:
+    - M-PATCH-018
+    - M-PATCH-021
+    - M-PATCH-022
+    - M-PATCH-023
+    - M-PATCH-026
+    - M-SLIDE-STEP-001
+    code:
+    - lib/application_parameters.lua
+    - lib/models/program.lua
+    - lib/clock/slide_lifetime.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Wrap param slides. Change its value.
+    result: 'On lets an eligible final parameter slide target the first lock within the repeating pattern;
+      different song patterns are not joined. Default: Off.'
+  details:
+  - title: Channel range boundary
+    text: Wrapping follows the channel’s configured start and end steps. It is not limited to a fixed
+      step-64 boundary.
+  - title: Legacy wording awaiting reconciliation
+    text: The preserved legacy README paragraph describes wrapping beyond step 64. The current owner uses
+      the effective channel range, capped by the song pattern’s global length, as reflected in the control
+      table. This boundary wording is awaiting reconciliation in the manual discrepancy review.
+  recipes: []
+  scene_refs:
+  - slide-wrap-boundary
+  - last-lock-slide-wrap
+  review:
+    status: verified
+    cases:
+    - M-SLIDE-STEP-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: slide-wrap-boundary
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-SLIDE-STEP-001
+      assertions:
+      - &id007
+        kind: step-slide
+        passed: true
+        stage: toggled-off-jumps
+      - &id008
+        kind: step-slide
+        passed: true
+        stage: last-lock-no-wrap
+      - &id009
+        kind: step-slide
+        passed: true
+        stage: last-lock-wraps
+      scope: Slide toggled Off, final lock without wrapping, and final lock wrapping; exact CC output
+        is asserted.
+    - scene: last-lock-slide-wrap
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-SLIDE-STEP-001
+      assertions:
+      - kind: step-slide
+        stage: toggled-off-jumps
+        passed: true
+      - kind: step-slide
+        stage: last-lock-no-wrap
+        passed: true
+      - kind: step-slide
+        stage: last-lock-wraps
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Slide toggled Off, final lock without wrapping, and final lock wrapping; exact CC output
+      is asserted.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: slide-wrap-boundary
+      clock_mode: controlled-experimental
+  category: options
+  parent: sequencer-options
+  level: 5
+- id: elektron-program-changes
+  title: Elektron Program Changes
+  audience: all
+  summary: 'Send program changes for Mosaic song-pattern selections and transitions. Default: Off.'
+  prose: Elektron program changes defaults to Off. Enable it to send corresponding program changes when
+    Mosaic selects or changes song patterns. For example, Mosaic song pattern 1 selects pattern 1 on the
+    receiving Elektron device. Configure the receiver to accept program changes.
+  musical_use: Enable program changes to select corresponding patterns on a receiving instrument.
+  related:
+  - sequencer-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#elektron-program-changes
+    behaviour_cases:
+    - M-OPT-ELEK-001
+    - M-OPT-ELEK-002
+    - M-OPT-ELEK-003
+    - M-OPT-ELEK-004
+    code:
+    - lib/application_parameters.lua
+    - lib/song_transition.lua
+    - lib/clock/m_clock.lua
+    - lib/m_midi.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Elektron program changes. Change its value.
+    result: 'On sends MIDI program changes associated with Mosaic song-pattern changes; the receiving
+      device must be configured to accept them. Default: Off.'
+  details: []
+  recipes: []
+  scene_refs:
+  - elektron-child-enable-and-announce
+  review:
+    status: verified
+    cases:
+    - M-OPT-ELEK-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: elektron-child-enable-and-announce
+      data: reference-nested-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828
+      data_sha256: 2fa470ae66b750bc23c62606863c9fc906797752bbcfff1414d3cb85e869d6ba
+      case: M-OPT-ELEK-001
+      assertions:
+      - kind: elektron-program-change
+        stage: default-off
+        sent: []
+        passed: true
+      - kind: mosaic-option-input
+        label: Elektron program changes
+        enabled: true
+      - kind: elektron-program-change
+        stage: stopped-selection
+        passed: true
+      - kind: elektron-program-change
+        stage: playing-transitions
+        global_length: 4
+        passed: true
+      scope: Default Off, public enable input, stopped-slot announcement and exact ahead-of-transition
+        MIDI program changes. Physical Elektron response is outside this native example.
+    applicability: native-ui
+    native_gap: Physical controller or Elektron device response is not established by native MIDI evidence.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa
+      data_sha256: a76a8f6ea2b124d05fcf98dd2523ffaa23387937fc17e77d62d09363e583a748
+      scene: elektron-child-enable-and-announce
+      clock_mode: controlled-experimental
+  category: options
+  parent: sequencer-options
+  level: 5
+- id: elektron-program-change-channel
+  title: Elektron Program Change Channel
+  audience: all
+  summary: 'Set the MIDI channel for Elektron program changes. Range: 1–16. Default: 10.'
+  prose: 'Set Elektron p.change channel to the MIDI channel used by the receiving device. Range: 1–16.
+    Default: 10, matching the default on most Elektron devices.'
+  musical_use: Set the same program-change channel on Mosaic and the receiving instrument.
+  related:
+  - sequencer-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#elektron-program-change-channel
+    behaviour_cases:
+    - M-OPT-ELEK-001
+    - M-OPT-ELEK-002
+    - M-OPT-ELEK-003
+    - M-OPT-ELEK-004
+    code:
+    - lib/application_parameters.lua
+    - lib/song_transition.lua
+    - lib/m_midi.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Elektron p.change channel. Change its value.
+    result: 'Selects MIDI channel 1–16 for Elektron program-change messages. Default: 10.'
+  details: []
+  recipes: []
+  scene_refs:
+  - elektron-child-program-channel
+  review:
+    status: verified
+    cases:
+    - M-OPT-ELEK-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: elektron-child-program-channel
+      data: reference-nested-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828
+      data_sha256: 2fa470ae66b750bc23c62606863c9fc906797752bbcfff1414d3cb85e869d6ba
+      case: M-OPT-ELEK-001
+      assertions:
+      - kind: mosaic-number-input
+        label: Elektron p.change channel
+        value: '1'
+      - kind: elektron-program-change
+        stage: channel-1
+        passed: true
+      scope: Public program-change channel value 1 and emitted MIDI channel 1 program change; physical
+        Elektron response is outside this native example.
+    applicability: native-ui
+    native_gap: Physical controller or Elektron device response is not established by native MIDI evidence.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa
+      data_sha256: a76a8f6ea2b124d05fcf98dd2523ffaa23387937fc17e77d62d09363e583a748
+      scene: elektron-child-program-channel
+      clock_mode: controlled-experimental
+  category: options
+  parent: sequencer-options
+  level: 5
+- id: parameter-lock-options
+  title: Parameter Lock Options
+  audience: all
+  summary: Set lock lead time, trigless locks and resending of unchanged lock values.
+  prose: Open PARAMS > MOSAIC > Parameter locks to configure lock output.
+  musical_use: Set how parameter locks are sent to the assigned device.
+  related:
+  - options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#parameter-lock-options
+    behaviour_cases: []
+    code:
+    - lib/application_parameters.lua
+    - lib/ui_adapters/native.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC > Parameter locks
+    result: Choose lock lead time, trigless locks and whether unchanged locks are resent.
+  details: []
+  recipes: []
+  scene_refs:
+  - slide-wrap-boundary
+  - global-parameter-slide
+  review:
+    status: verified
+    cases:
+    - M-PATCH-017
+    - M-SLIDE-STEP-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: slide-wrap-boundary
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-SLIDE-STEP-001
+      assertions:
+      - *id007
+      - *id008
+      - *id009
+      scope: Overview of slide/wrap behavior and routed CC examples; Trigless locks has its own reference.
+    - scene: global-parameter-slide
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-PATCH-017
+      assertions:
+      - kind: slide-musical-time
+        passed: true
+        from_value: 24
+        to_value: 96
+        step_distance: 2
+        off_middle: false
+        step_local: false
+        swing: null
+        shuffle: null
+        clock_ratio: /1
+      scope: Overview of slide/wrap behavior and routed CC examples; Trigless locks has its own reference.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Overview of slide/wrap behavior and routed CC examples; Trigless locks has its own reference.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: slide-wrap-boundary
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: global-parameter-slide
+      clock_mode: controlled-experimental
+  category: options
+  parent: options
+  level: 4
+- id: trigless-locks
+  title: Trigless Locks
+  audience: all
+  summary: 'Apply parameter locks on steps without an active trig. Default: On.'
+  prose: Trigless locks defaults to On. With On selected, parameter locks are applied on steps without
+    an active trig.
+  musical_use: Use trigless locks to change a parameter between note attacks.
+  related:
+  - parameter-lock-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#trigless-locks
+    behaviour_cases:
+    - M-MERGE-INTERLOCK-002
+    - M-PARAM-022
+    - M-PARAM-023
+    - M-PARAM-024
+    - M-PARAM-025
+    - M-PARAM-043
+    - M-PATCH-029
+    - M-PATCH-030
+    - M-REC-PARAM-003
+    - M-REC-PARAM-028
+    - M-REC-PARAM-029
+    - M-REC-PARAM-030
+    - M-REC-PARAM-031
+    - M-TRIPLE-004
+    code:
+    - lib/application_parameters.lua
+    - lib/clock/m_clock.lua
+    - lib/step.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Trigless locks. Change its value.
+    result: 'On honours parameter locks on steps with no active trig. Default: On.'
+  details: []
+  recipes: []
+  scene_refs:
+  - trigless-locks-on
+  - trigless-locks-off
+  review:
+    status: pending
+    cases:
+    - M-PARAM-022
+    - M-PARAM-023
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: trigless-locks-on
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-PARAM-022
+      assertions:
+      - kind: probability-trigless-midi-locks
+        nrpn: false
+        trigless: true
+        phase: probability0-active-trigs-retain-locks
+        active_steps:
+        - 1
+        - 2
+        - 3
+        - 4
+        accepted_steps: []
+        passed: true
+      - kind: probability-trigless-midi-locks
+        nrpn: false
+        trigless: true
+        phase: removed-trig-respects-trigless
+        active_steps:
+        - 1
+        - 2
+        - 4
+        accepted_steps: []
+        passed: true
+      - kind: probability-trigless-midi-locks
+        nrpn: false
+        trigless: true
+        phase: step-probability100-keeps-lock-before-note
+        active_steps:
+        - 1
+        - 2
+        - 4
+        accepted_steps:
+        - 4
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    - scene: trigless-locks-off
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-PARAM-023
+      assertions:
+      - kind: probability-trigless-midi-locks
+        nrpn: false
+        trigless: false
+        phase: probability0-active-trigs-retain-locks
+        active_steps:
+        - 1
+        - 2
+        - 3
+        - 4
+        accepted_steps: []
+        passed: true
+      - kind: probability-trigless-midi-locks
+        nrpn: false
+        trigless: false
+        phase: removed-trig-respects-trigless
+        active_steps:
+        - 1
+        - 2
+        - 4
+        accepted_steps: []
+        passed: true
+      - kind: probability-trigless-midi-locks
+        nrpn: false
+        trigless: false
+        phase: step-probability100-keeps-lock-before-note
+        active_steps:
+        - 1
+        - 2
+        - 4
+        accepted_steps:
+        - 4
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: options
+  parent: parameter-lock-options
+  level: 5
+- id: quantiser-options
+  title: Quantiser Options
+  audience: all
+  summary: Set note-mask quantisation, channel scale-lock lifetime and pentatonic restrictions.
+  prose: Open PARAMS > MOSAIC > Quantiser to configure note-mask quantisation, scale-lock lifetime and
+    pentatonic restrictions.
+  musical_use: Set how generated and masked notes follow the selected scale.
+  related:
+  - options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#quantiser-options
+    behaviour_cases: []
+    code:
+    - lib/application_parameters.lua
+    - lib/ui_adapters/native.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC > Quantiser
+    result: Choose how masks, channel scale locks and pentatonic restrictions affect pitch.
+  details: []
+  recipes: []
+  scene_refs:
+  - full-quantisation-precedence
+  review:
+    status: verified
+    cases:
+    - M-MASK-021
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: full-quantisation-precedence
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-MASK-021
+      assertions:
+      - &id010
+        kind: full-mask-quantisation
+        passed: true
+        stage: snap-ignores-degree-and-rotation
+        pitches:
+        - 60
+        - 64
+        - 69
+        - 71
+      - &id011
+        kind: full-mask-quantisation
+        passed: true
+        stage: global-full-degree-and-rotation
+        pitches:
+        - 62
+        - 65
+        - 71
+        - 60
+      - &id012
+        kind: full-mask-quantisation
+        passed: true
+        stage: channel-off-overrides-global-on
+        pitches:
+        - 60
+        - 64
+        - 69
+        - 71
+      - &id013
+        kind: full-mask-quantisation
+        passed: true
+        stage: step-on-overrides-channel-off
+        pitches:
+        - 60
+        - 65
+        - 69
+        - 71
+      - &id014
+        kind: full-mask-quantisation
+        passed: true
+        stage: channel-unset-inherits-global
+        pitches:
+        - 62
+        - 65
+        - 71
+        - 60
+      - &id015
+        kind: full-mask-quantisation
+        passed: true
+        stage: clear-step-off-restores-channel-on
+        pitches:
+        - 62
+        - 65
+        - 71
+        - 60
+      - &id016
+        kind: full-mask-quantisation
+        passed: true
+        stage: explicit-step-X-uses-global-off
+        pitches:
+        - 60
+        - 65
+        - 71
+        - 60
+      scope: Overview of snap/full mapping and mask precedence; other quantiser flags remain in their
+        child references.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Overview of snap/full mapping and mask precedence; other quantiser flags remain in their
+      child references.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: full-quantisation-precedence
+      clock_mode: controlled-experimental
+  category: options
+  parent: options
+  level: 4
+- id: snap-note-masks-to-scale
+  title: Snap Note Masks to Scale
+  audience: all
+  summary: 'Snap note masks to the selected scale without degree or rotation changes. Default: On.'
+  prose: Snap note masks to scale defaults to On. On snaps note masks to the selected scale. Scale-degree
+    and rotation adjustments do not alter these snapped masks.
+  musical_use: Enable snapping to keep masked notes within the selected scale.
+  related:
+  - quantiser-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#snap-note-masks-to-scale
+    behaviour_cases:
+    - M-MASK-019
+    - M-MASK-020
+    - M-MASK-021
+    code:
+    - lib/application_parameters.lua
+    - lib/musical_resolution/pitch_resolution.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Snap note masks to scale. Change its value.
+    result: 'On snaps note masks to the selected scale without applying scale-degree or rotation adjustments;
+      Quantise note masks overrides this setting. Default: On.'
+  details: []
+  recipes: []
+  scene_refs:
+  - full-quantisation-precedence
+  review:
+    status: verified
+    cases:
+    - M-MASK-021
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: full-quantisation-precedence
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-MASK-021
+      assertions:
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - *id014
+      - *id015
+      - *id016
+      scope: Native full-mask acceptance contrasts snap-only pitch outcomes with full degree/rotation
+        mapping.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Native full-mask acceptance contrasts snap-only pitch outcomes with full degree/rotation
+      mapping.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: full-quantisation-precedence
+      clock_mode: controlled-experimental
+  category: options
+  parent: quantiser-options
+  level: 5
+- id: quantise-note-masks
+  title: Quantise Note Masks
+  audience: all
+  summary: 'Fully quantise note masks, including scale-degree and transposition changes. Default: Off.'
+  prose: Quantise note masks defaults to Off. On fully quantises all note masks to the selected scale
+    and applies scale-degree and transposition adjustments. This setting overrides Snap note masks to
+    scale.
+  musical_use: Enable full quantisation to apply harmonic changes to masked notes.
+  related:
+  - quantiser-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#quantise-note-masks
+    behaviour_cases:
+    - M-MASK-021
+    code:
+    - lib/application_parameters.lua
+    - lib/musical_resolution/pitch_resolution.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Quantise note masks. Change its value.
+    result: 'On fully quantises note masks and applies scale-degree and transposition adjustments, overriding
+      Snap note masks to scale. Default: Off.'
+  details: []
+  recipes: []
+  scene_refs:
+  - full-quantisation-precedence
+  review:
+    status: verified
+    cases:
+    - M-MASK-021
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: full-quantisation-precedence
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-MASK-021
+      assertions:
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - *id014
+      - *id015
+      - *id016
+      scope: Native global full mapping, explicit channel/step overrides and clear/inheritance outcomes.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Native global full mapping, explicit channel/step overrides and clear/inheritance outcomes.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: full-quantisation-precedence
+      clock_mode: controlled-experimental
+  category: options
+  parent: quantiser-options
+  level: 5
+- id: scales-lock-until-pattern-end
+  title: Scales Lock Until Pattern End
+  audience: all
+  summary: 'Retain channel scale locks until channel wrap or replacement. Default: On.'
+  prose: 'Scales lock until ptn end defaults to On and controls channel scale locks.
+
+
+    On retains a channel lock until the channel wraps to its start or another channel scale lock replaces
+    it.
+
+
+    Off clears the previous lock at the next active trig that passes its probability check. A probability-rejected
+    trig does not clear it. A new scale lock on the accepted trig applies normally.
+
+
+    Global scale-track locks are independent of this option. They remain until replacement or global-track
+    wrap.'
+  musical_use: Set On to retain a channel scale lock across subsequent trigs. Set Off to clear it at the
+    next active trig that passes probability.
+  related:
+  - quantiser-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#scales-lock-until-pattern-end
+    behaviour_cases:
+    - M-SCALE-002
+    - M-SCALE-LOCK-003
+    code:
+    - lib/application_parameters.lua
+    - lib/step.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Scales lock until ptn end. Change its value.
+    result: 'On retains a channel scale lock until channel wrap or replacement; Off releases it at the
+      next active trig that passes probability. Global scale-track locks are independent. Default: On.'
+  details: []
+  recipes: []
+  scene_refs:
+  - scale-lock-scope-and-lifetime
+  review:
+    status: verified
+    cases:
+    - M-SCALE-LOCK-003
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: scale-lock-scope-and-lifetime
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-SCALE-LOCK-003
+      assertions:
+      - kind: scale-lock-precedence
+        stage: hold-on-channel-over-global
+        slots:
+        - 3
+        - 3
+        - 3
+        - 3
+        pitches:
+        - 64
+        - 66
+        - 68
+        - 69
+        passed: true
+      - kind: scale-lock-precedence
+        stage: hold-off-next-trig-clears
+        slots:
+        - 3
+        - 4
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 69
+        - 71
+        - 72
+        passed: true
+      - kind: scale-lock-precedence
+        stage: hold-off-rejected-trig-keeps-lock
+        slots:
+        - 3
+        - null
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 71
+        - 72
+        passed: true
+      - kind: scale-lock-precedence
+        stage: hold-off-probability-cleared
+        slots:
+        - 3
+        - 4
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 69
+        - 71
+        - 72
+        passed: true
+      - kind: scale-lock-precedence
+        stage: hold-off-rest-keeps-lock
+        slots:
+        - 3
+        - null
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 71
+        - 72
+        passed: true
+      - kind: scale-lock-precedence
+        stage: hold-off-replacement
+        slots:
+        - 3
+        - 4
+        - 2
+        - 4
+        pitches:
+        - 64
+        - 69
+        - 66
+        - 72
+        passed: true
+      - kind: scale-lock-precedence
+        stage: hold-on-replacement
+        slots:
+        - 3
+        - 3
+        - 2
+        - 2
+        pitches:
+        - 64
+        - 66
+        - 66
+        - 67
+        passed: true
+      scope: On retains locks; Off clears on accepted next onset while rejected trigs/rests preserve the
+        lock. Replacement behavior is asserted.
+    applicability: native-ui
+    native_gap: Physical norns/device equivalence is outside the native examples.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: scale-lock-scope-and-lifetime
+      clock_mode: controlled-experimental
+    rationale: On retains locks; Off clears on accepted next onset while rejected trigs/rests preserve
+      the lock. Replacement behavior is asserted.
+  category: options
+  parent: quantiser-options
+  level: 5
+- id: lock-all-to-pentatonic
+  title: Lock All to Pentatonic
+  audience: all
+  summary: 'Restrict resolved notes to Mosaic’s five-note selection for the selected scale. Default: Off.'
+  prose: Lock all to pentatonic defaults to Off. On restricts all resolved notes to Mosaic's five-note
+    selection for the selected scale.
+  musical_use: Enable this option to restrict the pitch set across all notes.
+  related:
+  - quantiser-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#lock-all-to-pentatonic
+    behaviour_cases:
+    - M-OPT-PENT-ALL-001
+    code:
+    - lib/application_parameters.lua
+    - lib/step.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Lock all to pentatonic. Change its value.
+    result: 'On restricts resolved notes to Mosaic’s five-note selection for the selected scale. Default:
+      Off.'
+  details: []
+  recipes: []
+  scene_refs:
+  - pentatonic-snap-all
+  review:
+    status: pending
+    cases:
+    - M-OPT-PENT-ALL-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: pentatonic-snap-all
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-OPT-PENT-ALL-001
+      assertions:
+      - kind: lock-all-to-pentatonic
+        stage: default-off-major
+        pitches:
+        - 60
+        - 62
+        - 64
+        - 65
+        - 67
+        - 69
+        - 71
+        passed: true
+      - kind: lock-all-to-pentatonic
+        stage: on-major
+        pitches:
+        - 60
+        - 62
+        - 64
+        - 64
+        - 67
+        - 69
+        - 72
+        passed: true
+      - kind: lock-all-to-pentatonic
+        stage: on-minor
+        pitches:
+        - 60
+        - 63
+        - 63
+        - 65
+        - 67
+        - 67
+        - 70
+        passed: true
+      - kind: lock-all-to-pentatonic
+        stage: on-lydian
+        pitches:
+        - 59
+        - 62
+        - 64
+        - 67
+        - 67
+        - 69
+        - 71
+        passed: true
+      - kind: lock-all-to-pentatonic
+        stage: off-locrian
+        pitches:
+        - 60
+        - 61
+        - 63
+        - 65
+        - 66
+        - 68
+        - 70
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: options
+  parent: quantiser-options
+  level: 5
+- id: lock-random-to-pentatonic
+  title: Lock Random to Pentatonic
+  audience: all
+  summary: 'Restrict notes changed by random trig locks to Mosaic’s five-note scale selection. Default:
+    On.'
+  prose: Lock random to pent. defaults to On. On restricts notes altered by random trig locks to Mosaic's
+    five-note selection for the selected scale.
+  musical_use: Enable this option to restrict random pitch changes to the five-note selection.
+  related:
+  - quantiser-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#lock-random-to-pentatonic
+    behaviour_cases:
+    - M-PARAM-039
+    - M-PARAM-040
+    - M-PARAM-041
+    - M-PARAM-042
+    - M-TRIPLE-001
+    code:
+    - lib/application_parameters.lua
+    - lib/step.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Lock random to pent.. Change its value.
+    result: 'On restricts notes changed by random trig locks to the selected scale’s Mosaic five-note
+      selection. Default: On.'
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: pending
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: native-ui
+    native_gap: No directly relevant published assertion-backed scene is currently available.
+  category: options
+  parent: quantiser-options
+  level: 5
+- id: lock-merged-to-pentatonic
+  title: Lock Merged to Pentatonic
+  audience: all
+  summary: 'Restrict merged notes to Mosaic’s scale-specific five-note selection. Default: On.'
+  prose: 'Lock merged to pent. defaults to On. On restricts notes changed by merge modes to Mosaic''s
+    five-note selection for the selected scale.
+
+
+    The selections use one-based degrees of each named seven-note scale:
+
+    - Major and Harmonic Major: 1/2/3/5/6.
+
+    - Minor, Harmonic Minor and Melodic Minor: 1/3/4/5/7.
+
+    - Dorian: 1/2/4/5/7.
+
+    - Phrygian: 1/3/4/6/7.
+
+    - Lydian: 2/3/5/6/7.
+
+    - Mixolydian: 1/2/4/5/6.
+
+    - Locrian: 2/3/4/6/7.
+
+
+    Apply the named scale''s alterations to these degrees. The selection does not always retain the tonic
+    or avoid semitones.
+
+
+    Merged values remain seven-note scale degrees, not five-note indices. Their scale pitches snap to
+    the nearest selected pitch across repeated octaves. An exact tie selects the lower pitch. Snapping
+    can cross an octave boundary.
+
+
+    For example, Lydian C snaps to the B below it. Melodic Minor A snaps down to G rather than the equally
+    distant B.
+
+
+    The scale root is used when set; otherwise, the song root is used. The effective octave offset is
+    applied afterward.'
+  musical_use: Enable this option to restrict merged note values. Check the documented degree selection
+    for the selected scale.
+  related:
+  - quantiser-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#lock-merged-to-pentatonic
+    behaviour_cases:
+    - M-MERGE-011
+    - M-MERGE-019
+    - M-MERGE-023
+    - M-MERGE-043
+    - M-MERGE-044
+    - M-MERGE-TRIG-002
+    - M-TRIPLE-001
+    code:
+    - lib/application_parameters.lua
+    - lib/step.lua
+    - lib/quantiser.lua
+    - lib/musical_resolution/pitch_resolution.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Lock merged to pent.. Change its value.
+    result: 'On snaps merged scale degrees to Mosaic’s scale-specific five-note selection; the lower pitch
+      wins exact ties and snapping can cross octaves. Default: On.'
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: pending
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: native-ui
+    native_gap: No directly relevant published assertion-backed scene is currently available.
+  category: options
+  parent: quantiser-options
+  level: 5
+- id: midi-controller-options
+  title: MIDI Controller Options
+  audience: all
+  summary: Set MIDI keyboard white-key mapping and scale transformations.
+  prose: Open PARAMS > MOSAIC > Midi control to configure MIDI keyboard mapping.
+  musical_use: Set which scale settings apply to played and recorded keyboard notes.
+  related:
+  - options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#midi-controller-options
+    behaviour_cases: []
+    code:
+    - lib/application_parameters.lua
+    - lib/ui_adapters/native.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC > Midi control
+    result: Choose white-key mapping and which scale transformations keyboard input honours.
+  details: []
+  recipes: []
+  scene_refs:
+  - mapping-child-selected-and-fixed
+  - keyboard-honour-degree
+  - keyboard-honour-degree-rotation
+  - keyboard-honour-all
+  review:
+    status: verified
+    cases:
+    - M-MAP-001
+    - M-OPT-KEYS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: mapping-child-selected-and-fixed
+      data: reference-nested-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/64def1ce30244215a19d997c6bcd9828
+      data_sha256: 2fa470ae66b750bc23c62606863c9fc906797752bbcfff1414d3cb85e869d6ba
+      case: M-MAP-001
+      assertions:
+      - kind: midi-mapping
+        stage: unmapped
+        passed: true
+      - kind: midi-mapping
+        stage: selected-ch1-plus-11
+        passed: true
+      - kind: midi-mapping
+        stage: selected-ch2-plus-3
+        passed: true
+      - kind: midi-mapping
+        stage: fixed-ch2-plus-2
+        passed: true
+      - kind: midi-mapping
+        stage: fixed-ch2-value-0-decreases
+        passed: true
+      scope: Saved PMAP fixture response covers selected/fixed channel mapping and exact wire velocities.
+        PMAP entry and save/reload are outside this scene.
+    - scene: keyboard-honour-degree
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-OPT-KEYS-001
+      assertions:
+      - &id019
+        kind: keyboard-mapping
+        stage: honour-defaults-off
+        passed: true
+      - &id020
+        kind: keyboard-mapping
+        stage: honour-degree
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    - scene: keyboard-honour-degree-rotation
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-OPT-KEYS-001
+      assertions:
+      - &id017
+        kind: keyboard-mapping
+        stage: honour-defaults-off
+        passed: true
+      - &id018
+        kind: keyboard-mapping
+        stage: honour-degree-rotation
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    - scene: keyboard-honour-all
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-OPT-KEYS-001
+      assertions:
+      - &id021
+        kind: keyboard-mapping
+        stage: honour-defaults-off
+        passed: true
+      - &id022
+        kind: keyboard-mapping
+        stage: honour-all
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Physical controller or Elektron device response is not established by native MIDI evidence.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/4536c59eb099481ba6c093bc9f72f8fa
+      data_sha256: a76a8f6ea2b124d05fcf98dd2523ffaa23387937fc17e77d62d09363e583a748
+      scene: mapping-child-selected-and-fixed
+      clock_mode: controlled-experimental
+  category: options
+  parent: options
+  level: 4
+- id: map-scale-to-white-keys
+  title: Map Scale to White Keys
+  audience: all
+  summary: 'Map the selected scale onto MIDI keyboard white keys, starting at C. Default: Off.'
+  prose: Map scale to white keys defaults to Off. On maps the selected scale onto MIDI keyboard white
+    keys, starting at C. The mapping changes when the selected scale changes.
+  musical_use: Enable this option to play the selected scale using white keys.
+  related:
+  - midi-controller-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#map-scale-to-white-keys
+    behaviour_cases:
+    - M-OPT-KEYS-001
+    code:
+    - lib/application_parameters.lua
+    - lib/devices/midi_input.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Map scale to white keys. Change its value.
+    result: 'On maps the selected scale onto MIDI keyboard white keys starting at C; changing scale changes
+      the mapping. Off uses the incoming note numbers. Default: Off.'
+  details:
+  - title: White-key workflow scope
+    text: This procedure covers white-key scale mapping. Black-key mapping is outside this example.
+  recipes: []
+  scene_refs:
+  - keyboard-white-key-options
+  review:
+    status: verified
+    cases:
+    - M-OPT-KEYS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: keyboard-white-key-options
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-OPT-KEYS-001
+      assertions:
+      - kind: keyboard-mapping
+        stage: default-raw
+        passed: true
+      - kind: keyboard-mapping
+        stage: white-major
+        passed: true
+      - kind: keyboard-mapping
+        stage: white-minor
+        keys:
+        - 60
+        - 61
+        - 62
+        - 63
+        - 64
+        - 65
+        - 66
+        - 67
+        - 68
+        - 69
+        - 70
+        - 71
+        - 72
+        passed: true
+      - kind: keyboard-mapping
+        stage: white-off-raw
+        keys:
+        - 60
+        - 61
+        - 62
+        - 63
+        - 64
+        - 65
+        - 66
+        - 67
+        - 68
+        - 69
+        - 70
+        - 71
+        - 72
+        notes:
+        - 60
+        - 61
+        - 62
+        - 63
+        - 64
+        - 65
+        - 66
+        - 67
+        - 68
+        - 69
+        - 70
+        - 71
+        - 72
+        passed: true
+      scope: Documented white-key mapping in major/minor and Off restoration. Additional black-key observations
+        are technical characterisation, not a player-facing mapping promise.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Reference source audit and the cited public native workflow are complete for publication.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: keyboard-white-key-options
+      clock_mode: controlled-experimental
+  category: options
+  parent: midi-controller-options
+  level: 5
+- id: honor-scale-rotations
+  title: Honor Scale Rotations
+  audience: all
+  summary: 'Apply scale rotation to mapped MIDI keyboard input. Default: Off.'
+  prose: Honour scale rotations defaults to Off. On applies the selected scale's rotation to the MIDI
+    keyboard mapping.
+  musical_use: Enable this option to apply the selected rotation while using white-key mapping.
+  related:
+  - midi-controller-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#honor-scale-rotations
+    behaviour_cases:
+    - M-OPT-KEYS-001
+    code:
+    - lib/application_parameters.lua
+    - lib/devices/midi_input.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Honour scale rotations. Change its value.
+    result: 'On applies the selected scale’s rotation to the mapped MIDI keyboard input. Default: Off.'
+  details:
+  - title: Mapping dependency
+    text: These honour switches affect the quantised white-key mapping. With Map scale to white keys Off,
+      MIDI input uses the original incoming pitch.
+  recipes: []
+  scene_refs:
+  - keyboard-honour-degree-rotation
+  review:
+    status: pending
+    cases:
+    - M-OPT-KEYS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: keyboard-honour-degree-rotation
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-OPT-KEYS-001
+      assertions:
+      - *id017
+      - *id018
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: options
+  parent: midi-controller-options
+  level: 5
+- id: honor-scale-degree
+  title: Honor Scale Degree
+  audience: all
+  summary: 'Apply scale degree to mapped MIDI keyboard input. Default: Off.'
+  prose: Honour scale degree defaults to Off. On applies the selected scale's degree to the MIDI keyboard
+    mapping.
+  musical_use: Enable this option to apply the selected degree while using white-key mapping.
+  related:
+  - midi-controller-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#honor-scale-degree
+    behaviour_cases:
+    - M-OPT-KEYS-001
+    code:
+    - lib/application_parameters.lua
+    - lib/devices/midi_input.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Honour scale degree. Change its value.
+    result: 'On applies the selected scale degree to the mapped MIDI keyboard input. Default: Off.'
+  details:
+  - title: Mapping dependency
+    text: These honour switches affect the quantised white-key mapping. With Map scale to white keys Off,
+      MIDI input uses the original incoming pitch.
+  recipes: []
+  scene_refs:
+  - keyboard-honour-degree
+  review:
+    status: pending
+    cases:
+    - M-OPT-KEYS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: keyboard-honour-degree
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-OPT-KEYS-001
+      assertions:
+      - *id019
+      - *id020
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: options
+  parent: midi-controller-options
+  level: 5
+- id: honour-scale-transpose
+  title: Honour Scale Transpose
+  audience: all
+  summary: 'Apply scale transposition to mapped MIDI keyboard input. Default: Off.'
+  prose: Honour scale transpose defaults to Off. On applies the selected scale's transposition to the
+    MIDI keyboard mapping.
+  musical_use: Enable this option to apply the selected transposition while using white-key mapping.
+  related:
+  - midi-controller-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#honour-scale-transpose
+    behaviour_cases:
+    - M-OPT-KEYS-001
+    code:
+    - lib/application_parameters.lua
+    - lib/devices/midi_input.lua
+    - lib/quantiser.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select Honour scale transpose. Change its value.
+    result: 'On applies the selected scale transposition to the mapped MIDI keyboard input. Default: Off.'
+  details:
+  - title: Mapping dependency
+    text: These honour switches affect the quantised white-key mapping. With Map scale to white keys Off,
+      MIDI input uses the original incoming pitch.
+  recipes: []
+  scene_refs:
+  - keyboard-honour-all
+  review:
+    status: pending
+    cases:
+    - M-OPT-KEYS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: keyboard-honour-all
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-OPT-KEYS-001
+      assertions:
+      - *id021
+      - *id022
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: options
+  parent: midi-controller-options
+  level: 5
+- id: screen-options
+  title: Screen Options
+  audience: all
+  summary: Set decorative screen motion.
+  prose: Open PARAMS > MOSAIC > Screen to configure screen motion.
+  musical_use: Select moving or still screen feedback.
+  related:
+  - options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#screen-options
+    behaviour_cases: []
+    code:
+    - lib/application_parameters.lua
+    - lib/ui_adapters/native.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC > Screen
+    result: Choose decorative screen motion.
+  details: []
+  recipes: []
+  scene_refs:
+  - output-dashboard-readout
+  review:
+    status: pending
+    cases:
+    - M-LIVEUI-DASH-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: output-dashboard-readout
+      data: reference-remaining-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: eb97da1626d05057276204030487ffb52955a3fc8ff83fbb999a2bb2e33b8746
+      case: M-LIVEUI-DASH-001
+      assertions:
+      - kind: dashboard
+        title: OUTPUT
+        passed: true
+      scope: Output readout is illustrated; UI motion setting and reduced-motion outcome await their specific
+        scene.
+    applicability: native-ui
+    native_gap: Output readout is illustrated; UI motion setting and reduced-motion outcome await their
+      specific scene.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/cd93ee88b1c04883ae47a9be2738d464
+      data_sha256: c4f8b619f19666138374af1984d2102a6129359cb15a396b929083e4fac5f729
+      scene: output-dashboard-readout
+      clock_mode: controlled-experimental
+    rationale: Output readout is illustrated; UI motion setting and reduced-motion outcome await their
+      specific scene.
+  category: options
+  parent: options
+  level: 4
+- id: ui-motion
+  title: UI Motion
+  audience: all
+  summary: 'Enable decorative screen motion. Default: On. This setting does not change sequencer timing
+    or input.'
+  prose: 'Open PARAMS > MOSAIC > UI motion. Default: On. Off keeps screen decoration still.
+
+
+    Fitting vertical-list labels, values, neighboring rows, title, scope and controls remain still. Only
+    selected text that exceeds its available row scrolls right to left with motion On. A long selected
+    value first uses a separate full-width row. With motion Off, shortened text uses ~; an exact value
+    that cannot fit reports LAYOUT OVERFLOW instead of silently changing its displayed value.
+
+
+    The miniature-header design replaces the four-tile title mark with a small screen graphic wherever
+    it fits within the title area; title, scope and controls take priority. Normal icons occupy at most
+    32 × 9 pixels; Masks and Trig params use 7 × 8 and retain all controls. Native norns PARAMS retains
+    its own display.
+
+
+    While playing, the miniature follows sequencer transport pulses. While stopped, it follows the selected
+    norns musical clock without starting playback or emitting notes. Motion Off or an invalid or unavailable
+    clock holds the rest pose. It uses musical position rather than elapsed wall time.
+
+
+    Startup and selection shadows on the retained overview grids remain decorative. This setting does
+    not change input or sequencer timing. Actual-app miniature-header acceptance is pending; design previews
+    are not native captures.'
+  musical_use: Set Off for a still screen. Set On for animated screen feedback.
+  related:
+  - screen-options
+  sources:
+    readme: manual/legacy/README-1.4.0.md#ui-motion
+    behaviour_cases: []
+    code:
+    - lib/application_parameters.lua
+    - lib/ui_motion.lua
+    - lib/ui_render.lua
+    - lib/ui_characters.lua
+    - lib/ui_live.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC. Select UI motion. Change its value.
+    result: 'Off keeps the screen still; On enables decorative motion and musical characters without changing
+      input or sequencer timing. Default: On.'
+  details:
+  - title: Selected overflow text
+    text: Overflow scrolling is restricted to the selected label or value. Fitting text and neighboring
+      rows remain stationary. Off stops scrolling; ~ indicates shortened text, and exact values that cannot
+      fit report LAYOUT OVERFLOW.
+  - title: Miniature header timing
+    text: Playing uses musical sequencer transport position. Stopped uses the selected musical clock and
+      does not start Mosaic or sound notes. Off or missing/invalid clock holds the rest pose. Native PARAMS
+      owns its own screen.
+  recipes: []
+  scene_refs: []
+  review:
+    status: pending
+    cases: []
+    note: Selected-overflow contract and frozen miniature-header design documented. Current native miniature
+      qualification remains pending; prior frames and design preview are separate evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: native-ui
+    native_gap: No directly relevant published assertion-backed scene is currently available.
+  category: options
+  parent: screen-options
+  level: 5
+- id: sinfonion-connect
+  title: Sinfonion Connect
+  audience: all
+  summary: Synchronise Mosaic with Sinfonion using the external norns2sinfonion bridge.
+  prose: Use the DIY [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion) bridge to
+    synchronise Mosaic with a Eurorack Sinfonion module.
+  musical_use: Use norns2sinfonion to send harmonic changes to Sinfonion.
+  related:
+  - save-and-load
+  sources:
+    readme: manual/legacy/README-1.4.0.md#sinfonion-connect
+    behaviour_cases:
+    - M-SIN-001
+    code:
+    - lib/sinfonion_harmonic_sync.lua
+    - lib/m_midi.lua
+    - lib/step.lua
+  controls:
+  - gesture: Use the documented norns2sinfonion hardware bridge and its setup instructions
+    result: Provides the supported route for synchronising Mosaic with Sinfonion; requires the external
+      bridge.
+  details: []
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: external-hardware
+    rationale: This section links the external Sinfonion MIDI-transposer firmware.
+    native_gap: The external firmware and connected hardware are outside native Mosaic emulator acceptance.
+  category: options
+  parent: save-and-load
+  level: 3

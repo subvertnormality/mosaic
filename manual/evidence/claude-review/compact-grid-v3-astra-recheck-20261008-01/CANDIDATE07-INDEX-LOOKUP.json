@@ -1,0 +1,16 @@
+{
+  "sha256": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca",
+  "bytes": 13902044,
+  "roots": [
+    {
+      "root": "/home/andy/mosaic-manual-1.4.0",
+      "matches": [],
+      "same_size_files_hashed": 0
+    },
+    {
+      "root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+      "matches": [],
+      "same_size_files_hashed": 0
+    }
+  ]
+}

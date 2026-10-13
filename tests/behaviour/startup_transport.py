@@ -30,7 +30,7 @@ def startup_transport(c):
     out = c.out/'restarted'; out.mkdir()
     d = Driver(out, project_seed=c.data_directory, **c.launch_options)
     try:
-        d.tap(3, 8); d.snapshot()                  # one observation, so repeats compare this segment
+        d.ui.menu('channel_editor'); d.snapshot()  # one observation, so repeats compare this segment
     finally: d.finish()
     loaded = transport_before_input(out)
     assert loaded and all(b == [252] for _, b in loaded) and len({p for p, _ in loaded}) == len(loaded), ('Autosave load transport', loaded)

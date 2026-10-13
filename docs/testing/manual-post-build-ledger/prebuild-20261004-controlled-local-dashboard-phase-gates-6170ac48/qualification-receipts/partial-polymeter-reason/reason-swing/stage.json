@@ -1,0 +1,51 @@
+{
+  "name": "reference-controlled-scene-plans-reason-swing-base-midi",
+  "command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-reason-swing.yaml",
+    "--profile",
+    "base-midi",
+    "--output",
+    "reference-reason-swing-scenes.json",
+    "--extra-cases",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_reason_swing_cases.py",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--publish",
+    "--controlled-local"
+  ],
+  "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+  "exclusive_lock": false,
+  "action": null,
+  "passed": true,
+  "executed_command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py",
+    "--plans",
+    "/home/andy/mosaic-manual-1.4.0/manual/scene-plans-reason-swing.yaml",
+    "--profile",
+    "base-midi",
+    "--output",
+    "reference-reason-swing-scenes.json",
+    "--extra-cases",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_reason_swing_cases.py",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--publish",
+    "--controlled-local"
+  ],
+  "returncode": 0,
+  "native_report": {
+    "path": "/home/andy/mosaic-manual-runs/50beafcd961a4581981b7973a57c5e7b/reference-scenes.json",
+    "sha256": "7e7067437362fec0dde388df1ccc5a2e3b81fc9cdcd9db01ed7ac8f62666adf8"
+  },
+  "started_utc": "2026-10-04T11:53:24.778839+00:00",
+  "finished_utc": "2026-10-04T11:54:38.269577+00:00",
+  "log_sha256": "bc46eb11049424af5477284e41ecdfa9c216e1de3118bc9c2eab5443ecb21122"
+}

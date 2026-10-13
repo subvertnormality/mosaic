@@ -1,0 +1,44 @@
+{
+  "timestamp_utc": "2026-10-04T05:09:16.126688Z",
+  "scope": "Two author-prose corrections only. No generated scenes, native evidence, inputs, assertions, ledger or production changes.",
+  "validation": "Source-only YAML parse and exact replacement count; no tests or native runs performed.",
+  "style_basis": "manual/STYLE.md rules 1\u20137: actual displayed controls, numbered operation, observable result and scope. Previously approved Elektron Syntakt \u00a79.10.1 and Polyend Play \u00a76.6 procedural comparisons; no new manual-research claim.",
+  "changes": [
+    {
+      "path": "manual/features/reference-workflow.yaml",
+      "before_sha256": "305fe19ee02d961f73d64ed359a29957b8aff31d7e220d194e1d11bcce58406a",
+      "after_sha256": "a0af2f5068e354dbe3064b1152d5e4ae5578466ec06d305142ca7c4c60be3b28",
+      "archive_before": "/home/andy/mosaic-manual-1.4.0/manual/evidence/merge-shared-strategy-prose-20261004/reference-workflow.yaml.before",
+      "archive_after": "/home/andy/mosaic-manual-1.4.0/manual/evidence/merge-shared-strategy-prose-20261004/reference-workflow.yaml.after",
+      "diff": "/home/andy/mosaic-manual-1.4.0/manual/evidence/merge-shared-strategy-prose-20261004/reference-workflow.yaml.diff"
+    },
+    {
+      "path": "manual/features/reference-musical.yaml",
+      "before_sha256": "721510468370160a264122c7b8357f60d5d4d0eb6a84ffda4f3f707ddf3c115f",
+      "after_sha256": "dff7e9290852baac9ccda2f6ca910bc31757f85138a5914658fca3e4f4540363",
+      "archive_before": "/home/andy/mosaic-manual-1.4.0/manual/evidence/merge-shared-strategy-prose-20261004/reference-musical.yaml.before",
+      "archive_after": "/home/andy/mosaic-manual-1.4.0/manual/evidence/merge-shared-strategy-prose-20261004/reference-musical.yaml.after",
+      "diff": "/home/andy/mosaic-manual-1.4.0/manual/evidence/merge-shared-strategy-prose-20261004/reference-musical.yaml.diff"
+    }
+  ],
+  "source_support": [
+    {
+      "path": "lib/musical_merge/strategy.lua",
+      "sha256": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+      "lines": "5;30\u201332",
+      "scope": "Read-only source contract support; no new execution claim."
+    },
+    {
+      "path": "lib/ui_adapters/read_only.lua",
+      "sha256": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+      "lines": "283\u2013284;301\u2013320",
+      "scope": "Read-only source contract support; no new execution claim."
+    },
+    {
+      "path": "tests/behaviour/contract/merge_strategy_ui.py",
+      "sha256": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+      "lines": "81\u201386;123\u2013135",
+      "scope": "Read-only source contract support; no new execution claim."
+    }
+  ]
+}

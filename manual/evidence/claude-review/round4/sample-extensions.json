@@ -1,0 +1,280 @@
+{
+  "build_manifest_sha256": "a8a3d59ade436592ee118658b6b720943c7551f4dd3f1a203b5bbe8737b42b0b",
+  "inventory_sha256": "a19f7a71c11f989a7a5362fbdad4644361fa08ba2b3891e7c9ee1efd1299a9fd",
+  "readthrough_sha256": "850af7177ce0d7256c6bc2b8c04cca4734bcbf7a5feaccc97673aa32d6b84e2e",
+  "units": [
+    {
+      "id": "course:harmony-design-apply",
+      "scores": {
+        "coherence": {
+          "score": 6,
+          "reason": "The course phrase and result agree, but the workflow teaches the same task with a different melody.",
+          "evidence": "#harmony-design: “C–C–C–D returns through relative notes” versus “notes C, D, E, F”; #harmony-design/course audio: “D3, D3, D3 and a softer E3”.",
+          "improvement": "A/R/M: make workflow point to the course stage; keep CDEF as a separately named lesson."
+        },
+        "usefulness": {
+          "score": 7,
+          "reason": "Applying a draft is useful and recovery is explicit; surrounding duplication reduces confidence.",
+          "evidence": "#harmony-design/course: “The Press K3 to confirm line disappears”; recovery says “tap scale slot 1 at (1,3) and press K3”.",
+          "improvement": "A/R: keep apply and recovery together in one stage workspace."
+        },
+        "understandability": {
+          "score": 7,
+          "reason": "Precise gestures and resulting notes are clear, but action cues imply change before a checkpoint changes.",
+          "evidence": "#harmony-design/lesson/harmony-design-apply: clicking Apply D major left #step-title “Draft D as the root”; View the captured result changed it to “Apply D major”.",
+          "improvement": "R/A: show grouped instructions with one honest Show result control."
+        },
+        "representation": {
+          "score": 7,
+          "reason": "Authentic result and local MIDI support the lesson; layout separates result, instructions and listening.",
+          "evidence": "#harmony-design/lesson/harmony-design-apply after Show result: “D2 vel 100 (ch 2) @0 ms · D3 vel 80 (ch 1) @0 ms”, then E3 vel50 @2000ms; audio heading “The phrase moved to D”.",
+          "improvement": "R/M: colocate result and stage-matching audio."
+        },
+        "granularity": {
+          "score": 6,
+          "reason": "A small apply task is spread over several interfaces and unequal progress counts.",
+          "evidence": "#harmony-design/course has six prose stages, practice/result links per stage, and “10 / 11” at the apply checkpoint.",
+          "improvement": "R/A: stage-based progress, one active workspace, optional full chapter text."
+        },
+        "flow": {
+          "score": 7,
+          "reason": "Previous and next chapters and exact prerequisites exist, but continue links precede demonstrations and audio.",
+          "evidence": "#harmony-design/course: “Continue chapter 6, stopped, with the detour undone”; links “← 6. Add a second part” and “8. Add a pickup →” precede Interactive examples.",
+          "improvement": "R/A: keep draft→apply→restore progression and put Continue after checkpoint/listening."
+        },
+        "integration": {
+          "score": 6,
+          "reason": "The course audio caption matches; workflow entry and browser action integration remain fractured.",
+          "evidence": "#harmony-design default “Save D major, then apply it” uses CDEF, audio “Changing Harmony with Scale Slots” uses degrees0,0,0,1; course audio is “The phrase moved to D”.",
+          "improvement": "R/A/M: bind workflow entry to canonical stage and its matching clip."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Instrument terms are explained, but build terms repeatedly address the learner.",
+          "evidence": "#harmony-design/course: “CAPTURED INTERACTIONS”, “PREPARED STARTING POINT”; apply route: “Recorded walkthrough cue: Apply D major.”",
+          "improvement": "R/A: Before, Show result, current action; move capture metadata into Evidence."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "Apply D major is a good stage title; chapter and breadcrumb identities differ.",
+          "evidence": "#harmony-design/course heading “7. Change harmony without changing the rhythm”, breadcrumb “Applying a Scale”; workflow heading also “Applying a Scale”.",
+          "improvement": "R/A: use musical chapter title in course crumbs and explicit controls title in reference."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "A working course stage exists, but workflow, practice and result paths compete.",
+          "evidence": "#harmony-design/course offers #harmony-design/lesson/harmony-design-apply and #harmony-design/course/course-harmony-design/harmony-design-apply plus reference #harmony-design.",
+          "improvement": "R/A: one canonical stage URL with aliases focusing that workspace."
+        }
+      }
+    },
+    {
+      "id": "lesson:loops-that-meet:play-loops-four-against-three-step-4-offset",
+      "scores": {
+        "coherence": {
+          "score": 5,
+          "reason": "The text and demonstration are four against three, while the default listening example is different music.",
+          "evidence": "#loops-that-meet title “Combining Four-Step and Three-Step Loops”; audio title “Sixteen steps against twelve”, meeting after48 steps rather than12.",
+          "improvement": "A/M/R: bind matching available audio or explicitly separate the 16/12 extension from this lesson."
+        },
+        "usefulness": {
+          "score": 6,
+          "reason": "The loop relationship is useful and explained, but the invitation to its lesson fails to focus it.",
+          "evidence": "#loops-that-meet walkthrough link to #loops-that-meet/lesson/play-loops-four-against-three-step-4-offset normalized back to #loops-that-meet with Starting point selected.",
+          "improvement": "R/A: repair alias selection and open the intended local result."
+        },
+        "understandability": {
+          "score": 6,
+          "reason": "The LCM explanation is plain; leading raw MIDI summaries and the failed lesson route obstruct a novice.",
+          "evidence": "#loops-that-meet: “meet again after 12 steps, the smallest number that both 4 and 3 divide into”; leading link is “The captured MIDI notes include MIDI 79 at velocity 40...”.",
+          "improvement": "A/R: name lesson by audible task and pair its simple explanation with instructions."
+        },
+        "representation": {
+          "score": 6,
+          "reason": "A selectable result shows genuine output, but the strip fragment poorly represents the offset and soundtrack differs.",
+          "evidence": "#loops-that-meet manual Step4 click: “A4 vel 60 (ch 2) @83 ms · C3 vel 127 (ch 1) @83 ms”; earlier Step3 explains65 beside79 at step4; audio is16/12.",
+          "improvement": "R/A/M: show relevant local play window and matching listening example."
+        },
+        "granularity": {
+          "score": 5,
+          "reason": "Setup gestures are heavily grouped, with unrelated boundary checks and extra recipes in the main route.",
+          "evidence": "#loops-that-meet Step3 groups output, pattern/range, six mask values and Play; Step5 includes reversed-range rejection; Recipes02/03 add song resets and16/5.",
+          "improvement": "A/R: divide setup into meaningful groups and move range rejection/other meters to extensions."
+        },
+        "flow": {
+          "score": 5,
+          "reason": "Starting state is described but the lesson link returns to the wrong focus; next navigation is a reference catalogue.",
+          "evidence": "#loops-that-meet starts new project/CH01 set up, link action returns root01/06; only previous “Changing Harmony with Scale Slots” and Related features, no lesson Continue.",
+          "improvement": "R/A: canonical start/setup/play/realignment progression and explicit extension link."
+        },
+        "integration": {
+          "score": 4,
+          "reason": "Example and audio are detached and teach distinct ranges.",
+          "evidence": "#loops-that-meet selected “Play four steps against three”; audio “Oilcan 1...16-step range and Polyperc1...12-step range”.",
+          "improvement": "R/A/M: integrate only matching music into the core lesson; label others independent."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Musical explanation is clear, but capture vocabulary and MIDI outcome fragments dominate entry points.",
+          "evidence": "#loops-that-meet: “Recorded walkthroughs”, “The captured MIDI notes include...”, “No authored practice is available for this transition”.",
+          "improvement": "R/A: Show steps, readable musical lesson titles; metadata under Evidence."
+        },
+        "naming": {
+          "score": 5,
+          "reason": "Main feature title is useful, but the requested lesson is named by a raw event summary.",
+          "evidence": "#loops-that-meet leading link names velocities79/40 and60/127 rather than drift or alignment; selector says “Play four steps against three”.",
+          "improvement": "A/R: reuse “Hear four steps against three” for lesson entry and breadcrumb."
+        },
+        "canonical_home": {
+          "score": 4,
+          "reason": "The route is not a reliable home and the recipe repeats core setup with relative context.",
+          "evidence": "#loops-that-meet/lesson/play-loops-four-against-three-step-4-offset clicked then observed URL #loops-that-meet; recipe says “the six steps above are done”.",
+          "improvement": "R/A: route aliases focus a stable complete lesson; recipe cards link there."
+        }
+      }
+    },
+    {
+      "id": "lesson:chord-strum:play-chord-strum-a-timed-chord-forward",
+      "scores": {
+        "coherence": {
+          "score": 5,
+          "reason": "Timed five-note chord, bounds walkthrough and triad progression audio are separate examples without a clear teaching relationship.",
+          "evidence": "#chord-strum defaults “Choose a supported strum division”; timed voices starts C/E/G/A/C; audio teaches C/Am/F/G triads with acceleration then arp.",
+          "improvement": "R/A/M: make timed chord the core lesson and label bounds/progression as extensions."
+        },
+        "usefulness": {
+          "score": 6,
+          "reason": "A useful timed chord result exists but the advertised lesson link does not select it.",
+          "evidence": "#chord-strum walkthrough link #chord-strum/lesson/play-chord-strum-a-timed-chord-forward returns #chord-strum with supported division scene still selected.",
+          "improvement": "R/A: repair scene/stage routing to timed voices."
+        },
+        "understandability": {
+          "score": 5,
+          "reason": "The opening assumes advanced terminology and the core lesson requires finding the alternate selector.",
+          "evidence": "#chord-strum: “consume spacing and acceleration ordinals, including trailing empty slots”; after manual selection starting state says “No slot is assigned yet, so the five notes would sound together”.",
+          "improvement": "A/R: explain a strum as notes arriving one after another, defer empty-slot ordinals."
+        },
+        "representation": {
+          "score": 6,
+          "reason": "Timed output is explicit, but the lesson route and soundtrack do not represent that result together.",
+          "evidence": "#chord-strum select Separate a chord into timed voices, click Step4: “C3 vel50...@0ms · E3 vel60...@750ms · G3...@1500ms · A3...@2250ms · C4...@3000ms”.",
+          "improvement": "R/M/A: present this result adjacent to its matching clip; retain exact timing as optional detail."
+        },
+        "granularity": {
+          "score": 5,
+          "reason": "Four checkpoints group many parameter assignments into the final one; first scene instead teaches extreme bounds.",
+          "evidence": "#chord-strum Step4 assigns Chord Pattern, Mute Chord Root, Chord Velocity Mod and Play/Stop; default Step5 turns about90 detents to128.",
+          "improvement": "A/R: focused setup→forward strum→hear result sequence, bounds after success."
+        },
+        "flow": {
+          "score": 5,
+          "reason": "Prerequisites are specific once found, but entry route fails and adjacent features do not form a lesson path.",
+          "evidence": "#chord-strum timed start requires one trig, Chd1–4 E/G/A/C and polyphonic output; previous Random Twos Note and next Chord Arpeggio.",
+          "improvement": "R/A: link prerequisites to their setup lesson and offer matching next variation after result."
+        },
+        "integration": {
+          "score": 4,
+          "reason": "Default audio is an acceleration/arp progression, not the forward half-step five-note chord.",
+          "evidence": "#chord-strum timed result states half-step C/E/G/A/C; audio “Spread1 and Acceleration minus1” with root/third/fifth and later two-note arp.",
+          "improvement": "M/A/R: deliberate stage-bound listening selection and separately named progression."
+        },
+        "vocabulary": {
+          "score": 4,
+          "reason": "Build/test labels and abstract scheduling words obscure a simple musical behavior.",
+          "evidence": "#chord-strum: “test device”, “acceleration ordinals”, “CAPTURED EXAMPLE”, “No authored practice is available”.",
+          "improvement": "A/R: example instrument, notes spaced apart; advanced definitions after basic result and evidence metadata collapsed."
+        },
+        "naming": {
+          "score": 5,
+          "reason": "Feature name is stable but the visible walkthrough title is a raw MIDI summary.",
+          "evidence": "#chord-strum link “The captured MIDI notes include MIDI60 at velocity50...”; alternate selector “Separate a chord into timed voices”.",
+          "improvement": "A/R: use “Strum a chord forwards” consistently for the lesson; reserve Chord Strum for controls."
+        },
+        "canonical_home": {
+          "score": 4,
+          "reason": "The lesson alias returns to feature defaults and requires manual rediscovery.",
+          "evidence": "#chord-strum/lesson/play-chord-strum-a-timed-chord-forward after click observed #chord-strum; manual combobox selection required.",
+          "improvement": "R/A: one timed chord home; aliases resolve to same stage, reference links explicitly marked."
+        }
+      }
+    },
+    {
+      "id": "lesson:masks:ghost-note-before-accent",
+      "scores": {
+        "coherence": {
+          "score": 6,
+          "reason": "Ghost-note gestures and result agree on velocity, but recipe preparation and demonstration pitches differ and audio is unrelated.",
+          "evidence": "#masks recipe begins four-step Make your first loop/Vel80; ghost demonstration says “This loop plays C, D, E and F, not one repeated note”; audio “A bass with room above it”.",
+          "improvement": "A/R/M: unify ghost-note setup and colocate its matching listening example."
+        },
+        "usefulness": {
+          "score": 6,
+          "reason": "The musical idea and actionable values are useful, but the lesson route visibly reports failure.",
+          "evidence": "#masks/lesson/ghost-note-before-accent footer: “Manual content could not be loaded: The requested recorded walkthrough could not be selected.”",
+          "improvement": "R/A: repair lesson selection while preserving readable fallback."
+        },
+        "understandability": {
+          "score": 7,
+          "reason": "Ghost note is defined plainly and gestures are exact; conflicting preparation and error limit confidence.",
+          "evidence": "#masks recipe: “A ghost note is a very quiet note played just before a louder one”; Holdstep3 to100, step2 to35; demo starts VelX and first sets80.",
+          "improvement": "A/R: one complete preparation and clear Before/After without route error."
+        },
+        "representation": {
+          "score": 5,
+          "reason": "Screen readout supports default/exception distinction, but promised MIDI strip is empty and no matching audio appears.",
+          "evidence": "#masks/lesson/ghost-note-before-accent Step5: “On screen: velocity = 80 · exact MIDI phrase over two cycles”; #midi-text innerText empty despite caption “The MIDI phrase is 80,35,100,80”.",
+          "improvement": "R/A: render the available musical output visibly; do not substitute caption assertions for MIDI."
+        },
+        "granularity": {
+          "score": 6,
+          "reason": "Five demonstration checkpoints are manageable, but lesson is buried inside all masks controls and four recipes.",
+          "evidence": "#masks lesson displays Before you explore Masks, complete reference, recipes01–04 and bass/chords audio around ghost scene.",
+          "improvement": "R/A: one focused lesson workspace, optional full Masks controls below."
+        },
+        "flow": {
+          "score": 6,
+          "reason": "Preparation and an intermittent extension are present; completion only says go back and failed route undermines entry.",
+          "evidence": "#masks Recipe03 “Make the ghost note intermittent” starts from step2 at35/step3at100; final ghost action “This example is complete. Go back to compare the results.”",
+          "improvement": "R/A: explicit Continue to probability extension and local recovery, after finished ghost result."
+        },
+        "integration": {
+          "score": 4,
+          "reason": "Steps, recipe and audio are spread out; the default clip is bass/chords rather than ghost/accent.",
+          "evidence": "#masks ghost scene05/05 says80,35,100,80; audio caption bass velocity48/chords32 on steps1,5,9,13 and1,9.",
+          "improvement": "R/A/M: stage-bound matched listening and canonical recipe link."
+        },
+        "vocabulary": {
+          "score": 6,
+          "reason": "Local explanation is plain, but unavailable-practice and exact-output evidence phrases leak into the lesson.",
+          "evidence": "#masks: “Recorded walkthrough. No authored practice is available...” and “exact MIDI phrase over two cycles”.",
+          "improvement": "R/A: honest Show result wording, output details optional, evidence terms in disclosure."
+        },
+        "naming": {
+          "score": 7,
+          "reason": "Recipe and demonstration names communicate musical intent, though the old prerequisite name is inconsistent.",
+          "evidence": "#masks “Add a ghost note before an accent”, selector “Set a ghost note and an accent”, prerequisite “Make your first loop”.",
+          "improvement": "A/R: use one ghost-note lesson title and update prerequisite to current course chapter title."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "Lesson URL selects a focused scene but also reports selection failure and repeats recipe/reference bodies.",
+          "evidence": "#masks/lesson/ghost-note-before-accent retained URL and selected ghost scene; footer error says requested walkthrough could not be selected; same procedure under Recipe02.",
+          "improvement": "R/A: make recipe and reference entry aliases of one lesson, resolve failure and preserve stable focus."
+        }
+      }
+    }
+  ],
+  "methods": [
+    "Read actual HANDOFF-CHATGPT.md and ASTRA-READTHROUGH.md in authoritative WSL checkout; verified readthrough SHA-256.",
+    "Personally browsed localhost:8765/manual in own background in-app browser through rendered DOM/accessibility and one screenshot; followed visible course practice, reference walkthrough links, combobox and step buttons.",
+    "Harmony: home workflow entry then course chapter and Apply practice link; clicked Apply D major, Play phrase and View captured result. Loops: clicked first walkthrough then selected Step4. Strum: clicked walkthrough, manually selected timed voices and Step4. Masks: clicked ghost lesson link and final result.",
+    "Scores judge experienced routes including prerequisites, previous/next progression, local visible output and audio captions. 8 reserved for confident novice use with small friction. Layer key R reader, A authoring, M audio metadata; no N justified by this review."
+  ],
+  "limits": [
+    "No sound was heard and no audio playback quality/timing claim is made; audio matching judgments compare visible clip titles/descriptions with visible lesson music only.",
+    "No live instrument, native emulator input, capture, recording, build, or source modification; only review report files written.",
+    "Not an exhaustive responsive/accessibility or evidence-provenance audit. One screenshot at normal viewport confirmed controls/result text spatial separation for ghost final checkpoint.",
+    "Inventory/build manifest hashes are assignment pins; readthrough hash independently verified. Route behavior observed on current served working-tree content, not inferred from HEAD.",
+    "Ghost route partially rendered/selects scene yet shows footer failure; final MIDI strip blank. Selection failure root cause was not diagnosed."
+  ]
+}

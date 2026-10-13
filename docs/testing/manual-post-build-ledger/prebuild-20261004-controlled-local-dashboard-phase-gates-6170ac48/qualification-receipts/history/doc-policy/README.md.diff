@@ -1,0 +1,23 @@
+--- before/README.md
++++ after/README.md
+@@ -65,5 +65,20 @@
+ [build instructions](manual/BUILD.md), [validation evidence](manual/REPORT.md)
+ and the [developer instructions](AGENTS.md).
+ 
++Every feature change must update its affected behaviour tests and manual sections
++in the same change. New features need comprehensive behaviour coverage, including
++boundaries, failures and interactions, plus full manual sections with practical
++workflows and interactive examples. Update the quick reference when controls change.
++
++Manual generation runs in a separate CI workflow on pull requests and on demand.
++PR runs provide downloadable preview artifacts. After merge to `main`, a separate
++deployment workflow publishes the validated artifact to GitHub Pages without a
++second build, after checking that its source tree matches the merged edition. If
++there is no matching artifact, an on-demand build is required.
++
++Local generation and behaviour checks use controlled time. Real-time execution is
++reserved for recording assets when necessary; the exhaustive real-time behaviour
++campaign runs separately in CI.
++
+ The [original 1.4.0 manual](manual/legacy/README-1.4.0.md) is preserved unchanged
+ so historical behaviour evidence retains its original source identity.

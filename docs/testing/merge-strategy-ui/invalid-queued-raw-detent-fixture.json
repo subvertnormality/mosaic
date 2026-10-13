@@ -1,0 +1,11 @@
+{
+  "kind": "invalid-fixture-not-production-red",
+  "run": "77f45d448d9b4c60b25e749029e6837f",
+  "stage_identity": "31d4c453f371897d450cbf933247279fb3e12146db60bd1e5e054962bc26e53d",
+  "actual": "Active ALL, Pending NONE; selection advanced only one row",
+  "reason": "Direct public native encoders require two raw units per detent; raw E3 1 was filtered and E2 2 selected Active rather than Pending",
+  "correction": "E3 raw2, E2 raw4 to Pending, E2 raw8 to Boundary; no extra settling and unchanged exact queued music/LED/row oracles",
+  "original_helper_sha256": "8232fa25f156394c45dffb27b62b52cf8ed88fc9d47c0622e7c75e35b27c6a47",
+  "corrected_helper_sha256": "e587fd7426ee208b649a952e8dac4664eb4433b46bb72f34011ac134d6de56fe",
+  "cleanup": "all four owned native services closed; readability and real lanes not launched"
+}

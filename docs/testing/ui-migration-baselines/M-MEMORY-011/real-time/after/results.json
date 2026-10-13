@@ -1,0 +1,260 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "chord-three-held-heard",
+    "stage": "original",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "chord-three-held-heard",
+    "stage": "chd4-up-three-down-one",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        67,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "chord-three-held-counter",
+    "stage": "chd4-up-three-down-one",
+    "current": 1,
+    "total": 1,
+    "frame_matched": true
+  },
+  {
+    "kind": "chord-three-held-counter",
+    "stage": "chd4-forgotten",
+    "current": 0,
+    "total": 0,
+    "frame_matched": true
+  },
+  {
+    "kind": "chord-three-held-heard",
+    "stage": "chd4-forgotten",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "chord-three-held-heard",
+    "stage": "chd3-up-two",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        65,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "chord-three-held-counter",
+    "stage": "chd3-up-two",
+    "current": 1,
+    "total": 1,
+    "frame_matched": true
+  },
+  {
+    "kind": "chord-three-held-counter",
+    "stage": "chd3-forgotten",
+    "current": 0,
+    "total": 0,
+    "frame_matched": true
+  },
+  {
+    "kind": "chord-three-held-heard",
+    "stage": "chd3-forgotten",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "chord-three-held-heard",
+    "stage": "chd3-up-three-down-one",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        65,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "chord-three-held-counter",
+    "stage": "chd3-up-three-down-one",
+    "current": 1,
+    "total": 1,
+    "frame_matched": true
+  },
+  {
+    "kind": "chord-three-held-summary",
+    "passed": true,
+    "failures": []
+  }
+]

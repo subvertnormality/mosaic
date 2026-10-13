@@ -1,0 +1,14 @@
+{
+  "run_id": "37802862071",
+  "url": "https://github.com/subvertnormality/mosaic/actions/runs/37802862071",
+  "event": "workflow_dispatch",
+  "head_branch": "codex/main-pages-promotion-v03",
+  "head_sha": "e05cf0d7c8e9be44259c3dad5a7c66dcd5dc5bb3",
+  "created_at": "2026-10-08T15:41:44Z",
+  "jobs_started_at": "2026-10-08T15:41:48Z",
+  "state_at_receipt": "in_progress",
+  "qualification_status": "pending",
+  "provenance": "Parent verified live run metadata; no polling or dispatch was performed by this auditor.",
+  "prior_failed_run_preserved": "37778845187",
+  "prior_aggregate_status": "FAILED: shard 7 M-PATCH-059 recovered only on serial retry"
+}

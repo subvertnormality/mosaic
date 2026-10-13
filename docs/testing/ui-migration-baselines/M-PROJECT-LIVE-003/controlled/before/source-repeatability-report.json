@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "509f38f3d69172fa9113956c30bb6eb6160eb38c",
+  "selected_cases": [
+    "M-PROJECT-LIVE-001",
+    "M-PROJECT-LIVE-002",
+    "M-PROJECT-LIVE-003",
+    "M-PROJECT-LIVE-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/project_dialog_lifecycle.py": "M-PROJECT-LIVE-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/project_dialog_lifecycle.py",
+      "case": "M-PROJECT-LIVE-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-b63883d3dd894aa895325f7a2c13957b/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-b63883d3dd894aa895325f7a2c13957b/manifest.json",
+      "manifest_sha256": "3306642b1a71778cecf8a7f720352fe879942c0def8b2a9081f2984e4b484bd8",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

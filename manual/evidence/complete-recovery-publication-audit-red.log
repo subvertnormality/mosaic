@@ -1,0 +1,25 @@
+..EE.........................
+======================================================================
+ERROR: test_recovery_reuses_complete_original_start_identity_without_missing_field_exemptions (test_manual_publication_verify.CompleteStartRecoveryIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 212, in test_recovery_reuses_complete_original_start_identity_without_missing_field_exemptions
+    audit.check_recovery_publication(document,failure,[scene])
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 65, in check_recovery_publication
+    if receipt.get('source_start_identity_complete') is not False or receipt.get('missing_start_identity_fields')!=['fixture_sources'] or source.get('fixture_sources','not-null') is not None:raise ValueError('Recovery fabricated missing start identity fields')
+ValueError: Recovery fabricated missing start identity fields
+
+======================================================================
+ERROR: test_yaml_numeric_selector_keys_match_exact_json_serialization (test_manual_publication_verify.CompleteStartRecoveryIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 216, in test_yaml_numeric_selector_keys_match_exact_json_serialization
+    audit.check_authored_assertion(dict(expect=dict(assertion=dict(phrases={'1':[[144,60,127]]}))),dict(assertion=dict(phrases={1:[[144,60,127]]})))
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 61, in check_authored_assertion
+    if step['expect']['assertion'] not in accepted:raise ValueError('Published assertion differs from exact pinned selector alternatives')
+ValueError: Published assertion differs from exact pinned selector alternatives
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.025s
+
+FAILED (errors=2)

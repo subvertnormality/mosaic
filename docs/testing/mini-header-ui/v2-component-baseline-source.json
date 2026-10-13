@@ -1,0 +1,7 @@
+{
+  "stage": "/tmp/mosaic-mini-v2-exact-component-red/mosaic",
+  "test_sha256": "21254032ea17c54bd4cf9ed28d7d39bc3a43f04a8a6bb8925989405f35c59893",
+  "atlas_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+  "renderer_sha256": "0bffa33541043ab3a8a95926bf2c316f3b622f2d1c980bd4dac6b151ba6b2a3e",
+  "acceptance": "v2 literal pixels and quarter-beat animation; v1rest retained"
+}

@@ -18,6 +18,9 @@ local step49to64_button = button:new(12, 8, {{"Inactive", 3}, {"Page 49-64", 15}
 local vel8to14_fade_button = fade_button:new(15, 8, 0, 7, "up")
 local vel1to7_fade_button = fade_button:new(16, 8, 0, 7, "down")
 
+-- The first step of the 16-step page the faders show (0, 16, 32 or 48).
+function velocity_edit_page.get_step_offset() return horizontal_offset end
+
 function velocity_edit_page.init()
   for s = 1, 64 do
     faders["step" .. s .. "_fader"] = vertical_fader:new(s, 1, 14)

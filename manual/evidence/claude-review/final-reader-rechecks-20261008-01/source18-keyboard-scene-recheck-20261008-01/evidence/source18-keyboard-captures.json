@@ -1,0 +1,186 @@
+{
+  "url": "http://localhost:8928/manual/",
+  "assets": {
+    "/manual/generated/reader-index.json": {
+      "status": 200,
+      "sha256": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+      "bytes": 13895116
+    },
+    "/manual/book.js": {
+      "status": 200,
+      "sha256": "11f6a0c42082d6f0f79da17d49f88ffee0813247f7e5d9fea878518127a830a4",
+      "bytes": 74742
+    },
+    "/manual/manual.js": {
+      "status": 200,
+      "sha256": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+      "bytes": 97929
+    },
+    "/manual/manual.css": {
+      "status": 200,
+      "sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+      "bytes": 31222
+    }
+  },
+  "index_meta": {
+    "keyboard-honour-degree": {
+      "feature_id": "midi-controller-options",
+      "lesson_id": "field-keyboard-honour-degree-pick-natural-minor",
+      "binding_id": "field-keyboard-honour-degree-pick-natural-minor",
+      "scene_id": "keyboard-honour-degree",
+      "scene_chunk_sha256": "da67d2e4d9e3c511f36f62cecbe3f7eb5fc03122d65060553b84429fa0eb7f5d",
+      "presentation_metadata_sha256": "a0bb31c39db85887fb4499baff253e89db3e36204563a98a3bd42de205cbf1c5"
+    },
+    "keyboard-honour-degree-rotation": {
+      "feature_id": "midi-controller-options",
+      "lesson_id": "keyboard-honour-degree-rotation",
+      "binding_id": "keyboard-honour-degree-rotation",
+      "scene_id": "keyboard-honour-degree-rotation",
+      "scene_chunk_sha256": "e8db3ed73e909eb4a3c08784021b02bed4498007af783c794cc4fc6594b018e4",
+      "presentation_metadata_sha256": "63099345d6952fa62a334fb88ae9549ee6af349ad2957e6428464ae83d6d45d0"
+    }
+  },
+  "captures": [
+    {
+      "id": "keyboard-honour-degree",
+      "picker_label": "Start from the chosen scale degree",
+      "route": "http://localhost:8928/manual/#midi-controller-options/keyboard-honour-degree",
+      "step_count": 11,
+      "steps": [
+        {
+          "step": 1,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "01\nBefore\nStarting point",
+          "excerpt": "\n01\nBefore\nStarting point\n\nChannel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale Editor is on C major.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nNEXT ACTION\n\nPlay some keys on the keyboard: each sounds the note you pressed, because nothing is mapped yet. Tap K1 and open PARAMS > MOSAIC > Midi control. Select Map scale to white keys and turn E3 right to On. The row reads On.\n\n← Back\nAuto-play\nView next result →\nMap white keys a",
+          "next_enabled": false
+        },
+        {
+          "step": 2,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "02\nAfter\nTurn on Map scale to white keys\nRecorded output excerpt: \nMiddle octave (MIDI 60–72)\nAll recorded output pitches",
+          "excerpt": "\n02\nAfter\nTurn on Map scale to white keys\nRecorded output excerpt: \nMiddle octave (MIDI 60–72)\nAll recorded output pitches\n\nPlay some keys on the keyboard: each sounds the note you pressed, because nothing is mapped yet. Tap K1 and open PARAMS > MOSAIC > Midi control. Select Map scale to white keys and turn E3 right to On. The row reads On.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output sweep: 128 note-ons and 128 note-offs; output pitches C-2–G8 (MIDI 0–127). Recorded output excerpt (MIDI 60–72): Recorded MIDI output: C3 vel 90 (ch 1) @0 ms · Note off C3 (ch 1) @0 ms · C#3 vel 90 (ch 1) @0 ms · Note off C#3 (ch 1) @0 ms · D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · E3 vel 90 (ch 1) @0 ms · Note off E3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note ",
+          "next_enabled": false
+        },
+        {
+          "step": 3,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "03\nAfter\nPlay the white keys in C major\nRecorded output excerpt: \nMiddle octave (MIDI 60–72)\nAll recorded output pitches",
+          "excerpt": "\n03\nAfter\nPlay the white keys in C major\nRecorded output excerpt: \nMiddle octave (MIDI 60–72)\nAll recorded output pitches\n\nClose the menu and play the white keys from C3 up to C4 on the keyboard. In C major they sound as written: 60, 62, 64, 65, 67, 69, 71, 72. The MIDI strip lists the notes Mosaic sent.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output sweep: 128 note-ons and 128 note-offs; output pitches C-2–G8 (MIDI 0–127). Recorded output excerpt (MIDI 60–72): Recorded MIDI output: C3 vel 90 (ch 1) @0 ms · Note off C3 (ch 1) @0 ms · D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · E3 vel 90 (ch 1) @0 ms · Note off E3 (ch 1) @0 ms · E3 vel 90 (ch 1) @0 ms · Note off E3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0",
+          "next_enabled": false
+        },
+        {
+          "step": 4,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "04\nAfter\nChoose natural minor in the Scale Editor",
+          "excerpt": "\n04\nAfter\nChoose natural minor in the Scale Editor\n\nOpen the Scale Editor (grid (4,8)), turn E3 two detents and press K3. The Scale row reads Minor, natural minor.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none.\n\nNEXT ACTION\n\nReturn to the Channel editor (3,8) and play the white keys again: they now follow C natural minor, 60, 62, 63, 65, 67, 68, 70, 72 (C D E-flat F G A-flat B-flat C).\n\n← Back\nAuto-play\nView next result →\nMap white keys and compare C major with natural minor 1\nMap white keys and compare C major with natural minor 2\nMap white keys and compare C major with natural minor 3\nMap white keys and compare C major with natural minor 4\nMap white keys and compare C major with natural minor 5\nSet degree II and verify only that option applies 1\nSet degree II and verify only that option applies 2\nSe",
+          "next_enabled": false
+        },
+        {
+          "step": 5,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "05\nAfter\nPlay the white keys in natural minor",
+          "excerpt": "\n05\nAfter\nPlay the white keys in natural minor\n\nReturn to the Channel editor (3,8) and play the white keys again: they now follow C natural minor, 60, 62, 63, 65, 67, 68, 70, 72 (C D E-flat F G A-flat B-flat C).\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: C3 vel 90 (ch 1) @0 ms · Note off C3 (ch 1) @0 ms · D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · A#3 vel 90 (ch 1) @0 m",
+          "next_enabled": false
+        },
+        {
+          "step": 6,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "06\nAfter\nSet degree II",
+          "excerpt": "\n06\nAfter\nSet degree II\n\nOpen the Scale Editor (4,8) again, turn E2 one click to Degree, turn E3 one detent and press K3. Degree reads ii°. Degree picks which scale note the keyboard's C starts on.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none.\n\nNEXT ACTION\n\nTurn E2 to the Rotation row, turn E3 two detents and press K3. Rotation reads r2. Rotation moves the top keys down an octave.\n\n← Back\nAuto-play\nView next result →\nMap white keys and compare C major with natural minor 1\nMap white keys and compare C major with natural minor 2\nMap white keys and compare C major with natural minor 3\nMap white keys and compare C major with natural minor 4\nMap white keys and compare C major with natural minor 5\nSet degree II and verify only that option applies 1\nSet degree II and verify only that option applies 2\nSet de",
+          "next_enabled": false
+        },
+        {
+          "step": 7,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "07\nAfter\nSet rotation 2",
+          "excerpt": "\n07\nAfter\nSet rotation 2\n\nTurn E2 to the Rotation row, turn E3 two detents and press K3. Rotation reads r2. Rotation moves the top keys down an octave.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: none.\n\nNEXT ACTION\n\nTap the global transpose fader on the grid at its lowest value, then tap its increment button fourteen times, and return to the Channel editor (3,8). The Scale overview lists Transpose +2, which shifts everything.\n\n← Back\nAuto-play\nView next result →\nMap white keys and compare C major with natural minor 1\nMap white keys and compare C major with natural minor 2\nMap white keys and compare C major with natural minor 3\nMap white keys and compare C major with natural minor 4\nMap white keys and compare C major with natural minor 5\nSet degree II and verify only that option applies 1\nSet deg",
+          "next_enabled": false
+        },
+        {
+          "step": 8,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "08\nAfter\nSet global transpose +2",
+          "excerpt": "\n08\nAfter\nSet global transpose +2\n\nTap the global transpose fader on the grid at its lowest value, then tap its increment button fourteen times, and return to the Channel editor (3,8). The Scale overview lists Transpose +2, which shifts everything.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: none.\n\nNEXT ACTION\n\nThe three Honour switches are still Off, so none of this is applied yet: the white keys still play 60, 62, 63, 65, 67, 68, 70, 72.\n\n← Back\nAuto-play\nView next result →\nMap white keys and compare C major with natural minor 1\nMap white keys and compare C major with natural minor 2\nMap white keys and compare C major with natural minor 3\nMap white keys and compare C major with natural minor 4\nMap white keys and compare C major with natural minor 5\nSet degree II and verify only that option app",
+          "next_enabled": false
+        },
+        {
+          "step": 9,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "09\nAfter\nNothing applies yet",
+          "excerpt": "\n09\nAfter\nNothing applies yet\n\nThe three Honour switches are still Off, so none of this is applied yet: the white keys still play 60, 62, 63, 65, 67, 68, 70, 72.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: C3 vel 90 (ch 1) @0 ms · Note off C3 (ch 1) @0 ms · D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · A#3 vel 90 (ch 1) @0 ms · Note off A#3 (ch 1) @0 ms · A#3 vel 90 (ch 1) ",
+          "next_enabled": false
+        },
+        {
+          "step": 10,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "10\nAfter\nTurn on Honour scale degree",
+          "excerpt": "\n10\nAfter\nTurn on Honour scale degree\n\nTap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale degree and turn E3 right to On. The row reads On.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none.\n\nNEXT ACTION\n\nClose the menu and play C3 to C4 again. Key C now plays the scale's second note: 62, 63, 65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied, so you can start a phrase from degree II without changing the scale.\n\n← Back\nAuto-play\nView next result →\nMap white keys and compare C major with natural minor 1\nMap white keys and compare C major with natural minor 2\nMap white keys and compare C major with natural minor 3\nMap white keys and compare C major with natural minor 4\nMap white keys and compare C major with natural minor 5\nSet degree II and verif",
+          "next_enabled": false
+        },
+        {
+          "step": 11,
+          "hash": "#midi-controller-options/keyboard-honour-degree",
+          "label": "11\nAfter\nStart from the chosen scale degree",
+          "excerpt": "\n11\nAfter\nStart from the chosen scale degree\n\nClose the menu and play C3 to C4 again. Key C now plays the scale's second note: 62, 63, 65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied, so you can start a phrase from degree II without changing the scale.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0 ms · Note off G#3 (ch 1) @0 ms · A#3 vel 90 (ch 1) @0 ms · Note off A#3",
+          "next_enabled": false
+        }
+      ],
+      "expected_final_text": [
+        {
+          "text": "62, 63, 65, 67, 68, 70, 72, 74",
+          "present": true
+        },
+        {
+          "text": "Rotation and transpose stay unapplied",
+          "present": true
+        }
+      ],
+      "final_text_excerpt": "the Honour switches control whether the Scale Editor’s degree, rotation and transpose settings affect that mapping.\n\nBaseline: in PARAMS > MOSAIC > Midi control, set Map scale to white keys On. In the Scale Editor select C natural minor, set degree II, rotation 2 and global transpose +2. Set Honour scale degree On, Honour scale rotations Off and Honour scale transpose Off. Play MIDI keys 60 through 72 chromatically at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 70, 70, 72, 72, 74.\nRotation comparison: turn Honour scale rotations On and replay MIDI keys 60 through 72 at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 58, 58, 60, 60, 74. The last two scale positions are an octave lower.\nRECIPE 02\nApply scale rotation and global transpose to every keyboard key\n\nGoal: compare the same incoming MIDI keys with Honour scale transpose Off and On. Map scale to white keys lays the selected scale on white keys; each Honour switch controls whether its named Scale Editor transformation participates.\n\nBaseline: in PARAMS > MOSAIC > Midi control, set Map scale to white keys On. In the Scale Editor select C natural minor, set degree II, rotation 2 and global transpose +2. Set Honour scale degree and Honour scale rotations On, and Honour scale transpose Off. Play MIDI keys 60 through 72 chromatically at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 58, 58, 60, 60, 74.\nTranspose comparison: turn Honour scale transpose On and replay the same keys at velocity 90. Output: 64, 65, 65, 67, 67, 69, 70, 70, 60, 60, 62, 62, 76. Every mapped note is two semitones higher.\nRelated features\nOptions\nMIDI Controller Mapping\n\nFollow these links for related controls and musical tasks.",
+      "screenshot": "../evidence/keyboard-honour-degree-final.png"
+    },
+    {
+      "id": "keyboard-honour-degree-rotation",
+      "picker_label": "Rotate the keyboard voicing",
+      "route": "http://localhost:8928/manual/#midi-controller-options/keyboard-honour-degree-rotation",
+      "step_count": 3,
+      "steps": [
+        {
+          "step": 1,
+          "hash": "#midi-controller-options/keyboard-honour-degree-rotation",
+          "label": "01\nBefore\nStarting point",
+          "excerpt": "\n01\nBefore\nStarting point\n\nChannel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4. The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68, 70, 72, 74. Honour scale rotations and Honour scale transpose are Off.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nNEXT ACTION\n\nTap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale rotations and turn E3 right to On. The row reads On.\n\n← B",
+          "next_enabled": false
+        },
+        {
+          "step": 2,
+          "hash": "#midi-controller-options/keyboard-honour-degree-rotation",
+          "label": "02\nAfter\nTurn on Honour scale rotations",
+          "excerpt": "\n02\nAfter\nTurn on Honour scale rotations\n\nTap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale rotations and turn E3 right to On. The row reads On.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none.\n\nNEXT ACTION\n\nClose the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down: the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to play a bass note or an inverted voicing of the same scale shape from the keys you already know.\n\n← Back\nAuto-play\nView next result →\nStart from degree II with rotation and transpose set 1\nStart from degree II with rotation and transpose set 2\nEnable rotation and compare the keyboard notes 1\n\nNext",
+          "next_enabled": false
+        },
+        {
+          "step": 3,
+          "hash": "#midi-controller-options/keyboard-honour-degree-rotation",
+          "label": "03\nAfter\nRotate the keyboard voicing",
+          "excerpt": "\n03\nAfter\nRotate the keyboard voicing\n\nClose the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down: the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to play a bass note or an inverted voicing of the same scale shape from the keys you already know.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: D3 vel 90 (ch 1) @0 ms · Note off D3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · D#3 vel 90 (ch 1) @0 ms · Note off D#3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · F3 vel 90 (ch 1) @0 ms · Note off F3 (ch 1) @0 ms · G3 vel 90 (ch 1) @0 ms · Note off G3 (ch 1) @0 ms · G#3 vel 90 (ch 1) @0",
+          "next_enabled": false
+        }
+      ],
+      "expected_final_text": [
+        {
+          "text": "62, 63, 65, 67, 68, 58, 60, 74",
+          "present": true
+        },
+        {
+          "text": "first five keys do not change",
+          "present": true
+        }
+      ],
+      "final_text_excerpt": "the Honour switches control whether the Scale Editor’s degree, rotation and transpose settings affect that mapping.\n\nBaseline: in PARAMS > MOSAIC > Midi control, set Map scale to white keys On. In the Scale Editor select C natural minor, set degree II, rotation 2 and global transpose +2. Set Honour scale degree On, Honour scale rotations Off and Honour scale transpose Off. Play MIDI keys 60 through 72 chromatically at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 70, 70, 72, 72, 74.\nRotation comparison: turn Honour scale rotations On and replay MIDI keys 60 through 72 at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 58, 58, 60, 60, 74. The last two scale positions are an octave lower.\nRECIPE 02\nApply scale rotation and global transpose to every keyboard key\n\nGoal: compare the same incoming MIDI keys with Honour scale transpose Off and On. Map scale to white keys lays the selected scale on white keys; each Honour switch controls whether its named Scale Editor transformation participates.\n\nBaseline: in PARAMS > MOSAIC > Midi control, set Map scale to white keys On. In the Scale Editor select C natural minor, set degree II, rotation 2 and global transpose +2. Set Honour scale degree and Honour scale rotations On, and Honour scale transpose Off. Play MIDI keys 60 through 72 chromatically at velocity 90. Output: 62, 63, 63, 65, 65, 67, 68, 68, 58, 58, 60, 60, 74.\nTranspose comparison: turn Honour scale transpose On and replay the same keys at velocity 90. Output: 64, 65, 65, 67, 67, 69, 70, 70, 60, 60, 62, 62, 76. Every mapped note is two semitones higher.\nRelated features\nOptions\nMIDI Controller Mapping\n\nFollow these links for related controls and musical tasks.",
+      "screenshot": "../evidence/keyboard-honour-degree-rotation-final.png"
+    }
+  ],
+  "browser_errors": [
+    "requestfailed: http://localhost:8928/manual/audio/masks-small-hours.ogg net::ERR_ABORTED"
+  ]
+}

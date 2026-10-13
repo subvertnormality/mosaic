@@ -1,0 +1,98 @@
+{
+  "kind": "doctor-fixture-public-navigation-review",
+  "scope": "Source review; does not qualify an unrun recipe",
+  "files": {
+    "lib/ui_grid_outcomes.lua": "455f882b35d15dcf0da1b2295e0e14d6ecbafb992106478530402620f0397f93",
+    "lib/ui_live.lua": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+    "lib/ui_adapters/doctor.lua": "bc3c0f4c854cce3cb63917cf505bc895bbe6898483a97158847a99ead881bcea",
+    "lib/rhythm_doctor/ui_adapter.lua": "ec03592c858ecefb448f9c649e3f711ecefee3539ffd68717a0eb0bcad9eb06e",
+    "docs/ui-reimplementation/spec.json": "56a9cf58e1da9a8bcef6cd468a10baaf79a476ae2e1d20c7ee42205eecb072a0",
+    "tests/behaviour/driver.py": "8f20a5cbc721e5cee57e69c4f60ee15d5e16718952ff669d31ca6788c837e13c"
+  },
+  "transitions": [
+    {
+      "action": "Channel Editor",
+      "flow": "G01",
+      "screen": "Channel primary",
+      "required_sequence": "Pattern Editor goes Trig P01; reopen Trig Tasks Rhythm Doctor before editing bank"
+    },
+    {
+      "action": "Pattern Editor from Channel",
+      "flow": "G03",
+      "screen": "P01",
+      "required_sequence": "Task entry required; do not press the same global page button again, which cycles views"
+    },
+    {
+      "action": "Algorithm 1-4 -> Doctor5",
+      "flow": "G40",
+      "screen": "Doctor owner R01/R05",
+      "required_sequence": "Initial entry supported"
+    },
+    {
+      "action": "Algorithm5 -> Doctor5",
+      "flow": "none",
+      "screen": "Current route retained",
+      "required_sequence": "Refresh/tooltip only; use declared Trig Tasks entry to reopen existing bank"
+    },
+    {
+      "action": "Pattern destination row1",
+      "flow": "G20",
+      "screen": "P01",
+      "required_sequence": "Assert exact PATnn CH01 header, then reopen Doctor task"
+    },
+    {
+      "action": "Individual step gate toggle",
+      "flow": "G21",
+      "screen": "P01",
+      "required_sequence": "Assert exact edited Pattern header, then reopen Doctor task before field edits"
+    },
+    {
+      "action": "BD/SD/CYM selection",
+      "flow": "G41",
+      "screen": "Owner route, READY R05",
+      "required_sequence": "No task reopen; exact lane LEDs and sensitivity isolation remain required"
+    },
+    {
+      "action": "Browse tap/hold",
+      "flow": "G46",
+      "screen": "Result override R15 then owner READY",
+      "required_sequence": "Exact public tooltip; subsequent E2 follows owner R05; no private state or artificial refresh"
+    },
+    {
+      "action": "Paint arm/commit/cancel",
+      "flow": "G42",
+      "screen": "R08/R09 or owner READY",
+      "required_sequence": "Exact preview/committed masks and cancelled destination must remain unchanged"
+    },
+    {
+      "action": "Record on occupied bank",
+      "flow": "G40",
+      "screen": "R10",
+      "required_sequence": "Held key blocks answering until release; K2 returns READY, K3 clears bank"
+    },
+    {
+      "action": "Alignment open/edit/refusal/cancel",
+      "flow": "doctor.dispatch",
+      "screen": "R06/R07/R05",
+      "required_sequence": "E2 clears refused error while retaining draft; K2 returns bank; confirmed correction awaits actual reanalysis"
+    },
+    {
+      "action": "Play/Stop",
+      "flow": "G38/G43",
+      "screen": "Retained or READY/armed owner route",
+      "required_sequence": "No page transition on transport alone; Driver.playback raw Play/Stop retains page"
+    },
+    {
+      "action": "Analysis completes asynchronously",
+      "flow": "async.update",
+      "screen": "R04 -> R05",
+      "required_sequence": "Existing view-model owner reconciliation follows actual bank; no extra input solely to refresh"
+    }
+  ],
+  "preserved_failed_reports": [
+    "/home/andy/mosaic-doctor-options-runs/bc84db0aa4f94e9fa2c3ce18156da282/report.json",
+    "/home/andy/mosaic-doctor-options-runs/e6ed565d5f804f05831af249cd2ddce4/report.json"
+  ],
+  "production_change_required": false,
+  "remaining": "Correct all G20/G21 continuations together, then qualify actual complete capture/fixture/READY recipes natively."
+}

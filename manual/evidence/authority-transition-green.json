@@ -1,0 +1,19 @@
+{
+  "scope": "Pre-freeze transition code only; no documents replaced, snapshots frozen or authority activated.",
+  "tests": {
+    "test_manual_authority_transition": 17,
+    "test_manual_authority": 16,
+    "test_inventory": 4,
+    "test_collection": 5
+  },
+  "case_list_gate": "passed without native session",
+  "proposal_patch": "git apply --check passed; not applied",
+  "sources": {
+    "tests/behaviour/manual_authority.py": "4d6a82b694080662e97026526830c663f54d882084f4ef8f7533c4c0bddf6a24",
+    "tests/behaviour/reconcile_manual.py": "7823f3e322a6ff2201109f181e2d6d84ade54be9b434adb3afe8cd037efcee4d",
+    "tests/behaviour/run.py": "ce5dd5459fb4f4fd1fde1d8a674ad9b30b8e0bfeb33da209870699ec579ce735",
+    "tests/behaviour/test_manual_authority_transition.py": "79151f2f1eeab917c13685c1a61aed3f28e8ddfe8b0566d603ee64d72b77cf1d"
+  },
+  "complete_regression_run": false,
+  "authority_activated": false
+}

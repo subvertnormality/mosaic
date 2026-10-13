@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "reviewed_source_members": 78,
+  "ledger_files": 3,
+  "snapshot_files": 81,
+  "nonmember_pins": 63,
+  "guard_pins": 3,
+  "supporting_assets": 7,
+  "receipt_files": 44,
+  "snapshot": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/snapshot.json",
+    "sha256": "9d0d19f343cd10cf2c62b386d1414d70dc74e2ba20602650ee9100f7b862e083"
+  },
+  "qualification": {
+    "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/manual-post-build-ledger/prebuild-20261004-controlled-local-resume-077-gates-cababd43/qualification-pins.json",
+    "sha256": "729fad3c439bb93b37b6057be1715af5c288f24f5b7cb8dba0312b9fd874fe1f"
+  },
+  "live_and_saved_hash_mismatches": [],
+  "strict_checks": {
+    "path": "/home/andy/mosaic-manual-build-operators/resume-source-review-applied-1d0d3fe9965048f8abc367869c4d1118/strict-checks.json",
+    "sha256": "622ed8d0bd75d7f4fc974c10c047dd76e5b8487fd3886942701fd3985ad97ec9"
+  },
+  "manual_generation_complete": false,
+  "native_launched": false,
+  "original_generation_remains_failed": true
+}

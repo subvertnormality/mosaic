@@ -1,0 +1,8 @@
+test_mono_preserved (test_audio_frontend.TestPhaseSafeMono.test_mono_preserved) ... ok
+test_opposite_phase_uses_strongest_channel (test_audio_frontend.TestPhaseSafeMono.test_opposite_phase_uses_strongest_channel) ... ok
+test_ordinary_stereo_averages (test_audio_frontend.TestPhaseSafeMono.test_ordinary_stereo_averages) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.011s
+
+OK

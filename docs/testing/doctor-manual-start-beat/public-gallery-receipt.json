@@ -1,0 +1,66 @@
+{
+  "url": "https://karen-diy-clarity-status.trycloudflare.com/manual/doctor-ui-captures.html",
+  "images": [
+    {
+      "path": "images/ui/rhythm-doctor-options/setup-manual-bpm.png",
+      "status": 200,
+      "sha256": "2747dd517798d62570692fbd5bbb7063a1c14503d3a8074e14911224e1e78088"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/setup-input-source.png",
+      "status": 200,
+      "sha256": "1e5d824e33e28c6d2e1bd3fa333489f84fa7ef10f30be4ca10a6d3da00c1e050"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/window-lower-row.png",
+      "status": 200,
+      "sha256": "02bb371c2d06f0c80b865e8b09705a48dcce4fc72d8c4a1048a462b28831144b"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/alignment-lower-row.png",
+      "status": 200,
+      "sha256": "4b739ef70c3bd93c45341c6786cb9f1023eca06775513c3ec571f238fa5d6de9"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/alignment-edited-then-cancelled.png",
+      "status": 200,
+      "sha256": "0080843500424ec9ec33f344275db8fb8a70be3caee41647e5e7a4a6d6965fcd"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/alignment-confirmed-draft.png",
+      "status": 200,
+      "sha256": "bf844e8b6b74b8d56824b47a787edcbd0f8786d635d6348e8cb60af821c66635"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/alignment-reanalysis-ready.png",
+      "status": 200,
+      "sha256": "73032e64ce53da74cbc09e489d1bf93a861b206dd9c98bd8f8a30cfe5757e1c0"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/start-beat-original1.png",
+      "status": 200,
+      "sha256": "ea9da0c3e7dd1bc85c9eb2dfbba06afdb8caec754f283e1126275c6c094d7f70"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/start-beat-next2.png",
+      "status": 200,
+      "sha256": "321893ecdc7c501a705dbdbca6addd0de6077eff05e85db421030e943aa9d749"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/start-beat-next-ready.png",
+      "status": 200,
+      "sha256": "8df454eaa05c68659bde79c0c0e2e2e6c008234a6266286b2618d1303495e3d9"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/start-beat-restore1.png",
+      "status": 200,
+      "sha256": "b0ebf0f3cd2eb0a2de3db25f16157b753afe3558b28fc429ded42a9791c5cd15"
+    },
+    {
+      "path": "images/ui/rhythm-doctor-options/start-beat-restored-ready.png",
+      "status": 200,
+      "sha256": "02bb371c2d06f0c80b865e8b09705a48dcce4fc72d8c4a1048a462b28831144b"
+    }
+  ],
+  "scope": "actual engineering native frames; final seven-role qualification pending"
+}

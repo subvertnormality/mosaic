@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "failed_capture": "/home/andy/mosaic-manual-runs/b37d0e99daad449d8244b763a6f92f29",
+  "old_helper_sha256": "6e88f77522addd8336e91d5c35bfc5e63c221ad30ab24bb57127176a385546c6",
+  "new_helper_sha256": "3791b8c877d3e36adafce88fdfa96dedca0a41555d9fb26f375ae26abfe04a17",
+  "unit_tests_sha256": "77502ebf757a2f2a74f1bf2d7711a327d3e47acc0172969e6d3052a2a7e08ca3",
+  "unit_green_count": 14,
+  "queue_semantic_red": "Archived old oracle accepts300ms real phase samples, below independently derived340ms visual dwell minimum",
+  "motion_exact_red": "Accepted C04 eight authored poses yield one hash with oldcorner crop: AssertionError1notgreaterthan1; fullauthoredfootprint makes exactsame regression green",
+  "production_emulator_changes": false,
+  "musical_oracle_changes": false,
+  "controlled_queue_exact_phase_unchanged": true,
+  "characterization": "Real native visual dwell derives from400msblink plus50msgridflush and existing10msclockallowance; faster polls and rawgrid transitions remove unsupported globalphaseassumption",
+  "native_qualification_pending": true,
+  "executable_evidence": {
+    "red": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/closure-fixture-red-runner.py"
+      ],
+      "exit_code": 1,
+      "log": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/closure-fixture-red.log",
+      "log_sha256": "b5700b35815b2a7bf48d82cedc7a1a02ce136e5cf4bd7cfc1730069f78548695",
+      "runner": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/closure-fixture-red-runner.py",
+      "runner_sha256": "bb6bcbdc6b6e9fd099c411345e6c3528f2cf6c272c4add7a92500710f244cb45",
+      "source": "/home/andy/mosaic-manual-runs/b37d0e99daad449d8244b763a6f92f29/capture-source/tools/manual_closure_cases.py"
+    },
+    "green": {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/behaviour",
+        "-p",
+        "test_manual_closure_cases.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/closure-fixture-green.log",
+      "log_sha256": "a36435e8b0acbdb4ba4a34ca6401451332e28c6854e3ee41093717379b597bdc",
+      "source": "/home/andy/mosaic-manual-1.4.0/tools/manual_closure_cases.py"
+    }
+  }
+}

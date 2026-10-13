@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "before_sha": "c9fbe8a8f0da9e610ae534c7f48fed401423cc9d",
+  "after_sha": "bdf2ae9239964faf4012e3d6a5d63ecedabdc4f6",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TRIPLE-005",
+    "M-PERSIST-COMBINED-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract/recording_lock_song.py",
+      "tests/behaviour/recording_lock_song.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract/recording_lock_song.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/recording_lock_song.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TRIPLE-005",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-005/real-time/before/af9cc28639474137b93e8dae9cfec596/manifest.json",
+              "manifest_sha256": "c9d2d64d5f04aee10e6061da48a1fddc2d48ec1a7f6943101578c907815233cf"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-005/real-time/after/638ceb4206674682aa81c8d9ae7c99d6/manifest.json",
+              "manifest_sha256": "6b4983e774717e517dbef3b91105b08a990eaf4923836fde220995d75783d23d"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-005/controlled-experimental/before/22d9fa7d38e94e4a897e1e037cb84ddb/manifest.json",
+              "manifest_sha256": "d7974143d253f8c562f346f9d6bf1240507b9e9d12d2831740dd5388df9e68a5"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRIPLE-005/controlled-experimental/after/3139720d2d8c4fb0b02e8cd3ba3bbe7c/manifest.json",
+              "manifest_sha256": "5ef04fad4beb8394c74b01dc3848661b4ade7f558dcf2d4563a42780a8da5db2"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-PERSIST-COMBINED-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/real-time/before/dade81d9ccd04013833537d44f441208/manifest.json",
+              "manifest_sha256": "265aa2908979119c47897d6fa2ad8e46e5423a553e701d6b7372b56ce04fb32c"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/real-time/after/67ef83ae23914ca598850e67a2d779ab/manifest.json",
+              "manifest_sha256": "386c02333c50e0cb0a4970353515de2eabb8c5b3fef7213646836cf109aaf87a"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/controlled-experimental/before/b49a0a8196ac42d08c23b9e068d8fe33/manifest.json",
+              "manifest_sha256": "35b9935136511baba9b8c28259c54a5603721c3fa6e984fd1207b94f945f2eea"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/controlled-experimental/after/017f8900504d4eb1ae6c678d49472dca/manifest.json",
+              "manifest_sha256": "de5402dc5e7561413abe292ce3c28fb3c1ce03595969db12ff8192a332e5f97a"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

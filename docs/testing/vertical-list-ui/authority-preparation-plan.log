@@ -1,0 +1,403 @@
+{
+  "manual": "manual/legacy/README-before-authority-5239f26c07e48a583a559d68b05ddb0b2668d9e6882a157308ffc81288366cce.md",
+  "manual_authority": {
+    "status": "inactive",
+    "prepared": true,
+    "feature_links": {
+      "MAN-001": [
+        "getting-started"
+      ],
+      "MAN-002": [
+        "install"
+      ],
+      "MAN-003": [
+        "setup"
+      ],
+      "MAN-004": [
+        "hardware"
+      ],
+      "MAN-005": [
+        "midi-device-configuration"
+      ],
+      "MAN-006": [
+        "stock-devices"
+      ],
+      "MAN-007": [
+        "adding-custom-devices"
+      ],
+      "MAN-116": [
+        "lock-lead-time"
+      ],
+      "MAN-008": [
+        "mods-and-software-devices"
+      ],
+      "MAN-009": [
+        "midi-keyboard-input"
+      ],
+      "MAN-010": [
+        "midi-controller-mapping"
+      ],
+      "MAN-011": [
+        "getting-around-mosaic"
+      ],
+      "MAN-012": [
+        "sequencer-start-and-stop"
+      ],
+      "MAN-013": [
+        "arm-live-record"
+      ],
+      "MAN-014": [
+        "grid-menu-navigation"
+      ],
+      "MAN-015": [
+        "norns-menu-navigation"
+      ],
+      "MAN-016": [
+        "tooltips"
+      ],
+      "MAN-114": [
+        "external-midi-transport"
+      ],
+      "MAN-017": [
+        "midi-panic"
+      ],
+      "MAN-018": [
+        "cheat-sheet"
+      ],
+      "MAN-019": [
+        "typical-workflow"
+      ],
+      "MAN-020": [
+        "sound-design"
+      ],
+      "MAN-021": [
+        "rhythm-section-design"
+      ],
+      "MAN-022": [
+        "harmony-design"
+      ],
+      "MAN-023": [
+        "sequence-composition"
+      ],
+      "MAN-024": [
+        "using-merge-modes"
+      ],
+      "MAN-025": [
+        "melody-composition"
+      ],
+      "MAN-026": [
+        "modulation-movement-and-interest"
+      ],
+      "MAN-027": [
+        "song-composition"
+      ],
+      "MAN-028": [
+        "dig-deeper"
+      ],
+      "MAN-029": [
+        "pattern-editor"
+      ],
+      "MAN-030": [
+        "adding-trigs"
+      ],
+      "MAN-115": [
+        "rhythm-doctor"
+      ],
+      "MAN-031": [
+        "adding-notes"
+      ],
+      "MAN-032": [
+        "adding-velocity"
+      ],
+      "MAN-033": [
+        "channel-editor"
+      ],
+      "MAN-034": [
+        "devices"
+      ],
+      "MAN-035": [
+        "midi-sound-sources"
+      ],
+      "MAN-036": [
+        "norns-sound-sources-with-n-b"
+      ],
+      "MAN-037": [
+        "device-parameters"
+      ],
+      "MAN-038": [
+        "adding-patterns-to-channels"
+      ],
+      "MAN-039": [
+        "masks"
+      ],
+      "MAN-040": [
+        "adding-trig-masks"
+      ],
+      "MAN-041": [
+        "adding-melodic-notes-over-harmony-and-drums"
+      ],
+      "MAN-042": [
+        "adding-chords"
+      ],
+      "MAN-043": [
+        "removing-masks"
+      ],
+      "MAN-044": [
+        "merge-modes"
+      ],
+      "MAN-045": [
+        "trig-merge-modes"
+      ],
+      "MAN-046": [
+        "note-merge-modes"
+      ],
+      "MAN-047": [
+        "velocity-merge-modes"
+      ],
+      "MAN-048": [
+        "length-merge-modes"
+      ],
+      "MAN-049": [
+        "note-dashboard"
+      ],
+      "MAN-050": [
+        "clocks-swing-and-shuffle"
+      ],
+      "MAN-051": [
+        "memory-undo-and-redo"
+      ],
+      "MAN-052": [
+        "channel-length"
+      ],
+      "MAN-053": [
+        "muting-channels"
+      ],
+      "MAN-054": [
+        "trig-parameters"
+      ],
+      "MAN-055": [
+        "sequencer-params"
+      ],
+      "MAN-056": [
+        "trig-probability"
+      ],
+      "MAN-057": [
+        "fixed-note"
+      ],
+      "MAN-058": [
+        "quantised-fixed-note"
+      ],
+      "MAN-059": [
+        "random-note"
+      ],
+      "MAN-060": [
+        "random-twos-note"
+      ],
+      "MAN-061": [
+        "chord-strum"
+      ],
+      "MAN-062": [
+        "chord-arpeggio"
+      ],
+      "MAN-063": [
+        "chord-acceleration"
+      ],
+      "MAN-064": [
+        "chord-spread"
+      ],
+      "MAN-065": [
+        "chord-velocity-modifier"
+      ],
+      "MAN-066": [
+        "chord-shape-modifier"
+      ],
+      "MAN-067": [
+        "mute-root-note"
+      ],
+      "MAN-068": [
+        "fully-quantise-mask"
+      ],
+      "MAN-069": [
+        "scale-editor"
+      ],
+      "MAN-070": [
+        "transposition"
+      ],
+      "MAN-071": [
+        "song-editor"
+      ],
+      "MAN-072": [
+        "button-indicators"
+      ],
+      "MAN-073": [
+        "interacting-with-slots"
+      ],
+      "MAN-074": [
+        "song-mode-operations"
+      ],
+      "MAN-075": [
+        "adjusting-song-sequence-length"
+      ],
+      "MAN-076": [
+        "navigating-the-norns-display"
+      ],
+      "MAN-077": [
+        "locks"
+      ],
+      "MAN-078": [
+        "trig-param-locks"
+      ],
+      "MAN-079": [
+        "param-slides"
+      ],
+      "MAN-080": [
+        "mask-locks"
+      ],
+      "MAN-081": [
+        "scale-locks"
+      ],
+      "MAN-082": [
+        "transposition-locks"
+      ],
+      "MAN-083": [
+        "octave-locks"
+      ],
+      "MAN-084": [
+        "save-and-load"
+      ],
+      "MAN-085": [
+        "options"
+      ],
+      "MAN-086": [
+        "sequencer-options"
+      ],
+      "MAN-087": [
+        "shift-press-stop"
+      ],
+      "MAN-088": [
+        "song-mode"
+      ],
+      "MAN-089": [
+        "reset-at-song-editor-pattern-change"
+      ],
+      "MAN-090": [
+        "reset-at-pattern-repeat"
+      ],
+      "MAN-091": [
+        "parameter-slides-wrap"
+      ],
+      "MAN-092": [
+        "elektron-program-changes"
+      ],
+      "MAN-093": [
+        "elektron-program-change-channel"
+      ],
+      "MAN-094": [
+        "parameter-lock-options"
+      ],
+      "MAN-095": [
+        "trigless-locks"
+      ],
+      "MAN-096": [
+        "quantiser-options"
+      ],
+      "MAN-097": [
+        "snap-note-masks-to-scale"
+      ],
+      "MAN-098": [
+        "quantise-note-masks"
+      ],
+      "MAN-099": [
+        "scales-lock-until-pattern-end"
+      ],
+      "MAN-100": [
+        "lock-all-to-pentatonic"
+      ],
+      "MAN-101": [
+        "lock-random-to-pentatonic"
+      ],
+      "MAN-102": [
+        "lock-merged-to-pentatonic"
+      ],
+      "MAN-103": [
+        "midi-controller-options"
+      ],
+      "MAN-104": [
+        "map-scale-to-white-keys"
+      ],
+      "MAN-105": [
+        "honor-scale-rotations"
+      ],
+      "MAN-106": [
+        "honor-scale-degree"
+      ],
+      "MAN-107": [
+        "honour-scale-transpose"
+      ],
+      "MAN-117": [
+        "screen-options"
+      ],
+      "MAN-118": [
+        "ui-motion"
+      ],
+      "MAN-108": [
+        "sinfonion-connect"
+      ],
+      "MAN-109": [
+        "lfos-and-modulation"
+      ],
+      "MAN-119": [
+        "musical-merge-and-voice-leading"
+      ],
+      "MAN-120": [
+        "merge-shape"
+      ],
+      "MAN-122": [
+        "fragments"
+      ],
+      "MAN-123": [
+        "interlock"
+      ],
+      "MAN-124": [
+        "structure"
+      ],
+      "MAN-125": [
+        "result-and-reason"
+      ],
+      "MAN-121": [
+        "harmony"
+      ],
+      "MAN-110": [
+        "performance-management"
+      ],
+      "MAN-111": [
+        "development"
+      ],
+      "MAN-112": [
+        "roadmap"
+      ],
+      "MAN-113": [
+        "interesting-components-for-norns-script-developers"
+      ]
+    },
+    "campaign_complete": false
+  },
+  "snapshots": {
+    "manual/legacy/README-before-authority-5239f26c07e48a583a559d68b05ddb0b2668d9e6882a157308ffc81288366cce.md": "5239f26c07e48a583a559d68b05ddb0b2668d9e6882a157308ffc81288366cce",
+    "manual/legacy/cheat-sheet-before-authority-4ca1e6b2c969527189a7d0e6beee14f899b341b50c16e742044df62dddec625d.html": "4ca1e6b2c969527189a7d0e6beee14f899b341b50c16e742044df62dddec625d"
+  },
+  "original_manual": {
+    "original_path": "README.md",
+    "path": "manual/legacy/README-1.4.0.md",
+    "sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c"
+  },
+  "section_manual": {
+    "path": "manual/legacy/README-before-authority-5239f26c07e48a583a559d68b05ddb0b2668d9e6882a157308ffc81288366cce.md",
+    "sha256": "5239f26c07e48a583a559d68b05ddb0b2668d9e6882a157308ffc81288366cce",
+    "original_path": "README.md"
+  },
+  "sections": 126,
+  "requirements": 178,
+  "cases": 877,
+  "writes_performed": false
+}

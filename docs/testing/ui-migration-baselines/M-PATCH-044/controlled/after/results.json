@@ -1,0 +1,72 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "cross-channel-lock-clear",
+    "phase": 0,
+    "cleared_channel": null,
+    "other_channel_unchanged": true,
+    "passed": true
+  },
+  {
+    "kind": "cross-channel-lock-clear",
+    "phase": 1,
+    "cleared_channel": 1,
+    "other_channel_unchanged": true,
+    "passed": true
+  },
+  {
+    "kind": "cross-channel-lock-clear",
+    "phase": 2,
+    "cleared_channel": 1,
+    "other_channel_unchanged": true,
+    "passed": true
+  }
+]

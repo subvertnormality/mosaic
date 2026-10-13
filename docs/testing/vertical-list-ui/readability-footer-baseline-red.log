@@ -1,0 +1,17 @@
+F......
+======================================================================
+FAIL: test_actual_transient_footer_cannot_seed_animation_body_baseline (test_mini_header_animation_ui.FooterBaselineGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_mini_header_animation_ui.py", line 61, in test_actual_transient_footer_cannot_seed_animation_body_baseline
+    with self.assertRaises(StopSampling):sample(Driver(),"S01",False,.125,tempo=90)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/mini_header_animation_ui.py", line 59, in sample
+    before=c.snapshot();before_index=len(c.observations)-1
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_mini_header_animation_ui.py", line 58, in snapshot
+    self_test.assertTrue(self.settled,"Cannot seed fixed body before exact normal footer")
+AssertionError: False is not true : Cannot seed fixed body before exact normal footer
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.203s
+
+FAILED (failures=1)

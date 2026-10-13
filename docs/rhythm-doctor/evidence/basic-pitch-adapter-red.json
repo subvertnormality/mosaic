@@ -1,0 +1,30 @@
+{
+  "test_sha256": "3615cb2e5ff08a53accdbfb935c5a64ba92bf776ddbcaf3c644fa33e5a0fe18f",
+  "adapter_present": false,
+  "exit_code": 1,
+  "output": "E\n======================================================================\nERROR: test_basic_pitch_adapter (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_basic_pitch_adapter\nTraceback (most recent call last):\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 436, in _find_test_path\n    module = self._get_module_from_name(name)\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 377, in _get_module_from_name\n    __import__(name)\n  File \"C:\\Users\\andy\\Documents\\ChatGPT\\mosaic\\.worktrees\\rhythm-doctor\\mosaic\\tests\\rhythm_doctor\\test_basic_pitch_adapter.py\", line 10, in <module>\n    from basic_pitch_adapter import midi_pitch_slice, frame_time\nModuleNotFoundError: No module named 'basic_pitch_adapter'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (errors=1)\n",
+  "scope": "Missing explicit upstream pitch/time adapter, not model quality",
+  "upstream_wheel_sha256": "738adb503aae7fdfc7d1e1511aa0ce35052315f260a19531ef4c356708425db0",
+  "audited_adapter_defects": [
+    {
+      "path": "raw onset pitch selection",
+      "observed": "Columns 28:61 were labelled MIDI 28..60 but the upstream output starts at MIDI 21, so those columns represent MIDI 49..81.",
+      "correct": "Inclusive MIDI 28..60 uses columns 7:40."
+    },
+    {
+      "path": "frame to seconds in both old paths",
+      "observed": "Frame*256/22050 omitted upstream model_frames_to_time window correction.",
+      "correct": "Apply exact pinned upstream cumulative window correction; omission exceeds 100ms by frame1720."
+    },
+    {
+      "path": "official note decoder frequency constraint",
+      "observed": "constrain_frequency max bound is exclusive; max at MIDI60 excluded MIDI60.",
+      "correct": "Use exclusive MIDI61 to retain inclusive MIDI28..60."
+    }
+  ],
+  "old_runner_current_sha256": {
+    "tests\\rhythm_doctor\\artifacts\\basic-pitch-bass-pilot\\run_basic_pitch_pilot.py": "9e637b48dee246aad552db6a07920920a012af3df9303d7f83f8392870af917b",
+    "tests\\rhythm_doctor\\artifacts\\basic-pitch-bass-pilot\\run_official_decoder.py": "d830d7ed7b26c755261e4feb4330408d5a98565178a8e40bdb937c47a858bb95"
+  },
+  "conclusion": "Prior Basic Pitch scores are measurements of incorrect pitch/time adapter configurations, not valid bass-specific architecture rejection evidence. Raw files remain unchanged; a separate corrected diagnostic is required."
+}

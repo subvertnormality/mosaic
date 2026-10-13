@@ -1,0 +1,26 @@
+{
+  "created_utc": "2026-10-04T07:03:23.232254+00:00",
+  "files": {
+    "tools/manual_publication_verify.py": {
+      "source": "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py",
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/controlled-publication-audio-pre-final-20261004/tools/manual_publication_verify.py",
+      "sha256": "496adeaa76267c360e26edaac1341bcc34c4bc72bd2845a022d56eaf5d6e6fcf"
+    },
+    "tools/manual_audio.py": {
+      "source": "/home/andy/mosaic-manual-1.4.0/tools/manual_audio.py",
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/controlled-publication-audio-pre-final-20261004/tools/manual_audio.py",
+      "sha256": "d1fb7cea325312f9b77ee002c7aa71d5f6b829e86f963d7f384ae60af73e17de"
+    },
+    "tests/behaviour/test_manual_publication_verify.py": {
+      "source": "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py",
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/controlled-publication-audio-pre-final-20261004/tests/behaviour/test_manual_publication_verify.py",
+      "sha256": "32d9f2bfb6293bafff4003041dd213d5534b8ede7abdd27fbc1b9664b4b6ec89"
+    },
+    "tests/behaviour/manual_audio_contract.py": {
+      "source": "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_audio_contract.py",
+      "archive": "/home/andy/mosaic-manual-build-operators/1a4322daff704294941dcfb3b5c7eb6a/source-transition-archive-20261004/controlled-publication-audio-pre-final-20261004/tests/behaviour/manual_audio_contract.py",
+      "sha256": "c716178137201fdc9bae4af26b0cd907c450fc49cee543740c21f59fed3e67fb"
+    }
+  },
+  "reason": "Pre-final controlled-generation audit/audio source snapshot; immutable archive before phase-accurate corrections."
+}

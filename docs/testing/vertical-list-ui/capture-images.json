@@ -1,0 +1,160 @@
+{
+  "source_path": "manual/generated/reference-vertical-list-scenes.json",
+  "source_sha256": "f80388b45711597fd8f2da342b7e7b68390d2dfb958db836aa87ba11f83ddfaf",
+  "clock_mode": "real-time",
+  "method": "Native captured16-grey framebuffer RLE decoded pixel-for-pixel; grid rendered from exact captured128 LED levels. Screen contains no added labels.",
+  "captures": [
+    {
+      "scene_id": "vertical-clock-neighbors",
+      "step_id": "neighbors",
+      "source_binding": {
+        "kind": "documentation-frame",
+        "name": "manual/M-UI-VERTICAL-001/vertical-clock-neighbors/neighbors",
+        "sha256": "4fd83c196364651062b3555275f08080f2b616b7a0011189ff471d3aa60f8d41",
+        "stable_rows": 55,
+        "stable_sha256": "fec58f1754f54a2bcc964a827ed71efd8ce5f213214b33a40008587d1c260b33",
+        "grid_sha256": "d733008980088ba249a2e315f1bf4d67efdf7bfe62ab58d9f49193265a63419a",
+        "semantic_assertions": 7,
+        "passed": true,
+        "assertion_index": 6,
+        "assertion": {
+          "kind": "vertical-list-ui",
+          "checkpoint": "clock-neighbors",
+          "passed": true,
+          "rows": [
+            "Clock Mod",
+            "Feel source",
+            "Swing Type"
+          ],
+          "citation": "README.md#norns-menu-navigation"
+        },
+        "assertion_sha256": "8688adb5566943bcdfc1b3a380582cbd245012d174e399e6b1daffe99f6774d5",
+        "trace_sha256": "19fa91fa8aed0332e6d97b71ba708bb781ed3d3a9b9665d9b0304f0ea0ceae2b",
+        "session_ordinal": 0
+      },
+      "screen_path": "images/norns-ui-vertical/neighbors-screen.png",
+      "screen_sha256": "8584fd288627bedd62757f4f45709acbf52f5d1395a703268156f6e1a4880392",
+      "grid_path": "images/norns-ui-vertical/neighbors-grid.png",
+      "grid_sha256": "a0287b584e6b6c21893d304d8bfdff8346e0b6ee2a33d8f75e50b51ea8cd24e1"
+    },
+    {
+      "scene_id": "vertical-clock-neighbors",
+      "step_id": "inherit-sentinel",
+      "source_binding": {
+        "kind": "documentation-frame",
+        "name": "manual/M-UI-VERTICAL-001/vertical-clock-neighbors/inherit-sentinel",
+        "sha256": "970469d4c93c1f104d21ce4aa72978e6cc8c167b865536d7c59b1e1f5d35df59",
+        "stable_rows": 55,
+        "stable_sha256": "46e173d7a8995e1af95130072814bdb8e9439335c65daf1a607b8d2d0edfd299",
+        "grid_sha256": "d733008980088ba249a2e315f1bf4d67efdf7bfe62ab58d9f49193265a63419a",
+        "semantic_assertions": 11,
+        "passed": true,
+        "assertion_index": 10,
+        "assertion": {
+          "kind": "vertical-list-ui",
+          "checkpoint": "inherit-sentinel",
+          "passed": true,
+          "label": "Swing type",
+          "value": "X",
+          "citation": "README.md#clocks-swing-and-shuffle"
+        },
+        "assertion_sha256": "3fc0d89b3206df93e1bb92e126f2ac7630e57840e379d2b1120c2786dbe9814a",
+        "trace_sha256": "488c10f10d430021601afef6b4f66931b4e00cc92f9ee8f0c5a88d2aae88203b",
+        "session_ordinal": 0
+      },
+      "screen_path": "images/norns-ui-vertical/inherit-sentinel-screen.png",
+      "screen_sha256": "7f1693fce7135c410dfd13d8eaed015b86c5cf3b16951cafe5e1dcabc12d7638",
+      "grid_path": "images/norns-ui-vertical/inherit-sentinel-grid.png",
+      "grid_sha256": "a0287b584e6b6c21893d304d8bfdff8346e0b6ee2a33d8f75e50b51ea8cd24e1"
+    },
+    {
+      "scene_id": "vertical-clock-neighbors",
+      "step_id": "scroll-end",
+      "source_binding": {
+        "kind": "documentation-frame",
+        "name": "manual/M-UI-VERTICAL-001/vertical-clock-neighbors/scroll-end",
+        "sha256": "9082d67778c9fc55d768e5851b5b2a2cbf58cd1dca4bde67b97eb8c1bfd89b70",
+        "stable_rows": 55,
+        "stable_sha256": "b47136c8aba8f6cb06c360cad8f565ada3d2b179c2dcaac0b29450e6f8778ee6",
+        "grid_sha256": "d733008980088ba249a2e315f1bf4d67efdf7bfe62ab58d9f49193265a63419a",
+        "semantic_assertions": 15,
+        "passed": true,
+        "assertion_index": 14,
+        "assertion": {
+          "kind": "vertical-list-ui",
+          "checkpoint": "scroll-end",
+          "passed": true,
+          "label": "Shuffle amount",
+          "value": "0",
+          "citation": "README.md#norns-menu-navigation"
+        },
+        "assertion_sha256": "5cc59b2a99da7937e178404cbe595e0e801c612e52d96694de92a6feb1226b89",
+        "trace_sha256": "12dc17fa4cba8543690972c1ceef07239448da5eda6e8870edbd0dfcd7307ba1",
+        "session_ordinal": 0
+      },
+      "screen_path": "images/norns-ui-vertical/scroll-end-screen.png",
+      "screen_sha256": "3edc3d067093fa01d7bbe5456ff6eed1e68dfcb9df4926d19dcf9b4bcf9eebc6",
+      "grid_path": "images/norns-ui-vertical/scroll-end-grid.png",
+      "grid_sha256": "a0287b584e6b6c21893d304d8bfdff8346e0b6ee2a33d8f75e50b51ea8cd24e1"
+    },
+    {
+      "scene_id": "vertical-clock-neighbors",
+      "step_id": "masks-unchanged",
+      "source_binding": {
+        "kind": "documentation-frame",
+        "name": "manual/M-UI-VERTICAL-001/vertical-clock-neighbors/masks-unchanged",
+        "sha256": "f7861b252153c216390463ce83d851709efd34c308ffd3e0426e2cbb902e3133",
+        "stable_rows": 55,
+        "stable_sha256": "a03aa55f6ed9fb141ee0dede26e67ace3cb0dcad1677d9189b8eba3c92f5e6d3",
+        "grid_sha256": "d733008980088ba249a2e315f1bf4d67efdf7bfe62ab58d9f49193265a63419a",
+        "semantic_assertions": 22,
+        "passed": true,
+        "assertion_index": 21,
+        "assertion": {
+          "kind": "vertical-list-ui",
+          "checkpoint": "masks-unchanged",
+          "passed": true,
+          "layout": "overview_masks",
+          "citation": "README.md#norns-menu-navigation"
+        },
+        "assertion_sha256": "89dfefa211fa10d4773916d7250b2f56a0d82c31ee95005c724a60cbed5787df",
+        "trace_sha256": "40af6e924955897c179dc783deddf2012c1e48f2ef4c0f475dc9e955ea2bfa76",
+        "session_ordinal": 0
+      },
+      "screen_path": "images/norns-ui-vertical/masks-unchanged-screen.png",
+      "screen_sha256": "81419de56be44eac9385aadab440d39d4f57b9deae897ae00b430d8f82d4a65f",
+      "grid_path": "images/norns-ui-vertical/masks-unchanged-grid.png",
+      "grid_sha256": "a0287b584e6b6c21893d304d8bfdff8346e0b6ee2a33d8f75e50b51ea8cd24e1"
+    },
+    {
+      "scene_id": "vertical-clock-neighbors",
+      "step_id": "single-field",
+      "source_binding": {
+        "kind": "documentation-frame",
+        "name": "manual/M-UI-VERTICAL-001/vertical-clock-neighbors/single-field",
+        "sha256": "74135ed7837ecefd4494454ff8adc2d1dc60d999c0a81fd3b10f5974b5b2c2c6",
+        "stable_rows": 55,
+        "stable_sha256": "7a969e13acfd22bd91882f93ffb4ec44f76b57be24ec6805eb8c1579f85d1c44",
+        "grid_sha256": "315873a586e47d113c87ab4ce80929d62556e33764701442ba60e31804e5e785",
+        "semantic_assertions": 25,
+        "passed": true,
+        "assertion_index": 24,
+        "assertion": {
+          "kind": "vertical-list-ui",
+          "checkpoint": "single-field",
+          "passed": true,
+          "label": "Tresillo amount",
+          "value": "x8",
+          "citation": "README.md#trig-editor-options"
+        },
+        "assertion_sha256": "91e559d2ec00e9ecf3cfd632bbfcf26acba519d4c0253168ad3b685d2112e764",
+        "trace_sha256": "a93e177e01489d8c51d44f3c6f246a2f221f4916ea37af50a6e618fcc8b57059",
+        "session_ordinal": 0
+      },
+      "screen_path": "images/norns-ui-vertical/single-field-screen.png",
+      "screen_sha256": "465e311c0641f4cad695016eb05e7966d1ed899f3c91a15ff121d9219a20d5a3",
+      "grid_path": "images/norns-ui-vertical/single-field-grid.png",
+      "grid_sha256": "274ef1b050df533fb39c217579c41449cd4ef094de8cc329b5378d08fe2ed946"
+    }
+  ]
+}

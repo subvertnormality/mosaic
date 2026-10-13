@@ -1,0 +1,24 @@
+{
+  "scope": "Hardware and grid changes after qualified Source18/homepage; authored setup prose remains pending",
+  "astra_seven_scores_retained": {
+    "readability": 8,
+    "comprehensibility": 8,
+    "flow": 8,
+    "understandability": 8,
+    "user_friendliness": 8,
+    "usefulness_of_interactive_examples": 8,
+    "cohesion": 8
+  },
+  "browser_regression_sha256": "08a1f9c720bafd0604847959bc851cae26361670ce46771bf5966f46a8cfe07a",
+  "current_reader_pins": {
+    "reader_index": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+    "book_js": "5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf",
+    "manual_js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+    "index_html": "93f9acf8b83257999a88d6db8974b70bd2eee10891cdd869082929ba275a6254"
+  },
+  "current_browser_test_sha256": "ccc11d06651c95d682d8677a8c44a1ad4eb470a8798c2da9af542a8ed722e4c4",
+  "native_rebuild": false,
+  "publication_qualified": false,
+  "ci_pending_fixes": true
+}

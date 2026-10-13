@@ -1,0 +1,275 @@
+schema_version: 1
+status: semantic-checkpoint-plan-not-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: Replay each existing native case in full and capture only result rows appended
+  after successful semantic oracles. Musical pitches are MIDI numbers to avoid octave-label
+  ambiguity. Captured MIDI checkpoints may show the stable editor after playback;
+  captions distinguish the audited performance from the displayed controls.
+scenes:
+- id: foundation-protected-and-added
+  feature_id: merge-shape
+  title: Keep anchors and accent the additions
+  behaviour_case: M-MERGE-FOUNDATION-001
+  citation: README.md#merge-shape
+  source: tests/behaviour/contract/foundation_workflow.py
+  steps:
+  - id: accent-setting
+    title: Foundation Rhythm settings
+    caption: Apply Foundation with P01 as the anchor. Add amount is 100 and Add accent
+      is 70; the grid keeps steps 1–4 and adds steps 5 and 7.
+    assertion:
+      kind: documentation-frame
+      name: images/merge-shape-foundation.png
+      baseline_sha256: 49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463
+      validation: pinned-v2-mini-pose
+      page: M03
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: accented-phrase
+    title: Hear protected notes and additions
+    caption: Two loops emit MIDI pitches 60, 62, 64, 65, 60, 60. The four anchors
+      retain velocities 127/117/107/97; both additions use 70.
+    assertion:
+      kind: foundation-physical-workflow
+      passed: true
+- id: foundation-two-cycle-build
+  feature_id: merge-shape
+  title: Build over two channel loops
+  behaviour_case: M-MERGE-PHRASE-001
+  citation: README.md#merge-shape
+  source: tests/behaviour/harmony_merge_workflow.py
+  steps:
+  - id: alternating-build
+    title: A two-cycle Build phrase
+    caption: Apply Phrase length two with the Build curve. The first loop adds step
+      7; the next adds steps 5 and 7. Four complete loops prove the alternation and
+      exact loop-relative timing.
+    assertion:
+      kind: foundation-build-phrase
+      positions:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 7
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 7
+      - 1
+      - 2
+      - 3
+      - 4
+      - 7
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 7
+      - 1
+      exact_timing: true
+      passed: true
+- id: fragments-seed-source-choice
+  feature_id: fragments
+  title: Let each fragment keep its source notes
+  behaviour_case: M-MERGE-FRAGMENTS-001
+  citation: README.md#fragments
+  source: tests/behaviour/contract/merge_extensions.py
+  steps:
+  - id: seed-zero
+    title: Seed zero selects the sparse half
+    caption: Size 4 splits an eight-step loop into two fragments. Seed 0 chooses P02
+      then P01, leaving only P02’s step-3 C at velocity 100. The original P01 note
+      at that position is not averaged in.
+    assertion:
+      kind: fragments-seed-0
+      seed: 0
+      loops: 2
+      loop_steps: 8
+      passed: true
+  - id: seed-one-editor
+    title: Change the saved seed
+    caption: Select Seed 1 and apply. The first fragment now uses P01 and the second
+      P02; lit steps are 1, 2, 3, 4 and 6.
+    assertion:
+      kind: documentation-frame
+      name: images/merge-shape-fragments.png
+      baseline_sha256: 760b9f276791a959a98a73441d88f534d9f77730fad051d93dd890841581689b
+      validation: pinned-v2-mini-pose
+      page: M15
+      atlas_sha256: 4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46
+      passed: true
+  - id: seed-one-playback
+    title: The source velocities survive
+    caption: Two exact loops verify P01’s four authored notes and velocities, followed
+      by P02’s step-6 C at 100.
+    assertion:
+      kind: fragments-seed-1
+      seed: 1
+      loops: 2
+      loop_steps: 8
+      passed: true
+- id: interlock-leader-window
+  feature_id: interlock
+  title: Leave room around a leader’s anchors
+  behaviour_case: M-MERGE-INTERLOCK-001
+  citation: README.md#interlock
+  source: tests/behaviour/contract/merge_extensions.py
+  steps:
+  - id: active-status
+    title: Choose channel two as leader
+    caption: Apply CH02 with Window 0. Status is ON; the follower’s coincident step-5
+      addition is removed, while its anchors and step-7 addition remain.
+    assertion:
+      kind: detail-row
+      row: 2
+      label: Status
+      value: 'ON'
+      passed: true
+  - id: zero-window-midi
+    title: Only the coincidence is removed
+    caption: Two exact loops verify follower steps 1–4 and 7 alongside the leader’s
+      step 5, on separate MIDI channels.
+    assertion:
+      kind: interlock-window-0
+      window: 0
+      loops: 2
+      loop_steps: 8
+      passed: true
+  - id: queued-window
+    title: Widen the window at a loop boundary
+    caption: Apply Window 2 while playing, then cancel a later draft. Every complete
+      loop is either the old or new pattern; the accepted queue persists and eventually
+      removes step 7 as well.
+    assertion:
+      kind: interlock-queued-window
+      passed: true
+  - id: refused-chain
+    title: The refused leader chain changes nothing
+    caption: Trying to make the leader follow its own follower reports INVALID CHANNEL
+      IS A LEADER. After discarding the refused draft, exact MIDI confirms that Window
+      2 still applies.
+    assertion:
+      kind: interlock-after-refusal
+      window: 2
+      loops: 2
+      loop_steps: 8
+      passed: true
+- id: structure-anchor-chord-and-delete
+  feature_id: structure
+  title: Give anchor notes a shared chord
+  behaviour_case: M-MERGE-STRUCTURE-001
+  citation: README.md#structure
+  source: tests/behaviour/contract/merge_extensions.py
+  steps:
+  - id: selected-group
+    title: Use chord group one
+    caption: Enable a C/E/G Harmony group, then choose Structure markers ANCHORS.
+      The Chord group row names group 1.
+    assertion:
+      kind: detail-row
+      row: 1
+      label: Chord group
+      value: '1'
+      passed: true
+  - id: snapped-anchors
+    title: Anchors snap to the nearest chord pitch
+    caption: Two loops verify MIDI anchors 60, 60, 64, 64 instead of 60, 62, 64, 65.
+      Equal-distance choices go lower. The step-5 and step-7 additions retain their
+      own pitches and accent.
+    assertion:
+      kind: structure-anchor-markers
+      markers: anchors
+      loops: 2
+      loop_steps: 8
+      passed: true
+  - id: delete-warning
+    title: See who deletion affects
+    caption: Deleting the referenced group opens a confirmation and names channel
+      1 as affected.
+    assertion:
+      kind: detail-row
+      row: 1
+      label: Affected
+      value: '1'
+      passed: true
+  - id: markers-off
+    title: Deletion restores authored pitches
+    caption: Confirming deletion turns Markers OFF in the same transaction. Exact
+      loops restore the authored 60/62/64/65 anchors while keeping the additions.
+    assertion:
+      kind: structure-group-deleted
+      markers: 'off'
+      loops: 2
+      loop_steps: 8
+      passed: true
+- id: harmony-revoice-two-voices
+  feature_id: harmony
+  title: Place two voices smoothly
+  behaviour_case: M-HARMONY-REVOICE-001
+  citation: README.md#harmony
+  source: tests/behaviour/contract/harmony_workflows.py
+  steps:
+  - id: two-voice-placement
+    title: Revoice preserves the two pitch classes
+    caption: After adding one chord-mask voice and applying Revoice, two loops emit
+      paired MIDI pitches 48/50, 50/52, 52/53 and 53/55. Each pair retains its source
+      velocity; Stop leaves no active notes.
+    assertion:
+      kind: revoice-physical-workflow
+      passed: true
+- id: harmony-ensemble-and-local-bypass
+  feature_id: harmony
+  title: Share a voicing while keeping each channel’s rhythm
+  behaviour_case: M-HARMONY-ENSEMBLE-001
+  citation: README.md#harmony
+  source: tests/behaviour/contract/harmony_workflows.py
+  steps:
+  - id: four-channel-roles
+    title: Four roles, independent rhythms
+    caption: Four explicit member channels retain their sparse rhythms and velocities
+      while Ensemble assigns MIDI pitches 48, 55, 64 and 67. Each channel’s onset
+      interval is checked independently.
+    assertion:
+      kind: ensemble-polyrhythm
+      role_pitches:
+        1: 48
+        2: 55
+        3: 64
+        4: 67
+      passed: true
+  - id: scale-bypass
+    title: A conflicting local scale uses the ordinary path
+    caption: 'A local scale lock on channel 2 makes its five tested notes emit MIDI
+      64. Result names the reason exactly: LOCAL SCALE BYPASS.'
+    assertion:
+      kind: local-scale-bypass
+      channel: 2
+      pitches:
+      - 64
+      - 64
+      - 64
+      - 64
+      - 64
+      status: LOCAL SCALE BYPASS
+      passed: true
+  - id: octave-bypass
+    title: A local octave also names its bypass
+    caption: Channel 3’s local octave produces six tested MIDI-72 notes through the
+      ordinary path. Inspecting step 2 shows LOCAL OCTAVE BYPASS on Result.
+    assertion:
+      kind: local-octave-bypass
+      channel: 3
+      inspected_step: 2
+      pitches:
+      - 72
+      - 72
+      - 72
+      - 72
+      - 72
+      - 72
+      status: LOCAL OCTAVE BYPASS
+      passed: true

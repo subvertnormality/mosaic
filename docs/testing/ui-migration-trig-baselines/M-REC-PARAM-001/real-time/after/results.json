@@ -1,0 +1,394 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "live-parameter-recording-dirty-value",
+    "expected": [
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ]
+    ],
+    "meaning": "Active edited values emit immediately and on eligible steps; Off remains silent."
+  },
+  {
+    "kind": "live-parameter-immediate-input",
+    "delay_ns": -111379,
+    "max_abs_delay_ns": 10000000,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999841935,
+        "error_ms": -0.1580649999999295
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999892986,
+        "error_ms": -0.1070140000001274
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999154415,
+        "error_ms": -0.845584999999982
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999389507,
+        "error_ms": -0.6104929999999342
+      }
+    ]
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "65"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000302236,
+        "error_ms": 0.3022359999995672
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999424883,
+        "error_ms": -0.5751169999999028
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999763592,
+        "error_ms": -0.2364080000001323
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999148439,
+        "error_ms": -0.8515610000001672
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999466155,
+        "error_ms": -0.5338450000000883
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.000341192,
+        "error_ms": 0.3411919999996016
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999702251,
+        "error_ms": -0.2977490000000138
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 3.999137308,
+        "error_ms": -0.8626920000001093
+      }
+    ]
+  },
+  {
+    "kind": "recorded-parameter-disarmed-replay",
+    "values": [
+      24,
+      64,
+      64,
+      64,
+      24,
+      64,
+      64,
+      64,
+      24
+    ],
+    "distinct_patch_default": 65,
+    "passed": true
+  }
+]

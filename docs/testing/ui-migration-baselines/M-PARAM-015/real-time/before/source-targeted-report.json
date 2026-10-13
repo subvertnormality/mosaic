@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "f6c1b65ebfa2da5be54063f9d39d85835bff79a7",
+  "after_sha": "f31751faa64a4cfea8dd815d41d816f20646551f",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-PARAM-015",
+    "M-PARAM-016"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/trig_parameter_interactions.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/trig_parameter_interactions.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-PARAM-015",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PARAM-015/real-time/before/e8c333fded144bc18373bcd9114849f0/manifest.json",
+              "manifest_sha256": "e6937b58686668ae6df51fca4627316c62902f16ad7ec521c7414e2a15f39479"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PARAM-015/real-time/after/1c9c9614c0b448f790d4cffbed8251b1/manifest.json",
+              "manifest_sha256": "13cd72e911d60fc8bef3d32d0fd97882c413ee0259f10195b2d74a44eacac0df"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PARAM-015/controlled-experimental/before/79735a702f7742b48697134f59742b3e/manifest.json",
+              "manifest_sha256": "24e3521f4b566efd4879689c1fa7a671cdfcfe10cee529e986df73b023eafb20"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PARAM-015/controlled-experimental/after/a59980849b684e49ab1aba503e026990/manifest.json",
+              "manifest_sha256": "ccecc38b78e3b1238feea656f98a756383d03c5275e86893704d28bd0067d86b"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-PARAM-016",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PARAM-016/real-time/before/b5f13fd3e0af4aa8a1699dc3a17fd6b3/manifest.json",
+              "manifest_sha256": "f18004edefeb61613ede230a6ed74dcb8edfb5939c10fab22906dcd97d019a92"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PARAM-016/real-time/after/87f8ceda6c634073a6251eb14806e363/manifest.json",
+              "manifest_sha256": "2f1307a5560bdf7efa18c372b6cd1c11670018d91d547213d27c7d0172d1b1f1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PARAM-016/controlled-experimental/before/7456bf031be9453499d001efdceeee15/manifest.json",
+              "manifest_sha256": "7668e175c32c4d52e20c32cf2603c92e861aa52eddd24e72184f8006072513d6"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PARAM-016/controlled-experimental/after/1fdc0db0405a4d4dbbaacbd953436d66/manifest.json",
+              "manifest_sha256": "453a4ce5c106bca5987174984890b25a4d1f1321130f47e88ddd12dd92757ee0"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

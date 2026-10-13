@@ -1,0 +1,1816 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 48,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166019843,
+        "error_ms": -0.6468236666666571
+      },
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16644681,
+        "error_ms": -0.21985666666665682
+      },
+      {
+        "pitch": 52,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166269568,
+        "error_ms": -0.39709866666665095
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166402352,
+        "error_ms": -0.26431466666665404
+      },
+      {
+        "pitch": 48,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166862964,
+        "error_ms": 0.1962973333333451
+      },
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165582785,
+        "error_ms": -1.0838816666666473
+      },
+      {
+        "pitch": 52,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16650056,
+        "error_ms": -0.16610666666666551
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16618162,
+        "error_ms": -0.4850466666666553
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -12,
+    "pitches": [
+      48,
+      50,
+      52,
+      53
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0005800406666666147,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 49,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166551347,
+        "error_ms": -0.11531966666666893
+      },
+      {
+        "pitch": 51,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166325925,
+        "error_ms": -0.34074166666664407
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166532385,
+        "error_ms": -0.13428166666665242
+      },
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165429508,
+        "error_ms": -1.2371586666666545
+      },
+      {
+        "pitch": 49,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166584965,
+        "error_ms": -0.0817016666666559
+      },
+      {
+        "pitch": 51,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16665033,
+        "error_ms": -0.01633666666664424
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165593416,
+        "error_ms": -1.0732506666666641
+      },
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166535398,
+        "error_ms": -0.13126866666665626
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -11,
+    "pitches": [
+      49,
+      51,
+      53,
+      54
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0008185920000000069,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16676165,
+        "error_ms": 0.09498333333335385
+      },
+      {
+        "pitch": 52,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166423977,
+        "error_ms": -0.2426896666666567
+      },
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165453986,
+        "error_ms": -1.21268066666666
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166446838,
+        "error_ms": -0.2198286666666438
+      },
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166338569,
+        "error_ms": -0.32809766666666573
+      },
+      {
+        "pitch": 52,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166458937,
+        "error_ms": -0.20772966666665615
+      },
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166471199,
+        "error_ms": -0.19546766666667104
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166522727,
+        "error_ms": -0.14393966666664815
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -10,
+    "pitches": [
+      50,
+      52,
+      54,
+      55
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009102226666668489,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 51,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166468781,
+        "error_ms": -0.1978856666666473
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166473818,
+        "error_ms": -0.19284866666666178
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166279518,
+        "error_ms": -0.38714866666667014
+      },
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166505734,
+        "error_ms": -0.16093266666666883
+      },
+      {
+        "pitch": 51,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16638486,
+        "error_ms": -0.2818066666666619
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166227383,
+        "error_ms": -0.4392836666666511
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165280017,
+        "error_ms": -1.3866496666666561
+      },
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16645111,
+        "error_ms": -0.2155566666666442
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -9,
+    "pitches": [
+      51,
+      53,
+      55,
+      56
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009677489999999622,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 52,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166424683,
+        "error_ms": -0.24198366666666749
+      },
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166373257,
+        "error_ms": -0.2934096666666608
+      },
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166333965,
+        "error_ms": -0.3327016666666571
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166322445,
+        "error_ms": -0.3442216666666442
+      },
+      {
+        "pitch": 52,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166304258,
+        "error_ms": -0.36240866666664706
+      },
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166204265,
+        "error_ms": -0.4624016666666675
+      },
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16636173,
+        "error_ms": -0.3049366666666442
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166581265,
+        "error_ms": -0.08540166666665128
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -8,
+    "pitches": [
+      52,
+      54,
+      56,
+      57
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0007052246666667816,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165942165,
+        "error_ms": -0.7245016666666548
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166341334,
+        "error_ms": -0.32533266666665006
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165462517,
+        "error_ms": -1.204149666666654
+      },
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166488611,
+        "error_ms": -0.17805566666664885
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166604566,
+        "error_ms": -0.06210066666664793
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165747015,
+        "error_ms": -0.9196516666666599
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166544,
+        "error_ms": -0.12266666666665982
+      },
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166638901,
+        "error_ms": -0.02776566666665148
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -7,
+    "pitches": [
+      53,
+      55,
+      57,
+      58
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0010753749999999895,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165951052,
+        "error_ms": -0.7156146666666696
+      },
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165305376,
+        "error_ms": -1.3612906666666535
+      },
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166451486,
+        "error_ms": -0.2151806666666478
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16642601,
+        "error_ms": -0.24065666666664431
+      },
+      {
+        "pitch": 54,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166455205,
+        "error_ms": -0.21146166666666244
+      },
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165592024,
+        "error_ms": -1.074642666666653
+      },
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166537621,
+        "error_ms": -0.12904566666666062
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166622956,
+        "error_ms": -0.043710666666668674
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -6,
+    "pitches": [
+      54,
+      56,
+      58,
+      59
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.001265853000000039,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167131389,
+        "error_ms": 0.4647223333333339
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165457564,
+        "error_ms": -1.209102666666656
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166257128,
+        "error_ms": -0.4095386666666534
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166471166,
+        "error_ms": -0.19550066666665367
+      },
+      {
+        "pitch": 55,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166459659,
+        "error_ms": -0.2070076666666476
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166301613,
+        "error_ms": -0.3650536666666704
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165321936,
+        "error_ms": -1.3447306666666548
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166267477,
+        "error_ms": -0.39918966666666056
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -5,
+    "pitches": [
+      55,
+      57,
+      59,
+      60
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009387003333333477,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166451675,
+        "error_ms": -0.21499166666666403
+      },
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166433892,
+        "error_ms": -0.23277466666665747
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16632958,
+        "error_ms": -0.33708666666665277
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166279938,
+        "error_ms": -0.38672866666666916
+      },
+      {
+        "pitch": 56,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166309445,
+        "error_ms": -0.3572216666666572
+      },
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165717359,
+        "error_ms": -0.9493076666666489
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166416279,
+        "error_ms": -0.2503876666666571
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166403775,
+        "error_ms": -0.26289166666665365
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -4,
+    "pitches": [
+      56,
+      58,
+      60,
+      61
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0006954606666667029,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166714541,
+        "error_ms": 0.04787433333333646
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166346517,
+        "error_ms": -0.3201496666666581
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166552526,
+        "error_ms": -0.11414066666665112
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165393165,
+        "error_ms": -1.2735016666666488
+      },
+      {
+        "pitch": 57,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166400251,
+        "error_ms": -0.2664156666666584
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166350647,
+        "error_ms": -0.31601966666666703
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166214071,
+        "error_ms": -0.4525956666666664
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166395769,
+        "error_ms": -0.2708976666666585
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -3,
+    "pitches": [
+      57,
+      59,
+      61,
+      62
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0007256629999999875,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16703044,
+        "error_ms": 0.36377333333334483
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165515729,
+        "error_ms": -1.150937666666657
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166500934,
+        "error_ms": -0.16573266666666808
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16660003,
+        "error_ms": -0.06663666666664736
+      },
+      {
+        "pitch": 58,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16654903,
+        "error_ms": -0.11763666666667061
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.1655449,
+        "error_ms": -1.1217666666666626
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16640293,
+        "error_ms": -0.26373666666665296
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166155614,
+        "error_ms": -0.5110526666666504
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -2,
+    "pitches": [
+      58,
+      60,
+      62,
+      63
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0008358676666666565,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166495343,
+        "error_ms": -0.17132366666666732
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166542058,
+        "error_ms": -0.12460866666666459
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166519128,
+        "error_ms": -0.14753866666666893
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165403405,
+        "error_ms": -1.263261666666654
+      },
+      {
+        "pitch": 59,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16626244,
+        "error_ms": -0.4042266666666461
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166567264,
+        "error_ms": -0.09940266666666475
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166734656,
+        "error_ms": 0.06798933333335144
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165438725,
+        "error_ms": -1.2279416666666487
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": -1,
+    "pitches": [
+      59,
+      61,
+      63,
+      64
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0007516349999999727,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16591982,
+        "error_ms": -0.7468466666666618
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166155173,
+        "error_ms": -0.5114936666666681
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166285094,
+        "error_ms": -0.381572666666663
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166317541,
+        "error_ms": -0.34912566666664424
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166323105,
+        "error_ms": -0.34356166666665855
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166348965,
+        "error_ms": -0.3177016666666699
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165261507,
+        "error_ms": -1.4051596666666555
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166920564,
+        "error_ms": 0.2538973333333361
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 0,
+    "pitches": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0008913016666667328,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166507028,
+        "error_ms": -0.15963866666665605
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166338631,
+        "error_ms": -0.3280356666666706
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166350511,
+        "error_ms": -0.31615566666665096
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166501485,
+        "error_ms": -0.1651816666666528
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165470057,
+        "error_ms": -1.1966096666666537
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166374247,
+        "error_ms": -0.29241966666665453
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166575656,
+        "error_ms": -0.0910106666666688
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16653663,
+        "error_ms": -0.13003666666666636
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 1,
+    "pitches": [
+      61,
+      63,
+      65,
+      66
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0007564253333334214,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167121038,
+        "error_ms": 0.4543713333333421
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165269738,
+        "error_ms": -1.396928666666658
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166404279,
+        "error_ms": -0.26238766666666913
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166391445,
+        "error_ms": -0.2752216666666585
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166409384,
+        "error_ms": -0.2572826666666639
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166466044,
+        "error_ms": -0.20062266666664996
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165435548,
+        "error_ms": -1.2311186666666696
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166652055,
+        "error_ms": -0.014611666666664025
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 2,
+    "pitches": [
+      62,
+      64,
+      66,
+      67
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009611413333333318,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167115947,
+        "error_ms": 0.4492803333333295
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16533559,
+        "error_ms": -1.331076666666653
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166477106,
+        "error_ms": -0.18956066666664384
+      },
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16659993,
+        "error_ms": -0.06673666666665024
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165417389,
+        "error_ms": -1.2492776666666594
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166487331,
+        "error_ms": -0.179335666666669
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166618582,
+        "error_ms": -0.048084666666670106
+      },
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166337882,
+        "error_ms": -0.32878466666666495
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 3,
+    "pitches": [
+      63,
+      65,
+      67,
+      68
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009830263333333311,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167066306,
+        "error_ms": 0.39963933333334034
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165526815,
+        "error_ms": -1.1398516666666636
+      },
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166501077,
+        "error_ms": -0.16558966666666008
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166541235,
+        "error_ms": -0.12543166666664773
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166518787,
+        "error_ms": -0.14787966666665597
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166330806,
+        "error_ms": -0.3358606666666597
+      },
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166252539,
+        "error_ms": -0.4141276666666527
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16637319,
+        "error_ms": -0.2934766666666533
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 4,
+    "pitches": [
+      64,
+      66,
+      68,
+      69
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0007919723333333351,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166268863,
+        "error_ms": -0.39780366666666844
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166446274,
+        "error_ms": -0.22039266666665225
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166482519,
+        "error_ms": -0.18414766666666194
+      },
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166518712,
+        "error_ms": -0.14795466666664425
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166491063,
+        "error_ms": -0.17560366666666272
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166402822,
+        "error_ms": -0.26384466666665163
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165408009,
+        "error_ms": -1.2586576666666627
+      },
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166503104,
+        "error_ms": -0.16356266666664454
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 5,
+    "pitches": [
+      65,
+      67,
+      69,
+      70
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009711629999999971,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166569799,
+        "error_ms": -0.0968676666666668
+      },
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166528163,
+        "error_ms": -0.1385036666666506
+      },
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166493081,
+        "error_ms": -0.1735856666666702
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165521735,
+        "error_ms": -1.1449316666666542
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166479914,
+        "error_ms": -0.1867526666666508
+      },
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166647759,
+        "error_ms": -0.018907666666651002
+      },
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166298992,
+        "error_ms": -0.36767466666665083
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166346429,
+        "error_ms": -0.3202376666666673
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 6,
+    "pitches": [
+      66,
+      68,
+      70,
+      71
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.000804919000000015,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167203266,
+        "error_ms": 0.5365993333333319
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165532944,
+        "error_ms": -1.13372266666667
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166643657,
+        "error_ms": -0.023009666666656825
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165882816,
+        "error_ms": -0.7838506666666689
+      },
+      {
+        "pitch": 67,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166788958,
+        "error_ms": 0.12229133333332975
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16532693,
+        "error_ms": -1.3397366666666466
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166606268,
+        "error_ms": -0.06039866666665561
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16660529,
+        "error_ms": -0.06137666666666819
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 7,
+    "pitches": [
+      67,
+      69,
+      71,
+      72
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009480353333333469,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16632285,
+        "error_ms": -0.3438166666666631
+      },
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166399658,
+        "error_ms": -0.2670086666666516
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166195304,
+        "error_ms": -0.47136266666666926
+      },
+      {
+        "pitch": 73,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166344885,
+        "error_ms": -0.3217816666666595
+      },
+      {
+        "pitch": 68,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166495166,
+        "error_ms": -0.17150066666665742
+      },
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165294582,
+        "error_ms": -1.372084666666662
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166554203,
+        "error_ms": -0.11246366666664565
+      },
+      {
+        "pitch": 73,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166498044,
+        "error_ms": -0.16862266666664572
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 8,
+    "pitches": [
+      68,
+      70,
+      72,
+      73
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.000777505666666678,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167186904,
+        "error_ms": 0.5202373333333399
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165394982,
+        "error_ms": -1.2716846666666615
+      },
+      {
+        "pitch": 73,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166597191,
+        "error_ms": -0.06947566666665184
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166424322,
+        "error_ms": -0.242344666666644
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166371877,
+        "error_ms": -0.29478966666665607
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16546486,
+        "error_ms": -1.201806666666666
+      },
+      {
+        "pitch": 73,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166561119,
+        "error_ms": -0.10554766666664994
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166675587,
+        "error_ms": 0.008920333333328756
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 9,
+    "pitches": [
+      69,
+      71,
+      73,
+      74
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0009203026666666503,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165862798,
+        "error_ms": -0.8038686666666517
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166461696,
+        "error_ms": -0.20497066666666508
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165442367,
+        "error_ms": -1.2242996666666506
+      },
+      {
+        "pitch": 75,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166417979,
+        "error_ms": -0.24868766666666375
+      },
+      {
+        "pitch": 70,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166403521,
+        "error_ms": -0.26314566666665873
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166561065,
+        "error_ms": -0.10560166666664927
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166480028,
+        "error_ms": -0.1866386666666553
+      },
+      {
+        "pitch": 75,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16529997,
+        "error_ms": -1.366696666666667
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 10,
+    "pitches": [
+      70,
+      72,
+      74,
+      75
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.000993291999999979,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165185622,
+        "error_ms": -1.4810446666666532
+      },
+      {
+        "pitch": 73,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166350464,
+        "error_ms": -0.316202666666654
+      },
+      {
+        "pitch": 75,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166392976,
+        "error_ms": -0.2736906666666594
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166402614,
+        "error_ms": -0.26405266666665317
+      },
+      {
+        "pitch": 71,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16640383,
+        "error_ms": -0.26283666666665484
+      },
+      {
+        "pitch": 73,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165485502,
+        "error_ms": -1.1811646666666509
+      },
+      {
+        "pitch": 75,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166392969,
+        "error_ms": -0.27369766666665574
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16690389,
+        "error_ms": 0.23722333333334178
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 11,
+    "pitches": [
+      71,
+      73,
+      75,
+      76
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0012734239999999675,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16621851,
+        "error_ms": -0.44815666666664367
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166565746,
+        "error_ms": -0.10092066666667066
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166487981,
+        "error_ms": -0.1786856666666503
+      },
+      {
+        "pitch": 77,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166483411,
+        "error_ms": -0.1832556666666596
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166371675,
+        "error_ms": -0.29499166666666077
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165402178,
+        "error_ms": -1.2644886666666466
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16647235,
+        "error_ms": -0.19431666666666625
+      },
+      {
+        "pitch": 77,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166673898,
+        "error_ms": 0.007231333333329593
+      }
+    ]
+  },
+  {
+    "kind": "global-transpose-value",
+    "value": 12,
+    "pitches": [
+      72,
+      74,
+      76,
+      77
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "owned_durations": 8,
+    "program_changes": 36,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0010352626666666476,
+    "passed": true
+  }
+]

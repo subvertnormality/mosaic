@@ -1,0 +1,157 @@
+{
+  "job_id": "source14-clocks-feature-review-20261008-01",
+  "reviewed_at_utc": "2026-10-08T08:02:40.211Z",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reader_url": "http://127.0.0.1:8924/manual/",
+  "source_identity_sha256": "da8b8d63986e46f1432278cc0cd8bdc800db727154c07bf18be05bd093e91049",
+  "inventory_serialized_sha256": "49180378684db9f038845d69eb42505f161f696b9cd1eb83cc2928cba8339a3d",
+  "book_sha256": "e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe",
+  "reader_index_sha256": "984dc86e198f71fb2594dac82add5fe03afbd706f30cded8f5f84f5189a44d6c",
+  "audio_scenes_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+  "book_js_sha256": "453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8",
+  "manual_js_sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+  "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+  "root_staged_receipt_sha256": "cffef64c66d07ff3089ecd31ff2e2be9c4f2777d41625af28997e481a58f7a93",
+  "scope": "One fresh unit: feature:clocks-swing-and-shuffle, as identified by parent’s bounded source10-to-source14 feature diff. This report does not modify the separate four-unit source14 scene report and does not claim a full-manual re-review.",
+  "all_ten_criteria_independently_rated": true,
+  "all_scores_at_least_8": false,
+  "unit": {
+    "id": "feature:clocks-swing-and-shuffle",
+    "title": "Clocks, Swing and Shuffle",
+    "kind": "feature",
+    "canonical_route": "#clocks-swing-and-shuffle",
+    "compiled_book_sha256": "e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe",
+    "criteria": {
+      "coherence": {
+        "score": 6,
+        "rationale": "The reader says every Song slot uses one global composition tempo, while the user-designated primary README says each sequence can have its own tempo. That unresolved contradiction affects the chapter’s central tempo model.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png",
+          "browser-evidence/cookbook-click.png",
+          "browser-evidence/README-primary-source.txt"
+        ]
+      },
+      "usefulness": {
+        "score": 8,
+        "rationale": "The page gives concrete Song tasks → Tempo / feel and Channel tasks → Clock paths, per-channel division or multiplication, and examples for changing Swing and Shuffle; the tempo claim needs reconciliation with the primary manual.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png",
+          "browser-evidence/open-clock-click.png",
+          "browser-evidence/cookbook-click.png"
+        ]
+      },
+      "understandability": {
+        "score": 8,
+        "rationale": "It separates shared composition tempo, per-channel rate, local Swing/Shuffle, and X inheritance in direct terms. The running-versus-stopped update boundary adds technical detail but is stated explicitly.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png",
+          "browser-evidence/open-clock-click.png"
+        ]
+      },
+      "representation": {
+        "score": 8,
+        "rationale": "The nine-frame capture shows channel/device and rate context, and the cookbook gives a two-slot, two-channel example. The new shared-tempo statement is explained in prose rather than demonstrated in a captured Song Tempo screen.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png",
+          "browser-evidence/cookbook-click.png"
+        ]
+      },
+      "granularity": {
+        "score": 9,
+        "rationale": "The feature groups clock rate with closely related Swing and Shuffle behavior, while independent captured examples isolate channel selection, shuffle amount, swing and the vertical Clock list.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png",
+          "browser-evidence/open-clock-lesson.png"
+        ]
+      },
+      "flow": {
+        "score": 9,
+        "rationale": "The page moves from the tempo/rate distinction to feel inheritance, then recorded examples, a concise controls table, and a multi-slot musical recipe.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png",
+          "browser-evidence/cookbook-click.png"
+        ]
+      },
+      "integration": {
+        "score": 8,
+        "rationale": "The visible clock lesson link opens the channel Clock task and explains Rate /1; the cookbook combines Song slots with separate channel Clock pages. The README conflict keeps confidence below a stronger integration score.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/open-clock-click.png",
+          "browser-evidence/cookbook-click.png",
+          "browser-evidence/README-primary-source.txt"
+        ]
+      },
+      "vocabulary": {
+        "score": 8,
+        "rationale": "Rate /1, global tempo, channel, Swing, Shuffle, basis and feel are used consistently and the page defines X inheritance; the concepts assume some familiarity with sequencer timing.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png",
+          "browser-evidence/open-clock-click.png"
+        ]
+      },
+      "naming": {
+        "score": 9,
+        "rationale": "“Clocks, Swing and Shuffle” names the feature’s three controls directly, and the linked lessons describe specific tasks such as opening the channel clock or setting a shuffle amount.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/feature.png"
+        ]
+      },
+      "canonical_home": {
+        "score": 9,
+        "rationale": "The canonical route loads the titled feature, its visible “Open the channel clock” link reaches the corresponding lesson, and the Musical examples control scrolls to the straight-then-swung recipe.",
+        "evidence": [
+          "browser-evidence/source14-clocks-live-evidence.json",
+          "browser-evidence/open-clock-click.png",
+          "browser-evidence/cookbook-click.png",
+          "browser-evidence/source14-clocks-click-handoffs.json"
+        ]
+      }
+    }
+  },
+  "below_threshold_findings": [
+    {
+      "unit_id": "feature:clocks-swing-and-shuffle",
+      "criterion": "coherence",
+      "score": 6,
+      "location": "#clocks-swing-and-shuffle introduction; README.md:805",
+      "finding": "Rendered reader says every Song slot uses the global composition tempo. The workspace README, which the user designates as the primary source of truth, says each sequence can have its own tempo.",
+      "suggested_resolution": "Reconcile the authoritative README and rendered feature prose to the actual behavior, then re-review this feature. Update the cheat sheet if the user-facing tempo behavior changes.",
+      "evidence": [
+        "browser-evidence/feature.png",
+        "browser-evidence/source14-clocks-live-evidence.json",
+        "browser-evidence/README-primary-source.txt"
+      ]
+    }
+  ],
+  "change_scope_assertion_from_parent": "feature prose now states that all Song slots use the shared composition tempo and each channel has its own clock rate; the bounded root feature-diff receipt was not present in the Windows visualization mirror at review time.",
+  "actual_served_assets": [
+    {
+      "url": "http://127.0.0.1:8924/manual/manual.js",
+      "status": 200,
+      "sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+      "bytes": 97763
+    },
+    {
+      "url": "http://127.0.0.1:8924/manual/book.js",
+      "status": 200,
+      "sha256": "453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8",
+      "bytes": 72837
+    },
+    {
+      "url": "http://127.0.0.1:8924/manual/manual.css",
+      "status": 200,
+      "sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+      "bytes": 31222
+    }
+  ],
+  "method": "Fresh full-document loads of the canonical clocks feature, its visible Open the channel clock destination, and its cookbook section waited for routeReady, the loading panel to disappear, and route-specific visible content. Clicked the channel-clock link and the Musical examples section control; the latter scrolls to the recipe while the canonical feature hash remains. Reviewed the written starting state, controls, captured nine-frame example and straight-then-swung recipe. No source edit, compile, native run, audio capture or listening."
+}

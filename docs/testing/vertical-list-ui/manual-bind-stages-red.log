@@ -1,0 +1,21 @@
+E...........F.......
+======================================================================
+ERROR: test_case_capture_report_requires_exact_terminal_stdout_and_valid_document (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 23, in test_case_capture_report_requires_exact_terminal_stdout_and_valid_document
+    result=build.case_capture_result(log,root)
+AttributeError: module 'manual_build' has no attribute 'case_capture_result'
+
+======================================================================
+FAIL: test_post_capture_teaching_stages_precede_compilation (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 31, in test_post_capture_teaching_stages_precede_compilation
+    self.assertIn(name,names)
+AssertionError: 'raw-publication-audit' not found in ['masks-real', 'masks-controlled', 'first-sound-real', 'first-sound-controlled', 'reference-real-scene-plans-course-base-midi', 'reference-controlled-scene-plans-course-base-midi', 'doctor-manual-real', 'doctor-auto-real', 'doctor-publish', 'musical-audio', 'player-routes', 'refresh-scene-index', 'refresh-editorial', 'inventory', 'compile-book', 'quick-reference', 'publication-audit']
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.384s
+
+FAILED (failures=1, errors=1)

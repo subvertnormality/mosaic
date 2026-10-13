@@ -1,0 +1,21 @@
+.....................E........F.....
+======================================================================
+ERROR: test_only_real_readability_uses_the_explicit_installation (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 55, in test_only_real_readability_uses_the_explicit_installation
+    self.assertEqual(real['command'][real['command'].index('--experimental-install')+1],'/native/qualified-real-output-boundary.json')
+ValueError: '--experimental-install' is not in list
+
+======================================================================
+FAIL: test_real_readability_requires_explicit_output_boundary_installation (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 50, in test_real_readability_requires_explicit_output_boundary_installation
+    with self.assertRaisesRegex(ValueError,'readability.*installation'):build.plan(options,['scene-plans-readability.yaml'])
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.783s
+
+FAILED (failures=1, errors=1)

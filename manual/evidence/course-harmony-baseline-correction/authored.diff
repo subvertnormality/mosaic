@@ -1,0 +1,106 @@
+--- before/manual/course.yaml
++++ after/manual/course.yaml
+@@ -428,10 +428,13 @@
+ 
+       2. Select scale slot 2.
+ 
+-      3. Select root with E2; set D with E3.
+-
+-      4. Select scale type and choose Major.'
+-    result: The slot is edited; the previous applied harmony remains until Apply.
++      3. Play two bars and stop to hear its stored C-major setting.
++
++      4. Select Root with E2; set D with E3.
++
++      5. Select Scale and choose Major.'
++    result: The melody and bass still use C major during the comparison. D major is now prepared in
++      the draft; press K3 before using the grid.
+     binding:
+       status: pending
+       scene: null
+--- before/manual/features/reference-workflow.yaml
++++ after/manual/features/reference-workflow.yaml
+@@ -219,12 +219,15 @@
+ 
+     2. Select scale slot 2.
+ 
+-    3. Select root with E2; set D with E3.
+-
+-    4. Select scale type and choose Major.
+-
+-
+-    The slot is edited; the previous applied harmony remains until Apply.
++    3. Play two bars and stop to hear its stored C-major setting.
++
++    4. Select Root with E2; set D with E3.
++
++    5. Select Scale and choose Major.
++
++
++    The melody and bass still use C major during the comparison. D major is now prepared in the
++    draft; press K3 before using the grid.
+ 
+ 
+     ### Compare the transposition
+--- before/manual/scene-plans-course.yaml
++++ after/manual/scene-plans-course.yaml
+@@ -268,10 +268,24 @@
+       passed: true
+   - id: harmony-design-draft
+     title: Prepare a second scale
+-    caption: The slot is edited; the previous applied harmony remains until Apply.
++    caption: Hear C–C–C–D and bass C–G before editing the second scale.
+     assertion:
+       kind: manual-course-midi
+       stage: harmony-design-draft
++      passed: true
++  - id: harmony-design-draft-scale
++    title: Harmony design draft scale
++    caption: Root D and Major are prepared in slot 2. Press K3 before using the grid.
++    assertion:
++      kind: manual-course-ui
++      stage: harmony-design-draft-scale
++      passed: true
++  - id: harmony-design-apply-d
++    title: Harmony design apply d
++    caption: After K3, the same rhythm becomes D–D–D–E with bass D–A.
++    assertion:
++      kind: manual-course-midi
++      stage: harmony-design-apply-d
+       passed: true
+   - id: harmony-design-apply
+     title: Compare the transposition
+@@ -281,20 +295,6 @@
+       kind: manual-course-midi
+       stage: harmony-design-apply-restored
+       passed: true
+-  - id: harmony-design-draft-scale
+-    title: Harmony design draft scale
+-    caption: Compare the setting or phrase before continuing in the same project.
+-    assertion:
+-      kind: manual-course-ui
+-      stage: harmony-design-draft-scale
+-      passed: true
+-  - id: harmony-design-apply-d
+-    title: Harmony design apply d
+-    caption: Compare the setting or phrase before continuing in the same project.
+-    assertion:
+-      kind: manual-course-midi
+-      stage: harmony-design-apply-d
+-      passed: true
+ - id: course-modulation-movement-and-interest
+   feature_id: modulation-movement-and-interest
+   title: 8. Add a pickup
+--- before/manual/features/reference-scale.yaml
++++ after/manual/features/reference-scale.yaml
+@@ -84,7 +84,9 @@
+   - title: Vertical list controls
+     text: Scale settings appear as vertical rows. Turn E2 to select a row and bring later fields into
+       view. E3 edits the selected slot’s draft; K3 applies and K2 cancels. Selecting another row does
+-      not apply a draft. Long selected scale names use a separate full-width value row.
++      not apply a draft. Tapping a grid key, including Play/Stop, cancels an unapplied draft. Press
++      K3 before using the grid to keep your edit. Long selected scale names use a separate full-width
++      value row.
+   recipes:
+   - title: Prepare and apply a second scale
+     text: Apply scale slot 1 to a short degree melody. Hold K1 and press slot 2 to select it for editing.

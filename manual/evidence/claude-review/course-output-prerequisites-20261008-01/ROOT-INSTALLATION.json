@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "path": "manual/course.yaml",
+      "before": "41ffc82cfaef102a738b69ac7a7a85a85b0f05f25b2b94247adb8ed25e9bd449",
+      "after": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a"
+    },
+    {
+      "path": "manual/features/reference-channel.yaml",
+      "before": "2d9ceadbe122f403a89194a08111badbf1b690ac7771e57cf4d85db7662197bf",
+      "after": "f1959ad4521ab1df2703b6d73ee2d45ad33571ba60e2f3e24c68c7a7c1c098bd"
+    },
+    {
+      "path": "manual/features/tutorials.yaml",
+      "before": "613240583b1675ac86c71a3fa21a4385634923a9600d4a0386b11f69e4bb5ced",
+      "after": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8"
+    },
+    {
+      "path": "manual/generated/book.json",
+      "before": "db95208ebe2c3bd251819501ed6863af7c045cc3e8616870ab8fb19429f6a79e",
+      "after": "b67b58422e7b978a28a073ab4dd18cc9f9fddebd5aa40c5edc67ce32398196f4"
+    },
+    {
+      "path": "manual/generated/reader-index.json",
+      "before": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+      "after": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701"
+    }
+  ],
+  "all_146_book_scenes_unchanged": true,
+  "all_167_chunks_byte_identical": true,
+  "fresh_reviewed_units": 6,
+  "all_ten_scores_at_least_8": true,
+  "native_rebuild": false,
+  "audio_recording": false,
+  "publication_qualified": false
+}

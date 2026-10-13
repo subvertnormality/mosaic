@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "c01d7c2d29271f03ea57647fe7fec7218e820ab9",
+  "after_sha": "fe8e1d80e956fe7e3143f9b07c019ced18f883fd",
+  "tooling_sha": null,
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-MERGE-039",
+    "M-MERGE-040",
+    "M-MERGE-041",
+    "M-MERGE-042"
+  ],
+  "selected_modules": {
+    "tests/behaviour/numeric_merging.py": "M-MERGE-039"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/numeric_merging.py",
+      "case": "M-MERGE-039",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-602a36ac51224511b094c91be1ba8ef0/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-602a36ac51224511b094c91be1ba8ef0/manifest.json",
+      "manifest_sha256": "593ce55e2cd449ccbb3674a998f5ac5f1727dfba51c3b48b85c4df631835d2e3",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

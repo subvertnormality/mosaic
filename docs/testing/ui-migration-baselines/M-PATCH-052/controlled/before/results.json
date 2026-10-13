@@ -1,0 +1,867 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "Control 1"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS2"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS3"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS4"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "128"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS5"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "129"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS6"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "16383"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NL0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NL1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NL2"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NL3"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NL4"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "128"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NL5"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "129"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NL6"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "16383"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NS0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "nrpn-native-boundary-mode-matrix",
+    "checks": [
+      {
+        "parameter": "NS0",
+        "value": 0,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NS1",
+        "value": 1,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              1
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              1
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NS2",
+        "value": 126,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              2
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              126
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NS3",
+        "value": 127,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              3
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              127
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NS4",
+        "value": 128,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              4
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              1
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NS5",
+        "value": 129,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              5
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              1
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              1
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NS6",
+        "value": 16383,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              127
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              127
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NL0",
+        "value": 0,
+        "expected": [
+          [
+            1,
+            [
+              191,
+              99,
+              7
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              98,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NL1",
+        "value": 1,
+        "expected": [
+          [
+            1,
+            [
+              191,
+              99,
+              7
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              98,
+              1
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NL2",
+        "value": 126,
+        "expected": [
+          [
+            1,
+            [
+              191,
+              99,
+              7
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              98,
+              2
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              38,
+              63
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NL3",
+        "value": 127,
+        "expected": [
+          [
+            1,
+            [
+              191,
+              99,
+              7
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              98,
+              3
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NL4",
+        "value": 128,
+        "expected": [
+          [
+            1,
+            [
+              191,
+              99,
+              7
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              98,
+              4
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              6,
+              1
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NL5",
+        "value": 129,
+        "expected": [
+          [
+            1,
+            [
+              191,
+              99,
+              7
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              98,
+              5
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              6,
+              1
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NL6",
+        "value": 16383,
+        "expected": [
+          [
+            1,
+            [
+              191,
+              99,
+              7
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              98,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              6,
+              127
+            ]
+          ],
+          [
+            1,
+            [
+              191,
+              38,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "parameter": "NS0",
+        "value": 0,
+        "expected": [
+          [
+            1,
+            [
+              177,
+              99,
+              6
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              98,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              6,
+              0
+            ]
+          ],
+          [
+            1,
+            [
+              177,
+              38,
+              0
+            ]
+          ]
+        ]
+      }
+    ],
+    "off_silence": true,
+    "aba": true,
+    "passed": true
+  }
+]

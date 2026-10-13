@@ -1,0 +1,24 @@
+....F..........
+======================================================================
+FAIL: test_motion_public_recipe_reaches_slow_rate_and_restores_through_actual_owner (test_manual_closure_cases.MotionClosureOracleTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_closure_cases.py", line 62, in test_motion_public_recipe_reaches_slow_rate_and_restores_through_actual_owner
+    self.assertEqual(list(map(int,result.stdout.split())),[14,13])
+AssertionError: Lists differ: [12, 13] != [14, 13]
+
+First differing element 0:
+12
+14
+
+- [12, 13]
+?   ^
+
++ [14, 13]
+?   ^
+
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.026s
+
+FAILED (failures=1)

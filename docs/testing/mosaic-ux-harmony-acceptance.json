@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "subject": "Mosaic UX Harmony and Musical Merge MM-01 through MM-07",
+  "scope": {
+    "harmony_plan": "C:/Users/andy/Documents/ChatGPT/monome-emulator/docs/proposals/mosaic-ux-harmony/HARMONY-PLAN.md",
+    "musical_merge_plan": "C:/Users/andy/Documents/ChatGPT/monome-emulator/docs/proposals/mosaic-ux-harmony/MUSICAL-MERGE-PLAN.md",
+    "included_cards": ["MM-01", "MM-02", "MM-03", "MM-04", "MM-05", "MM-06", "MM-07"],
+    "excluded_cards": ["MM-08+ Interlock / fragments"],
+    "exclusion_reason": "MM-08+ is explicitly gated as later design work and was not requested for this implementation."
+  },
+  "source": {
+    "revision": "87752639fd9959837c1e386ed4db677480c96419",
+    "dirty_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "git_tree": "209d391310cd16451eda4b17c6eed9b9214951eb",
+    "tree_sha256": "bb0fe228f0ad8bd83bfcfa5417842b157b6c08fb6f632379be022a6f0ce0db3a",
+    "file_count": 1248
+  },
+  "automated_tests": {
+    "lua_unit_and_integration": {
+      "passed": true,
+      "tests": 1868,
+      "failures": 0,
+      "command": "cd lib/tests && lua run_tests.lua"
+    },
+    "python_inventory_and_ci_guards": {
+      "passed": true,
+      "tests": 18,
+      "failures": 0,
+      "modules": [
+        "tests.behaviour.test_collection",
+        "tests.behaviour.test_inventory",
+        "tests.behaviour.test_hardening_matrix",
+        "tests.behaviour.test_lua_syntax",
+        "tests.behaviour.test_lua_test_names",
+        "tests.behaviour.ci.test_select_shard",
+        "tests.behaviour.ci.test_verify_full"
+      ]
+    },
+    "solver_evidence": {
+      "covered_by_full_lua_suite": true,
+      "independent_oracles": [
+        "test_harmony_voicing_matches_independent_small_bruteforce_oracle",
+        "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
+        "test_harmony_voicing_matches_independent_oracle_across_small_multi_register_domains",
+        "test_harmony_voicing_five_voice_preset_reports_measured_bounded_cost",
+        "test_harmony_voicing_reports_budget_instead_of_partial_optimum",
+        "test_harmony_voicing_range_beats_common_tone_and_never_clamps",
+        "test_harmony_voicing_root_and_inversion_bass_are_hard_constraints",
+        "test_harmony_voicing_is_deterministic_and_preserves_duplicate_sources"
+      ],
+      "properties": [
+        "deterministic lexicographic choice",
+        "396-case independent two-voice brute-force agreement across every ordered distinct pitch-class pair and three prior-voice positions",
+        "3,170-frame independent assignment-enumeration agreement across every one-through-five-voice pitch-class subset with empty and populated previous state",
+        "372-frame independent multi-register agreement across every one-through-five-voice subset of six pitch classes, two 25-semitone role layouts and three previous states",
+        "five-voice bounded search",
+        "budget-exceeded fail-closed result",
+        "range, crossing, inversion, coverage and lifecycle failures"
+      ],
+      "measured_cost": {
+        "command": "lua5.3 tools/benchmark_harmony_solver.lua .",
+        "scope": "Reference-host pure-solver CPU evidence only; this is not a physical-norns scheduling or deadline claim.",
+        "runs_per_preset": 100,
+        "voices": 5,
+        "nodes_per_solve": 17244,
+        "node_budget": 200000,
+        "results": {
+          "smooth_cpu_ms_per_solve": 23.726430,
+          "compact_cpu_ms_per_solve": 23.188240,
+          "independent_cpu_ms_per_solve": 22.448870
+        },
+        "status": "ok"
+      }
+    },
+    "final_review_regressions": {
+      "covered_by_full_lua_suite": true,
+      "tests": [
+        "test_harmony_playback_revoice_cache_distinguishes_equal_pitch_absolute_pin",
+        "test_harmony_playback_delayed_first_arp_voice_commits_at_first_reached_onset",
+        "test_harmony_playback_zero_gate_silent_arp_does_not_commit_history",
+        "test_harmony_playback_gate_before_first_voiced_arp_slot_does_not_commit_history",
+        "test_harmony_playback_terminating_interval_before_first_voiced_arp_slot_does_not_commit_history",
+        "test_harmony_playback_swung_gate_before_first_voiced_arp_slot_does_not_commit_history",
+        "test_harmony_context_pentatonic_policy_is_material_and_revision_identity",
+        "test_harmony_inspection_retains_actual_event_source_and_emitted_pitch",
+        "test_harmony_inspection_keeps_authored_source_distinct_from_note_mask_merge_pitch",
+        "test_harmony_inspection_keeps_delayed_stages_with_their_event_and_selected_step",
+        "test_harmony_inspection_replaces_a_steps_old_event_without_accepting_its_late_callback",
+        "test_midi_note_on_reports_the_normalized_emitted_pitch",
+        "test_harmony_result_prefers_active_event_bypass_without_a_solver_result",
+        "test_harmony_failure_details_use_active_event_not_unapplied_draft",
+        "test_harmony_result_step_selector_reads_one_coherent_event_chain",
+        "test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event",
+        "test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state",
+        "test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason",
+        "test_harmony_group_result_surfaces_a_members_local_scale_bypass",
+        "test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset",
+        "test_harmony_result_names_local_octave_bypass_instead_of_no_voicing",
+        "test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch",
+        "test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit",
+        "test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap",
+        "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
+        "test_harmony_voicing_matches_independent_oracle_across_small_multi_register_domains",
+        "test_harmony_grid_projection_uses_played_harmony_value_without_mutating_source",
+        "test_harmony_grid_projection_off_and_bypass_recover_ordinary_value_immediately",
+        "test_harmony_grid_projection_treats_absent_legacy_config_as_off",
+        "test_harmony_grid_projection_rejects_stale_events_and_names_out_of_range",
+        "test_harmony_grid_projection_inverts_only_exact_native_grid_positions",
+        "test_harmony_pattern_channels_retain_independent_frames_at_staggered_clocks",
+        "test_harmony_pattern_delayed_strum_bypass_keeps_legacy_pitch_and_note_ownership"
+      ]
+    },
+    "red_green_evidence": {
+      "path": "docs/testing/mosaic-ux-harmony-red-green.json",
+      "source_bound": true,
+      "baseline_regressions_failed_as_expected": 9,
+      "candidate_regressions_passed": 17,
+      "inspection_baseline": "a1347fa",
+      "scheduler_baseline": "c08b99e",
+      "local_octave_baseline": "f248a881eca9e5da72318cae13a3a93ba23a3aed",
+      "candidate_revision": "87752639fd9959837c1e386ed4db677480c96419"
+    },
+    "plan_coverage": {
+      "path": "docs/testing/mosaic-ux-harmony-plan-coverage.json",
+      "solver_frames": 3938,
+      "public_pattern_disable_and_reenable": true,
+      "public_pattern_unequal_clocks": true,
+      "public_pattern_delayed_chord_bypass": true,
+      "public_local_scale_and_octave_bypass": true,
+      "deferred_requirements": []
+    },
+    "plan_requirement_matrix": [
+      {
+        "family": "Legacy Off path, source semantics, precedence and immutable authored data",
+        "unit_integration": ["foundation_planner_tests.lua", "musical_merge_pattern_integration_tests.lua", "harmony_playback_integration_tests.lua"],
+        "behaviour": ["M-MERGE-FOUNDATION-001", "M-HARMONY-REVOICE-001", "M-HARMONY-HELD-001"]
+      },
+      {
+        "family": "Foundation anchors, additions, provenance, gap, amount, accent, deterministic ranking and finite boundaries",
+        "unit_integration": ["foundation_planner_tests.lua", "musical_merge_config_tests.lua", "musical_merge_pattern_integration_tests.lua"],
+        "behaviour": ["M-MERGE-FOUNDATION-001"]
+      },
+      {
+        "family": "Phrase cycles, shapes, fixed/per-phrase variation, activation boundaries, transport and polymetric lifecycle",
+        "unit_integration": ["musical_merge_state_tests.lua", "musical_merge_pattern_integration_tests.lua"],
+        "behaviour": ["M-MERGE-PHRASE-001"]
+      },
+      {
+        "family": "Structural pitch targets, anchor pitch, scale inventory, masks, fixed/random precedence and Pattern binding identity",
+        "unit_integration": ["musical_merge_pitch_target_tests.lua", "harmony_context_tests.lua", "harmony_pattern_tests.lua", "harmony_playback_integration_tests.lua"],
+        "behaviour": ["M-HARMONY-PATTERN-001", "M-HARMONY-PATTERN-CLOCKS-001"]
+      },
+      {
+        "family": "Deterministic voicing, material preservation, common tones, identity, inversion, register, spacing, bass, entry and score tie-breaks",
+        "unit_integration": ["harmony_voicing_tests.lua", "harmony_config_tests.lua", "harmony_context_tests.lua", "harmony_state_tests.lua"],
+        "behaviour": ["M-HARMONY-REVOICE-001", "M-HARMONY-ENSEMBLE-001"]
+      },
+      {
+        "family": "No-solution, invalid/budget outcomes, strict silence, explicit legacy fallback and visible explanations",
+        "unit_integration": ["harmony_voicing_tests.lua", "harmony_playback_integration_tests.lua", "harmony_inspection_tests.lua", "channel_feature_editor_tests.lua"],
+        "behaviour": ["M-HARMONY-FAILURE-001"]
+      },
+      {
+        "family": "Ensemble membership, stable channel roles, group source, local-scale and local-octave bypass, rhythm preservation and atomic edits",
+        "unit_integration": ["harmony_config_state_tests.lua", "harmony_context_tests.lua", "harmony_playback_integration_tests.lua", "channel_feature_editor_tests.lua"],
+        "behaviour": ["M-HARMONY-ENSEMBLE-001"]
+      },
+      {
+        "family": "Scheduler articulation, retrigger/gate/note ownership, swing-aware arp admission and committed-history lifecycle",
+        "unit_integration": ["harmony_playback_integration_tests.lua", "voice_lifetime_tests.lua"],
+        "behaviour": ["M-HARMONY-REVOICE-001", "M-HARMONY-PATTERN-001", "M-HARMONY-PATTERN-CLOCKS-001", "M-HARMONY-PATTERN-BYPASS-001", "M-MERGE-PHRASE-001"]
+      },
+      {
+        "family": "Existing Channel UI navigation, drafts/queue/active state, held-step precedence, played Note-grid projection and coherent event inspection",
+        "unit_integration": ["channel_feature_editor_tests.lua", "harmony_inspection_tests.lua", "harmony_grid_projection_tests.lua", "musical_merge_pattern_integration_tests.lua"],
+        "behaviour": ["M-MERGE-FOUNDATION-001", "M-MERGE-PHRASE-001", "M-HARMONY-PATTERN-001", "M-HARMONY-FAILURE-001", "M-HARMONY-HELD-001"]
+      },
+      {
+        "family": "Persistence, copy/migration defaults, transient-history exclusion and cold-load replay",
+        "unit_integration": ["optional_config_persistence_tests.lua", "harmony_config_state_tests.lua", "musical_merge_config_tests.lua"],
+        "behaviour": ["M-HARMONY-PERSIST-001"]
+      }
+    ],
+    "coverage_qualification": "Finite planner/solver axes and boundary classes are exercised exhaustively in pure tests where practical; cross-module contracts use integration tests; player-visible controls, MIDI, grid, screen and persistence use the public emulator input/output path. Pattern PH-03 acceptance includes literal onset/gate/release timing, rest and probability rejection, output disconnect/reconnect, repeated Stop/Start, copied-song entry, independent unequal-clock public channels and delayed reverse-arpeggio chord-mask bypass. The named 20-run campaign is feature acceptance, not the exhaustive repository behavior campaign, physical-norns evidence, or a hardware deadline claim."
+  },
+  "emulator_behaviour": {
+    "passed": true,
+    "complete_regression_run": false,
+    "reason_not_complete": "Feature acceptance selection; exhaustive repository campaign remains sharded CI scope.",
+    "source_identity": {
+      "mosaic_revision": "87752639fd9959837c1e386ed4db677480c96419",
+      "mosaic_clean": true,
+      "mosaic_sources_stable": true,
+      "emulator_revision": "bd5b8986413ff3649994ba04574999f37b2c654f",
+      "emulator_dirty_patch_sha256": "17c43bf9da28c520f321e1c19c788a8b7b215d5a729caf5f3b7d25768a5c6c8d",
+      "emulator_tree_sha256": "4bbd5b9fba3296b13debcd73da40a9564d8b4245891ecf754eda883aebf9c5ac",
+      "qualification": "The externally supplied emulator checkout was dirty but remained byte-stable for the full run; its complete tracked/untracked identity is retained in the hashed suite report. Mosaic made no emulator changes."
+    },
+    "started": "2026-09-20T05:32:42+0100",
+    "finished": "2026-09-20T05:44:13+0100",
+    "suite_sha256": [
+      "7140ec139435c0db476e7237692037bc4c80c73296e3b9f1cf773dfd15d6bbb5",
+      "fbd2645a9f0342026966d4eb18f51afc996a055e8b3208b9f7c871cc46fdd4be"
+    ],
+    "suite_partition": "One exact-commit run covers the complete named ten-case acceptance inventory in both lanes on the same clean source identity. The original report preserves one concurrent real-time documentation-frame mismatch in persistence; the suite-supported serial rerun passed on the identical source and the hashed effective report records it as load-sensitive.",
+    "case_runs": 20,
+    "failed_case_runs": 0,
+    "load_sensitive_serial_reruns": ["real-time/M-HARMONY-PERSIST-001"],
+    "lanes": ["real-time", "controlled-experimental"],
+    "cases": [
+      "M-MERGE-FOUNDATION-001",
+      "M-MERGE-PHRASE-001",
+      "M-HARMONY-REVOICE-001",
+      "M-HARMONY-PATTERN-001",
+      "M-HARMONY-PATTERN-CLOCKS-001",
+      "M-HARMONY-PATTERN-BYPASS-001",
+      "M-HARMONY-ENSEMBLE-001",
+      "M-HARMONY-PERSIST-001",
+      "M-HARMONY-FAILURE-001",
+      "M-HARMONY-HELD-001"
+    ],
+    "manifest_sha256": {
+      "real-time": {
+        "M-HARMONY-ENSEMBLE-001": "5a46a642e48b2026f1c2929bf3233944d43be7aac61b4ebc8e7d14724d7b466e",
+        "M-HARMONY-FAILURE-001": "cea95b7228338ec462b875a69f37975a78b5d6876e15b62b53a04d93988c8dbf",
+        "M-HARMONY-HELD-001": "e2ec1a7144423fda1a1ed11f98f8820583e4068d6948025619200df1fc201a7c",
+        "M-HARMONY-PATTERN-001": "1dc467dfc5ff66ebe8a3816723f23e7d080147bbffcf0d8fd1292bd9590bb9d7",
+        "M-HARMONY-PATTERN-BYPASS-001": "8e2f6e282e2564a023147d7ae613ef9fbca37f3202f51b76059580acc57a2b63",
+        "M-HARMONY-PATTERN-CLOCKS-001": "ccb2a68f289977504331b241c3b55eda0f59ba1d69874627df4ba5701e7c1996",
+        "M-HARMONY-PERSIST-001": "0d8abafd4321b7cfceca2e1a42b11a76b98983f58a0c6e32b5ff0a112b6bc106",
+        "M-HARMONY-REVOICE-001": "a2f384760dda2776b63088cc28818e49b483c3e4a2d16dff75a3cc66aafddf0d",
+        "M-MERGE-FOUNDATION-001": "9df42a78cd203b3f607f8b29c38e2ca1135491075b789ecaf15706d263723e54",
+        "M-MERGE-PHRASE-001": "ecdaef8465a4ddac10860dec9e5fb2b5dff9faa44a2c0fbe1d79d1eb0c420a9e"
+      },
+      "controlled-experimental": {
+        "M-HARMONY-ENSEMBLE-001": "d0e07574407ad82ff5ba1ef8f54faf13ce76202fcaebc1a03171e95e6b269f80",
+        "M-HARMONY-FAILURE-001": "51dd112a0876f569f912eb47a1b506b5cfc00d5e08a904cb223d1543987ff26d",
+        "M-HARMONY-HELD-001": "592ae7850d8878a004c94c717a08254c8f8e6293d8a6c026d6fd684b11dd5440",
+        "M-HARMONY-PATTERN-001": "58c54ac9671a88106a41f8e9b333f172abbb1a959d2271ae0f77d34cf719ed70",
+        "M-HARMONY-PATTERN-BYPASS-001": "587006c290627f07dc8cdefe004f83c4601bf5f781c2f940bb36fee1e4ab8368",
+        "M-HARMONY-PATTERN-CLOCKS-001": "cad49e5ce94700950a0cede45e8eaf602c1b2641c1b6ca8fc1fb1846b8cc518b",
+        "M-HARMONY-PERSIST-001": "fff9fdab9e5522b4ce430364ca6458e2b45c925222860111e525b70a724b1087",
+        "M-HARMONY-REVOICE-001": "96cfae64a2fed2b8616224bf672722ce7bfe5faf98bfd72ac548134ac3046c49",
+        "M-MERGE-FOUNDATION-001": "d7a0db8413edace764993bb750e0e12fc2eeebbfeb90138a3a8ee042b8f0f514",
+        "M-MERGE-PHRASE-001": "ce6dfafebe429b7960c94f5c4044375a24c67b49c810c9fc3ad16af29fb93160"
+      }
+    }
+  },
+  "result": "accepted"
+}

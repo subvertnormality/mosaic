@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-08",
+  "verdict": "conditional; CG-1 closed, CG-2 open",
+  "all_seven_at_least_8": false,
+  "scores": {
+    "readability": 8,
+    "comprehensibility": 8,
+    "flow": 8,
+    "understandability": 8,
+    "user_friendliness": 7,
+    "usefulness_of_interactive_examples": 7,
+    "cohesion": 8
+  },
+  "assets": {
+    "manual.css": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25",
+    "book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24"
+  },
+  "endCSS": "7959bc1e9f40f4320f7516ee8125dff945153a0ab9d950d8904824a0fcf00a25",
+  "coverage": {
+    "widths": [
+      1440,
+      1280,
+      1121,
+      768,
+      390
+    ],
+    "routes": [
+      "#rhythm-doctor",
+      "#first-sound/course"
+    ],
+    "states": 40,
+    "compact_states": 20,
+    "compact_clipped_pads": 0,
+    "page_errors": [],
+    "page_overflows": 0,
+    "strict_check": "All128 compact pads against viewport and every horizontal clipping/scrolling ancestor",
+    "extra_checks": "Expanded lesson guide at1440/1280; settled enlarged keyboard focus at1121 in original and Shield"
+  },
+  "closed_findings": [
+    {
+      "id": "CG-1",
+      "screen_width_now": 282,
+      "cases": [
+        "1440 lesson",
+        "1280 lesson",
+        "1121 Rhythm Doctor"
+      ]
+    }
+  ],
+  "open_findings": [
+    {
+      "id": "CG-2",
+      "severity": "blocking",
+      "route": "#rhythm-doctor",
+      "width": 1121,
+      "mode": "enlarged, both original and Shield",
+      "problem": "Column labels drift from enlarged pads; ArrowRight to column16 leaves pad partly clipped.",
+      "observed": {
+        "scrollLeft": 401,
+        "scrollWidth": 1163,
+        "clientWidth": 718,
+        "lastPadRight": 1073.21875,
+        "containerRight": 1043.4375
+      },
+      "baseline_attribution": "Appears pre-existing; responsive pad rule already present beforev2. No claim thatv2 introduced it.",
+      "fix": "Share enlarged pad/label column sizes,gaps,insets; ensure focused pad fully visible."
+    }
+  ],
+  "evidence": [
+    "observations.json",
+    "settled-diagnostic.json",
+    "lesson-1440-original.png",
+    "lesson-1280-original.png",
+    "rhythm-1121-original.png",
+    "rhythm-1121-original-settled-column16.png"
+  ],
+  "carry": {
+    "prior_content_review": "../locks-c07-1-astra-final-recheck-20261008-01/review.md",
+    "prior_failed_layout": "../compact-grid-astra-recheck-20261008-01/review.md",
+    "content_identity": "exact unchanged index and JS"
+  },
+  "limitations": [
+    "No source edits,no native/audio/CI/listening claim.",
+    "Owned browsers closed."
+  ]
+}

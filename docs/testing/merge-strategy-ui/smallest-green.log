@@ -1,0 +1,11 @@
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+E..
+Tests with errors:
+------------------
+1) test_ui_adapters_merge_root_strategy_is_readonly_and_selector_is_explicit
+.///lib/ui_adapters_merge_tests.lua:387: attempt to index a nil value (field 'strategy_selector')
+stack traceback:
+	.///lib/ui_adapters_merge_tests.lua:387: in upvalue 'test_ui_adapters_merge_root_strategy_is_readonly_and_selector_is_explicit'
+
+Ran 3 tests in 0.011 seconds, 2 successes, 1 error, 2410 non-selected
+find: ‘/home/we/norns/lua/core’: No such file or directory

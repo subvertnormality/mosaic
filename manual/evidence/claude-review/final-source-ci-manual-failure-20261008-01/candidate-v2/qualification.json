@@ -1,0 +1,24 @@
+{
+  "kind": "locks-decay-recipe-test-only-candidate-v2",
+  "scope": "Only the existing failing test method is updated. No authoring, scored content, production code, native job, audio job, or source installation was performed.",
+  "test_preimage_sha256": "4677ca7173629cab71aac8b5c7c3a7cba8b872903ffe524269d2b526e29d85f1",
+  "candidate_test_sha256": "55a9ac06635188b14571b44ca0e17a75bc595846f66ca3aa50c20e6f6a4139a0",
+  "patch_sha256": "7f45cc5dbe1981097fe5e417cdfa20559a7d227ae417d437b29b783dfc466297",
+  "actual_source_head_used_for_focused_tests": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+  "original_ci_failure": {
+    "run_id": "37809731780",
+    "summary": "984 passed, 1 skipped, 1 failed before audio/native generation",
+    "failure": "RecordingReviewFixes.test_decay_recipe_replays_recorded_gestures_and_separates_endpoint_practice",
+    "preserved_log": "../failed-job.log",
+    "preserved_log_sha256": "6f6d721bc58216b70c7e470fd8ca6c115e9c17636e8582eaf82cd2a892bcddbc"
+  },
+  "focused_validation": {
+    "python_3_11_pytest": "4 passed",
+    "python_3_8_unittest": "4 passed",
+    "external_mutations": "six semantic changes rejected and one benign prose/heading/whitespace paraphrase accepted; all expectations met"
+  },
+  "mutation_receipt": "mutation-qualification.json",
+  "mutation_receipt_sha256": "3bb908957fab98cb0879e9f2ced2446b92439623eba0a53cb6c1083e13e30589",
+  "mutation_runner": "qualify_mutations.py",
+  "mutation_runner_sha256": "fa2d1b42c0d624a5ab9e82d103d4f719ab3d4ac8bbcedb01ee776a19f98e9dfd"
+}

@@ -1,0 +1,10 @@
+{
+  "source_sha256": {
+    "lib/project_lifecycle.lua": "4a0ad718768d64df71d81679634fc4e25d7f36b930e443cde6f46987d5db3d97",
+    "lib/rhythm_doctor/state_machine.lua": "a5e060b639f47a03ed77de6e3e9c02672203e1641992b97d08caea4d62daaeb0",
+    "lib/tests/lib/project_load_integration_tests.lua": "a672e3668a85596ca7a1603169a68d1068bc88a4a2d7b7de8409fbd065d89f07"
+  },
+  "exit_code": 2,
+  "output": "The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.\n.FF\nFailed tests:\n-------------\n1) test_rhythm_doctor_project_replace_latest_request_wins_and_cleanup_discards_it\n.///lib/project_load_integration_tests.lua:336: expected: 0, actual: 2\nstack traceback:\n\t.///lib/project_load_integration_tests.lua:336: in upvalue 'test_rhythm_doctor_project_replace_latest_request_wins_and_cleanup_discards_it'\n\n2) test_rhythm_doctor_project_replace_waits_before_transport_and_model_mutation\n.///lib/project_load_integration_tests.lua:302: load/stop\nexpected: 0, actual: 1\nstack traceback:\n\t.///lib/project_load_integration_tests.lua:302: in upvalue 'test_rhythm_doctor_project_replace_waits_before_transport_and_model_mutation'\n\nRan 3 tests in 0.005 seconds, 1 success, 2 failures, 1713 non-selected\nfind: \u00e2\u20ac\u02dc/home/we/norns/lua/core\u00e2\u20ac\u2122: No such file or directory\n",
+  "scope": "Actual lifecycle and machine collaboration; IO/transport are observed test boundaries, not hardware acceptance"
+}

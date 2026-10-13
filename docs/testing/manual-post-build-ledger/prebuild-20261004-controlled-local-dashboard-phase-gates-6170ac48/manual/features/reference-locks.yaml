@@ -1,0 +1,1632 @@
+features:
+- id: locks
+  title: Locks
+  audience: all
+  summary: Set parameter, mask, scale, transposition and octave changes on sequencer steps. Lock duration
+    depends on the lock type.
+  prose: 'Set parameter values, masks and grid-function values on specific steps in the channel or global
+    Scale workspace. A lock takes effect at its step. Parameter and octave locks affect that step. Scale
+    locks use the persistence rules in Scale Locks. See Transposition Locks for transposition behaviour.
+
+
+    Set channel locks from the Channel Editor. Set global scale and transposition locks from the Scale
+    workspace.'
+  musical_use: Use locks to change a value at a specific step.
+  related: []
+  sources:
+    readme: manual/legacy/README-1.4.0.md#locks
+    behaviour_cases: []
+    code:
+    - lib/models/program.lua
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/step.lua
+  controls:
+  - gesture: Hold a sequencer step, then edit the relevant parameter or grid selector
+    result: Writes to that step rather than the channel default.
+  details: []
+  recipes: []
+  scene_refs:
+  - mask-precedence
+  - mask-expression
+  - parameter-slot-endpoints
+  - structure-anchor-chord-and-delete
+  - locks-default-versus-local
+  - trig-parameter-locks
+  - global-parameter-slide
+  - transpose-explicit-zero-and-clear
+  - octave-local-over-global
+  - scale-lock-scope-and-lifetime
+  review:
+    status: verified
+    cases:
+    - M-MERGE-STRUCTURE-001
+    - M-OCT-002
+    - M-PARAM-016
+    - M-PARAM-046
+    - M-PATCH-017
+    - M-SCALE-LOCK-003
+    - M-TRANS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: mask-precedence
+      data: pilot.json
+      clock_mode: null
+      case: M-MASK-007
+      assertions:
+      - &id005
+        screen:
+        - - note
+          - X
+      - &id006
+        screen:
+        - - note
+          - G3
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 97
+      - &id007
+        screen:
+        - - note
+          - C4
+      - &id008
+        screen:
+        - - note
+          - G3
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 72
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 97
+      - &id009
+        screen:
+        - - note
+          - G3
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 72
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 74
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 97
+      - &id010
+        screen:
+        - - note
+          - G3
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 74
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 97
+      - &id011
+        screen:
+        - - note
+          - G3
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 127
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 117
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 107
+        - port: 1
+          bytes:
+          - 144
+          - 67
+          - 97
+      scope: Overview illustrates mask inheritance and clearing. Trig parameters, scale/octave locks and
+        slides require their own scenes.
+    - scene: mask-expression
+      data: pilot.json
+      clock_mode: null
+      case: M-MASK-008
+      assertions:
+      - &id012
+        screen:
+        - - velocity
+          - X
+      - &id013
+        screen:
+        - - velocity
+          - '50'
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 50
+      - &id014
+        screen:
+        - - velocity
+          - '50'
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 90
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 50
+      - &id015
+        screen:
+        - - velocity
+          - '0'
+      - &id016
+        screen:
+        - - velocity
+          - '50'
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 90
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 50
+      - &id017
+        screen:
+        - - length
+          - 1/2
+        midi_phrase:
+        - port: 1
+          bytes:
+          - 144
+          - 60
+          - 90
+        - port: 1
+          bytes:
+          - 144
+          - 62
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 64
+          - 50
+        - port: 1
+          bytes:
+          - 144
+          - 65
+          - 50
+        durations:
+        - 0.5
+        - 0.5
+        - 0.5
+        - 0.5
+      scope: Overview illustrates mask inheritance and clearing. Trig parameters, scale/octave locks and
+        slides require their own scenes.
+    - scene: parameter-slot-endpoints
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-PARAM-046
+      assertions:
+      - &id001
+        kind: parameter-slot-limit
+        assigned_slots: 10
+        upper_route_cc: 10
+        lower_route_cc: 1
+        upper_and_lower_clamped: true
+        passed: true
+      scope: Overview of mask precedence, parameter-slot limits and group-reference changes; individual
+        lock sections carry their own scopes.
+    - scene: structure-anchor-chord-and-delete
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-MERGE-STRUCTURE-001
+      assertions:
+      - kind: detail-row
+        row: 1
+        label: Chord group
+        value: '1'
+        passed: true
+      - kind: structure-anchor-markers
+        markers: anchors
+        loops: 2
+        loop_steps: 8
+        passed: true
+      - kind: detail-row
+        row: 1
+        label: Affected
+        value: '1'
+        passed: true
+      - kind: structure-group-deleted
+        markers: 'off'
+        loops: 2
+        loop_steps: 8
+        passed: true
+      scope: Overview of mask precedence, parameter-slot limits and group-reference changes; individual
+        lock sections carry their own scopes.
+    - scene: locks-default-versus-local
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-PARAM-016
+      assertions:
+      - kind: stock-pitch-lock-inheritance
+        passed: true
+        quantised: false
+        phase: channel60
+        pitches:
+        - 60
+        - 60
+        - 60
+        - 60
+      - kind: stock-pitch-lock-inheritance
+        passed: true
+        quantised: false
+        phase: step2-override
+        pitches:
+        - 60
+        - 63
+        - 60
+        - 60
+      - kind: stock-pitch-lock-inheritance
+        passed: true
+        quantised: false
+        phase: default-edit-preserves-locks
+        pitches:
+        - 0
+        - 63
+        - 65
+        - 65
+      scope: Overview of default versus held-step override, clear inheritance, and global/local slide
+        output.
+    - scene: trig-parameter-locks
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-PARAM-016
+      assertions:
+      - &id002
+        kind: stock-pitch-lock-inheritance
+        passed: true
+        quantised: false
+        phase: step2-override
+        pitches:
+        - 60
+        - 63
+        - 60
+        - 60
+      - &id003
+        kind: stock-pitch-lock-inheritance
+        passed: true
+        quantised: false
+        phase: clear-step2
+        pitches:
+        - 0
+        - 65
+        - 65
+        - 65
+      scope: Overview of default versus held-step override, clear inheritance, and global/local slide
+        output.
+    - scene: global-parameter-slide
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-PATCH-017
+      assertions:
+      - &id004
+        kind: slide-musical-time
+        passed: true
+        from_value: 24
+        to_value: 96
+        step_distance: 2
+        off_middle: false
+        step_local: false
+        swing: null
+        shuffle: null
+        clock_ratio: /1
+      scope: Overview of default versus held-step override, clear inheritance, and global/local slide
+        output.
+    - scene: transpose-explicit-zero-and-clear
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-TRANS-001
+      assertions:
+      - &id025
+        kind: transpose-lock-value
+        value: 0
+        expected_first_pitch: 60
+        passed: true
+      - &id026
+        kind: transpose-lock-value
+        value: 12
+        expected_first_pitch: 72
+        passed: true
+      - &id027
+        kind: transpose-lock-clear
+        global_transpose: 4
+        explicit_zero_step: 2
+        restored_pitches:
+        - 64
+        - 62
+        - 64
+        - 65
+        passed: true
+      scope: Overview of actual note, transpose/octave/scale lock precedence and clear, plus previously
+        bound Trig lock/slide examples.
+    - scene: octave-local-over-global
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-OCT-002
+      assertions:
+      - &id028
+        kind: octave-phrase
+        phase: override--2-0
+        octaves:
+        - -2
+        - 0
+        - -2
+        - -2
+        passed: true
+      - &id029
+        kind: octave-phrase
+        phase: cleared--2-0
+        octaves:
+        - -2
+        - -2
+        - -2
+        - -2
+        passed: true
+      - &id030
+        kind: octave-phrase
+        phase: zero-lock-step-2
+        octaves:
+        - -2
+        - 0
+        - -2
+        - -2
+        passed: true
+      - &id031
+        kind: octave-phrase
+        phase: toggle-clear-step-2
+        octaves:
+        - -2
+        - -2
+        - -2
+        - -2
+        passed: true
+      scope: Overview of actual note, transpose/octave/scale lock precedence and clear, plus previously
+        bound Trig lock/slide examples.
+    - scene: scale-lock-scope-and-lifetime
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-SCALE-LOCK-003
+      assertions:
+      - &id018
+        kind: scale-lock-precedence
+        stage: hold-on-channel-over-global
+        slots:
+        - 3
+        - 3
+        - 3
+        - 3
+        pitches:
+        - 64
+        - 66
+        - 68
+        - 69
+        passed: true
+      - &id019
+        kind: scale-lock-precedence
+        stage: hold-off-next-trig-clears
+        slots:
+        - 3
+        - 4
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 69
+        - 71
+        - 72
+        passed: true
+      - &id020
+        kind: scale-lock-precedence
+        stage: hold-off-rejected-trig-keeps-lock
+        slots:
+        - 3
+        - null
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 71
+        - 72
+        passed: true
+      - &id021
+        kind: scale-lock-precedence
+        stage: hold-off-probability-cleared
+        slots:
+        - 3
+        - 4
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 69
+        - 71
+        - 72
+        passed: true
+      - &id022
+        kind: scale-lock-precedence
+        stage: hold-off-rest-keeps-lock
+        slots:
+        - 3
+        - null
+        - 4
+        - 4
+        pitches:
+        - 64
+        - 71
+        - 72
+        passed: true
+      - &id023
+        kind: scale-lock-precedence
+        stage: hold-off-replacement
+        slots:
+        - 3
+        - 4
+        - 2
+        - 4
+        pitches:
+        - 64
+        - 69
+        - 66
+        - 72
+        passed: true
+      - &id024
+        kind: scale-lock-precedence
+        stage: hold-on-replacement
+        slots:
+        - 3
+        - 3
+        - 2
+        - 2
+        pitches:
+        - 64
+        - 66
+        - 66
+        - 67
+        passed: true
+      scope: Overview of actual note, transpose/octave/scale lock precedence and clear, plus previously
+        bound Trig lock/slide examples.
+    applicability: native-ui
+    native_gap: Physical norns/device equivalence is outside the native examples.
+    rationale: Overview of actual note, transpose/octave/scale lock precedence and clear, plus previously
+      bound Trig lock/slide examples.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: parameter-slot-endpoints
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: structure-anchor-chord-and-delete
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: locks-default-versus-local
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: trig-parameter-locks
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: global-parameter-slide
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: transpose-explicit-zero-and-clear
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: octave-local-over-global
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: scale-lock-scope-and-lifetime
+      clock_mode: controlled-experimental
+  category: locks
+  parent: null
+  level: 2
+- id: trig-param-locks
+  title: Trig Param Locks
+  audience: all
+  summary: Set an assigned device parameter for individual channel steps.
+  prose: 'Set a device parameter lock:
+
+    1. Open Trig params from Channel tasks with E1.
+
+    2. Hold a step on the channel sequencer.
+
+    3. Adjust the parameter value for that step.
+
+
+    Clear a step''s parameter trig locks:
+
+    1. Open Trig params.
+
+    2. Hold the step and press K2.
+
+
+    Clear all parameter trig locks on the channel:
+
+    1. Open Trig params.
+
+    2. Release all steps.
+
+    3. Hold K1 and press K2.
+
+
+    Trig locks demo'
+  musical_use: Use a parameter lock to change filter cutoff or envelope settings on one step.
+  related:
+  - locks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#trig-param-locks
+    behaviour_cases:
+    - M-MOD-004
+    - M-PARAM-026
+    - M-PARAM-027
+    - M-PARAM-028
+    - M-PARAM-029
+    - M-PARAM-030
+    - M-PARAM-031
+    - M-PARAM-032
+    - M-PARAM-033
+    - M-PARAM-036
+    - M-PARAM-043
+    - M-PARAM-044
+    - M-PARAM-046
+    - M-PARAM-047
+    - M-PATCH-035
+    - M-PATCH-037
+    - M-PATCH-039
+    - M-PATCH-040
+    - M-PATCH-041
+    - M-PATCH-043
+    - M-PATCH-044
+    - M-PATCH-065
+    - M-PATCH-066
+    - M-SPREAD-024
+    - M-SPREAD-025
+    - M-SYNC-LEAD-002
+    - M-SYNC-LEAD-003
+    - M-SYNC-LEAD-004
+    - M-SYNC-LEAD-005
+    - M-SYNC-LEAD-006
+    - M-SYNC-LEAD-007
+    - M-SYNC-LEAD-008
+    - M-SYNC-LEAD-009
+    - M-SYNC-LEAD-010
+    - M-SYNC-LEAD-011
+    - M-SYNC-LEAD-012
+    - M-SYNC-LEAD-013
+    - M-SYNC-LEAD-014
+    - M-SYNC-LEAD-015
+    - M-SYNC-LEAD-016
+    - M-SYNC-LEAD-017
+    - M-SYNC-LEAD-018
+    - M-SYNC-LEAD-019
+    - M-SYNC-LEAD-020
+    - M-TRIPLE-005
+    - M-UIACC-A02-001
+    - M-UIACC-A03-001
+    - M-XA-005-NB-LOCK
+    - M-XA-006-NB-CHORD-ACCEL
+    code:
+    - lib/pages/channel_edit_page/channel_edit_parameters.lua
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/models/program.lua
+    - lib/ui_adapters/parameters.lua
+    - lib/step.lua
+  controls:
+  - gesture: On Channel tasks > Trig params, use E2 to select an assigned slot
+    result: The selected parameter cell is highlighted.
+  - gesture: Hold a channel sequencer step and turn E3
+    result: Sets that assigned parameter for the held step; the cell shows its held value and L marker.
+  - gesture: Hold the step and press K2 on Trig params
+    result: Clears parameter trig locks for the held step, rather than only the selected slot.
+  - gesture: Release all steps, then hold K1 and press K2 on Trig params
+    result: Clears the channel parameter trig locks.
+  details: []
+  recipes:
+  - title: Set a filter cutoff lock
+    text: 1. Assign a filter cutoff parameter to a trig slot. 2. Select the slot with E2. 3. Hold the
+      final active step and turn E3 to raise cutoff. 4. Release the step. Other steps retain the channel
+      value.
+  scene_refs:
+  - parameter-slot-endpoints
+  - trig-parameter-locks
+  review:
+    status: verified
+    cases:
+    - M-PARAM-016
+    - M-PARAM-046
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: parameter-slot-endpoints
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-PARAM-046
+      assertions:
+      - *id001
+      scope: All ten parameter slots are reachable; selecting beyond either endpoint clamps. Individual
+        lock/slide behavior is covered by separate references.
+    - scene: trig-parameter-locks
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-PARAM-016
+      assertions:
+      - *id002
+      - *id003
+      scope: Actual public held-step Fixed Note lock/clear plus parameter slot limits; not only the assignment
+        bounds.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Actual public held-step Fixed Note lock/clear plus parameter slot limits; not only the
+      assignment bounds.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: parameter-slot-endpoints
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: trig-parameter-locks
+      clock_mode: controlled-experimental
+  category: locks
+  parent: locks
+  level: 3
+- id: param-slides
+  title: Param Slides
+  audience: all
+  summary: Interpolate between parameter locks. Enable slides for a parameter across the channel or for
+    an individual step.
+  prose: 'Enable slides for a parameter across the channel:
+
+    1. Open Trig params and select the parameter.
+
+    2. Release all steps and press K3.
+
+    The parameter slides between its trig locks.
+
+
+    Enable a slide on one step:
+
+    1. Hold the step.
+
+    2. Select the parameter and press K3.
+
+    The selected step slides to the next lock for that parameter. Other locks remain unchanged.
+
+
+    Slides do not cross into a different song pattern. Enable Wrap param slides to allow a slide across
+    the boundary of the same repeating pattern. Slides use additional resources; limit their use when
+    necessary.
+
+
+    Param slides demo'
+  musical_use: Use two parameter locks and a slide to change a value gradually.
+  related:
+  - trig-param-locks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#param-slides
+    behaviour_cases:
+    - M-MEMORY-012
+    - M-PATCH-017
+    - M-PATCH-018
+    - M-PATCH-019
+    - M-PATCH-020
+    - M-PATCH-021
+    - M-PATCH-022
+    - M-PATCH-023
+    - M-PATCH-024
+    - M-PATCH-025
+    - M-PATCH-026
+    - M-PATCH-027
+    - M-PATCH-028
+    - M-PATCH-029
+    - M-PATCH-030
+    - M-PATCH-031
+    - M-PATCH-032
+    - M-PATCH-033
+    - M-PATCH-034
+    - M-PATCH-035
+    - M-PATCH-036
+    - M-PATCH-037
+    - M-PATCH-038
+    - M-PATCH-039
+    - M-PATCH-045
+    - M-PATCH-046
+    - M-PATCH-047
+    - M-PATCH-048
+    - M-PATCH-049
+    - M-PATCH-053
+    - M-PATCH-054
+    - M-PATCH-055
+    - M-PATCH-056
+    - M-PATCH-062
+    - M-PATCH-063
+    - M-PATCH-064
+    - M-REC-PARAM-014
+    - M-REC-PARAM-015
+    - M-SLIDE-CAPACITY-001
+    - M-SLIDE-RESET-001
+    - M-SLIDE-STEP-001
+    - M-TRIPLE-004
+    - M-UIACC-A03-001
+    code:
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/models/program.lua
+    - lib/clock/slide_lifetime.lua
+    - lib/step.lua
+    - lib/ui_adapters/parameters.lua
+  controls:
+  - gesture: Select an assigned parameter in Trig params and press K3 with no grid steps or K1 held
+    result: Toggles channel-wide sliding for that parameter; enabled cells show S.
+  - gesture: Hold a channel step and press K3 on the selected parameter
+    result: Toggles a slide from that step to the next lock for the same parameter.
+  - gesture: Use PARAMS > MOSAIC > Wrap param slides
+    result: Allows an eligible final slide to reach the first lock across a repeating pattern boundary;
+      it does not slide into another song pattern.
+  details: []
+  recipes:
+  - title: Slide between filter cutoff locks
+    text: 1. Set low and high cutoff locks on two steps. 2. Select the cutoff parameter. 3. Hold the first
+      locked step and press K3. 4. Enable Wrap param slides if the final lock should slide to the first
+      lock in the repeating pattern.
+  scene_refs:
+  - global-parameter-slide
+  - local-parameter-slide
+  review:
+    status: verified
+    cases:
+    - M-PATCH-017
+    - M-PATCH-033
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: global-parameter-slide
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-PATCH-017
+      assertions:
+      - *id004
+      scope: Global/local CC ramp wire output and live before-finish CC1 display; capture stage keeps
+        the application alive for that UI frame.
+    - scene: local-parameter-slide
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-PATCH-033
+      assertions:
+      - kind: slide-musical-time
+        passed: true
+        from_value: 24
+        to_value: 96
+        step_distance: 2
+        off_middle: false
+        step_local: true
+        swing: null
+        shuffle: null
+        clock_ratio: /1
+      scope: Global/local CC ramp wire output and live before-finish CC1 display; capture stage keeps
+        the application alive for that UI frame.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Global/local CC ramp wire output and live before-finish CC1 display; capture stage keeps
+      the application alive for that UI frame.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: global-parameter-slide
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: local-parameter-slide
+      clock_mode: controlled-experimental
+  category: locks
+  parent: trig-param-locks
+  level: 4
+- id: mask-locks
+  title: Mask Locks
+  audience: all
+  summary: Set mask values for individual channel steps. Step locks override channel default masks.
+  prose: 'Set a mask lock:
+
+    1. Open Masks from Channel tasks with E1.
+
+    2. Hold a step on the channel sequencer.
+
+    3. Adjust the mask value.
+
+
+    Clear a step''s mask locks:
+
+    1. Open Masks.
+
+    2. Hold the step and press K2.
+
+
+    Clear all step-mask locks on the channel:
+
+    1. Open Masks.
+
+    2. Release all steps.
+
+    3. Hold K1 and press K2.
+
+    Channel default masks are retained.
+
+
+    Mask locks demo'
+  musical_use: Use note and velocity locks to vary individual steps while retaining channel defaults.
+  related:
+  - locks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#mask-locks
+    behaviour_cases:
+    - M-PATCH-041
+    - M-PATCH-042
+    - M-UIACC-A02-001
+    code:
+    - lib/pages/channel_edit_page/channel_edit_masks.lua
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/models/program.lua
+    - lib/ui_adapters/masks.lua
+    - lib/step.lua
+  controls:
+  - gesture: On Channel tasks > Masks, select a mask with E2
+    result: The highlighted cell identifies the field to edit.
+  - gesture: Hold a channel sequencer step and turn E3
+    result: Sets that mask for the held step instead of changing the channel default.
+  - gesture: Hold the step and press K2 on Masks
+    result: Clears the held step’s mask locks so its channel defaults can apply again.
+  - gesture: Release all steps, then hold K1 and press K2 on Masks
+    result: Clears channel step-mask locks while keeping channel default masks.
+  details: []
+  recipes: []
+  scene_refs:
+  - mask-precedence
+  - mask-expression
+  - harmony-ensemble-and-local-bypass
+  - mask-locks-clear-neighbours
+  - scale-lock-scope-and-lifetime
+  - transpose-explicit-zero-and-clear
+  - octave-local-over-global
+  review:
+    status: verified
+    cases:
+    - M-HARMONY-ENSEMBLE-001
+    - M-MASK-007
+    - M-OCT-002
+    - M-SCALE-LOCK-003
+    - M-TRANS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: mask-precedence
+      data: pilot.json
+      clock_mode: null
+      case: M-MASK-007
+      assertions:
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      - *id009
+      - *id010
+      - *id011
+      scope: Scene demonstrates absolute-note and velocity step/default precedence and clearing; scale,
+        transpose and octave locks are separate references.
+    - scene: mask-expression
+      data: pilot.json
+      clock_mode: null
+      case: M-MASK-008
+      assertions:
+      - *id012
+      - *id013
+      - *id014
+      - *id015
+      - *id016
+      - *id017
+      scope: Scene demonstrates absolute-note and velocity step/default precedence and clearing; scale,
+        transpose and octave locks are separate references.
+    - scene: harmony-ensemble-and-local-bypass
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-HARMONY-ENSEMBLE-001
+      assertions:
+      - kind: ensemble-polyrhythm
+        role_pitches:
+          '1': 48
+          '2': 55
+          '3': 64
+          '4': 67
+        passed: true
+      - kind: local-scale-bypass
+        channel: 2
+        pitches:
+        - 64
+        - 64
+        - 64
+        - 64
+        - 64
+        status: LOCAL SCALE BYPASS
+        passed: true
+      - kind: local-octave-bypass
+        channel: 3
+        inspected_step: 2
+        pitches:
+        - 72
+        - 72
+        - 72
+        - 72
+        - 72
+        - 72
+        status: LOCAL OCTAVE BYPASS
+        passed: true
+      scope: Note/velocity step/default precedence plus Harmony’s local scale/octave bypass. This is not
+        a capture of the Scale/Transpose/Octave lock editing workflow.
+    - scene: mask-locks-clear-neighbours
+      data: reference-parameter-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/d0a8dc021ded4143b41130c987418b04
+      data_sha256: 335dabb07b3dcba565ce8f39b9cd08b46b60809da8042dd80017ec8449d62f07
+      case: M-MASK-007
+      assertions:
+      - kind: mask-clear-attribute
+        passed: true
+        attribute: note
+        chord_slot: 1
+        defaults: true
+        stage: both-step-overrides
+        active_step_overrides:
+        - 1
+        - 2
+      - kind: mask-clear-attribute
+        passed: true
+        attribute: note
+        chord_slot: 1
+        defaults: true
+        stage: clear-first-step
+        active_step_overrides:
+        - 2
+      - kind: mask-clear-attribute
+        passed: true
+        attribute: note
+        chord_slot: 1
+        defaults: true
+        stage: clear-channel-step-overrides
+        active_step_overrides: []
+      scope: Actual note-mask held-step overrides and independent/all-step clearing without erasing channel
+        defaults.
+    - scene: scale-lock-scope-and-lifetime
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-SCALE-LOCK-003
+      assertions:
+      - *id018
+      - *id019
+      - *id020
+      - *id021
+      - *id022
+      - *id023
+      - *id024
+      scope: Public note clear neighbors, plus actual scale/transpose/octave lock editing/clear precedence
+        and emitted output.
+    - scene: transpose-explicit-zero-and-clear
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-TRANS-001
+      assertions:
+      - *id025
+      - *id026
+      - *id027
+      scope: Public note clear neighbors, plus actual scale/transpose/octave lock editing/clear precedence
+        and emitted output.
+    - scene: octave-local-over-global
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-OCT-002
+      assertions:
+      - *id028
+      - *id029
+      - *id030
+      - *id031
+      scope: Public note clear neighbors, plus actual scale/transpose/octave lock editing/clear precedence
+        and emitted output.
+    applicability: native-ui
+    native_gap: Physical norns/device equivalence is outside the native examples.
+    rationale: Public note clear neighbors, plus actual scale/transpose/octave lock editing/clear precedence
+      and emitted output.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: harmony-ensemble-and-local-bypass
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/a740efa7430348bc91bb38441fc181dc
+      data_sha256: a1db8287b81b4c5b521cdc0159d3b74a07a4f770de6cf5888bfa6d38a7a336bd
+      scene: mask-locks-clear-neighbours
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: scale-lock-scope-and-lifetime
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: transpose-explicit-zero-and-clear
+      clock_mode: controlled-experimental
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: octave-local-over-global
+      clock_mode: controlled-experimental
+  category: locks
+  parent: locks
+  level: 3
+- id: scale-locks
+  title: Scale Locks
+  audience: all
+  summary: Set scale slots on channel steps or the global scale track. Channel locks take precedence over
+    global locks.
+  prose: 'Set scale locks on channel steps in the Channel Editor, or on the global scale track in the
+    Scale Editor. Channel scale locks take precedence over global scale locks.
+
+
+    Set a channel scale lock:
+
+    1. Hold a step on the channel sequencer.
+
+    2. Press the required scale slot.
+
+
+    Clear a step lock:
+
+    1. Hold the step.
+
+    2. Press K2 in the relevant lock workspace.
+
+
+    With Scales lock until ptn end On, a channel scale lock remains until the channel wraps to its start
+    or another channel scale lock replaces it.
+
+
+    With the option Off, the lock remains until the next active trig that passes its probability check.
+    A probability-rejected trig does not clear it. A scale lock on the next accepted trig replaces the
+    previous lock.
+
+
+    Global scale-track locks are independent of this option. They remain until another global lock replaces
+    them or the global scale track wraps.
+
+
+    Scale locks demo'
+  musical_use: Use channel locks for a separate scale progression on one channel. Use global locks for
+    a shared progression.
+  related:
+  - locks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#scale-locks
+    behaviour_cases:
+    - M-GESTURE-ORDER-001
+    - M-RANGE-GLOBAL-004
+    - M-SCALE-002
+    - M-SCALE-004
+    - M-SCALE-DISPLAY-001
+    - M-SCALE-LOCK-003
+    - M-SCALE-ORDER-001
+    - M-TRANS-004
+    - M-TRANS-005
+    - M-TRIPLE-001
+    code:
+    - lib/pages/channel_edit_page/channel_edit_page.lua
+    - lib/pages/scale_edit_page/scale_edit_page.lua
+    - lib/pages/scale_edit_page/scale_edit_page_ui.lua
+    - lib/models/program.lua
+    - lib/step.lua
+  controls:
+  - gesture: Hold a channel sequencer step, then press a scale-slot button on the channel grid
+    result: Sets a channel scale lock at that step, taking precedence over the global scale track.
+  - gesture: Hold a global scale-track step, then press its scale-slot button
+    result: Sets a global scale lock, which persists until replacement or global-track wrap.
+  - gesture: Hold the step and press its currently locked scale slot again
+    result: Removes that scale lock.
+  - gesture: Hold the step and press K2 in the relevant Scale or channel lock workspace
+    result: Clears locks in that workspace; this is a step clear, not an individual-field undo.
+  details: []
+  recipes: []
+  scene_refs:
+  - scale-lock-scope-and-lifetime
+  review:
+    status: verified
+    cases:
+    - M-SCALE-LOCK-003
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: scale-lock-scope-and-lifetime
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-SCALE-LOCK-003
+      assertions:
+      - *id018
+      - *id019
+      - *id020
+      - *id021
+      - *id022
+      - *id023
+      - *id024
+      scope: Public channel/global precedence, On/Off lifetime, accepted/rejected onset/rest and replacement
+        scale behavior.
+    applicability: native-ui
+    native_gap: Physical norns/device equivalence is outside the native examples.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: scale-lock-scope-and-lifetime
+      clock_mode: controlled-experimental
+    rationale: Public channel/global precedence, On/Off lifetime, accepted/rejected onset/rest and replacement
+      scale behavior.
+  category: locks
+  parent: locks
+  level: 3
+- id: transposition-locks
+  title: Transposition Locks
+  audience: all
+  summary: Set transposition locks on global Scale-track steps. Locks are applied in addition to the selected
+    scale’s transposition.
+  prose: 'Set a transposition lock on a global Scale-track step:
+
+    1. Open the Scale grid workspace.
+
+    2. Hold the step.
+
+    3. Press the required transposition value.
+
+
+    The lock is applied in addition to the selected scale''s transposition value.
+
+
+    Clear a transposition lock:
+
+    1. Hold the step in the Scale workspace.
+
+    2. Press K2.
+
+
+    The archived README refers to this as the scale page accessed in the Channel Editor. See the reconciliation
+    note below for the current workspace.'
+  musical_use: Use transposition locks to transpose a passage without editing its notes.
+  related:
+  - locks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#transposition-locks
+    behaviour_cases:
+    - M-LIFECYCLE-001
+    - M-TRANS-001
+    - M-TRANS-002
+    - M-TRANS-003
+    - M-TRANS-004
+    - M-TRANS-005
+    code:
+    - lib/pages/scale_edit_page/scale_edit_page.lua
+    - lib/pages/scale_edit_page/scale_edit_page_ui.lua
+    - lib/models/program.lua
+    - lib/step.lua
+  controls:
+  - gesture: Open the Scale grid workspace, hold a scale-track step and press a transposition value
+    result: Sets a transposition lock for that step; the global scale track supplies song transposition.
+  - gesture: Hold that step and press the same transposition value again
+    result: Removes that lock, including an explicit zero lock.
+  - gesture: Hold the scale-track step and press K2 in the Scale workspace
+    result: Clears the held scale-track locks.
+  details:
+  - title: Legacy wording awaiting reconciliation
+    text: The preserved legacy README paragraph refers to a scale page in the Channel Editor. The current
+      transposition-lock owner is the global Scale grid workspace (channel 17), as reflected in the control
+      table. This wording difference is awaiting reconciliation in the manual discrepancy review.
+  recipes: []
+  scene_refs:
+  - transpose-explicit-zero-and-clear
+  review:
+    status: verified
+    cases:
+    - M-TRANS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: transpose-explicit-zero-and-clear
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-TRANS-001
+      assertions:
+      - *id025
+      - *id026
+      - *id027
+      scope: Public explicit zero/+12 transposition locks and clear inheritance emit literal pitches.
+    applicability: native-ui
+    native_gap: Physical norns/device equivalence is outside the native examples.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: transpose-explicit-zero-and-clear
+      clock_mode: controlled-experimental
+    rationale: Public explicit zero/+12 transposition locks and clear inheritance emit literal pitches.
+  category: locks
+  parent: locks
+  level: 3
+- id: octave-locks
+  title: Octave Locks
+  audience: all
+  summary: Set the octave for individual channel steps.
+  prose: 'Set an octave lock:
+
+    1. Hold a step on the channel sequencer.
+
+    2. Press the required octave button at the bottom of the channel grid.
+
+
+    Clear an octave lock:
+
+    1. Hold the step.
+
+    2. Press K2 in Trig params.'
+  musical_use: Use octave locks to change the register of selected notes.
+  related:
+  - locks
+  sources:
+    readme: manual/legacy/README-1.4.0.md#octave-locks
+    behaviour_cases:
+    - M-OCT-002
+    - M-OCT-003
+    - M-PATCH-040
+    - M-PATCH-041
+    - M-PATCH-042
+    - M-PATCH-043
+    - M-PATCH-044
+    - M-TRANS-002
+    - M-TRANS-005
+    code:
+    - lib/pages/channel_edit_page/channel_edit_page.lua
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/models/program.lua
+    - lib/step.lua
+  controls:
+  - gesture: Hold a channel sequencer step and press an octave button at the bottom of the channel grid
+    result: Sets the held step’s octave lock.
+  - gesture: Hold that step and press the same octave button again
+    result: Removes the octave lock; an explicit zero is distinct from no lock.
+  - gesture: Hold the step and press K2 on Trig params
+    result: Clears the held step’s trig locks, including its octave lock.
+  details: []
+  recipes: []
+  scene_refs:
+  - octave-local-over-global
+  review:
+    status: verified
+    cases:
+    - M-OCT-002
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: octave-local-over-global
+      data: reference-lock-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/9c1d986eb63c4bd3acc0e010c49971a0
+      data_sha256: 9f28fb738ca5e76b6e744b02d4cb0de172ce7e153316f37386afdbf7897080ae
+      case: M-OCT-002
+      assertions:
+      - *id028
+      - *id029
+      - *id030
+      - *id031
+      scope: Public local-over-channel octave override, active zero and repeated clear restore exact octave
+        phrases.
+    applicability: native-ui
+    native_gap: Physical norns/device equivalence is outside the native examples.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/5e1955429697495094c20cbf9215580c
+      data_sha256: 5898c74b0083ec58a2daed354715e188f95a4a9950354d03e7cddf858b078683
+      scene: octave-local-over-global
+      clock_mode: controlled-experimental
+    rationale: Public local-over-channel octave override, active zero and repeated clear restore exact
+      octave phrases.
+  category: locks
+  parent: locks
+  level: 3
+- id: save-and-load
+  title: Save and Load
+  audience: all
+  summary: Save named projects and load saved projects from PARAMS > MOSAIC. Stopped, idle projects normally
+    autosave after 60 seconds.
+  prose: 'Open PARAMS > MOSAIC to save or load a project. Choose Save project and enter a descriptive
+    name. Use named saves for versions that must not be overwritten by autosave.
+
+
+    When playback is stopped, 60 seconds of inactivity normally saves the current project as autosave.
+    Mosaic loads the most recent autosave at startup.
+
+
+    Before replacing the current project, Mosaic checks saved song slots, global lengths, channel ranges
+    and scale-track ranges. If a check fails, the screen identifies the problem. The current project and
+    playback are retained.
+
+
+    A rejected load suspends autosave to protect the rejected file. Editing, playing and cancelling a
+    dialog do not resume autosave. A successful valid load, a successful named save or New resumes the
+    normal idle autosave interval. A failed save leaves autosave suspended.
+
+
+    Valid saved one-step ranges are supported. There is no one-step range gesture. Validation covers the
+    saved range structure; it does not check every possible corrupted project field.'
+  musical_use: Save a named project before making changes. Named saves are separate from autosave.
+  related: []
+  sources:
+    readme: manual/legacy/README-1.4.0.md#save-and-load
+    behaviour_cases:
+    - M-LIFECYCLE-001
+    - M-MEMORY-005
+    - M-MEMORY-006
+    - M-MEMORY-007
+    - M-MERGE-STRUCTURE-005
+    - M-PARAM-035
+    - M-PERSIST-COMBINED-001
+    - M-PERSIST-FIXTURE-1.2.12
+    - M-PERSIST-FIXTURE-CURRENT
+    - M-PROJECT-LIVE-001
+    - M-PROJECT-LIVE-002
+    - M-PROJECT-LIVE-003
+    - M-PROJECT-LIVE-004
+    - M-RANGE-SAVED-001
+    - M-RANGE-SAVED-002
+    - M-RANGE-SAVED-003
+    - M-RANGE-SAVED-004
+    - M-RANGE-SAVED-005
+    - M-RANGE-SAVED-006
+    - M-REC-PARAM-027
+    - M-SAVE-001
+    - M-SAVE-002
+    - M-SAVE-FAIL-001
+    - M-SAVE-LENGTH-001
+    - M-SAVE-NAMED-001
+    - M-STARTUP-TRANSPORT-001
+    - M-TOOLTIP-002
+    - M-TRANS-008
+    - M-WORKFLOW-001
+    code:
+    - mosaic.lua
+    - lib/application_parameters.lua
+    - lib/project_lifecycle.lua
+    - lib/models/program.lua
+  controls:
+  - gesture: Open PARAMS > MOSAIC and choose Save
+    result: Prompts for a project name; a successful named save keeps a durable version separate from
+      autosave.
+  - gesture: Choose Load and select a saved project
+    result: Checks saved song slots and ranges before replacing the current project; rejection keeps the
+      current project and playback.
+  - gesture: Leave Mosaic stopped and idle for 60 seconds
+    result: Normally writes autosave; rejected loads suspend this until a successful valid load, named
+      save or New.
+  details: []
+  recipes: []
+  scene_refs:
+  - named-project-roundtrip
+  review:
+    status: pending
+    cases:
+    - M-SAVE-NAMED-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: named-project-roundtrip
+      data: reference-option-scenes.json
+      clock_mode: controlled-experimental
+      run: /home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44
+      data_sha256: db53fb76f90d1bc69f4af38afd718b8e9f824b457c5b5342ed09bd8a27ca6b23
+      case: M-SAVE-NAMED-001
+      assertions:
+      - kind: named-save
+        stage: save-default-name
+        files_state: created
+        passed: true
+      - kind: named-save
+        stage: save-typed-name
+        name: newB
+        files_state: created
+        passed: true
+      - kind: named-save
+        stage: autosave-preserves-named
+        autosave_state: created
+        named_saves: unchanged
+        passed: true
+      - kind: named-save
+        stage: cancel-save
+        passed: true
+      - kind: named-save
+        stage: overwrite-default-name
+        files_state: changed
+        typed_save: unchanged
+        passed: true
+      - kind: named-save
+        stage: load-typed-A
+        phrase:
+        - 60
+        - 62
+        - 64
+        - 65
+        passed: true
+      - kind: named-save
+        stage: load-overwritten-B
+        phrase:
+        - 60
+        - 62
+        - 64
+        - 67
+        passed: true
+      scope: Published public-input checkpoints cover this named workflow; other settings and physical
+        hardware are outside this example.
+    applicability: native-ui
+    native_gap: Controlled native checkpoints are independently audited; corresponding real-time publication
+      is pending.
+  category: locks
+  parent: null
+  level: 2

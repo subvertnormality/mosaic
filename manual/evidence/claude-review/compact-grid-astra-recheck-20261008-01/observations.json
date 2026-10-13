@@ -1,0 +1,4512 @@
+{
+  "assets": {
+    "manual.css": "c664709772996b542460a5c55a9c2eaf54e633170a29ce90685b78b10645cbcc",
+    "book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 315.234375,
+        "y": 300.40625,
+        "width": 1057.53125,
+        "height": 501.71875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 806.8125,
+        "y": 388.46875,
+        "width": 540.953125,
+        "height": 276,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 813.8125,
+        "y": 395.46875,
+        "width": 30.109375,
+        "height": 30.109375,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 806.8125,
+        "y": 341.78125,
+        "width": 540.953125,
+        "height": 353.53125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 362.234375,
+          "y": 480.40625,
+          "width": 294.578125,
+          "height": 147.28125,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 315.234375,
+          "y": 245.265625,
+          "width": 1057.53125,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 315.234375,
+          "y": 300.40625,
+          "width": 1057.53125,
+          "height": 501.71875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 315.234375,
+          "y": 802.125,
+          "width": 1057.53125,
+          "height": 249.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 315.234375,
+          "y": 1051.265625,
+          "width": 1057.53125,
+          "height": 110.578125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 315.234375,
+          "y": 1161.84375,
+          "width": 1057.53125,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 315.234375,
+          "y": 1231.640625,
+          "width": 1057.53125,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 315.234375,
+          "y": 1280.140625,
+          "width": 1057.53125,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1440,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 315.234375,
+        "y": 300.40625,
+        "width": 1057.53125,
+        "height": 581.515625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 806.8125,
+        "y": 428.359375,
+        "width": 540.953125,
+        "height": 276,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 813.8125,
+        "y": 435.359375,
+        "width": 30.109375,
+        "height": 30.109375,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 806.8125,
+        "y": 381.671875,
+        "width": 540.953125,
+        "height": 353.53125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 362.234375,
+          "y": 480.40625,
+          "width": 398.578125,
+          "height": 199.28125,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 315.234375,
+          "y": 245.265625,
+          "width": 1057.53125,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 315.234375,
+          "y": 300.40625,
+          "width": 1057.53125,
+          "height": 581.515625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 315.234375,
+          "y": 881.921875,
+          "width": 1057.53125,
+          "height": 249.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 315.234375,
+          "y": 1131.0625,
+          "width": 1057.53125,
+          "height": 110.578125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 315.234375,
+          "y": 1241.640625,
+          "width": 1057.53125,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 315.234375,
+          "y": 1311.4375,
+          "width": 1057.53125,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 315.234375,
+          "y": 1359.9375,
+          "width": 1057.53125,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1440,
+      "route": "rhythm-doctor",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 315.234375,
+        "y": 102.40625,
+        "width": 1057.53125,
+        "height": 1500.25,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 340.234375,
+        "y": 729.890625,
+        "width": 1413,
+        "height": 717,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 354.234375,
+        "y": 743.890625,
+        "width": 80,
+        "height": 80,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 340.234375,
+        "y": 683.203125,
+        "width": 1007.53125,
+        "height": 794.53125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 586,
+          "y": 282.40625,
+          "width": 516,
+          "height": 258,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 315.234375,
+          "y": 47.265625,
+          "width": 1057.53125,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 315.234375,
+          "y": 102.40625,
+          "width": 1057.53125,
+          "height": 1500.25,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 315.234375,
+          "y": 1602.65625,
+          "width": 1057.53125,
+          "height": 249.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 315.234375,
+          "y": 1851.796875,
+          "width": 1057.53125,
+          "height": 110.578125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 315.234375,
+          "y": 1962.375,
+          "width": 1057.53125,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 315.234375,
+          "y": 2032.171875,
+          "width": 1057.53125,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 315.234375,
+          "y": 2080.671875,
+          "width": 1057.53125,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1440,
+      "route": "first-sound/course",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 639.53125,
+        "y": 559.78125,
+        "width": 733.234375,
+        "height": 426.4375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 979.875,
+        "y": 622.46875,
+        "width": 376.890625,
+        "height": 194,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 986.875,
+        "y": 629.46875,
+        "width": 19.859375,
+        "height": 19.859375,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 979.875,
+        "y": 575.78125,
+        "width": 376.890625,
+        "height": 271.53125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 677.53125,
+          "y": 745.6875,
+          "width": 160.34375,
+          "height": 80.171875,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 639.53125,
+          "y": 503.03125,
+          "width": 733.234375,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 639.53125,
+          "y": 559.78125,
+          "width": 733.234375,
+          "height": 426.4375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 639.53125,
+          "y": 1002.21875,
+          "width": 733.234375,
+          "height": 208.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 639.53125,
+        "y": 503.03125,
+        "width": 733.234375,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1440,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 639.53125,
+        "y": 533.78125,
+        "width": 733.234375,
+        "height": 466.40625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 979.875,
+        "y": 596.46875,
+        "width": 376.890625,
+        "height": 194,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 986.875,
+        "y": 603.46875,
+        "width": 19.859375,
+        "height": 19.859375,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 979.875,
+        "y": 549.78125,
+        "width": 376.890625,
+        "height": 271.53125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 677.53125,
+          "y": 699.78125,
+          "width": 264.34375,
+          "height": 132.171875,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 639.53125,
+          "y": 477.03125,
+          "width": 733.234375,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 639.53125,
+          "y": 533.78125,
+          "width": 733.234375,
+          "height": 466.40625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 639.53125,
+          "y": 1016.1875,
+          "width": 733.234375,
+          "height": 208.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 639.53125,
+        "y": 477.03125,
+        "width": 733.234375,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1440,
+      "route": "first-sound/course",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 639.53125,
+        "y": 101.78125,
+        "width": 733.234375,
+        "height": 1432.25,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 655.53125,
+        "y": 695.265625,
+        "width": 1413,
+        "height": 717,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 669.53125,
+        "y": 709.265625,
+        "width": 80,
+        "height": 80,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 655.53125,
+        "y": 648.578125,
+        "width": 701.234375,
+        "height": 794.53125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 748.140625,
+          "y": 267.78125,
+          "width": 516,
+          "height": 258,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 639.53125,
+          "y": 45.03125,
+          "width": 733.234375,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 639.53125,
+          "y": 101.78125,
+          "width": 733.234375,
+          "height": 1432.25,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 639.53125,
+          "y": 1550.03125,
+          "width": 733.234375,
+          "height": 208.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 639.53125,
+        "y": 45.03125,
+        "width": 733.234375,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nEnlarged grid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nUse the standard grid controls\n\nThis is the same interactive grid shown above. Enlarge it for touch input; scroll horizontally only if needed.\n\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1280,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 307.875,
+        "y": 317.265625,
+        "width": 912.25,
+        "height": 468.4375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 734.078125,
+        "y": 411.625,
+        "width": 461.046875,
+        "height": 236.125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 741.078125,
+        "y": 418.625,
+        "width": 25.125,
+        "height": 25.125,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 734.078125,
+        "y": 364.9375,
+        "width": 461.046875,
+        "height": 313.65625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 354.875,
+          "y": 499.96875,
+          "width": 229.203125,
+          "height": 114.59375,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 307.875,
+          "y": 262.125,
+          "width": 912.25,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 307.875,
+          "y": 317.265625,
+          "width": 912.25,
+          "height": 468.4375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 307.875,
+          "y": 785.703125,
+          "width": 912.25,
+          "height": 249.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 307.875,
+          "y": 1034.84375,
+          "width": 912.25,
+          "height": 110.578125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 307.875,
+          "y": 1145.421875,
+          "width": 912.25,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 307.875,
+          "y": 1215.21875,
+          "width": 912.25,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 307.875,
+          "y": 1263.71875,
+          "width": 912.25,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1280,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 307.875,
+        "y": 317.265625,
+        "width": 912.25,
+        "height": 542.828125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 734.078125,
+        "y": 448.8125,
+        "width": 461.046875,
+        "height": 236.125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 741.078125,
+        "y": 455.8125,
+        "width": 25.125,
+        "height": 25.125,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 734.078125,
+        "y": 402.125,
+        "width": 461.046875,
+        "height": 313.65625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 354.875,
+          "y": 497.265625,
+          "width": 333.203125,
+          "height": 166.59375,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 307.875,
+          "y": 262.125,
+          "width": 912.25,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 307.875,
+          "y": 317.265625,
+          "width": 912.25,
+          "height": 542.828125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 307.875,
+          "y": 860.09375,
+          "width": 912.25,
+          "height": 249.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 307.875,
+          "y": 1109.234375,
+          "width": 912.25,
+          "height": 110.578125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 307.875,
+          "y": 1219.8125,
+          "width": 912.25,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 307.875,
+          "y": 1289.609375,
+          "width": 912.25,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 307.875,
+          "y": 1338.109375,
+          "width": 912.25,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1280,
+      "route": "rhythm-doctor",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 307.875,
+        "y": 102.265625,
+        "width": 912.25,
+        "height": 1471.109375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 332.875,
+        "y": 723.75,
+        "width": 1378.109375,
+        "height": 699.859375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 346.875,
+        "y": 737.75,
+        "width": 78.390625,
+        "height": 78.390625,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 332.875,
+        "y": 677.0625,
+        "width": 862.25,
+        "height": 777.390625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 506,
+          "y": 282.265625,
+          "width": 516,
+          "height": 258,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 307.875,
+          "y": 47.125,
+          "width": 912.25,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 307.875,
+          "y": 102.265625,
+          "width": 912.25,
+          "height": 1471.109375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 307.875,
+          "y": 1573.375,
+          "width": 912.25,
+          "height": 249.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 307.875,
+          "y": 1822.515625,
+          "width": 912.25,
+          "height": 110.578125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 307.875,
+          "y": 1933.09375,
+          "width": 912.25,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 307.875,
+          "y": 2002.890625,
+          "width": 912.25,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 307.875,
+          "y": 2051.390625,
+          "width": 912.25,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1280,
+      "route": "first-sound/course",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 590.046875,
+        "y": 556.46875,
+        "width": 630.0625,
+        "height": 426.4375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 902.046875,
+        "y": 619.15625,
+        "width": 302.0625,
+        "height": 156.625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 909.046875,
+        "y": 626.15625,
+        "width": 15.1875,
+        "height": 15.1875,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 902.046875,
+        "y": 572.46875,
+        "width": 302.0625,
+        "height": 234.15625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 628.046875,
+          "y": 749.46875,
+          "width": 132,
+          "height": 66,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 590.046875,
+          "y": 499.71875,
+          "width": 630.0625,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 590.046875,
+          "y": 556.46875,
+          "width": 630.0625,
+          "height": 426.4375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 590.046875,
+          "y": 998.90625,
+          "width": 630.0625,
+          "height": 252.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 590.046875,
+        "y": 499.71875,
+        "width": 630.0625,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1280,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 590.046875,
+        "y": 545.46875,
+        "width": 630.0625,
+        "height": 454.234375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 902.046875,
+        "y": 608.15625,
+        "width": 302.0625,
+        "height": 156.625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 909.046875,
+        "y": 615.15625,
+        "width": 15.1875,
+        "height": 15.1875,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 902.046875,
+        "y": 561.46875,
+        "width": 302.0625,
+        "height": 234.15625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 628.046875,
+          "y": 712.46875,
+          "width": 236,
+          "height": 118,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 590.046875,
+          "y": 488.71875,
+          "width": 630.0625,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 590.046875,
+          "y": 545.46875,
+          "width": 630.0625,
+          "height": 454.234375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 590.046875,
+          "y": 1015.703125,
+          "width": 630.0625,
+          "height": 252.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 590.046875,
+        "y": 488.71875,
+        "width": 630.0625,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1280,
+      "route": "first-sound/course",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 590.046875,
+        "y": 102.46875,
+        "width": 630.0625,
+        "height": 1438.203125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 606.046875,
+        "y": 695.953125,
+        "width": 1378.109375,
+        "height": 699.859375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 620.046875,
+        "y": 709.953125,
+        "width": 78.390625,
+        "height": 78.390625,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 606.046875,
+        "y": 649.265625,
+        "width": 598.0625,
+        "height": 777.390625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 647.078125,
+          "y": 268.46875,
+          "width": 516,
+          "height": 258,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 590.046875,
+          "y": 45.71875,
+          "width": 630.0625,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 590.046875,
+          "y": 102.46875,
+          "width": 630.0625,
+          "height": 1438.203125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 590.046875,
+          "y": 1556.671875,
+          "width": 630.0625,
+          "height": 252.140625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 590.046875,
+        "y": 45.71875,
+        "width": 630.0625,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nEnlarged grid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nUse the standard grid controls\n\nThis is the same interactive grid shown above. Enlarge it for touch input; scroll horizontally only if needed.\n\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1121,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 300.5625,
+        "y": 317.015625,
+        "width": 767.875,
+        "height": 468.4375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 661.796875,
+        "y": 431.25,
+        "width": 381.640625,
+        "height": 196.375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 668.796875,
+        "y": 438.25,
+        "width": 20.15625,
+        "height": 20.15625,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 661.796875,
+        "y": 384.5625,
+        "width": 381.640625,
+        "height": 273.90625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 347.5625,
+          "y": 515.953125,
+          "width": 164.234375,
+          "height": 82.109375,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 300.5625,
+          "y": 261.875,
+          "width": 767.875,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 300.5625,
+          "y": 317.015625,
+          "width": 767.875,
+          "height": 468.4375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 300.5625,
+          "y": 785.453125,
+          "width": 767.875,
+          "height": 272.234375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 300.5625,
+          "y": 1057.6875,
+          "width": 767.875,
+          "height": 133.671875,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 300.5625,
+          "y": 1191.359375,
+          "width": 767.875,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 300.5625,
+          "y": 1261.15625,
+          "width": 767.875,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 300.5625,
+          "y": 1309.65625,
+          "width": 767.875,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1121,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 300.5625,
+        "y": 317.015625,
+        "width": 767.875,
+        "height": 510.34375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 661.796875,
+        "y": 452.203125,
+        "width": 381.640625,
+        "height": 196.375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 668.796875,
+        "y": 459.203125,
+        "width": 20.15625,
+        "height": 20.15625,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 661.796875,
+        "y": 405.515625,
+        "width": 381.640625,
+        "height": 273.90625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 347.5625,
+          "y": 497.015625,
+          "width": 268.234375,
+          "height": 134.109375,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 300.5625,
+          "y": 261.875,
+          "width": 767.875,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 300.5625,
+          "y": 317.015625,
+          "width": 767.875,
+          "height": 510.34375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 300.5625,
+          "y": 827.359375,
+          "width": 767.875,
+          "height": 272.234375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 300.5625,
+          "y": 1099.59375,
+          "width": 767.875,
+          "height": 133.671875,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 300.5625,
+          "y": 1233.265625,
+          "width": 767.875,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 300.5625,
+          "y": 1303.0625,
+          "width": 767.875,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 300.5625,
+          "y": 1351.5625,
+          "width": 767.875,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1121,
+      "route": "rhythm-doctor",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 300.5625,
+        "y": 102.015625,
+        "width": 767.875,
+        "height": 1363.78125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 325.5625,
+        "y": 723.5,
+        "width": 1162.65625,
+        "height": 592.53125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 339.5625,
+        "y": 737.5,
+        "width": 65.671875,
+        "height": 65.671875,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 325.5625,
+        "y": 676.8125,
+        "width": 717.875,
+        "height": 670.0625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 426.5,
+          "y": 282.015625,
+          "width": 516,
+          "height": 258,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 300.5625,
+          "y": 46.875,
+          "width": 767.875,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 300.5625,
+          "y": 102.015625,
+          "width": 767.875,
+          "height": 1363.78125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 300.5625,
+          "y": 1465.796875,
+          "width": 767.875,
+          "height": 272.234375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 300.5625,
+          "y": 1738.03125,
+          "width": 767.875,
+          "height": 133.671875,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 300.5625,
+          "y": 1871.703125,
+          "width": 767.875,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 300.5625,
+          "y": 1941.5,
+          "width": 767.875,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 300.5625,
+          "y": 1990,
+          "width": 767.875,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 1121,
+      "route": "first-sound/course",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 622.90625,
+        "y": 254.96875,
+        "width": 445.53125,
+        "height": 745.109375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 638.90625,
+        "y": 695.421875,
+        "width": 413.53125,
+        "height": 212.375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 645.90625,
+        "y": 702.421875,
+        "width": 22.15625,
+        "height": 22.15625,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 638.90625,
+        "y": 648.734375,
+        "width": 413.53125,
+        "height": 289.90625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 660.90625,
+          "y": 420.96875,
+          "width": 265.53125,
+          "height": 132.765625,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 622.90625,
+          "y": 198.21875,
+          "width": 445.53125,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 622.90625,
+          "y": 254.96875,
+          "width": 445.53125,
+          "height": 745.109375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 622.90625,
+          "y": 1016.078125,
+          "width": 445.53125,
+          "height": 298.328125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 622.90625,
+        "y": 198.21875,
+        "width": 445.53125,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1121,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 622.90625,
+        "y": 174.96875,
+        "width": 445.53125,
+        "height": 824.90625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 638.90625,
+        "y": 695.21875,
+        "width": 413.53125,
+        "height": 212.375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 645.90625,
+        "y": 702.21875,
+        "width": 22.15625,
+        "height": 22.15625,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 638.90625,
+        "y": 648.53125,
+        "width": 413.53125,
+        "height": 289.90625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 660.90625,
+          "y": 340.96875,
+          "width": 369.53125,
+          "height": 184.765625,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 622.90625,
+          "y": 118.21875,
+          "width": 445.53125,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 622.90625,
+          "y": 174.96875,
+          "width": 445.53125,
+          "height": 824.90625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 622.90625,
+          "y": 1015.875,
+          "width": 445.53125,
+          "height": 298.328125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 622.90625,
+        "y": 118.21875,
+        "width": 445.53125,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 1121,
+      "route": "first-sound/course",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 622.90625,
+        "y": 101.96875,
+        "width": 445.53125,
+        "height": 1257.640625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 638.90625,
+        "y": 622.21875,
+        "width": 1162.65625,
+        "height": 592.53125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 652.90625,
+        "y": 636.21875,
+        "width": 65.671875,
+        "height": 65.671875,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 638.90625,
+        "y": 575.53125,
+        "width": 413.53125,
+        "height": 670.0625,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 660.90625,
+          "y": 267.96875,
+          "width": 369.53125,
+          "height": 184.765625,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 622.90625,
+          "y": 45.21875,
+          "width": 445.53125,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 622.90625,
+          "y": 101.96875,
+          "width": 445.53125,
+          "height": 1257.640625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 622.90625,
+          "y": 1375.609375,
+          "width": 445.53125,
+          "height": 298.328125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 622.90625,
+        "y": 45.21875,
+        "width": 445.53125,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nEnlarged grid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nUse the standard grid controls\n\nThis is the same interactive grid shown above. Enlarge it for touch input; scroll horizontally only if needed.\n\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 768,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 25,
+        "y": 56.4375,
+        "width": 718,
+        "height": 977.46875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 43,
+        "y": 583.125,
+        "width": 682,
+        "height": 346.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 50,
+        "y": 590.125,
+        "width": 38.9375,
+        "height": 38.9375,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 43,
+        "y": 536.4375,
+        "width": 682,
+        "height": 424.03125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 121,
+          "y": 228.4375,
+          "width": 422,
+          "height": 211,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 25,
+          "y": 1.296875,
+          "width": 718,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 25,
+          "y": 56.4375,
+          "width": 718,
+          "height": 977.46875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 25,
+          "y": 1033.90625,
+          "width": 718,
+          "height": 295.328125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 25,
+          "y": 1329.234375,
+          "width": 718,
+          "height": 133.671875,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 25,
+          "y": 1462.90625,
+          "width": 718,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 25,
+          "y": 1532.703125,
+          "width": 718,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 25,
+          "y": 1581.203125,
+          "width": 718,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 768,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 25,
+        "y": 66.4375,
+        "width": 718,
+        "height": 1057.265625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 43,
+        "y": 672.921875,
+        "width": 682,
+        "height": 346.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 50,
+        "y": 679.921875,
+        "width": 38.9375,
+        "height": 38.9375,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 43,
+        "y": 626.234375,
+        "width": 682,
+        "height": 424.03125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 121,
+          "y": 238.4375,
+          "width": 526,
+          "height": 263,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 25,
+          "y": 11.296875,
+          "width": 718,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 25,
+          "y": 66.4375,
+          "width": 718,
+          "height": 1057.265625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 25,
+          "y": 1123.703125,
+          "width": 718,
+          "height": 295.328125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 25,
+          "y": 1419.03125,
+          "width": 718,
+          "height": 133.671875,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 25,
+          "y": 1552.703125,
+          "width": 718,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 25,
+          "y": 1622.5,
+          "width": 718,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 25,
+          "y": 1671,
+          "width": 718,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 768,
+      "route": "rhythm-doctor",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 25,
+        "y": -146.5625,
+        "width": 718,
+        "height": 1147.046875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 43,
+        "y": 459.921875,
+        "width": 789.421875,
+        "height": 406.796875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 57,
+        "y": 473.921875,
+        "width": 44,
+        "height": 44,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 43,
+        "y": 413.234375,
+        "width": 682,
+        "height": 484.328125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 121,
+          "y": 25.4375,
+          "width": 526,
+          "height": 263,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 25,
+          "y": -201.703125,
+          "width": 718,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 25,
+          "y": -146.5625,
+          "width": 718,
+          "height": 1147.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 25,
+          "y": 1000.484375,
+          "width": 718,
+          "height": 295.328125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 25,
+          "y": 1295.8125,
+          "width": 718,
+          "height": 133.671875,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 25,
+          "y": 1429.484375,
+          "width": 718,
+          "height": 69.796875,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 25,
+          "y": 1499.28125,
+          "width": 718,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 25,
+          "y": 1547.78125,
+          "width": 718,
+          "height": 38.140625,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 768,
+      "route": "first-sound/course",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 25,
+        "y": 63.015625,
+        "width": 718,
+        "height": 963.46875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 41,
+        "y": 581.703125,
+        "width": 686,
+        "height": 348.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 48,
+        "y": 588.703125,
+        "width": 39.1875,
+        "height": 39.1875,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 41,
+        "y": 535.015625,
+        "width": 686,
+        "height": 426.03125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 121,
+          "y": 227.015625,
+          "width": 422,
+          "height": 211,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 25,
+          "y": 6.265625,
+          "width": 718,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 25,
+          "y": 63.015625,
+          "width": 718,
+          "height": 963.46875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 25,
+          "y": 1042.484375,
+          "width": 718,
+          "height": 208.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 25,
+        "y": 6.265625,
+        "width": 718,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 768,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 25,
+        "y": 74.015625,
+        "width": 718,
+        "height": 1043.265625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 41,
+        "y": 672.5,
+        "width": 686,
+        "height": 348.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 48,
+        "y": 679.5,
+        "width": 39.1875,
+        "height": 39.1875,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 41,
+        "y": 625.8125,
+        "width": 686,
+        "height": 426.03125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 121,
+          "y": 238.015625,
+          "width": 526,
+          "height": 263,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 25,
+          "y": 17.265625,
+          "width": 718,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 25,
+          "y": 74.015625,
+          "width": 718,
+          "height": 1043.265625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 25,
+          "y": 1133.28125,
+          "width": 718,
+          "height": 208.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 25,
+        "y": 17.265625,
+        "width": 718,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 768,
+      "route": "first-sound/course",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 25,
+        "y": -122.984375,
+        "width": 718,
+        "height": 1123.046875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 41,
+        "y": 471.5,
+        "width": 789.421875,
+        "height": 406.796875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 55,
+        "y": 485.5,
+        "width": 44,
+        "height": 44,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 41,
+        "y": 424.8125,
+        "width": 686,
+        "height": 484.328125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 121,
+          "y": 41.015625,
+          "width": 526,
+          "height": 263,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 25,
+          "y": -179.734375,
+          "width": 718,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 25,
+          "y": -122.984375,
+          "width": 718,
+          "height": 1123.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 25,
+          "y": 1016.0625,
+          "width": 718,
+          "height": 208.046875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 25,
+        "y": -179.734375,
+        "width": 718,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nEnlarged grid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nUse the standard grid controls\n\nThis is the same interactive grid shown above. Enlarge it for touch input; scroll horizontally only if needed.\n\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\n1. Enter four trigs\n2. Assign pattern 1 and loop four steps\n3. Open the Masks page\n4. Set pitch, velocity and length\n5. Play the loop\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 390,
+      "route": "rhythm-doctor",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 19,
+        "y": 195.828125,
+        "width": 352,
+        "height": 697.46875,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 31,
+        "y": 625.515625,
+        "width": 328,
+        "height": 169.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 38,
+        "y": 632.515625,
+        "width": 16.8125,
+        "height": 16.8125,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 31,
+        "y": 578.828125,
+        "width": 328,
+        "height": 247.03125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 48,
+          "y": 374.328125,
+          "width": 190,
+          "height": 95,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 19,
+          "y": 140.6875,
+          "width": 352,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 19,
+          "y": 195.828125,
+          "width": 352,
+          "height": 697.46875,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 19,
+          "y": 893.296875,
+          "width": 352,
+          "height": 445.125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 19,
+          "y": 1338.421875,
+          "width": 352,
+          "height": 198.953125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 19,
+          "y": 1537.375,
+          "width": 352,
+          "height": 66,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 19,
+          "y": 1603.375,
+          "width": 352,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 19,
+          "y": 1651.875,
+          "width": 352,
+          "height": 54.28125,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 390,
+      "route": "rhythm-doctor",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 19,
+        "y": 195.828125,
+        "width": 352,
+        "height": 752.265625,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 31,
+        "y": 680.3125,
+        "width": 328,
+        "height": 169.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 38,
+        "y": 687.3125,
+        "width": 16.8125,
+        "height": 16.8125,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 31,
+        "y": 633.625,
+        "width": 328,
+        "height": 247.03125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 48,
+          "y": 361.828125,
+          "width": 294,
+          "height": 147,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 19,
+          "y": 140.6875,
+          "width": 352,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 19,
+          "y": 195.828125,
+          "width": 352,
+          "height": 752.265625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 19,
+          "y": 948.09375,
+          "width": 352,
+          "height": 445.125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 19,
+          "y": 1393.21875,
+          "width": 352,
+          "height": 198.953125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 19,
+          "y": 1592.171875,
+          "width": 352,
+          "height": 66,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 19,
+          "y": 1658.171875,
+          "width": 352,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 19,
+          "y": 1706.671875,
+          "width": 352,
+          "height": 54.28125,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 390,
+      "route": "rhythm-doctor",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 19,
+        "y": 89.828125,
+        "width": 352,
+        "height": 1079.9375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 31,
+        "y": 588.8125,
+        "width": 801,
+        "height": 409,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 42,
+        "y": 599.8125,
+        "width": 44,
+        "height": 44,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 31,
+        "y": 525.625,
+        "width": 328,
+        "height": 503.03125,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 48,
+          "y": 255.828125,
+          "width": 294,
+          "height": 147,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 19,
+          "y": 34.6875,
+          "width": 352,
+          "height": 55.140625,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 19,
+          "y": 89.828125,
+          "width": 352,
+          "height": 1079.9375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 19,
+          "y": 1169.765625,
+          "width": 352,
+          "height": 445.125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 19,
+          "y": 1614.890625,
+          "width": 352,
+          "height": 198.953125,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 19,
+          "y": 1813.84375,
+          "width": 352,
+          "height": 66,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 19,
+          "y": 1879.84375,
+          "width": 352,
+          "height": 48.5,
+          "font": "16px",
+          "display": "flex"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 19,
+          "y": 1928.34375,
+          "width": 352,
+          "height": 54.28125,
+          "font": "11px",
+          "display": "block"
+        }
+      ],
+      "instructions": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "font": "16px",
+        "display": "none"
+      },
+      "mainText": "Manual\n/\nPattern\n/\nDig Deeper\n/\nPattern Editor\n/\nAdding Trigs\n/\nRhythm Doctor\nMOSAIC / PATTERN\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nExample\n← Adding Trigs\nAdding Notes →\nCaptured examples\nControls\n\nRhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2. Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control. Each project retains one captured bank. Select a lane, preview a 64-step window, then paint it into the selected pattern.\n\nRecord and paint a phrase\n\nUse Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.\n\nPress Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.\nOptional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.\nTap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.\nPress K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.\nWhen the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).\nSelect the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.\nPress Channel (3,8) and Play (1,8) to hear the painted rhythm.\n\nWith the 120 BPM test loop, BD paints a hit on every fourth step.\n\nRecording needs the sequencer stopped, because capture takes over the audio input and analysis replaces the bank underneath whatever is on the screen. So does Alignment, which re-analyses. Record, capture setup and Alignment do nothing while the sequencer runs, and the screen says STOP SEQUENCER when there is no bank to work on instead.\n\nA bank that has already been analysed stays usable while the sequencer plays. Choosing a lane, browsing the recording, changing sensitivity or paint policy, and previewing a"
+    },
+    {
+      "width": 390,
+      "route": "first-sound/course",
+      "mode": "original",
+      "overflow": false,
+      "instruments": {
+        "x": 19,
+        "y": 207.953125,
+        "width": 352,
+        "height": 673.8125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 31,
+        "y": 631.640625,
+        "width": 328,
+        "height": 169.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 38,
+        "y": 638.640625,
+        "width": 16.8125,
+        "height": 16.8125,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 31,
+        "y": 584.953125,
+        "width": 328,
+        "height": 235.375,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 48,
+          "y": 380.453125,
+          "width": 190,
+          "height": 95,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "false",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 19,
+          "y": 151.203125,
+          "width": 352,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 19,
+          "y": 207.953125,
+          "width": 352,
+          "height": 673.8125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 19,
+          "y": 897.765625,
+          "width": 352,
+          "height": 365.515625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 19,
+        "y": 151.203125,
+        "width": 352,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\nChoose another step\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 390,
+      "route": "first-sound/course",
+      "mode": "shield",
+      "overflow": false,
+      "instruments": {
+        "x": 19,
+        "y": 207.953125,
+        "width": 352,
+        "height": 728.609375,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 31,
+        "y": 686.4375,
+        "width": 328,
+        "height": 169.5,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 38,
+        "y": 693.4375,
+        "width": 16.8125,
+        "height": 16.8125,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 31,
+        "y": 639.75,
+        "width": 328,
+        "height": 235.375,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 48,
+          "y": 367.953125,
+          "width": 294,
+          "height": 147,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 19,
+          "y": 151.203125,
+          "width": 352,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments",
+          "x": 19,
+          "y": 207.953125,
+          "width": 352,
+          "height": 728.609375,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 19,
+          "y": 952.5625,
+          "width": 352,
+          "height": 365.515625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 19,
+        "y": 151.203125,
+        "width": 352,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\nChoose another step\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    },
+    {
+      "width": 390,
+      "route": "first-sound/course",
+      "mode": "enlarged",
+      "overflow": false,
+      "instruments": {
+        "x": 19,
+        "y": 89.953125,
+        "width": 352,
+        "height": 1023.78125,
+        "font": "16px",
+        "display": "grid"
+      },
+      "grid": {
+        "x": 31,
+        "y": 558.4375,
+        "width": 801,
+        "height": 409,
+        "font": "16px",
+        "display": "grid"
+      },
+      "pad": {
+        "x": 42,
+        "y": 569.4375,
+        "width": 44,
+        "height": 44,
+        "font": "16px",
+        "display": "block"
+      },
+      "wrap": {
+        "x": 31,
+        "y": 511.75,
+        "width": 328,
+        "height": 474.875,
+        "font": "16px",
+        "display": "block"
+      },
+      "screen": [
+        {
+          "tag": "CANVAS",
+          "id": "screen",
+          "x": 48,
+          "y": 249.953125,
+          "width": 294,
+          "height": 147,
+          "font": "16px",
+          "display": "block"
+        }
+      ],
+      "layout": "true",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "player-top",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "teaching-actions",
+          "cls": "",
+          "x": 19,
+          "y": 33.203125,
+          "width": 352,
+          "height": 40.75,
+          "font": "16px",
+          "display": "block"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "instruments grid-enlarged",
+          "x": 19,
+          "y": 89.953125,
+          "width": 352,
+          "height": 1023.78125,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "SECTION",
+          "id": "listen",
+          "cls": "listening",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "caption",
+          "x": 19,
+          "y": 1129.734375,
+          "width": 352,
+          "height": 365.515625,
+          "font": "16px",
+          "display": "grid"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "next-action",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "transport",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "DIV",
+          "id": "step-strip",
+          "cls": "step-strip",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "16px",
+          "display": "none"
+        },
+        {
+          "tag": "P",
+          "id": "control-help",
+          "cls": "player-help",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "11px",
+          "display": "none"
+        }
+      ],
+      "instructions": {
+        "x": 19,
+        "y": 33.203125,
+        "width": 352,
+        "height": 40.75,
+        "font": "16px",
+        "display": "block"
+      },
+      "mainText": "Manual\n/\nMake a piece\n/\n3. Make four equal notes\nMOSAIC / LEARN\n3. Make four equal notes\n\nMake four equal notes. Start with the sound and tempo from chapter 2. Write four trigs and hear them repeat.\n\nBefore you begin\nWhen you finish\nIf you need to recover\nRead all chapter steps\n\nFor all controls and independent examples: Open Creating a First Loop reference\n\nYour starting point: Continue with the routed project from chapter 2: tempo 90, channel 1 routed to your instrument, transport stopped.\n\nEnter four trigs\n\nWrite a first rhythm. A trig is a step that will play a note. Four neighbouring trigs are deliberately plain; chapter 4 reshapes them.\n\nTap Pattern (5,8). The screen reads PATTERN TRIG.\nTap (1,1) on the top row to choose pattern 1. PAT01 appears in the title row.\nTap (1,4), (2,4), (3,4) and (4,4). Row 4 holds steps 1 to 16 of the pattern. Each tap switches one step on; tap a lit step again to remove it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nEnlarged grid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nUse the standard grid controls\n\nThis is the same interactive grid shown above. Enlarge it for touch input; scroll horizontally only if needed.\n\n01\nBefore\nStarting point\n\nThe project from chapter 2: channel 1 sends to a MIDI instrument on port 1, MIDI channel 1 (its Device page shows CC Device, MIDI channel CC1, MIDI port OUT 1), and the tempo is 90 BPM (GLOBAL FEEL shows Tempo 90). No pattern has trigs yet, nothing is assigned to a channel and playback is stopped.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.\n\nChoose an interaction\nChoose another step\nContinue: Assign pattern 1 and loop four steps\nRecordings for this topic"
+    }
+  ],
+  "errors": [],
+  "endCSS": "c664709772996b542460a5c55a9c2eaf54e633170a29ce90685b78b10645cbcc"
+}

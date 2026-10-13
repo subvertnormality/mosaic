@@ -1,0 +1,167 @@
+{
+  "scope": "Independent causal review of failed partial course; no whole-course acceptance",
+  "whole_course_passed": false,
+  "public_recipe_indices": [
+    1324,
+    1334
+  ],
+  "public_edges": [
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 1
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 0
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 1
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 0
+    },
+    {
+      "type": "key",
+      "n": 3,
+      "state": 1
+    },
+    {
+      "type": "key",
+      "n": 3,
+      "state": 0
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 1
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 0
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 1
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 8,
+      "state": 0
+    }
+  ],
+  "unique_action_trace_matches": [
+    1324
+  ],
+  "native_applied_sequences": [
+    3137,
+    3138,
+    3257,
+    3258,
+    3261,
+    3262,
+    3264,
+    3265,
+    3382,
+    3383
+  ],
+  "native_scale02_frames": [
+    {
+      "index": 149,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 150,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 151,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 152,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 153,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 154,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 155,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 156,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 157,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 158,
+      "passed": false,
+      "error": "'scale_editor'"
+    },
+    {
+      "index": 159,
+      "passed": false,
+      "error": "'scale_editor'"
+    }
+  ],
+  "actual_failed_phrase_pitches": [
+    60,
+    60,
+    60,
+    60,
+    62,
+    60,
+    60,
+    60
+  ],
+  "expected_pitches": [
+    62,
+    62,
+    62,
+    64,
+    62,
+    62,
+    62,
+    64
+  ],
+  "production_source": {
+    "lib/press.lua": "1a96e57271dd0b7aedcb1496e20cece6b898cabaeefd57b46707e183e9777360",
+    "lib/pages/scale_edit_page/scale_edit_page.lua": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc"
+  },
+  "cleanup_sha256": "56b2bca90839370c50fa3382db9daab82c9d74727636447878e4fb0ef7198901",
+  "interpretation": "Actual ordinary public grid Play/Stop follows draft editing and precedes K3; immutable press.handle invokes save_confirm.cancel after registered page handlers. Applied musical phrase remains C/C/C/D rather than D/D/D/E.",
+  "complete_regression_run": false
+}

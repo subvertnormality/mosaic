@@ -1,0 +1,17 @@
+..............E......
+======================================================================
+ERROR: test_exact_zero_velocity_public_stop_release_is_a_real_owned_endpoint (test_doctor_options_audit.DoctorPublicStopIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_options_audit.py", line 110, in test_exact_zero_velocity_public_stop_release_is_a_real_owned_endpoint
+    receipt=audit.bind_public_stop(events,packets,'controlled-experimental')
+  File "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_audit.py", line 60, in bind_public_stop
+    last=notes[-1];releases=[value for value in packets if value['index']>last['index'] and value['port']==last['port'] and value['bytes']==[128,last['bytes'][1],last['bytes'][2]]];require(bool(releases),'Stop binding lacks exact release')
+  File "/home/andy/mosaic-manual-1.4.0/tools/doctor_options_audit.py", line 18, in require
+    if not condition:raise ValueError(message)
+ValueError: Stop binding lacks exact release
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.059s
+
+FAILED (errors=1)

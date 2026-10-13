@@ -1,0 +1,12 @@
+test_cell_ties_go_later (test_grid_quality.GridQuality.test_cell_ties_go_later) ... ok
+test_collision (test_grid_quality.GridQuality.test_collision) ... ok
+test_end_excluded (test_grid_quality.GridQuality.test_end_excluded) ... ok
+test_final_event_clamps (test_grid_quality.GridQuality.test_final_event_clamps) ... ok
+test_invalid_values_fail_closed (test_grid_quality.GridQuality.test_invalid_values_fail_closed) ... ok
+test_origin_and_partial_tail (test_grid_quality.GridQuality.test_origin_and_partial_tail) ... ok
+test_quantize_sample_before_region_filter (test_grid_quality.GridQuality.test_quantize_sample_before_region_filter) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.001s
+
+OK

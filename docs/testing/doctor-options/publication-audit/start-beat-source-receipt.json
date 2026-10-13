@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "scope": "current authored ManualRight Start Beat qualification extension",
+  "source_sha256": {
+    "tools/doctor_options_audit.py": "d4e41ac4f48322cfc70b45e9e1e2134a89f3b4a6f582829c1e3b0a4c89ec63e5",
+    "tests/behaviour/test_doctor_options_audit.py": "0ef299020e69c2364e88923a796c16ab64a22f4867aa8a1e9de06f9e7a16d65f",
+    "tests/behaviour/contract/rhythm_doctor_start_beat.py": "fb0a2f8f192a78413ecdc6ccb3415ad81442a4fcc5e58cb838b26007d111cfa1"
+  },
+  "red": [
+    "start-beat-red.log",
+    "bound-checkpoint-red.log"
+  ],
+  "green": "start-beat-final-green.log",
+  "focused_tests": 27,
+  "passed": true,
+  "native_qualification": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "exact_contract": {
+    "manual_right_analyses": 4,
+    "revisions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "manual_right_checkpoints": 12,
+    "manual120origins": [
+      0,
+      24000,
+      0
+    ],
+    "same_recording_and_candidates": true,
+    "fixture_analysis": "final restored immutable native envelope",
+    "checkpoint_pixels": "own bound native framebuffer SHA/grid; no other-observation borrowing"
+  }
+}

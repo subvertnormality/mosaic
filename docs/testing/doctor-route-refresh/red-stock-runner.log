@@ -1,0 +1,16 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+F.F
+Failed tests:
+-------------
+1) test_ui_live_doctor_route_refresh_capture_without_dispatch
+.///lib/ui_live_doctor_route_refresh_tests.lua:37: expected: "R02"
+actual: "R01"
+stack traceback:
+
+2) test_ui_live_doctor_route_refresh_ready_without_dispatch
+.///lib/ui_live_doctor_route_refresh_tests.lua:47: expected: "R05"
+actual: "R04"
+stack traceback:
+
+Ran 3 tests in 0.246 seconds, 1 success, 2 failures, 2404 non-selected

@@ -1,0 +1,176 @@
+{
+  "job_id": "source14-clocks-coherence-recheck-20261008-01",
+  "reviewed_at_utc": "2026-10-08T08:12:16.457Z",
+  "reviewer_identity": "/root/source06_review_preparation/source06b_review_job05",
+  "reader_url": "http://127.0.0.1:8924/manual/",
+  "unit": {
+    "id": "feature:clocks-swing-and-shuffle",
+    "title": "Clocks, Swing and Shuffle",
+    "kind": "feature",
+    "canonical_route": "#clocks-swing-and-shuffle",
+    "compiled_book_sha256": "e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe",
+    "criteria": {
+      "coherence": {
+        "score": 9,
+        "rationale": "The user-authorized source of truth is the feature YAML; the Windows README copy used in the prior finding is stale and non-authoritative. The authoritative clocks YAML says every Song slot uses the shared composition tempo. Production writes and refreshes one global clock_tempo parameter, while song-pattern data stores repeats and length but no tempo; each channel stores its own clock_mods. The rendered statement matches both the authoritative content and production model.",
+        "evidence": [
+          "../evidence/reader-coherence-capture.json",
+          "../evidence/clocks-feature.png",
+          "../evidence/authoritative-clocks-yaml.txt",
+          "../evidence/song-tempo-write-refresh.txt",
+          "../evidence/clock-global-tempo-reads.txt",
+          "../evidence/song-pattern-data-model.txt",
+          "../evidence/program-song-slot-switch.txt",
+          "../evidence/song-slot-parameter-capture.txt",
+          "../evidence/song-clock-global-field.txt",
+          "../evidence/production-clock-tempo-scan.txt",
+          "../evidence/head-readme-stale-wording-search.txt",
+          "../evidence/source-file-sha256.txt"
+        ]
+      },
+      "usefulness": {
+        "score": 8,
+        "rationale": "The page gives concrete Song tasks → Tempo / feel and Channel tasks → Clock paths, per-channel division or multiplication, and examples for changing Swing and Shuffle; the tempo claim needs reconciliation with the primary manual.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/feature.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/open-clock-click.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/cookbook-click.png"
+        ]
+      },
+      "understandability": {
+        "score": 8,
+        "rationale": "It separates shared composition tempo, per-channel rate, local Swing/Shuffle, and X inheritance in direct terms. The running-versus-stopped update boundary adds technical detail but is stated explicitly.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/feature.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/open-clock-click.png"
+        ]
+      },
+      "representation": {
+        "score": 8,
+        "rationale": "The nine-frame capture shows channel/device and rate context, and the cookbook gives a two-slot, two-channel example. The new shared-tempo statement is explained in prose rather than demonstrated in a captured Song Tempo screen.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/feature.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/cookbook-click.png"
+        ]
+      },
+      "granularity": {
+        "score": 9,
+        "rationale": "The feature groups clock rate with closely related Swing and Shuffle behavior, while independent captured examples isolate channel selection, shuffle amount, swing and the vertical Clock list.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/feature.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/open-clock-lesson.png"
+        ]
+      },
+      "flow": {
+        "score": 9,
+        "rationale": "The page moves from the tempo/rate distinction to feel inheritance, then recorded examples, a concise controls table, and a multi-slot musical recipe.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/feature.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/cookbook-click.png"
+        ]
+      },
+      "integration": {
+        "score": 8,
+        "rationale": "The visible clock lesson link opens the channel Clock task and explains Rate /1; the cookbook combines Song slots with separate channel Clock pages. The README conflict keeps confidence below a stronger integration score.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/open-clock-click.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/cookbook-click.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/README-primary-source.txt"
+        ]
+      },
+      "vocabulary": {
+        "score": 8,
+        "rationale": "Rate /1, global tempo, channel, Swing, Shuffle, basis and feel are used consistently and the page defines X inheritance; the concepts assume some familiarity with sequencer timing.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/feature.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/open-clock-click.png"
+        ]
+      },
+      "naming": {
+        "score": 9,
+        "rationale": "“Clocks, Swing and Shuffle” names the feature’s three controls directly, and the linked lessons describe specific tasks such as opening the channel clock or setting a shuffle amount.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/feature.png"
+        ]
+      },
+      "canonical_home": {
+        "score": 9,
+        "rationale": "The canonical route loads the titled feature, its visible “Open the channel clock” link reaches the corresponding lesson, and the Musical examples control scrolls to the straight-then-swung recipe.",
+        "evidence": [
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-live-evidence.json",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/open-clock-click.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/cookbook-click.png",
+          "../../source14-clocks-feature-review-20261008-01/browser-evidence/source14-clocks-click-handoffs.json"
+        ]
+      }
+    }
+  },
+  "criterion_review_status": {
+    "coherence": "fresh re-review against user-authorized authoritative YAML and production code",
+    "usefulness": "carried forward unchanged from the prior source14 report",
+    "understandability": "carried forward unchanged from the prior source14 report",
+    "representation": "carried forward unchanged from the prior source14 report",
+    "granularity": "carried forward unchanged from the prior source14 report",
+    "flow": "carried forward unchanged from the prior source14 report",
+    "integration": "carried forward unchanged from the prior source14 report",
+    "vocabulary": "carried forward unchanged from the prior source14 report",
+    "naming": "carried forward unchanged from the prior source14 report",
+    "canonical_home": "carried forward unchanged from the prior source14 report"
+  },
+  "all_scores_at_least_8": true,
+  "source_authority": {
+    "basis": "Parent supplied the recorded user direction superseding README-primary for this feature: YAML is authoritative and README is an overview.",
+    "authoritative_checkout": "/home/andy/mosaic-manual-1.4.0",
+    "wsl_distribution": "Ubuntu-20.04",
+    "head": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+    "source_identity_sha256": "da8b8d63986e46f1432278cc0cd8bdc800db727154c07bf18be05bd093e91049",
+    "inventory_serialized_sha256": "49180378684db9f038845d69eb42505f161f696b9cd1eb83cc2928cba8339a3d",
+    "authoritative_feature_path": "manual/features/reference-channel.yaml",
+    "source_files_sha256": {
+      "manual/features/reference-channel.yaml": "2d9ceadbe122f403a89194a08111badbf1b690ac7771e57cf4d85db7662197bf",
+      "lib/pages/song_edit_page/song_edit_page_ui.lua": "9228f92c828d709f6f26e63e323018bcacbb9b2bdab7d1b6c8105048edad6755",
+      "lib/clock/m_clock.lua": "99483290e1736a811e5cde7437a14c8e209a0e423d5559b17eefa713d455fe09",
+      "lib/models/program.lua": "9e187a966253c69f154092f6a0585c15d3b2e9c14bddcf74c82292bd9cbd274c",
+      "lib/models/model_defaults.lua": "ddae5c4acd1385d038b880f6bfa3a2e5faf742be8967983289dd9c7797eca9c",
+      "lib/song_slot_params.lua": "e13facc2467a49a018d0ad4346c39e4e2606d497b39c8065e6a4ccd892c68bca",
+      "lib/ui_adapters/song_clock.lua": "734350f3e9f811b32b538cf0877d1c6b6908d7d010b85b5158b0d3ee7ec25382",
+      "README.md": "839b89906e6cf299540d9ca2bed35b44cfa664d814901b71e8d077b97b587d46"
+    }
+  },
+  "production_confirmation": {
+    "song_tempo_write": "song_edit_page_ui.update_tempo writes params clock_tempo (lines 309-311); refresh_tempo reads the same param (326-327).",
+    "clock_reads": "m_clock reads params clock_tempo (lines 53, 264); song_clock UI maps global Tempo to clock_tempo.",
+    "song_pattern_model": "defaults.song_pattern stores active, global_pattern_length, scale, repeats, patterns, channels and scales; it has no tempo property. The separate repeat update writes selected_song_pattern.repeats.",
+    "channel_model": "Each channel has clock_mods (default /1) and per-channel swing/shuffle fields.",
+    "slot_parameter_swap": "song_slot_params captures/restores channel stock parameters when the selected slot changes; bounded production scan finds no per-slot tempo assignment.",
+    "readme_check": "The authoritative WSL HEAD README has no “Each sequence can have” or “Every Song slot” wording; the contradiction came from the stale Windows workspace README copy."
+  },
+  "previous_report": {
+    "path": "../source14-clocks-feature-review-20261008-01/reports/source14-clocks-feature-review.json",
+    "sha256": "dd6c01163bea557a633abf587c97c1c68e6cf3cc5bab8032fdbfcaca732a22cd",
+    "markdown_path": "../source14-clocks-feature-review-20261008-01/reports/source14-clocks-feature-review.md",
+    "markdown_sha256": "10ef23210ecfd9247ea108e203b354dde73b84e1957bc857b1a78ff205cace37",
+    "previous_coherence_score": 6,
+    "previous_finding_status": "withdrawn as based on the stale workspace README rather than the user-authorized YAML authority; original report preserved unchanged",
+    "preserved_unchanged": true
+  },
+  "scope": "Only coherence for feature:clocks-swing-and-shuffle was re-reviewed. The other nine criterion scores and rationales carry forward unchanged from the earlier source14 report. This is not a full-manual re-review.",
+  "reassessment": "The previous below-threshold coherence finding was invalid against the user-authorized authoritative source. The YAML statement and production parameter/model data agree that Song slots share composition tempo while channels have their own clock rates. Revised coherence score: 9/10.",
+  "reader_pins": {
+    "root_staged_receipt_sha256": "cffef64c66d07ff3089ecd31ff2e2be9c4f2777d41625af28997e481a58f7a93",
+    "book_sha256": "e39c222890193f487e6f54dbfac1756e5e9f4582fbee114ead7658ee3000aabe",
+    "reader_index_sha256": "984dc86e198f71fb2594dac82add5fe03afbd706f30cded8f5f84f5189a44d6c",
+    "book_js_sha256": "453bf67a382733b330d5d76bb4d958066ee2604a82f6b0c38fd8b37786608cd8",
+    "manual_js_sha256": "e2d1057bc5375691541620951cb8e0484c7395ba52d6e686bac8fbad780534d7",
+    "manual_css_sha256": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309"
+  },
+  "method": "Inspected the user-authorized authoritative YAML, bounded production parameter/model code, and live source14 canonical feature route. No source edit, compile, native run, audio capture or listening."
+}

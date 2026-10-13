@@ -1,0 +1,14 @@
+test_a_relaunch_over_a_live_runtime_still_publishes (test_launch_analysis_worker.LaunchAnalysisWorker.test_a_relaunch_over_a_live_runtime_still_publishes)
+The runtime directory is reused across sessions, not created fresh. ... ok
+test_it_publishes_a_mailbox_the_host_can_read (test_launch_analysis_worker.LaunchAnalysisWorker.test_it_publishes_a_mailbox_the_host_can_read) ... ok
+test_a_relaunch_over_a_live_runtime_still_publishes (test_launch_analysis_worker.NativeBackendEndToEnd.test_a_relaunch_over_a_live_runtime_still_publishes)
+The runtime directory is reused across sessions, not created fresh. ... ok
+test_it_publishes_a_mailbox_the_host_can_read (test_launch_analysis_worker.NativeBackendEndToEnd.test_it_publishes_a_mailbox_the_host_can_read) ... ok
+test_it_reads_the_24_bit_captures_softcut_writes (test_launch_analysis_worker.NativeBackendEndToEnd.test_it_reads_the_24_bit_captures_softcut_writes)
+Capture runs through softcut now, and softcut writes 24-bit PCM. ... ok
+test_the_native_backend_analyses_a_capture (test_launch_analysis_worker.NativeBackendEndToEnd.test_the_native_backend_analyses_a_capture) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 13.940s
+
+OK

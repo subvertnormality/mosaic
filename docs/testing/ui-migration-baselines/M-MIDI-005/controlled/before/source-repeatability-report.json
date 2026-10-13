@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "06e75221b5cf6e38af62908e6d84efba4aee0e9a",
+  "after_sha": "2a2f62e836d1b5850b5aba6ecb5049aaa37b32f5",
+  "tooling_sha": "ccceed848cacb21c838028cf893a67ff8e46b2ff",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-SYNC-022",
+    "M-SYNC-023",
+    "M-MIDI-REPEAT-001",
+    "M-MIDI-002",
+    "M-MIDI-005"
+  ],
+  "selected_modules": {
+    "tests/behaviour/external_clock_long.py": "M-SYNC-022",
+    "tests/behaviour/external_clock_backlog.py": "M-SYNC-023",
+    "tests/behaviour/keyboard_repeated_note_on.py": "M-MIDI-REPEAT-001",
+    "tests/behaviour/cases.py": "M-MIDI-002"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/external_clock_long.py",
+      "case": "M-SYNC-022",
+      "lane": "controlled-experimental",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-0edecdfe666541e7bfc91f1c3b6b4e0a/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-0edecdfe666541e7bfc91f1c3b6b4e0a/manifest.json",
+      "manifest_sha256": "d7b0e84f5627a5739850e8deb1d53a65d346854d41eb6926cee69c2c8af889a2",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/external_clock_backlog.py",
+      "case": "M-SYNC-023",
+      "runs": [
+        {
+          "manifest": "mosaic-behaviour-runs/rt-repeat-M-SYNC-023/0/d2777d7c4f6442f5831b6719d33084a5/manifest.json",
+          "sha256": "f24980f265d06bc51670f9b7de7bb8d2522959605041887060f90c2f5de74090"
+        },
+        {
+          "manifest": "mosaic-behaviour-runs/rt-repeat-M-SYNC-023/1/8602d32bd67c43d18c1f398c59d69e71/manifest.json",
+          "sha256": "41bf7404dc6fa6c4cd5825da6dad57b76aac960cf82e2c0f6fc1ac4bd004e341"
+        },
+        {
+          "manifest": "mosaic-behaviour-runs/rt-repeat-M-SYNC-023/2/03790a23326543878eaad9a6a5ac6f84/manifest.json",
+          "sha256": "2174b22c912f36735a00d94e54e0327beb65b49cfb8a975cff7e7081bf804f5e"
+        }
+      ],
+      "lane": "real-time",
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/keyboard_repeated_note_on.py",
+      "case": "M-MIDI-REPEAT-001",
+      "lane": "controlled-experimental",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-f7be390d200d4e0f929a8a821caa083b/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-f7be390d200d4e0f929a8a821caa083b/manifest.json",
+      "manifest_sha256": "8f0d4620faa2078f2fafff54f404fcd3282023af310d149703e6fc70fb035071",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-MIDI-002",
+      "lane": "controlled-experimental",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-73bab3be2eb54572a81c5f45819b985e/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-73bab3be2eb54572a81c5f45819b985e/manifest.json",
+      "manifest_sha256": "1efe190819281457ba9a9fdd68dbbee8f9fed35fe4799c8b9abdc24f747b37c2",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

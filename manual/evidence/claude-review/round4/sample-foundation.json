@@ -1,0 +1,278 @@
+{
+  "build_manifest_sha256": "a8a3d59ade436592ee118658b6b720943c7551f4dd3f1a203b5bbe8737b42b0b",
+  "inventory_sha256": "a19f7a71c11f989a7a5362fbdad4644361fa08ba2b3891e7c9ee1efd1299a9fd",
+  "readthrough_sha256": "850af7177ce0d7256c6bc2b8c04cca4734bcbf7a5feaccc97673aa32d6b84e2e",
+  "units": [
+    {
+      "id": "course:getting-started-objects",
+      "scores": {
+        "coherence": {
+          "score": 6,
+          "reason": "Clear three-object explanation is undermined by conflicting chapter framing and a failed exercise.",
+          "evidence": "#getting-started/course — “Learn the three objects” versus “Install Mosaic and configure one channel before creating a song.”",
+          "improvement": "A: Align the chapter introduction with the orientation-only goal."
+        },
+        "usefulness": {
+          "score": 7,
+          "reason": "The definitions and one safe action are useful, but the first practice invitation blocks reassurance.",
+          "evidence": "#getting-started/course — “A pattern holds a rhythm of trigs”; clicking Practice opens #getting-started/lesson/getting-started-objects with “source receipt is stale.”",
+          "improvement": "R: Restore the practice link to the valid local checkpoint while preserving lesson prose on asset failure."
+        },
+        "understandability": {
+          "score": 6,
+          "reason": "Coordinates and X are explained, but newcomers encounter terminology before the notation stage and an opaque error.",
+          "evidence": "#getting-started/course — “tap Channel (3,8)” precedes “Read the grid and norns controls”; error says “requested recorded course walkthrough is unavailable”.",
+          "improvement": "A/R: Put the minimal coordinate/key legend before the first gesture; give a reader-friendly fallback."
+        },
+        "representation": {
+          "score": 6,
+          "reason": "Authentic screen and grid exist through Result, but Practice loses the lesson.",
+          "evidence": "#getting-started/course — View the captured result targets #getting-started/course/course-getting-started/getting-started-objects; Practice replaces main content with error.",
+          "improvement": "R: Put the valid screen/grid checkpoint immediately under the gesture."
+        },
+        "granularity": {
+          "score": 7,
+          "reason": "Three concepts and one tap are a reasonable chunk; lengthy eight-cell feedback overwhelms orientation.",
+          "evidence": "#getting-started/course — “Trig, Note, Vel, Len and Chd1 to Chd4” follows the first tap.",
+          "improvement": "A: Keep CH01 and X as the first confirmation; disclose the other fields later."
+        },
+        "flow": {
+          "score": 5,
+          "reason": "The main course starts sensibly, but the first recommended practice breaks the journey.",
+          "evidence": "#getting-started/course — Home → “1. Meet Mosaic” → Practice → error; next prose stage is “Read the grid and norns controls”.",
+          "improvement": "R/A: Make a single continue path from orientation to notation and routing, with no failed fork."
+        },
+        "integration": {
+          "score": 4,
+          "reason": "Instructions and authentic result are separate choices and Practice is unusable.",
+          "evidence": "#getting-started/course — Adjacent links “Practice the recorded walkthrough” and “View the captured result”; “Interactive examples” follows next-chapter link.",
+          "improvement": "R: Replace competing links with an inline stage workspace."
+        },
+        "vocabulary": {
+          "score": 4,
+          "reason": "Musical definitions are plain; build status vocabulary intrudes on the first lesson.",
+          "evidence": "#getting-started/course — “CAPTURED INTERACTIONS”, “PREPARED STARTING POINT”, “No authored practice is available”, “source receipt is stale”.",
+          "improvement": "R/A: Move receipt/status language into Evidence and label reader controls Show result."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "The object-stage name is good; chapter and breadcrumb name different scopes.",
+          "evidence": "#getting-started/course — “1. Meet Mosaic”, breadcrumb “Getting Started”, subtitle “Install Mosaic and configure one channel”.",
+          "improvement": "A/R: Use Meet Mosaic consistently and retain Getting Started only as a collection name."
+        },
+        "canonical_home": {
+          "score": 4,
+          "reason": "The reader must choose among course, practice, result and reference homes.",
+          "evidence": "#getting-started/course — #getting-started/course, #getting-started/lesson/getting-started-objects, result URL, “Open Getting Started reference”.",
+          "improvement": "R: Canonicalize stage links to one working chapter workspace; reference remains an optional detail link."
+        }
+      }
+    },
+    {
+      "id": "course:first-sound-attacks",
+      "scores": {
+        "coherence": {
+          "score": 6,
+          "reason": "Prose has a clear rhythm goal; demo mixes starting and future states.",
+          "evidence": "#first-sound/course — 01/10 “No pattern has trigs yet” simultaneously shows “Four bright buttons light at (1,4) to (4,4)”.",
+          "improvement": "R/A: Label expected future feedback explicitly and show current feedback only after Result."
+        },
+        "usefulness": {
+          "score": 7,
+          "reason": "The physical gesture and undo are useful; cue buttons supply little feedback.",
+          "evidence": "#first-sound/course — “tap a lit step again to remove it”; clicking all six buttons leaves 01/10 until View the captured result changes to 02/10.",
+          "improvement": "R: Present these as grouped instructions with one Show result action."
+        },
+        "understandability": {
+          "score": 6,
+          "reason": "Trig is defined well, but note-labelled buttons confuse rhythm with sounded notes.",
+          "evidence": "#first-sound/course — “A trig is a step that will play a note”; cue buttons “Add the first note”; prose says “Nothing sounds yet”.",
+          "improvement": "A/R: Name cues Add trig 1–4 and explain that pitch and routing come next."
+        },
+        "representation": {
+          "score": 6,
+          "reason": "The genuine final grid is informative, but intermediate clicks do not demonstrate change.",
+          "evidence": "#first-sound/course — Six cues remain on 01/10; Result gives 02/10 “Enter four trigs”, “MIDI sent in this step: none.”",
+          "improvement": "R: Keep grouped gestures and the existing final grid beside each other without promising intermediate simulation."
+        },
+        "granularity": {
+          "score": 6,
+          "reason": "Four trigs fit one chunk, but six cue acknowledgements plus another result click fragment it.",
+          "evidence": "#first-sound/course — Open Pattern, Choose pattern 1, Add first/second/third/fourth note, View the captured result.",
+          "improvement": "R/A: Use one three-step instruction group and one result control."
+        },
+        "flow": {
+          "score": 7,
+          "reason": "Routing prerequisites and the assignment next step are logical; reader controls complicate progress.",
+          "evidence": "#first-sound/course — “Continue with the routed project from chapter 2”; result NEXT ACTION starts “Tap Channel (3,8), then tap (1,2)”.",
+          "improvement": "R: Continue directly from this stage to Assign pattern 1 in the same workspace."
+        },
+        "integration": {
+          "score": 5,
+          "reason": "Example and prose repeat at a distance; audio illustrates the later completed stage.",
+          "evidence": "#first-sound/course — Next-chapter link precedes Interactive examples; Four equal notes below describes pitched C3 while this stage says nothing sounds yet.",
+          "improvement": "R/A/M: Keep this silent grid result inline and reserve the clip for Play the loop."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Good trig definition competes with repeated implementation terms.",
+          "evidence": "#first-sound/course — “Recorded walkthrough cue”; “CAPTURED EXAMPLE”; “does not actuate a live instrument”.",
+          "improvement": "R: Explain replay once in About, then use Action/Result labels."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "The stage heading is precise; cue and page identities vary.",
+          "evidence": "#first-sound/course — “Enter four trigs”, “Add the first note”, breadcrumb “Creating a First Loop”, “3. Make four equal notes”.",
+          "improvement": "A/R: Use trig consistently for the rhythm action and stable chapter names."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "Working routes exist but duplicate full chapter prose and split practice from result.",
+          "evidence": "#first-sound/course — #first-sound/lesson/first-sound-attacks and #first-sound/course/course-first-sound/first-sound-attacks both render the chapter plus player.",
+          "improvement": "R: Resolve both links to the same focused inline stage, using one canonical stage URL."
+        }
+      }
+    },
+    {
+      "id": "course:first-sound-defaults",
+      "scores": {
+        "coherence": {
+          "score": 6,
+          "reason": "Targets are coherent, but practice displays the all-X current state beside completed values.",
+          "evidence": "#first-sound/course — Practice #first-sound/lesson/first-sound-defaults shows 05/10 “all X” alongside “NOTE MASKS shows Note C3, Vel 80 and Len 1/2”.",
+          "improvement": "R: Clearly distinguish before, instruction and after states."
+        },
+        "usefulness": {
+          "score": 7,
+          "reason": "Exact targets and not-counting advice help; elaborate cue labels make a simple task feel difficult.",
+          "evidence": "#first-sound/course — “You do not need to count detents”; button “Choose Note field, then set the channel note to C3 with E2, then set note to C3 with E3”.",
+          "improvement": "A/R: Separate Select Note with E2 and Set C3 with E3 in concise prose."
+        },
+        "understandability": {
+          "score": 6,
+          "reason": "No-step-held scope and half-step duration are explained, but cue grammar assigns setting to E2.",
+          "evidence": "#first-sound/course — “With no step held”; cue says “set the channel note to C3 with E2”, then repeats E3.",
+          "improvement": "A/R: Correct the visible cue so E2 selects and E3 changes the value."
+        },
+        "representation": {
+          "score": 7,
+          "reason": "Valid final screenshot is tied to values, but it sits apart from the prose and action controls.",
+          "evidence": "#first-sound/course — Result route selects 08/10 “Give the trigs a pitch, level and length” and reports C3,80,1/2; practice begins at 05/10.",
+          "improvement": "R: Keep screen, short gesture group and target values in one stage panel."
+        },
+        "granularity": {
+          "score": 6,
+          "reason": "Three values belong together, but progress alternates between compound cues and separate native checkpoints.",
+          "evidence": "#first-sound/course — Five prose stages versus ten checkpoints; strip offers Note at 06, Vel at 07, combined defaults at 08.",
+          "improvement": "R/A: Align reader stage progress with the three-value task; hide capture counts as optional details."
+        },
+        "flow": {
+          "score": 7,
+          "reason": "The previous Masks stage and next playback stage fit; page layout obscures continuation.",
+          "evidence": "#first-sound/course — Previous heading “Open the Masks page”; result 08 NEXT ACTION “Tap Play (1,8), listen for two repeats”.",
+          "improvement": "R: Put Continue to Play after the target-value result, with stage progress expressed in lesson terms."
+        },
+        "integration": {
+          "score": 5,
+          "reason": "The reader reconstructs instructions, current state, future expected result and audio.",
+          "evidence": "#first-sound/course — 05/10 all-X panel includes complete-default feedback; audio Four equal notes is below the whole player.",
+          "improvement": "R/A/M: Bind the default result inline and place its listening payoff in the following Play stage."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Most instruction words are accessible, but repeated cue and capture status language adds friction.",
+          "evidence": "#first-sound/course — “Current part: Turn E2 to select note.”; “Recorded walkthrough cue”; “CAPTURED EXAMPLE”.",
+          "improvement": "R: Present plain Select/Set actions and move capture status into Evidence."
+        },
+        "naming": {
+          "score": 6,
+          "reason": "Pitch/velocity/length is stable in prose, but panel and cue names vary unnecessarily.",
+          "evidence": "#first-sound/course — “Set pitch, velocity and length” becomes “Give the trigs a pitch, level and length”; Velocity field versus Vel.",
+          "improvement": "A/R: Use Set pitch, velocity and length consistently, matching screen abbreviations in parentheses."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "Practice and result remain separate routes to the same long chapter.",
+          "evidence": "#first-sound/course — #first-sound/lesson/first-sound-defaults versus #first-sound/course/course-first-sound/first-sound-defaults.",
+          "improvement": "R: Make one canonical defaults workspace with its before/after toggle."
+        }
+      }
+    },
+    {
+      "id": "course:first-sound-hear",
+      "scores": {
+        "coherence": {
+          "score": 7,
+          "reason": "The musical expectation matches the selected audio caption and MIDI; stop feedback is ambiguous.",
+          "evidence": "#first-sound/course — “1/6 s apart”; MIDI @0,@167,@333 ms; result “Play and stop” then NEXT ACTION “Stop playback”.",
+          "improvement": "A/R: State whether the checkpoint is during playback or after stop and avoid asking to stop an already stopped result."
+        },
+        "usefulness": {
+          "score": 7,
+          "reason": "The stutter test validates the chain and includes recovery, but the Play cue only advances text.",
+          "evidence": "#first-sound/course — “If you hear nothing, check in this order”; Play the four-note pattern leaves 08/10 until Result; audio control is lower down.",
+          "improvement": "R: Put the actual clip control at Play the loop, distinguish instrument gesture from Show result."
+        },
+        "understandability": {
+          "score": 7,
+          "reason": "Tempo-to-loop timing is unusually clear; clip duration and stop status need explanation.",
+          "evidence": "#first-sound/course — “four notes ... 1/6 s apart ... every 2/3 s”; lesson asks two repeats, clip caption says four bars.",
+          "improvement": "A/M: Explain that the demonstration clip repeats longer for listening and label the stopped checkpoint plainly."
+        },
+        "representation": {
+          "score": 7,
+          "reason": "Local MIDI timestamps and matching loaded audio are good evidence, but device feedback is offscreen at listening.",
+          "evidence": "#first-sound/course — 09/10 MIDI C3 vel80 @0/167/333/500 ms; audio readyState4 duration13.673167; screenshot of player has no norns/grid.",
+          "improvement": "R: Place compact synchronized grid/screen directly beside the audio player."
+        },
+        "granularity": {
+          "score": 7,
+          "reason": "Play/listen/stop is a sensible single task; two overlapping stop checkpoints and controls add overhead.",
+          "evidence": "#first-sound/course — Result 09 “Play and stop”; checkpoint10 “Stop playback”; cue button plus View result plus audio player.",
+          "improvement": "A/R: Present one complete play-and-stop group with an optional during-play view."
+        },
+        "flow": {
+          "score": 7,
+          "reason": "The text prepares the wider rhythm chapter, but Continue appears before the demonstration and sound.",
+          "evidence": "#first-sound/course — “Chapter 4 spreads these four trigs out so each one lands on a beat”; chapter4 link is above Interactive examples and audio.",
+          "improvement": "R: Move Continue after the listening/result workspace and stop confirmation."
+        },
+        "integration": {
+          "score": 5,
+          "reason": "Audio selection is musically relevant but detached from the action that asks for listening.",
+          "evidence": "#first-sound/course — Listen anchor and separate “05 / AUDIO EXAMPLES”; “The devices above follow the captured playhead” while devices are outside screenshot.",
+          "improvement": "R/A/M: Embed Four equal notes inside Play the loop with matching device feedback."
+        },
+        "vocabulary": {
+          "score": 5,
+          "reason": "Useful musical language is mixed with capture status and raw controller counts.",
+          "evidence": "#first-sound/course — “fast stutter rather than a tune”; “36 controller or program messages · 8 note-offs”; “No authored practice is available”.",
+          "improvement": "R/A: Keep the musical pulse readout prominent and disclose raw MIDI/evidence details."
+        },
+        "naming": {
+          "score": 7,
+          "reason": "Play the loop is clear, but chapter, clip and result use three names.",
+          "evidence": "#first-sound/course — “Play the loop”, “Four equal notes”, “Play and stop”.",
+          "improvement": "A/R: Use Play the loop as the stable stage name; label the clip Four equal notes as its listening example."
+        },
+        "canonical_home": {
+          "score": 5,
+          "reason": "One task has a practice route, result route and audio anchor rather than one listening home.",
+          "evidence": "#first-sound/course — #first-sound/lesson/first-sound-hear, #first-sound/course/course-first-sound/first-sound-hear, #first-sound/course/section-listen.",
+          "improvement": "R: Make one Play the loop stage containing action, result and audio; aliases focus it."
+        }
+      }
+    }
+  ],
+  "methods": [
+    "Personally navigated a new background in-app browser tab from live home through Meet Mosaic, its Practice failure and Result, Choose one sound, and Make four equal notes. Read rendered prose and DOM; inspected screenshots of cue controls and audio.",
+    "Clicked all six trig cues and their Result, defaults Practice and Result, Play cue and Result. Observed unchanged checkpoint count until Show result. Followed Listen; used native audio Play/Pause UI and verified paused false then true, currentTime advancing to 0.381377. Closed own tab.",
+    "Scored exactly the four assigned units against the ten inventory criteria, informed by the completed Astra read-through. No source authoring or isolated YAML scoring."
+  ],
+  "limits": [
+    "No sound-by-ear assessment: audio loaded/playback verified only. No sonic-quality, real-time scheduling or hardware claims.",
+    "No physical instrument operation, production edits, builds, tests, native captures, audio recording or service changes. Baseline -23 and ADVERSARIAL_REVIEW untouched.",
+    "Next chapter4 sidebar click did not change the observed route; no chapter4 content is used as evidence. Previous/next flow judged from rendered prerequisite and next-stage text.",
+    "inventory_sha256 is the pinned semantic identity field; actual inventory.json file-byte SHA256 is b039090ca5c2b288ae3172c608d2dc21873a75806ec235126a8adfcd9b82f391."
+  ]
+}

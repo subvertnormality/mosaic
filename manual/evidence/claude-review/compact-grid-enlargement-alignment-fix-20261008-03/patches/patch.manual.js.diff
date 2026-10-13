@@ -1,0 +1,11 @@
+--- a/manual/manual.js
++++ b/manual/manual.js
+@@ -179,7 +179,7 @@
+ for(let i=0;i<128;i++){
+  const b=node("button",undefined,$("grid"));b.type="button";b.tabIndex=i===0?0:-1;b.dataset.index=i;controls.grid.push(b);
+  bindPress(b,"grid",{x:i%16+1,y:Math.floor(i/16)+1});
+- b.onkeydown=e=>{const shift={ArrowLeft:-1,ArrowRight:1,ArrowUp:-16,ArrowDown:16}[e.key];if(shift!==undefined){e.preventDefault();const target=Math.max(0,Math.min(127,i+shift));controls.grid.forEach(n=>n.tabIndex=-1);controls.grid[target].tabIndex=0;controls.grid[target].focus();}};
++ b.onkeydown=e=>{const shift={ArrowLeft:-1,ArrowRight:1,ArrowUp:-16,ArrowDown:16}[e.key];if(shift!==undefined){e.preventDefault();const target=Math.max(0,Math.min(127,i+shift));controls.grid.forEach(n=>n.tabIndex=-1);controls.grid[target].tabIndex=0;controls.grid[target].focus();controls.grid[target].scrollIntoView({block:"nearest",inline:"nearest"});}};
+ }
+ $("previous").onclick=()=>move(-1);$("next").onclick=()=>move(1);
+ $("autoplay").onclick=()=>{

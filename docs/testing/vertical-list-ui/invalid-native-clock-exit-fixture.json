@@ -1,0 +1,11 @@
+{
+  "kind": "invalid-fixture-not-production-red",
+  "run": "f15e36479b484dd68e9700f7fc7139e0",
+  "stage_identity": "2b07f7b541e486b2492297240993edec43215c3407a202db03433e1c5c5a4d56",
+  "actual": "Native CLOCK submenu Tempo90 remained selected when next existing options setter expected LEVELS root",
+  "correction": "Both owned CLOCK fixture exits restore LEVELS via existing K2/E2-60/LEVELS assertion/K2/K1 path; shared UI unchanged",
+  "original_helper_sha256": "62ab08ebe681f5fbe0cc0663b0006b02266d6fda187985bbf494bb53c15043c1",
+  "corrected_helper_sha256": "f0f54903a2639403c35b1d59918e8c51dda61e8addbf892800ab96d5d29550f8",
+  "preserved": "All phase/font/grid/MIDI/tempo/assertion literals unchanged; existing Strategy app exact",
+  "cleanup": "Four services exited; no real or subsequent native launched"
+}

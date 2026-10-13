@@ -1,0 +1,12 @@
+{
+  "stage": "/tmp/mosaic-p02-footer-red-4doz0d57/mosaic",
+  "command": [
+    "lua",
+    "run_tests.lua",
+    "-p",
+    "test_ui_live_trig_options_footer_names_only_its_effective_control"
+  ],
+  "exit_code": 1,
+  "ui_live_sha256": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+  "test_sha256": "58024da1288998c7b5311a70438afdbb1ec0108fbb39ddcb98c7c91c874ad0ee"
+}

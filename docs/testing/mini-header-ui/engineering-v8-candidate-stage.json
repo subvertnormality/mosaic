@@ -1,0 +1,41 @@
+{
+  "staged_root": "/home/andy/mosaic-mini-header-engineering-v8-20261003/mosaic",
+  "identity_path": "/home/andy/mosaic-mini-header-engineering-v8-20261003/identity.json",
+  "identity_sha256": "0b2aadbe8e15866f183ff935239ee6eaaf9b69a3a053eb81669f7710ff30a389",
+  "files": 17789,
+  "pre_post_copied_equal": true,
+  "read_only": true,
+  "engineering_only": true,
+  "final_global_qualification": false,
+  "scope_files_checked": 389,
+  "scope_files_unchanged": 388,
+  "scope_delta": [
+    "tests/behaviour/contract/mini_header_animation_ui.py"
+  ],
+  "mini_module_function_changes": [
+    "sample",
+    "wait_normal_footer"
+  ],
+  "exact_header_matches_ast_unchanged": true,
+  "v5_strategy_direct_dependencies_checked": [
+    "tests/behaviour/contract/merge_strategy_ui.py",
+    "tests/behaviour/contract/merge_extensions.py",
+    "tests/behaviour/merge_strategy_routes.py",
+    "tests/behaviour/driver.py",
+    "tests/behaviour/ui.py",
+    "tests/behaviour/ui_map.py",
+    "tests/behaviour/frame_oracle.py",
+    "tests/behaviour/contract/mini_header_ui.py",
+    "tests/behaviour/contract/mini_header_atlas_v2.json"
+  ],
+  "strategy_dependency_drift": [],
+  "v5_controlled_strategy_scoped_identity_preserved": true,
+  "reason": "Strategy does not call mini sample/footer wait. Shared imported exact_header_matches and all Strategy route/driver/frame dependencies unchanged.",
+  "previous_stage_preserved": "/home/andy/mosaic-mini-header-engineering-v7-20261003/mosaic",
+  "helper_hashes": {
+    "tests/behaviour/contract/merge_strategy_ui.py": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+    "tests/behaviour/contract/ui_readability.py": "74f7ae189216c700edaed31cafa6c41adb85b41706b27ad94c3c2940503e2c55",
+    "tests/behaviour/contract/mini_header_animation_ui.py": "050c7ff3deaaf4401014d148f989075ab03fcac5be050b03e4ad10f0f8ab40b8",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7"
+  }
+}

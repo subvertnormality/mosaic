@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "error": "Song queue documentation frame precedes sampled blink",
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 6, in <module>\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 167, in audit_reference\n    verify_teaching_checkpoint(step,observations,path,document['clock_mode'],results)\n  File \"/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py\", line 575, in verify_teaching_checkpoint\n    if not any(item['state']==state for item in observations[row['samples'][-1]['observation_index']:]):raise ValueError('Song queue documentation frame precedes sampled blink')\nValueError: Song queue documentation frame precedes sampled blink\n",
+  "report": "/home/andy/mosaic-manual-runs/d2ba58ca3e1f4f6498fe6a9bbda5f042/reference-scenes.json",
+  "report_sha256": "14613c2c39098bc3ea83449bc4c12f80576e3f1eb7405375ab71eb972ac72aab",
+  "seconds": 0.46911684499355033,
+  "clock_mode": "real-time",
+  "scope": "Two closure cases, three scenes; not complete regression or hardware timing",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

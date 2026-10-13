@@ -1,0 +1,1051 @@
+schema_version: 1
+status: source-plan-not-yet-captured
+scope: Specific public-input controls, original full-case MIDI assertions, Song LED/Slot Setup acceptance
+  and native UI motion On/Off. Capture only after the new UI candidate freeze. Timing receipts characterize
+  the admitted emulator runtime, with no hardware scheduling claim.
+scenes:
+- id: random-pentatonic-on
+  feature_id: lock-random-to-pentatonic
+  title: 'Lock random notes to pentatonic: On'
+  behaviour_case: M-PARAM-039
+  citation: README.md#lock-random-to-pentatonic
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4
+      (the channel range) with notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107
+      and 97. Tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second each)
+      and the sequencer is stopped. The norns shows channel 1''s Device screen and every Mosaic option
+      is at its default. Lock random to pent. and Lock merged to pent. are both On, and no trig params
+      are assigned yet.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: switch
+    title: Check Lock random to pent.
+    caption: Tap K1 and open PARAMS > MOSAIC, select Lock random to pent. and turn E3 right to On (the
+      default). The row shows On. Notes moved by Random Note or Twos Random Note will snap to the five-note
+      selection.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock random to pent.
+      value: 'On'
+      matched: true
+  - id: merged-off
+    title: Turn Lock merged to pent. Off (not needed here)
+    caption: Select Lock merged to pent. and turn E3 left to Off. The row shows Off. That option only
+      affects notes made by merge modes, so it has no effect on this lesson's random notes; the recording
+      turns it Off here and you can leave it On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock merged to pent.
+      value: 'Off'
+      matched: true
+  - id: assign-random
+    title: Assign Random Note
+    caption: Close the menu. On Channel tasks > Trig params assign Random Note to the first slot. The
+      slot list shows Random Note; its value is still 0, so the pattern is unchanged.
+    assertion:
+      kind: parameter-list-label
+      label: Random Note
+      passed: true
+  - id: assign-twos
+    title: Assign Twos Random Note
+    caption: Assign Twos Random Note to the second slot in the same way. It stays at 0, so it adds nothing
+      to this lesson; only Random Note is used.
+    assertion:
+      kind: parameter-list-label
+      label: Twos Random Note
+      passed: true
+  - id: phrase
+    title: Hear random notes locked to pentatonic
+    caption: 'Select the Random Note slot, turn E3 right to 4 and press Play (1,8). Random Note 4 offsets
+      each note by -2, -1, 0, +1 or +2 scale degrees chosen at random; with Lock random to pent. On every
+      result snaps to the five-note selection C D E G A. Listen to several loops and press Stop. The recorded
+      run begins 60, 64, 64, 64, 60, 64, 67, 64: step 4, a plain F (65), now sounds as E (64). Random
+      notes change on every run, so your notes will differ. A step whose random offset is 0 keeps its
+      own note, so a plain pattern note outside the selection, such as F, can still sound.'
+    assertion:
+      kind: random-note-domain
+      pentatonic: true
+      random: 4
+      twos: 0
+      seed: 42
+      mask: null
+      passed: true
+- id: random-pentatonic-off
+  feature_id: lock-random-to-pentatonic
+  title: 'Lock random notes to pentatonic: Off'
+  behaviour_case: M-PARAM-037
+  citation: README.md#lock-random-to-pentatonic
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4
+      (the channel range) with notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107
+      and 97. Tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second each)
+      and the sequencer is stopped. The norns shows channel 1''s Device screen and every Mosaic option
+      is at its default. Lock random to pent. and Lock merged to pent. are both On, and no trig params
+      are assigned yet.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: switch
+    title: Turn Lock random to pent. Off
+    caption: Tap K1 and open PARAMS > MOSAIC, select Lock random to pent. and turn E3 left to Off. The
+      row shows Off. Random note offsets will now land on any degree of the seven-note scale.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock random to pent.
+      value: 'Off'
+      matched: true
+  - id: merged-off
+    title: Turn Lock merged to pent. Off (not needed here)
+    caption: Select Lock merged to pent. and turn E3 left to Off. The row shows Off. That option only
+      affects notes made by merge modes, so it has no effect on this lesson's random notes; the recording
+      turns it Off here and you can leave it On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock merged to pent.
+      value: 'Off'
+      matched: true
+  - id: assign-random
+    title: Assign Random Note
+    caption: Close the menu. On Channel tasks > Trig params assign Random Note to the first slot. The
+      slot list shows Random Note; its value is still 0, so the pattern is unchanged.
+    assertion:
+      kind: parameter-list-label
+      label: Random Note
+      passed: true
+  - id: assign-twos
+    title: Assign Twos Random Note
+    caption: Assign Twos Random Note to the second slot in the same way. It stays at 0, so it adds nothing
+      to this lesson; only Random Note is used.
+    assertion:
+      kind: parameter-list-label
+      label: Twos Random Note
+      passed: true
+  - id: plain
+    title: Hear the plain pattern
+    caption: 'Press Play (1,8) with Random Note at 0: the pattern repeats C, D, E, F (MIDI 60, 62, 64,
+      65) with no random offsets. Stop playback.'
+    assertion:
+      kind: random-note-domain
+      pentatonic: false
+      random: 0
+      twos: 0
+      seed: 42
+      mask: null
+      passed: true
+  - id: phrase
+    title: Hear random notes on all seven degrees
+    caption: 'Raise Random Note to 4 in single steps: turn E3 right once, press Play (1,8) and Stop, and
+      repeat until it reads 4. Random Note 4 offsets each note by -2, -1, 0, +1 or +2 scale degrees chosen
+      at random, and with Lock random to pent. Off the results use all seven degrees of C major. The recorded
+      final run begins 57, 64, 67, 62, 64, 59, 65, 65. F (65) and B (59) are in C major but outside C
+      D E G A, so hearing them shows the lock is off. Random notes change on every run: play several loops
+      and expect F and B to turn up now and then.'
+    assertion:
+      kind: random-note-domain
+      pentatonic: false
+      random: 4
+      twos: 0
+      seed: 42
+      mask: null
+      passed: true
+- id: merged-pentatonic-on
+  feature_id: lock-merged-to-pentatonic
+  title: 'Lock merged notes to pentatonic: On'
+  behaviour_case: M-MERGE-011
+  citation: README.md#lock-merged-to-pentatonic
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4
+      (the channel range) with notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107
+      and 97. Tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second each)
+      and the sequencer is stopped. The norns shows channel 1''s Device screen and every Mosaic option
+      is at its default. Lock merged to pent. is at its default On. Only pattern 1 exists and is assigned
+      to channel 1; patterns 2 and 3 are built in the next steps.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: switch
+    title: Check Lock merged to pent.
+    caption: Tap K1 and open PARAMS > MOSAIC, select Lock merged to pent. and turn E3 right to On (the
+      default). The row shows On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock merged to pent.
+      value: 'On'
+      matched: true
+  - id: pattern-one
+    title: Enter pattern 1
+    caption: Close the menu. Press Pattern (5,8), choose pattern 1 at (1,1) and tap (1,7), (2,5), (3,3)
+      and (4,1) to rewrite its four notes as scale degrees I, III, V, VII (C E G B). The four notes light
+      on the grid.
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 7
+      - - 2
+        - 5
+      - - 3
+        - 3
+      - - 4
+        - 1
+      expected:
+      - 12
+      - 12
+      - 12
+      - 12
+  - id: pattern-two
+    title: Enter pattern 2
+    caption: 'Choose pattern 2 at (2,1), add four trigs on steps 1 to 4 and tap (1,5), (2,3), (3,1) and
+      (4,7): degrees III, V, VII, I (E G B C). Pattern 2 is a second voice that overlaps pattern 1 on
+      every step.'
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 5
+      - - 2
+        - 3
+      - - 3
+        - 1
+      - - 4
+        - 7
+      expected:
+      - 12
+      - 12
+      - 12
+      - 12
+  - id: velocity-pattern
+    title: Build pattern 3 as a velocity source
+    caption: 'Choose pattern 3 at (3,1), add four trigs on steps 1 to 4 and put their notes on the top
+      row, (1,1) to (4,1); the four top-row notes light. Pattern 3 will never be assigned to the channel.
+      It is only a velocity source: every trig has the default velocity 100, and its notes are ignored
+      by the merge, so the notes you hear come only from patterns 1 and 2.'
+    assertion:
+      kind: selected-pattern-top-note-blink
+      slot: 3
+      levels:
+      - 11
+      - 13
+      passed: true
+  - id: trig-strategy-all
+    title: Choose Strategy ALL
+    caption: Press Channel (3,8), tap pattern slot 2 at (2,2) so patterns 1 and 2 are both assigned, then
+      press the trig merge key at (14,8) twice. Strategy moves from Skip to Only to ALL and the key lights
+      at medium brightness. With Skip every step both patterns share would be silenced; ALL lets every
+      trig sound.
+    assertion:
+      kind: grid
+      cells:
+      - - 14
+        - 8
+      expected:
+      - 8
+  - id: assign
+    title: Take velocity from pattern 3
+    caption: 'Hold the velocity merge key (16,8), tap pattern slot 3 at (3,2) and release. Slots 1 and
+      2 stay lit as the assigned patterns and slot 3 stays dim because it is not assigned: it only supplies
+      the velocity of the merged notes. Note merge stays on its default, Average.'
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 2
+      - - 2
+        - 2
+      - - 3
+        - 2
+      expected:
+      - 15
+      - 15
+      - 2
+  - id: phrase
+    title: Hear the averaged phrase snap to pentatonic
+    caption: Press Play (1,8), listen to two loops and press Play again to stop. The average of each step's
+      degrees is II, IV, VI, IV, which in C major is D, F, A, F. With Lock merged to pent. On, F is not
+      in the C D E G A selection and snaps to the nearer E, so you hear 62, 64, 69, 64 (D E A E) at velocity
+      100, taken from pattern 3. Compare the Off lesson, which plays F (65) on steps 2 and 4.
+    assertion:
+      kind: numeric-note-merge
+      mode: average
+      assigned_patterns:
+      - 1
+      - 2
+      velocity_source: 3
+      pitches:
+      - 62
+      - 64
+      - 69
+      - 64
+      passed: true
+  - id: higher-phrase
+    title: Switch Note merge to Higher and listen
+    caption: 'Tap the note merge key at (15,8) once; it brightens as Note merge moves from Average to Higher. Press Play (1,8), listen to two loops and press Play again to stop. Higher adds the spread (the highest minus the lowest degree) to the rounded average, so the four steps become degrees IV, VI, VIII and X: F, A, C and E in C major. Lock merged to pent. On snaps F to the nearer E, so the MIDI strip "MIDI sent in this step" shows 64, 69, 72, 76 at velocity 100. Compare the Off lesson, which plays F (65) on the first step.'
+    assertion:
+      kind: numeric-note-merge
+      mode: higher
+      velocity_source: 3
+      pitches:
+      - 64
+      - 69
+      - 72
+      - 76
+      passed: true
+- id: merged-pentatonic-off
+  feature_id: lock-merged-to-pentatonic
+  title: 'Lock merged notes to pentatonic: Off'
+  behaviour_case: M-MERGE-010
+  citation: README.md#lock-merged-to-pentatonic
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4
+      (the channel range) with notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107
+      and 97. Tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second each)
+      and the sequencer is stopped. The norns shows channel 1''s Device screen and every Mosaic option
+      is at its default. Lock merged to pent. is at its default On. Only pattern 1 exists and is assigned
+      to channel 1; patterns 2 and 3 are built in the next steps.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: switch
+    title: Turn Lock merged to pent. Off
+    caption: Tap K1 and open PARAMS > MOSAIC, select Lock merged to pent. and turn E3 left to Off. The
+      default is On. The row shows Off; this option only affects notes produced by merge modes.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock merged to pent.
+      value: 'Off'
+      matched: true
+  - id: pattern-one
+    title: Enter pattern 1
+    caption: Close the menu. Press Pattern (5,8), choose pattern 1 at (1,1) and tap (1,7), (2,5), (3,3)
+      and (4,1) to rewrite its four notes as scale degrees I, III, V, VII (C E G B). The four notes light
+      on the grid.
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 7
+      - - 2
+        - 5
+      - - 3
+        - 3
+      - - 4
+        - 1
+      expected:
+      - 12
+      - 12
+      - 12
+      - 12
+  - id: pattern-two
+    title: Enter pattern 2
+    caption: 'Choose pattern 2 at (2,1), add four trigs on steps 1 to 4 and tap (1,5), (2,3), (3,1) and
+      (4,7): degrees III, V, VII, I (E G B C). Pattern 2 is a second voice that overlaps pattern 1 on
+      every step.'
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 5
+      - - 2
+        - 3
+      - - 3
+        - 1
+      - - 4
+        - 7
+      expected:
+      - 12
+      - 12
+      - 12
+      - 12
+  - id: velocity-pattern
+    title: Build pattern 3 as a velocity source
+    caption: 'Choose pattern 3 at (3,1), add four trigs on steps 1 to 4 and put their notes on the top
+      row, (1,1) to (4,1); the four top-row notes light. Pattern 3 will never be assigned to the channel.
+      It is only a velocity source: every trig has the default velocity 100, and its notes are ignored
+      by the merge, so the notes you hear come only from patterns 1 and 2.'
+    assertion:
+      kind: selected-pattern-top-note-blink
+      slot: 3
+      levels:
+      - 11
+      - 13
+      passed: true
+  - id: trig-strategy-all
+    title: Choose Strategy ALL
+    caption: Press Channel (3,8), tap pattern slot 2 at (2,2) so patterns 1 and 2 are both assigned, then
+      press the trig merge key at (14,8) twice. Strategy moves from Skip to Only to ALL and the key lights
+      at medium brightness. With Skip every step both patterns share would be silenced; ALL lets every
+      trig sound.
+    assertion:
+      kind: grid
+      cells:
+      - - 14
+        - 8
+      expected:
+      - 8
+  - id: assign
+    title: Take velocity from pattern 3
+    caption: 'Hold the velocity merge key (16,8), tap pattern slot 3 at (3,2) and release. Slots 1 and
+      2 stay lit as the assigned patterns and slot 3 stays dim because it is not assigned: it only supplies
+      the velocity of the merged notes. Note merge stays on its default, Average.'
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 2
+      - - 2
+        - 2
+      - - 3
+        - 2
+      expected:
+      - 15
+      - 15
+      - 2
+  - id: phrase
+    title: Hear the averaged phrase unchanged
+    caption: 'Press Play (1,8), listen to two loops and press Play again to stop. The average of each
+      step''s degrees is II, IV, VI, IV, which in C major is D, F, A, F. With Lock merged to pent. Off
+      the merged degrees play unchanged: 62, 65, 69, 65 (D F A F) at velocity 100, taken from pattern
+      3. Compare the On lesson, where the F steps snap to E.'
+    assertion:
+      kind: numeric-note-merge
+      mode: average
+      assigned_patterns:
+      - 1
+      - 2
+      velocity_source: 3
+      pitches:
+      - 62
+      - 65
+      - 69
+      - 65
+  - id: higher-phrase
+    title: Switch Note merge to Higher and listen
+    caption: 'Tap the note merge key at (15,8) once; it brightens as Note merge moves from Average to Higher. Press Play (1,8), listen to two loops and press Play again to stop. Higher adds the spread (the highest minus the lowest degree) to the rounded average, so the four steps become degrees IV, VI, VIII and X: F, A, C and E in C major. Lock merged to pent. Off leaves the F alone, so the MIDI strip "MIDI sent in this step" shows 65, 69, 72, 76 at velocity 100. Compare the On lesson, where the first step snaps to E (64).'
+    assertion:
+      kind: numeric-note-merge
+      mode: higher
+      velocity_source: 3
+      pitches:
+      - 65
+      - 69
+      - 72
+      - 76
+      passed: true
+      passed: true
+- id: song-tempo-across-slots
+  feature_id: navigating-the-norns-display
+  title: Set Tempo and feel across Song slots
+  behaviour_case: M-SONG-SETTINGS-002
+  citation: README.md#navigating-the-norns-display
+  related:
+  - song-editor
+  - adjusting-song-sequence-length
+  steps:
+  - id: start
+    title: Starting point
+    caption: Song slot 1 holds the four-step phrase on channel 1 (MIDI 60, 62, 64, 65) and slot 2 is a
+      copy with channel 1 raised one octave. Song mode is Off, the tempo is 90 BPM, slot 1 is selected
+      and playback is stopped. Song tasks > Tempo / feel is the screen that holds the song's one tempo,
+      next to its swing and shuffle feel.
+    assertion:
+      kind: mosaic-option-input
+      label: Song mode
+      enabled: false
+  - id: set-30
+    title: Turn Tempo down to 30
+    caption: 'Close the menu. With slot 1 selected at (1,1), turn E1 to Song tasks, turn E2 to Tempo /
+      feel and press K3. Turn E3 all the way down: Tempo reads 30, the lowest value.'
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Tempo
+      value: '30'
+      matched: true
+    occurrence: 1
+  - id: minimum
+    title: Hear slot 1 at 30 BPM
+    caption: Press K3 to apply, then press Play (1,8) to hear the phrase at 30 BPM and press Play again
+      to stop. Swing type stays Swing and Swing 0.
+    assertion:
+      kind: song-global-tempo
+      stage: minimum
+      slot: 1
+      bpm: 30
+      passed: true
+  - id: slot-2-reads-30
+    title: Slot 2 reads the same tempo
+    caption: 'Select slot 2 at (2,1), the copy that plays an octave higher, then turn E1 to Song tasks,
+      E2 to Tempo / feel and press K3. It already reads 30: tempo belongs to the whole song, not to one
+      slot.'
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Tempo
+      value: '30'
+      matched: true
+    occurrence: 2
+  - id: set-300
+    title: Turn Tempo up to 300
+    caption: 'Press Play (1,8) and Stop to hear slot 2 at 30 BPM. With slot 2 selected, open Tempo / feel
+      again, turn E3 all the way up: Tempo reads 300, the highest value. Press K3 to apply.'
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Tempo
+      value: '300'
+      matched: true
+    occurrence: 1
+  - id: maximum
+    title: Hear slot 2 at 300 BPM
+    caption: Press Play (1,8) to hear slot 2 at 300 BPM, ten times as fast as before, then press Play
+      again to stop.
+    assertion:
+      kind: song-global-tempo
+      stage: maximum
+      slot: 2
+      bpm: 300
+      passed: true
+  - id: slot-1-reads-300
+    title: Slot 1 reads 300
+    caption: Select slot 1 at (1,1) and open Tempo / feel again. It reads 300, the value you set while
+      slot 2 was selected.
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Tempo
+      value: '300'
+      matched: true
+    occurrence: 2
+  - id: set-90
+    title: Set Tempo back to 90
+    caption: Press Play (1,8) to hear slot 1 at 300 BPM and Stop. Open Tempo / feel on slot 1, turn E3
+      down to 30, then up 60 detents to 90, and press K3 to apply.
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Tempo
+      value: '90'
+      matched: true
+    occurrence: 1
+  - id: restore
+    title: Hear slot 1 at 90 BPM
+    caption: Press Play (1,8) to hear slot 1 at 90 BPM, the starting tempo, then press Play again to stop.
+    assertion:
+      kind: song-global-tempo
+      stage: restore
+      slot: 1
+      bpm: 90
+      passed: true
+  - id: slot-2-reads-90
+    title: Slot 2 follows to 90
+    caption: 'Select slot 2 at (2,1) and open Tempo / feel. It reads 90 too: the tempo you set on any
+      slot applies to every slot.'
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Tempo
+      value: '90'
+      matched: true
+    occurrence: 2
+- id: song-slot-light-states
+  feature_id: button-indicators
+  title: Read Song slot lights
+  behaviour_case: M-MANUAL-CLOSURE-SONG-001
+  citation: README.md#button-indicators
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays the four-step phrase (MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97)
+      through a MIDI device on OUT 1, in C major at 90 BPM with sixteenth-note steps (Rate /1). Only Song
+      slot 1 is filled. Song mode is Off, the global length is 32 steps (fader cell (4,7) on the Song page; Song Playback
+      reads Global length 32) and playback is stopped. The norns shows channel 1's Device screen.
+    assertion:
+      kind: mosaic-option-input
+      label: Song mode
+      enabled: false
+  - id: copied-selected
+    title: Copy a populated slot
+    caption: 'Close the menu and press Song at grid (6,8). Hold slot 1 at (1,1), press slot 2 at (2,1),
+      then release both: slot 1 is copied to slot 2. Tap (2,1) to select slot 2. The top row now reads
+      slot 1 mid-bright (filled), slot 2 bright (selected) and slot 3 dim (empty). The norns shows Slot
+      setup for SONG 02 with the message Song sequence 2 selected.'
+    assertion:
+      kind: manual-song-indicators
+      stage: copied-selected
+      levels:
+      - 7
+      - 15
+      - 2
+      passed: true
+  - id: repeats-set
+    title: Give slot 2 Repeats 2
+    caption: Turn E1 to Song tasks, turn E2 to Slot setup and press K3. Turn E3 up to Repeats 2 and press
+      K3 to apply. Song mode is Off, so Repeats does not hold the slot for extra passes here; it only
+      shows as the pass count on Song Playback.
+    assertion:
+      kind: manual-song-slot-setting
+      field: Repeats
+      value: 2
+      passed: true
+  - id: playing
+    title: Play the selected slot
+    caption: Press Song (6,8) and then Play at (1,8). Slot 2 plays the phrase C, D, E, F (MIDI 60, 62,
+      64, 65) and stays bright; slot 1 stays mid-bright and empty slot 3 stays dim. Song Playback reads
+      Playing SONG 02, Pass 1 / 2, Song mode MANUAL.
+    assertion:
+      kind: manual-song-indicators
+      stage: playing
+      levels:
+      - 7
+      - 15
+      - 2
+      passed: true
+  - id: queued-blink
+    title: Queue slot 1 while slot 2 plays
+    caption: 'Do these in order. 1: press Stop (1,8). 2: press Song (6,8) and select slot 1 at (1,1).
+      3: press Channel (3,8) and tap octave +1 at (11,8), so slot 1 sounds an octave higher. 4: press
+      Song (6,8) again, select slot 2 at (2,1) and press Play (1,8). 5: while slot 2 sounds, press slot
+      1 at (1,1) to queue it. Slot 1 now blinks between dim and mid-bright (a still shows one moment of
+      the blink) while slot 2 stays bright. Song mode is Off, so playback continues on slot 2 until one
+      pass of its sequence ends.'
+    assertion:
+      kind: manual-song-queue-blink
+      stage: waiting
+      queued_slot: 1
+      playing_slot: 2
+      passed: true
+  - id: queued-transition
+    title: Hear the queued slot take over
+    caption: 'Do nothing for about five seconds: slot 2 plays its full 32 steps (32 steps at one sixth
+      of a second each). Slot 1 then becomes bright and plays its phrase an octave higher (MIDI 72, 74,
+      76, 77); slot 2 returns to mid-bright. Press Stop at (1,8). Song Playback reads Playing SONG 01.'
+    assertion:
+      kind: manual-song-queue-transition
+      from_slot: 2
+      to_slot: 1
+      transition_index: 32
+      levels:
+      - 15
+      - 7
+      - 2
+      passed: true
+  - id: empty-copy-erases
+    title: Erase by copying an empty slot
+    caption: 'With playback stopped, hold empty slot 3 at (3,1), press slot 2 at (2,1) and release: the
+      empty slot is copied over slot 2 and erases it. Tap slot 1 at (1,1). Slot 1 is bright; slots 2 and
+      3 are both dim. There is no undo.'
+    assertion:
+      kind: manual-song-indicators
+      stage: empty-copy-erases
+      levels:
+      - 15
+      - 2
+      - 2
+      passed: true
+- id: song-slot-repeat-values
+  feature_id: navigating-the-norns-display
+  title: Set Song slot repetitions
+  behaviour_case: M-MANUAL-CLOSURE-SONG-001
+  citation: README.md#navigating-the-norns-display
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Song slot 1 holds the four-step phrase (channel 1: MIDI 60, 62, 64, 65) and has just been
+      copied to slot 2, which is selected. The top row of the Song page reads slot 1 mid-bright, slot
+      2 bright and slot 3 dim. Song mode is Off and playback is stopped. Repeats is the number of passes
+      a slot plays before Song mode advances to the next slot; it ranges from 1 to 16.'
+    assertion:
+      kind: manual-song-indicators
+      stage: copied-selected
+      levels:
+      - 7
+      - 15
+      - 2
+      passed: true
+  - id: repeats-1
+    title: 'Open Slot setup: Repeats 1'
+    caption: With slot 2 selected, turn E1 to Song tasks, turn E2 to Slot setup and press K3. Slot setup
+      lists Repeats and Song mode. Repeats reads 1 for this freshly copied slot.
+    assertion:
+      kind: manual-song-slot-setting
+      field: Repeats
+      value: 1
+      passed: true
+  - id: repeats-16
+    title: Set Repeats 16
+    caption: Repeats is already selected. Turn E3 up 15 detents to 16 and press K3 to apply. The screen
+      shows OK and Repeats reads 16, the highest value.
+    assertion:
+      kind: manual-song-slot-setting
+      field: Repeats
+      value: 16
+      passed: true
+  - id: repeats-2
+    title: Set Repeats 2
+    caption: Turn E3 down 14 detents to 2 and press K3 to apply. Repeats reads 2. With Song mode on, slot
+      2 would play two passes before the next slot. Song mode is Off in this example, so the value does
+      not hold the slot here; it shows as Pass 1 / 2 on Song Playback.
+    assertion:
+      kind: manual-song-slot-setting
+      field: Repeats
+      value: 2
+      passed: true
+- id: screen-motion-on-and-off
+  feature_id: ui-motion
+  title: Turn screen motion on or off
+  behaviour_case: M-MANUAL-CLOSURE-MOTION-001
+  citation: README.md#ui-motion
+  related:
+  - screen-options
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern through the test MIDI device: trigs on steps 1 to 4
+      (the channel range) with notes C3, D3, E3 and F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107
+      and 97. Tempo is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second each)
+      and the sequencer is stopped. The norns shows channel 1''s Device screen and every Mosaic option
+      is at its default. UI motion is at its default On.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: off-menu
+    title: Set UI motion Off
+    caption: Tap K1 and open PARAMS > MOSAIC and select UI motion in the Screen section. Turn E3 left
+      to Off. The row shows Off. UI motion only changes decoration; it never changes timing or input.
+    assertion:
+      kind: selected-menu-option-row
+      label: UI motion
+      value: 'Off'
+      matched: true
+  - id: off-rest
+    title: Open the Clock screen and set Rate /1.5 (motion Off)
+    caption: 'Close the menu. Turn E1 to Channel tasks, turn E2 to Clock and press K3 to open the Clock
+      screen (Rate, Feel source, Swing type). Turn E3 to set Rate to /1.5 and press K3 to apply. Look
+      at the mark in the top-right corner of the screen: it is in its rest pose.'
+    assertion:
+      kind: manual-motion-pose
+      enabled: false
+      phase: rest
+  - id: off-moved
+    title: 'Wait: the mark does not move (motion Off)'
+    caption: 'Wait half a second and look at the same corner again. With UI motion Off the mark has not
+      changed, and Rate, Feel source and Swing type are as readable as before.'
+    assertion:
+      kind: manual-motion-pose
+      enabled: false
+      phase: moved
+      at_rest: true
+  - id: off-list
+    title: Set Rate back to /1
+    caption: Set Rate back to /1 the same way, turning E3 and pressing K3. Every label and value stays
+      fully readable and the header mark stays in its rest pose.
+    assertion:
+      kind: manual-motion-stable-rows
+      enabled: false
+      clock_value: /1
+      decorative_mark_changed: false
+      passed: true
+  - id: off-phrase
+    title: Play the phrase with motion Off
+    caption: Press Play (1,8), let the four-note pattern play and press Play again to stop. With UI motion
+      Off you hear C3, D3, E3, F3 (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97; keep this
+      as the reference.
+    assertion:
+      kind: manual-motion-music
+      enabled: false
+      pitches:
+      - 60
+      - 62
+      - 64
+      - 65
+      velocities:
+      - 127
+      - 117
+      - 107
+      - 97
+      stopped: true
+      passed: true
+  - id: on-menu
+    title: Set UI motion On
+    caption: Tap K1 and open PARAMS > MOSAIC, select UI motion and turn E3 right to On. The row shows
+      On.
+    assertion:
+      kind: selected-menu-option-row
+      label: UI motion
+      value: 'On'
+      matched: true
+  - id: on-rest
+    title: Open the Clock screen and set Rate /1.5 (motion On)
+    caption: 'Close the menu and open the Clock screen again (E1 to Channel tasks, E2 to Clock, K3). Set
+      Rate to /1.5 with E3 and press K3. Watch the mark in the top-right corner: this is the moment it
+      passes through its rest pose, the same picture as with motion Off.'
+    assertion:
+      kind: manual-motion-pose
+      enabled: true
+      phase: rest
+  - id: on-moved
+    title: 'Wait: the mark has moved (motion On)'
+    caption: 'Wait a fraction of a second and look at the same corner. The mark has turned to another
+      pose while Rate, Feel source and Swing type still read exactly the same.'
+    assertion:
+      kind: manual-motion-pose
+      enabled: true
+      phase: moved
+      at_rest: false
+  - id: on-list
+    title: Set Rate back to /1
+    caption: Restore Rate to /1 with E3 and K3. Labels and values are still fully readable while the
+      header mark keeps moving.
+    assertion:
+      kind: manual-motion-stable-rows
+      enabled: true
+      clock_value: /1
+      decorative_mark_changed: true
+      passed: true
+  - id: on-phrase
+    title: Play the same phrase with motion On
+    caption: 'Press Play (1,8), let the four-note pattern play and press Play again to stop. The notes
+      (60, 62, 64, 65), velocities (127, 117, 107, 97), gates and transport LED are exactly what they
+      were with UI motion Off: it changes only what the screen draws.'
+    assertion:
+      kind: manual-motion-music
+      enabled: true
+      pitches:
+      - 60
+      - 62
+      - 64
+      - 65
+      velocities:
+      - 127
+      - 117
+      - 107
+      - 97
+      stopped: true
+      passed: true
+- id: song-repeats-advance
+  feature_id: navigating-the-norns-display
+  title: Hear Repeats advance the song
+  behaviour_case: M-MANUAL-CLOSURE-SONG-002
+  citation: README.md#song-mode-operations
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays the four-step phrase (MIDI 60, 62, 64, 65 at velocities 127, 117, 107, 97)
+      through a MIDI device at 90 BPM, Rate /1. Only Song slot 1 is filled, Song mode is at its default
+      On and playback is stopped. The norns shows channel 1''s Device screen.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: set-length
+    title: Shorten the song to 8 steps
+    caption: 'Press Song (6,8) and tap fader cell (2,7) on the Song page, then tap (8,7) seven times:
+      Song Playback reads Global length 8, so one pass of a slot lasts 8 steps (about 1.3 seconds).'
+    assertion:
+      kind: dashboard-row
+      label: Global length
+      value: '8'
+  - id: repeats-2
+    title: Copy slot 1 to slot 2 an octave higher with Repeats 2
+    caption: 'Hold slot 1 at (1,1), press slot 2 at (2,1) and release; tap (2,1) to select slot 2. Press
+      Channel (3,8) and tap octave +1 at (11,8), then press Song (6,8). Turn E1 to Song tasks, E2 to
+      Slot setup and press K3, turn E3 up one detent and press K3: Repeats reads 2 for slot 2.'
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Repeats
+      value: '2'
+  - id: slot-1
+    title: Play slot 1 once
+    caption: 'Press Song (6,8), tap slot 1 at (1,1) and press Play (1,8). Slot 1 is bright and plays C, D,
+      E, F (MIDI 60, 62, 64, 65); Song Playback reads Pass 1 / 1. Watch the MIDI strip "MIDI sent in this
+      step": each note is one sixth of a second after the last.'
+    assertion:
+      kind: manual-song-repeat-advance
+      stage: slot-1
+  - id: slot-2-pass-1
+    title: Slot 2, first of two passes
+    caption: 'After eight steps the song moves on by itself. Slot 2 is bright and slot 1 mid-bright; the
+      phrase sounds an octave higher (MIDI 72, 74, 76, 77) and Song Playback reads Pass 1 / 2.'
+    assertion:
+      kind: manual-song-repeat-advance
+      stage: slot-2-pass-1
+  - id: slot-2-pass-2
+    title: Slot 2, second pass
+    caption: 'Slot 2 stays bright and plays the same octave-higher phrase again; Song Playback reads
+      Pass 2 / 2. Repeats held the slot for exactly two passes.'
+    assertion:
+      kind: manual-song-repeat-advance
+      stage: slot-2-pass-2
+  - id: wrapped
+    title: The song loops back to slot 1
+    caption: 'Slot 3 is empty, so after slot 2 the song returns to slot 1: it is bright again, the notes
+      drop back to C, D, E, F (MIDI 60, 62, 64, 65) and Song Playback reads Pass 1 / 1. Press Stop at
+      (1,8).'
+    assertion:
+      kind: manual-song-repeat-advance
+      stage: wrapped
+- id: panic-stops-sounding-note
+  feature_id: midi-panic
+  title: Panic silences a note that is still sounding
+  behaviour_case: M-MANUAL-CLOSURE-PANIC-001
+  citation: README.md#midi-panic
+  related:
+  - song-editor
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with the notes
+      C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. The sequencer is stopped
+      and three MIDI ports are connected. The norns shows channel 1''s Device screen.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+  - id: note-sounding
+    title: Start one long note
+    caption: 'On Channel, hold step 1 at (1,4) and tap step 24 to set the channel range to steps 1 to
+      24. Open Pattern (5,8) and tap steps 2, 3 and 4 to clear those trigs, then hold step 1 and tap step
+      24 to give the one remaining trig a length of 24 steps: four seconds. Press Song (6,8), then Play
+      (1,8). C (MIDI 60) starts and keeps sounding; the MIDI strip "MIDI sent in this step" shows only its
+      Note On.'
+    assertion:
+      kind: panic-note-sounding
+  - id: panic-released
+    title: Hold Channel to panic
+    caption: 'While the note sounds, hold Channel (3,8), a page you are not on, for about two seconds and
+      release it. The note is cut off about a second and a quarter after it started, well before its four seconds are up: the MIDI
+      strip shows the 6,144 note-offs of the panic sweep, 128 notes on each of the 16 MIDI channels of
+      the three ports. The screen stays on Song and playback carries on, so C starts again when the
+      loop comes round. Press Stop at (1,8).'
+    assertion:
+      kind: panic-releases-sounding-note
+      released_early: true
+      playback_continued: true
+      passed: true
+- id: pocket-ghost-bar
+  feature_id: channel-length
+  title: Build a four-bar groove with ghost trigs
+  behaviour_case: M-MANUAL-CLOSURE-GHOST-001
+  citation: README.md#channel-length
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through the test MIDI device: four trigs on steps 1 to 4 with the
+      notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. The sequencer is stopped
+      and the norns shows channel 1''s Device screen.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: main-hits
+    title: Set a 64-step range and add the main hits
+    caption: 'Tap Channel (3,8), hold step 1 at (1,4) and tap step 64 at (16,7): the range is now four
+      rows of sixteen steps, bars 1 to 4 on rows 4 to 7. Press Pattern (5,8) and tap steps 2, 3 and 4
+      to clear those trigs, then tap the first step of each beat: (5,4), (9,4), (13,4), then (1,5), (5,5),
+      (9,5), (13,5), and the same four columns on rows 6 and 7. Step 1 is already lit. Press Channel
+      (3,8): sixteen trigs are lit, four in each row.'
+    assertion:
+      kind: ghost-main-hits
+      passed: true
+  - id: ghost-bar-3
+    title: Add the ghost trig in bar 3
+    caption: 'Press Pattern (5,8) and tap step 44, step 12 of bar 3, at (12,6). Press Channel (3,8): a
+      seventeenth trig is lit on row 6, one step before the beat on step 45.'
+    assertion:
+      kind: ghost-trig-grid
+      bar: 3
+      step: 44
+      passed: true
+  - id: ghost-bar-4
+    title: Add the ghost trig in bar 4
+    caption: 'Press Pattern (5,8) and tap step 60, step 12 of bar 4, at (12,7). Press Channel (3,8): the
+      same trig is lit on row 7, one step before the beat on step 61. Bars 1 and 2 are unchanged, and
+      bars 3 and 4 each carry one extra trig.'
+    assertion:
+      kind: ghost-trig-grid
+      bar: 4
+      step: 60
+      passed: true
+- id: polymeter-song-reset
+  feature_id: reset-at-song-editor-pattern-change
+  title: Restart or carry on at a song slot change
+  behaviour_case: M-MANUAL-CLOSURE-RESET-001
+  citation: README.md#song-editor
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'A new project with playback stopped and Rate /1. Channel 1 plays range 1-4, MIDI 60, 62, 64
+      and 65 at velocities 127, 117, 107 and 97, to its own MIDI output. Channel 2 is not set up yet. The
+      norns shows channel 1''s Device screen.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+      matched: true
+    occurrence: 1
+  - id: build
+    title: Build channel 2 and a two-slot song
+    caption: 'Give channel 2 its own MIDI output on the Device page, pattern 1 and the range steps 1-3, then
+      open Masks and set its values: Note 79, Vel 40 and Len ½ on every step, with step 2 locked to Note
+      81, Vel 60 and Len 1¼. Select channel 1. Press Song (6,8), set the global length fader to 10 steps and
+      copy slot 1 into slot 2 (hold (1,1) and tap (2,1)). Each slot is now ten steps long and both play
+      the same four-against-three pair.'
+    assertion:
+      kind: dashboard-row
+      label: Global length
+      value: '10'
+      passed: true
+  - id: reset-on-option
+    title: Check Reset on song seq change
+    caption: Tap K1 and open PARAMS > MOSAIC, select Reset on song seq change and turn E3 right to On (the
+      default). The row reads On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Reset on song seq change
+      value: 'On'
+      matched: true
+    occurrence: 1
+  - id: reset-on
+    title: Both loops restart at slot 2
+    caption: 'Close the menu, tap slot 1 at (1,1) and press Play (1,8). Play slot 1 and the first four steps
+      of slot 2, then press Stop. Ten steps in, the song moves to slot 2 and both channels start their
+      loops again: channel 1 plays 60 and channel 2 plays 79 on step 11, as the MIDI strip "MIDI sent in
+      this step" shows.'
+    assertion:
+      kind: song-boundary-reset-polymeter
+      reset_on_song_change: true
+      passed: true
+  - id: reset-off-option
+    title: Switch Reset on song seq change Off
+    caption: Tap K1 and open PARAMS > MOSAIC, select Reset on song seq change and turn E3 left to Off. The
+      row reads Off.
+    assertion:
+      kind: selected-menu-option-row
+      label: Reset on song seq change
+      value: 'Off'
+      matched: true
+    occurrence: 1
+  - id: reset-off
+    title: Neither loop restarts
+    caption: 'Close the menu, tap slot 1 and press Play again, then press Stop after the first four steps of
+      slot 2. This time the loops carry on across the slot change: on step 11 channel 1 plays 64, the
+      third note of its four-note loop, and channel 2 plays 81, the second note of its three-note loop.'
+    assertion:
+      kind: song-boundary-reset-polymeter
+      reset_on_song_change: false
+      passed: true

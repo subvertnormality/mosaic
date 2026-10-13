@@ -1,0 +1,15 @@
+--- a/manual/manual.css
++++ b/manual/manual.css
+@@ -133,3 +133,12 @@
+ /* Let the Norns mock retain its readable canvas when the grid is enlarged. */
+ .instruments.grid-enlarged{grid-template-columns:minmax(0,1fr)}
+ @media(max-width:1279px){.lesson-mode .instruments:not(.grid-enlarged){grid-template-columns:minmax(0,1fr)}.lesson-mode .instruments:not(.grid-enlarged)>.grid-wrap{grid-column:1/-1}}
++
++/* Keep the full-resolution norns canvas legible beside the compact grid. */
++@media(min-width:1121px){.instruments:not(.grid-enlarged){grid-template-columns:minmax(430px,.95fr) minmax(280px,1.05fr);gap:16px;padding:20px 14px}.instruments:not(.grid-enlarged)>.grid-wrap{grid-column:auto;width:100%;min-width:0}.instruments:not(.grid-enlarged)>.norns-wrap{width:100%;max-width:560px}.lesson-mode .instruments:not(.grid-enlarged){grid-template-columns:minmax(430px,.95fr) minmax(280px,1.05fr);gap:16px;padding:20px 14px}.lesson-mode .instruments:not(.grid-enlarged)>.grid-wrap{grid-column:auto}.lesson-mode .instruments:not(.grid-enlarged)>.norns-wrap{width:100%;max-width:430px}}
++@media(min-width:1121px) and (max-width:1279px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(0,1fr)}}
++@media(min-width:1280px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(270px,.27fr) minmax(0,.73fr)}}
++
++/* At 1440px the lesson instructions and paired hardware can share a row; below that, preserve the instruction column and give the paired hardware the full workspace. */
++@media(min-width:1121px) and (max-width:1439px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(0,1fr)}.lesson-mode #lesson-workspace>.player{grid-column:1;grid-row:2}.lesson-mode #lesson-instructions{grid-column:1;grid-row:1}}
++@media(min-width:1440px){.lesson-mode #lesson-workspace{grid-template-columns:minmax(270px,.27fr) minmax(0,.73fr)}}

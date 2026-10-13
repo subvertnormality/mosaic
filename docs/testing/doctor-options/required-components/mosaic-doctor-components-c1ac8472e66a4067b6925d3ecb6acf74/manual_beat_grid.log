@@ -1,0 +1,10 @@
+test_a_corrected_origin_keeps_relevant_beats_before_it (test_manual_beat_grid.ManualBeatGridTests.test_a_corrected_origin_keeps_relevant_beats_before_it) ... ok
+test_exact_half_sample_ties_round_up_in_both_backends (test_manual_beat_grid.ManualBeatGridTests.test_exact_half_sample_ties_round_up_in_both_backends) ... ok
+test_fractional_spacing_is_rounded_from_the_origin_without_drift (test_manual_beat_grid.ManualBeatGridTests.test_fractional_spacing_is_rounded_from_the_origin_without_drift) ... ok
+test_manual_capture_start_has_more_than_one_addressable_beat (test_manual_beat_grid.ManualBeatGridTests.test_manual_capture_start_has_more_than_one_addressable_beat) ... ok
+test_tempo_and_rate_boundaries_preserve_the_half_open_capture (test_manual_beat_grid.ManualBeatGridTests.test_tempo_and_rate_boundaries_preserve_the_half_open_capture) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.466s
+
+OK

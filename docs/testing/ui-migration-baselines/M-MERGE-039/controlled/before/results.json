@@ -1,0 +1,942 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        8,
+        4
+      ]
+    ],
+    "expected": [
+      15,
+      5,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "actual": [
+      15,
+      5,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        8,
+        4
+      ]
+    ],
+    "expected": [
+      15,
+      5,
+      5,
+      5,
+      2,
+      2,
+      2,
+      2
+    ],
+    "actual": [
+      15,
+      5,
+      5,
+      5,
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "X",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333334,
+        "error_ms": 6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333333,
+        "error_ms": -3.333333331578814e-07
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "average",
+    "masked": true,
+    "expected_steps": 0.5,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "X",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.5,
+        "actual_seconds": 0.500000001,
+        "error_ms": 9.999999717180685e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.5,
+        "actual_seconds": 0.5,
+        "error_ms": 0.0
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "average",
+    "masked": false,
+    "expected_steps": 3,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        16,
+        8
+      ]
+    ],
+    "expected": [
+      5
+    ],
+    "actual": [
+      5
+    ]
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333334,
+        "error_ms": 6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333333,
+        "error_ms": -3.333333331578814e-07
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "longer",
+    "masked": true,
+    "expected_steps": 0.5,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "X",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.8333333333333334,
+        "actual_seconds": 0.833333334,
+        "error_ms": 6.666666108046115e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.8333333333333334,
+        "actual_seconds": 0.833333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "longer",
+    "masked": false,
+    "expected_steps": 5,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        16,
+        8
+      ]
+    ],
+    "expected": [
+      8
+    ],
+    "actual": [
+      8
+    ]
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333334,
+        "error_ms": 6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333333,
+        "error_ms": -3.333333331578814e-07
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "shorter",
+    "masked": true,
+    "expected_steps": 0.5,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "X",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "shorter",
+    "masked": false,
+    "expected_steps": 1,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        16,
+        8
+      ]
+    ],
+    "expected": [
+      2
+    ],
+    "actual": [
+      2
+    ]
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333334,
+        "error_ms": 6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083333333,
+        "error_ms": -3.333333331578814e-07
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "average",
+    "masked": true,
+    "expected_steps": 0.5,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "X",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.5,
+        "actual_seconds": 0.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.5,
+        "actual_seconds": 0.5,
+        "error_ms": 0.0
+      }
+    ]
+  },
+  {
+    "kind": "fractional-length-mask-merge",
+    "sources": [
+      2,
+      4
+    ],
+    "mode": "average",
+    "masked": false,
+    "expected_steps": 3,
+    "passed": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "1/2",
+    "passed": true
+  }
+]

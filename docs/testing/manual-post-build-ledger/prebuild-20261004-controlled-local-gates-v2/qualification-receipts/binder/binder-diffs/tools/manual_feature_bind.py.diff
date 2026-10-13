@@ -1,0 +1,113 @@
+--- before/tools/manual_feature_bind.py
++++ after/tools/manual_feature_bind.py
+@@ -117,12 +117,13 @@
+ def auditors():
+  from manual_publication_verify import audit_raw_publications,audit_reference,native_source_identity
+  return audit_raw_publications,audit_reference,native_source_identity
+-def stage_reports(build):
++def stage_reports(build,controlled_local=False):
+  if not build.is_dir():raise ValueError('Missing build evidence directory')
+  rows=[]
+  for path in sorted(build.glob('*.json')):
+   record=read(path)
+   if not record.get('name','').startswith(('reference-real-','reference-controlled-','doctor-')):continue
++  if controlled_local and record.get('name','').startswith('reference-real-'):continue
+   if record.get('action') or record.get('name')=='doctor-publish':continue
+   if record.get('passed') is not True or record.get('returncode')!=0:raise ValueError('Failed native stage: '+path.name)
+   log=build/(record['name']+'.log')
+@@ -202,6 +203,25 @@
+  ci=identity(Path(cs['evidence']['path']),profile=cs.get('profile','base-midi'))
+  if ri['application_digest']!=ci['application_digest']:raise ValueError('Two-lane application identity mismatch')
+  return [dict(strip_receipt(row),application_identity=native_identity) for row,native_identity in [(real,ri),(controlled,ci)]]
++def controlled_manual_audit(build):
++ from manual_publication_verify import audit_controlled_manual_generation
++ return audit_controlled_manual_generation(build,require_manual_generation_complete=False)
++
++def match_controlled_scene(identifier,scene,document,rows,audit_lane,identity):
++ matches=[]
++ for row in rows:
++  if row["clock_mode"]!="controlled-experimental" or row["stage"].startswith("doctor-"):continue
++  native=next((candidate for candidate in row["document"].get("scenes",[]) if candidate["id"]==identifier),None)
++  if native is None:continue
++  if native["behaviour_case"]!=scene["behaviour_case"] or [step["id"] for step in native["steps"]]!=[step["id"] for step in scene["steps"]]:raise ValueError("Controlled scene/case contract mismatch: "+identifier)
++  audit_lane(row["document"]);assertions(native);verify_reviewed_scene(native)
++  if document.get("clock_mode")!="controlled-experimental" or native!=scene:raise ValueError("Publication is not exact current controlled build scene")
++  native_identity=identity(Path(native["evidence"]["path"]),profile=native.get("profile","base-midi"))
++  matches.append((row,native,native_identity))
++ if len(matches)!=1:raise ValueError("Missing or ambiguous controlled build scene: "+identifier)
++ row,native,native_identity=matches[0]
++ return [dict(strip_receipt(row),application_identity=native_identity)]
++
+ def doctor_proof(document,rows):
+  exception=document.get('controlled_time',{})
+  if exception.get('applicable') is not False or not exception.get('reason'):raise ValueError('Missing Doctor audio-lane inapplicability')
+@@ -236,22 +256,30 @@
+  return dict(passed=True,scene_ids=list(NB_ROUTE_IDS),catalogue=str(path),catalogue_sha256=sha(path),case=case,audit=proof,complete_regression_run=False,scope='Real-audio native Device selection before K3; subsequent public apply and parent DSP acceptance. No controlled-audio or hardware claim.')
+ 
+ 
+-def bind(build,evidence,root=ROOT,mappings=None,audit_functions=None):
++def bind(build,evidence,root=ROOT,mappings=None,audit_functions=None,controlled_local=False):
+  default_mappings=mappings is None
+  mappings=MAPPINGS if default_mappings else mappings
+  build=Path(build).resolve();evidence=Path(evidence).resolve()
+  if evidence.exists():raise ValueError('Binding evidence directory must be new')
+  evidence.mkdir(parents=True)
+  receipt=dict(schema_version=1,tool_sha256=sha(Path(__file__)),passed=False,complete_regression_run=False,hardware_timing_verified=False,build_evidence=str(build),feature_ids=list(mappings),mappings=[])
++ if controlled_local:receipt.update(validation_scope="controlled-manual-generation",realtime_qualification="pending-ci",clock_mode="controlled-experimental")
+  originals={};changed=[]
+  try:
+   audit_raw,audit_lane,identity=auditors() if audit_functions is None else audit_functions
+-  audit=audit_raw()
+-  if audit.get('passed') is not True or audit.get('complete_regression_run') is not False:raise ValueError('Raw publication audit failed or changed campaign scope')
+-  write_new(evidence/'raw-audit.json',audit)
+-  receipt['raw_audit_sha256']=sha(evidence/'raw-audit.json')
++  if controlled_local:
++   scoped=controlled_manual_audit(build)
++   if scoped.get('passed') is not True or scoped.get('validation_scope')!='controlled-manual-generation' or scoped.get('realtime_qualification')!='pending-ci' or scoped.get('complete_regression_run') is not False:raise ValueError('Controlled manual generation audit failed or changed scope')
++   write_new(evidence/'controlled-audit.json',scoped)
++   receipt['controlled_audit_sha256']=sha(evidence/'controlled-audit.json')
++   receipt['controlled_audit']=scoped
++  else:
++   audit=audit_raw()
++   if audit.get('passed') is not True or audit.get('complete_regression_run') is not False:raise ValueError('Raw publication audit failed or changed campaign scope')
++   write_new(evidence/'raw-audit.json',audit)
++   receipt['raw_audit_sha256']=sha(evidence/'raw-audit.json')
+   if default_mappings:receipt['nb_player_routes']=verify_nb_route_bindings(root)
+-  rows=stage_reports(build);scenes=catalogue(root)
++  rows=stage_reports(build,controlled_local=controlled_local);scenes=catalogue(root)
+   feature_owners,documents,originals=owners(root,mappings)
+   proof_cache={};audited_lanes=set()
+   def cached_lane_audit(document):
+@@ -270,16 +298,18 @@
+     verify_reviewed_scene(scene)
+     if identifier not in proof_cache:
+      if is_doctor:proof_cache[identifier]=doctor_proof(document,rows)
+-     else:proof_cache[identifier]=(match_scene(identifier,scene,document,rows,cached_lane_audit,identity),None)
++     else:proof_cache[identifier]=((match_controlled_scene(identifier,scene,document,rows,cached_lane_audit,identity) if controlled_local else match_scene(identifier,scene,document,rows,cached_lane_audit,identity)),None)
+     proofs,exception=proof_cache[identifier]
+-    refs.append(dict(scene=identifier,data=pub.name,data_sha256=sha(pub),clock_mode='real-time',case=scene['behaviour_case'],assertions=semantic,scope=SCOPES.get(fid,'Exact audited native scene contract only.'),build_lane_proofs=proofs))
++    refs.append(dict(scene=identifier,data=pub.name,data_sha256=sha(pub),clock_mode=('controlled-experimental' if controlled_local and not is_doctor else 'real-time'),case=scene['behaviour_case'],assertions=semantic,scope=SCOPES.get(fid,'Exact audited native scene contract only.'),build_lane_proofs=proofs))
+     lanes.extend(proofs);cases.append(scene['behaviour_case'])
+    prior=copy.deepcopy(feature.get('review',{}))
+    history=prior.get('historical_native_evidence',[])+[dict(review=copy.deepcopy({k:v for k,v in prior.items() if k!='historical_native_evidence'}),scene_refs=copy.deepcopy(feature.get('scene_refs',[])))]
+    revised=copy.deepcopy(prior)
+-   revised.update(status='verified',cases=list(dict.fromkeys(prior.get('cases',[])+cases)),native_evidence=refs,historical_native_evidence=history,native_gap=None,rationale=SCOPES.get(fid,'Exact audited native scene contract only.'),scope=SCOPES.get(fid,'Exact audited native scene contract only.'),
++   revised.update(status=('controlled-verified' if controlled_local else 'verified'),cases=list(dict.fromkeys(prior.get('cases',[])+cases)),native_evidence=refs,historical_native_evidence=history,native_gap=None,rationale=SCOPES.get(fid,'Exact audited native scene contract only.'),scope=SCOPES.get(fid,'Exact audited native scene contract only.'),
+     binding_receipt=str(evidence/'manifest.json'),complete_regression_run=False,
+     note='Current raw publications independently audited; exact current-build timing-lane receipts are retained. Verification is scoped to the listed native contracts; exhaustive behavior and hardware acceptance remain separate.')
++   if controlled_local:
++    revised['validation_scope']='controlled-manual-generation';revised['realtime_qualification']='pending-ci'
+    revised['controlled_baselines']=[row for row in lanes if row['clock_mode']=='controlled-experimental']
+    if exception:revised['controlled_time']=exception
+    feature['review']=revised
+@@ -330,8 +360,8 @@
+ def main():
+  parser=argparse.ArgumentParser(description=__doc__)
+  parser.add_argument('--build-evidence',required=True)
+- parser.add_argument('--evidence',required=True)
++ parser.add_argument('--evidence',required=True);parser.add_argument('--controlled-local',action='store_true')
+  options=parser.parse_args()
+- print(json.dumps(bind(options.build_evidence,options.evidence),indent=2))
++ print(json.dumps(bind(options.build_evidence,options.evidence,controlled_local=options.controlled_local),indent=2))
+ if __name__=='__main__':main()
+ 

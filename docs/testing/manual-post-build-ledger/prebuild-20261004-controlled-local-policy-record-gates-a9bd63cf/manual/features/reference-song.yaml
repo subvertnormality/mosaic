@@ -1,0 +1,578 @@
+features:
+- id: song-editor
+  title: Song Editor
+  audience: all
+  summary: Select and arrange 96 Song Sequence slots on six grid rows. Each slot stores its pattern, channel
+    and harmonic setup.
+  prose: 'The Song Editor contains 96 Song Sequence slots, arranged in six rows of 16. Use each slot to
+    store a configuration of patterns, channels, rhythms and scales.
+
+
+    Song editor demo'
+  musical_use: Store variations in separate slots. Select slots during playback or enable Song mode for
+    automatic progression.
+  related:
+  - dig-deeper
+  sources:
+    readme: manual/legacy/README-1.4.0.md#song-editor
+    behaviour_cases:
+    - M-SONG-FLOW-001
+    - M-SONG-COPY-001
+    - M-SONG-SETTINGS-001
+    - M-SONG-SETTINGS-002
+    code:
+    - lib/pages/song_edit_page/song_edit_page.lua
+    - lib/pages/song_edit_page/song_edit_page_ui.lua
+    - lib/models/program.lua
+    - lib/song_transition.lua
+  controls:
+  - gesture: Press Grid (6, 8).
+    result: The Song Editor opens on Playback. Grid rows 1–6 contain the 96 Song slots.
+  - gesture: Press a Song slot.
+    result: Select it immediately while stopped, or queue it for the current sequence boundary during
+      playback.
+  details:
+  - title: Song slot contents
+    text: Copying a Song slot copies its sequence configuration. Source note patterns and channel settings
+      can be reused or changed within the copied slot.
+  recipes:
+  - title: Create a two-slot group
+    text: Copy slot 1 to slot 2. Change one channel’s rhythm or mask in slot 2 and retain the motif in
+      the other channels. Leave slot 3 empty. Enable Song mode to loop slots 1 and 2.
+  scene_refs:
+  - song-global-length
+  - workflow-compose-two-channels
+  - song-mode-groups-and-selection
+  review:
+    status: verified
+    cases:
+    - M-SONG-FLOW-001
+    - M-WORKFLOW-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: song-global-length
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-LIVEUI-FOCUS-001
+      assertions:
+      - &id009
+        kind: dashboard
+        rows:
+        - - Playing
+          - SONG 01
+        - - Next
+          - SONG 01
+        - - Pass
+          - 1 / 1
+        - - Global length
+          - '63'
+        - - Song mode
+          - AUTO
+        passed: true
+      - &id010
+        kind: dashboard
+        rows:
+        - - Playing
+          - SONG 01
+        - - Next
+          - SONG 01
+        - - Pass
+          - 1 / 1
+        - - Global length
+          - '64'
+        - - Song mode
+          - AUTO
+        passed: true
+      scope: Overview illustrates Global length dashboard feedback only; selection/copy/group behavior
+        needs its own scenes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    - scene: workflow-compose-two-channels
+      data: reference-workflow-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/2de11f78f9984f9e852e4acfdd5c646e
+      data_sha256: 239ee675560047a01a9df969446fb61e17756436fd87d962042c80c3ca36a771
+      case: M-WORKFLOW-001
+      assertions:
+      - &id001
+        kind: composition-workflow
+        stage: default-skip
+        passed: true
+      - &id002
+        kind: composition-workflow
+        stage: merge-all-average
+        passed: true
+      - &id003
+        kind: composition-workflow
+        stage: two-channels-with-melody
+        passed: true
+      - &id004
+        kind: composition-workflow
+        stage: chained-song
+        passed: true
+      scope: Overview of chained copied slots, contiguous-group playback, queued selection and manual
+        holding.
+    - scene: song-mode-groups-and-selection
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-SONG-FLOW-001
+      assertions:
+      - &id005
+        kind: song-mode-flow
+        stage: default-on-group-1
+        slots:
+        - 1
+        - 2
+        - 1
+        - 2
+        notes:
+        - 60
+        - 62
+        - 72
+        - 74
+        - 60
+        - 62
+        - 72
+        - 74
+        passed: true
+      - &id006
+        kind: song-mode-flow
+        stage: queued-selection
+        slots:
+        - 4
+        - 2
+        - 1
+        - 2
+        notes:
+        - 84
+        - 86
+        - 72
+        - 74
+        - 60
+        - 62
+        - 72
+        - 74
+        passed: true
+      - &id007
+        kind: song-mode-flow
+        stage: off-holds-slot
+        slots:
+        - 1
+        - 1
+        - 1
+        - 1
+        notes:
+        - 60
+        - 62
+        - 60
+        - 62
+        - 60
+        - 62
+        - 60
+        - 62
+        passed: true
+      - &id008
+        kind: song-mode-flow
+        stage: off-manual-selection
+        slots:
+        - 1
+        - 2
+        - 2
+        - 2
+        notes:
+        - 60
+        - 62
+        - 72
+        - 74
+        - 72
+        - 74
+        - 72
+        - 74
+        passed: true
+      scope: Overview of chained copied slots, contiguous-group playback, queued selection and manual
+        holding.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Overview of chained copied slots, contiguous-group playback, queued selection and manual
+      holding.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: song-mode-groups-and-selection
+      clock_mode: controlled-experimental
+  category: song
+  parent: dig-deeper
+  level: 3
+- id: button-indicators
+  title: Button Indicators
+  audience: all
+  summary: Song slot brightness indicates empty, filled and selected slots.
+  prose: 'Read Song slot status from the grid:
+
+
+    * Dim buttons indicate empty slots.
+
+    * Mid-glow buttons indicate slots containing rhythms and patterns.
+
+    * The brightly lit button identifies the Song Sequence currently in play.'
+  musical_use: Check which slots contain sequences and which slot is selected before changing slots.
+  related:
+  - song-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#button-indicators
+    behaviour_cases:
+    - M-SONG-FLOW-001
+    - M-SONG-COPY-001
+    - M-SONG-QUEUE-STOP-001
+    code:
+    - lib/pages/song_edit_page/song_edit_page.lua
+    - lib/controls/button.lua
+  controls:
+  - gesture: Check Song Editor Grid rows 1–6.
+    result: Dim slots are empty; mid-bright slots contain active sequences; the selected slot is bright.
+  - gesture: Press another slot while playback runs.
+    result: Its blinking feedback marks the queued selection until the boundary.
+  details:
+  - title: Selected while stopped
+    text: The bright indicator represents the selected Song slot, including when transport is stopped.
+      During playback it identifies the current section; queued selection has blinking feedback.
+  recipes: []
+  scene_refs: []
+  review:
+    status: pending
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: native-ui
+    native_gap: No directly relevant published assertion-backed scene is currently available.
+  category: song
+  parent: song-editor
+  level: 4
+- id: interacting-with-slots
+  title: Interacting with Slots
+  audience: all
+  summary: Select, copy and erase Song slots using grid presses.
+  prose: 'Press a slot button to select its Song Sequence.
+
+
+    To copy a slot, press and hold the source slot, then press the destination slot. The destination’s
+    contents are overwritten.
+
+
+    To erase a slot, copy an empty slot over it. There is no undo.'
+  musical_use: Copy a Song slot before editing a variation. The original slot remains available for playback.
+  related:
+  - song-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#interacting-with-slots
+    behaviour_cases:
+    - M-SONG-COPY-001
+    - M-SONG-FLOW-001
+    code:
+    - lib/pages/song_edit_page/song_edit_page.lua
+    - lib/models/program.lua
+  controls:
+  - gesture: Press a Song slot.
+    result: Select the sequence while stopped; during playback, queue it until the current sequence completes.
+  - gesture: Press and hold the source slot, then press the destination slot.
+    result: Copy the first-pressed slot over the destination. Either release order keeps the first-pressed
+      slot as source.
+  - gesture: Copy an empty slot over a filled slot.
+    result: Erase the destination. The destination’s previous content is overwritten; there is no undo.
+  details:
+  - title: Copy direction
+    text: Press the source slot first, then the destination. Either release order uses the first-pressed
+      slot as the source. Copying leaves the source and other slots unchanged.
+  recipes:
+  - title: Copy a slot before editing
+    text: Press and hold the current slot, then press an unused destination slot. Release both buttons.
+      While stopped, select the destination and edit the variation. Select the original slot to return
+      to the previous section.
+  scene_refs:
+  - workflow-compose-two-channels
+  - song-mode-groups-and-selection
+  review:
+    status: verified
+    cases:
+    - M-SONG-FLOW-001
+    - M-WORKFLOW-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: workflow-compose-two-channels
+      data: reference-workflow-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/2de11f78f9984f9e852e4acfdd5c646e
+      data_sha256: 239ee675560047a01a9df969446fb61e17756436fd87d962042c80c3ca36a771
+      case: M-WORKFLOW-001
+      assertions:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      scope: UI copy/selection and queued transition produce distinct literal Song MIDI phrases; overwrite/undo
+        boundaries remain source/case reference.
+    - scene: song-mode-groups-and-selection
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-SONG-FLOW-001
+      assertions:
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      scope: UI copy/selection and queued transition produce distinct literal Song MIDI phrases; overwrite/undo
+        boundaries remain source/case reference.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: UI copy/selection and queued transition produce distinct literal Song MIDI phrases; overwrite/undo
+      boundaries remain source/case reference.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: song-mode-groups-and-selection
+      clock_mode: controlled-experimental
+  category: song
+  parent: song-editor
+  level: 4
+- id: song-mode-operations
+  title: Song Mode Operations
+  audience: all
+  summary: Song mode advances to the next filled slot after the current slot’s repeats. An empty slot
+    ends the contiguous group and returns playback to that group’s first filled slot.
+  prose: 'Enable Song mode to advance automatically to the next slot after the current sequence has played
+    its specified number of repetitions.
+
+
+    When playback reaches an empty slot, it returns to the first filled slot in the current sequence group.
+    Use empty slots to separate groups.
+
+
+    Press another slot during playback to queue a change. The change takes effect after the current sequence
+    completes.'
+  musical_use: Separate Song groups with empty slots. Press a slot in another group to queue a change
+    at the current sequence boundary.
+  related:
+  - song-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#song-mode-operations
+    behaviour_cases:
+    - M-SONG-FLOW-001
+    - M-SONG-QUEUE-STOP-001
+    - M-SONG-SETTINGS-001
+    code:
+    - lib/song_transition.lua
+    - lib/pages/song_edit_page/song_edit_page.lua
+    - lib/pages/song_edit_page/song_edit_page_ui.lua
+    - lib/ui_adapters/song.lua
+    - lib/application_parameters.lua
+  controls:
+  - gesture: Choose Song tasks with E1, then Slot setup; edit Song mode with E2/E3 and apply with K3.
+    result: Enable automatic progression, or disable it to keep repeating the selected slot.
+  - gesture: Set Repeats in Slot setup and apply with K3.
+    result: Determine how many passes the selected slot plays before Song mode advances.
+  - gesture: Press another Song slot during playback.
+    result: Queue a change for completion of the current sequence, including its repeats.
+  details:
+  - title: Song groups
+    text: When the next slot is empty, playback returns to the first filled slot of the current contiguous
+      group. Manual slot selection remains available when Song mode is off.
+  recipes:
+  - title: Create two Song groups
+    text: Fill slots 1–2 and 4–5. Leave slots 3 and 6 empty. Enable Song mode and select slot 1 to loop
+      slots 1–2. During playback, press slot 4 to queue a change; slots 4–5 loop after the change. Use
+      a different bass rhythm or harmony in the second group and retain one motif in both groups.
+  scene_refs:
+  - song-mode-groups-and-selection
+  review:
+    status: verified
+    cases:
+    - M-SONG-FLOW-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: song-mode-groups-and-selection
+      data: reference-musical-scenes.json
+      clock_mode: real-time
+      run: /home/andy/mosaic-manual-runs/004c6ad4fe4e4eb4851d1add4a91a59a
+      data_sha256: e70e56a2087c59f498e4420fddb4d75e714fa6553fe1dbaf93570bbea29cba16
+      case: M-SONG-FLOW-001
+      assertions:
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      scope: The cited public workflow and stated native semantic outcomes.
+    applicability: native-ui
+    native_gap: Physical norns scheduling equivalence is outside the native real-time and controlled examples.
+    rationale: Reference source audit and the cited public native workflow are complete for publication.
+    controlled_baselines:
+    - run: /home/andy/mosaic-manual-runs/044dbf8ad2234f53be3876dac68a40ee
+      data_sha256: 02abfdebfa6968f7b5e3bf2b63157ea0be5b2dee708b496be9cbdd92d8b594f2
+      scene: song-mode-groups-and-selection
+      clock_mode: controlled-experimental
+  category: song
+  parent: song-editor
+  level: 4
+- id: adjusting-song-sequence-length
+  title: Adjusting Song Sequence Length
+  audience: all
+  summary: Set the selected Song Sequence’s global length from 1 to 64 steps. Each track plays at most
+    this number of steps, counted from its own start.
+  prose: 'Use the fader at the lower left of the Song Editor to set global Song Sequence length from 1
+    to 64 steps.
+
+
+    Channel start and end steps may lie outside the global-length range. A channel’s played length cannot
+    exceed global length. The limit counts steps from the channel start: with channel range 2–4 and global
+    length 2, playback repeats steps 2 and 3. Increase global length to restore the remaining selected
+    steps.
+
+
+    The same limit applies to the scale track. Each track follows its own clock rate, and explicit song
+    reset options still apply.
+
+
+    Global pattern length demo'
+  musical_use: Shorten a section without changing channel endpoints. Increase global length to restore
+    the remaining steps. Channel lengths and clock rates can differ within this limit.
+  related:
+  - song-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#adjusting-song-sequence-length
+    behaviour_cases:
+    - M-RANGE-GLOBAL-001
+    - M-RANGE-GLOBAL-002
+    - M-RANGE-GLOBAL-003
+    - M-RANGE-GLOBAL-004
+    - M-SONG-LENGTH-001
+    - M-SONG-LENGTH-002
+    code:
+    - lib/pages/song_edit_page/song_edit_page.lua
+    - lib/controls/fader.lua
+    - lib/step.lua
+    - lib/clock/m_clock.lua
+  controls:
+  - gesture: Press the length fader on Song Editor Grid row 7, columns 1–8.
+    result: The selected slot’s global length changes within 1–64 steps. End buttons make fine adjustments.
+      Inner buttons select coarse positions.
+  - gesture: Change global length while playback runs.
+    result: Queue the new length for the pattern boundary; stopped changes take effect immediately.
+  details:
+  - title: Global length and channel range
+    text: With channel range 2–4 and global length 2, the channel repeats steps 2 and 3. Its selected
+      endpoint remains at 4. Increasing global length restores step 4. The scale track follows the same
+      length cap. Each track retains its clock rate, and explicit song reset options still apply.
+  recipes:
+  - title: Shorten and restore a phrase
+    text: Prepare a four-step motif. While stopped, set global length to 2. Start playback to repeat the
+      first two steps. Stop playback and set global length to 4 to restore the complete phrase. Leave
+      channel endpoints unchanged.
+  scene_refs:
+  - song-global-length
+  review:
+    status: verified
+    cases:
+    - M-LIVEUI-FOCUS-001
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: song-global-length
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-LIVEUI-FOCUS-001
+      assertions:
+      - *id009
+      - *id010
+      scope: The authored scene’s cited workflow and stated semantic outcomes.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    applicability: native-ui
+    native_gap: null
+  category: song
+  parent: song-editor
+  level: 4
+- id: navigating-the-norns-display
+  title: Navigating the Norns Display
+  audience: all
+  summary: Open Playback, Slot setup or Tempo / feel from Song tasks.
+  prose: 'The Song page opens on Playback. This screen shows the playing slot, the next slot, the current
+    pass within its repeats, global pattern length and whether Song mode is advancing. Use E1 to open
+    Song tasks and select another screen.
+
+
+    Open Slot setup to set the number of repetitions for the selected Song Sequence. This setting determines
+    when Song mode advances. With Song mode off, select slots manually.
+
+
+    Open Tempo and feel to set global tempo and Swing or Shuffle.'
+  musical_use: Use Playback to check the playing slot and repeat count. Set repeats in Slot setup. Set
+    global tempo and groove in Tempo / feel.
+  related:
+  - song-editor
+  sources:
+    readme: manual/legacy/README-1.4.0.md#navigating-the-norns-display
+    behaviour_cases:
+    - M-LIVEUI-DASH-001
+    - M-SONG-SETTINGS-001
+    - M-SONG-SETTINGS-002
+    code:
+    - lib/ui_spec_data.lua
+    - lib/pages/song_edit_page/song_edit_page_ui.lua
+    - lib/ui_adapters/song.lua
+    - lib/ui_adapters/song_clock.lua
+    - lib/ui_adapters/read_only.lua
+  controls:
+  - gesture: Open the Song Editor.
+    result: Playback shows Playing, Next, Pass, global length and Song mode status.
+  - gesture: Turn E1 to Song tasks, choose Slot setup and open it.
+    result: Edit the selected slot’s Repeats and global Song mode with E2/E3; K3 applies and K2 cancels.
+  - gesture: Choose Tempo / feel from Song tasks.
+    result: Edit global tempo and Swing or Shuffle settings. Choose a field with E2, change it with E3,
+      then apply with K3 or cancel with K2.
+  details:
+  - title: Setting scope
+    text: Repeats applies to the selected Song slot. Song mode, tempo and global feel apply across the
+      song.
+  - title: Vertical list controls
+    text: Slot setup and Tempo / feel use vertical lists. Turn E2 to select the row and E3 to edit it.
+      K3 applies the draft; K2 cancels. Repeats belongs to the selected slot; Song mode and global feel
+      apply across the song. Playback remains a read-only dashboard.
+  recipes: []
+  scene_refs:
+  - song-global-length
+  review:
+    status: pending
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence:
+    - scene: song-global-length
+      data: reference-scenes.json
+      clock_mode: real-time
+      case: M-LIVEUI-FOCUS-001
+      assertions:
+      - *id009
+      - *id010
+      scope: Scene demonstrates the Playback dashboard Global length row; Slot setup and Tempo feel navigation
+        is not covered.
+      run: /home/andy/mosaic-manual-runs/bf06e4c957154a359e3bb9f5f2c638b9
+      data_sha256: 74303143000c74cb5d269dd250926b34883345710ab4511f79a4f10e537d2eb9
+    applicability: native-ui
+    native_gap: Scene demonstrates the Playback dashboard Global length row; Slot setup and Tempo feel
+      navigation is not covered.
+  category: song
+  parent: song-editor
+  level: 4

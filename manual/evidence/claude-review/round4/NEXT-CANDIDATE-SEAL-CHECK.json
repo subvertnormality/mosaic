@@ -1,0 +1,206 @@
+{
+  "checked_utc": "2026-10-07T18:46:11.897441+00:00",
+  "files": [
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/FINAL-MANIFEST.json",
+      "sha256": "e29e31a033a5517def6eecbca4d1e6c8fa839470a0b691826e4a5e8a26152d47"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/candidate/manual/book.js",
+      "sha256": "65cdf8911fe73290c109f35bb406851fefedaf295fb0ce3db8eb016f21b03d48"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/candidate/manual/manual.js",
+      "sha256": "da6f426afd281557fc41d34d1de00aeda98a12ecfe1268e6065ae6a2c696c2ae"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/candidate/manual/manual.css",
+      "sha256": "14891c11b2793d9e61a8478b2ae7b50a5afbd3143e47e7d205642b08e6f514ed"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/candidate/manual/index.html",
+      "sha256": "c14cf7269be28acfa7bdd995673e407753cbeeffbcbed547022c910cbaea3003"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v4/FINAL-MANIFEST.json",
+      "sha256": "b72aebcfa770ec9709032211bd87a3052e980583665a79279e06befc9e1804e1"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/PILOT-MANIFEST.json",
+      "sha256": "4ef391c63c28258aed04031aee9bba4aa0d4f4ea2eed1f8f27f517a260069257"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/BUILD-IMPACT.md",
+      "sha256": "9b595b203697880e45b2af18771849cb6ce0d5891324254070aa9cdfa41b78e9"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/QUALIFICATION.md",
+      "sha256": "ba911b1b5b589b783a223f45d0a302bdab4cc10b0b4465a91a3ab17daa302fee"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/BOUNDED-PROPOSALS.md",
+      "sha256": "2e69f53b24fc9637b29085323cd0e151244655eef5df3cd866c84df6a56d0759"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/qa-sealed/ACCEPTANCE.json",
+      "sha256": "277169bdbeb7ed0302029952eb4666a0a517d55eca0a03c6df74f02d92d2a1b2"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/qa-sealed/ACTIONS-RED-v4.json",
+      "sha256": "4f7ae522c6f4393429917f3e38cbd6107f534662a274480ed68fc479e045d7fc"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/qa-sealed/ACTIONS-GREEN-v5-adjacent.json",
+      "sha256": "f31cd2bbd8349d10939ca16ec02bad370791b9594f1b80f3c49c838b77c427a8"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/qa-sealed/tests/behaviour/remediation/actions.cjs",
+      "sha256": "664b9e243f5a48290c3ee30f167f680c1093d36ae0e1f403d29fa9ca50819dcb"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/qa-sealed/tests/behaviour/manual_remediation_browser.cjs",
+      "sha256": "53aebc6d374908d7325a8b6d7fe4ac8b291a9f9dc318ec4d39219f46a5ac9339"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/qa-sealed/durable-test.patch",
+      "sha256": "1f13bd7fa1d94be4607b408ae4a2d1cec162a6d5c95fa4246009585168ed5638"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reader-remediation-20261007-01/v5/candidate/manual/generated/reader-index.json",
+      "sha256": "45bd24900d38f489536a9c82bed90bc935ba2643040814923e0a8e7d3ac98c95"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/FINAL-MANIFEST.json",
+      "sha256": "64867684f1e56e60825eeb57fd08fb3ce138479cf5d9a01813f55ba0dcc9adb5"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/source/manual/course.yaml",
+      "sha256": "af5f43ee130252b2559929f53cb098f0e612786918342baed06aa23409469c83"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/source/manual/features/cookbook.yaml",
+      "sha256": "62b51e797444638477716ae1b3ebb0136f8bc9b95b04a25cd4a0b9aff54824d8"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/EDITORIAL-PROOF.json",
+      "sha256": "0dfe4c1bf8514b805a19c37707c446308bd3513a8ac6779d71994b0ba8fe59ae"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/SAVE-FOCUSED-ASSET-PLAN.md",
+      "sha256": "af355605c2a9be04a6e1540dba77cad0b707a10e456a61bac9e2021c064b5140"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/BUILD-IMPACT.md",
+      "sha256": "d6a62bda22e732751cd65bb1a40c0248d00e04a89aef0cc44d45a367e1e9c627"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/course.yaml.patch",
+      "sha256": "3e9cb0b2ba575c3ad387ad6a8165efdc03adc5da4f27270646f1213e5d6f9b6d"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-course-followup-20261007-01/cookbook.yaml.patch",
+      "sha256": "08346640224b5cd8efd9b0f90a25a6ce4fad8bdb5b8bbef046e8209eb01439f7"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/manifest.json",
+      "sha256": "241fd00469b5db21907cf64abe7dcaf5793c5e3781776078e254f7d5def5ea6e"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/tools/manual_retained_target_midi.py",
+      "sha256": "8efd1836e881cd0bb37e690623dd04126fc351b3a6fc67141bdd92db0eaf011a"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/tools/manual_reader_projection.py",
+      "sha256": "e2269867b580df1936e8eaf348c8466b8ddefcb7846af1a4e07ced553bf4cfeb"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/tests/manual_ci/test_manual_retained_target_midi.py",
+      "sha256": "9746bbada827ede44aae7c271d7fda38e1bc2acf94d4ed479a4ab4a9911a9fef"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/test-fixtures/retained-target-midi-v1/fixture.json.gz",
+      "sha256": "9d9e9a15b288ff0794990aa15603a3f38f550dfb5de373e23b91557268b2e4bd"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/test-fixtures/retained-target-midi-v1/DERIVATION.json",
+      "sha256": "d74a6e7ff1562c492b320bffe40f9e02af74ed85ed511428fd64f6a886ef64d4"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/test-fixtures/retained-target-midi-v1/README.md",
+      "sha256": "9840f3f8a3c08d0bdece48b38df661171e76caceb99e1f19432262e6981809f6"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/manual/evidence/retained-midi/retained-target-midi-admission-v1.json",
+      "sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/PLUMBING-IMPACT.md",
+      "sha256": "0eeb57ce0794bb36d752157794504ca1d7c65040423709edb551164732ef4675"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/baseline-red-doctor.log",
+      "sha256": "4fa452d13db06c431e40a52e69a1e06806e9daa0af70f43fc0c341d36deb0687"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/baseline-red-joint-seal-required-final-test.log",
+      "sha256": "59a89fe3b7b3e57e15e8e47a1b6fdbf183c858f67a663a3b793a7c5d40f4b38b"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/baseline-red-panic.log",
+      "sha256": "16ef4f8f531da48d4630f7607884f5c41030d8dacb85124adf73d44f6692b8fa"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/baseline/tools/manual_reader_projection.py",
+      "sha256": "118f0c477e03db2a467be46977de2d0ce8c24e7904311e01793664f5ae7d2c66"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/baseline/tools/manual_retained_target_midi-unsealed.py",
+      "sha256": "ecd139b021a7222695c12b4a3765f1033b6b092e82b3845d1189898385e42c2f"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/compatibility.json",
+      "sha256": "69cdfd6491fd21968c06f88a0f8eba36c24f149c22876b41290733c635185453"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/green-py311.log",
+      "sha256": "9978807e00c2e33eaa5e9a2eb17f28a4138f3ee0b25fe0268b51a08e6542b71e"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/green-py38.log",
+      "sha256": "623fb7c2ff2ec56e3ce2e2c03274fad5ff62718063d5d013e87ffbfe89d19def"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/payload.zip",
+      "sha256": "635f186240921dc9bae4cc4d0554089b58bc3c551c366f5e677f66f84b62e871"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/pilot8-compatibility-green.log",
+      "sha256": "a0dc181f07553247aedabfa94abb682564ee3eefdfe69331652d49db6da4c5f5"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/portable-check-results.json",
+      "sha256": "074fb2bc67a2933a670cf6dca2f57635f6e115f67eaa72257b7a3f3c92ed92b2"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/qualification.json",
+      "sha256": "9431260a8101a2cf10f96b332f2535418a2a236adbc3894691b5258b2ae46b81"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/recheck-joint-baseline.py",
+      "sha256": "0a8ca56ff3827590e986797692a640026f7c7137666e9f175865472a8d0c6ba1"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-strum-save-coverage-20261007-01/retained-target-candidate-v1/review.patch",
+      "sha256": "24f9fb4e00e03d68531c813d82a1fd6415f71fd237fd7abf0af765c90babf53f"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reference-remediation-20261007-01/next-fix-candidate-01/candidate/luna-author-a/proposals.json",
+      "sha256": "84f73bcab2ac6b7987cbbf1ef61ed4053a52a2a2e7af163418a655cc9fedaf3d"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-build-operators/round4-reference-remediation-20261007-01/next-fix-candidate-01/AUTHOR-BRIEF-a.json",
+      "sha256": "7cf15ac56067305973dd3e2ab39411ce7450148d96663fdf22f20b355afc0396"
+    }
+  ],
+  "status": "exact bytes only; external candidates not integrated or scored"
+}

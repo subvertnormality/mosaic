@@ -1,0 +1,252 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 2",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 3",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 4",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 5",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 6",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 7",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 8",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 9",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 10",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "ten-slot-recording-staggered-zero-one",
+    "slots": 10,
+    "odd_edit_before_step": 2,
+    "even_edit_before_step": 3,
+    "distinct_default": 2,
+    "cycles": 2,
+    "passed": true
+  }
+]

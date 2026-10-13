@@ -1,0 +1,95 @@
+Stage: capture-0
+Stage: capture-1
+Stage: capture-2
+Stage: capture-3
+Stage: capture-4
+Stage: capture-5
+Stage: capture-6
+Stage: capture-7
+Stage: capture-8
+Stage: capture-9
+Stage: capture-10
+Stage: capture-11
+Stage: capture-12
+Stage: capture-13
+Stage: capture-14
+Stage: capture-15
+Stage: capture-16
+Stage: capture-17
+Stage: capture-18
+Stage: capture-19
+Stage: capture-20
+Stage: capture-21
+Stage: capture-22
+Stage: capture-23
+Stage: capture-24
+Stage: capture-25
+Stage: capture-26
+Stage: capture-27
+Stage: capture-28
+Stage: capture-29
+Stage: capture-30
+Stage: capture-31
+Stage: capture-32
+Stage: capture-33
+Stage: capture-34
+Stage: capture-35
+Stage: capture-36
+Stage: capture-37
+Stage: capture-38
+Stage: capture-39
+Stage: capture-40
+Stage: capture-41
+Stage: capture-42
+Stage: capture-43
+Stage: capture-44
+Stage: capture-45
+Stage: capture-46
+Stage: capture-47
+Stage: capture-48
+Stage: capture-49
+Stage: capture-50
+Stage: capture-51
+Stage: capture-52
+Stage: capture-53
+Stage: capture-54
+Stage: capture-55
+Stage: capture-56
+Stage: capture-57
+Stage: capture-58
+Stage: capture-59
+Stage: capture-60
+Stage: capture-61
+Stage: capture-62
+Stage: capture-63
+Stage: capture-64
+Stage: capture-65
+Stage: capture-66
+Stage: capture-67
+Stage: capture-68
+Stage: capture-69
+Stage: capture-70
+Stage: capture-71
+Immutable build evidence: /tmp/tmp0jh5vubr/runs/589158fdb4214ca581117be0a627882b
+Stage gate ready: /tmp/tmpea86isiy/gates/001-ca5f8b5921657aef72740372eb42378ab582194af3653d2532e14216205fdfb4.request.json
+Stage gate ready: /tmp/tmpds8dm1w0/gates/001-08ed6e7afd7a68ebb8ee1de5687c99e1a4d74fe4858fe9a1e91ad3640aa9a168.request.json
+Stage gate ready: /tmp/tmp5f2ocdoa/gates/001-b4d119f3cb5a53d9be0ed21ecfa5a5f06ec8368932a4393d6940e321bc16d668.request.json
+Stage: capture-real
+Immutable build evidence: /tmp/tmpmsjm1re0/runs/a17d329930704a5cb86212d8f47561f1
+Stage gate ready: /tmp/tmpwbxcen49/gates/001-1cf142106b26b1b341c579fbcf4238c01f4b49c8f8aa56b453fa74ccd0dfe106.request.json
+Stage gate ready: /tmp/tmplgux4vqy/gates/002-b1328a233f648bb100ca5de1c40d93b4be098b2c282445530cd092b31bdde3c5.request.json
+Stage gate ready: /tmp/tmp3m5q0srl/gates/002-0129d4bbc99e1c28c7fd97ef5b6de67501caa77ea4e21885e85d312d53b7aa07.request.json
+Stage gate ready: /tmp/tmp_umryxdy/gates/001-891c6faaa9a59263a11d285f1334eb256a07cd3fe9f68adc30faea74a282c1e5.request.json
+Stage gate ready: /tmp/tmpv82tbllp/gates/001-904f33292daef9f07db358f8ec28eb44cd564133c07fc2a61494989480b88e31.request.json
+Stage gate ready: /tmp/tmpldfpfn2p/gates/001-b4ca30879ecf6be14cd7c3d149d7b1a506847d37e705c20321c99f92ee01333b.request.json
+Stage gate ready: /tmp/tmp7_w7nb3a/gates/001-4c1838d4ccb27b472394f3046e116cca08916e66f2947a9bfd0991dcdf4a324b.request.json
+Stage gate ready: /tmp/tmpxb09ri07/gates/001-af148923fcc3797f3ff77b64a156375ada29ee3920d11dd511a4d5bbfb86ad8c.request.json
+Stage gate ready: /tmp/tmp2_ck5o2s/gates/001-144f0ad24f767b8a2fa44086209e2df24619aba2f3374cecf9f7be4d20fd638d.request.json
+Stage gate ready: /tmp/tmp261pdscg/gates/001-2c47a6e0efda7daa37674dd4a4bd28c58f62412ad76a2a82d4afd54fbd7c2873.request.json
+Stage gate ready: /tmp/tmpdulgr8gk/gates/001-a14504b69e4089fe3d61136017f12c3886842a9e31287c808b8f614e558f216f.request.json
+Stage gate ready: /tmp/tmpybi1rzx7/gates/001-2762ef7258ac5c320d952ff14d945b25fe8ef8f96fb7b321f4a4088b37906d2c.request.json
+......................................................
+----------------------------------------------------------------------
+Ran 54 tests in 1.093s
+
+OK

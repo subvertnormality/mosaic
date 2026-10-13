@@ -1,0 +1,1811 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "source"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "internal"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "midi"
+  },
+  {
+    "kind": "external-clock-fault",
+    "fault": "step",
+    "pulse_count": 43,
+    "target_ns": [
+      10290000000,
+      10440000000,
+      10590000000,
+      10740000000,
+      10840000002,
+      10940000004,
+      11040000006,
+      11140000008
+    ],
+    "tolerance_ns": 3000002,
+    "post_stop_clock_pulses": 12,
+    "stimulus": [
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9065000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9090000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9115000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9140000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9165000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9190000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9215000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9240000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9265000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9290000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9315000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9340000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9365000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9390000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9415000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9440000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9465000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9490000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9515000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9540000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9565000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9590000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9615000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9640000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9665000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9690000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9715000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9740000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9765000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9790000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9815000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9840000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9865000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9890000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9915000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9940000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9965000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 9990000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10015000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10040000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10065000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10090000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10115000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10140000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10165000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10190000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10215000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10240000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10265000000
+      },
+      {
+        "port": 2,
+        "bytes": [
+          250
+        ],
+        "at_logical_ns": 10270000000
+      },
+      {
+        "port": 2,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10280000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "at_logical_ns": 10290000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10290000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10315000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10340000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10365000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10390000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10415000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10440000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10465000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10490000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10515000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10540000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10565000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10590000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10615000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10640000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10665000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10690000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10715000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10740000000
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10756666667
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10773333334
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10790000001
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10806666668
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10823333335
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10840000002
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10856666669
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10873333336
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10890000003
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10906666670
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10923333337
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10940000004
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10956666671
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10973333338
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 10990000005
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11006666672
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11023333339
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11040000006
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11056666673
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11073333340
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11090000007
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11106666674
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11123333341
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11140000008
+      },
+      {
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "at_logical_ns": 11152500008
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11169166675
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11185833342
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11202500009
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11219166676
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11235833343
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11252500010
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11269166677
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11285833344
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11302500011
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11319166678
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11335833345
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_logical_ns": 11352500012
+      }
+    ],
+    "delivered": [
+      {
+        "index": 0,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9065000000,
+        "actual_logical_ns": 9065000000
+      },
+      {
+        "index": 1,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9090000000,
+        "actual_logical_ns": 9090000000
+      },
+      {
+        "index": 2,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9115000000,
+        "actual_logical_ns": 9115000000
+      },
+      {
+        "index": 3,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9140000000,
+        "actual_logical_ns": 9140000000
+      },
+      {
+        "index": 4,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9165000000,
+        "actual_logical_ns": 9165000000
+      },
+      {
+        "index": 5,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9190000000,
+        "actual_logical_ns": 9190000000
+      },
+      {
+        "index": 6,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9215000000,
+        "actual_logical_ns": 9215000000
+      },
+      {
+        "index": 7,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9240000000,
+        "actual_logical_ns": 9240000000
+      },
+      {
+        "index": 8,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9265000000,
+        "actual_logical_ns": 9265000000
+      },
+      {
+        "index": 9,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9290000000,
+        "actual_logical_ns": 9290000000
+      },
+      {
+        "index": 10,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9315000000,
+        "actual_logical_ns": 9315000000
+      },
+      {
+        "index": 11,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9340000000,
+        "actual_logical_ns": 9340000000
+      },
+      {
+        "index": 12,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9365000000,
+        "actual_logical_ns": 9365000000
+      },
+      {
+        "index": 13,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9390000000,
+        "actual_logical_ns": 9390000000
+      },
+      {
+        "index": 14,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9415000000,
+        "actual_logical_ns": 9415000000
+      },
+      {
+        "index": 15,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9440000000,
+        "actual_logical_ns": 9440000000
+      },
+      {
+        "index": 16,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9465000000,
+        "actual_logical_ns": 9465000000
+      },
+      {
+        "index": 17,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9490000000,
+        "actual_logical_ns": 9490000000
+      },
+      {
+        "index": 18,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9515000000,
+        "actual_logical_ns": 9515000000
+      },
+      {
+        "index": 19,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9540000000,
+        "actual_logical_ns": 9540000000
+      },
+      {
+        "index": 20,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9565000000,
+        "actual_logical_ns": 9565000000
+      },
+      {
+        "index": 21,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9590000000,
+        "actual_logical_ns": 9590000000
+      },
+      {
+        "index": 22,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9615000000,
+        "actual_logical_ns": 9615000000
+      },
+      {
+        "index": 23,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9640000000,
+        "actual_logical_ns": 9640000000
+      },
+      {
+        "index": 24,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9665000000,
+        "actual_logical_ns": 9665000000
+      },
+      {
+        "index": 25,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9690000000,
+        "actual_logical_ns": 9690000000
+      },
+      {
+        "index": 26,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9715000000,
+        "actual_logical_ns": 9715000000
+      },
+      {
+        "index": 27,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9740000000,
+        "actual_logical_ns": 9740000000
+      },
+      {
+        "index": 28,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9765000000,
+        "actual_logical_ns": 9765000000
+      },
+      {
+        "index": 29,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9790000000,
+        "actual_logical_ns": 9790000000
+      },
+      {
+        "index": 30,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9815000000,
+        "actual_logical_ns": 9815000000
+      },
+      {
+        "index": 31,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9840000000,
+        "actual_logical_ns": 9840000000
+      },
+      {
+        "index": 32,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9865000000,
+        "actual_logical_ns": 9865000000
+      },
+      {
+        "index": 33,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9890000000,
+        "actual_logical_ns": 9890000000
+      },
+      {
+        "index": 34,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9915000000,
+        "actual_logical_ns": 9915000000
+      },
+      {
+        "index": 35,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9940000000,
+        "actual_logical_ns": 9940000000
+      },
+      {
+        "index": 36,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9965000000,
+        "actual_logical_ns": 9965000000
+      },
+      {
+        "index": 37,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 9990000000,
+        "actual_logical_ns": 9990000000
+      },
+      {
+        "index": 38,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10015000000,
+        "actual_logical_ns": 10015000000
+      },
+      {
+        "index": 39,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10040000000,
+        "actual_logical_ns": 10040000000
+      },
+      {
+        "index": 40,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10065000000,
+        "actual_logical_ns": 10065000000
+      },
+      {
+        "index": 41,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10090000000,
+        "actual_logical_ns": 10090000000
+      },
+      {
+        "index": 42,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10115000000,
+        "actual_logical_ns": 10115000000
+      },
+      {
+        "index": 43,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10140000000,
+        "actual_logical_ns": 10140000000
+      },
+      {
+        "index": 44,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10165000000,
+        "actual_logical_ns": 10165000000
+      },
+      {
+        "index": 45,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10190000000,
+        "actual_logical_ns": 10190000000
+      },
+      {
+        "index": 46,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10215000000,
+        "actual_logical_ns": 10215000000
+      },
+      {
+        "index": 47,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10240000000,
+        "actual_logical_ns": 10240000000
+      },
+      {
+        "index": 48,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10265000000,
+        "actual_logical_ns": 10265000000
+      },
+      {
+        "index": 49,
+        "port": 2,
+        "bytes": [
+          250
+        ],
+        "intended_logical_ns": 10270000000,
+        "actual_logical_ns": 10270000000
+      },
+      {
+        "index": 50,
+        "port": 2,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10280000000,
+        "actual_logical_ns": 10280000000
+      },
+      {
+        "index": 51,
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "intended_logical_ns": 10290000000,
+        "actual_logical_ns": 10290000000
+      },
+      {
+        "index": 52,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10290000000,
+        "actual_logical_ns": 10290000000
+      },
+      {
+        "index": 53,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10315000000,
+        "actual_logical_ns": 10315000000
+      },
+      {
+        "index": 54,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10340000000,
+        "actual_logical_ns": 10340000000
+      },
+      {
+        "index": 55,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10365000000,
+        "actual_logical_ns": 10365000000
+      },
+      {
+        "index": 56,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10390000000,
+        "actual_logical_ns": 10390000000
+      },
+      {
+        "index": 57,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10415000000,
+        "actual_logical_ns": 10415000000
+      },
+      {
+        "index": 58,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10440000000,
+        "actual_logical_ns": 10440000000
+      },
+      {
+        "index": 59,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10465000000,
+        "actual_logical_ns": 10465000000
+      },
+      {
+        "index": 60,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10490000000,
+        "actual_logical_ns": 10490000000
+      },
+      {
+        "index": 61,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10515000000,
+        "actual_logical_ns": 10515000000
+      },
+      {
+        "index": 62,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10540000000,
+        "actual_logical_ns": 10540000000
+      },
+      {
+        "index": 63,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10565000000,
+        "actual_logical_ns": 10565000000
+      },
+      {
+        "index": 64,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10590000000,
+        "actual_logical_ns": 10590000000
+      },
+      {
+        "index": 65,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10615000000,
+        "actual_logical_ns": 10615000000
+      },
+      {
+        "index": 66,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10640000000,
+        "actual_logical_ns": 10640000000
+      },
+      {
+        "index": 67,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10665000000,
+        "actual_logical_ns": 10665000000
+      },
+      {
+        "index": 68,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10690000000,
+        "actual_logical_ns": 10690000000
+      },
+      {
+        "index": 69,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10715000000,
+        "actual_logical_ns": 10715000000
+      },
+      {
+        "index": 70,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10740000000,
+        "actual_logical_ns": 10740000000
+      },
+      {
+        "index": 71,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10756666667,
+        "actual_logical_ns": 10756666667
+      },
+      {
+        "index": 72,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10773333334,
+        "actual_logical_ns": 10773333334
+      },
+      {
+        "index": 73,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10790000001,
+        "actual_logical_ns": 10790000001
+      },
+      {
+        "index": 74,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10806666668,
+        "actual_logical_ns": 10806666668
+      },
+      {
+        "index": 75,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10823333335,
+        "actual_logical_ns": 10823333335
+      },
+      {
+        "index": 76,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10840000002,
+        "actual_logical_ns": 10840000002
+      },
+      {
+        "index": 77,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10856666669,
+        "actual_logical_ns": 10856666669
+      },
+      {
+        "index": 78,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10873333336,
+        "actual_logical_ns": 10873333336
+      },
+      {
+        "index": 79,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10890000003,
+        "actual_logical_ns": 10890000003
+      },
+      {
+        "index": 80,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10906666670,
+        "actual_logical_ns": 10906666670
+      },
+      {
+        "index": 81,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10923333337,
+        "actual_logical_ns": 10923333337
+      },
+      {
+        "index": 82,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10940000004,
+        "actual_logical_ns": 10940000004
+      },
+      {
+        "index": 83,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10956666671,
+        "actual_logical_ns": 10956666671
+      },
+      {
+        "index": 84,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10973333338,
+        "actual_logical_ns": 10973333338
+      },
+      {
+        "index": 85,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 10990000005,
+        "actual_logical_ns": 10990000005
+      },
+      {
+        "index": 86,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11006666672,
+        "actual_logical_ns": 11006666672
+      },
+      {
+        "index": 87,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11023333339,
+        "actual_logical_ns": 11023333339
+      },
+      {
+        "index": 88,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11040000006,
+        "actual_logical_ns": 11040000006
+      },
+      {
+        "index": 89,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11056666673,
+        "actual_logical_ns": 11056666673
+      },
+      {
+        "index": 90,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11073333340,
+        "actual_logical_ns": 11073333340
+      },
+      {
+        "index": 91,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11090000007,
+        "actual_logical_ns": 11090000007
+      },
+      {
+        "index": 92,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11106666674,
+        "actual_logical_ns": 11106666674
+      },
+      {
+        "index": 93,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11123333341,
+        "actual_logical_ns": 11123333341
+      },
+      {
+        "index": 94,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11140000008,
+        "actual_logical_ns": 11140000008
+      },
+      {
+        "index": 95,
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "intended_logical_ns": 11152500008,
+        "actual_logical_ns": 11152500008
+      },
+      {
+        "index": 96,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11169166675,
+        "actual_logical_ns": 11169166675
+      },
+      {
+        "index": 97,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11185833342,
+        "actual_logical_ns": 11185833342
+      },
+      {
+        "index": 98,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11202500009,
+        "actual_logical_ns": 11202500009
+      },
+      {
+        "index": 99,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11219166676,
+        "actual_logical_ns": 11219166676
+      },
+      {
+        "index": 100,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11235833343,
+        "actual_logical_ns": 11235833343
+      },
+      {
+        "index": 101,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11252500010,
+        "actual_logical_ns": 11252500010
+      },
+      {
+        "index": 102,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11269166677,
+        "actual_logical_ns": 11269166677
+      },
+      {
+        "index": 103,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11285833344,
+        "actual_logical_ns": 11285833344
+      },
+      {
+        "index": 104,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11302500011,
+        "actual_logical_ns": 11302500011
+      },
+      {
+        "index": 105,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11319166678,
+        "actual_logical_ns": 11319166678
+      },
+      {
+        "index": 106,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11335833345,
+        "actual_logical_ns": 11335833345
+      },
+      {
+        "index": 107,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_logical_ns": 11352500012,
+        "actual_logical_ns": 11352500012
+      }
+    ],
+    "actual_stop_ns": 11152500008,
+    "passed": true,
+    "onsets": 8,
+    "releases": 8,
+    "maximum_onset_error_ns": 1
+  }
+]

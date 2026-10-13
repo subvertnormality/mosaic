@@ -1,0 +1,316 @@
+--- a/manual/features/reference-pattern.yaml
++++ b/manual/features/reference-pattern.yaml
+@@ -788,113 +788,145 @@
+   title: Rhythm Doctor
+   audience: all
+   summary: Select the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.
+-  prose: 'Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
+-
+-    Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control.
+-
+-    Each project retains one captured bank. Select a lane, preview a 64-step
+-
+-    window, then paint it into the selected pattern.
+-
+-
+-    ### Record and paint a phrase
+-
+-
+-    Use Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.
+-
+-
+-    1. Press Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.
+-
+-    2. Optional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.
+-
+-    3. Tap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.
+-
+-    4. Press K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.
+-
+-    5. When the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).
+-
+-    6. Select the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.
+-
+-    7. Press Channel (3,8) and Play (1,8) to hear the painted rhythm.
+-
+-
+-    With the 120 BPM test loop, BD paints a hit on every fourth step.
+-
+-
+-    Recording needs the sequencer stopped, because capture takes over the audio
+-
+-    input and analysis replaces the bank underneath whatever is on the screen. So
+-
+-    does Alignment, which re-analyses. Record, capture setup and Alignment do
+-
+-    nothing while the sequencer runs, and the screen says `STOP SEQUENCER` when
+-
+-    there is no bank to work on instead.
+-
+-
+-    A bank that has already been analysed stays usable while the sequencer plays.
+-
+-    Choosing a lane, browsing the recording, changing sensitivity or paint policy,
+-
+-    and previewing and painting all read a finished bank and write to a pattern,
+-
+-    which is what the rest of the Trigger Editor already lets you do while playing.
+-
+-    Starting the sequencer cancels an unfinished capture or analysis and closes a
+-
+-    capture-setup or alignment draft, but keeps an armed paint preview, so you can
+-
+-    arm Paint, start the sequencer and commit. Rhythm Doctor does not start or stop
+-
+-    the sequencer for you.
+-
+-
+-    On an empty bank, press grid column 1, row 2 to begin Record; the press starts
+-
+-    the action and its release is consumed. Press Record again to stop, or press K3:
+-
+-    either finishes the capture once the screen says `ENOUGH / REC OR K3`. Until it
+-
+-    does, the screen says `MORE AUDIO NEEDED`, and pressing Record then asks whether
+-
+-    to abandon the take instead. Pressing Record on an occupied bank asks whether to
+-
+-    clear its capture bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that
+-
+-    were already painted. In a ready bank, use E2 to choose Window bar, Window
+-
+-    step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
+-
+-    edit the chosen item. Window bar moves by 16 steps and Window step by one; both
+-
+-    view the same bounded timeline. Alignment shows `OPEN >`: choose it and press
+-
+-    K3 (or turn E3) to open its tempo, start-beat, and fine-start settings; K2
+-
+-    cancels and K3 applies the draft.
+-
+-
+-    Before recording, use E2/E3 to open and edit the setup draft for Auto or Manual tempo, manual BPM (40–240), and Stereo/L/R input. Press K3 to confirm the settings for the take, or K2 to discard the draft. Record uses the confirmed settings.
+-
+-
+-    Stereo records left and right separately. L records the left input into both recorded channels; R records the right input into both. Auto estimates tempo and phrase start from the recording. Manual uses the selected integer BPM and starts the phrase at the beginning of recording. Applying an explicit Alignment draft later replaces that capture timing.
+-
+-
+-    To paint a ready lane, select the destination pattern with the top row, press
+-
+-    Paint (column 16, row 8) to preview, then press it again to commit. Cancel
+-
+-    (column 14, row 8) discards the preview. Toggle is the default paint policy;
+-
+-    Add and Replace are selectable on the Rhythm Doctor screen. Painting does not
+-
+-    alter the captured bank.
+-
+-
+-    Prime, Cancel and the preview-shift buttons work the same way in every algorithm; see Adding Trigs. In Rhythm Doctor the buttons at (10,8), (11,8) and (12,8) browse the recording instead (see Finding the phrase below).
+-
+-
+-    Watch: [Pattern editor trig page demo](https://youtu.be/J1ckUZvhFJ0?t=668)'
++  prose: |-
++      Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
++      Setup and workflow screens use labelled vertical rows. E2 selects an editable row and E3 changes it. The contextual footer names confirmation actions; painting still uses the grid Paint control.
++      Each project retains one captured bank. Select a lane, preview a 64-step
++      window, then paint it into the selected pattern.
++    
++      ### Record and paint a phrase
++    
++      Use Rhythm Doctor to turn a rhythm you can play into the norns audio input, such as a drum loop, into a Mosaic pattern. Before you start, stop the sequencer, assign a device and a pattern to the channel you will paint into, and have the source ready to play. In the example captured below the source is a steady 120 BPM test loop with one thump on every beat.
++    
++      1. Press Pattern (5,8) and select the Rhythm Doctor algorithm at (16,2). The norns shows RHYTHM DR with Record READY, Tempo AUTO, Manual BPM and Input STEREO.
++      2. Optional: turn E2 to Tempo and E3 to MANUAL, set Manual BPM, and press K3 to confirm. Leave Tempo on AUTO to let Doctor estimate it.
++      3. Tap Record at (1,2) and play the audio. The screen shows CAPTURE and MORE AUDIO NEEDED, then ENOUGH / REC OR K3.
++      4. Press K3 to finish. The screen shows ANALYSING and the lanes BD, SD and CYM.
++      5. When the Window screen reads READY, select a lane: BD at (3,2), SD at (4,2) or CYM at (5,2).
++      6. Select the destination pattern on the top row and tap Paint at (16,8). Detected hits flash on the grid as a preview. Tap Paint again to commit; the tooltip reads Pattern painted. Cancel at (14,8) discards the preview.
++      7. Press Channel (3,8) and Play (1,8) to hear the painted rhythm.
++    
++      With the 120 BPM test loop, BD paints a hit on every fourth step.
++    
++      Recording needs the sequencer stopped, because capture takes over the audio
++      input and analysis replaces the bank underneath whatever is on the screen. So
++      does Alignment, which re-analyses. Record, capture setup and Alignment do
++      nothing while the sequencer runs, and the screen says `STOP SEQUENCER` when
++      there is no bank to work on instead.
++    
++      A bank that has already been analysed stays usable while the sequencer plays.
++      Choosing a lane, browsing the recording, changing sensitivity or paint policy,
++      and previewing and painting all read a finished bank and write to a pattern,
++      which is what the rest of the Trigger Editor already lets you do while playing.
++      Starting the sequencer cancels an unfinished capture or analysis and closes a
++      capture-setup or alignment draft, but keeps an armed paint preview, so you can
++      arm Paint, start the sequencer and commit. Rhythm Doctor does not start or stop
++      the sequencer for you.
++    
++      On an empty bank, press grid column 1, row 2 to begin Record; the press starts
++      the action and its release is consumed. Press Record again to stop, or press K3:
++      either finishes the capture once the screen says `ENOUGH / REC OR K3`. Until it
++      does, the screen says `MORE AUDIO NEEDED`, and pressing Record then asks whether
++      to abandon the take instead. Pressing Record on an occupied bank asks whether to
++      clear its capture bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that
++      were already painted. In a ready bank, use E2 to choose Window bar, Window
++      step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
++      edit the chosen item. Window bar moves by 16 steps and Window step by one; both
++      view the same bounded timeline. Alignment shows `OPEN >`: choose it and press
++      K3 (or turn E3) to open its tempo, start-beat, and fine-start settings; K2
++      cancels and K3 applies the draft.
++    
++      Before recording, use E2/E3 to open and edit the setup draft for Auto or Manual tempo, manual BPM (40–240), and Stereo/L/R input. Press K3 to confirm the settings for the take, or K2 to discard the draft. Record uses the confirmed settings.
++    
++      Stereo records left and right separately. L records the left input into both recorded channels; R records the right input into both. Auto estimates tempo and phrase start from the recording. Manual uses the selected integer BPM and starts the phrase at the beginning of recording. Applying an explicit Alignment draft later replaces that capture timing.
++    
++      To paint a ready lane, select the destination pattern with the top row, press
++      Paint (column 16, row 8) to preview, then press it again to commit. Cancel
++      (column 14, row 8) discards the preview. Toggle is the default paint policy;
++      Add and Replace are selectable on the Rhythm Doctor screen. Painting does not
++      alter the captured bank.
++    
++      Prime, Cancel and the preview-shift buttons work the same way in every algorithm; see Adding Trigs. In Rhythm Doctor the buttons at (10,8), (11,8) and (12,8) browse the recording instead (see Finding the phrase below).
++    
++      Watch: [Pattern editor trig page demo](https://youtu.be/J1ckUZvhFJ0?t=668)
++    
++      ### Set up the analysis server
++    
++      ## Prerequisites
++    
++      Install [Git](https://git-scm.com/downloads/) and [Python](https://www.python.org/downloads/) on the computer that will run the server. The Windows steps below were checked on Windows 10/11 with Python 3.10. On Linux or macOS, use an installed Python 3.9 or newer.
++    
++      Get the Mosaic checkout and enter the server folder:
++    
++      ```sh
++      git clone --branch codex/1.4.0 https://github.com/subvertnormality/mosaic.git
++      cd mosaic
++      cd tools/rhythm_doctor_server
++      ```
++    
++      ## Install the server
++    
++      Windows PowerShell:
++    
++      ```powershell
++      py -3.10 -m venv .venv
++      .\.venv\Scripts\python -m pip install -r requirements.txt pyyaml
++      ```
++    
++      Linux or macOS:
++    
++      ```sh
++      python3 -m venv .venv
++      .venv/bin/python -m pip install -r requirements.txt pyyaml
++      ```
++    
++      Demucs and Beat This fetch and cache their model weights when first used. Let that first model load finish before analysing a capture.
++    
++      The server provides six lanes without LarsNet: `DRUMS`, `BASS`, `GUITAR`, `PIANO`, `VOCALS` and `OTHER`. To keep six lanes, skip the optional LarsNet commands below and leave `LARSNET_ROOT` unset. To split the kit into ten lanes, install LarsNet as well. Its checkpoint archive is about 562 MB and is licensed CC BY-NC 4.0; read that licence before using it, especially for commercial work. The following commands fetch the published archive and verify its SHA-256.
++    
++      Windows PowerShell:
++    
++      ```powershell
++      git clone https://github.com/polimi-ispl/larsnet .\larsnet
++      .\.venv\Scripts\python -m pip install gdown
++      .\.venv\Scripts\python fetch_models.py --larsnet-root .\larsnet --sha256 dd785d77f66413c5acbd3a4cedac02951578c838496d059930c43f159647c907
++      $env:LARSNET_ROOT = "$PWD\larsnet"
++      ```
++    
++      Linux or macOS:
++    
++      ```sh
++      git clone https://github.com/polimi-ispl/larsnet ./larsnet
++      .venv/bin/python -m pip install gdown
++      .venv/bin/python fetch_models.py --larsnet-root ./larsnet --sha256 dd785d77f66413c5acbd3a4cedac02951578c838496d059930c43f159647c907
++      export LARSNET_ROOT="$PWD/larsnet"
++      ```
++    
++      ## Start and check the server
++    
++      From `tools/rhythm_doctor_server`, start it on all network interfaces at port 8420:
++    
++      Windows PowerShell:
++    
++      ```powershell
++      .\.venv\Scripts\python server.py --host 0.0.0.0 --port 8420
++      ```
++    
++      Linux or macOS:
++    
++      ```sh
++      .venv/bin/python server.py --host 0.0.0.0 --port 8420
++      ```
++    
++      On Windows, allow the firewall prompt on private networks. The startup log should report `ready=True`. On the computer, open `http://127.0.0.1:8420/v1/health` in a browser; the response should contain `"ready": true` and a lane list. Only read the lane count when `ready` is true: ten lanes means LarsNet loaded, six means it did not. If required Demucs or Beat This models are missing, the server normally exits. The diagnostic option `--allow-missing-models` keeps it running with `ready:false`; analysis is unavailable in that state. Keep the terminal and server running while using Rhythm Doctor; press Ctrl+C in that terminal to stop it.
++    
++      ## Connect Mosaic on norns
++    
++      Find the computer’s IPv4 address with `ipconfig` on Windows, or the network settings on Linux/macOS. If the norns is providing the access point, use the computer address on its `10.42.0.x` subnet. Otherwise use the address on the same network as the norns. In `PARAMS > MOSAIC > Rhythm Doctor`, set **Analysis server** to the computer’s reachable address, such as `http://192.168.1.50:8420`, and turn **Use analysis server** on. Enter the reachable computer address, not `0.0.0.0` or `127.0.0.1`.
++    
++      If the server is enabled and reachable, a successful capture uses its six or ten lanes. Turn **Use analysis server** off to keep its address saved and use on-device analysis. If the remote request fails, Mosaic falls back only if its local analysis backend is available; otherwise it reports `ANALYSIS_BACKEND_UNAVAILABLE` and creates no bank. If you see only `BD`, `SD` and `CYM`, check the switch, address, health response, network and firewall.
++    
++      Beat This estimates tempo and phrase start from the mix before separation. Treat them as estimates and adjust Alignment when needed.
+   musical_use: Record a percussion phrase into an empty bank. Select a lane and an unused destination pattern. Adjust sensitivity and paint policy, preview the result, then paint it.
+   related:
+   - adding-trigs
+@@ -1039,57 +1071,9 @@
+ 
+       A reloaded bank can still be browsed and painted, but alignment correction needs the retained capture audio. If that audio is unavailable, K3 refuses with CAPTURE AUDIO UNAVAILABLE instead of changing the bank.'
+   - title: Analysis server (advanced)
+-    text: '**Analysis server (advanced).** Analysis runs on the norns by default and
+-
+-      needs nothing configured. If you run the optional analysis server on a computer
+-
+-      on the same network, Rhythm Doctor can send the capture there instead and get
+-
+-      back ten lanes rather than three: KICK, SNARE, TOMS, HIHAT and CYMBALS from a
+-
+-      model that separates a kit into its pieces, and BASS, GUITAR, PIANO, VOCALS and
+-
+-      OTHER from the rest of the mix. The melodic lanes carry rhythm and velocity,
+-
+-      not notes.
+-
+-
+-      Set it up in PARAMS > MOSAIC > Rhythm Doctor: put the address in **Analysis
+-
+-      server** (for example `http://192.168.1.50:8420`) and switch **Use analysis
+-
+-      server** on. The switch is separate from the address so you can keep a server
+-
+-      saved while working locally.
+-
+-
+-      The on-device analysis stays the default and the fallback. If the server is
+-
+-      switched off, unreachable, slower than its timeout, or returns anything Mosaic
+-
+-      does not accept, the capture is analysed on the norns instead and you still get
+-
+-      gates. You lose the extra lanes, not the recording.
+-
+-
+-      The server also tracks the beat with a model trained for it, so on the remote
+-
+-      path the tempo and the phrase start are usually better than the on-device
+-
+-      estimate.
+-
+-
+-      `tools/rhythm_doctor_server/README.md` has step-by-step setup, including a
+-
+-      Windows walkthrough that needs no administrator rights, how to find the
+-
+-      address to type into the setting, and what to check when captures keep coming
+-
+-      back with three lanes. Three lanes is the on-device fallback: it is what you
+-
+-      get whenever the server cannot be reached, so it is the symptom to look for
+-
+-      rather than an error message.'
++    text: |
++      **Optional computer analysis server.** Rhythm Doctor analyses on the norns by default. To add six or ten remote lanes, follow “Set up the analysis server” in the instructions above. Remote analysis needs a reachable computer; the local three-lane analysis remains the fallback when available.
++
+   - title: Local analysis and availability
+     text: '**Availability:** Rhythm Doctor analyses captures on norns by default. The first
+ 

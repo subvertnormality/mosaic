@@ -1,0 +1,1973 @@
+{
+  "data": [
+    {
+      "label": "inventory-1440",
+      "articles": [
+        {
+          "id": "getting-started",
+          "href": "manual/#getting-started",
+          "rows": 0
+        },
+        {
+          "id": "install",
+          "href": "manual/#install",
+          "rows": 0
+        },
+        {
+          "id": "setup",
+          "href": "manual/#setup",
+          "rows": 0
+        },
+        {
+          "id": "hardware",
+          "href": "manual/#hardware",
+          "rows": 0
+        },
+        {
+          "id": "midi-device-configuration",
+          "href": "manual/#midi-device-configuration",
+          "rows": 0
+        },
+        {
+          "id": "stock-devices",
+          "href": "manual/#stock-devices",
+          "rows": 0
+        },
+        {
+          "id": "adding-custom-devices",
+          "href": "manual/#adding-custom-devices",
+          "rows": 0
+        },
+        {
+          "id": "lock-lead-time",
+          "href": "manual/#lock-lead-time",
+          "rows": 1
+        },
+        {
+          "id": "mods-and-software-devices",
+          "href": "manual/#mods-and-software-devices",
+          "rows": 0
+        },
+        {
+          "id": "midi-keyboard-input",
+          "href": "manual/#midi-keyboard-input",
+          "rows": 3
+        },
+        {
+          "id": "midi-controller-mapping",
+          "href": "manual/#midi-controller-mapping",
+          "rows": 4
+        },
+        {
+          "id": "getting-around-mosaic",
+          "href": "manual/#getting-around-mosaic",
+          "rows": 0
+        },
+        {
+          "id": "sequencer-start-and-stop",
+          "href": "manual/#sequencer-start-and-stop",
+          "rows": 1
+        },
+        {
+          "id": "arm-live-record",
+          "href": "manual/#arm-live-record",
+          "rows": 1
+        },
+        {
+          "id": "grid-menu-navigation",
+          "href": "manual/#grid-menu-navigation",
+          "rows": 2
+        },
+        {
+          "id": "norns-menu-navigation",
+          "href": "manual/#norns-menu-navigation",
+          "rows": 5
+        },
+        {
+          "id": "tooltips",
+          "href": "manual/#tooltips",
+          "rows": 0
+        },
+        {
+          "id": "external-midi-transport",
+          "href": "manual/#external-midi-transport",
+          "rows": 0
+        },
+        {
+          "id": "midi-panic",
+          "href": "manual/#midi-panic",
+          "rows": 1
+        },
+        {
+          "id": "cheat-sheet",
+          "href": "manual/#cheat-sheet",
+          "rows": 0
+        },
+        {
+          "id": "typical-workflow",
+          "href": "manual/#typical-workflow",
+          "rows": 0
+        },
+        {
+          "id": "sound-design",
+          "href": "manual/#sound-design",
+          "rows": 0
+        },
+        {
+          "id": "rhythm-section-design",
+          "href": "manual/#rhythm-section-design",
+          "rows": 0
+        },
+        {
+          "id": "harmony-design",
+          "href": "manual/#harmony-design",
+          "rows": 0
+        },
+        {
+          "id": "sequence-composition",
+          "href": "manual/#sequence-composition",
+          "rows": 0
+        },
+        {
+          "id": "using-merge-modes",
+          "href": "manual/#using-merge-modes",
+          "rows": 0
+        },
+        {
+          "id": "melody-composition",
+          "href": "manual/#melody-composition",
+          "rows": 0
+        },
+        {
+          "id": "modulation-movement-and-interest",
+          "href": "manual/#modulation-movement-and-interest",
+          "rows": 0
+        },
+        {
+          "id": "song-composition",
+          "href": "manual/#song-composition",
+          "rows": 0
+        },
+        {
+          "id": "dig-deeper",
+          "href": "manual/#dig-deeper",
+          "rows": 0
+        },
+        {
+          "id": "pattern-editor",
+          "href": "manual/#pattern-editor",
+          "rows": 3
+        },
+        {
+          "id": "adding-trigs",
+          "href": "manual/#adding-trigs",
+          "rows": 11
+        },
+        {
+          "id": "rhythm-doctor",
+          "href": "manual/#rhythm-doctor",
+          "rows": 11
+        },
+        {
+          "id": "adding-notes",
+          "href": "manual/#adding-notes",
+          "rows": 7
+        },
+        {
+          "id": "adding-velocity",
+          "href": "manual/#adding-velocity",
+          "rows": 7
+        },
+        {
+          "id": "channel-editor",
+          "href": "manual/#channel-editor",
+          "rows": 6
+        },
+        {
+          "id": "devices",
+          "href": "manual/#devices",
+          "rows": 3
+        },
+        {
+          "id": "midi-sound-sources",
+          "href": "manual/#midi-sound-sources",
+          "rows": 2
+        },
+        {
+          "id": "norns-sound-sources-with-n-b",
+          "href": "manual/#norns-sound-sources-with-n-b",
+          "rows": 2
+        },
+        {
+          "id": "device-parameters",
+          "href": "manual/#device-parameters",
+          "rows": 2
+        },
+        {
+          "id": "adding-patterns-to-channels",
+          "href": "manual/#adding-patterns-to-channels",
+          "rows": 2
+        },
+        {
+          "id": "adding-trig-masks",
+          "href": "manual/#adding-trig-masks",
+          "rows": 1
+        },
+        {
+          "id": "adding-melodic-notes-over-harmony-and-drums",
+          "href": "manual/#adding-melodic-notes-over-harmony-and-drums",
+          "rows": 3
+        },
+        {
+          "id": "adding-chords",
+          "href": "manual/#adding-chords",
+          "rows": 2
+        },
+        {
+          "id": "removing-masks",
+          "href": "manual/#removing-masks",
+          "rows": 2
+        },
+        {
+          "id": "merge-modes",
+          "href": "manual/#merge-modes",
+          "rows": 4
+        },
+        {
+          "id": "trig-merge-modes",
+          "href": "manual/#trig-merge-modes",
+          "rows": 1
+        },
+        {
+          "id": "note-merge-modes",
+          "href": "manual/#note-merge-modes",
+          "rows": 2
+        },
+        {
+          "id": "velocity-merge-modes",
+          "href": "manual/#velocity-merge-modes",
+          "rows": 2
+        },
+        {
+          "id": "length-merge-modes",
+          "href": "manual/#length-merge-modes",
+          "rows": 2
+        },
+        {
+          "id": "note-dashboard",
+          "href": "manual/#note-dashboard",
+          "rows": 2
+        },
+        {
+          "id": "clocks-swing-and-shuffle",
+          "href": "manual/#clocks-swing-and-shuffle",
+          "rows": 3
+        },
+        {
+          "id": "memory-undo-and-redo",
+          "href": "manual/#memory-undo-and-redo",
+          "rows": 4
+        },
+        {
+          "id": "channel-length",
+          "href": "manual/#channel-length",
+          "rows": 2
+        },
+        {
+          "id": "muting-channels",
+          "href": "manual/#muting-channels",
+          "rows": 2
+        },
+        {
+          "id": "trig-parameters",
+          "href": "manual/#trig-parameters",
+          "rows": 5
+        },
+        {
+          "id": "sequencer-params",
+          "href": "manual/#sequencer-params",
+          "rows": 1
+        },
+        {
+          "id": "trig-probability",
+          "href": "manual/#trig-probability",
+          "rows": 3
+        },
+        {
+          "id": "fixed-note",
+          "href": "manual/#fixed-note",
+          "rows": 3
+        },
+        {
+          "id": "quantised-fixed-note",
+          "href": "manual/#quantised-fixed-note",
+          "rows": 3
+        },
+        {
+          "id": "random-note",
+          "href": "manual/#random-note",
+          "rows": 3
+        },
+        {
+          "id": "random-twos-note",
+          "href": "manual/#random-twos-note",
+          "rows": 3
+        },
+        {
+          "id": "chord-strum",
+          "href": "manual/#chord-strum",
+          "rows": 3
+        },
+        {
+          "id": "chord-arpeggio",
+          "href": "manual/#chord-arpeggio",
+          "rows": 3
+        },
+        {
+          "id": "chord-acceleration",
+          "href": "manual/#chord-acceleration",
+          "rows": 3
+        },
+        {
+          "id": "chord-spread",
+          "href": "manual/#chord-spread",
+          "rows": 3
+        },
+        {
+          "id": "chord-velocity-modifier",
+          "href": "manual/#chord-velocity-modifier",
+          "rows": 3
+        },
+        {
+          "id": "chord-shape-modifier",
+          "href": "manual/#chord-shape-modifier",
+          "rows": 3
+        },
+        {
+          "id": "mute-root-note",
+          "href": "manual/#mute-root-note",
+          "rows": 3
+        },
+        {
+          "id": "fully-quantise-mask",
+          "href": "manual/#fully-quantise-mask",
+          "rows": 3
+        },
+        {
+          "id": "scale-editor",
+          "href": "manual/#scale-editor",
+          "rows": 9
+        },
+        {
+          "id": "transposition",
+          "href": "manual/#transposition",
+          "rows": 3
+        },
+        {
+          "id": "song-editor",
+          "href": "manual/#song-editor",
+          "rows": 4
+        },
+        {
+          "id": "button-indicators",
+          "href": "manual/#button-indicators",
+          "rows": 2
+        },
+        {
+          "id": "interacting-with-slots",
+          "href": "manual/#interacting-with-slots",
+          "rows": 3
+        },
+        {
+          "id": "song-mode-operations",
+          "href": "manual/#song-mode-operations",
+          "rows": 3
+        },
+        {
+          "id": "adjusting-song-sequence-length",
+          "href": "manual/#adjusting-song-sequence-length",
+          "rows": 2
+        },
+        {
+          "id": "navigating-the-norns-display",
+          "href": "manual/#navigating-the-norns-display",
+          "rows": 3
+        },
+        {
+          "id": "locks",
+          "href": "manual/#locks",
+          "rows": 3
+        },
+        {
+          "id": "trig-param-locks",
+          "href": "manual/#trig-param-locks",
+          "rows": 4
+        },
+        {
+          "id": "param-slides",
+          "href": "manual/#param-slides",
+          "rows": 3
+        },
+        {
+          "id": "mask-locks",
+          "href": "manual/#mask-locks",
+          "rows": 4
+        },
+        {
+          "id": "scale-locks",
+          "href": "manual/#scale-locks",
+          "rows": 4
+        },
+        {
+          "id": "transposition-locks",
+          "href": "manual/#transposition-locks",
+          "rows": 3
+        },
+        {
+          "id": "octave-locks",
+          "href": "manual/#octave-locks",
+          "rows": 3
+        },
+        {
+          "id": "save-and-load",
+          "href": "manual/#save-and-load",
+          "rows": 3
+        },
+        {
+          "id": "options",
+          "href": "manual/#options",
+          "rows": 3
+        },
+        {
+          "id": "sequencer-options",
+          "href": "manual/#sequencer-options",
+          "rows": 1
+        },
+        {
+          "id": "shift-press-stop",
+          "href": "manual/#shift-press-stop",
+          "rows": 3
+        },
+        {
+          "id": "song-mode",
+          "href": "manual/#song-mode",
+          "rows": 1
+        },
+        {
+          "id": "reset-at-song-editor-pattern-change",
+          "href": "manual/#reset-at-song-editor-pattern-change",
+          "rows": 1
+        },
+        {
+          "id": "reset-at-pattern-repeat",
+          "href": "manual/#reset-at-pattern-repeat",
+          "rows": 1
+        },
+        {
+          "id": "parameter-slides-wrap",
+          "href": "manual/#parameter-slides-wrap",
+          "rows": 1
+        },
+        {
+          "id": "elektron-program-changes",
+          "href": "manual/#elektron-program-changes",
+          "rows": 1
+        },
+        {
+          "id": "elektron-program-change-channel",
+          "href": "manual/#elektron-program-change-channel",
+          "rows": 1
+        },
+        {
+          "id": "parameter-lock-options",
+          "href": "manual/#parameter-lock-options",
+          "rows": 1
+        },
+        {
+          "id": "trigless-locks",
+          "href": "manual/#trigless-locks",
+          "rows": 1
+        },
+        {
+          "id": "quantiser-options",
+          "href": "manual/#quantiser-options",
+          "rows": 1
+        },
+        {
+          "id": "snap-note-masks-to-scale",
+          "href": "manual/#snap-note-masks-to-scale",
+          "rows": 1
+        },
+        {
+          "id": "quantise-note-masks",
+          "href": "manual/#quantise-note-masks",
+          "rows": 1
+        },
+        {
+          "id": "scales-lock-until-pattern-end",
+          "href": "manual/#scales-lock-until-pattern-end",
+          "rows": 1
+        },
+        {
+          "id": "lock-all-to-pentatonic",
+          "href": "manual/#lock-all-to-pentatonic",
+          "rows": 1
+        },
+        {
+          "id": "lock-random-to-pentatonic",
+          "href": "manual/#lock-random-to-pentatonic",
+          "rows": 1
+        },
+        {
+          "id": "lock-merged-to-pentatonic",
+          "href": "manual/#lock-merged-to-pentatonic",
+          "rows": 1
+        },
+        {
+          "id": "midi-controller-options",
+          "href": "manual/#midi-controller-options",
+          "rows": 1
+        },
+        {
+          "id": "map-scale-to-white-keys",
+          "href": "manual/#map-scale-to-white-keys",
+          "rows": 1
+        },
+        {
+          "id": "honor-scale-rotations",
+          "href": "manual/#honor-scale-rotations",
+          "rows": 1
+        },
+        {
+          "id": "honor-scale-degree",
+          "href": "manual/#honor-scale-degree",
+          "rows": 1
+        },
+        {
+          "id": "honour-scale-transpose",
+          "href": "manual/#honour-scale-transpose",
+          "rows": 1
+        },
+        {
+          "id": "screen-options",
+          "href": "manual/#screen-options",
+          "rows": 1
+        },
+        {
+          "id": "ui-motion",
+          "href": "manual/#ui-motion",
+          "rows": 1
+        },
+        {
+          "id": "sinfonion-connect",
+          "href": "manual/#sinfonion-connect",
+          "rows": 1
+        },
+        {
+          "id": "lfos-and-modulation",
+          "href": "manual/#lfos-and-modulation",
+          "rows": 2
+        },
+        {
+          "id": "musical-merge-and-voice-leading",
+          "href": "manual/#musical-merge-and-voice-leading",
+          "rows": 7
+        },
+        {
+          "id": "merge-shape",
+          "href": "manual/#merge-shape",
+          "rows": 8
+        },
+        {
+          "id": "fragments",
+          "href": "manual/#fragments",
+          "rows": 7
+        },
+        {
+          "id": "interlock",
+          "href": "manual/#interlock",
+          "rows": 5
+        },
+        {
+          "id": "structure",
+          "href": "manual/#structure",
+          "rows": 4
+        },
+        {
+          "id": "result-and-reason",
+          "href": "manual/#result-and-reason",
+          "rows": 3
+        },
+        {
+          "id": "harmony",
+          "href": "manual/#harmony",
+          "rows": 10
+        },
+        {
+          "id": "performance-management",
+          "href": "manual/#performance-management",
+          "rows": 0
+        },
+        {
+          "id": "masks",
+          "href": "manual/#masks",
+          "rows": 7
+        },
+        {
+          "id": "first-sound",
+          "href": "manual/#first-sound",
+          "rows": 0
+        },
+        {
+          "id": "no-sound",
+          "href": "manual/#no-sound",
+          "rows": 0
+        },
+        {
+          "id": "build-a-phrase",
+          "href": "manual/#build-a-phrase",
+          "rows": 0
+        },
+        {
+          "id": "keep-your-work",
+          "href": "manual/#keep-your-work",
+          "rows": 2
+        },
+        {
+          "id": "small-hours",
+          "href": "manual/#small-hours",
+          "rows": 0
+        },
+        {
+          "id": "pocket-rhythm",
+          "href": "manual/#pocket-rhythm",
+          "rows": 0
+        },
+        {
+          "id": "tilting-harmony",
+          "href": "manual/#tilting-harmony",
+          "rows": 0
+        },
+        {
+          "id": "loops-that-meet",
+          "href": "manual/#loops-that-meet",
+          "rows": 0
+        }
+      ],
+      "privateLinks": []
+    },
+    {
+      "label": "slash-1440",
+      "focus": "find"
+    },
+    {
+      "label": "query-1440-masks",
+      "count": "14 of 130 features",
+      "cards": [
+        {
+          "id": "midi-keyboard-input",
+          "text": "MIDI Keyboard Input\n\nHold a step to enter it, or arm recording and play.\n\nGESTURE\tWHAT HAPPENS\nSelect channel; Record off; no step held; play MIDI keys\tAudition the selected channel’s output without entering step masks.\nSelect channel → hold step → play MIDI keys\tEnter that step’s note, velocity and chord masks.\nRecord (2,8) + running transport + MIDI keys\tRecord onto the selected channel’s active steps."
+        },
+        {
+          "id": "norns-menu-navigation",
+          "text": "Norns Menu Navigation\n\nOpen tasks with E1; choose a row with E2 and change its value with E3.\n\nGESTURE\tWHAT HAPPENS\nE1 → E2 → K3\tOpen the context task list, select a task, then open it.\nE2 / E3\tSelect a row / change its value.\nK3 / K2 on staged settings\tApply the draft / cancel or return. K3 also confirms a question and K2 cancels it. While an OPEN > row is chosen the last line names the target, for example K3 OPEN RHYTHM, or just K3 OPEN when space is short.\nHold K1 + E3\tChange the selected value finely where it supports that.\nHold step + K2 in Masks\tClear all mask attributes of that step."
+        },
+        {
+          "id": "channel-editor",
+          "text": "Channel Editor\n\nSelect one of 16 channels and open its editing tasks.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8)\tOpen the Channel Editor.\nTap a channel in grid row 1\tSelect one of 16 channels; the selected channel supplies the current masks, locks and range.\nE1 → E2 task → K3\tOpen the named channel task; use the task list rather than an old screen-page shortcut.\nGrid row 3\tRead the currently active scale slot during playback.\nGrid (8,8)–(12,8), no step held\tSet the selected channel’s octave offset to −2, −1, 0, +1 or +2.\nPress grid (10,8)\tSet the selected channel’s octave offset to zero."
+        },
+        {
+          "id": "adding-trig-masks",
+          "text": "Adding Trig Masks\n\nAdd or remove a step trig mask with K1 and the sequencer grid.\n\nGESTURE\tWHAT HAPPENS\nChannel Editor: hold K1 and tap a sequencer step\tToggle the step’s trig mask; supply note, velocity and length masks if no source pattern supplies them."
+        },
+        {
+          "id": "adding-melodic-notes-over-harmony-and-drums",
+          "text": "Adding Melodic Notes over Harmony and Drums\n\nSet channel mask defaults or step overrides for note, velocity, length and chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Masks → E2 attribute → E3\tSet a channel default with no step held.\nHold a sequencer step → E2 attribute → E3\tSet an explicit override for that step.\nHold a step and play a MIDI keyboard\tEnter note-mask data from the played notes."
+        },
+        {
+          "id": "adding-chords",
+          "text": "Adding Chords\n\nAdd up to four chord-mask voices to a root note. The selected output must support polyphony.\n\nGESTURE\tWHAT HAPPENS\nMasks → hold step → E2 Chd1–Chd4 → E3\tAdd up to four scale-relative chord voices to the root; the output must support them.\nAssign Chord Strum or Chord Arp in Trig params\tSpace the chord voices in time rather than playing them simultaneously."
+        },
+        {
+          "id": "removing-masks",
+          "text": "Removing Masks\n\nClear step-mask overrides without changing channel mask defaults.\n\nGESTURE\tWHAT HAPPENS\nMasks: hold step + K2\tClear all step-mask attributes for held steps; channel defaults remain.\nMasks: K1 + K2 with no grid key held\tClear all step-mask overrides on the selected channel; preserve channel defaults."
+        },
+        {
+          "id": "fully-quantise-mask",
+          "text": "Fully Quantise Mask\n\nSet whether note masks follow scale degree and rotation, overriding global quantisation when explicitly Off or On.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantise Note Mask → K3 → K2\tAssign Quantise Note Mask to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "locks",
+          "text": "Locks\n\nStore a different value on one step. Hold the step, then change the same control you use for the whole channel.\n\nGESTURE\tWHAT HAPPENS\nHold a sequencer step, then change a value (E3 on Trig params or Masks, or a grid button for octave, scale and transposition).\tThe value is written to that step. The channel default does not change.\nRelease the step.\tThe screen shows the channel default again. The lock remains on the step.\nHold the step and press K2 on the screen where the lock was set.\tThe lock is removed and the step uses the channel default again."
+        },
+        {
+          "id": "mask-locks",
+          "text": "Mask Locks\n\nGive one step its own note, velocity, length or other mask value. Step locks override the channel default masks.\n\nGESTURE\tWHAT HAPPENS\nOn Channel tasks > Masks, select a mask with E2\tThe highlighted cell identifies the field to edit.\nHold a channel sequencer step and turn E3\tSets that mask for the held step instead of changing the channel default.\nHold the step and press K2 on Masks\tClears the held step’s mask locks so its channel defaults can apply again.\nRelease all steps, then hold K1 and press K2 on Masks\tClears channel step-mask locks while keeping channel default masks."
+        },
+        {
+          "id": "quantiser-options",
+          "text": "Quantiser Options\n\nSet note-mask quantisation, channel scale-lock lifetime and pentatonic restrictions.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC > Quantiser\tChoose how masks, channel scale locks and pentatonic restrictions affect pitch."
+        },
+        {
+          "id": "snap-note-masks-to-scale",
+          "text": "Snap Note Masks to Scale\n\nSnap note masks to the selected scale without degree or rotation changes. Default: On.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC. Select Snap note masks to scale. Change its value.\tOn snaps note masks to the selected scale without applying scale-degree or rotation adjustments; Quantise note masks overrides this setting. Default: On."
+        },
+        {
+          "id": "quantise-note-masks",
+          "text": "Quantise Note Masks\n\nFully quantise note masks, including scale-degree and transposition changes. Default: Off.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC. Select Quantise note masks. Change its value.\tOn fully quantises note masks and applies scale-degree and transposition adjustments, overriding Snap note masks to scale. Default: Off."
+        },
+        {
+          "id": "masks",
+          "text": "Masks\n\nOverride channel and step trig, note, velocity, length and chord values.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8) → E1 tasks → E2 Masks → K3\tOpen the eight mask values.\nE2\tChoose Trig, Note, Vel, Len, Chd1–Chd4.\nE3, no step held\tEdit the channel default.\nHold step + E3\tEdit that step's exception.\nHold K1 + tap step\tAdd or remove a trig mask.\nHold step + K2\tClear all mask attributes for the held step.\nK1 + K2, no grid keys held\tClear channel step overrides; preserve defaults."
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "query-1440-hold K2",
+      "count": "27 of 130 features",
+      "cards": [
+        {
+          "id": "midi-controller-mapping",
+          "text": "MIDI Controller Mapping\n\nAssign MIDI controls to channel parameters through the norns MIDI Map menu.\n\nGESTURE\tWHAT HAPPENS\nNative PARAMS: hold K1 and press K3\tSwitch between EDIT and MAP modes.\nMap editor: select Learn and press K3; operate MIDI control\tLearn its CC, input channel and device.\nMap editor: press K2\tLeave the editor and save the assignment.\nOperate assigned relative MIDI control\tChange the mapped Mosaic value."
+        },
+        {
+          "id": "norns-menu-navigation",
+          "text": "Norns Menu Navigation\n\nOpen tasks with E1; choose a row with E2 and change its value with E3.\n\nGESTURE\tWHAT HAPPENS\nE1 → E2 → K3\tOpen the context task list, select a task, then open it.\nE2 / E3\tSelect a row / change its value.\nK3 / K2 on staged settings\tApply the draft / cancel or return. K3 also confirms a question and K2 cancels it. While an OPEN > row is chosen the last line names the target, for example K3 OPEN RHYTHM, or just K3 OPEN when space is short.\nHold K1 + E3\tChange the selected value finely where it supports that.\nHold step + K2 in Masks\tClear all mask attributes of that step."
+        },
+        {
+          "id": "rhythm-doctor",
+          "text": "Rhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nGESTURE\tWHAT HAPPENS\nWith the sequencer stopped, choose Rhythm Doctor at grid (16,2).\tOpen capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.\nEmpty bank: grid (1,2)\tStart Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.\nRecord before enough audio, or Record on an occupied bank\tOpen an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.\nBefore capture: E2/E3 edit setup → K3 confirm; K2 cancels.\tRecord uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.\nReady bank: select a lane, then E2 field → E3\tBrowse Window bar/step, sensitivity or paint policy.\nIn a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).\tSelect BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.\nReady bank: select Alignment → K3\tOpen the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.\nGrid (10,8) / (12,8); hold for a phrase\tMove the recording window one step backward / forward, or a whole four-bar phrase.\nGrid (11,8)\tReturn the window to its calculated phrase start.\nSelect destination pattern in row 1 → grid (16,8) twice\tPreview the selected lane, then paint it; grid (14,8) cancels the preview.\nIf local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.\tNo bank is created. See If local analysis fails for the norns setup needed to retry."
+        },
+        {
+          "id": "removing-masks",
+          "text": "Removing Masks\n\nClear step-mask overrides without changing channel mask defaults.\n\nGESTURE\tWHAT HAPPENS\nMasks: hold step + K2\tClear all step-mask attributes for held steps; channel defaults remain.\nMasks: K1 + K2 with no grid key held\tClear all step-mask overrides on the selected channel; preserve channel defaults."
+        },
+        {
+          "id": "trig-parameters",
+          "text": "Trig Parameters\n\nAssign up to ten parameters per channel and set defaults or step locks for the current song pattern.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2\tChoose one of ten parameter slots.\nK2 → E3 parameter → K3 → K2\tOpen the assignment list, assign a parameter and return to the slot overview.\nE3; hold K1 for fine adjustment\tChange the selected slot’s default value.\nHold step + E3\tSet an explicit step lock that overrides its channel default.\nHold step + K2\tClear held steps’ trig locks; K1 + K2 with no held grid key clears channel step locks."
+        },
+        {
+          "id": "trig-probability",
+          "text": "Trig Probability\n\nSet a trig’s playback probability from 0 to 100, globally or per step.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Trig Probability → K3 → K2\tAssign Trig Probability to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: 0–100.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "fixed-note",
+          "text": "Fixed Note\n\nOverride ordinary root pitch with an unquantised MIDI note from 0 to 127.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Fixed Note → K3 → K2\tAssign Fixed Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: MIDI 0–127; X disables the override.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "quantised-fixed-note",
+          "text": "Quantised Fixed Note\n\nSet MIDI pitch 0–127 and select the nearest playable pitch in the active scale. Ties choose the lower pitch.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantised Fixed Note → K3 → K2\tAssign Quantised Fixed Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: MIDI 0–127; X disables the override.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "random-note",
+          "text": "Random Note\n\nAdd a random scale-degree offset. Zero leaves the note unchanged.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Random Note → K3 → K2\tAssign Random Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: 0 disables random displacement; positive values expand its scale-degree choices.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "random-twos-note",
+          "text": "Random Twos Note\n\nAdd a random offset in multiples of two scale degrees. Zero leaves the note unchanged.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Twos Random Note → K3 → K2\tAssign Twos Random Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: 0 disables displacement; positive values choose offsets in twos.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-strum",
+          "text": "Chord Strum\n\nPlay chord-mask slots once, spaced by the selected channel-step division.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Note Strum → K3 → K2\tAssign Chord Note Strum to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X disables strumming; select a channel-step division.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-arpeggio",
+          "text": "Chord Arpeggio\n\nRepeat chord slots at the selected division for the note’s duration. Arpeggio takes precedence over Strum.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Note Arpeggio → K3 → K2\tAssign Chord Note Arpeggio to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X disables arpeggiation; select a channel-step division.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-acceleration",
+          "text": "Chord Acceleration\n\nChange successive Strum or Arpeggio gaps using Spread and Acceleration. Zero Spread disables the acceleration effect.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Accel Mod → K3 → K2\tAssign Chord Accel Mod to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: −5 to +5; 0 is off.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-spread",
+          "text": "Chord Spread\n\nAdd a channel-step duration to Strum or Arpeggio spacing without changing note length.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Spread → K3 → K2\tAssign Chord Spread to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X disables added spacing; select a channel-step duration.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-velocity-modifier",
+          "text": "Chord Velocity Modifier\n\nAdjust successive chord-note velocities by a positive or negative increment.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Velocity Mod → K3 → K2\tAssign Chord Velocity Mod to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: −40 to +40; 0 leaves velocity unchanged.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-shape-modifier",
+          "text": "Chord Shape Modifier\n\nSet the slot order used by Chord Strum and Chord Arpeggio.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Pattern → K3 → K2\tAssign Chord Pattern to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, ->, <-, -><- or <-->.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "mute-root-note",
+          "text": "Mute Root Note\n\nSilence the chord’s root slot while retaining its other chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Mute Chord Root → K3 → K2\tAssign Mute Chord Root to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "fully-quantise-mask",
+          "text": "Fully Quantise Mask\n\nSet whether note masks follow scale degree and rotation, overriding global quantisation when explicitly Off or On.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantise Note Mask → K3 → K2\tAssign Quantise Note Mask to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "scale-editor",
+          "text": "Scale Editor\n\nChoose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose, Rotation) without changing playback until you apply it.\n\nGESTURE\tWHAT HAPPENS\nPress Grid (4, 8).\tThe Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.\nShort-press a scale slot on row 3.\tApply it globally and select it for editing. Press the applied slot again to turn global scale off while it stays selected for editing.\nHold K1 and press a scale slot, or long-press a different editing slot.\tSelect the slot for editing without changing which scale playback uses.\nLong-press the slot already selected for editing.\tTurn global scale off and clear the editing selection.\nOn the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3 to change its value.\tThe value changes in the draft for the slot named in the title row. Nothing sounds different yet.\nRelease all grid keys, then press K3 or K2.\tK3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes its harmony immediately.\nOn the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.\tSet the rate of the global scale track. Selected range, Global cap and Playable range are shown for reference and cannot be edited there.\nOn the Scale page, hold the first step of a range on the scale track and press its last step.\tSet the length of the scale track independently of the channels. The tooltip reads Channel 17 length changed.\nHold a sequencer step, then press a scale slot.\tSet or toggle a scale lock at that step: global on the Scale page, channel-specific on a channel page."
+        },
+        {
+          "id": "locks",
+          "text": "Locks\n\nStore a different value on one step. Hold the step, then change the same control you use for the whole channel.\n\nGESTURE\tWHAT HAPPENS\nHold a sequencer step, then change a value (E3 on Trig params or Masks, or a grid button for octave, scale and transposition).\tThe value is written to that step. The channel default does not change.\nRelease the step.\tThe screen shows the channel default again. The lock remains on the step.\nHold the step and press K2 on the screen where the lock was set.\tThe lock is removed and the step uses the channel default again."
+        },
+        {
+          "id": "trig-param-locks",
+          "text": "Trig Param Locks\n\nGive one step its own value for an assigned device parameter, such as filter cutoff.\n\nGESTURE\tWHAT HAPPENS\nOn Channel tasks > Trig params, use E2 to select an assigned slot\tThe selected parameter cell is highlighted.\nHold a channel sequencer step and turn E3\tSets that assigned parameter for the held step; the cell shows its held value and L marker.\nHold the step and press K2 on Trig params\tClears parameter trig locks for the held step, rather than only the selected slot.\nRelease all steps, then hold K1 and press K2 on Trig params\tClears the channel parameter trig locks."
+        },
+        {
+          "id": "mask-locks",
+          "text": "Mask Locks\n\nGive one step its own note, velocity, length or other mask value. Step locks override the channel default masks.\n\nGESTURE\tWHAT HAPPENS\nOn Channel tasks > Masks, select a mask with E2\tThe highlighted cell identifies the field to edit.\nHold a channel sequencer step and turn E3\tSets that mask for the held step instead of changing the channel default.\nHold the step and press K2 on Masks\tClears the held step’s mask locks so its channel defaults can apply again.\nRelease all steps, then hold K1 and press K2 on Masks\tClears channel step-mask locks while keeping channel default masks."
+        },
+        {
+          "id": "scale-locks",
+          "text": "Scale Locks\n\nChange the scale on a step, for one channel or for every channel. A channel lock overrides the global scale.\n\nGESTURE\tWHAT HAPPENS\nHold a channel sequencer step, then press a scale slot on Grid row 3.\tSet a channel scale lock at that step. It overrides the global scale track. The norns screen shows Scale source.\nOn the Scale page, hold a scale-track step, then press a scale slot on Grid row 3.\tSet a global scale lock. It lasts until a later global lock replaces it or the global scale track wraps. The norns screen shows Scale overview.\nHold the step and press its currently locked scale slot again.\tRemove that scale lock.\nHold the step and press K2 in the relevant Scale or channel workspace.\tClear the locks on that step in that workspace. This clears the step; it does not undo one field."
+        },
+        {
+          "id": "transposition-locks",
+          "text": "Transposition Locks\n\nTranspose the song from a chosen scale-track step. The lock is added to the selected scale's Transpose value.\n\nGESTURE\tWHAT HAPPENS\nOpen the Scale grid workspace, hold a scale-track step and press a transposition value\tSets a transposition lock for that step; the global scale track supplies song transposition.\nHold that step and press the same transposition value again\tRemoves that lock, including an explicit zero lock.\nHold the scale-track step and press K2 in the Scale workspace\tClears the held scale-track locks."
+        },
+        {
+          "id": "octave-locks",
+          "text": "Octave Locks\n\nPlace one step in a different octave from the channel's octave.\n\nGESTURE\tWHAT HAPPENS\nHold a channel sequencer step and press an octave button on Grid row 8, columns 8–12.\tSet the held step's octave lock to -2, -1, 0, +1 or +2.\nHold that step and press the same octave button again.\tRemove the octave lock. An explicit 0 is a lock; no lock is different.\nHold the step and press K2 on Trig params.\tClear the step's trig locks, including its octave lock."
+        },
+        {
+          "id": "harmony",
+          "text": "Harmony\n\nHarmony provides Off, Revoice, Pattern and Ensemble modes for channel output pitch placement.\n\nGESTURE\tWHAT HAPPENS\nIn Channel tasks, select Harmony. Press K3.\tVoice leading settings open.\nTurn E2 to Mode. Turn E3.\tThe draft mode changes between Off, Revoice, Pattern and Ensemble.\nSelect Register or another settings row marked OPEN >. Press K3.\tThe selected settings list opens.\nTurn E2 to select a value. Turn E3 to change it. Press K3 on a value row.\tMosaic validates and applies the draft. During playback, NEXT PATTERN indicates a queued change.\nPress K2.\tA dirty draft is cancelled. An opened settings list returns to its parent.\nIn Result, select Step.\tThe selected event’s planned and sent pitches are displayed.\nOn Note Dashboard, hold a grid step.\tThat step’s event is inspected. A step without a recorded event displays NO EVENT.\nIn Pattern mode, select Tone Map. Press K3. Select a Tone row and turn E3.\tThe row changes between RAW, BASS, INNER1, INNER2, INNER3 and TOP. K3 on a value row applies the map.\nSelect Register. Press K3. Select a role with the Role row, then select Low, High or Centre and turn E3.\tThe role’s inclusive MIDI range changes. A Low, High and Centre that leave no legal placement for a mapped note give NO VOICING RANGE and silence it.\nSelect Entry. Press K3. Select Failure fallback and turn E3.\tFailure fallback changes between SILENCE and LEGACY. Silence is the default; Legacy plays the ordinary pitch and Result reads LEGACY RANGE."
+        },
+        {
+          "id": "masks",
+          "text": "Masks\n\nOverride channel and step trig, note, velocity, length and chord values.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8) → E1 tasks → E2 Masks → K3\tOpen the eight mask values.\nE2\tChoose Trig, Note, Vel, Len, Chd1–Chd4.\nE3, no step held\tEdit the channel default.\nHold step + E3\tEdit that step's exception.\nHold K1 + tap step\tAdd or remove a trig mask.\nHold step + K2\tClear all mask attributes for the held step.\nK1 + K2, no grid keys held\tClear channel step overrides; preserve defaults."
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "query-1440-Harmony",
+      "count": "7 of 130 features",
+      "cards": [
+        {
+          "id": "adding-melodic-notes-over-harmony-and-drums",
+          "text": "Adding Melodic Notes over Harmony and Drums\n\nSet channel mask defaults or step overrides for note, velocity, length and chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Masks → E2 attribute → E3\tSet a channel default with no step held.\nHold a sequencer step → E2 attribute → E3\tSet an explicit override for that step.\nHold a step and play a MIDI keyboard\tEnter note-mask data from the played notes."
+        },
+        {
+          "id": "note-dashboard",
+          "text": "Note Dashboard\n\nOpen Output to inspect the selected channel’s last note or a held step’s resolved output.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Output\tInspect the selected channel’s last played note, degree, pitch and sent result.\nHold a sequencer step\tInspect that step’s resolved output, including Harmony stages."
+        },
+        {
+          "id": "scale-editor",
+          "text": "Scale Editor\n\nChoose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose, Rotation) without changing playback until you apply it.\n\nGESTURE\tWHAT HAPPENS\nPress Grid (4, 8).\tThe Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.\nShort-press a scale slot on row 3.\tApply it globally and select it for editing. Press the applied slot again to turn global scale off while it stays selected for editing.\nHold K1 and press a scale slot, or long-press a different editing slot.\tSelect the slot for editing without changing which scale playback uses.\nLong-press the slot already selected for editing.\tTurn global scale off and clear the editing selection.\nOn the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3 to change its value.\tThe value changes in the draft for the slot named in the title row. Nothing sounds different yet.\nRelease all grid keys, then press K3 or K2.\tK3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes its harmony immediately.\nOn the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.\tSet the rate of the global scale track. Selected range, Global cap and Playable range are shown for reference and cannot be edited there.\nOn the Scale page, hold the first step of a range on the scale track and press its last step.\tSet the length of the scale track independently of the channels. The tooltip reads Channel 17 length changed.\nHold a sequencer step, then press a scale slot.\tSet or toggle a scale lock at that step: global on the Scale page, channel-specific on a channel page."
+        },
+        {
+          "id": "musical-merge-and-voice-leading",
+          "text": "Musical Merge and Voice Leading\n\nFoundation and Fragments reshape merged output without rewriting patterns. Harmony places output voices; its default is Off.\n\nGESTURE\tWHAT HAPPENS\nIn Channel tasks, turn E2 to Merge Shape or Harmony. Press K3.\tThe selected feature opens.\nTurn E2.\tThe selected row changes.\nTurn E3 on a value row.\tThe draft value changes.\nPress K3 on a row marked OPEN >.\tThe selected settings list opens.\nPress K3 on a value row.\tMosaic validates and applies the draft.\nPress K2.\tA dirty draft is discarded. In an opened settings list, the parent list returns.\nTurn E1.\tAn unapplied draft is discarded and the feature’s first screen returns. From that screen, Channel tasks returns."
+        },
+        {
+          "id": "structure",
+          "text": "Structure\n\nStructure moves selected Foundation notes to the nearest pitch class of an enabled Harmony group’s chord.\n\nGESTURE\tWHAT HAPPENS\nChoose Foundation on Merge modes or with grid (14,8). On Merge Shape, select Pitch and press K3, then select Structure and press K3.\tThe Structure list opens with Markers.\nSelect Markers. Turn E3.\tMarkers changes between OFF, ANCHORS, EVERY 4 and EVERY 8. When Markers is on, a Chord group row appears.\nSelect Chord group. Turn E3.\tAn enabled Harmony group becomes the draft chord source.\nPress K3 on a value row.\tThe draft applies. A group that is missing or disabled prevents activation."
+        },
+        {
+          "id": "harmony",
+          "text": "Harmony\n\nHarmony provides Off, Revoice, Pattern and Ensemble modes for channel output pitch placement.\n\nGESTURE\tWHAT HAPPENS\nIn Channel tasks, select Harmony. Press K3.\tVoice leading settings open.\nTurn E2 to Mode. Turn E3.\tThe draft mode changes between Off, Revoice, Pattern and Ensemble.\nSelect Register or another settings row marked OPEN >. Press K3.\tThe selected settings list opens.\nTurn E2 to select a value. Turn E3 to change it. Press K3 on a value row.\tMosaic validates and applies the draft. During playback, NEXT PATTERN indicates a queued change.\nPress K2.\tA dirty draft is cancelled. An opened settings list returns to its parent.\nIn Result, select Step.\tThe selected event’s planned and sent pitches are displayed.\nOn Note Dashboard, hold a grid step.\tThat step’s event is inspected. A step without a recorded event displays NO EVENT.\nIn Pattern mode, select Tone Map. Press K3. Select a Tone row and turn E3.\tThe row changes between RAW, BASS, INNER1, INNER2, INNER3 and TOP. K3 on a value row applies the map.\nSelect Register. Press K3. Select a role with the Role row, then select Low, High or Centre and turn E3.\tThe role’s inclusive MIDI range changes. A Low, High and Centre that leave no legal placement for a mapped note give NO VOICING RANGE and silence it.\nSelect Entry. Press K3. Select Failure fallback and turn E3.\tFailure fallback changes between SILENCE and LEGACY. Silence is the default; Legacy plays the ordinary pitch and Result reads LEGACY RANGE."
+        },
+        {
+          "id": "tilting-harmony",
+          "text": "Changing Harmony with Scale Slots\n\nCompare the same relative patterns under C major for two bars and D major for two bars."
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "query-1440-Rhythm Doctor",
+      "count": "2 of 130 features",
+      "cards": [
+        {
+          "id": "adding-trigs",
+          "text": "Adding Trigs\n\nEnter pattern trigs manually or preview and paint a generated rhythm.\n\nGESTURE\tWHAT HAPPENS\nPattern Trig: tap row-1 pattern button\tChoose the source pattern for editing.\nTap a sequencer step in grid rows 4–7\tToggle a trig; active trigs glow brightly.\nHold a trig and choose its end step\tSet the note’s length; dimmer steps show its duration, cut short by another trig in the same pattern.\nTap algorithm button, columns 12–16 of row 2\tSelect Drum, Tresillo, Euclidean, Numeric Repetitor or Rhythm Doctor.\nTap Paint at grid (16,8), then tap it again\tPreview the generated pattern, then commit it; flashing steps show the preview.\nTap Cancel at grid (14,8)\tDiscard the prepared preview.\nGrid (10,8), (11,8), (12,8)\tMove the preview left, reset its shift, or move it right; paint to commit.\nGrid row 3, columns 12–16, with Drum or Tresillo selected\tSelect one of five algorithm banks.\nGrid row 3, columns 12–15, with Numeric Repetitor selected\tSelect one of four banks. Euclidean and Rhythm Doctor do not use this bank fader.\nGrid row 2, columns 1–10\tSet the algorithm’s first parameter. The outer buttons decrement/increment; inner buttons choose broader values.\nGrid row 3, columns 1–10\tSet the second algorithm parameter for Tresillo, Euclidean or Numeric Repetitor. This fader is disabled for Drum and Rhythm Doctor."
+        },
+        {
+          "id": "rhythm-doctor",
+          "text": "Rhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nGESTURE\tWHAT HAPPENS\nWith the sequencer stopped, choose Rhythm Doctor at grid (16,2).\tOpen capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.\nEmpty bank: grid (1,2)\tStart Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.\nRecord before enough audio, or Record on an occupied bank\tOpen an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.\nBefore capture: E2/E3 edit setup → K3 confirm; K2 cancels.\tRecord uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.\nReady bank: select a lane, then E2 field → E3\tBrowse Window bar/step, sensitivity or paint policy.\nIn a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).\tSelect BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.\nReady bank: select Alignment → K3\tOpen the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.\nGrid (10,8) / (12,8); hold for a phrase\tMove the recording window one step backward / forward, or a whole four-bar phrase.\nGrid (11,8)\tReturn the window to its calculated phrase start.\nSelect destination pattern in row 1 → grid (16,8) twice\tPreview the selected lane, then paint it; grid (14,8) cancels the preview.\nIf local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.\tNo bank is created. See If local analysis fails for the norns setup needed to retry."
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "query-1440-save",
+      "count": "6 of 130 features",
+      "cards": [
+        {
+          "id": "midi-controller-mapping",
+          "text": "MIDI Controller Mapping\n\nAssign MIDI controls to channel parameters through the norns MIDI Map menu.\n\nGESTURE\tWHAT HAPPENS\nNative PARAMS: hold K1 and press K3\tSwitch between EDIT and MAP modes.\nMap editor: select Learn and press K3; operate MIDI control\tLearn its CC, input channel and device.\nMap editor: press K2\tLeave the editor and save the assignment.\nOperate assigned relative MIDI control\tChange the mapped Mosaic value."
+        },
+        {
+          "id": "typical-workflow",
+          "text": "Composition Workflow\n\nMake your first piece. Start with an empty project. Keep it through all ten chapters; you finish with a saved bass-only/full-phrase arrangement."
+        },
+        {
+          "id": "merge-modes",
+          "text": "Merge Modes\n\nSet how assigned patterns supply trigs, notes, velocities and note lengths to a channel.\n\nGESTURE\tWHAT HAPPENS\nIn Channel Editor, press grid (14,8).\tCycle the shared Strategy through Skip, Only, All, Foundation and Fragments; the sequence wraps.\nOn Merge modes, select Strategy with E2 and turn E3.\tRequest the same strategy; the list is clamped and needs no extra K3 Apply.\nPress grid (15,8) or (16,8), or hold K1 and press (16,8).\tChange note, velocity or length merge respectively when the active strategy permits it. Fragments leaves saved settings unchanged.\nHold note, velocity or length merge button and tap a pattern in row 2.\tChoose a source pattern for that attribute when the active strategy permits it."
+        },
+        {
+          "id": "save-and-load",
+          "text": "Save and Load\n\nSave named projects and load saved projects from PARAMS > MOSAIC. Stopped, idle projects normally autosave after 60 seconds.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC and choose Save\tPrompts for a project name; a successful named save keeps a durable version separate from autosave.\nChoose Load and select a saved project\tChecks saved song slots and ranges before replacing the current project; rejection keeps the current project and playback.\nLeave Mosaic stopped and idle for 60 seconds\tNormally writes autosave; rejected loads suspend this until a successful valid load, named save or New."
+        },
+        {
+          "id": "fragments",
+          "text": "Fragments\n\nFragments cuts the channel loop into 4-, 8- or 16-step sections and plays each section from one assigned pattern, chosen by a repeatable seed.\n\nGESTURE\tWHAT HAPPENS\nOn Merge modes, select Strategy with E2 and turn E3 to FRAGMENTS, or press grid (14,8) until it selects Fragments.\tActive reads FRAGMENTS. Fragments owns all four merge attributes, and the note, velocity and length rows on Merge modes show values such as AVERAGE SAVED and are inactive.\nOn Merge Shape, select Rhythm. Press K3.\tThe Fragments list opens: Size, Keep anchor, Seed, and Anchor when Keep anchor is ON.\nSelect Size. Turn E3.\tFragment size changes between 4, 8 and 16 channel steps. A draft is shown until K3 applies it.\nSelect Seed. Turn E3.\tSeed changes from 0 to 65535. The same seed always chooses the same source pattern for each fragment.\nSelect Keep anchor. Turn E3.\tWhen ON, the Anchor row appears and the anchor pattern’s trigs fill positions where the fragment’s source has no trig.\nPress K3 on a value row.\tThe draft applies and the footer reads APPLIED. The channel grid then shows exactly the trigs the fragments play.\nSelect Phrase. Press K3.\tCycles and Variation open. Fixed repeats the same fragment sources every phrase; Per phrase draws new ones."
+        },
+        {
+          "id": "keep-your-work",
+          "text": "Saving and Loading a Project\n\nSave, reload and perform. Start with the two-section arrangement from chapter 9, stopped with slot 1 selected. Save it, make a temporary change, and reload the saved version.\n\nGESTURE\tWHAT HAPPENS\nShort K1 → PARAMS → MOSAIC → Save project\tEnter and confirm a project name.\nPARAMS → MOSAIC → Load project\tChoose a saved project; K2 cancels the dialog."
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "query-1440-degree rotation",
+      "count": "3 of 130 features",
+      "cards": [
+        {
+          "id": "fully-quantise-mask",
+          "text": "Fully Quantise Mask\n\nSet whether note masks follow scale degree and rotation, overriding global quantisation when explicitly Off or On.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantise Note Mask → K3 → K2\tAssign Quantise Note Mask to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "scale-editor",
+          "text": "Scale Editor\n\nChoose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose, Rotation) without changing playback until you apply it.\n\nGESTURE\tWHAT HAPPENS\nPress Grid (4, 8).\tThe Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.\nShort-press a scale slot on row 3.\tApply it globally and select it for editing. Press the applied slot again to turn global scale off while it stays selected for editing.\nHold K1 and press a scale slot, or long-press a different editing slot.\tSelect the slot for editing without changing which scale playback uses.\nLong-press the slot already selected for editing.\tTurn global scale off and clear the editing selection.\nOn the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3 to change its value.\tThe value changes in the draft for the slot named in the title row. Nothing sounds different yet.\nRelease all grid keys, then press K3 or K2.\tK3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes its harmony immediately.\nOn the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.\tSet the rate of the global scale track. Selected range, Global cap and Playable range are shown for reference and cannot be edited there.\nOn the Scale page, hold the first step of a range on the scale track and press its last step.\tSet the length of the scale track independently of the channels. The tooltip reads Channel 17 length changed.\nHold a sequencer step, then press a scale slot.\tSet or toggle a scale lock at that step: global on the Scale page, channel-specific on a channel page."
+        },
+        {
+          "id": "snap-note-masks-to-scale",
+          "text": "Snap Note Masks to Scale\n\nSnap note masks to the selected scale without degree or rotation changes. Default: On.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC. Select Snap note masks to scale. Change its value.\tOn snaps note masks to the selected scale without applying scale-degree or rotation adjustments; Quantise note masks overrides this setting. Default: On."
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "query-1440-development",
+      "count": "0 of 130 features",
+      "cards": [],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "query-1440-xxyyzz no match",
+      "count": "0 of 130 features",
+      "cards": [],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "escape-1440",
+      "count": "130 of 130 features",
+      "query": ""
+    },
+    {
+      "label": "clear-1440",
+      "count": "130 of 130 features",
+      "focus": "find"
+    },
+    {
+      "label": "theme-1440",
+      "theme": "dark",
+      "background": "rgb(16, 21, 16)",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "masks-navigation-1440",
+      "url": "http://localhost:8926/manual/#masks",
+      "title": "Masks"
+    },
+    {
+      "label": "manual-home-1440",
+      "url": "http://localhost:8926/manual/"
+    },
+    {
+      "label": "inventory-390",
+      "articles": [
+        {
+          "id": "getting-started",
+          "href": "manual/#getting-started",
+          "rows": 0
+        },
+        {
+          "id": "install",
+          "href": "manual/#install",
+          "rows": 0
+        },
+        {
+          "id": "setup",
+          "href": "manual/#setup",
+          "rows": 0
+        },
+        {
+          "id": "hardware",
+          "href": "manual/#hardware",
+          "rows": 0
+        },
+        {
+          "id": "midi-device-configuration",
+          "href": "manual/#midi-device-configuration",
+          "rows": 0
+        },
+        {
+          "id": "stock-devices",
+          "href": "manual/#stock-devices",
+          "rows": 0
+        },
+        {
+          "id": "adding-custom-devices",
+          "href": "manual/#adding-custom-devices",
+          "rows": 0
+        },
+        {
+          "id": "lock-lead-time",
+          "href": "manual/#lock-lead-time",
+          "rows": 1
+        },
+        {
+          "id": "mods-and-software-devices",
+          "href": "manual/#mods-and-software-devices",
+          "rows": 0
+        },
+        {
+          "id": "midi-keyboard-input",
+          "href": "manual/#midi-keyboard-input",
+          "rows": 3
+        },
+        {
+          "id": "midi-controller-mapping",
+          "href": "manual/#midi-controller-mapping",
+          "rows": 4
+        },
+        {
+          "id": "getting-around-mosaic",
+          "href": "manual/#getting-around-mosaic",
+          "rows": 0
+        },
+        {
+          "id": "sequencer-start-and-stop",
+          "href": "manual/#sequencer-start-and-stop",
+          "rows": 1
+        },
+        {
+          "id": "arm-live-record",
+          "href": "manual/#arm-live-record",
+          "rows": 1
+        },
+        {
+          "id": "grid-menu-navigation",
+          "href": "manual/#grid-menu-navigation",
+          "rows": 2
+        },
+        {
+          "id": "norns-menu-navigation",
+          "href": "manual/#norns-menu-navigation",
+          "rows": 5
+        },
+        {
+          "id": "tooltips",
+          "href": "manual/#tooltips",
+          "rows": 0
+        },
+        {
+          "id": "external-midi-transport",
+          "href": "manual/#external-midi-transport",
+          "rows": 0
+        },
+        {
+          "id": "midi-panic",
+          "href": "manual/#midi-panic",
+          "rows": 1
+        },
+        {
+          "id": "cheat-sheet",
+          "href": "manual/#cheat-sheet",
+          "rows": 0
+        },
+        {
+          "id": "typical-workflow",
+          "href": "manual/#typical-workflow",
+          "rows": 0
+        },
+        {
+          "id": "sound-design",
+          "href": "manual/#sound-design",
+          "rows": 0
+        },
+        {
+          "id": "rhythm-section-design",
+          "href": "manual/#rhythm-section-design",
+          "rows": 0
+        },
+        {
+          "id": "harmony-design",
+          "href": "manual/#harmony-design",
+          "rows": 0
+        },
+        {
+          "id": "sequence-composition",
+          "href": "manual/#sequence-composition",
+          "rows": 0
+        },
+        {
+          "id": "using-merge-modes",
+          "href": "manual/#using-merge-modes",
+          "rows": 0
+        },
+        {
+          "id": "melody-composition",
+          "href": "manual/#melody-composition",
+          "rows": 0
+        },
+        {
+          "id": "modulation-movement-and-interest",
+          "href": "manual/#modulation-movement-and-interest",
+          "rows": 0
+        },
+        {
+          "id": "song-composition",
+          "href": "manual/#song-composition",
+          "rows": 0
+        },
+        {
+          "id": "dig-deeper",
+          "href": "manual/#dig-deeper",
+          "rows": 0
+        },
+        {
+          "id": "pattern-editor",
+          "href": "manual/#pattern-editor",
+          "rows": 3
+        },
+        {
+          "id": "adding-trigs",
+          "href": "manual/#adding-trigs",
+          "rows": 11
+        },
+        {
+          "id": "rhythm-doctor",
+          "href": "manual/#rhythm-doctor",
+          "rows": 11
+        },
+        {
+          "id": "adding-notes",
+          "href": "manual/#adding-notes",
+          "rows": 7
+        },
+        {
+          "id": "adding-velocity",
+          "href": "manual/#adding-velocity",
+          "rows": 7
+        },
+        {
+          "id": "channel-editor",
+          "href": "manual/#channel-editor",
+          "rows": 6
+        },
+        {
+          "id": "devices",
+          "href": "manual/#devices",
+          "rows": 3
+        },
+        {
+          "id": "midi-sound-sources",
+          "href": "manual/#midi-sound-sources",
+          "rows": 2
+        },
+        {
+          "id": "norns-sound-sources-with-n-b",
+          "href": "manual/#norns-sound-sources-with-n-b",
+          "rows": 2
+        },
+        {
+          "id": "device-parameters",
+          "href": "manual/#device-parameters",
+          "rows": 2
+        },
+        {
+          "id": "adding-patterns-to-channels",
+          "href": "manual/#adding-patterns-to-channels",
+          "rows": 2
+        },
+        {
+          "id": "adding-trig-masks",
+          "href": "manual/#adding-trig-masks",
+          "rows": 1
+        },
+        {
+          "id": "adding-melodic-notes-over-harmony-and-drums",
+          "href": "manual/#adding-melodic-notes-over-harmony-and-drums",
+          "rows": 3
+        },
+        {
+          "id": "adding-chords",
+          "href": "manual/#adding-chords",
+          "rows": 2
+        },
+        {
+          "id": "removing-masks",
+          "href": "manual/#removing-masks",
+          "rows": 2
+        },
+        {
+          "id": "merge-modes",
+          "href": "manual/#merge-modes",
+          "rows": 4
+        },
+        {
+          "id": "trig-merge-modes",
+          "href": "manual/#trig-merge-modes",
+          "rows": 1
+        },
+        {
+          "id": "note-merge-modes",
+          "href": "manual/#note-merge-modes",
+          "rows": 2
+        },
+        {
+          "id": "velocity-merge-modes",
+          "href": "manual/#velocity-merge-modes",
+          "rows": 2
+        },
+        {
+          "id": "length-merge-modes",
+          "href": "manual/#length-merge-modes",
+          "rows": 2
+        },
+        {
+          "id": "note-dashboard",
+          "href": "manual/#note-dashboard",
+          "rows": 2
+        },
+        {
+          "id": "clocks-swing-and-shuffle",
+          "href": "manual/#clocks-swing-and-shuffle",
+          "rows": 3
+        },
+        {
+          "id": "memory-undo-and-redo",
+          "href": "manual/#memory-undo-and-redo",
+          "rows": 4
+        },
+        {
+          "id": "channel-length",
+          "href": "manual/#channel-length",
+          "rows": 2
+        },
+        {
+          "id": "muting-channels",
+          "href": "manual/#muting-channels",
+          "rows": 2
+        },
+        {
+          "id": "trig-parameters",
+          "href": "manual/#trig-parameters",
+          "rows": 5
+        },
+        {
+          "id": "sequencer-params",
+          "href": "manual/#sequencer-params",
+          "rows": 1
+        },
+        {
+          "id": "trig-probability",
+          "href": "manual/#trig-probability",
+          "rows": 3
+        },
+        {
+          "id": "fixed-note",
+          "href": "manual/#fixed-note",
+          "rows": 3
+        },
+        {
+          "id": "quantised-fixed-note",
+          "href": "manual/#quantised-fixed-note",
+          "rows": 3
+        },
+        {
+          "id": "random-note",
+          "href": "manual/#random-note",
+          "rows": 3
+        },
+        {
+          "id": "random-twos-note",
+          "href": "manual/#random-twos-note",
+          "rows": 3
+        },
+        {
+          "id": "chord-strum",
+          "href": "manual/#chord-strum",
+          "rows": 3
+        },
+        {
+          "id": "chord-arpeggio",
+          "href": "manual/#chord-arpeggio",
+          "rows": 3
+        },
+        {
+          "id": "chord-acceleration",
+          "href": "manual/#chord-acceleration",
+          "rows": 3
+        },
+        {
+          "id": "chord-spread",
+          "href": "manual/#chord-spread",
+          "rows": 3
+        },
+        {
+          "id": "chord-velocity-modifier",
+          "href": "manual/#chord-velocity-modifier",
+          "rows": 3
+        },
+        {
+          "id": "chord-shape-modifier",
+          "href": "manual/#chord-shape-modifier",
+          "rows": 3
+        },
+        {
+          "id": "mute-root-note",
+          "href": "manual/#mute-root-note",
+          "rows": 3
+        },
+        {
+          "id": "fully-quantise-mask",
+          "href": "manual/#fully-quantise-mask",
+          "rows": 3
+        },
+        {
+          "id": "scale-editor",
+          "href": "manual/#scale-editor",
+          "rows": 9
+        },
+        {
+          "id": "transposition",
+          "href": "manual/#transposition",
+          "rows": 3
+        },
+        {
+          "id": "song-editor",
+          "href": "manual/#song-editor",
+          "rows": 4
+        },
+        {
+          "id": "button-indicators",
+          "href": "manual/#button-indicators",
+          "rows": 2
+        },
+        {
+          "id": "interacting-with-slots",
+          "href": "manual/#interacting-with-slots",
+          "rows": 3
+        },
+        {
+          "id": "song-mode-operations",
+          "href": "manual/#song-mode-operations",
+          "rows": 3
+        },
+        {
+          "id": "adjusting-song-sequence-length",
+          "href": "manual/#adjusting-song-sequence-length",
+          "rows": 2
+        },
+        {
+          "id": "navigating-the-norns-display",
+          "href": "manual/#navigating-the-norns-display",
+          "rows": 3
+        },
+        {
+          "id": "locks",
+          "href": "manual/#locks",
+          "rows": 3
+        },
+        {
+          "id": "trig-param-locks",
+          "href": "manual/#trig-param-locks",
+          "rows": 4
+        },
+        {
+          "id": "param-slides",
+          "href": "manual/#param-slides",
+          "rows": 3
+        },
+        {
+          "id": "mask-locks",
+          "href": "manual/#mask-locks",
+          "rows": 4
+        },
+        {
+          "id": "scale-locks",
+          "href": "manual/#scale-locks",
+          "rows": 4
+        },
+        {
+          "id": "transposition-locks",
+          "href": "manual/#transposition-locks",
+          "rows": 3
+        },
+        {
+          "id": "octave-locks",
+          "href": "manual/#octave-locks",
+          "rows": 3
+        },
+        {
+          "id": "save-and-load",
+          "href": "manual/#save-and-load",
+          "rows": 3
+        },
+        {
+          "id": "options",
+          "href": "manual/#options",
+          "rows": 3
+        },
+        {
+          "id": "sequencer-options",
+          "href": "manual/#sequencer-options",
+          "rows": 1
+        },
+        {
+          "id": "shift-press-stop",
+          "href": "manual/#shift-press-stop",
+          "rows": 3
+        },
+        {
+          "id": "song-mode",
+          "href": "manual/#song-mode",
+          "rows": 1
+        },
+        {
+          "id": "reset-at-song-editor-pattern-change",
+          "href": "manual/#reset-at-song-editor-pattern-change",
+          "rows": 1
+        },
+        {
+          "id": "reset-at-pattern-repeat",
+          "href": "manual/#reset-at-pattern-repeat",
+          "rows": 1
+        },
+        {
+          "id": "parameter-slides-wrap",
+          "href": "manual/#parameter-slides-wrap",
+          "rows": 1
+        },
+        {
+          "id": "elektron-program-changes",
+          "href": "manual/#elektron-program-changes",
+          "rows": 1
+        },
+        {
+          "id": "elektron-program-change-channel",
+          "href": "manual/#elektron-program-change-channel",
+          "rows": 1
+        },
+        {
+          "id": "parameter-lock-options",
+          "href": "manual/#parameter-lock-options",
+          "rows": 1
+        },
+        {
+          "id": "trigless-locks",
+          "href": "manual/#trigless-locks",
+          "rows": 1
+        },
+        {
+          "id": "quantiser-options",
+          "href": "manual/#quantiser-options",
+          "rows": 1
+        },
+        {
+          "id": "snap-note-masks-to-scale",
+          "href": "manual/#snap-note-masks-to-scale",
+          "rows": 1
+        },
+        {
+          "id": "quantise-note-masks",
+          "href": "manual/#quantise-note-masks",
+          "rows": 1
+        },
+        {
+          "id": "scales-lock-until-pattern-end",
+          "href": "manual/#scales-lock-until-pattern-end",
+          "rows": 1
+        },
+        {
+          "id": "lock-all-to-pentatonic",
+          "href": "manual/#lock-all-to-pentatonic",
+          "rows": 1
+        },
+        {
+          "id": "lock-random-to-pentatonic",
+          "href": "manual/#lock-random-to-pentatonic",
+          "rows": 1
+        },
+        {
+          "id": "lock-merged-to-pentatonic",
+          "href": "manual/#lock-merged-to-pentatonic",
+          "rows": 1
+        },
+        {
+          "id": "midi-controller-options",
+          "href": "manual/#midi-controller-options",
+          "rows": 1
+        },
+        {
+          "id": "map-scale-to-white-keys",
+          "href": "manual/#map-scale-to-white-keys",
+          "rows": 1
+        },
+        {
+          "id": "honor-scale-rotations",
+          "href": "manual/#honor-scale-rotations",
+          "rows": 1
+        },
+        {
+          "id": "honor-scale-degree",
+          "href": "manual/#honor-scale-degree",
+          "rows": 1
+        },
+        {
+          "id": "honour-scale-transpose",
+          "href": "manual/#honour-scale-transpose",
+          "rows": 1
+        },
+        {
+          "id": "screen-options",
+          "href": "manual/#screen-options",
+          "rows": 1
+        },
+        {
+          "id": "ui-motion",
+          "href": "manual/#ui-motion",
+          "rows": 1
+        },
+        {
+          "id": "sinfonion-connect",
+          "href": "manual/#sinfonion-connect",
+          "rows": 1
+        },
+        {
+          "id": "lfos-and-modulation",
+          "href": "manual/#lfos-and-modulation",
+          "rows": 2
+        },
+        {
+          "id": "musical-merge-and-voice-leading",
+          "href": "manual/#musical-merge-and-voice-leading",
+          "rows": 7
+        },
+        {
+          "id": "merge-shape",
+          "href": "manual/#merge-shape",
+          "rows": 8
+        },
+        {
+          "id": "fragments",
+          "href": "manual/#fragments",
+          "rows": 7
+        },
+        {
+          "id": "interlock",
+          "href": "manual/#interlock",
+          "rows": 5
+        },
+        {
+          "id": "structure",
+          "href": "manual/#structure",
+          "rows": 4
+        },
+        {
+          "id": "result-and-reason",
+          "href": "manual/#result-and-reason",
+          "rows": 3
+        },
+        {
+          "id": "harmony",
+          "href": "manual/#harmony",
+          "rows": 10
+        },
+        {
+          "id": "performance-management",
+          "href": "manual/#performance-management",
+          "rows": 0
+        },
+        {
+          "id": "masks",
+          "href": "manual/#masks",
+          "rows": 7
+        },
+        {
+          "id": "first-sound",
+          "href": "manual/#first-sound",
+          "rows": 0
+        },
+        {
+          "id": "no-sound",
+          "href": "manual/#no-sound",
+          "rows": 0
+        },
+        {
+          "id": "build-a-phrase",
+          "href": "manual/#build-a-phrase",
+          "rows": 0
+        },
+        {
+          "id": "keep-your-work",
+          "href": "manual/#keep-your-work",
+          "rows": 2
+        },
+        {
+          "id": "small-hours",
+          "href": "manual/#small-hours",
+          "rows": 0
+        },
+        {
+          "id": "pocket-rhythm",
+          "href": "manual/#pocket-rhythm",
+          "rows": 0
+        },
+        {
+          "id": "tilting-harmony",
+          "href": "manual/#tilting-harmony",
+          "rows": 0
+        },
+        {
+          "id": "loops-that-meet",
+          "href": "manual/#loops-that-meet",
+          "rows": 0
+        }
+      ],
+      "privateLinks": []
+    },
+    {
+      "label": "slash-390",
+      "focus": "find"
+    },
+    {
+      "label": "query-390-masks",
+      "count": "14 of 130 features",
+      "cards": [
+        {
+          "id": "midi-keyboard-input",
+          "text": "MIDI Keyboard Input\n\nHold a step to enter it, or arm recording and play.\n\nGESTURE\tWHAT HAPPENS\nSelect channel; Record off; no step held; play MIDI keys\tAudition the selected channel’s output without entering step masks.\nSelect channel → hold step → play MIDI keys\tEnter that step’s note, velocity and chord masks.\nRecord (2,8) + running transport + MIDI keys\tRecord onto the selected channel’s active steps."
+        },
+        {
+          "id": "norns-menu-navigation",
+          "text": "Norns Menu Navigation\n\nOpen tasks with E1; choose a row with E2 and change its value with E3.\n\nGESTURE\tWHAT HAPPENS\nE1 → E2 → K3\tOpen the context task list, select a task, then open it.\nE2 / E3\tSelect a row / change its value.\nK3 / K2 on staged settings\tApply the draft / cancel or return. K3 also confirms a question and K2 cancels it. While an OPEN > row is chosen the last line names the target, for example K3 OPEN RHYTHM, or just K3 OPEN when space is short.\nHold K1 + E3\tChange the selected value finely where it supports that.\nHold step + K2 in Masks\tClear all mask attributes of that step."
+        },
+        {
+          "id": "channel-editor",
+          "text": "Channel Editor\n\nSelect one of 16 channels and open its editing tasks.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8)\tOpen the Channel Editor.\nTap a channel in grid row 1\tSelect one of 16 channels; the selected channel supplies the current masks, locks and range.\nE1 → E2 task → K3\tOpen the named channel task; use the task list rather than an old screen-page shortcut.\nGrid row 3\tRead the currently active scale slot during playback.\nGrid (8,8)–(12,8), no step held\tSet the selected channel’s octave offset to −2, −1, 0, +1 or +2.\nPress grid (10,8)\tSet the selected channel’s octave offset to zero."
+        },
+        {
+          "id": "adding-trig-masks",
+          "text": "Adding Trig Masks\n\nAdd or remove a step trig mask with K1 and the sequencer grid.\n\nGESTURE\tWHAT HAPPENS\nChannel Editor: hold K1 and tap a sequencer step\tToggle the step’s trig mask; supply note, velocity and length masks if no source pattern supplies them."
+        },
+        {
+          "id": "adding-melodic-notes-over-harmony-and-drums",
+          "text": "Adding Melodic Notes over Harmony and Drums\n\nSet channel mask defaults or step overrides for note, velocity, length and chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Masks → E2 attribute → E3\tSet a channel default with no step held.\nHold a sequencer step → E2 attribute → E3\tSet an explicit override for that step.\nHold a step and play a MIDI keyboard\tEnter note-mask data from the played notes."
+        },
+        {
+          "id": "adding-chords",
+          "text": "Adding Chords\n\nAdd up to four chord-mask voices to a root note. The selected output must support polyphony.\n\nGESTURE\tWHAT HAPPENS\nMasks → hold step → E2 Chd1–Chd4 → E3\tAdd up to four scale-relative chord voices to the root; the output must support them.\nAssign Chord Strum or Chord Arp in Trig params\tSpace the chord voices in time rather than playing them simultaneously."
+        },
+        {
+          "id": "removing-masks",
+          "text": "Removing Masks\n\nClear step-mask overrides without changing channel mask defaults.\n\nGESTURE\tWHAT HAPPENS\nMasks: hold step + K2\tClear all step-mask attributes for held steps; channel defaults remain.\nMasks: K1 + K2 with no grid key held\tClear all step-mask overrides on the selected channel; preserve channel defaults."
+        },
+        {
+          "id": "fully-quantise-mask",
+          "text": "Fully Quantise Mask\n\nSet whether note masks follow scale degree and rotation, overriding global quantisation when explicitly Off or On.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantise Note Mask → K3 → K2\tAssign Quantise Note Mask to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "locks",
+          "text": "Locks\n\nStore a different value on one step. Hold the step, then change the same control you use for the whole channel.\n\nGESTURE\tWHAT HAPPENS\nHold a sequencer step, then change a value (E3 on Trig params or Masks, or a grid button for octave, scale and transposition).\tThe value is written to that step. The channel default does not change.\nRelease the step.\tThe screen shows the channel default again. The lock remains on the step.\nHold the step and press K2 on the screen where the lock was set.\tThe lock is removed and the step uses the channel default again."
+        },
+        {
+          "id": "mask-locks",
+          "text": "Mask Locks\n\nGive one step its own note, velocity, length or other mask value. Step locks override the channel default masks.\n\nGESTURE\tWHAT HAPPENS\nOn Channel tasks > Masks, select a mask with E2\tThe highlighted cell identifies the field to edit.\nHold a channel sequencer step and turn E3\tSets that mask for the held step instead of changing the channel default.\nHold the step and press K2 on Masks\tClears the held step’s mask locks so its channel defaults can apply again.\nRelease all steps, then hold K1 and press K2 on Masks\tClears channel step-mask locks while keeping channel default masks."
+        },
+        {
+          "id": "quantiser-options",
+          "text": "Quantiser Options\n\nSet note-mask quantisation, channel scale-lock lifetime and pentatonic restrictions.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC > Quantiser\tChoose how masks, channel scale locks and pentatonic restrictions affect pitch."
+        },
+        {
+          "id": "snap-note-masks-to-scale",
+          "text": "Snap Note Masks to Scale\n\nSnap note masks to the selected scale without degree or rotation changes. Default: On.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC. Select Snap note masks to scale. Change its value.\tOn snaps note masks to the selected scale without applying scale-degree or rotation adjustments; Quantise note masks overrides this setting. Default: On."
+        },
+        {
+          "id": "quantise-note-masks",
+          "text": "Quantise Note Masks\n\nFully quantise note masks, including scale-degree and transposition changes. Default: Off.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC. Select Quantise note masks. Change its value.\tOn fully quantises note masks and applies scale-degree and transposition adjustments, overriding Snap note masks to scale. Default: Off."
+        },
+        {
+          "id": "masks",
+          "text": "Masks\n\nOverride channel and step trig, note, velocity, length and chord values.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8) → E1 tasks → E2 Masks → K3\tOpen the eight mask values.\nE2\tChoose Trig, Note, Vel, Len, Chd1–Chd4.\nE3, no step held\tEdit the channel default.\nHold step + E3\tEdit that step's exception.\nHold K1 + tap step\tAdd or remove a trig mask.\nHold step + K2\tClear all mask attributes for the held step.\nK1 + K2, no grid keys held\tClear channel step overrides; preserve defaults."
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "query-390-hold K2",
+      "count": "27 of 130 features",
+      "cards": [
+        {
+          "id": "midi-controller-mapping",
+          "text": "MIDI Controller Mapping\n\nAssign MIDI controls to channel parameters through the norns MIDI Map menu.\n\nGESTURE\tWHAT HAPPENS\nNative PARAMS: hold K1 and press K3\tSwitch between EDIT and MAP modes.\nMap editor: select Learn and press K3; operate MIDI control\tLearn its CC, input channel and device.\nMap editor: press K2\tLeave the editor and save the assignment.\nOperate assigned relative MIDI control\tChange the mapped Mosaic value."
+        },
+        {
+          "id": "norns-menu-navigation",
+          "text": "Norns Menu Navigation\n\nOpen tasks with E1; choose a row with E2 and change its value with E3.\n\nGESTURE\tWHAT HAPPENS\nE1 → E2 → K3\tOpen the context task list, select a task, then open it.\nE2 / E3\tSelect a row / change its value.\nK3 / K2 on staged settings\tApply the draft / cancel or return. K3 also confirms a question and K2 cancels it. While an OPEN > row is chosen the last line names the target, for example K3 OPEN RHYTHM, or just K3 OPEN when space is short.\nHold K1 + E3\tChange the selected value finely where it supports that.\nHold step + K2 in Masks\tClear all mask attributes of that step."
+        },
+        {
+          "id": "rhythm-doctor",
+          "text": "Rhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nGESTURE\tWHAT HAPPENS\nWith the sequencer stopped, choose Rhythm Doctor at grid (16,2).\tOpen capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.\nEmpty bank: grid (1,2)\tStart Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.\nRecord before enough audio, or Record on an occupied bank\tOpen an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.\nBefore capture: E2/E3 edit setup → K3 confirm; K2 cancels.\tRecord uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.\nReady bank: select a lane, then E2 field → E3\tBrowse Window bar/step, sensitivity or paint policy.\nIn a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).\tSelect BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.\nReady bank: select Alignment → K3\tOpen the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.\nGrid (10,8) / (12,8); hold for a phrase\tMove the recording window one step backward / forward, or a whole four-bar phrase.\nGrid (11,8)\tReturn the window to its calculated phrase start.\nSelect destination pattern in row 1 → grid (16,8) twice\tPreview the selected lane, then paint it; grid (14,8) cancels the preview.\nIf local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.\tNo bank is created. See If local analysis fails for the norns setup needed to retry."
+        },
+        {
+          "id": "removing-masks",
+          "text": "Removing Masks\n\nClear step-mask overrides without changing channel mask defaults.\n\nGESTURE\tWHAT HAPPENS\nMasks: hold step + K2\tClear all step-mask attributes for held steps; channel defaults remain.\nMasks: K1 + K2 with no grid key held\tClear all step-mask overrides on the selected channel; preserve channel defaults."
+        },
+        {
+          "id": "trig-parameters",
+          "text": "Trig Parameters\n\nAssign up to ten parameters per channel and set defaults or step locks for the current song pattern.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2\tChoose one of ten parameter slots.\nK2 → E3 parameter → K3 → K2\tOpen the assignment list, assign a parameter and return to the slot overview.\nE3; hold K1 for fine adjustment\tChange the selected slot’s default value.\nHold step + E3\tSet an explicit step lock that overrides its channel default.\nHold step + K2\tClear held steps’ trig locks; K1 + K2 with no held grid key clears channel step locks."
+        },
+        {
+          "id": "trig-probability",
+          "text": "Trig Probability\n\nSet a trig’s playback probability from 0 to 100, globally or per step.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Trig Probability → K3 → K2\tAssign Trig Probability to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: 0–100.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "fixed-note",
+          "text": "Fixed Note\n\nOverride ordinary root pitch with an unquantised MIDI note from 0 to 127.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Fixed Note → K3 → K2\tAssign Fixed Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: MIDI 0–127; X disables the override.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "quantised-fixed-note",
+          "text": "Quantised Fixed Note\n\nSet MIDI pitch 0–127 and select the nearest playable pitch in the active scale. Ties choose the lower pitch.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantised Fixed Note → K3 → K2\tAssign Quantised Fixed Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: MIDI 0–127; X disables the override.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "random-note",
+          "text": "Random Note\n\nAdd a random scale-degree offset. Zero leaves the note unchanged.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Random Note → K3 → K2\tAssign Random Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: 0 disables random displacement; positive values expand its scale-degree choices.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "random-twos-note",
+          "text": "Random Twos Note\n\nAdd a random offset in multiples of two scale degrees. Zero leaves the note unchanged.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Twos Random Note → K3 → K2\tAssign Twos Random Note to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: 0 disables displacement; positive values choose offsets in twos.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-strum",
+          "text": "Chord Strum\n\nPlay chord-mask slots once, spaced by the selected channel-step division.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Note Strum → K3 → K2\tAssign Chord Note Strum to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X disables strumming; select a channel-step division.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-arpeggio",
+          "text": "Chord Arpeggio\n\nRepeat chord slots at the selected division for the note’s duration. Arpeggio takes precedence over Strum.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Note Arpeggio → K3 → K2\tAssign Chord Note Arpeggio to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X disables arpeggiation; select a channel-step division.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-acceleration",
+          "text": "Chord Acceleration\n\nChange successive Strum or Arpeggio gaps using Spread and Acceleration. Zero Spread disables the acceleration effect.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Accel Mod → K3 → K2\tAssign Chord Accel Mod to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: −5 to +5; 0 is off.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-spread",
+          "text": "Chord Spread\n\nAdd a channel-step duration to Strum or Arpeggio spacing without changing note length.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Spread → K3 → K2\tAssign Chord Spread to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X disables added spacing; select a channel-step duration.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-velocity-modifier",
+          "text": "Chord Velocity Modifier\n\nAdjust successive chord-note velocities by a positive or negative increment.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Velocity Mod → K3 → K2\tAssign Chord Velocity Mod to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: −40 to +40; 0 leaves velocity unchanged.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "chord-shape-modifier",
+          "text": "Chord Shape Modifier\n\nSet the slot order used by Chord Strum and Chord Arpeggio.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Chord Pattern → K3 → K2\tAssign Chord Pattern to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, ->, <-, -><- or <-->.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "mute-root-note",
+          "text": "Mute Root Note\n\nSilence the chord’s root slot while retaining its other chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Mute Chord Root → K3 → K2\tAssign Mute Chord Root to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "fully-quantise-mask",
+          "text": "Fully Quantise Mask\n\nSet whether note masks follow scale degree and rotation, overriding global quantisation when explicitly Off or On.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantise Note Mask → K3 → K2\tAssign Quantise Note Mask to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "scale-editor",
+          "text": "Scale Editor\n\nChoose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose, Rotation) without changing playback until you apply it.\n\nGESTURE\tWHAT HAPPENS\nPress Grid (4, 8).\tThe Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.\nShort-press a scale slot on row 3.\tApply it globally and select it for editing. Press the applied slot again to turn global scale off while it stays selected for editing.\nHold K1 and press a scale slot, or long-press a different editing slot.\tSelect the slot for editing without changing which scale playback uses.\nLong-press the slot already selected for editing.\tTurn global scale off and clear the editing selection.\nOn the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3 to change its value.\tThe value changes in the draft for the slot named in the title row. Nothing sounds different yet.\nRelease all grid keys, then press K3 or K2.\tK3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes its harmony immediately.\nOn the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.\tSet the rate of the global scale track. Selected range, Global cap and Playable range are shown for reference and cannot be edited there.\nOn the Scale page, hold the first step of a range on the scale track and press its last step.\tSet the length of the scale track independently of the channels. The tooltip reads Channel 17 length changed.\nHold a sequencer step, then press a scale slot.\tSet or toggle a scale lock at that step: global on the Scale page, channel-specific on a channel page."
+        },
+        {
+          "id": "locks",
+          "text": "Locks\n\nStore a different value on one step. Hold the step, then change the same control you use for the whole channel.\n\nGESTURE\tWHAT HAPPENS\nHold a sequencer step, then change a value (E3 on Trig params or Masks, or a grid button for octave, scale and transposition).\tThe value is written to that step. The channel default does not change.\nRelease the step.\tThe screen shows the channel default again. The lock remains on the step.\nHold the step and press K2 on the screen where the lock was set.\tThe lock is removed and the step uses the channel default again."
+        },
+        {
+          "id": "trig-param-locks",
+          "text": "Trig Param Locks\n\nGive one step its own value for an assigned device parameter, such as filter cutoff.\n\nGESTURE\tWHAT HAPPENS\nOn Channel tasks > Trig params, use E2 to select an assigned slot\tThe selected parameter cell is highlighted.\nHold a channel sequencer step and turn E3\tSets that assigned parameter for the held step; the cell shows its held value and L marker.\nHold the step and press K2 on Trig params\tClears parameter trig locks for the held step, rather than only the selected slot.\nRelease all steps, then hold K1 and press K2 on Trig params\tClears the channel parameter trig locks."
+        },
+        {
+          "id": "mask-locks",
+          "text": "Mask Locks\n\nGive one step its own note, velocity, length or other mask value. Step locks override the channel default masks.\n\nGESTURE\tWHAT HAPPENS\nOn Channel tasks > Masks, select a mask with E2\tThe highlighted cell identifies the field to edit.\nHold a channel sequencer step and turn E3\tSets that mask for the held step instead of changing the channel default.\nHold the step and press K2 on Masks\tClears the held step’s mask locks so its channel defaults can apply again.\nRelease all steps, then hold K1 and press K2 on Masks\tClears channel step-mask locks while keeping channel default masks."
+        },
+        {
+          "id": "scale-locks",
+          "text": "Scale Locks\n\nChange the scale on a step, for one channel or for every channel. A channel lock overrides the global scale.\n\nGESTURE\tWHAT HAPPENS\nHold a channel sequencer step, then press a scale slot on Grid row 3.\tSet a channel scale lock at that step. It overrides the global scale track. The norns screen shows Scale source.\nOn the Scale page, hold a scale-track step, then press a scale slot on Grid row 3.\tSet a global scale lock. It lasts until a later global lock replaces it or the global scale track wraps. The norns screen shows Scale overview.\nHold the step and press its currently locked scale slot again.\tRemove that scale lock.\nHold the step and press K2 in the relevant Scale or channel workspace.\tClear the locks on that step in that workspace. This clears the step; it does not undo one field."
+        },
+        {
+          "id": "transposition-locks",
+          "text": "Transposition Locks\n\nTranspose the song from a chosen scale-track step. The lock is added to the selected scale's Transpose value.\n\nGESTURE\tWHAT HAPPENS\nOpen the Scale grid workspace, hold a scale-track step and press a transposition value\tSets a transposition lock for that step; the global scale track supplies song transposition.\nHold that step and press the same transposition value again\tRemoves that lock, including an explicit zero lock.\nHold the scale-track step and press K2 in the Scale workspace\tClears the held scale-track locks."
+        },
+        {
+          "id": "octave-locks",
+          "text": "Octave Locks\n\nPlace one step in a different octave from the channel's octave.\n\nGESTURE\tWHAT HAPPENS\nHold a channel sequencer step and press an octave button on Grid row 8, columns 8–12.\tSet the held step's octave lock to -2, -1, 0, +1 or +2.\nHold that step and press the same octave button again.\tRemove the octave lock. An explicit 0 is a lock; no lock is different.\nHold the step and press K2 on Trig params.\tClear the step's trig locks, including its octave lock."
+        },
+        {
+          "id": "harmony",
+          "text": "Harmony\n\nHarmony provides Off, Revoice, Pattern and Ensemble modes for channel output pitch placement.\n\nGESTURE\tWHAT HAPPENS\nIn Channel tasks, select Harmony. Press K3.\tVoice leading settings open.\nTurn E2 to Mode. Turn E3.\tThe draft mode changes between Off, Revoice, Pattern and Ensemble.\nSelect Register or another settings row marked OPEN >. Press K3.\tThe selected settings list opens.\nTurn E2 to select a value. Turn E3 to change it. Press K3 on a value row.\tMosaic validates and applies the draft. During playback, NEXT PATTERN indicates a queued change.\nPress K2.\tA dirty draft is cancelled. An opened settings list returns to its parent.\nIn Result, select Step.\tThe selected event’s planned and sent pitches are displayed.\nOn Note Dashboard, hold a grid step.\tThat step’s event is inspected. A step without a recorded event displays NO EVENT.\nIn Pattern mode, select Tone Map. Press K3. Select a Tone row and turn E3.\tThe row changes between RAW, BASS, INNER1, INNER2, INNER3 and TOP. K3 on a value row applies the map.\nSelect Register. Press K3. Select a role with the Role row, then select Low, High or Centre and turn E3.\tThe role’s inclusive MIDI range changes. A Low, High and Centre that leave no legal placement for a mapped note give NO VOICING RANGE and silence it.\nSelect Entry. Press K3. Select Failure fallback and turn E3.\tFailure fallback changes between SILENCE and LEGACY. Silence is the default; Legacy plays the ordinary pitch and Result reads LEGACY RANGE."
+        },
+        {
+          "id": "masks",
+          "text": "Masks\n\nOverride channel and step trig, note, velocity, length and chord values.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8) → E1 tasks → E2 Masks → K3\tOpen the eight mask values.\nE2\tChoose Trig, Note, Vel, Len, Chd1–Chd4.\nE3, no step held\tEdit the channel default.\nHold step + E3\tEdit that step's exception.\nHold K1 + tap step\tAdd or remove a trig mask.\nHold step + K2\tClear all mask attributes for the held step.\nK1 + K2, no grid keys held\tClear channel step overrides; preserve defaults."
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "query-390-Harmony",
+      "count": "7 of 130 features",
+      "cards": [
+        {
+          "id": "adding-melodic-notes-over-harmony-and-drums",
+          "text": "Adding Melodic Notes over Harmony and Drums\n\nSet channel mask defaults or step overrides for note, velocity, length and chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Masks → E2 attribute → E3\tSet a channel default with no step held.\nHold a sequencer step → E2 attribute → E3\tSet an explicit override for that step.\nHold a step and play a MIDI keyboard\tEnter note-mask data from the played notes."
+        },
+        {
+          "id": "note-dashboard",
+          "text": "Note Dashboard\n\nOpen Output to inspect the selected channel’s last note or a held step’s resolved output.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Output\tInspect the selected channel’s last played note, degree, pitch and sent result.\nHold a sequencer step\tInspect that step’s resolved output, including Harmony stages."
+        },
+        {
+          "id": "scale-editor",
+          "text": "Scale Editor\n\nChoose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose, Rotation) without changing playback until you apply it.\n\nGESTURE\tWHAT HAPPENS\nPress Grid (4, 8).\tThe Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.\nShort-press a scale slot on row 3.\tApply it globally and select it for editing. Press the applied slot again to turn global scale off while it stays selected for editing.\nHold K1 and press a scale slot, or long-press a different editing slot.\tSelect the slot for editing without changing which scale playback uses.\nLong-press the slot already selected for editing.\tTurn global scale off and clear the editing selection.\nOn the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3 to change its value.\tThe value changes in the draft for the slot named in the title row. Nothing sounds different yet.\nRelease all grid keys, then press K3 or K2.\tK3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes its harmony immediately.\nOn the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.\tSet the rate of the global scale track. Selected range, Global cap and Playable range are shown for reference and cannot be edited there.\nOn the Scale page, hold the first step of a range on the scale track and press its last step.\tSet the length of the scale track independently of the channels. The tooltip reads Channel 17 length changed.\nHold a sequencer step, then press a scale slot.\tSet or toggle a scale lock at that step: global on the Scale page, channel-specific on a channel page."
+        },
+        {
+          "id": "musical-merge-and-voice-leading",
+          "text": "Musical Merge and Voice Leading\n\nFoundation and Fragments reshape merged output without rewriting patterns. Harmony places output voices; its default is Off.\n\nGESTURE\tWHAT HAPPENS\nIn Channel tasks, turn E2 to Merge Shape or Harmony. Press K3.\tThe selected feature opens.\nTurn E2.\tThe selected row changes.\nTurn E3 on a value row.\tThe draft value changes.\nPress K3 on a row marked OPEN >.\tThe selected settings list opens.\nPress K3 on a value row.\tMosaic validates and applies the draft.\nPress K2.\tA dirty draft is discarded. In an opened settings list, the parent list returns.\nTurn E1.\tAn unapplied draft is discarded and the feature’s first screen returns. From that screen, Channel tasks returns."
+        },
+        {
+          "id": "structure",
+          "text": "Structure\n\nStructure moves selected Foundation notes to the nearest pitch class of an enabled Harmony group’s chord.\n\nGESTURE\tWHAT HAPPENS\nChoose Foundation on Merge modes or with grid (14,8). On Merge Shape, select Pitch and press K3, then select Structure and press K3.\tThe Structure list opens with Markers.\nSelect Markers. Turn E3.\tMarkers changes between OFF, ANCHORS, EVERY 4 and EVERY 8. When Markers is on, a Chord group row appears.\nSelect Chord group. Turn E3.\tAn enabled Harmony group becomes the draft chord source.\nPress K3 on a value row.\tThe draft applies. A group that is missing or disabled prevents activation."
+        },
+        {
+          "id": "harmony",
+          "text": "Harmony\n\nHarmony provides Off, Revoice, Pattern and Ensemble modes for channel output pitch placement.\n\nGESTURE\tWHAT HAPPENS\nIn Channel tasks, select Harmony. Press K3.\tVoice leading settings open.\nTurn E2 to Mode. Turn E3.\tThe draft mode changes between Off, Revoice, Pattern and Ensemble.\nSelect Register or another settings row marked OPEN >. Press K3.\tThe selected settings list opens.\nTurn E2 to select a value. Turn E3 to change it. Press K3 on a value row.\tMosaic validates and applies the draft. During playback, NEXT PATTERN indicates a queued change.\nPress K2.\tA dirty draft is cancelled. An opened settings list returns to its parent.\nIn Result, select Step.\tThe selected event’s planned and sent pitches are displayed.\nOn Note Dashboard, hold a grid step.\tThat step’s event is inspected. A step without a recorded event displays NO EVENT.\nIn Pattern mode, select Tone Map. Press K3. Select a Tone row and turn E3.\tThe row changes between RAW, BASS, INNER1, INNER2, INNER3 and TOP. K3 on a value row applies the map.\nSelect Register. Press K3. Select a role with the Role row, then select Low, High or Centre and turn E3.\tThe role’s inclusive MIDI range changes. A Low, High and Centre that leave no legal placement for a mapped note give NO VOICING RANGE and silence it.\nSelect Entry. Press K3. Select Failure fallback and turn E3.\tFailure fallback changes between SILENCE and LEGACY. Silence is the default; Legacy plays the ordinary pitch and Result reads LEGACY RANGE."
+        },
+        {
+          "id": "tilting-harmony",
+          "text": "Changing Harmony with Scale Slots\n\nCompare the same relative patterns under C major for two bars and D major for two bars."
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "query-390-Rhythm Doctor",
+      "count": "2 of 130 features",
+      "cards": [
+        {
+          "id": "adding-trigs",
+          "text": "Adding Trigs\n\nEnter pattern trigs manually or preview and paint a generated rhythm.\n\nGESTURE\tWHAT HAPPENS\nPattern Trig: tap row-1 pattern button\tChoose the source pattern for editing.\nTap a sequencer step in grid rows 4–7\tToggle a trig; active trigs glow brightly.\nHold a trig and choose its end step\tSet the note’s length; dimmer steps show its duration, cut short by another trig in the same pattern.\nTap algorithm button, columns 12–16 of row 2\tSelect Drum, Tresillo, Euclidean, Numeric Repetitor or Rhythm Doctor.\nTap Paint at grid (16,8), then tap it again\tPreview the generated pattern, then commit it; flashing steps show the preview.\nTap Cancel at grid (14,8)\tDiscard the prepared preview.\nGrid (10,8), (11,8), (12,8)\tMove the preview left, reset its shift, or move it right; paint to commit.\nGrid row 3, columns 12–16, with Drum or Tresillo selected\tSelect one of five algorithm banks.\nGrid row 3, columns 12–15, with Numeric Repetitor selected\tSelect one of four banks. Euclidean and Rhythm Doctor do not use this bank fader.\nGrid row 2, columns 1–10\tSet the algorithm’s first parameter. The outer buttons decrement/increment; inner buttons choose broader values.\nGrid row 3, columns 1–10\tSet the second algorithm parameter for Tresillo, Euclidean or Numeric Repetitor. This fader is disabled for Drum and Rhythm Doctor."
+        },
+        {
+          "id": "rhythm-doctor",
+          "text": "Rhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nGESTURE\tWHAT HAPPENS\nWith the sequencer stopped, choose Rhythm Doctor at grid (16,2).\tOpen capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.\nEmpty bank: grid (1,2)\tStart Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.\nRecord before enough audio, or Record on an occupied bank\tOpen an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.\nBefore capture: E2/E3 edit setup → K3 confirm; K2 cancels.\tRecord uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.\nReady bank: select a lane, then E2 field → E3\tBrowse Window bar/step, sensitivity or paint policy.\nIn a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).\tSelect BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.\nReady bank: select Alignment → K3\tOpen the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.\nGrid (10,8) / (12,8); hold for a phrase\tMove the recording window one step backward / forward, or a whole four-bar phrase.\nGrid (11,8)\tReturn the window to its calculated phrase start.\nSelect destination pattern in row 1 → grid (16,8) twice\tPreview the selected lane, then paint it; grid (14,8) cancels the preview.\nIf local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.\tNo bank is created. See If local analysis fails for the norns setup needed to retry."
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "query-390-save",
+      "count": "6 of 130 features",
+      "cards": [
+        {
+          "id": "midi-controller-mapping",
+          "text": "MIDI Controller Mapping\n\nAssign MIDI controls to channel parameters through the norns MIDI Map menu.\n\nGESTURE\tWHAT HAPPENS\nNative PARAMS: hold K1 and press K3\tSwitch between EDIT and MAP modes.\nMap editor: select Learn and press K3; operate MIDI control\tLearn its CC, input channel and device.\nMap editor: press K2\tLeave the editor and save the assignment.\nOperate assigned relative MIDI control\tChange the mapped Mosaic value."
+        },
+        {
+          "id": "typical-workflow",
+          "text": "Composition Workflow\n\nMake your first piece. Start with an empty project. Keep it through all ten chapters; you finish with a saved bass-only/full-phrase arrangement."
+        },
+        {
+          "id": "merge-modes",
+          "text": "Merge Modes\n\nSet how assigned patterns supply trigs, notes, velocities and note lengths to a channel.\n\nGESTURE\tWHAT HAPPENS\nIn Channel Editor, press grid (14,8).\tCycle the shared Strategy through Skip, Only, All, Foundation and Fragments; the sequence wraps.\nOn Merge modes, select Strategy with E2 and turn E3.\tRequest the same strategy; the list is clamped and needs no extra K3 Apply.\nPress grid (15,8) or (16,8), or hold K1 and press (16,8).\tChange note, velocity or length merge respectively when the active strategy permits it. Fragments leaves saved settings unchanged.\nHold note, velocity or length merge button and tap a pattern in row 2.\tChoose a source pattern for that attribute when the active strategy permits it."
+        },
+        {
+          "id": "save-and-load",
+          "text": "Save and Load\n\nSave named projects and load saved projects from PARAMS > MOSAIC. Stopped, idle projects normally autosave after 60 seconds.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC and choose Save\tPrompts for a project name; a successful named save keeps a durable version separate from autosave.\nChoose Load and select a saved project\tChecks saved song slots and ranges before replacing the current project; rejection keeps the current project and playback.\nLeave Mosaic stopped and idle for 60 seconds\tNormally writes autosave; rejected loads suspend this until a successful valid load, named save or New."
+        },
+        {
+          "id": "fragments",
+          "text": "Fragments\n\nFragments cuts the channel loop into 4-, 8- or 16-step sections and plays each section from one assigned pattern, chosen by a repeatable seed.\n\nGESTURE\tWHAT HAPPENS\nOn Merge modes, select Strategy with E2 and turn E3 to FRAGMENTS, or press grid (14,8) until it selects Fragments.\tActive reads FRAGMENTS. Fragments owns all four merge attributes, and the note, velocity and length rows on Merge modes show values such as AVERAGE SAVED and are inactive.\nOn Merge Shape, select Rhythm. Press K3.\tThe Fragments list opens: Size, Keep anchor, Seed, and Anchor when Keep anchor is ON.\nSelect Size. Turn E3.\tFragment size changes between 4, 8 and 16 channel steps. A draft is shown until K3 applies it.\nSelect Seed. Turn E3.\tSeed changes from 0 to 65535. The same seed always chooses the same source pattern for each fragment.\nSelect Keep anchor. Turn E3.\tWhen ON, the Anchor row appears and the anchor pattern’s trigs fill positions where the fragment’s source has no trig.\nPress K3 on a value row.\tThe draft applies and the footer reads APPLIED. The channel grid then shows exactly the trigs the fragments play.\nSelect Phrase. Press K3.\tCycles and Variation open. Fixed repeats the same fragment sources every phrase; Per phrase draws new ones."
+        },
+        {
+          "id": "keep-your-work",
+          "text": "Saving and Loading a Project\n\nSave, reload and perform. Start with the two-section arrangement from chapter 9, stopped with slot 1 selected. Save it, make a temporary change, and reload the saved version.\n\nGESTURE\tWHAT HAPPENS\nShort K1 → PARAMS → MOSAIC → Save project\tEnter and confirm a project name.\nPARAMS → MOSAIC → Load project\tChoose a saved project; K2 cancels the dialog."
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "query-390-degree rotation",
+      "count": "3 of 130 features",
+      "cards": [
+        {
+          "id": "fully-quantise-mask",
+          "text": "Fully Quantise Mask\n\nSet whether note masks follow scale degree and rotation, overriding global quantisation when explicitly Off or On.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Trig params → E2 slot → K2 → E3 Quantise Note Mask → K3 → K2\tAssign Quantise Note Mask to one of the ten slots.\nE3 with no grid step held\tEdit the channel default: X, OFF or ON.\nHold a sequencer step + E3\tSet that step’s parameter lock; clear it with held step + K2 to return to the channel default."
+        },
+        {
+          "id": "scale-editor",
+          "text": "Scale Editor\n\nChoose the scale the song plays in. Edit any of the 16 scale slots (Root, Scale, Degree, Transpose, Rotation) without changing playback until you apply it.\n\nGESTURE\tWHAT HAPPENS\nPress Grid (4, 8).\tThe Scale Editor opens. Scale slots are the 16 buttons on Grid row 3.\nShort-press a scale slot on row 3.\tApply it globally and select it for editing. Press the applied slot again to turn global scale off while it stays selected for editing.\nHold K1 and press a scale slot, or long-press a different editing slot.\tSelect the slot for editing without changing which scale playback uses.\nLong-press the slot already selected for editing.\tTurn global scale off and clear the editing selection.\nOn the Scale screen, turn E2 to select Root, Scale, Degree, Transpose or Rotation. Turn E3 to change its value.\tThe value changes in the draft for the slot named in the title row. Nothing sounds different yet.\nRelease all grid keys, then press K3 or K2.\tK3 applies the draft. K2 cancels it. Applying changes to a scale used by playback changes its harmony immediately.\nOn the Scale clock task, turn E2 to Rate and E3 to the rate, then press K3.\tSet the rate of the global scale track. Selected range, Global cap and Playable range are shown for reference and cannot be edited there.\nOn the Scale page, hold the first step of a range on the scale track and press its last step.\tSet the length of the scale track independently of the channels. The tooltip reads Channel 17 length changed.\nHold a sequencer step, then press a scale slot.\tSet or toggle a scale lock at that step: global on the Scale page, channel-specific on a channel page."
+        },
+        {
+          "id": "snap-note-masks-to-scale",
+          "text": "Snap Note Masks to Scale\n\nSnap note masks to the selected scale without degree or rotation changes. Default: On.\n\nGESTURE\tWHAT HAPPENS\nOpen PARAMS > MOSAIC. Select Snap note masks to scale. Change its value.\tOn snaps note masks to the selected scale without applying scale-degree or rotation adjustments; Quantise note masks overrides this setting. Default: On."
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "query-390-development",
+      "count": "0 of 130 features",
+      "cards": [],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "query-390-xxyyzz no match",
+      "count": "0 of 130 features",
+      "cards": [],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "escape-390",
+      "count": "130 of 130 features",
+      "query": ""
+    },
+    {
+      "label": "clear-390",
+      "count": "130 of 130 features",
+      "focus": "find"
+    },
+    {
+      "label": "theme-390",
+      "theme": "dark",
+      "background": "rgb(16, 21, 16)",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "masks-navigation-390",
+      "url": "http://localhost:8926/manual/#masks",
+      "title": "Masks"
+    },
+    {
+      "label": "manual-home-390",
+      "url": "http://localhost:8926/manual/"
+    }
+  ],
+  "errors": []
+}

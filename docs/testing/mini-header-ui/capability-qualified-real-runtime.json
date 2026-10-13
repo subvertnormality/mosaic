@@ -1,0 +1,62 @@
+{
+  "scope": "Capability-qualified real-time mini-header phase; not stock runtime or physical norns equivalence",
+  "installation": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+  "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+  "norns_revision": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+  "binaries": {
+    "matron": {
+      "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/matron/matron",
+      "sha256": "c60c21338c3b1a5b6a7be40b136d090fd751a0c864b9c3e3e4f8dd17223eab7a"
+    },
+    "crone": {
+      "path": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/norns/build/crone/crone",
+      "sha256": "401d1a653d6a2498ec286419e1253613e17b9783cb78d8c229e1ded853dc6d7f"
+    },
+    "libmonome": {
+      "path": "/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/prefix/lib/libmonome.so",
+      "sha256": "0c55b7a7ee59cf376304eed493d396e1ce6a740a4eb554123e77014d18c2fe3f"
+    }
+  },
+  "boundary": {
+    "status": "experimental-unadmitted",
+    "patches": [
+      {
+        "path": "patches/norns/candidates/clock-scheduled-deadline.patch",
+        "sha256": "09726e7c5346dcbae3cdb54dd0af3e51587d6d5edcce592be85c87829f5ca479"
+      },
+      {
+        "path": "patches/norns/candidates/midi-output-boundary.patch",
+        "sha256": "1e6ea366b8199a362f4971fe55ece3b0e9eee3b95b0f863ecd0124e353d8c4a2"
+      },
+      {
+        "path": "patches/norns/candidates/clock-queued-epoch.patch",
+        "sha256": "158a230daf6529ecfa041a58cb27cb3fb08ad210e0d4af6286c1d5d7ceead569"
+      },
+      {
+        "path": "patches/norns/candidates/midi-output-fault-isolation.patch",
+        "sha256": "c195d22ad36734b2a33cb7bb1aaf5edab21d90a7d957bfda2f07be5c85d6ea3b"
+      },
+      {
+        "path": "patches/norns/candidates/midi-received-zero.patch",
+        "sha256": "f31f072313e210a27adc077e9e8fa1f59f9cd2c6ef33b8e483a4851d0aaeb09e"
+      },
+      {
+        "path": "patches/norns/candidates/midi-source-serialization.patch",
+        "sha256": "a84b3faea319fa1936af86742751a5d84c3bdaeaf2175dc7807a2e353a35841e"
+      }
+    ]
+  },
+  "independent_verify_install": "PASS",
+  "mode": "real-time",
+  "app_stage": "/home/andy/mosaic-mini-header-engineering-v10-20261003/mosaic",
+  "app_stage_identity": "0e016344c2beb1b0f825c4925b3fe8feed25394d86b17d4faa02ec03e89d5983",
+  "unchanged": "Same app/helper/oracle/tolerances as controlled pass; no emulator edits",
+  "stock_real_failure": {
+    "run": "45ce6626eb414d42864e2672dbd9d4d2",
+    "classification": "Fullcase failed. Exact F8 origin characterization inapplicable because stock runtime lacks output-boundary API; no relabel as passed.",
+    "native_warning": "Mosaic: native MIDI output boundary unavailable; master phase alignment is not guaranteed",
+    "first_note_before_F8_ms": 22.319858,
+    "partial": "All10stoppedmini rows and original exact MIDI playback passed before phase refusal",
+    "cleanup": "Fourservicesclosed"
+  }
+}

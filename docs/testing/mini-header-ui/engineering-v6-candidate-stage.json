@@ -1,0 +1,23 @@
+{
+  "staged_root": "/home/andy/mosaic-mini-header-engineering-v6-20261003/mosaic",
+  "identity_path": "/home/andy/mosaic-mini-header-engineering-v6-20261003/identity.json",
+  "identity_sha256": "2b07f7b541e486b2492297240993edec43215c3407a202db03433e1c5c5a4d56",
+  "files": 17786,
+  "pre_post_copied_equal": true,
+  "read_only": true,
+  "engineering_only": true,
+  "final_global_qualification": false,
+  "v5_controlled_strategy_scoped_identity_preserved": true,
+  "scoped_unchanged_files": 389,
+  "scoped_drift": [],
+  "prior_stage": "/home/andy/mosaic-mini-header-engineering-v5-20261003/mosaic",
+  "helper_hashes": {
+    "tests/behaviour/contract/merge_strategy_ui.py": "f8bb0c81b6fbcc8891b05420f9236130a6c1aacb0b7593ae30a02ffc9f2a5a3b",
+    "tests/behaviour/contract/ui_readability.py": "62ab08ebe681f5fbe0cc0663b0006b02266d6fda187985bbf494bb53c15043c1",
+    "tests/behaviour/contract/mini_header_animation_ui.py": "450dbff89309d6004481b0d9162acd86ae6e359b10f30a861b225289d2d238de",
+    "tests/behaviour/mini_phase_oracle.py": "ef12eac67a11ca7b7e4b2a7c77aab7a18b36f9fc69474928af9764ae862b6aa7",
+    "tools/rhythm_doctor/rd_analysis_backend.c": "ff871aa3e1714a011ad7836990990ecc654aad0a0237baf5d50c7eccc4a87a25",
+    "tests/behaviour/suite.py": "602b8c5dd3a8b18a9f7c6f9748bf004203540d1153ef99bb402ff603840813e2",
+    "tests/behaviour/run.py": "ce5dd5459fb4f4fd1fde1d8a674ad9b30b8e0bfeb33da209870699ec579ce735"
+  }
+}

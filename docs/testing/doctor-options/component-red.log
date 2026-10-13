@@ -1,0 +1,42 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+EFFFFF
+Tests with errors:
+------------------
+1) test_rhythm_doctor_setup_backend_adapter_commits_and_forwards_values
+../../../mosaic/lib/rhythm_doctor/ui_adapter.lua:208: runtime.record_action is required
+stack traceback:
+	../../../mosaic/lib/rhythm_doctor/ui_adapter.lua:208: in field 'new'
+	.///lib/rhythm_doctor_setup_backend_tests.lua:27: in upvalue 'test_rhythm_doctor_setup_backend_adapter_commits_and_forwards_values'
+
+Failed tests:
+-------------
+1) test_rhythm_doctor_setup_backend_auto_omits_manual_alignment
+.///lib/rhythm_doctor_setup_backend_tests.lua:48: expected: "left"
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:48: in upvalue 'test_rhythm_doctor_setup_backend_auto_omits_manual_alignment'
+
+2) test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition
+.///lib/rhythm_doctor_setup_backend_tests.lua:86: expected: "FAILED"
+actual: "READY"
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:86: in upvalue 'test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition'
+
+3) test_rhythm_doctor_setup_backend_recorder_routes_only_selected_adc
+.///lib/rhythm_doctor_setup_backend_tests.lua:79: expected: 1, actual: 0
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:79: in upvalue 'test_rhythm_doctor_setup_backend_recorder_routes_only_selected_adc'
+
+4) test_rhythm_doctor_setup_backend_rejects_invalid_values_before_open
+.///lib/rhythm_doctor_setup_backend_tests.lua:57: expected: false, actual: true
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:57: in upvalue 'test_rhythm_doctor_setup_backend_rejects_invalid_values_before_open'
+
+5) test_rhythm_doctor_setup_backend_runtime_freezes_source_and_manual_analysis
+.///lib/rhythm_doctor_setup_backend_tests.lua:38: expected: "right"
+actual: nil
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:38: in upvalue 'test_rhythm_doctor_setup_backend_runtime_freezes_source_and_manual_analysis'
+
+Ran 6 tests in 0.002 seconds, 0 successes, 5 failures, 1 error, 2415 non-selected

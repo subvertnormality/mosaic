@@ -1,0 +1,38 @@
+EEE
+======================================================================
+ERROR: test_exact_subset_and_occurrence (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 7, in test_exact_subset_and_occurrence
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 779, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 915, in get_code
+  File "<frozen importlib._bootstrap_external>", line 972, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py'
+
+======================================================================
+ERROR: test_trace_identity_includes_waits (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 16, in test_trace_identity_includes_waits
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 779, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 915, in get_code
+  File "<frozen importlib._bootstrap_external>", line 972, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py'
+
+======================================================================
+ERROR: test_unverified_result_is_rejected (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 13, in test_unverified_result_is_rejected
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 779, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 915, in get_code
+  File "<frozen importlib._bootstrap_external>", line 972, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/home/andy/mosaic-manual-1.4.0/tools/manual_case_capture.py'
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (errors=3)

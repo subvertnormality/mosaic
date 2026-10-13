@@ -1,0 +1,8 @@
+test_invalid_messages_and_paths_fail_before_io (test_native_transport.NativeTransport) ... ok
+test_malformed_reply_fails_closed_for_current_identity (test_native_transport.NativeTransport) ... ok
+test_round_trip_decodes_matching_identity (test_native_transport.NativeTransport) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.025s
+
+OK

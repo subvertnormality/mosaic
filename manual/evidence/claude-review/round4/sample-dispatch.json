@@ -1,0 +1,35 @@
+{
+  "sample-foundation": {
+    "agent": "/root/round4_sample_foundation",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "units": [
+      "course:getting-started-objects",
+      "course:first-sound-attacks",
+      "course:first-sound-defaults",
+      "course:first-sound-hear"
+    ]
+  },
+  "sample-masks": {
+    "agent": "/root/round4_sample_masks",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "units": [
+      "course:masks-edit",
+      "course:masks-listen",
+      "course:masks-quiet",
+      "recipe:masks:2-add-a-ghost-note-before-an-accent"
+    ]
+  },
+  "sample-extensions": {
+    "agent": "/root/round4_sample_extensions",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "units": [
+      "course:harmony-design-apply",
+      "lesson:loops-that-meet:play-loops-four-against-three-step-4-offset",
+      "lesson:chord-strum:play-chord-strum-a-timed-chord-forward",
+      "lesson:masks:ghost-note-before-accent"
+    ]
+  }
+}

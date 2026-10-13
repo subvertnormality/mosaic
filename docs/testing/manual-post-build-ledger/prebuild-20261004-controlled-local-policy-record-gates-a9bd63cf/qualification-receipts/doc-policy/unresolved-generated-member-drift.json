@@ -1,0 +1,12 @@
+[
+  {
+    "path": "manual/features/scenes-reference-musical-scenes.yaml",
+    "reviewed_sha256": "329924c793b75426499bb3b9e7314205b99060639deab346c206eb5c3a22b830",
+    "current_sha256": "04bbf4782e05d26f1cb89a5d414471a57cd091aaaacd83102dffbbe910d4ef00"
+  },
+  {
+    "path": "manual/features/scenes-reference-nested-scenes.yaml",
+    "reviewed_sha256": "cba4e49eca7296e7e5971deeb657c26d5f2e42e964b4e5741b8a7a3e43630a23",
+    "current_sha256": "2fe0f2b128916c24effc28890c21a50e3b30b560b9504e707a7dad3e2d9c895d"
+  }
+]

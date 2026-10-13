@@ -1,0 +1,31 @@
+{
+  "scope": "Reviewed user-authorized YAML manual authority document replacements; native acceptance activation remains pending",
+  "prepared_receipt": "manual/evidence/authority-preparation-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.json",
+  "acceptance_authority": "inactive",
+  "root_replacements_performed": true,
+  "files": {
+    "README.md": "a06498ce330b93157ddbf3c853a528d9c87a3c61d8e7f9cd5c4af543945bb5c9",
+    "AGENTS.md": "2b45240fc4350c6de0c47bf8c442728783f8bf6f497eeaf482df29113ca2bd5b",
+    "cheat_sheet.html": "ddf7ccbb3a0e00c604826f2fb5a328451238e181c36c2b495a6aaaddff247ffa"
+  },
+  "preserved_aliases": {
+    "README.md": {
+      "path": "manual/legacy/README-before-authority-8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8.md",
+      "sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+      "original_path": "README.md"
+    },
+    "cheat_sheet.html": {
+      "path": "manual/legacy/cheat-sheet-before-authority-6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed.html",
+      "sha256": "6821a93489eb768e22b5c3c8204fe7dfb8d246590b9dea84d88d3fcdf739eaed",
+      "original_path": "cheat_sheet.html"
+    }
+  },
+  "counts": {
+    "original_MAN_ids": 125,
+    "requirements": 178,
+    "case_ids": 879,
+    "original_cheat_rows": 77,
+    "feature_destinations": 133
+  },
+  "complete_regression_run": false
+}

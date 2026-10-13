@@ -1,0 +1,4009 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        6
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 1,
+    "pitch": 62,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        5
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        2,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 2,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        3,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 3,
+    "pitch": 65,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        3
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        4,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 4,
+    "pitch": 67,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        5,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 5,
+    "pitch": 69,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        6,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 6,
+    "pitch": 71,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        7,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 7,
+    "pitch": 60,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        6
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        8,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 8,
+    "pitch": 62,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        5
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        9,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 9,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        10,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 10,
+    "pitch": 65,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        3
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        11,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 11,
+    "pitch": 67,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        12,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 12,
+    "pitch": 69,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        13,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 13,
+    "pitch": 71,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        14,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 14,
+    "pitch": 60,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        6
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        15,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 15,
+    "pitch": 62,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        5
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        16,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "shift",
+    "slot": 16,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        5
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 1,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        2,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 2,
+    "pitch": 65,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        3
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        3,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 3,
+    "pitch": 67,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        4,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 4,
+    "pitch": 69,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        5,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 5,
+    "pitch": 71,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        6,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 6,
+    "pitch": 60,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        6
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        7,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 7,
+    "pitch": 62,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        5
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        8,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 8,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        9,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 9,
+    "pitch": 65,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        3
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        10,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 10,
+    "pitch": 67,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        11,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 11,
+    "pitch": 69,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        12,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 12,
+    "pitch": 71,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        7
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        13,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 13,
+    "pitch": 60,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        6
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        14,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 14,
+    "pitch": 62,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        5
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        15,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 15,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ]
+    ],
+    "expected": [
+      12
+    ],
+    "actual": [
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        16,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector",
+    "gesture": "hold",
+    "slot": 16,
+    "pitch": 65,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 1,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 2,
+    "pitch": 65,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 3,
+    "pitch": 67,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 4,
+    "pitch": 69,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 5,
+    "pitch": 71,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 6,
+    "pitch": 60,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 7,
+    "pitch": 62,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 8,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 9,
+    "pitch": 65,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          67,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 10,
+    "pitch": 67,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 11,
+    "pitch": 69,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          71,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 12,
+    "pitch": 71,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 13,
+    "pitch": 60,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 14,
+    "pitch": 62,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 15,
+    "pitch": 64,
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "pattern-selector-retained",
+    "slot": 16,
+    "pitch": 65,
+    "passed": true
+  }
+]

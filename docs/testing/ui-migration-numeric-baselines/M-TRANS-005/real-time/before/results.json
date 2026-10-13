@@ -1,0 +1,283 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 127,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166626141,
+        "error_ms": -0.04052566666665203
+      },
+      {
+        "pitch": 127,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166149659,
+        "error_ms": -0.5170076666666523
+      },
+      {
+        "pitch": 96,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166185843,
+        "error_ms": -0.48082366666665766
+      },
+      {
+        "pitch": 96,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167188243,
+        "error_ms": 0.521576333333329
+      },
+      {
+        "pitch": 127,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16626925,
+        "error_ms": -0.3974166666666501
+      },
+      {
+        "pitch": 127,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166143328,
+        "error_ms": -0.5233386666666506
+      },
+      {
+        "pitch": 96,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166155587,
+        "error_ms": -0.5110796666666639
+      },
+      {
+        "pitch": 96,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166113348,
+        "error_ms": -0.5533186666666634
+      }
+    ]
+  },
+  {
+    "kind": "transpose-midi-boundary",
+    "mode": "higher",
+    "sources": [
+      [
+        -7,
+        13,
+        -7,
+        -7
+      ],
+      [
+        13,
+        -7,
+        -7,
+        -7
+      ]
+    ],
+    "unbounded": [
+      148,
+      148,
+      96,
+      96
+    ],
+    "expected": [
+      127,
+      127,
+      96,
+      96
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "program_changes": 36,
+    "program_group": [
+      [
+        3,
+        [
+          192,
+          0
+        ]
+      ],
+      [
+        3,
+        [
+          193,
+          0
+        ]
+      ],
+      [
+        3,
+        [
+          194,
+          3
+        ]
+      ],
+      [
+        3,
+        [
+          195,
+          88
+        ]
+      ]
+    ],
+    "excluded_script_start_events": 10,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0008559593333333781,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.167144053,
+        "error_ms": 0.47738633333332947
+      },
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166020078,
+        "error_ms": -0.6465886666666698
+      },
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166522841,
+        "error_ms": -0.14382566666665264
+      },
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166111347,
+        "error_ms": -0.5553196666666649
+      },
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166051165,
+        "error_ms": -0.6155016666666568
+      },
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.1660534,
+        "error_ms": -0.6132666666666675
+      },
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166104727,
+        "error_ms": -0.5619396666666499
+      },
+      {
+        "pitch": 0,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166210979,
+        "error_ms": -0.4556876666666487
+      }
+    ]
+  },
+  {
+    "kind": "transpose-midi-boundary",
+    "mode": "lower",
+    "sources": [
+      [
+        -7,
+        13,
+        -7,
+        -7
+      ],
+      [
+        13,
+        -7,
+        -7,
+        -7
+      ]
+    ],
+    "unbounded": [
+      -17,
+      -17,
+      0,
+      0
+    ],
+    "expected": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "onsets": 9,
+    "releases": 9,
+    "program_changes": 36,
+    "program_group": [
+      [
+        3,
+        [
+          192,
+          0
+        ]
+      ],
+      [
+        3,
+        [
+          193,
+          0
+        ]
+      ],
+      [
+        3,
+        [
+          194,
+          3
+        ]
+      ],
+      [
+        3,
+        [
+          195,
+          40
+        ]
+      ]
+    ],
+    "excluded_script_start_events": 0,
+    "transport_events": 6,
+    "total_events": 60,
+    "maximum_phase_error_seconds": 0.0008580833333333426,
+    "passed": true
+  }
+]

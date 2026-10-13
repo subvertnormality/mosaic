@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "passed": false,
+  "case": "M-REC-001",
+  "run": "/home/andy/mosaic-manual-runs/4ddcfe9160544b6e997b2805bf13df9f",
+  "failure_sha256": "6263f4baeb855931297d240050b780647eff38d234848762d786b878ed217956",
+  "observations_sha256": "69da149eea42832a1e96408c7532a25d15b6db6e9fb596c8651ecc320bdb8da7",
+  "diagnosis": {
+    "method": "independent frame_oracle.selected_value literal pixel rendering from preserved observations",
+    "visible_tempo_before_encoder": 108,
+    "visible_tempo_after_encoder": 98,
+    "public_encoder_delta": -10,
+    "original_required_tempo": 90,
+    "observation_indices": [
+      43,
+      44
+    ]
+  },
+  "successful_partial_scope": "Exact recorded placement steps 2/4 and input offsets 1430000000/1730000000ns passed before replay menu failure. This is not full case acceptance.",
+  "action": "Preserve original failed case and all its oracles. Real Record publication remains pending; complete-start recovery excludes this case."
+}

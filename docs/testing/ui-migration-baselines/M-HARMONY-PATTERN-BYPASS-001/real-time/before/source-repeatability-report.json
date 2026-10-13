@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "90595bb99717de83f4886ec1acac7bca1a99054a",
+  "selected_cases": [
+    "M-HARMONY-FAILURE-001",
+    "M-HARMONY-HELD-001",
+    "M-HARMONY-PATTERN-BYPASS-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/harmony_merge_workflow.py": "M-HARMONY-FAILURE-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/harmony_merge_workflow.py",
+      "case": "M-HARMONY-FAILURE-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-da39ea573d64474d895f8ab473044b54/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-da39ea573d64474d895f8ab473044b54/manifest.json",
+      "manifest_sha256": "df09a78e299429c04f758dc9d6cafb3e9a86f5e5d88c0a3cb3116ff82c3bb5ec",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

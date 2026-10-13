@@ -1,0 +1,8 @@
+{
+  "characterisation": "Adapter source confinement rejects a path before creating a native run",
+  "passed": true,
+  "returncode": 1,
+  "created_runs": [],
+  "adapter_sha256": "5acc052b08f5896ce2a913797ed1955642cad712e1340ac1cb4e710de5be551d",
+  "failure": "Traceback (most recent call last):\n  File \"tools/manual_case_capture.py\", line 96, in load_extra_cases\n    try:path.relative_to(tools)\n  File \"/usr/lib/python3.8/pathlib.py\", line 904, in relative_to\n    raise ValueError(\"{!r} does not start with {!r}\"\nValueError: '/home/andy/mosaic-manual-1.4.0/tests/behaviour/cases.py' does not start with '/home/andy/mosaic-manual-1.4.0/tools'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"tools/manual_case_capture.py\", line 284, in <module>\n    if __name__==\"__main__\":main()\n  File \"tools/manual_case_capture.py\", line 249, in main\n    a.case_registry,extra_blobs=load_extra_cases(a.extra_cases,cases.CASES)\n  File \"tools/manual_case_capture.py\", line 97, in load_extra_cases\n    except ValueError:raise ValueError(\"Extra cases must be Python source under ROOT/tools\")\nValueError: Extra cases must be Python source under ROOT/tools\n"
+}

@@ -11,13 +11,36 @@ exec(compile(ast.Module(body=[node],type_ignores=[]),'duration-oracle','exec'),n
 check=namespace['assert_durations']
 
 def event(index,port,status,time):
-    return dict(index=index,port=port,bytes=[status,60,100],logical_ns=time)
+    return dict(index=index,port=port,bytes=[status,60,100],logical_ns=time,monotonic_ns=time)
 
 class DurationRoutes(unittest.TestCase):
     def run_check(self,port,channel,offs):
         note=event(1,port,144+channel-1,0)
         c=SimpleNamespace(clock_mode='controlled-experimental',results=[],snapshot=lambda:dict(midi=offs))
         check(c,[note],[1])
+    def test_one_bounded_real_time_startup_gate_is_distinct_from_later_gates(self):
+        notes=[event(1,1,144,0),event(3,1,144,200000000)]
+        notes[1]['bytes'][1]=62
+        offs=[event(2,1,128,153456907),event(4,1,128,366666667)]
+        offs[1]['bytes'][1]=62
+        c=SimpleNamespace(clock_mode='real-time',results=[],snapshot=lambda:dict(midi=offs))
+        check(c,notes,[1,1],startup_tolerance_ms=20)
+        offs[1]['monotonic_ns']=353456907
+        with self.assertRaises(AssertionError):
+            check(c,notes,[1,1],startup_tolerance_ms=20)
+        offs[1]['monotonic_ns']=366666667
+        offs[0]['monotonic_ns']=142000000
+        with self.assertRaises(AssertionError):
+            check(c,notes,[1,1],startup_tolerance_ms=20)
+
+    def test_startup_allowance_does_not_relax_controlled_time(self):
+        note=event(1,1,144,0)
+        off=event(2,1,128,153456907)
+        c=SimpleNamespace(clock_mode='controlled-experimental',results=[],
+                          snapshot=lambda:dict(midi=[off]))
+        with self.assertRaises(AssertionError):
+            check(c,[note],[1],startup_tolerance_ms=20)
+
     def test_existing_default_route(self):
         self.run_check(1,1,[event(2,1,128,166666667)])
     def test_reference_route_ignores_other_routes(self):

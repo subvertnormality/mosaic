@@ -1,0 +1,2124 @@
+{
+  "assets": {
+    "generated/reader-index.json": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+    "book.js": "5079bd12045d8ad09b4501b0867f7e6bb527d734fde8d0441c68815d9fdf91cf",
+    "manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "manual.css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+    "index.html": "93f9acf8b83257999a88d6db8974b70bd2eee10891cdd869082929ba275a6254"
+  },
+  "data": [
+    {
+      "label": "default-1440",
+      "text": "NORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "theme",
+          "text": "Dark mode",
+          "aria": "Switch colour theme"
+        },
+        {
+          "tag": "SELECT",
+          "id": "scene",
+          "text": "Set channel and step note masks\nSet velocity and length masks\nSet chord masks\nChange the ending of a",
+          "aria": null,
+          "options": [
+            {
+              "text": "Set channel and step note masks",
+              "value": "0"
+            },
+            {
+              "text": "Set velocity and length masks",
+              "value": "1"
+            },
+            {
+              "text": "Set chord masks",
+              "value": "2"
+            },
+            {
+              "text": "Change the ending of a four-note melody",
+              "value": "3"
+            },
+            {
+              "text": "Set a ghost note and an accent",
+              "value": "4"
+            },
+            {
+              "text": "Add and remove trig masks",
+              "value": "5"
+            },
+            {
+              "text": "Unset the channel Note default",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Follow the controls one at a time",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "norns-layout",
+          "text": "norns Shield layout",
+          "aria": "Use norns Shield layout"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "E1",
+          "aria": "E1, pictured encoder"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "E2",
+          "aria": "E2, pictured encoder"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "E3",
+          "aria": "E3, pictured encoder"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "K1",
+          "aria": "Norns K1"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "K2",
+          "aria": "Norns K2"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "K3",
+          "aria": "Norns K3"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 1, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 2, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 3, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 8, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 8, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 8, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 8, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Enlarge grid controls",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "previous",
+          "text": "← Back",
+          "aria": "Previous scene step"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "autoplay",
+          "text": "Auto-play",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "next",
+          "text": "View next result →",
+          "aria": "Next captured step"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 1",
+          "aria": "Set the channel default and step-note exceptions · step 1 of 6: Starting point: channel 1 plays pattern 1 on steps 1-4 with the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, and no masks are set. Turn E1 to open Channel tasks, turn E2 to Masks and press K3, then turn E2 to Note. The header reads NOTE MASKS CH01 and the value reads X, which means no mask is set, so each step plays its own pattern note."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 2",
+          "aria": "Set the channel default and step-note exceptions · step 2 of 6: With no step held, turn E3 right until the screen reads G3 (MIDI 67). The screen shows the note name, so stop on the readout. This is the channel note mask: all four steps now play G, and their velocities stay as they were."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 3",
+          "aria": "Set the channel default and step-note exceptions · step 3 of 6: Hold step 1 at (1,4). The header gains ST01, which means edits now apply to that step only. Turn E3 right until the screen reads C4 (MIDI 72, five detents up from G3). Step 1 has its own note, which overrides the channel default."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 4",
+          "aria": "Set the channel default and step-note exceptions · step 4 of 6: Release step 1. The header loses ST01 and the screen returns to the channel default, G3. Playback now starts with C4 (72) and continues G, G, G: a step mask beats the channel mask."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 5",
+          "aria": "Set the channel default and step-note exceptions · step 5 of 6: Hold step 2 at (2,4) and turn E3 right until the screen reads D4 (MIDI 74). While a step is held, the screen shows that step's own note."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 6",
+          "aria": "Set the channel default and step-note exceptions · step 6 of 6: Release step 2. Steps 1 and 2 each have their own note (C4, D4), and steps 3 and 4 still play the channel note G."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Clear one exception, then clear all exceptions 1",
+          "aria": "Clear one exception, then clear all exceptions · step 1 of 2: Hold step 1 and press K2, then release the step. Step 1's mask is cleared, so it plays G3 again from the channel default, and step 2 still plays D4."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Clear one exception, then clear all exceptions 2",
+          "aria": "Clear one exception, then clear all exceptions · step 2 of 2: With no step held, hold K1 and press K2. Every step exception is cleared at once and the channel default stays: the screen still reads G3 and all four steps play G again."
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Recordings for this topic",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "dense",
+          "text": "Dense view",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Unset values and precedence",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Chord masks",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Scale, degree and rotation",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "MIDI and clearing",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "If a new note is silent",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Note names on the Masks screen",
+          "aria": null
+        }
+      ],
+      "geometry": {
+        "width": 1440,
+        "docWidth": 1440,
+        "items": [
+          {
+            "id": "norns-layout",
+            "cls": "norns-layout-toggle",
+            "x": 729.53125,
+            "y": -50.640625,
+            "width": 130.703125,
+            "height": 44,
+            "scrollWidth": 129
+          },
+          {
+            "id": "norns-device",
+            "cls": "norns",
+            "x": 340.234375,
+            "y": 6.359375,
+            "width": 520,
+            "height": 358,
+            "scrollWidth": 518
+          },
+          {
+            "id": "screen",
+            "cls": "",
+            "x": 362.234375,
+            "y": 99.359375,
+            "width": 372,
+            "height": 186,
+            "scrollWidth": 360
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "x": 340.234375,
+            "y": 400.359375,
+            "width": 1007.53125,
+            "height": 586.90625,
+            "scrollWidth": 1008
+          },
+          {
+            "id": "grid",
+            "cls": "",
+            "x": 340.234375,
+            "y": 447.046875,
+            "width": 1007.53125,
+            "height": 509.375,
+            "scrollWidth": 1006
+          },
+          {
+            "id": "enlarged-grid-controls",
+            "cls": "",
+            "x": 340.234375,
+            "y": 1023.265625,
+            "width": 1007.53125,
+            "height": 29.4375,
+            "scrollWidth": 1008
+          }
+        ]
+      }
+    },
+    {
+      "label": "default-390",
+      "text": "NORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "id": "theme",
+          "text": "Dark mode",
+          "aria": "Switch colour theme"
+        },
+        {
+          "tag": "SELECT",
+          "id": "scene",
+          "text": "Set channel and step note masks\nSet velocity and length masks\nSet chord masks\nChange the ending of a",
+          "aria": null,
+          "options": [
+            {
+              "text": "Set channel and step note masks",
+              "value": "0"
+            },
+            {
+              "text": "Set velocity and length masks",
+              "value": "1"
+            },
+            {
+              "text": "Set chord masks",
+              "value": "2"
+            },
+            {
+              "text": "Change the ending of a four-note melody",
+              "value": "3"
+            },
+            {
+              "text": "Set a ghost note and an accent",
+              "value": "4"
+            },
+            {
+              "text": "Add and remove trig masks",
+              "value": "5"
+            },
+            {
+              "text": "Unset the channel Note default",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Follow the controls one at a time",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "norns-layout",
+          "text": "norns Shield layout",
+          "aria": "Use norns Shield layout"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "E1",
+          "aria": "E1, pictured encoder"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "E2",
+          "aria": "E2, pictured encoder"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "E3",
+          "aria": "E3, pictured encoder"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "K1",
+          "aria": "Norns K1"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "K2",
+          "aria": "Norns K2"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "K3",
+          "aria": "Norns K3"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 1, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 1, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 2, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 2, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 3, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 3, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 4, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 4, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 5, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 6, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 7, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 1, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 2, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 3, row 8, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 4, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 5, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 6, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 7, row 8, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 8, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 9, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 10, row 8, brightness 15 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 11, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 12, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 13, row 8, brightness 0 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 14, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 15, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "",
+          "aria": "Grid column 16, row 8, brightness 2 of 15"
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Enlarge grid controls",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "previous",
+          "text": "← Back",
+          "aria": "Previous scene step"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "autoplay",
+          "text": "Auto-play",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "next",
+          "text": "View next result →",
+          "aria": "Next captured step"
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 1",
+          "aria": "Set the channel default and step-note exceptions · step 1 of 6: Starting point: channel 1 plays pattern 1 on steps 1-4 with the notes C, D, E and F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, and no masks are set. Turn E1 to open Channel tasks, turn E2 to Masks and press K3, then turn E2 to Note. The header reads NOTE MASKS CH01 and the value reads X, which means no mask is set, so each step plays its own pattern note."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 2",
+          "aria": "Set the channel default and step-note exceptions · step 2 of 6: With no step held, turn E3 right until the screen reads G3 (MIDI 67). The screen shows the note name, so stop on the readout. This is the channel note mask: all four steps now play G, and their velocities stay as they were."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 3",
+          "aria": "Set the channel default and step-note exceptions · step 3 of 6: Hold step 1 at (1,4). The header gains ST01, which means edits now apply to that step only. Turn E3 right until the screen reads C4 (MIDI 72, five detents up from G3). Step 1 has its own note, which overrides the channel default."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 4",
+          "aria": "Set the channel default and step-note exceptions · step 4 of 6: Release step 1. The header loses ST01 and the screen returns to the channel default, G3. Playback now starts with C4 (72) and continues G, G, G: a step mask beats the channel mask."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 5",
+          "aria": "Set the channel default and step-note exceptions · step 5 of 6: Hold step 2 at (2,4) and turn E3 right until the screen reads D4 (MIDI 74). While a step is held, the screen shows that step's own note."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Set the channel default and step-note exceptions 6",
+          "aria": "Set the channel default and step-note exceptions · step 6 of 6: Release step 2. Steps 1 and 2 each have their own note (C4, D4), and steps 3 and 4 still play the channel note G."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Clear one exception, then clear all exceptions 1",
+          "aria": "Clear one exception, then clear all exceptions · step 1 of 2: Hold step 1 and press K2, then release the step. Step 1's mask is cleared, so it plays G3 again from the channel default, and step 2 still plays D4."
+        },
+        {
+          "tag": "BUTTON",
+          "id": "",
+          "text": "Clear one exception, then clear all exceptions 2",
+          "aria": "Clear one exception, then clear all exceptions · step 2 of 2: With no step held, hold K1 and press K2. Every step exception is cleared at once and the channel default stays: the screen still reads G3 and all four steps play G again."
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Recordings for this topic",
+          "aria": null
+        },
+        {
+          "tag": "BUTTON",
+          "id": "dense",
+          "text": "Dense view",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Unset values and precedence",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Chord masks",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Scale, degree and rotation",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "MIDI and clearing",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "If a new note is silent",
+          "aria": null
+        },
+        {
+          "tag": "SUMMARY",
+          "id": "",
+          "text": "Note names on the Masks screen",
+          "aria": null
+        }
+      ],
+      "geometry": {
+        "width": 390,
+        "docWidth": 390,
+        "items": [
+          {
+            "id": "norns-layout",
+            "cls": "norns-layout-toggle",
+            "x": 228.296875,
+            "y": 136.328125,
+            "width": 130.703125,
+            "height": 44,
+            "scrollWidth": 129
+          },
+          {
+            "id": "norns-device",
+            "cls": "norns",
+            "x": 31,
+            "y": 193.328125,
+            "width": 328,
+            "height": 288,
+            "scrollWidth": 326
+          },
+          {
+            "id": "screen",
+            "cls": "",
+            "x": 48,
+            "y": 296.828125,
+            "width": 190,
+            "height": 95,
+            "scrollWidth": 178
+          },
+          {
+            "id": "",
+            "cls": "grid-wrap",
+            "x": 31,
+            "y": 501.328125,
+            "width": 328,
+            "height": 247.03125,
+            "scrollWidth": 328
+          },
+          {
+            "id": "grid",
+            "cls": "",
+            "x": 31,
+            "y": 548.015625,
+            "width": 328,
+            "height": 169.5,
+            "scrollWidth": 326
+          },
+          {
+            "id": "enlarged-grid-controls",
+            "cls": "",
+            "x": 31,
+            "y": 768.359375,
+            "width": 328,
+            "height": 29.4375,
+            "scrollWidth": 328
+          }
+        ]
+      }
+    }
+  ],
+  "errors": []
+}

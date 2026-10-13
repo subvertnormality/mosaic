@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "prototype_dir": "/home/andy/mosaic-manual-build-operators/resume-prototype-20261004/prototype",
+  "patch_path": "/home/andy/mosaic-manual-build-operators/resume-prototype-20261004/final-review.diff",
+  "patch_sha256": "bf3887eb24add537ea8dd1b3555594e660655f46c98e66e066df73b13123e653",
+  "files": {
+    "tools/manual_build.py": "7ec922bb6a8118e174aaadbe8483a6aa164bf00e95c483778b8df54df4cd053e",
+    "tools/manual_publication_verify.py": "0b53fa7eda495dbd4520880099ccf2a99d111badf95bd418c7c6646175de4d61",
+    "tools/resume_adoption.py": "78c977b9b6f5087ea24bc5df58f7328cbb99d99e5ad17eff76043b537d8d54c3",
+    "tools/test_manual_resume_adoption.py": "9f5eb95ed7b8b1c5d1de2d796e08343e39034503c28efad5be3e8d73bc724168"
+  },
+  "base_files": {
+    "tools/manual_build.py": "cdf8b1cb1fdca9d6d2384e7e954acc7f992ddf6e4ca0d9e5a3b48d3cc8afd0cc",
+    "tools/manual_publication_verify.py": "490e067a6a39ec95f6a89ef14cd5635d3c493fe55af29f8c189e8943c7dadd8a"
+  },
+  "strict_oracles_ast_unchanged": {
+    "scoped_native_witness": true,
+    "check_merge_music": true
+  },
+  "parent_manifest_sha256": "7a074c5e5de8eafd3d1191bfed1ded1911baca384f4378632761f3d79ed94f87",
+  "parent_reference_audit": {
+    "count": 19,
+    "passed": 19,
+    "failed": []
+  },
+  "doctor_parent_audit": {
+    "doctor-manual-real": {
+      "frames": 7,
+      "evidence_files": 275,
+      "tree_sha256": "715bbab605598d716fbfdf487a305e5e9c97cfa4499f03f0fc8eca0d835720cc",
+      "strict_audit_current_runtime_emulator": true
+    },
+    "doctor-auto-real": {
+      "frames": 7,
+      "evidence_files": 275,
+      "tree_sha256": "9066c241b35fc7b990a57df3d9f884d7647df4e6817262fca9ddeb14144b2331",
+      "strict_audit_current_runtime_emulator": true
+    }
+  },
+  "tests": {
+    "portable_resume_doctor_witness_inventory": 7,
+    "focused_lineage_adoption": 20,
+    "actual_report_witness_resolver": 5,
+    "syntax_compile": "passed"
+  },
+  "notes": [
+    "Default clean builder remains fresh.",
+    "Masks and first-sound are not adoptable; failed musical-audio-assets is rerun.",
+    "Reference rows are reusable only after current native/source audits and exact output reconstruction.",
+    "Doctor reports retain immutable original parent paths; no report JSON path rewriting.",
+    "All downstream stages and browser suites rerun.",
+    "Resume prototype was not installed or launched."
+  ]
+}

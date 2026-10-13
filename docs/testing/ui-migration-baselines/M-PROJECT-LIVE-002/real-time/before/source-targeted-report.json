@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "before_sha": "c0d6fd9c10105975c5f404d264e2740b8a08df23",
+  "after_sha": "509f38f3d69172fa9113956c30bb6eb6160eb38c",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-PROJECT-LIVE-001",
+    "M-PROJECT-LIVE-002",
+    "M-PROJECT-LIVE-003",
+    "M-PROJECT-LIVE-004"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/project_dialog_lifecycle.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/project_dialog_lifecycle.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-PROJECT-LIVE-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-001/real-time/before/7097073b84fb416fac50a3457e236336/manifest.json",
+              "manifest_sha256": "8d93e7c955800bbd9d130e87fca0025a6de7f5558da5056d912a141d8cee38a5"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-001/real-time/after/1351cd9e27354fb0a798ec4e392b01a2/manifest.json",
+              "manifest_sha256": "e6fbc4f331ee02633e1aa4d464409887d422e7cd9b19cc12aed409c668ecb120"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-001/controlled-experimental/before/45d767276dec42a59bc85a8885e7139c/manifest.json",
+              "manifest_sha256": "9a1c3fe1564376e412ffbc1a7c94a0ccc4008ad5bf6338a65dd9e96eac50e743"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-001/controlled-experimental/after/dd82f23c9031480f9033b91c2d16a1df/manifest.json",
+              "manifest_sha256": "353983231a3c45c50e0470f82686375d25523be2e36fd57fa95aa6887dac2462"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-PROJECT-LIVE-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-002/real-time/before/c21b6607f1ff44b796cdb8b474399d6d/manifest.json",
+              "manifest_sha256": "13635ebe85d42040c2db0a1bdd275785500381639e20f1eff4fcf1e569bbf398"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-002/real-time/after/68dfe6df644d4a62a3cbcab16135b56a/manifest.json",
+              "manifest_sha256": "9d5491a560f274aa3cc736f702240281b135aa09dc5f6e980f5773d7a6502093"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-002/controlled-experimental/before/676a3a301dc443cf9b650c3b44f04a2e/manifest.json",
+              "manifest_sha256": "f691c41a3e6b246e61b6d7c5a921fd5e7598fa0cd10ce35cbb3ccb1d7fd104c6"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-002/controlled-experimental/after/d91eb3cc494c48849c13b0b34cd94344/manifest.json",
+              "manifest_sha256": "9289f40929fa96610ba3ca6c2cc92d4b8c14843f749d912d033134a787311fa6"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-PROJECT-LIVE-003",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-003/real-time/before/274ef63bb19e47ab98f35737b6ea574f/manifest.json",
+              "manifest_sha256": "ac9dd3fec19f0f9f0a37a8b6292f75178723844232b2795dc91d65e80067f7af"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-003/real-time/after/31314eade6aa423c86558919d3d2af02/manifest.json",
+              "manifest_sha256": "9dd91dbbb58b2823ea4b3ebe5f54a6e542c0e744d1ce4852a4d58ea36dcf65f5"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-003/controlled-experimental/before/4dbd18296bfa4f96be12750297d769b8/manifest.json",
+              "manifest_sha256": "cb3f118b042aaee3444a322ae75d106068fa2d1a834febb3434f8336bb7db5f8"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-003/controlled-experimental/after/18b1a308992f44508aae1f064c5d83bd/manifest.json",
+              "manifest_sha256": "13d9e59a98cf2d3ade503190a2a21eb3c928764e46846ff795e89a0c5e36d846"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-PROJECT-LIVE-004",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-004/real-time/before/7fb72741003e4b9dbf677f306d39adea/manifest.json",
+              "manifest_sha256": "da47e63b5244b9cd4536f6b50eced336834102321c71cf3d452a5a506ba06494"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-004/real-time/after/30c6547f0c33407bb6d9f2357729cfbe/manifest.json",
+              "manifest_sha256": "31f2d03eb46f606e16cc063d2eb5c9b689f4e9a55d77e69ea4e3777ab0ee183f"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-004/controlled-experimental/before/8aadf715d54440a0a74b367cd8005030/manifest.json",
+              "manifest_sha256": "4a0cf778d76c7e9a1bd5866a7bcad8b325ff48fd8d8de03a82445d0cc9d61da4"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PROJECT-LIVE-004/controlled-experimental/after/2b7c56da7dad48cb97037971825e0760/manifest.json",
+              "manifest_sha256": "b256a9d85980e30dcee6d8bb5544336e645c3c1494f7c98ac3d19540b6fe2d95"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

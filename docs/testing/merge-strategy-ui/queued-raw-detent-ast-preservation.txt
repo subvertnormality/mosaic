@@ -1,0 +1,1 @@
+Only queued_cycle differs. With the three public encoder delta literals normalized, complete function AST is identical. All other functions, musical arrays, scope/LED/timing assertions unchanged.

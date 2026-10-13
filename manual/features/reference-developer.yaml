@@ -1,0 +1,168 @@
+features:
+- id: development
+  title: Development
+  audience: developer
+  summary: Run the repository tests on a development machine before opening a pull request.
+  prose: 'This section is for people changing Mosaic''s code, not for playing it. Before opening a pull
+    request, run the repository tests on a development machine:
+
+
+    ```
+
+    ./test.sh
+
+    ```
+
+
+    Do not run the harness on norns. It downloads a copy of the norns repository, which can conflict with
+    the device''s own installation. If you ran it on the device by mistake, delete /code/mosaic/lib/tests/test_artefacts
+    to remove that copy and restore the device.'
+  musical_use: ''
+  related: []
+  sources:
+    readme: manual/legacy/README-1.4.0.md#development
+    behaviour_cases: []
+    code:
+    - test.sh
+    - lib/tests/run_tests.lua
+    - tests/behaviour/run.py
+    - tests/behaviour/suite.py
+  controls:
+  - gesture: Run ./test.sh on the development machine.
+    result: The Lua test suite runs. Do not run the harness on the norns device.
+  details:
+  - title: Behavior changes
+    text: '1. Add the smallest regression for the change.
+
+      2. Confirm that it fails for the expected reason.
+
+      3. Make the production change and rerun the regression.
+
+      4. Run affected unit, integration and emulator behavior tests, then the full Lua suite.
+
+      Follow AGENTS.md. Documentation does not replace observable acceptance.'
+  recipes:
+  - title: Check a change before a pull request
+    text: 'Before you start you need Lua (CI uses 5.3), curl, unzip and network access to GitHub: the
+      first run downloads a copy of the norns repository.
+
+      1. On your computer, open a terminal in the Mosaic folder.
+
+      2. Run ./test.sh and wait for it to finish. It ends with luaunit''s summary, Ran N tests in S seconds,
+      N successes, 0 failures, then OK.
+
+      3. Fix any failing test, then run it again until the whole suite passes.
+
+      4. Only then open the pull request. CI runs the same ./test.sh on every pull request, so a pass
+      here predicts the check.
+
+      5. Never run this on the norns itself. If you did, delete /code/mosaic/lib/tests/test_artefacts
+      to remove the downloaded copy.'
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: documentation-only
+    rationale: Development-machine test commands are developer guidance, not a player-input feature.
+    native_gap: No native playback capture is required for the prose; test-suite results remain separate
+      evidence.
+  category: developer
+  parent: null
+  level: 2
+- id: roadmap
+  title: Roadmap
+  audience: developer
+  summary: Microtiming is listed as future work.
+  prose: Microtiming is listed as future work. Mosaic 1.4.0 has no microtiming control, and the roadmap
+    lists no delivery date.
+  musical_use: ''
+  related:
+  - development
+  sources:
+    readme: manual/legacy/README-1.4.0.md#roadmap
+    behaviour_cases: []
+    code: []
+  controls: []
+  details:
+  - title: What exists today
+    text: For timing feel now, use a channel's swing and shuffle on the Clock task (Channel tasks > Clock).
+      Microtiming is not available.
+  recipes: []
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: documentation-only
+    rationale: Microtiming is a roadmap entry with no available control in this release.
+    native_gap: No native microtiming acceptance is claimed.
+  category: developer
+  parent: development
+  level: 3
+- id: interesting-components-for-norns-script-developers
+  title: Interesting Components for Norns Script Developers
+  audience: developer
+  summary: The Lua harness and mocks run norns script tests away from hardware.
+  prose: 'Mosaic has a Lua test harness that runs norns scripts away from the hardware. It downloads a
+    copy of the norns repository and uses local mocks and shims so luaunit tests run on a normal computer.
+    The harness and example tests are in the lib/tests folder; start there when you want to test your
+    own script the same way. Run it on a development machine, never on norns.
+
+
+    This program is released under the GNU license. Copyright Andrew Hillel 2024.'
+  musical_use: ''
+  related:
+  - development
+  sources:
+    readme: manual/legacy/README-1.4.0.md#interesting-components-for-norns-script-developers
+    behaviour_cases: []
+    code:
+    - lib/tests/run_tests.lua
+  controls: []
+  details:
+  - title: Where to look
+    text: lib/tests/run_tests.lua downloads the norns copy and loads every test file. lib/tests/lib holds
+      the unit tests, for example m_midi_tests.lua (MIDI output with a spy device), scheduler_tests.lua
+      (the scheduler) and ui_adapters_tests.lua (screen pages). lib/tests/lib/integration_tests holds
+      tests that run several modules together. lib/tests/helpers/mocks holds the stand-ins for norns,
+      params, MIDI and the scheduler.
+  recipes:
+  - title: Read a harness example
+    text: "1. Open lib/tests/lib/m_midi_tests.lua in the Mosaic repository. Its helper with_output_spy\
+      \ swaps the global midi_devices for a stub that records note_on and note_off calls, runs the module\
+      \ under test and checks what was sent with luaunit.assert_equals. That is a complete example of\
+      \ testing a norns script without hardware. The helper, lines 3-14 of the file:\n```lua\nlocal function\
+      \ with_output_spy(run)\n  local original_devices=midi_devices\n  local sent={}\n  midi_devices={{\n\
+      \    note_on=function(_,note,velocity,channel) sent[#sent+1]={\"on\",note,velocity,channel} end,\n\
+      \    note_off=function(_,note,velocity,channel) sent[#sent+1]={\"off\",note,velocity,channel} end\n\
+      \  }}\n  midi_output:reset_note_counts()\n  local ok,err=pcall(run,sent)\n  midi_output:reset_note_counts();midi_devices=original_devices\n\
+      \  if not ok then error(err,0) end\nend\n```\nThe test that uses it, lines 33-38 of the file: it\
+      \ releases a note that was never played with an out-of-range value, and the spy shows the value\
+      \ clamped to 127 before it is sent.\n```lua\nfunction test_unmatched_midi_release_is_clamped_before_safety_send()\n\
+      \  with_output_spy(function(sent)\n    midi_output:note_off(200,77,4,1)\n    luaunit.assert_equals(sent,{{\"\
+      off\",127,77,4}})\n  end)\nend\n```\n2. Open lib/tests/helpers/mocks to see the other stand-ins\
+      \ (norns_mock.lua, params_mock.lua, scheduler_mock.lua, m_midi_mock.lua) and search lib/tests/lib\
+      \ for the tests that include them.\n3. Run every test with ./test.sh on your computer. To run a\
+      \ single test, change into lib/tests and run lua ./run_tests.lua with luaunit's -p option and part\
+      \ of the test's name, for example -p test_unmatched_midi_release."
+  scene_refs: []
+  review:
+    status: verified
+    cases: []
+    note: Source and case definitions reviewed. Published native assertions and their scope are listed
+      separately; pending gaps are not acceptance evidence.
+    source_status: code-and-case-reviewed
+    native_evidence: []
+    applicability: documentation-only
+    rationale: Lua harness architecture and license are developer reference content.
+    native_gap: Native scenes do not verify licensing or harness architecture.
+  category: developer
+  parent: development
+  level: 3

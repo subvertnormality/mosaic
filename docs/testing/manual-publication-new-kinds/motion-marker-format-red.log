@@ -1,0 +1,15 @@
+.................................E.....................................
+======================================================================
+ERROR: test_full_authored_motion_requires_original_native_mini_proof (test_manual_publication_verify.MotionSampleIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 285, in test_full_authored_motion_requires_original_native_mini_proof
+    audit.check_motion_samples(row,obs,'controlled-experimental',events,results,1)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 625, in check_motion_samples
+    if item.get('mark_sha256')!=sha:raise ValueError('Motion marker differs from full authored C04 footprint')
+ValueError: Motion marker differs from full authored C04 footprint
+
+----------------------------------------------------------------------
+Ran 71 tests in 2.168s
+
+FAILED (errors=1)

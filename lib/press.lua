@@ -130,13 +130,15 @@ function press:handle_pre(page, x, y)
 
   -- If no functions have been registered for this page, do nothing
   if self.pre_handlers[found_page] == nil then
-    return
+    return false
   end
 
   -- Otherwise, call all functions registered for this page
+  local claimed = false
   for _, func in ipairs(self.pre_handlers[fn.find_key(pages.pages, page)]) do
-    func(x, y)
+    if func(x, y) == true then claimed = true end
   end
+  return claimed
 end
 
 function press:handle_post(page, x, y)

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "focused_tests": 20,
+  "native_qualification_passed": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "supersedes_source_receipt": "source-and-ast-receipt.json",
+  "strengthening": [
+    "READY genuine fixture window_max >=64",
+    "native public Play/Stop horizon >=12s with unchanged real .01s tolerance",
+    "exact entire musical packet window across native public transport"
+  ],
+  "files": {
+    "tools/doctor_options_audit.py": "54e4bbcbe2d41ae18bd4f84dcf0509dc764cc8471a48c54aa54518ed03b494bb",
+    "tests/behaviour/test_doctor_options_audit.py": "11507ce1a0c90b64eaff9dd01593d9cdffd03c93e27ddbf945bf8bd11d943fbe"
+  }
+}

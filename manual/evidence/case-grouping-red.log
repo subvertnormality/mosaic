@@ -1,0 +1,21 @@
+.EE..
+======================================================================
+ERROR: test_groups_share_case_but_keep_profiles_separate (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 26, in test_groups_share_case_but_keep_profiles_separate
+    groups=module.group_plans([dict(id="a",behaviour_case="X"),dict(id="b",behaviour_case="X"),dict(id="c",behaviour_case="X",profile="midi-modulation")])
+AttributeError: module 'manual_case_capture' has no attribute 'group_plans'
+
+======================================================================
+ERROR: test_shared_case_keeps_independent_scene_traces (__main__.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_case_capture.py", line 20, in test_shared_case_keeps_independent_scene_traces
+    traces=module.TraceCursors()
+AttributeError: module 'manual_case_capture' has no attribute 'TraceCursors'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.011s
+
+FAILED (errors=2)

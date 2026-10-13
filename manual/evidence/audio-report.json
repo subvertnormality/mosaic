@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "native_run": "/home/andy/mosaic-manual-audio-runs/8f01f0f4ae0d42148bfcdeda7a1a8939",
+  "source_sha256": "2681fe0e37fa5d727e63ecfc200f968f99aea7ae7403ea28d3819a854abe18a0",
+  "complete_regression_run": false,
+  "controlled_lane": "inapplicable: native DSP audio depends on real host time",
+  "examples": [
+    {
+      "id": "oilcan-pocket",
+      "case": "MA-AUDIO-oilcan-pocket",
+      "bars": 4,
+      "bpm": 90,
+      "timeline_frames": 68,
+      "mix": {
+        "peak": 0.40384313464164734,
+        "rms": 0.06392287422443134,
+        "tail_rms": 0.0009619168652784546,
+        "sample_rate": 48000,
+        "duration": 13.666666666666666,
+        "clipped_samples": 0
+      },
+      "solos": [
+        {
+          "voice": "Oilcan 1",
+          "channel": 1,
+          "metrics": {
+            "peak": 0.40384313464164734,
+            "rms": 0.06392287422443134,
+            "tail_rms": 0.0009619168652784546,
+            "sample_rate": 48000,
+            "duration": 13.666666666666666,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "file_sha256": {
+        "audio/oilcan-pocket.ogg": "c0fec622ba03c17bada4d166607cf368571937948d074c0edc6c32f7ec6755e0",
+        "audio/oilcan-pocket.mp3": "bf5399821a95a9a973bc0e6cd9c23a2faf9c81f8c9c716922717fc00bf88cb2a"
+      }
+    },
+    {
+      "id": "bass-and-intervals",
+      "case": "MA-AUDIO-bass-and-intervals",
+      "bars": 4,
+      "bpm": 90,
+      "timeline_frames": 68,
+      "mix": {
+        "peak": 0.08824799954891205,
+        "rms": 0.012723403180997682,
+        "tail_rms": 0.0001584329577310582,
+        "sample_rate": 48000,
+        "duration": 13.666666666666666,
+        "clipped_samples": 0
+      },
+      "solos": [
+        {
+          "voice": "Polyperc 1",
+          "channel": 1,
+          "metrics": {
+            "peak": 0.027893653139472008,
+            "rms": 0.0054062049279384105,
+            "tail_rms": 6.912005371949457e-05,
+            "sample_rate": 48000,
+            "duration": 13.666666666666666,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "voice": "Doubledecker",
+          "channel": 2,
+          "metrics": {
+            "peak": 0.07650259882211685,
+            "rms": 0.011611081600782896,
+            "tail_rms": 0.00014745734706028796,
+            "sample_rate": 48000,
+            "duration": 13.666666666666666,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "file_sha256": {
+        "audio/bass-and-intervals.ogg": "cec9ccf0e59ce4ce1d546fe82aaca14a0f58a1800ea55e2e2fb8cd3537dd5e2f",
+        "audio/bass-and-intervals.mp3": "78ad1ed05239c4893aa3d17e222d2c84051917f8f39c4f4abad5f189f82fef3a"
+      }
+    },
+    {
+      "id": "three-voice-conversation",
+      "case": "MA-AUDIO-three-voice-conversation",
+      "bars": 4,
+      "bpm": 90,
+      "timeline_frames": 68,
+      "mix": {
+        "peak": 0.35842379927635193,
+        "rms": 0.05241235470574048,
+        "tail_rms": 0.0007846954135939633,
+        "sample_rate": 48000,
+        "duration": 13.666666666666666,
+        "clipped_samples": 0
+      },
+      "solos": [
+        {
+          "voice": "Oilcan 1",
+          "channel": 1,
+          "metrics": {
+            "peak": 0.33498114347457886,
+            "rms": 0.05142942803767426,
+            "tail_rms": 0.000775081593988896,
+            "sample_rate": 48000,
+            "duration": 13.666666666666666,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "voice": "Polyperc 1",
+          "channel": 2,
+          "metrics": {
+            "peak": 0.021226447075605392,
+            "rms": 0.004114001849213293,
+            "tail_rms": 5.259882657150466e-05,
+            "sample_rate": 48000,
+            "duration": 13.666666666666666,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "voice": "Doubledecker",
+          "channel": 3,
+          "metrics": {
+            "peak": 0.0745786726474762,
+            "rms": 0.010646315868533394,
+            "tail_rms": 0.00018829566618444346,
+            "sample_rate": 48000,
+            "duration": 13.666666666666666,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "file_sha256": {
+        "audio/three-voice-conversation.ogg": "14271d63722c6b10b836afbf35ef06e25f5a29ec82c6427778c675a6ebe84a45",
+        "audio/three-voice-conversation.mp3": "3ea4b50f44b09f9714a405cd93425f851408e669bef090ce51fb4b6b4466f566"
+      }
+    }
+  ]
+}

@@ -296,7 +296,19 @@ function Lattice:pulse()
   if probe then probe:record(1, probe.pulse, 0, 0, 2) end
 end
 
+-- One pulse's sprocket work. `pulse_token` is a fresh table for each call
+-- and nil outside it: the wrap rebuilds of one pulse may share work under it
+-- (pattern.lua wrap memo). A pulse that raises leaves its token behind, but
+-- the next pulse_all replaces it before any sprocket runs, so nothing is
+-- shared across pulses.
 function Lattice:pulse_all()
+  self.pulse_token = {}
+  local result = self:pulse_all_sprockets()
+  self.pulse_token = nil
+  return result
+end
+
+function Lattice:pulse_all_sprockets()
   if self.enabled then
     -- Parameter values resolved ahead of their own step leave here, inside a
     -- pulse the sequencer was already running and before this pulse's own work.
@@ -363,6 +375,8 @@ function Lattice:pulse_all()
         -- served here rather than behind the notes that follow it.
         if serve then serve() end
         if self.output then self.output.flush() end
+        if self.before_note_group then self.before_note_group(deferred, deferred_count, self.transport) end
+        if not self.enabled then return end
         -- The group's notes leave back to back, then each sprocket finishes its
         -- step and moves past the onset. Every note is still sent before its
         -- own sprocket advances, so its releases keep the phase they had.
@@ -390,6 +404,7 @@ function Lattice:pulse_all()
           if probe then probe:record(3, self.transport, sprocket.id, 0, 2) end
           if not self.enabled then return end
         end
+        if self.after_note_group then self.after_note_group(deferred, deferred_count, self.transport) end
         -- m_midi only appends a note to the pulse's batch; it reaches the wire
         -- at a flush. Finishing a step under lookahead resolves the next step's
         -- values, which reads and allocates, so the group's notes are written

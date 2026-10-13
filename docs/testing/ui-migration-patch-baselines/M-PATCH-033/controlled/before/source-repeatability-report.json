@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "132900c537c367fdb144e5cc323ec4778a4cfb40",
+  "selected_cases": [
+    "M-PATCH-029",
+    "M-PATCH-030",
+    "M-PATCH-031",
+    "M-PATCH-032",
+    "M-PATCH-033",
+    "M-PATCH-034",
+    "M-PATCH-035",
+    "M-PERSIST-COMBINED-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/patch_params.py": "M-PATCH-029",
+    "tests/behaviour/contract/patch_params.py": "M-PATCH-031",
+    "tests/behaviour/contract/recording_lock_song.py": "M-PERSIST-COMBINED-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/patch_params.py",
+      "case": "M-PATCH-029",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-8acedfface4a4cdebb4afd55a49b54b3/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-8acedfface4a4cdebb4afd55a49b54b3/manifest.json",
+      "manifest_sha256": "ed4700e23218872c08ee87b69ec9b5bab12eb299f7e43895444f31d586f7ce7c",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/patch_params.py",
+      "case": "M-PATCH-031",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-2aafaec0ce6f4fde8e2a02da48fbe98d/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-2aafaec0ce6f4fde8e2a02da48fbe98d/manifest.json",
+      "manifest_sha256": "edb95783c2e4ba246fb40ca6bfc3c0b098056015bd7fc20494a5f06c3d011b1e",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/recording_lock_song.py",
+      "case": "M-PERSIST-COMBINED-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-264b72936d0945d386682c6f7312a14a/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-264b72936d0945d386682c6f7312a14a/manifest.json",
+      "manifest_sha256": "7d078541e3e5b090323e5ae0aa326d4de34a1d1bc219d9c35fd99ab0ed493ab7",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

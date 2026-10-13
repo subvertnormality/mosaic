@@ -1,0 +1,21 @@
+.....EE.............
+======================================================================
+ERROR: test_subset_can_select_complete_scenes_without_changing_any_evidence (test_manual_publication_verify.ExactPublicationSubset)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 146, in test_subset_can_select_complete_scenes_without_changing_any_evidence
+    audit.check_reference_publication(subset,original)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_reference_publication'
+
+======================================================================
+ERROR: test_subset_cannot_convert_failed_or_empty_report_into_success (test_manual_publication_verify.ExactPublicationSubset)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 154, in test_subset_cannot_convert_failed_or_empty_report_into_success
+    with self.assertRaisesRegex(ValueError,'Failed or empty'):audit.check_reference_publication(subset,original)
+AttributeError: module 'manual_publication_verify' has no attribute 'check_reference_publication'
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.022s
+
+FAILED (errors=2)

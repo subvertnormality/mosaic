@@ -1,0 +1,116 @@
+{
+  "scope": "Independent failed stage11 transient footer/selected pixels and all external participant cleanup; no whole-run success",
+  "whole_run_passed": false,
+  "run": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7",
+  "failure_sha256": "30a698bd607cd0fb4cdb60819f1fdd73ad4e75ba3c213dcb95120142848a18b7",
+  "native_skip_fields": [
+    {
+      "label": "Strategy",
+      "observation_index": 54,
+      "passed": true
+    },
+    {
+      "label": "Active",
+      "observation_index": 55,
+      "passed": true
+    }
+  ],
+  "expected_footer": "SKIP APPLIED",
+  "footer_observations": [
+    {
+      "observation_index": 54,
+      "matched": true,
+      "frame_sha256": "b3514077bc5a7a6add7d5acebaff3b342aa4510a2de50f9dd8d5567728f3393f"
+    },
+    {
+      "observation_index": 55,
+      "matched": true,
+      "frame_sha256": "c998c173d516ed0c371d512b955fe7ce72ceffaca2d190a6802c3ccf05147a57"
+    },
+    {
+      "observation_index": 56,
+      "matched": false,
+      "frame_sha256": "df44c32abaa69b738853523b5009ef6581b50d566d2800702afe2ee9f247d934"
+    },
+    {
+      "observation_index": 57,
+      "matched": false,
+      "frame_sha256": "df44c32abaa69b738853523b5009ef6581b50d566d2800702afe2ee9f247d934"
+    },
+    {
+      "observation_index": 58,
+      "matched": false,
+      "frame_sha256": "e7efa9fe4c9d1104b26e74e03f7982aa23333c2b2bd235d3d48de4fa5c6f29fb"
+    }
+  ],
+  "participants": [
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-PARAM-046-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 9,
+      "releases": 9,
+      "cleanup_sha256": "c96c53715a9b95820e360a3999be884741a0a383d185ab89ac7cd01fe4fabac2"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-LIVEUI-SHAPETRIG-001-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 26,
+      "releases": 26,
+      "cleanup_sha256": "b7441e231361af4f2cfdd647c89ddb8a273377a97873a7ecd67fe5be5170b906"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-TRANS-009-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 11,
+      "releases": 11,
+      "cleanup_sha256": "10735481d8c4bf1371ebb80c126c256098b609f475e74426d505fab543b4121a"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-SONG-FLOW-001-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 56,
+      "releases": 56,
+      "cleanup_sha256": "35ca5afa32840818a9c77440d836ebbbdf03ce76f16ec5e5255e09f7f5655e8e"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-OPT-KEYS-001-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 360,
+      "releases": 360,
+      "cleanup_sha256": "74e6ed979701359682269e5e589793e5aad9801ea386c9e5672ac0ba153db77b"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-MUTE-001-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 42,
+      "releases": 42,
+      "cleanup_sha256": "67138b2e028e22ad31803f637f600593cb6b60b5f8212898c61cb77b90e37218"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-PARAM-001-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 0,
+      "releases": 0,
+      "cleanup_sha256": "12dc86a9edb591ffea73d8ca9a3ba58fe739fc91e5904fab9755d05e7259ff57"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7/M-RANGE-REJECT-001-base-midi",
+      "held_inputs": [],
+      "active_notes": 0,
+      "onsets": 26,
+      "releases": 26,
+      "cleanup_sha256": "612a85ba34eba8f689e21cac056d95950c7cc1a8a3c82df9ec99835ef659cc34"
+    }
+  ],
+  "source_explanation": "Exact SKIP APPLIED is already present during selected Strategy and Active observations54/55. select_strategy then sends ordinaryE2 input reselecting firstfield; later observations56\u201358 do not show that footer. Late observer failed, while apply feedback was delivered.",
+  "diagnostic_history": "Initial scratch assertion that nofooterframe matched failed; corrected interpretation retains positive54/55 and negative56\u201358, no artifact or source rewritten",
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

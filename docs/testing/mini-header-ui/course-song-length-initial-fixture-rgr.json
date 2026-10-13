@@ -1,0 +1,74 @@
+{
+  "baseline_run": "/home/andy/mosaic-manual-runs/37462fd6236d492ca7e02beda002b122",
+  "baseline_helper_sha256": "d31360389d2a9eeb1d3fb3e9622092364e281454b78618e79d8ec21ea48defc8",
+  "candidate_helper_sha256": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5",
+  "test_sha256": "600a5264201379ecdba4b8224a799d07eac8dea53b733d6898db9575c27104fd",
+  "commands": [
+    "python3 -m unittest discover -s tests/behaviour -p test_manual_course_bind.py -k CourseSongLengthRecipe",
+    "python3 -m unittest discover -s tests/behaviour -p test_manual_course_bind.py"
+  ],
+  "evidence": [
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-length-focused-red.log",
+      "sha256": "80fed5e220771448ad1b2f1d5e321f3af9ca72f227eb9751ffc833db0f187e3a"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-length-focused-green.log",
+      "sha256": "8c48a33d2c359464395f74f0b2034ed8bf3608b2775d4035d227ae6fba0e0ce0"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-length-green.log",
+      "sha256": "845d453a2da12ee02a7bd6346f0283bb3f0d8545aeba2fddf86b8b72aac6685f"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-length-unfixed.py",
+      "sha256": "d31360389d2a9eeb1d3fb3e9622092364e281454b78618e79d8ec21ea48defc8"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-length-red-source.py",
+      "sha256": "6b1f790df4d0f2af4915513daa19b91248b9fd9a0f2fff172f6a712af70ca650"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-song-length-helper.diff",
+      "sha256": "544335ac8992fff6179a14caea0cf7335b703026a7744b976eef6d1278028da9"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-50-publication-count-red.log",
+      "sha256": "31d00f8a19328ed1265ec46b9f709731f56ba7ec2525a157eb04956e267662e4"
+    }
+  ],
+  "old_length": 1,
+  "new_length": 16,
+  "actual_fader_source": {
+    "path": "lib/controls/fader.lua",
+    "sha256": "3d3311970d45bc0aed719f782c5727963e64ebe92c1b44991ee9c25bc77fd797"
+  },
+  "checkpoint_kind": "manual-course-ui",
+  "new_checkpoint_ids": [
+    "song-composition-global-length-slot1",
+    "song-composition-global-length-slot2"
+  ],
+  "accepted_native_index_key": "native_observation_index",
+  "native_dashboard_rows": [
+    {
+      "row": 4,
+      "label": "Global length",
+      "value": "16"
+    }
+  ],
+  "fader_led_levels": [
+    7,
+    2,
+    9,
+    2,
+    2,
+    2,
+    2,
+    7
+  ],
+  "musical_functions_and19contracts_ast_unchanged": true,
+  "production_changed": false,
+  "emulator_changed": false,
+  "native_qualification_pending": true,
+  "whole_test_returncode": 1
+}

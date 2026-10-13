@@ -1,0 +1,56 @@
+[
+  {
+    "command": [
+      "python3",
+      "docs/ui-reimplementation/tools/refresh_source_inventory.py",
+      "--review",
+      "docs/ui-reimplementation/current-source-review.json"
+    ],
+    "returncode": 1,
+    "log": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/check-1.log",
+    "sha256": "30ae9df7e8dc486795c79c24b635040d9c6113730490d16427f2ff601713deea"
+  },
+  {
+    "command": [
+      "python3",
+      "docs/ui-reimplementation/tools/refresh_source_inventory.py",
+      "--review",
+      "docs/ui-reimplementation/current-source-review.json",
+      "--check"
+    ],
+    "returncode": 1,
+    "log": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/check-2.log",
+    "sha256": "30ae9df7e8dc486795c79c24b635040d9c6113730490d16427f2ff601713deea"
+  },
+  {
+    "command": [
+      "python3",
+      "docs/ui-reimplementation/tools/validate.py"
+    ],
+    "returncode": 1,
+    "log": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/check-3.log",
+    "sha256": "1fe33f6b7acf201e7f113178c29ae2a6601b4460b882dfd8f53be078ec41602c"
+  },
+  {
+    "command": [
+      "python3",
+      "tests/behaviour/reconcile_manual.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "log": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/check-4.log",
+    "sha256": "babe161140943cb9ce4a67dd09d31dc5be86e37ac4641f8872a786820880043d"
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.behaviour.test_inventory",
+      "tests.behaviour.test_collection"
+    ],
+    "returncode": 1,
+    "log": "/home/andy/mosaic-manual-build-operators/manual-ci-policy-source-review-864e916d574749688c60a01536fef06f/check-5.log",
+    "sha256": "f5d153914968dcb01f6c1eb561397ae0244c23ec7f2c2e09fcbdaa88a8a652b9"
+  }
+]

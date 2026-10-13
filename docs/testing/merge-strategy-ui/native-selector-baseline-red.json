@@ -1,0 +1,87 @@
+{
+  "complete_regression_run": false,
+  "controlled_time_admitted": false,
+  "stage_identity_sha256": "bb1e958b7052f5ed9baf9f389a34f9edf949b94c55add8e4b8932b899ccc893c",
+  "helper_sha256": "62d47f23db7e17bad93553465e658d1c56cef7c11c936fb24d06a4d1e0da4ced",
+  "invalid_fixture_runs": [
+    "40c16046e9854dfd98d72ed2618ece4f",
+    "c1f84fdf91194343b93639d5b858c525"
+  ],
+  "invalid_fixture_reason": "initial SKIP/default and one step per E3 event were not explicitly handled; not credited as boundary red",
+  "lanes": {
+    "controlled-experimental": {
+      "manifest": "/home/andy/mosaic-behaviour-runs/merge-strategy-selector-controlled-experimental/bd32065f28164ad7ab0ee17f07911f0d/manifest.json",
+      "manifest_sha256": "fdd0f0bc52cb29f77564f87891cb51bb0be0831bd0ce048d8b5314c3967fb96f",
+      "expected_missing": "Strategy FOUNDATION after positive detent from explicitly established ALL",
+      "actual_frozen_old_oracle": "Trig mode ALL",
+      "native_old_all_observations": [
+        31,
+        32
+      ],
+      "last_observation": 32,
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 23814,
+          "returncode": 0,
+          "seconds": 0.06375984800979495
+        },
+        {
+          "service": "sclang",
+          "pid": 23713,
+          "returncode": -15,
+          "seconds": 0.11446132301352918
+        },
+        {
+          "service": "crone",
+          "pid": 23705,
+          "returncode": 0,
+          "seconds": 6.448099156841636e-05
+        },
+        {
+          "service": "jack",
+          "pid": 23689,
+          "returncode": 0,
+          "seconds": 0.015510169963818043
+        }
+      ]
+    },
+    "real-time": {
+      "manifest": "/home/andy/mosaic-behaviour-runs/merge-strategy-selector-real-time/4238977365094e29a6a9461e6c15dfd2/manifest.json",
+      "manifest_sha256": "6e633475ef5652a28fbce2f0f1744482b26bbadc5af4e4ed58f0c643903fd955",
+      "expected_missing": "Strategy FOUNDATION after positive detent from explicitly established ALL",
+      "actual_frozen_old_oracle": "Trig mode ALL",
+      "native_old_all_observations": [
+        31,
+        32
+      ],
+      "last_observation": 32,
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 25869,
+          "returncode": 0,
+          "seconds": 0.11385751096531749
+        },
+        {
+          "service": "sclang",
+          "pid": 25783,
+          "returncode": -15,
+          "seconds": 0.06429645599564537
+        },
+        {
+          "service": "crone",
+          "pid": 25769,
+          "returncode": 0,
+          "seconds": 7.37910158932209e-05
+        },
+        {
+          "service": "jack",
+          "pid": 25759,
+          "returncode": 0,
+          "seconds": 0.031604109972249717
+        }
+      ]
+    }
+  }
+}

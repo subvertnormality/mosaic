@@ -1,0 +1,29 @@
+--- unfixedroutes
++++ candidate
+@@ -5,13 +5,14 @@
+ """
+ CHOICES=('SKIP','ONLY','ALL','FOUNDATION','FRAGMENTS')
+ 
+-def select_strategy(c,value,channel=1):
++def select_strategy(c,value,channel=1,after_edit=None):
+     c.ui.open_channel_task('merge')
+     c.ui.expect_header('merge_detail',channel=channel)
+     c.ui.select_row('trig_mode',1)
+     for _ in range(5):c.ui.turn(3,-1)
+     for _ in range(CHOICES.index(value)):c.ui.turn(3,1)
+     c.ui.expect_selected_field('detail','Strategy',value)
++    if after_edit is not None:after_edit()
+     c.ui.select_row('active_strategy',2)
+     c.ui.expect_selected_field('detail','Active',value)
+     c.ui.select_row('trig_mode',1)
+--- unfixedfeedback
++++ candidate
+@@ -515,7 +515,6 @@
+     select_strategy(c,'ALL')
+     c.led_values([(14,8)],[8])
+     c.playback(_ALL_PHRASE,cycles=2)
+-    select_strategy(c,'SKIP')
+-    _expect_footer(c,'SKIP APPLIED')
++    select_strategy(c,'SKIP',after_edit=lambda:_expect_footer(c,'SKIP APPLIED'))
+     c.led_values([(14,8)],[2])
+     c.results.append(dict(kind='live-ui-merge-shape-trig-mode-summary',passed=True))

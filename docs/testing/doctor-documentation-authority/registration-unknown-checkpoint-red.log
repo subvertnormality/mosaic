@@ -1,0 +1,13 @@
+..F.
+======================================================================
+FAIL: test_unknown_membership_and_invalid_full_lane_fail (test_doctor_qualification_registration.DoctorQualificationRegistrationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_doctor_qualification_registration.py", line 49, in test_unknown_membership_and_invalid_full_lane_fail
+    runner.qualification_registration('manual_right','real-time',source)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.032s
+
+FAILED (failures=1)

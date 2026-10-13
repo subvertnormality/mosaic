@@ -1,0 +1,5 @@
+{
+  "tools/rhythm_doctor/rd_analysis_backend.c": "9153f5cd6bd1fe0458bdab0f0d8749c339914c4881b31fb27315a07c2c47d375",
+  "tools/rhythm_doctor/dsp_drum_backend.py": "f8242cd0be29d72efb56fc418b45bcd7599076ea42bb91ab163e0066d3281bb0",
+  "tests/rhythm_doctor/test_manual_beat_grid.py": "daf3ce83f8be258d4e8cc7d288241b0fe7fbc1dfd0a6c934cc459d747cef9194"
+}

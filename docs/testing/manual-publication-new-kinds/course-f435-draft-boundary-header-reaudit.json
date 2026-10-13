@@ -1,0 +1,72 @@
+{
+  "scope": "Failed course causal re-audit with canonical Scale page and actual subsequent Play applied boundary",
+  "course_complete": false,
+  "start_native_sequence": 3264,
+  "start_ns": 461872973073032,
+  "native_scale02_headers": [
+    {
+      "index": 149,
+      "passed": true
+    },
+    {
+      "index": 150,
+      "passed": true
+    },
+    {
+      "index": 151,
+      "passed": true
+    },
+    {
+      "index": 152,
+      "passed": true
+    },
+    {
+      "index": 153,
+      "passed": true
+    },
+    {
+      "index": 154,
+      "passed": true
+    },
+    {
+      "index": 155,
+      "passed": true
+    },
+    {
+      "index": 156,
+      "passed": true
+    },
+    {
+      "index": 157,
+      "passed": true
+    },
+    {
+      "index": 158,
+      "passed": true
+    },
+    {
+      "index": 159,
+      "passed": true
+    }
+  ],
+  "actual_failed_phrase_pitches": [
+    60,
+    60,
+    60,
+    62,
+    60,
+    60,
+    60,
+    62
+  ],
+  "expected_pitches": [
+    62,
+    62,
+    62,
+    64,
+    62,
+    62,
+    62,
+    64
+  ]
+}

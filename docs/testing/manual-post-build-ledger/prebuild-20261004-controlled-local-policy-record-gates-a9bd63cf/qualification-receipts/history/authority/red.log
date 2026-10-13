@@ -1,0 +1,41 @@
+EFF
+======================================================================
+ERROR: test_explicit_controlled_complete_authority_accepts_without_real_claim (test_manual_authority.ControlledAuthorityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority.py", line 143, in test_explicit_controlled_complete_authority_accepts_without_real_claim
+    self.active();self.assertEqual(self.verify_active(),authoring_identity(self.root))
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority.py", line 141, in verify_active
+    return verify_authority(self.root,self.inventory,self.book)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_authority.py", line 84, in verify_authority
+    raise ValueError("Manual content migration incomplete")
+ValueError: Manual content migration incomplete
+
+======================================================================
+FAIL: test_controlled_authority_requires_pending_ci_on_both_sources (test_manual_authority.ControlledAuthorityTests)
+----------------------------------------------------------------------
+ValueError: Manual content migration incomplete
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority.py", line 152, in test_controlled_authority_requires_pending_ci_on_both_sources
+    with self.assertRaisesRegex(ValueError,'qualification'):self.verify_active()
+AssertionError: "qualification" does not match "Manual content migration incomplete"
+
+======================================================================
+FAIL: test_controlled_authority_requires_compiled_scope (test_manual_authority.ControlledAuthorityTests)
+----------------------------------------------------------------------
+ValueError: Manual content migration incomplete
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_authority.py", line 158, in test_controlled_authority_requires_compiled_scope
+    with self.assertRaisesRegex(ValueError,'scope'):self.verify_active()
+AssertionError: "scope" does not match "Manual content migration incomplete"
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.012s
+
+FAILED (failures=2, errors=1)

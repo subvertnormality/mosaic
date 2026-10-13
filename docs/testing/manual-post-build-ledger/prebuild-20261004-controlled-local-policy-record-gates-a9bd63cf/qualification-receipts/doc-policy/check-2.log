@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "docs/ui-reimplementation/tools/refresh_source_inventory.py", line 113, in <module>
+    review=json.loads(args.review.read_text());baseline=ROOT/review['baseline_inventory'];out,receipt=refresh(baseline,review)
+  File "docs/ui-reimplementation/tools/refresh_source_inventory.py", line 29, in refresh
+    current=(REPO/path).read_bytes();assert digest(current)==item['sha256'], 'unreviewed source bytes '+path
+AssertionError: unreviewed source bytes manual/features/scenes-reference-musical-scenes.yaml

@@ -1,0 +1,17 @@
+{
+  "kind": "doctor-held-step-return-fixture-diagnosis",
+  "whole_qualification_passed": false,
+  "report": "/home/andy/mosaic-doctor-options-runs/6a86f5c1a4be4f5baa1fb8c1bf528ea3/report.json",
+  "report_sha256": "2dcdf65016d8aed5c96abb1f059681849206af9e8e3e07e41b391baebd3f0b61",
+  "expected_by_failed_fixture": "P01 PATTERN TRIG after release",
+  "actual_observable": {
+    "route_R05_exact_header": true,
+    "exact_selected_field": true,
+    "held": [],
+    "active_destination_steps": [],
+    "frame_sha256": "46a4ca14df1a9f4db3dfa2c0aa72a6a1b29996cc7be7155a52dd0b23e0c6ad44"
+  },
+  "source_contract": "characterisation: spec input_algebra hold.begin return.push, G21 invalidates_return=false, hold.end return.restore_if_generation_matches",
+  "production_defect_claim": false,
+  "correction": "Require exact R05 after released step taps that started on R05; do not add a redundant task reopen."
+}

@@ -20,36 +20,37 @@ FIXTURES = Path(__file__).parent/'fixtures'/'persisted'
 
 def build_fixture_project(c):
     from cases import assign_trig_parameter
-    c.configure()
-    c.tap(6, 8); c.tap(2, 7)
-    for _ in range(3): c.tap(8, 7)                                # global length 4
-    c.tap(3, 8); c.enc(1, -3)                                     # channel 1 Trig Locks
+    ui = c.ui
+    ui.configure()
+    ui.song_editor(); ui.tap_control('global_pattern_length', 2)
+    for _ in range(3): ui.tap_control('global_pattern_length', 8)             # global length 4
+    ui.menu('channel_editor'); ui.channel_page('trig_locks', 'midi_config', confirm=False)
     def lock(step, value):
-        c.action(type='grid', x=step, y=4, state=1)
-        try: c.elapse(.05); c.action(type='enc', n=3, delta=-126); c.enc(3, value + 1)
-        finally: c.action(type='grid', x=step, y=4, state=0)
+        ui.gesture([('step', step)], [])
+        try: c.elapse(.05); ui.encoder_event(3, -126); ui.turn(3, value + 1)
+        finally: ui.gesture([], [('step', step)])
     assign_trig_parameter(c, 'CC 1'); lock(2, 90)
-    c.enc(2, 1); assign_trig_parameter(c, 'CC 2'); lock(1, 10); lock(3, 50); c.key(3)
-    c.enc(1, -1)                                                  # Note Masks
-    c.action(type='grid', x=4, y=4, state=1)
+    ui.turn(2, 1); assign_trig_parameter(c, 'CC 2'); lock(1, 10); lock(3, 50); ui.press_key(3)
+    ui.channel_page('masks', 'trig_locks', confirm=False)
+    ui.gesture([('step', 4)], [])
     try: c.action(type='midi', port=1, bytes=[144, 72, 90]); c.elapse(.05); c.action(type='midi', port=1, bytes=[128, 72, 0])
-    finally: c.action(type='grid', x=4, y=4, state=0)
-    c.enc(2, -5); c.enc(2, 3); c.enc(3, 8)                        # channel length mask 1/2
-    c.tap(4, 8); c.tap(3, 3); c.enc(2, -1); c.enc(3, 4); c.key(3); c.tap(1, 3); c.tap(3, 8)  # slot 3 E major; slot 1 applied
-    c.action(type='grid', x=3, y=4, state=1)
-    try: c.tap(3, 3)                                              # channel scale lock step 3 -> slot 3
-    finally: c.action(type='grid', x=3, y=4, state=0)
-    c.tap(6, 8); c.hold_tap((1, 1), (2, 1)); c.tap(2, 1); c.tap(3, 8); c.tap(1, 1); c.tap(11, 8)  # slot 2 copy, octave +1
-    c.tap(6, 8); c.tap(1, 1); c.tap(3, 8)
+    finally: ui.gesture([], [('step', 4)])
+    ui.turn(2, -5); ui.turn(2, 3); ui.set_value(8)                # channel length mask 1/2
+    ui.scale_editor(); ui.tap_control('scale_slot', 3); ui.turn(2, -1); ui.set_value(4); ui.press_key(3); ui.tap_control('scale_slot', 1); ui.menu('channel_editor')
+    with ui.hold_step(3):
+        ui.tap_control('scale_slot', 3)                            # channel scale lock step 3 -> slot 3
+    ui.song_editor(); ui.copy_slot(1, 2, control='song_pattern_slot'); ui.tap_control('song_pattern_slot', 2)
+    ui.menu('channel_editor'); ui.select_channel(1); ui.tap_control('channel_octave', 1)  # slot 2 copy, octave +1
+    ui.song_editor(); ui.tap_control('song_pattern_slot', 1); ui.menu('channel_editor')
 
 
 def capture_stream(c, onsets=17):
     """Play from slot 1 and return notes and CCs on port 1 relative to the first onset."""
     field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
-    before = c.snapshot()['midi_count']; c.tap(1, 8)
+    before = c.snapshot()['midi_count']; c.ui.play()
     def notes(s): return [m for m in s['midi'] if m['index'] > before and m['bytes'][0] == 144 and m['bytes'][2] > 0]
     state = c.wait(lambda s: len(notes(s)) >= onsets, timeout=10)
-    c.tap(1, 8); c.wait(lambda s: not s['midi_capture']['outstanding'])
+    c.ui.stop(); c.wait(lambda s: not s['midi_capture']['outstanding'])
     first = notes(state)[0]
     last = notes(state)[onsets - 1]
     return [dict(seconds=round((m[field] - first[field]) / 1e9, 6), bytes=m['bytes']) for m in state['midi']
@@ -80,11 +81,11 @@ def persisted_fixture(c, label, expected=None):
     fixture = FIXTURES/label
     golden = json.loads((FIXTURES/(expected or label)/'golden.json').read_text())
     assert golden['clock_mode'] == 'controlled-experimental'
-    c.configure(); c.finish()                                     # the fixture replaces this empty session
+    c.ui.configure(); c.finish()                                  # the fixture replaces this empty session
     out = c.out/'fixture'; out.mkdir()
     d = Driver(out, project_seed=fixture/'data', **c.launch_options)
     try:
-        d.tap(3, 8)
+        d.ui.menu('channel_editor')
         actual = capture_stream(d)
         d.results.append(dict(kind='persisted-fixture-stream', label=label, stream=actual))
         compare(d, golden['stream'], actual)

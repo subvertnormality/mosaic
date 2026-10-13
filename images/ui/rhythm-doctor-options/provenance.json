@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "kind": "native-doctor-engineering-gallery",
+  "status": "engineering-report-passed-final-seven-role-qualification-pending",
+  "report": "/home/andy/mosaic-doctor-options-runs/4a991148aa4042b8a1b875631aa3ed23/report.json",
+  "report_sha256": "d04881bd155cba2f7e57e42ba10a53292460a286d78415a46ca5aff237183e65",
+  "source_file": "/home/andy/mosaic-doctor-options-runs/4a991148aa4042b8a1b875631aa3ed23/source.json",
+  "source_sha256": "0624e9f46ef6cadd0e034e2709ead2387adf78a8d3623f1fe128b54931b59ee5",
+  "application_digest": "a976287cbe6fb9efd1e1664ae19cde9569383d9e7c832421e0f9d01740b30980",
+  "native_identity_sha256": "da6d0167d2d5737f54d125b54f017dcbb171656903177e4f55a36876c0ceb513",
+  "encoder": "tools/docs_capture.py:write_png",
+  "encoder_source_sha256": "1d59aaa6c89e4c42dec50dd08bf8e08ec66d00473234a343cae3cab650d158ca",
+  "conversion": "Existing deterministic 3x greyscale native-frame encoder; no UI reconstruction or inferred states.",
+  "frames": [
+    {
+      "id": "setup-manual-bpm",
+      "image": "setup-manual-bpm.png",
+      "image_sha256": "2747dd517798d62570692fbd5bbb7063a1c14503d3a8074e14911224e1e78088",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R01",
+        "label": "Manual BPM",
+        "value": "100"
+      },
+      "native_frame_sha256": "4edb4205c2d0dbb4bfd79a9eb5ef493c01921743f5ad4cc7719c3130c9b1bbec",
+      "native_stable_sha256": "9212848c165d303707c85355e8d32615d360bc4f30b96c4758e0bc67cdade7ba",
+      "native_grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/setup-manual-bpm",
+        "sha256": "4edb4205c2d0dbb4bfd79a9eb5ef493c01921743f5ad4cc7719c3130c9b1bbec",
+        "stable_rows": 55,
+        "stable_sha256": "9212848c165d303707c85355e8d32615d360bc4f30b96c4758e0bc67cdade7ba",
+        "grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+        "semantic_assertions": 5,
+        "passed": true
+      }
+    },
+    {
+      "id": "setup-input-source",
+      "image": "setup-input-source.png",
+      "image_sha256": "1e5d824e33e28c6d2e1bd3fa333489f84fa7ef10f30be4ca10a6d3da00c1e050",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R01",
+        "label": "Input",
+        "value": "R"
+      },
+      "native_frame_sha256": "4be14f8a40094ab68bb9c06bc91bb2d7a507845e815449fa75bfb978ea736817",
+      "native_stable_sha256": "2397d9fd8c30a2a7f5099a6a2344801a0f5699c43ca2237c0492180f2b1f4e10",
+      "native_grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/setup-input-source",
+        "sha256": "4be14f8a40094ab68bb9c06bc91bb2d7a507845e815449fa75bfb978ea736817",
+        "stable_rows": 55,
+        "stable_sha256": "2397d9fd8c30a2a7f5099a6a2344801a0f5699c43ca2237c0492180f2b1f4e10",
+        "grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+        "semantic_assertions": 7,
+        "passed": true
+      }
+    },
+    {
+      "id": "window-lower-row",
+      "image": "window-lower-row.png",
+      "image_sha256": "02bb371c2d06f0c80b865e8b09705a48dcce4fc72d8c4a1048a462b28831144b",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R05",
+        "label": "Alignment",
+        "value": "OPEN >"
+      },
+      "native_frame_sha256": "d76cd347c8be235d942edf8e78a631244a3cda38e871ea1551261d958c16c880",
+      "native_stable_sha256": "cb069765096847c6eb7566986eadc9acd397c18602d784152d360b47a51953a4",
+      "native_grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/window-lower-row",
+        "sha256": "d76cd347c8be235d942edf8e78a631244a3cda38e871ea1551261d958c16c880",
+        "stable_rows": 55,
+        "stable_sha256": "cb069765096847c6eb7566986eadc9acd397c18602d784152d360b47a51953a4",
+        "grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+        "semantic_assertions": 10,
+        "passed": true
+      }
+    },
+    {
+      "id": "alignment-lower-row",
+      "image": "alignment-lower-row.png",
+      "image_sha256": "4b739ef70c3bd93c45341c6786cb9f1023eca06775513c3ec571f238fa5d6de9",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R06",
+        "label": "Fine start",
+        "value": "0ms"
+      },
+      "native_frame_sha256": "0b34dc14905d93b55b4a196c538725c325c0a74d1fa7466b3f694b1454d84b8b",
+      "native_stable_sha256": "eea0418cad52142ac6849ac8dc37568db0e410a2abc603713a4c4663f957aeae",
+      "native_grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/alignment-lower-row",
+        "sha256": "0b34dc14905d93b55b4a196c538725c325c0a74d1fa7466b3f694b1454d84b8b",
+        "stable_rows": 55,
+        "stable_sha256": "eea0418cad52142ac6849ac8dc37568db0e410a2abc603713a4c4663f957aeae",
+        "grid_sha256": "fc884a674246a12869850de6bca4bf72533f8f60d3ff0a6af75753310cca36f4",
+        "semantic_assertions": 12,
+        "passed": true
+      }
+    },
+    {
+      "id": "alignment-edited-then-cancelled",
+      "image": "alignment-edited-then-cancelled.png",
+      "image_sha256": "0080843500424ec9ec33f344275db8fb8a70be3caee41647e5e7a4a6d6965fcd",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R06",
+        "label": "Exact BPM",
+        "value": "120"
+      },
+      "native_frame_sha256": "8c95cef4c9987fc3c8af6598062f84768f1419dc999babceeefa5f3326d7b6a7",
+      "native_stable_sha256": "8313178afcf0942f486fa7753eaeb97953dd976b1888f1fa9445badf30a282a3",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/alignment-edited-then-cancelled",
+        "sha256": "8c95cef4c9987fc3c8af6598062f84768f1419dc999babceeefa5f3326d7b6a7",
+        "stable_rows": 55,
+        "stable_sha256": "8313178afcf0942f486fa7753eaeb97953dd976b1888f1fa9445badf30a282a3",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 15,
+        "passed": true
+      }
+    },
+    {
+      "id": "alignment-confirmed-draft",
+      "image": "alignment-confirmed-draft.png",
+      "image_sha256": "bf844e8b6b74b8d56824b47a787edcbd0f8786d635d6348e8cb60af821c66635",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R06",
+        "label": "Exact BPM",
+        "value": "120"
+      },
+      "native_frame_sha256": "a1a79fb162b393f03da4420108e750c13037cd09f5cb291ef0f681aa7cdf9972",
+      "native_stable_sha256": "73acbaab05adc7211bd5306484ed321ac096ac61815e844b475c0e3ab8cf0b90",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/alignment-confirmed-draft",
+        "sha256": "a1a79fb162b393f03da4420108e750c13037cd09f5cb291ef0f681aa7cdf9972",
+        "stable_rows": 55,
+        "stable_sha256": "73acbaab05adc7211bd5306484ed321ac096ac61815e844b475c0e3ab8cf0b90",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 17,
+        "passed": true
+      }
+    },
+    {
+      "id": "alignment-reanalysis-ready",
+      "image": "alignment-reanalysis-ready.png",
+      "image_sha256": "73032e64ce53da74cbc09e489d1bf93a861b206dd9c98bd8f8a30cfe5757e1c0",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R06",
+        "label": "Half tempo",
+        "value": "120"
+      },
+      "native_frame_sha256": "e7c9df64383191e5faf93dc4e6f9b66be57d6245950ea83e93a06a795b99d90c",
+      "native_stable_sha256": "1a05af671d325e4e1ee9e643596c5143547c8e3f9a744f3dc7ce68c7793f3345",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-OPTIONS/alignment-reanalysis-ready",
+        "sha256": "e7c9df64383191e5faf93dc4e6f9b66be57d6245950ea83e93a06a795b99d90c",
+        "stable_rows": 55,
+        "stable_sha256": "1a05af671d325e4e1ee9e643596c5143547c8e3f9a744f3dc7ce68c7793f3345",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 19,
+        "passed": true
+      }
+    },
+    {
+      "id": "start-beat-original1",
+      "image": "start-beat-original1.png",
+      "image_sha256": "ea9da0c3e7dd1bc85c9eb2dfbba06afdb8caec754f283e1126275c6c094d7f70",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R06",
+        "label": "Start beat",
+        "value": "1"
+      },
+      "native_frame_sha256": "c605883afea720a53fbef3ff581e4de39636eca2946f3fd2c5479eb114ccd9dd",
+      "native_stable_sha256": "dfd220fa13d56fb1ce8faa855f5ca11501ae098c5a02625d56041cd0b0136abb",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-START-BEAT/start-beat-original1",
+        "sha256": "c605883afea720a53fbef3ff581e4de39636eca2946f3fd2c5479eb114ccd9dd",
+        "stable_rows": 55,
+        "stable_sha256": "dfd220fa13d56fb1ce8faa855f5ca11501ae098c5a02625d56041cd0b0136abb",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 22,
+        "passed": true
+      }
+    },
+    {
+      "id": "start-beat-next2",
+      "image": "start-beat-next2.png",
+      "image_sha256": "321893ecdc7c501a705dbdbca6addd0de6077eff05e85db421030e943aa9d749",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R06",
+        "label": "Start beat",
+        "value": "2"
+      },
+      "native_frame_sha256": "22515d7e7a840934194cd57f4e8f8b01c202efbc26e063d6c8c0901b186c94df",
+      "native_stable_sha256": "ab6a65e47925380efc4e39c179d3b6af20f60aae94d083c66012cb99cf497f69",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-START-BEAT/start-beat-next2",
+        "sha256": "22515d7e7a840934194cd57f4e8f8b01c202efbc26e063d6c8c0901b186c94df",
+        "stable_rows": 55,
+        "stable_sha256": "ab6a65e47925380efc4e39c179d3b6af20f60aae94d083c66012cb99cf497f69",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 24,
+        "passed": true
+      }
+    },
+    {
+      "id": "start-beat-next-ready",
+      "image": "start-beat-next-ready.png",
+      "image_sha256": "8df454eaa05c68659bde79c0c0e2e2e6c008234a6266286b2618d1303495e3d9",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R05",
+        "label": null,
+        "value": null
+      },
+      "native_frame_sha256": "8bac8756f243af077549cff42d18724f25f4462b7b2863cf92238c0d45c5d5a6",
+      "native_stable_sha256": "ce98e85fc019cd6636299e013a5daf6b656b33d574c81193ea8c124e29106966",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-START-BEAT/start-beat-next-ready",
+        "sha256": "8bac8756f243af077549cff42d18724f25f4462b7b2863cf92238c0d45c5d5a6",
+        "stable_rows": 55,
+        "stable_sha256": "ce98e85fc019cd6636299e013a5daf6b656b33d574c81193ea8c124e29106966",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 26,
+        "passed": true
+      }
+    },
+    {
+      "id": "start-beat-restore1",
+      "image": "start-beat-restore1.png",
+      "image_sha256": "b0ebf0f3cd2eb0a2de3db25f16157b753afe3558b28fc429ded42a9791c5cd15",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R06",
+        "label": "Start beat",
+        "value": "1"
+      },
+      "native_frame_sha256": "ba30ec97b30110ece6ed2758c57c5995ff597fee134be5a5f43b9cd85c4d848b",
+      "native_stable_sha256": "3a57e2a5400ec2d0e8d70ddfef83b8e3307dbd78f57d90e5d04efe1e42a735fc",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-START-BEAT/start-beat-restore1",
+        "sha256": "ba30ec97b30110ece6ed2758c57c5995ff597fee134be5a5f43b9cd85c4d848b",
+        "stable_rows": 55,
+        "stable_sha256": "3a57e2a5400ec2d0e8d70ddfef83b8e3307dbd78f57d90e5d04efe1e42a735fc",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 28,
+        "passed": true
+      }
+    },
+    {
+      "id": "start-beat-restored-ready",
+      "image": "start-beat-restored-ready.png",
+      "image_sha256": "02bb371c2d06f0c80b865e8b09705a48dcce4fc72d8c4a1048a462b28831144b",
+      "width": 384,
+      "height": 192,
+      "expect": {
+        "route": "R05",
+        "label": null,
+        "value": null
+      },
+      "native_frame_sha256": "d76cd347c8be235d942edf8e78a631244a3cda38e871ea1551261d958c16c880",
+      "native_stable_sha256": "cb069765096847c6eb7566986eadc9acd397c18602d784152d360b47a51953a4",
+      "native_grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+      "binding": {
+        "kind": "documentation-frame",
+        "name": "manual/DOCTOR-START-BEAT/start-beat-restored-ready",
+        "sha256": "d76cd347c8be235d942edf8e78a631244a3cda38e871ea1551261d958c16c880",
+        "stable_rows": 55,
+        "stable_sha256": "cb069765096847c6eb7566986eadc9acd397c18602d784152d360b47a51953a4",
+        "grid_sha256": "3dccfe96bb0aaa2e4d57828abbe7a30295724d43727ab76320482abb40de8dbf",
+        "semantic_assertions": 30,
+        "passed": true
+      }
+    }
+  ]
+}

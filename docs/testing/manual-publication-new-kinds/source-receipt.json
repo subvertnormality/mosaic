@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "focused_tests": 65,
+  "native_publication_qualification": false,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false,
+  "current_files": {
+    "tools/manual_publication_verify.py": "a497be265ad7e47db2527e04c2f9404647624f1a409273a8155681eb5c2062aa",
+    "tests/behaviour/test_manual_publication_verify.py": "0d2e9cc5d30391965aadf291cbfb53b33d19681738056cebca0c64c8a4d2a483"
+  },
+  "baseline_auditor_sha256": "a3d1112df7b3941357b3f9912da0608a64f2c4243ac8137ab42239fdf1bff498",
+  "new_dispatch": "verify_new_public_checkpoint called after existing reference checks",
+  "existing_global_freshness_checks": "retained; no source/immutable baseline exemptions",
+  "scope": [
+    "merge exact earlier field assertions/native framebuffer",
+    "exact scoped native merge phrase pitch/velocity/channel/loop onset and released notes",
+    "Only zero attacks across two real native public transport cycles",
+    "C07 exact native marquee font phases and stationary controls",
+    "fitting vertical native literal text",
+    "mini exact v2 bitmap phases with stationary RGB/grid/MIDI",
+    "overview Off/On framebuffer bodies and scoped full repeated native phrase"
+  ],
+  "failure_checks": [
+    "unknown new prefixes cannot bypass independent verification",
+    "empty arrays lack native witness",
+    "short native silent window cannot use post-Stop UI overhead",
+    "forged witness BGRA fails actual frame hash",
+    "extra unrelated field receipts cannot hide missing Active field",
+    "missing native sample grid fails",
+    "changed authored bitmap matching pose fails",
+    "changed grid during stationary mini fails"
+  ],
+  "pending": [
+    "fresh affected native publication and exact matching plan selectors from owners"
+  ]
+}

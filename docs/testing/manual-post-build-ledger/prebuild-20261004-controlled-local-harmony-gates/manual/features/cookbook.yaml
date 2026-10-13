@@ -1,0 +1,389 @@
+features:
+- id: small-hours
+  title: Four-Bar Percussion, Bass and Chord Example
+  audience: intermediate
+  summary: Combine Oilcan, Polyperc and Doubledecker at 90 BPM in C major.
+  prose: 'Set 90 BPM and C major. Use three channels with 64-step ranges at a sixteenth-note rate (Clock
+    Rate /4). This gives four bars in 4/4. Assign Oilcan 1 to percussion, Polyperc 1 to bass and Doubledecker
+    to chords.
+
+
+    1. Enter the three channel phrases below. Add 16 to each listed step number for each following bar.
+
+    2. Set channel-wide note, velocity and length values on Masks. Hold individual steps to enter pitch
+    exceptions.
+
+    3. On the chord channel, set Chd1 to 3rd and Chd2 to 5th.
+
+    4. In the fourth bar, change chord roots at steps 49 and 57 to MIDI 67 and 60.
+
+    5. Start playback. The bass and percussion repeat while the final chord roots move from G back to
+    C.
+
+    6. Copy the song slot and mute one channel in the copy to create a contrasting section.
+
+
+    Use numeric MIDI notes when transferring these settings. In Masks, MIDI 48/60 display as C2/C3; other
+    controls can use different octave labels. Each assigned n.b. player is unique: Polyperc 1 cannot be
+    selected on another channel after it is assigned to the bass.'
+  musical_use: Save a copy before changing a layer. Compare playback before and after the change.
+  related:
+  - masks
+  - channel-length
+  - song-composition
+  - norns-sound-sources-with-n-b
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-MASK-007
+    - M-MASK-010
+    - M-MASK-008
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+    - lib/devices/device_map.lua
+    - lib/clock/divisions.lua
+  controls: []
+  details:
+  - title: Example Scope
+    text: These recipes specify suggested musical settings. Attached audio demonstrates only its authored
+      version. Suggested variations are not covered by that recording.
+  - title: 'Recorded Example: Rhythm, bass and a changing chord'
+    text: 'Assign Oilcan 1, Polyperc 1 and Doubledecker to channels 1, 2 and 3. Repeat the percussion
+      and bass trigs in each bar. On channel 3, use MIDI 60 and 62 as chord roots in bars 1 to 3; change
+      them to MIDI 67 and 60 in bar 4. Play the four-bar loop to hear the chord change over the repeated
+      rhythm and bass. The example uses step masks within one sequence. 4 bars at 90 BPM. CH01: Oilcan
+      1, velocity 38, MIDI notes 36, 37, 38. CH02: Polyperc 1, velocity 42, MIDI notes 48, 55. CH03: Doubledecker,
+      velocity 26, MIDI notes 60, 62.'
+  recipes:
+  - title: Percussion Channel
+    text: Assign Oilcan 1. Set velocity 38 and length ½ step. Enter steps 1/36, 4/38, 5/37, 9/36, 12/38
+      and 13/37 as step/MIDI-note pairs. Repeat for all four bars. These notes select three timbres in
+      the default Oilcan kit.
+  - title: Bass Channel
+    text: Assign Polyperc 1. Set velocity 42 and length ½ step. Enter MIDI 48 on steps 1, 5 and 13, and
+      MIDI 55 on step 9. Repeat for all four bars.
+  - title: Chord Channel
+    text: Assign Doubledecker. Set velocity 26 and length 3 steps. Enter MIDI 60 on step 1 and MIDI 62
+      on step 9 of the first three bars. Add Chd1 3rd and Chd2 5th. In bar four, use MIDI 67 on step 49
+      and MIDI 60 on step 57. These scale-relative intervals follow the C-major scale.
+  scene_refs:
+  - mask-precedence
+  - mask-chords
+  - mask-expression
+  review:
+    status: verified
+    cases:
+    - M-MASK-007
+    - M-MASK-010
+    - M-MASK-008
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: Mask controls and the authored three-player recording are demonstrated. Each player contributes
+      verified solo PCM before the mix publishes. Suggested song-slot mutes use their own native workflow
+      evidence; physical norns output and player installation are separate.
+    audio_refs:
+    - three-voice-conversation
+    audio_cases:
+    - MA-AUDIO-three-voice-conversation
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: pocket-rhythm
+  title: Adding a Ghost Note
+  audience: intermediate
+  summary: Compare two bars of main hits with two bars that add a quiet hit before an accent.
+  prose: 'Use Oilcan 1 at 90 BPM, Rate /4 and a 64-step range. Main attacks use MIDI 36 and 37 at velocity
+    90. In the four-bar comparison, bars 1–2 contain only the main attacks; bars 3–4 add MIDI 38 at velocity
+    35 on each bar’s step 12. All notes use length 1/2.
+
+
+    The change adds one quieter event without changing the main hits. The separate Three sounds, one pocket
+    example uses a denser fixed pattern at velocity 48.'
+  musical_use: Save a copy before changing a layer. Compare playback before and after the change.
+  related:
+  - adding-trigs
+  - adding-velocity
+  - trig-probability
+  - clocks-swing-and-shuffle
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-EDIT-002
+    - M-PARAM-018
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+  controls: []
+  details:
+  - title: Comparison settings
+    text: 'Adding a Ghost Note uses Oilcan 1: four main attacks at velocity 90 in every bar, with one
+      velocity-35 addition in each of bars 3 and 4. Three sounds, one pocket is an independent equal-velocity
+      example. MIDI kit mappings can differ on another instrument.'
+  recipes:
+  - title: Make the recorded ghost-note comparison
+    text: '1. Start an empty pattern on channel 1. Assign Oilcan 1, set range 1–64 and Rate /4; press
+      K3 to apply the rate while stopped. Set 90 BPM in Song tasks → Tempo & feel and press K3.
+
+      2. Add attacks at steps 1,5,9,13 in each bar, adding 16 to each step for each following bar.
+
+      3. Open Masks. Set Note to MIDI 36, Vel to 90 and Len to 1/2 without holding a step. Set MIDI 37
+      on each bar’s steps 5 and 13 by holding those steps and editing Note.
+
+      4. Add attacks at absolute steps 44 and 60: these are step 12 in bars 3 and 4. Hold each and set
+      Note to MIDI 38 and Vel to 35.
+
+      5. Play four bars. Main hits sound alone for two bars, then the quieter added hits precede the accents.
+
+      6. Hold step 44 or 60 and press K2 to clear all its mask attributes; remove its attack in Pattern
+      Trig to return to the main-only phrase.'
+  - title: Optional probability variation
+    text: 'After making the fixed comparison, open Trig params and select Trig Probability. Hold step
+      44 and set 50%, then release; repeat for step 60. Keep main accents at 100%. Play several loops:
+      a quiet event may be omitted, while the main hits remain. The recorded comparison is deterministic
+      and does not contain this optional random version.'
+  - title: Separate fixed percussion example
+    text: Three sounds, one pocket uses velocity 48 and length 1/2 throughout. In each bar its step/note
+      pairs are 1/36,4/38,5/37,7/38,9/36,12/38,13/37,15/38. This is a separate four-bar example, rather
+      than the starting half of the ghost-note comparison.
+  scene_refs:
+  - pattern-velocity-range
+  - probability-endpoints
+  review:
+    status: verified
+    cases:
+    - M-EDIT-002
+    - M-PARAM-018
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The new exact main-only/ghost comparison is authored and awaiting native capture. Existing
+      fixed Oilcan evidence and probability endpoint scenes retain their separate scope. The optional
+      50% version is not a matching recording.
+    audio_refs:
+    - ghost-note-comparison
+    - oilcan-pocket
+    audio_cases:
+    - MA-AUDIO-ghost-note-comparison
+    - MA-AUDIO-oilcan-pocket
+    native_evidence_catalogues:
+    - generated/reference-parameter-scenes.json
+    audio_comparison_status: pending-native-capture
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: tilting-harmony
+  title: Changing Harmony with Scale Slots
+  audience: intermediate
+  summary: Compare the same relative patterns under C major for two bars and D major for two bars.
+  prose: 'Use Doubledecker on channel 1 for the upper phrase and Polyperc 1 on channel 2 for bass. The
+    four-bar comparison applies C-major slot 1 for bars 1–2, then D-major slot 2 for bars 3–4. Relative
+    pattern notes supply pitch; Note masks remain X. Rhythm, velocity and length stay fixed.
+
+
+    This is a separate listening project. Its bass velocity is 60 and its notes last 1/2 step; Make a
+    piece retains inherited bass velocity 100 and length 1. The separate A bass with room above it example
+    uses fixed note masks in C major.'
+  musical_use: Save a copy before changing a layer. Compare playback before and after the change.
+  related:
+  - scale-editor
+  - scale-locks
+  - adding-notes
+  - adding-chords
+  - chord-strum
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-SCALE-001
+    - M-MASK-010
+    - M-PARAM-001
+    - M-HARMONY-REVOICE-001
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+  controls: []
+  details:
+  - title: Pitch and output scope
+    text: The scale comparison uses relative pattern notes and X Note masks. A Note mask can replace the
+      edited relative pitch. Polyperc 1 is assigned once, to the bass. Numeric MIDI notes avoid differing
+      octave labels between controls.
+  recipes:
+  - title: Make the relative-note scale comparison
+    text: '1. Start an empty project; stop playback. Set 90 BPM and Rate /4. Apply C major in scale slot
+      1.
+
+      2. Assign Doubledecker to CH01. Use pattern 1 with attacks 1,5,9,13 and relative degrees 0,0,0,1:
+      on Pattern Note, tap (1,7),(5,7),(9,7),(13,6). Set range 1–16.
+
+      3. Open Masks. Keep Note X, set Vel 80 and Len 1/2. Hold step 13 and set Vel 50, then release.
+
+      4. Assign Polyperc 1 to CH02. Use pattern 2 with attacks 1,9 and degrees 0,4: tap (1,7),(9,3) on
+      its Note page. Set range 1–16 and octave −1 with (9,8). Keep Note X, set Vel 60 and Len 1/2.
+
+      5. Open Scale. Select slot 2 at (2,3); set Root D and Scale Major with E2/E3. Press K3 to apply. Select slot
+      1 and press K3 to restore C major before starting.
+
+      6. Play two bars in C major. During the quiet interval before bar 3, select scale slot 2 and press
+      K3 to apply D major. Play two further bars and stop.
+
+      The upper phrase changes from MIDI 60,60,60,62 to 62,62,62,64; bass changes from 48,55 to 50,57.
+      Select scale slot 1 at (1,3) and press K3 to restore C major.'
+  - title: Separate fixed bass-and-chord example
+    text: A bass with room above it stays in C major. Polyperc 1 uses velocity 48, length 1/2, MIDI 48
+      on steps 1,5,13 and MIDI 55 on step 9. Doubledecker uses velocity 32, length 3, roots MIDI 60 on
+      step 1 and 62 on step 9, with Chd1 3rd and Chd2 5th. Repeat each phrase for four bars. Its fixed
+      masks demonstrate layers rather than a relative-note scale change.
+  scene_refs:
+  - scale-edit-versus-apply
+  - mask-chords
+  - strum-division-bounds
+  - harmony-revoice-two-voices
+  review:
+    status: verified
+    cases:
+    - M-SCALE-001
+    - M-MASK-010
+    - M-PARAM-001
+    - M-HARMONY-REVOICE-001
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The new exact C-to-D relative-note comparison is authored and awaiting native capture.
+      Existing fixed C-major bass-and-chord evidence remains separate.
+    audio_refs:
+    - scale-slot-comparison
+    - bass-and-intervals
+    audio_cases:
+    - MA-AUDIO-scale-slot-comparison
+    - MA-AUDIO-bass-and-intervals
+    audio_comparison_status: pending-native-capture
+  category: workflow
+  parent: typical-workflow
+  level: 3
+- id: loops-that-meet
+  title: Combining Four-Step and Three-Step Loops
+  audience: intermediate
+  summary: Use independent channel lengths to create a 12-step repeating relationship.
+  prose: 'Use two channels at the same clock rate. The first channel has a four-step range; the second
+    has a three-step range. Their phrase starts coincide every 12 steps while playback remains continuous.
+
+
+    1. On channel 1, assign a pattern with active steps 1–4. Using the default C-major scale source, set
+    relative pattern notes to 0, 1, 2 and 3; these produce MIDI 60, 62, 64 and 65. Set velocities to 127,
+    117, 107 and 97, and note lengths to one step. Set its range to 1–4.
+
+    2. On channel 2, assign the same pattern and set its range to 1–3.
+
+    3. Open channel 2 Masks. Set the channel defaults to Note MIDI 79, Vel 40 and Len ½.
+
+    4. Hold step 2 and set Note MIDI 81, Vel 60 and Len 1¼. Release the step. Channel 2 now repeats 79–81–79
+    independently of channel 1’s four notes.
+
+    5. Start playback. Both channels begin together; compare their first steps again after 12 steps.
+
+    6. Stop playback before changing the arrangement.
+
+
+    Use independent MIDI routes for the two instruments. For internal sound, assign separate supported
+    players, such as Polyperc for channel 1 and Doubledecker for channel 2. Song transitions and reset
+    options can restart channels earlier; check them before extending this arrangement.'
+  musical_use: Save a copy before changing a layer. Compare playback before and after the change.
+  related:
+  - channel-length
+  - clocks-swing-and-shuffle
+  - reset-at-song-editor-pattern-change
+  - reset-at-pattern-repeat
+  - song-composition
+  sources:
+    readme: manual/legacy/README-1.4.0.md#typical-workflow
+    behaviour_cases:
+    - M-WORKFLOW-001
+    - M-RANGE-REJECT-005
+    code:
+    - tests/behaviour/composition_workflow.py
+    - lib/devices/device_descriptors.lua
+    - tests/behaviour/range_rejection.py
+  controls: []
+  details:
+  - title: Example Scope
+    text: These recipes specify suggested musical settings. Attached audio demonstrates only its authored
+      version. Suggested variations are not covered by that recording.
+  recipes:
+  - title: Comparing the Loop Alignment
+    text: Keep both channels at the same rate. Count three four-step phrases on channel 1 and four three-step
+      phrases on channel 2. Both reach the next phrase start on step 13.
+  - title: Comparing Song Boundary Resets
+    text: After saving the continuous version, compare it with a version that resets at a song boundary.
+      Verify the selected reset option before adding another slot; the continuous 12-step relationship
+      assumes no earlier reset.
+  scene_refs:
+  - loops-four-against-three
+  review:
+    status: verified
+    cases:
+    - M-RANGE-REJECT-005
+    source_status: code-and-case-reviewed
+    applicability: native-ui
+    native_gap: The unchanged native case verifies independent four-/three-step phrases, simultaneous
+      first onsets, exact timing and gates, and a rejected range edit preserving both schedules. The 12-step
+      relationship is the least common multiple of those lengths. Physical sound and the optional song-reset
+      comparison are separately scoped.
+    native_evidence_catalogues:
+    - generated/reference-polymeter-scenes.json
+    native_evidence:
+    - scene: loops-four-against-three
+      clock_mode: real-time
+      data: generated/reference-polymeter-scenes.json
+      data_sha256: edf2b56a0da99b175b76dbf4d9ee75a3803c2d1c4af15bb3f33b6eac67a1da15
+      evidence:
+        path: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/M-RANGE-REJECT-005-base-midi
+        session_context:
+          session_ordinal: 0
+          clock_mode: real-time
+          profile: base-midi
+          app_root: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/application
+          experimental_install: null
+          installation_sha256: null
+          session_id: d53a687cef154ea5b0f33620fc5b30a4
+          runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+          application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+          finished: true
+          held_inputs: []
+          cleanup_verified: true
+        results_sha256: b491345196c7aaa5a758ccd1fb26d6738509d0b299307dc6f4b45fdd14df9385
+        identity_sha256: 06a8d09bfaab1cef576ef46a0b1382ef9e45c92194176636ddfd3f388bf2f679
+        recipe_sha256: 287dbc8c4b95e317680d81cde159910a1446f758dcd45804907628e25dae5c3f
+        native_events_sha256: b4fe491dee2d6258e4d9e76b090ca9d90385ea251c8aee526fabe3fc06b0dab7
+        capture_trace_sha256: 6594dbadb7d0a5d54239c90db2781b414d3d90c452b1deb1e58203fe344b328f
+        session_context_sha256: b1e92971f1894eb823fddb3d6db4a0b4b9ac7694c49682e2735b46bdfba1388d
+        native_config_sha256: 49ba7d3fcb2d8d9ed91c23974af446f9d776dc14ab80e921c812364b7a06350c
+        cleanup_sha256: fa41c7b8a7411886f63a0817a038252d2f7fea73982d495605f542296491fdf0
+        case_participants:
+        - path: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/M-RANGE-REJECT-005-base-midi
+          session_context:
+            session_ordinal: 0
+            clock_mode: real-time
+            profile: base-midi
+            app_root: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/application
+            experimental_install: null
+            installation_sha256: null
+            session_id: d53a687cef154ea5b0f33620fc5b30a4
+            runtime_identity_sha256: 46012b2388401038f9ad6b491c9d7e020b04e4e29d50df796eabcd6059f30b83
+            application_identity_sha256: 742a7904e61afeccf2462757f626023b141bbd118a96bb49908319e581846721
+            finished: true
+            held_inputs: []
+            cleanup_verified: true
+          results_sha256: b491345196c7aaa5a758ccd1fb26d6738509d0b299307dc6f4b45fdd14df9385
+          identity_sha256: 06a8d09bfaab1cef576ef46a0b1382ef9e45c92194176636ddfd3f388bf2f679
+          recipe_sha256: 287dbc8c4b95e317680d81cde159910a1446f758dcd45804907628e25dae5c3f
+          native_events_sha256: b4fe491dee2d6258e4d9e76b090ca9d90385ea251c8aee526fabe3fc06b0dab7
+          capture_trace_sha256: 6594dbadb7d0a5d54239c90db2781b414d3d90c452b1deb1e58203fe344b328f
+          session_context_sha256: b1e92971f1894eb823fddb3d6db4a0b4b9ac7694c49682e2735b46bdfba1388d
+          native_config_sha256: 49ba7d3fcb2d8d9ed91c23974af446f9d776dc14ab80e921c812364b7a06350c
+          cleanup_sha256: fa41c7b8a7411886f63a0817a038252d2f7fea73982d495605f542296491fdf0
+        case_participants_path: /home/andy/mosaic-manual-runs/d548ae0484bf4f499ce90e912fa54cf1/M-RANGE-REJECT-005-base-midi/case-participants.json
+        case_participants_sha256: 0e48f3c9cdad0a61d9e98e9e96388f17c8412b272401f613254231b7d9ddd0b9
+  category: workflow
+  parent: typical-workflow
+  level: 3

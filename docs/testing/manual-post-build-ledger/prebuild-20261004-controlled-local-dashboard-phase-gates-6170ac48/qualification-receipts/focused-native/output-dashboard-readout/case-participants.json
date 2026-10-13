@@ -1,0 +1,27 @@
+[
+  {
+    "path": "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa/M-LIVEUI-DASH-001-base-midi",
+    "session_context": {
+      "session_ordinal": 0,
+      "clock_mode": "controlled-experimental",
+      "profile": "base-midi",
+      "app_root": "/home/andy/mosaic-manual-runs/e9ca0d55a22741d2a2d46af4d0e446aa/application",
+      "experimental_install": "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+      "installation_sha256": "4acdf1830c9dbd22ba64ad53a5abe0fccbd5521b6bc2e60e51a294669142f979",
+      "session_id": "98640694507a4ce4b635def734973d69",
+      "runtime_identity_sha256": "64cf3f1b2fcaa19bdaa5c27cf1ae8e0d4dc3faa2fdb040100cd8be85888822e2",
+      "application_identity_sha256": "5d6e5d60536ff98c42659f00cb5f8f57c14b20252a6548698ef195fcc58c81c9",
+      "finished": true,
+      "held_inputs": [],
+      "cleanup_verified": true
+    },
+    "results_sha256": "f2926c831167f33f4151e9ae5af987ef69cb18fd0e62aa85803c1652eb42c4d9",
+    "identity_sha256": "3a564c472f6f3c2c2912dd808697f2179d7754b8bf6271bf6f3a681a77de7e05",
+    "recipe_sha256": "c0c63e8e8463546f07450cd8bffe2ad8b237cfc4e70ef96cd6455258d576517b",
+    "native_events_sha256": "d66470fcc53573cfb24a367847da18eabd976a64ed6edaf95efc86ab3247b636",
+    "capture_trace_sha256": "ab34dfd257cdcc6966686fab546e4cd92ab6421dfb66b1231325bf922738ae02",
+    "session_context_sha256": "2d1cf60bbe5e2721f3c3c3556a70fc9b1753d5e06df5ce4f0b2fd47577e6d37b",
+    "native_config_sha256": "6dc20bfe6bae31b144ee4cc945d5836de8a4e2beddd5ad8339c3e369330ae71e",
+    "cleanup_sha256": "7aed1683a5c7ee71501662717cf96795e0b684fdbf565ef45da01304e6bcfa1f"
+  }
+]

@@ -1,0 +1,42 @@
+test_doctor_ready_transport.py
+test_after_stop_original_mask_and_bank_tempo_are_observed (test_doctor_ready_transport.ReadyTransportCoverage) ... ok
+test_failed_held_route_observation_releases_record_and_stops (test_doctor_ready_transport.ReadyTransportCoverage) ... ok
+test_public_record_press_and_release_are_exercised_while_playing (test_doctor_ready_transport.ReadyTransportCoverage) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.013s
+
+OK
+
+test_doctor_ready_routes.py
+test_g20_without_step_hold_remains_destination_p01 (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+test_g21_preserves_doctor_return_frame_until_release (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+test_recipe_observes_release_return_without_extra_navigation (test_doctor_ready_routes.DoctorHeldRouteTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.040s
+
+OK
+
+test_doctor_ready_encoder.py
+test_both_signs_and_boundary_requests_preserve_public_input (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... ok
+test_invalid_types_fail_before_any_public_event (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... ok
+test_large_negative_request_preserves_total_inside_public_delta_bound (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... ok
+test_zero_sends_no_public_event_or_wait (test_doctor_ready_encoder.DoctorEncoderBoundaryTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
+
+test_doctor_start_beat.py
+test_apply_and_restore_bind_same_wave_exact_revisions (test_doctor_start_beat.ManualStartBeatGuards) ... ok
+test_old_singleton_cannot_qualify_regular_capture_grid (test_doctor_start_beat.ManualStartBeatGuards) ... ok
+test_origin_second_beat_retains_absolute_first_beat (test_doctor_start_beat.ManualStartBeatGuards) ... ok
+test_recording_or_candidate_mutation_refuses_correction (test_doctor_start_beat.ManualStartBeatGuards) ... ok
+test_wrong_phase_or_partial_capture_grid_refused (test_doctor_start_beat.ManualStartBeatGuards) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK

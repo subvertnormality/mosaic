@@ -1,0 +1,44 @@
+{
+  "real_baseline": "/home/andy/mosaic-manual-runs/1d7bd95a760141c3a8a76599ad8125f7",
+  "controlled_baseline": "/home/andy/mosaic-manual-runs/046947d6a8cb43d08f20ed9ea34b6da1",
+  "sources": [
+    {
+      "path": "tests/behaviour/merge_strategy_routes.py",
+      "sha256": "c5c0045ed946897e7ccf75afdd40087d59e3b85db6d1900d1abb447680af39af"
+    },
+    {
+      "path": "tests/behaviour/contract/live_ui_feedback.py",
+      "sha256": "e2c42d52ed5f2f9164c28c1192e28e88480633e29c2bf7d76f7b1898fe0c4048"
+    },
+    {
+      "path": "tests/behaviour/test_merge_strategy_ui_routes.py",
+      "sha256": "2d29ea2a9d2e1513e429478a9a636d515586c57a2f61b6d225b14b89dedcec43"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/footer-temporal-regression-red.log",
+      "sha256": "2371983cf79bc5f67fc98b253d86b7b2c6391d187cdb524bb543eae3aea69c5a"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/footer-temporal-regression-green.log",
+      "sha256": "a74854b58927d50f48f1bf9bfee51635b5688f562679538d7a39aa294421e65f"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/footer-temporal-red-test-source.py",
+      "sha256": "2d29ea2a9d2e1513e429478a9a636d515586c57a2f61b6d225b14b89dedcec43"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/merge-strategy-ui/footer-observer-helper.diff",
+      "sha256": "9ffbefa0fbb7c3bb5420fa14670a5a8000ffbf91f5b878c6af7ceb555666a2b6"
+    }
+  ],
+  "command": "python3 -m unittest discover -s tests/behaviour -p test_merge_strategy_ui_routes.py",
+  "test_count": 11,
+  "exact_footer_preserved": "SKIP APPLIED",
+  "selected_strategy_and_active_and_led_and_midi_preserved": true,
+  "production_changed": false,
+  "emulator_changed": false,
+  "native_candidate_pending": true,
+  "source_ledger_live_not_changed": true
+}

@@ -1,0 +1,53 @@
+.......................FFFF
+======================================================================
+FAIL: test_retired_path_cannot_still_exist (test_reconcile_manual_build.RetiredSourceTests)
+----------------------------------------------------------------------
+AssertionError: missing reviewed source
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 62, in test_retired_path_cannot_still_exist
+    with self.assertRaisesRegex(AssertionError,'retired'):self.invoke()
+AssertionError: "retired" does not match "missing reviewed source"
+
+======================================================================
+FAIL: test_retirement_cannot_remove_runtime (test_reconcile_manual_build.RetiredSourceTests)
+----------------------------------------------------------------------
+AssertionError: missing reviewed source
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 59, in test_retirement_cannot_remove_runtime
+    with self.assertRaisesRegex(AssertionError,'retired'):self.invoke()
+AssertionError: "retired" does not match "missing reviewed source"
+
+======================================================================
+FAIL: test_retirement_changed_archive_rejected (test_reconcile_manual_build.RetiredSourceTests)
+----------------------------------------------------------------------
+AssertionError: missing reviewed source
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 56, in test_retirement_changed_archive_rejected
+    with self.assertRaisesRegex(AssertionError,'retired'):self.invoke()
+AssertionError: "retired" does not match "missing reviewed source"
+
+======================================================================
+FAIL: test_valid_archived_generated_retirement (test_reconcile_manual_build.RetiredSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 53, in test_valid_archived_generated_retirement
+    name,archive=self.retirement();out,receipt=self.invoke();self.assertNotIn(name,out['files']);self.assertEqual(out['manual_sections'][0]['id'],'MAN.001')
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 22, in invoke
+    return tool.refresh(self.baseline,self.review)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/refresh_source_inventory.py", line 28, in refresh
+    assert set(old['files'])<=set(review['files']), 'missing reviewed source'
+AssertionError: missing reviewed source
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.061s
+
+FAILED (failures=4)

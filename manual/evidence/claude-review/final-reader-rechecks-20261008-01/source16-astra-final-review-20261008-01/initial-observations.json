@@ -1,0 +1,403 @@
+{
+  "assets": {
+    "manual/generated/reader-index.json": "1d0cf924b6e0e28819636edf950e43544f278bd7af384242673c5a46a04a8654",
+    "manual/book.js": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+    "manual/manual.js": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+    "manual/manual.css": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+    "manual/index.html": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482",
+    "cheat_sheet.html": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+  },
+  "data": [
+    {
+      "label": "panic-1440-panic-from-song-channel",
+      "caption": "From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "midi": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "panic-1440-panic-from-song-pattern",
+      "caption": "From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "midi": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "quick-1440",
+      "text": "Skip to controls\nMOSAIC\n\n1.4.0 / QUICK REFERENCE\n\nInteractive manual\nSwitch light / dark\n\nFind a control here, then follow its heading for setup and full steps.\n\nFind a control\nClear\n130 of 130 features\nGetting Started\n\nInstall Mosaic and configure one channel before creating a song.\n\nInstalling Mosaic\n\nInstall Mosaic from maiden or the norns community catalogue.\n\nConfiguring an Output\n\nRoute channel 1 to one instrument.\n\nHardware Requirements\n\nMosaic requires norns and a 128 grid.\n\nMIDI Device Configuration\n\nDevice configurations define output defaults and mapped parameters.\n\nInstalling Stock Device Configurations\n\nCopy selected stock JSON files into data/mosaic/config.\n\nCreating a Custom Device Configuration\n\nCreate a JSON map from the instrument’s MIDI implementation.\n\nLock lead time\n\nSet the lead time for MIDI parameter locks before their step.\n\nGESTURE\tWHAT HAPPENS\nPARAMS → MOSAIC → Parameter locks → Lock lead time (ms)\tSet the global MIDI lock lead from 0 to 50 ms (default 25).\nSelecting an n.b. Player\n\nInstall and enable a supported player before assigning it to a channel.\n\nMIDI Keyboard Input\n\nHold a step to enter it, or arm recording and play.\n\nGESTURE\tWHAT HAPPENS\nSelect channel; Record off; no step held; play MIDI keys\tAudition the selected channel’s output without entering step masks.\nSelect channel → hold step → play MIDI keys\tEnter that step’s note, velocity and chord masks.\nRecord (2,8) + running transport + MIDI keys\tRecord onto the selected channel’s active steps.\nMIDI Controller Mapping\n\nAssign MIDI controls to channel parameters through the norns MIDI Map menu.\n\nGESTURE\tWHAT HAPPENS\nNative PARAMS: hold K1 and press K3\tSwitch between EDIT and MAP modes.\nMap editor: select Learn and press K3; operate MIDI control\tLearn its CC, input channel and device.\nMap editor: press K2\tLeave the editor and save the assignment.\nOperate assigned relative MIDI control\tChange the mapped Mosaic value.\nControls and Navigation\n\nUse the bottom-row page keys and check the screen header.\n\nStarting and Stopping Playback\n\nGrid (1,8) starts and stops the sequencer.\n\nGESTURE\tWHAT HAPPENS\nGrid (1,8)\tStart or stop playback, subject to Shift press stop.\nArm live record\n\nRecord notes and edited parameters into the selected channel.\n\nGESTURE\tWHAT HAPPENS\nGrid (2,8)\tArm or disarm live recording.\nSelecting a Grid Page\n\nGrid (3,8) through (6,8) select the four editors.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8) / (4,8) / (5,8) / (6,8)\tChannel / Scale / Pattern / Song.\nTap Pattern again\tCycle Trig, Note and Velocity views.\nNorns Menu Navigation\n\nOpen tasks with E1; choose a row with E2 and change its value with E3.\n\nGESTURE\tWHAT HAPPENS\nE1 → E2 → K3\tOpen the context task list, select a task, then open it.\nE2 / E3\tSelect a row / change its value.\nK3 / K2 on staged settings\tApply the draft / cancel or return. K3 also confirms a question and K2 cancels it. While an OPEN > row is chosen the last line names the target, for example K3 OPEN RHYTHM, or just K3 OPEN when space is short.\nHold K1 + E3\tChange the selected value finely where it supports that.\nHold step + K2 in Masks\tClear all mask attributes of that step.\nTooltips\n\nThe screen footer displays controls or feedback for the last grid action.\n\nExternal MIDI Transport\n\nAn external MIDI clock can drive the transport.\n\nMIDI Panic\n\nSend a Note Off sweep without stopping the sequencer.\n\nGESTURE\tWHAT HAPPENS\nHold a non-selected page key (stopping first is optional)\tSweep Note Off across connected MIDI channels; holding the selected page key does not panic.\nQuick Control Reference\n\nUse the cheat sheet for a compact list of gestures.\n\nComposition Workflow\n\nMake your first piece. Start with an empty project. Keep it through all ten chapters; you finish with a saved bass-only/full-phrase arrangement.\n\nAssigning Instruments to Channels\n\nChoose one sound. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.\n\nCreating a Rhythm Pattern\n\nSpread the rhythm across a bar. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.\n\nApplying a Scale\n\nCompare C and D major on the chapter 6 phrase and bass, then restore C major at the end for chapter 8.\n\nAssigning Patterns to Channels\n\nAdd a second part. Start with the softer C, C, C, D ending from chapter 5 and an independent second sound. Add a root-and-fifth bass beneath it.\n\nCombining Pattern Overlaps\n\nTrig, note, velocity and length merge choices are independent.\n\nEntering a Melody\n\nGive the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\n\nAdding Parameter Variation\n\nContinue the phrase and bass in C major restored at the end of chapter 7. Add a quiet C pickup before the next bar.\n\nArranging Song Slots\n\nArrange two sections. Start with the completed phrase, bass and pickup from chapter 8. Use empty slots 2 and 3; copying overwrites the destination with no undo.\n\nDig Deeper\n\nReference sections for pattern editing, channel processing and song arrangement.\n\nPattern Editor\n\nEdit source-pattern trigs, scale-relative notes and velocities, then assign the patterns to channels.\n\nGESTURE\tWHAT HAPPENS\nGrid (5,8)\tOpen Pattern Trig; press again to cycle Pattern Note and Pattern Velocity.\nPattern Trig: tap grid row 1\tChoose one of 16 editable source patterns.\nNote and Velocity pages: grid (9,8)–(12,8)\tChoose steps 1–16, 17–32, 33–48 or 49–64.\nAdding Trigs\n\nEnter pattern trigs manually or preview and paint a generated rhythm.\n\nGESTURE\tWHAT HAPPENS\nPattern Trig: tap row-1 pattern button\tChoose the source pattern for editing.\nTap a sequencer step in grid rows 4–7\tToggle a trig; active trigs glow brightly.\nHold a trig and choose its end step\tSet the note’s length; dimmer steps show its duration, cut short by another trig in the same pattern.\nTap algorithm button, columns 12–16 of row 2\tSelect Drum, Tresillo, Euclidean, Numeric Repetitor or Rhythm Doctor.\nTap Paint at grid (16,8), then tap it again\tPreview the generated pattern, then commit it; flashing steps show the preview.\nTap Cancel at grid (14,8)\tDiscard the prepared preview.\nGrid (10,8), (11,8), (12,8)\tMove the preview left, reset its shift, or move it right; paint to commit.\nGrid row 3, columns 12–16, with Drum or Tresillo selected\tSelect one of five algorithm banks.\nGrid row 3, columns 12–15, with Numeric Repetitor selected\tSelect one of four banks. Euclidean and Rhythm Doctor do not use this bank fader.\nGrid row 2, columns 1–10\tSet the algorithm’s first parameter. The outer buttons decrement/increment; inner buttons choose broader values.\nGrid row 3, columns 1–10\tSet the second algorithm parameter for Tresillo, Euclidean or Numeric Repetitor. This fader is disabled for Drum and Rhythm Doctor.\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nGESTURE\tWHAT HAPPENS\nWith the sequencer stopped, choose Rhythm Doctor at grid (16,2).\tOpen capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.\nEmpty bank: grid (1,2)\tStart Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.\nRecord before enough audio, or Record on an occupied bank\tOpen an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.\nBefore capture: E2/E3 edit setup → K3 confirm; K2 cancels.\tRecord uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.\nReady bank: select a lane, then E2 field → E3\tBrowse Window bar/step, sensitivity or paint policy.\nIn a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).\tSelect BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.\nReady bank: select Alignment → K3\tOpen the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.\nGrid (10,8) / (12,8); hold for a phrase\tMove the recording window one step backward / forward, or a whole four-bar phrase.\nGrid (11,8)\tReturn the window to its calculated phrase start.\nSelect destination pattern in row 1 → grid (16,8) twice\tPreview the selected lane, then paint it; grid (14,8) cancels the preview.\nIf local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.\tNo bank is created. See If local analysis fails for the norns setup needed to retry.\nAdding Notes\n\nSet source-pattern notes as scale degrees relative to the channel’s active root.\n\nGESTURE\tWHAT HAPPENS\nFrom Pattern Trig, press grid (5,8) again\tOpen Pattern Note.\nTap a note in a step’s grid column\tSet a scale-relative note for that source step, including steps without trigs.\nHold K1 while entering a note\tCopy the note to the corresponding position on all four sixteen-step pages.\nGrid (9,8)–(12,8)\tChoose steps 1–16, 17–32, 33–48 or 49–64.\nGrid (14,8), (15,8), (16,8)\tMove the note range up one scale degree, return to the page with the root on the bottom row, or move it down one scale degree. Hold (14,8) or (16,8) to reach the highest or lowest range.\nHold a row-1 pattern button, or K1 + tap it\tSelect another source pattern while on the note page.\nE3 on Pattern Note screen\tView another channel’s resolved steps without changing the selected channel.\nAdding Velocity\n\nSet source-pattern velocities using fourteen discrete grid levels from MIDI 127 to 0.\n\nGESTURE\tWHAT HAPPENS\nFrom Pattern Note, press grid (5,8) again\tOpen Pattern Velocity.\nTap a level in a step’s grid column\tSet that source step’s velocity to the displayed grid level.\nHold K1 while entering a velocity\tCopy it to the corresponding position across all four sixteen-step pages.\nGrid (9,8)–(12,8)\tChoose the sixteen-step page.\nGrid (15,8) / (16,8)\tMove the displayed velocity range toward higher / lower values; hold to reach an extreme.\nHold a row-1 pattern button, or K1 + tap it\tSelect another source pattern.\nE3 on Pattern Velocity screen\tView another channel’s resolved steps without changing the selected channel.\nChannel Editor\n\nSelect one of 16 channels and open its editing tasks.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8)\tOpen the Channel Editor.\nTap a channel in grid row 1\tSelect one of 16 channels; the selected channel supplies the current masks, locks and range.\nE1 → E2 task → K3\tOpen the named channel task; use the task list rather than an old screen-page shortcut.\nGrid row 3\tRead the currently active scale slot during playback.\nGrid (8,8)–(12,8), no step held\tSet the selected channel’s octave offset to −2, −1, 0, +1 or +2.\nPress grid (10,8)\tSet the selected channel’s octave offset to zero.\nDevices\n\nAssign an output device to the selected channel.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Device\tOpen the output assignment for the selected channel.\nE2 Device → E3 → K3\tBrowse a device and apply the selected output.\nE2 MIDI channel or MIDI port → E3 → K3\tChoose the route for a MIDI device and confirm it.\nMIDI Sound Sources\n\nRoute a channel to a configured MIDI output, device and MIDI channel.\n\nGESTURE\tWHAT HAPPENS\nNorns MIDI device configuration\tMake the required physical or virtual output available to Mosaic.\nChannel tasks → Device → E2 field → E3 → K3\tAssign the named device or generic CC output, MIDI channel and port.\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nGESTURE\tWHAT HAPPENS\nInstall and enable the supported n.b. mod, then open Channel tasks → Device\tInstalled supported voices appear in the device picker.\nSelect the voice with E3 and apply with K3\tRoute the channel to the chosen internal engine or Crow voice.\nDevice Parameters\n\nStore MIDI parameter values and transmit them when loading Mosaic or starting playback.\n\nGESTURE\tWHAT HAPPENS\nNorns params → the assigned MIDI device parameter\tEdit stored patch values; a configured Off value sends nothing.\nLoad Mosaic or start playback\tTransmit the stored enabled MIDI parameters to recall the patch.\nAdding Patterns to Channels\n\nAssign one or more source patterns to a channel. A pattern can be used by several channels.\n\nGESTURE\tWHAT HAPPENS\nTap channel in grid row 1\tChoose the channel whose source patterns will be changed.\nTap a pattern in grid row 2\tToggle that pattern in the selected channel’s source set; several patterns may be active.\nAdding Trig Masks\n\nAdd or remove a step trig mask with K1 and the sequencer grid.\n\nGESTURE\tWHAT HAPPENS\nChannel Editor: hold K1 and tap a sequencer step\tToggle the step’s trig mask; supply note, velocity and length masks if no source pattern supplies them.\nAdding Melodic Notes over Harmony and Drums\n\nSet channel mask defaults or step overrides for note, velocity, length and chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Masks → E2 attribute → E3\tSet a channel default with no step held.\nHold a sequencer step → E2 attribute → E3\tSet an explicit override for that step.\nHold a step and play a MIDI keyboard\tEnter note-mask data from the played notes.\nAdding Chords\n\nAdd up to four chord-mask voices to a root note. The selected output must support polyphony.\n\nGESTURE\tWHAT HAPPENS\nMasks → hold step → E2 Chd1–Chd4 → E3\tAdd up to four scale-relative chord voices to the root; the output must support them.\nAssign Chord Strum or Chord Arp in Trig params\tSpace the chord voices in time rather than playing them simultaneously.\nRemoving Masks\n\nClear step-mask overrides without changing channel mask defaults.\n\nGESTURE\tWHAT HAPPENS\nMasks: hold step + K2\tClear all step-mask attributes for held steps; channel defaults remain.\nMasks: K1 + K2 with no grid key held\tClear all step-mask overrides on the selected channel; preserve channel defaults.\nMerge Modes\n\nSet how assigned patterns supply trigs, notes, velocities and note lengths to a channel.\n\nGESTURE\tWHAT HAPPENS\nIn Channel Editor, press grid (14,8).\tCycle the shared Strategy through Skip, Only, All, Foundation and Fragments; the sequence wraps.\nOn Merge modes, select Strategy with E2 and turn E3.\tRequest the same strategy; the list is clamped and needs no extra K3 Apply.\nPress grid (15,8) or (16,8), or hold K1 and press (16,8).\tChange note, velocity or length merge respectively when the active strategy permits it. Fragments leaves saved settings unchanged.\nHold note, velocity or length merge button and tap a pattern in row 2.\tChoose a source pattern for that attribute when the active strategy permits it.\nTrig Merge Modes\n\nSelect All, Skip or Only to determine which overlapping pattern trigs play.\n\nGESTURE\tWHAT HAPPENS\nPress grid (14,8), or select Strategy on Merge modes and turn E3.\tChoose Skip, Only, All, Foundation or Fragments. The grid wraps; E3 stops at each end. Active and Pending",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "type": "button",
+          "id": "theme",
+          "placeholder": null,
+          "aria": null,
+          "text": "Switch light / dark"
+        },
+        {
+          "tag": "INPUT",
+          "type": "search",
+          "id": "find",
+          "placeholder": "Try masks, hold or velocity",
+          "aria": null,
+          "text": ""
+        },
+        {
+          "tag": "BUTTON",
+          "type": "button",
+          "id": "clear",
+          "placeholder": null,
+          "aria": null,
+          "text": "Clear"
+        }
+      ],
+      "links": [
+        {
+          "text": "Skip to controls",
+          "href": "#reference"
+        },
+        {
+          "text": "Interactive manual",
+          "href": "manual/"
+        },
+        {
+          "text": "Getting Started",
+          "href": "manual/#getting-started"
+        },
+        {
+          "text": "Installing Mosaic",
+          "href": "manual/#install"
+        },
+        {
+          "text": "Configuring an Output",
+          "href": "manual/#setup"
+        },
+        {
+          "text": "Hardware Requirements",
+          "href": "manual/#hardware"
+        },
+        {
+          "text": "MIDI Device Configuration",
+          "href": "manual/#midi-device-configuration"
+        },
+        {
+          "text": "Installing Stock Device Configurations",
+          "href": "manual/#stock-devices"
+        },
+        {
+          "text": "Creating a Custom Device Configuration",
+          "href": "manual/#adding-custom-devices"
+        },
+        {
+          "text": "Lock lead time",
+          "href": "manual/#lock-lead-time"
+        },
+        {
+          "text": "Selecting an n.b. Player",
+          "href": "manual/#mods-and-software-devices"
+        },
+        {
+          "text": "MIDI Keyboard Input",
+          "href": "manual/#midi-keyboard-input"
+        },
+        {
+          "text": "MIDI Controller Mapping",
+          "href": "manual/#midi-controller-mapping"
+        },
+        {
+          "text": "Controls and Navigation",
+          "href": "manual/#getting-around-mosaic"
+        },
+        {
+          "text": "Starting and Stopping Playback",
+          "href": "manual/#sequencer-start-and-stop"
+        },
+        {
+          "text": "Arm live record",
+          "href": "manual/#arm-live-record"
+        },
+        {
+          "text": "Selecting a Grid Page",
+          "href": "manual/#grid-menu-navigation"
+        },
+        {
+          "text": "Norns Menu Navigation",
+          "href": "manual/#norns-menu-navigation"
+        },
+        {
+          "text": "Tooltips",
+          "href": "manual/#tooltips"
+        },
+        {
+          "text": "External MIDI Transport",
+          "href": "manual/#external-midi-transport"
+        },
+        {
+          "text": "MIDI Panic",
+          "href": "manual/#midi-panic"
+        },
+        {
+          "text": "Quick Control Reference",
+          "href": "manual/#cheat-sheet"
+        },
+        {
+          "text": "Composition Workflow",
+          "href": "manual/#typical-workflow"
+        },
+        {
+          "text": "Assigning Instruments to Channels",
+          "href": "manual/#sound-design"
+        },
+        {
+          "text": "Creating a Rhythm Pattern",
+          "href": "manual/#rhythm-section-design"
+        },
+        {
+          "text": "Applying a Scale",
+          "href": "manual/#harmony-design"
+        },
+        {
+          "text": "Assigning Patterns to Channels",
+          "href": "manual/#sequence-composition"
+        },
+        {
+          "text": "Combining Pattern Overlaps",
+          "href": "manual/#using-merge-modes"
+        },
+        {
+          "text": "Entering a Melody",
+          "href": "manual/#melody-composition"
+        },
+        {
+          "text": "Adding Parameter Variation",
+          "href": "manual/#modulation-movement-and-interest"
+        },
+        {
+          "text": "Arranging Song Slots",
+          "href": "manual/#song-composition"
+        },
+        {
+          "text": "Dig Deeper",
+          "href": "manual/#dig-deeper"
+        },
+        {
+          "text": "Pattern Editor",
+          "href": "manual/#pattern-editor"
+        },
+        {
+          "text": "Adding Trigs",
+          "href": "manual/#adding-trigs"
+        },
+        {
+          "text": "Rhythm Doctor",
+          "href": "manual/#rhythm-doctor"
+        }
+      ],
+      "images": [
+        {
+          "src": "images/logo.svg",
+          "alt": "",
+          "loaded": true
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "panic-390-panic-from-song-channel",
+      "caption": "From Song, hold the Channel button (3,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "midi": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "panic-390-panic-from-song-pattern",
+      "caption": "From Song, hold the Pattern button (5,8) for about two seconds, then release it. Panic sends Note Off to the connected MIDI outputs to release stuck notes. This example starts silent, so you hear no change and the screen stays on Song. Panic leaves playback running. Holding the button of the page you are already on does nothing.",
+      "midi": "Panic sends Note Off messages to the connected MIDI outputs. This capture starts silent.",
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "quick-390",
+      "text": "Skip to controls\nMOSAIC\n\n1.4.0 / QUICK REFERENCE\n\nInteractive manual\nSwitch light / dark\n\nFind a control here, then follow its heading for setup and full steps.\n\nFind a control\nClear\n130 of 130 features\nGetting Started\n\nInstall Mosaic and configure one channel before creating a song.\n\nInstalling Mosaic\n\nInstall Mosaic from maiden or the norns community catalogue.\n\nConfiguring an Output\n\nRoute channel 1 to one instrument.\n\nHardware Requirements\n\nMosaic requires norns and a 128 grid.\n\nMIDI Device Configuration\n\nDevice configurations define output defaults and mapped parameters.\n\nInstalling Stock Device Configurations\n\nCopy selected stock JSON files into data/mosaic/config.\n\nCreating a Custom Device Configuration\n\nCreate a JSON map from the instrument’s MIDI implementation.\n\nLock lead time\n\nSet the lead time for MIDI parameter locks before their step.\n\nGESTURE\tWHAT HAPPENS\nPARAMS → MOSAIC → Parameter locks → Lock lead time (ms)\tSet the global MIDI lock lead from 0 to 50 ms (default 25).\nSelecting an n.b. Player\n\nInstall and enable a supported player before assigning it to a channel.\n\nMIDI Keyboard Input\n\nHold a step to enter it, or arm recording and play.\n\nGESTURE\tWHAT HAPPENS\nSelect channel; Record off; no step held; play MIDI keys\tAudition the selected channel’s output without entering step masks.\nSelect channel → hold step → play MIDI keys\tEnter that step’s note, velocity and chord masks.\nRecord (2,8) + running transport + MIDI keys\tRecord onto the selected channel’s active steps.\nMIDI Controller Mapping\n\nAssign MIDI controls to channel parameters through the norns MIDI Map menu.\n\nGESTURE\tWHAT HAPPENS\nNative PARAMS: hold K1 and press K3\tSwitch between EDIT and MAP modes.\nMap editor: select Learn and press K3; operate MIDI control\tLearn its CC, input channel and device.\nMap editor: press K2\tLeave the editor and save the assignment.\nOperate assigned relative MIDI control\tChange the mapped Mosaic value.\nControls and Navigation\n\nUse the bottom-row page keys and check the screen header.\n\nStarting and Stopping Playback\n\nGrid (1,8) starts and stops the sequencer.\n\nGESTURE\tWHAT HAPPENS\nGrid (1,8)\tStart or stop playback, subject to Shift press stop.\nArm live record\n\nRecord notes and edited parameters into the selected channel.\n\nGESTURE\tWHAT HAPPENS\nGrid (2,8)\tArm or disarm live recording.\nSelecting a Grid Page\n\nGrid (3,8) through (6,8) select the four editors.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8) / (4,8) / (5,8) / (6,8)\tChannel / Scale / Pattern / Song.\nTap Pattern again\tCycle Trig, Note and Velocity views.\nNorns Menu Navigation\n\nOpen tasks with E1; choose a row with E2 and change its value with E3.\n\nGESTURE\tWHAT HAPPENS\nE1 → E2 → K3\tOpen the context task list, select a task, then open it.\nE2 / E3\tSelect a row / change its value.\nK3 / K2 on staged settings\tApply the draft / cancel or return. K3 also confirms a question and K2 cancels it. While an OPEN > row is chosen the last line names the target, for example K3 OPEN RHYTHM, or just K3 OPEN when space is short.\nHold K1 + E3\tChange the selected value finely where it supports that.\nHold step + K2 in Masks\tClear all mask attributes of that step.\nTooltips\n\nThe screen footer displays controls or feedback for the last grid action.\n\nExternal MIDI Transport\n\nAn external MIDI clock can drive the transport.\n\nMIDI Panic\n\nSend a Note Off sweep without stopping the sequencer.\n\nGESTURE\tWHAT HAPPENS\nHold a non-selected page key (stopping first is optional)\tSweep Note Off across connected MIDI channels; holding the selected page key does not panic.\nQuick Control Reference\n\nUse the cheat sheet for a compact list of gestures.\n\nComposition Workflow\n\nMake your first piece. Start with an empty project. Keep it through all ten chapters; you finish with a saved bass-only/full-phrase arrangement.\n\nAssigning Instruments to Channels\n\nChoose one sound. Start with an empty channel and playback stopped. Choose and apply its output before entering notes.\n\nCreating a Rhythm Pattern\n\nSpread the rhythm across a bar. Start with the four-note loop from chapter 3. Move its trigs onto beats 1, 2, 3 and 4.\n\nApplying a Scale\n\nCompare C and D major on the chapter 6 phrase and bass, then restore C major at the end for chapter 8.\n\nAssigning Patterns to Channels\n\nAdd a second part. Start with the softer C, C, C, D ending from chapter 5 and an independent second sound. Add a root-and-fifth bass beneath it.\n\nCombining Pattern Overlaps\n\nTrig, note, velocity and length merge choices are independent.\n\nEntering a Melody\n\nGive the phrase an ending. Start with four equal notes on the beats. Raise only the last beat and make it softer.\n\nAdding Parameter Variation\n\nContinue the phrase and bass in C major restored at the end of chapter 7. Add a quiet C pickup before the next bar.\n\nArranging Song Slots\n\nArrange two sections. Start with the completed phrase, bass and pickup from chapter 8. Use empty slots 2 and 3; copying overwrites the destination with no undo.\n\nDig Deeper\n\nReference sections for pattern editing, channel processing and song arrangement.\n\nPattern Editor\n\nEdit source-pattern trigs, scale-relative notes and velocities, then assign the patterns to channels.\n\nGESTURE\tWHAT HAPPENS\nGrid (5,8)\tOpen Pattern Trig; press again to cycle Pattern Note and Pattern Velocity.\nPattern Trig: tap grid row 1\tChoose one of 16 editable source patterns.\nNote and Velocity pages: grid (9,8)–(12,8)\tChoose steps 1–16, 17–32, 33–48 or 49–64.\nAdding Trigs\n\nEnter pattern trigs manually or preview and paint a generated rhythm.\n\nGESTURE\tWHAT HAPPENS\nPattern Trig: tap row-1 pattern button\tChoose the source pattern for editing.\nTap a sequencer step in grid rows 4–7\tToggle a trig; active trigs glow brightly.\nHold a trig and choose its end step\tSet the note’s length; dimmer steps show its duration, cut short by another trig in the same pattern.\nTap algorithm button, columns 12–16 of row 2\tSelect Drum, Tresillo, Euclidean, Numeric Repetitor or Rhythm Doctor.\nTap Paint at grid (16,8), then tap it again\tPreview the generated pattern, then commit it; flashing steps show the preview.\nTap Cancel at grid (14,8)\tDiscard the prepared preview.\nGrid (10,8), (11,8), (12,8)\tMove the preview left, reset its shift, or move it right; paint to commit.\nGrid row 3, columns 12–16, with Drum or Tresillo selected\tSelect one of five algorithm banks.\nGrid row 3, columns 12–15, with Numeric Repetitor selected\tSelect one of four banks. Euclidean and Rhythm Doctor do not use this bank fader.\nGrid row 2, columns 1–10\tSet the algorithm’s first parameter. The outer buttons decrement/increment; inner buttons choose broader values.\nGrid row 3, columns 1–10\tSet the second algorithm parameter for Tresillo, Euclidean or Numeric Repetitor. This fader is disabled for Drum and Rhythm Doctor.\nRhythm Doctor\n\nSelect the fifth pattern algorithm at grid column 16, row 2 to capture, analyse and paint rhythm lanes.\n\nGESTURE\tWHAT HAPPENS\nWith the sequencer stopped, choose Rhythm Doctor at grid (16,2).\tOpen capture and paint. Recording, capture setup and Alignment require stopped transport; a finished bank can be browsed and painted while playing.\nEmpty bank: grid (1,2)\tStart Record. Press again or use K3 after ENOUGH / REC OR K3 to finish.\nRecord before enough audio, or Record on an occupied bank\tOpen an abandon/clear question; K2 cancels and K3 confirms. Clearing a bank preserves already painted patterns.\nBefore capture: E2/E3 edit setup → K3 confirm; K2 cancels.\tRecord uses the confirmed setup. Stereo records both inputs separately; L duplicates the left input and R duplicates the right input into both recorded channels. Manual uses the selected integer BPM from recording start; Auto estimates tempo and phrase start.\nReady bank: select a lane, then E2 field → E3\tBrowse Window bar/step, sensitivity or paint policy.\nIn a locally analysed READY bank, press grid (3,2), (4,2) or (5,2).\tSelect BD (bass drum), SD (snare drum) or CYM (hi-hats and cymbals). The default local detector produces these three lanes; the remote server can declare additional lanes.\nReady bank: select Alignment → K3\tOpen the tempo, Start beat and fine-start draft. E2 chooses the field; E3 edits. K3 reanalyses the retained recording with the confirmed alignment; K2 cancels. Manual Start beat uses regular confirmed-tempo beats; Auto uses detected beats.\nGrid (10,8) / (12,8); hold for a phrase\tMove the recording window one step backward / forward, or a whole four-bar phrase.\nGrid (11,8)\tReturn the window to its calculated phrase start.\nSelect destination pattern in row 1 → grid (16,8) twice\tPreview the selected lane, then paint it; grid (14,8) cancels the preview.\nIf local analysis reports ANALYSIS_BACKEND_UNAVAILABLE.\tNo bank is created. See If local analysis fails for the norns setup needed to retry.\nAdding Notes\n\nSet source-pattern notes as scale degrees relative to the channel’s active root.\n\nGESTURE\tWHAT HAPPENS\nFrom Pattern Trig, press grid (5,8) again\tOpen Pattern Note.\nTap a note in a step’s grid column\tSet a scale-relative note for that source step, including steps without trigs.\nHold K1 while entering a note\tCopy the note to the corresponding position on all four sixteen-step pages.\nGrid (9,8)–(12,8)\tChoose steps 1–16, 17–32, 33–48 or 49–64.\nGrid (14,8), (15,8), (16,8)\tMove the note range up one scale degree, return to the page with the root on the bottom row, or move it down one scale degree. Hold (14,8) or (16,8) to reach the highest or lowest range.\nHold a row-1 pattern button, or K1 + tap it\tSelect another source pattern while on the note page.\nE3 on Pattern Note screen\tView another channel’s resolved steps without changing the selected channel.\nAdding Velocity\n\nSet source-pattern velocities using fourteen discrete grid levels from MIDI 127 to 0.\n\nGESTURE\tWHAT HAPPENS\nFrom Pattern Note, press grid (5,8) again\tOpen Pattern Velocity.\nTap a level in a step’s grid column\tSet that source step’s velocity to the displayed grid level.\nHold K1 while entering a velocity\tCopy it to the corresponding position across all four sixteen-step pages.\nGrid (9,8)–(12,8)\tChoose the sixteen-step page.\nGrid (15,8) / (16,8)\tMove the displayed velocity range toward higher / lower values; hold to reach an extreme.\nHold a row-1 pattern button, or K1 + tap it\tSelect another source pattern.\nE3 on Pattern Velocity screen\tView another channel’s resolved steps without changing the selected channel.\nChannel Editor\n\nSelect one of 16 channels and open its editing tasks.\n\nGESTURE\tWHAT HAPPENS\nGrid (3,8)\tOpen the Channel Editor.\nTap a channel in grid row 1\tSelect one of 16 channels; the selected channel supplies the current masks, locks and range.\nE1 → E2 task → K3\tOpen the named channel task; use the task list rather than an old screen-page shortcut.\nGrid row 3\tRead the currently active scale slot during playback.\nGrid (8,8)–(12,8), no step held\tSet the selected channel’s octave offset to −2, −1, 0, +1 or +2.\nPress grid (10,8)\tSet the selected channel’s octave offset to zero.\nDevices\n\nAssign an output device to the selected channel.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Device\tOpen the output assignment for the selected channel.\nE2 Device → E3 → K3\tBrowse a device and apply the selected output.\nE2 MIDI channel or MIDI port → E3 → K3\tChoose the route for a MIDI device and confirm it.\nMIDI Sound Sources\n\nRoute a channel to a configured MIDI output, device and MIDI channel.\n\nGESTURE\tWHAT HAPPENS\nNorns MIDI device configuration\tMake the required physical or virtual output available to Mosaic.\nChannel tasks → Device → E2 field → E3 → K3\tAssign the named device or generic CC output, MIDI channel and port.\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nGESTURE\tWHAT HAPPENS\nInstall and enable the supported n.b. mod, then open Channel tasks → Device\tInstalled supported voices appear in the device picker.\nSelect the voice with E3 and apply with K3\tRoute the channel to the chosen internal engine or Crow voice.\nDevice Parameters\n\nStore MIDI parameter values and transmit them when loading Mosaic or starting playback.\n\nGESTURE\tWHAT HAPPENS\nNorns params → the assigned MIDI device parameter\tEdit stored patch values; a configured Off value sends nothing.\nLoad Mosaic or start playback\tTransmit the stored enabled MIDI parameters to recall the patch.\nAdding Patterns to Channels\n\nAssign one or more source patterns to a channel. A pattern can be used by several channels.\n\nGESTURE\tWHAT HAPPENS\nTap channel in grid row 1\tChoose the channel whose source patterns will be changed.\nTap a pattern in grid row 2\tToggle that pattern in the selected channel’s source set; several patterns may be active.\nAdding Trig Masks\n\nAdd or remove a step trig mask with K1 and the sequencer grid.\n\nGESTURE\tWHAT HAPPENS\nChannel Editor: hold K1 and tap a sequencer step\tToggle the step’s trig mask; supply note, velocity and length masks if no source pattern supplies them.\nAdding Melodic Notes over Harmony and Drums\n\nSet channel mask defaults or step overrides for note, velocity, length and chord voices.\n\nGESTURE\tWHAT HAPPENS\nChannel tasks → Masks → E2 attribute → E3\tSet a channel default with no step held.\nHold a sequencer step → E2 attribute → E3\tSet an explicit override for that step.\nHold a step and play a MIDI keyboard\tEnter note-mask data from the played notes.\nAdding Chords\n\nAdd up to four chord-mask voices to a root note. The selected output must support polyphony.\n\nGESTURE\tWHAT HAPPENS\nMasks → hold step → E2 Chd1–Chd4 → E3\tAdd up to four scale-relative chord voices to the root; the output must support them.\nAssign Chord Strum or Chord Arp in Trig params\tSpace the chord voices in time rather than playing them simultaneously.\nRemoving Masks\n\nClear step-mask overrides without changing channel mask defaults.\n\nGESTURE\tWHAT HAPPENS\nMasks: hold step + K2\tClear all step-mask attributes for held steps; channel defaults remain.\nMasks: K1 + K2 with no grid key held\tClear all step-mask overrides on the selected channel; preserve channel defaults.\nMerge Modes\n\nSet how assigned patterns supply trigs, notes, velocities and note lengths to a channel.\n\nGESTURE\tWHAT HAPPENS\nIn Channel Editor, press grid (14,8).\tCycle the shared Strategy through Skip, Only, All, Foundation and Fragments; the sequence wraps.\nOn Merge modes, select Strategy with E2 and turn E3.\tRequest the same strategy; the list is clamped and needs no extra K3 Apply.\nPress grid (15,8) or (16,8), or hold K1 and press (16,8).\tChange note, velocity or length merge respectively when the active strategy permits it. Fragments leaves saved settings unchanged.\nHold note, velocity or length merge button and tap a pattern in row 2.\tChoose a source pattern for that attribute when the active strategy permits it.\nTrig Merge Modes\n\nSelect All, Skip or Only to determine which overlapping pattern trigs play.\n\nGESTURE\tWHAT HAPPENS\nPress grid (14,8), or select Strategy on Merge modes and turn E3.\tChoose Skip, Only, All, Foundation or Fragments. The grid wraps; E3 stops at each end. Active and Pending",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "type": "button",
+          "id": "theme",
+          "placeholder": null,
+          "aria": null,
+          "text": "Switch light / dark"
+        },
+        {
+          "tag": "INPUT",
+          "type": "search",
+          "id": "find",
+          "placeholder": "Try masks, hold or velocity",
+          "aria": null,
+          "text": ""
+        },
+        {
+          "tag": "BUTTON",
+          "type": "button",
+          "id": "clear",
+          "placeholder": null,
+          "aria": null,
+          "text": "Clear"
+        }
+      ],
+      "links": [
+        {
+          "text": "Skip to controls",
+          "href": "#reference"
+        },
+        {
+          "text": "Interactive manual",
+          "href": "manual/"
+        },
+        {
+          "text": "Getting Started",
+          "href": "manual/#getting-started"
+        },
+        {
+          "text": "Installing Mosaic",
+          "href": "manual/#install"
+        },
+        {
+          "text": "Configuring an Output",
+          "href": "manual/#setup"
+        },
+        {
+          "text": "Hardware Requirements",
+          "href": "manual/#hardware"
+        },
+        {
+          "text": "MIDI Device Configuration",
+          "href": "manual/#midi-device-configuration"
+        },
+        {
+          "text": "Installing Stock Device Configurations",
+          "href": "manual/#stock-devices"
+        },
+        {
+          "text": "Creating a Custom Device Configuration",
+          "href": "manual/#adding-custom-devices"
+        },
+        {
+          "text": "Lock lead time",
+          "href": "manual/#lock-lead-time"
+        },
+        {
+          "text": "Selecting an n.b. Player",
+          "href": "manual/#mods-and-software-devices"
+        },
+        {
+          "text": "MIDI Keyboard Input",
+          "href": "manual/#midi-keyboard-input"
+        },
+        {
+          "text": "MIDI Controller Mapping",
+          "href": "manual/#midi-controller-mapping"
+        },
+        {
+          "text": "Controls and Navigation",
+          "href": "manual/#getting-around-mosaic"
+        },
+        {
+          "text": "Starting and Stopping Playback",
+          "href": "manual/#sequencer-start-and-stop"
+        },
+        {
+          "text": "Arm live record",
+          "href": "manual/#arm-live-record"
+        },
+        {
+          "text": "Selecting a Grid Page",
+          "href": "manual/#grid-menu-navigation"
+        },
+        {
+          "text": "Norns Menu Navigation",
+          "href": "manual/#norns-menu-navigation"
+        },
+        {
+          "text": "Tooltips",
+          "href": "manual/#tooltips"
+        },
+        {
+          "text": "External MIDI Transport",
+          "href": "manual/#external-midi-transport"
+        },
+        {
+          "text": "MIDI Panic",
+          "href": "manual/#midi-panic"
+        },
+        {
+          "text": "Quick Control Reference",
+          "href": "manual/#cheat-sheet"
+        },
+        {
+          "text": "Composition Workflow",
+          "href": "manual/#typical-workflow"
+        },
+        {
+          "text": "Assigning Instruments to Channels",
+          "href": "manual/#sound-design"
+        },
+        {
+          "text": "Creating a Rhythm Pattern",
+          "href": "manual/#rhythm-section-design"
+        },
+        {
+          "text": "Applying a Scale",
+          "href": "manual/#harmony-design"
+        },
+        {
+          "text": "Assigning Patterns to Channels",
+          "href": "manual/#sequence-composition"
+        },
+        {
+          "text": "Combining Pattern Overlaps",
+          "href": "manual/#using-merge-modes"
+        },
+        {
+          "text": "Entering a Melody",
+          "href": "manual/#melody-composition"
+        },
+        {
+          "text": "Adding Parameter Variation",
+          "href": "manual/#modulation-movement-and-interest"
+        },
+        {
+          "text": "Arranging Song Slots",
+          "href": "manual/#song-composition"
+        },
+        {
+          "text": "Dig Deeper",
+          "href": "manual/#dig-deeper"
+        },
+        {
+          "text": "Pattern Editor",
+          "href": "manual/#pattern-editor"
+        },
+        {
+          "text": "Adding Trigs",
+          "href": "manual/#adding-trigs"
+        },
+        {
+          "text": "Rhythm Doctor",
+          "href": "manual/#rhythm-doctor"
+        }
+      ],
+      "images": [
+        {
+          "src": "images/logo.svg",
+          "alt": "",
+          "loaded": true
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    }
+  ],
+  "errors": []
+}

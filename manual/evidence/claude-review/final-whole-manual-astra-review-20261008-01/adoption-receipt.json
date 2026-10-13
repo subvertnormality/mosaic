@@ -1,0 +1,204 @@
+{
+  "package": "final-whole-manual-astra-review-20261008-01",
+  "review_verdict": "changes_required",
+  "all_seven_at_least_eight": false,
+  "scores": {
+    "readability": 7,
+    "comprehensibility": 7,
+    "flow": 7,
+    "understandability": 8,
+    "user_friendliness": 8,
+    "interactive_example_usefulness": 7,
+    "cohesion": 7
+  },
+  "threshold": "FAILED: at least eight required for every criterion",
+  "reopened": [
+    "F06: R1/R2/R3/R4 practical recipe accuracy",
+    "F11: R5 player-facing review/production language"
+  ],
+  "pending_findings": [
+    {
+      "id": "R1",
+      "severity": "high",
+      "title": "Missing Pattern 1 assignment from empty project"
+    },
+    {
+      "id": "R2",
+      "severity": "high",
+      "title": "Incorrect sixteen-step paging on Channel Masks and Trig params"
+    },
+    {
+      "id": "R3",
+      "severity": "high",
+      "title": "Average/Higher recipe selects copy before preparing source"
+    },
+    {
+      "id": "R4",
+      "severity": "medium",
+      "title": "Misleading playback comparisons"
+    },
+    {
+      "id": "R5",
+      "severity": "medium",
+      "title": "Review/production language remains in player-facing content"
+    }
+  ],
+  "next_review": "Scoped verification after corrections with unchanged-source parity; no blanket native/audio/CI closure.",
+  "review_provenance": {
+    "review_md_sha256": "03f3905ec4bbe4baefbf5d9d5013fbb7daa251141272a1466e56da3a4025af26",
+    "review_json_sha256": "d6a2a3fae98e0463660f6148416a568321f360324f0f52fc0349e34d25eb1ce7",
+    "review_url": "http://localhost:8785/manual/",
+    "review_date": "2026-10-08",
+    "source_mutated_during_review": false,
+    "audio_listened": false,
+    "native_or_hardware_run": false,
+    "pins_from_review": {
+      "book_authoritative_independently_hashed": "54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+      "reader_index_served": "39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf",
+      "book_js_final_served_and_authoritative": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+      "book_js_initial_collection": "ff5958093a44b274ab4e142d9e5d29f54ed0f53f8d82aee4f85027bbfc2d9091",
+      "manual_js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+      "css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+      "index_html_served_and_authoritative": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+      "author_identity_root_supplied": "80cc81d39ab276c32da0561588cafad4ac3f4123b065043573a78b1483312d46",
+      "quick_reference": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+    }
+  },
+  "source_pin_verification": [
+    {
+      "label": "actual",
+      "root": "/home/andy/mosaic-manual-1.4.0",
+      "head": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+      "review_source_pins": {
+        "book_authoritative_independently_hashed": {
+          "path": "manual/generated/book.json",
+          "sha256": "54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+          "matches_review": true
+        },
+        "reader_index_served": {
+          "path": "manual/generated/reader-index.json",
+          "sha256": "39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf",
+          "matches_review": true
+        },
+        "book_js_final_served_and_authoritative": {
+          "path": "manual/book.js",
+          "sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+          "matches_review": true
+        },
+        "manual_js": {
+          "path": "manual/manual.js",
+          "sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+          "matches_review": true
+        },
+        "css": {
+          "path": "manual/manual.css",
+          "sha256": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+          "matches_review": true
+        },
+        "index_html_served_and_authoritative": {
+          "path": "manual/index.html",
+          "sha256": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+          "matches_review": true
+        },
+        "quick_reference": {
+          "path": "cheat_sheet.html",
+          "sha256": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695",
+          "matches_review": true
+        }
+      },
+      "destination": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/final-whole-manual-astra-review-20261008-01"
+    },
+    {
+      "label": "publication",
+      "root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+      "head": "9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0",
+      "review_source_pins": {
+        "book_authoritative_independently_hashed": {
+          "path": "manual/generated/book.json",
+          "sha256": "54a7433e87b61dba58865cd0a857aea642ddd7b96604e12cec56e6165c9d79c5",
+          "matches_review": true
+        },
+        "reader_index_served": {
+          "path": "manual/generated/reader-index.json",
+          "sha256": "39eab0635e6bfcabefc61d44faec4ec368a0f86435da9ca48b3c72a7d042f0cf",
+          "matches_review": true
+        },
+        "book_js_final_served_and_authoritative": {
+          "path": "manual/book.js",
+          "sha256": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+          "matches_review": true
+        },
+        "manual_js": {
+          "path": "manual/manual.js",
+          "sha256": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+          "matches_review": true
+        },
+        "css": {
+          "path": "manual/manual.css",
+          "sha256": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+          "matches_review": true
+        },
+        "index_html_served_and_authoritative": {
+          "path": "manual/index.html",
+          "sha256": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+          "matches_review": true
+        },
+        "quick_reference": {
+          "path": "cheat_sheet.html",
+          "sha256": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695",
+          "matches_review": true
+        }
+      },
+      "destination": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/final-whole-manual-astra-review-20261008-01"
+    }
+  ],
+  "included_files": [
+    {
+      "name": "review.md",
+      "bytes": 15978,
+      "sha256": "03f3905ec4bbe4baefbf5d9d5013fbb7daa251141272a1466e56da3a4025af26"
+    },
+    {
+      "name": "review.json",
+      "bytes": 5688,
+      "sha256": "d6a2a3fae98e0463660f6148416a568321f360324f0f52fc0349e34d25eb1ce7"
+    },
+    {
+      "name": "collection.json",
+      "bytes": 1880,
+      "sha256": "90dae9a0caec2a41f473cd74b8ec69d9a7e4bbd6a555a09f44e86ae60513f80d"
+    },
+    {
+      "name": "browser-observations.json",
+      "bytes": 425649,
+      "sha256": "dc629f1feead8826d05d1e55ec5cc089d30bfc15f657ef82114ef475e29ca463"
+    },
+    {
+      "name": "interaction-observations.json",
+      "bytes": 28216,
+      "sha256": "46ab8aa726d196154a07380915ba048d73da2d46ccf7943e769afd2acaa99d4b"
+    },
+    {
+      "name": "workflow-observations.json",
+      "bytes": 67871,
+      "sha256": "327882e518d78542348ef0ca02b6417a720b23a2cf1f2dad6d8233567f30dc75"
+    },
+    {
+      "name": "audio-check.json",
+      "bytes": 374,
+      "sha256": "2107748d32236e23c50e42938631fc3c7eb044f7d55866dbdbb565bf0a37d486"
+    },
+    {
+      "name": "caption-candidates.json",
+      "bytes": 291,
+      "sha256": "d4bbd909d66f022a5080fa970c16ec35edd738f2713a9e9b1c6d0e7f7ac8f1db"
+    },
+    {
+      "name": "reader-prose.json",
+      "bytes": 279439,
+      "sha256": "0c073e040126c8d589d0e29a2d4f49e1bbc604b0df7662f7315a4691a7b3d632"
+    }
+  ],
+  "excluded_assets": "Screenshots, raw served reader index, and source JS/CSS were omitted; the review report records their hashes and the compact browser/workflow/prose observations are included.",
+  "adoption_scope": "Adds only this review-evidence directory under manual/evidence/claude-review; does not modify reader content, YAML, generated outputs, or the current ledger."
+}

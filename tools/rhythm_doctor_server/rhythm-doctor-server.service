@@ -1,0 +1,27 @@
+# systemd unit for the analysis server. Install with:
+#   sudo cp rhythm-doctor-server.service /etc/systemd/system/
+#   sudo systemctl enable --now rhythm-doctor-server
+#
+# Adjust User, WorkingDirectory and the venv path to your machine. LARSNET_ROOT
+# is optional: without it the drums stem stays a single lane.
+[Unit]
+Description=Rhythm Doctor analysis server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/rhythm-doctor-server
+Environment=LARSNET_ROOT=/opt/rhythm-doctor-server/larsnet
+ExecStart=/opt/rhythm-doctor-server/.venv/bin/python3 server.py --host 0.0.0.0 --port 8420
+Restart=on-failure
+RestartSec=5
+# The server reads captures and model weights and writes nothing outside /tmp.
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

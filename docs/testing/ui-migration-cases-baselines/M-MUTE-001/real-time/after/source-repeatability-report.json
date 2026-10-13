@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "4611d9c2992ea90d89f88ec29b33d0513cbe79e8",
+  "selected_cases": [
+    "M-PAT-002",
+    "M-RANGE-001",
+    "M-RANGE-002",
+    "M-MUTE-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/scale_memory.py": "M-PAT-002"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/scale_memory.py",
+      "case": "M-PAT-002",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-78c785aa200e4c2693e27320ac5f71d1/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-78c785aa200e4c2693e27320ac5f71d1/manifest.json",
+      "manifest_sha256": "1116212bdc5eb4f8c4b1f2a460c88c74171dcc20eef7718caf1847248a966119",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

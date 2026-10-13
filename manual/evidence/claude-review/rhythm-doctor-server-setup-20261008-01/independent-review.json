@@ -1,0 +1,16 @@
+{
+  "reviewer": "luna_player_integration",
+  "candidate_sha256": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+  "verdict": "GO",
+  "scope": "Documentation correctness against implementation; browser proof recorded separately. No fresh musical, audio or full CI qualification.",
+  "checks": [
+    "fresh computer prerequisites and checkout",
+    "Windows and Unix virtual-environment commands",
+    "optional six or ten lanes",
+    "separate model weights and pinned download",
+    "health readiness required before interpreting lane count",
+    "reachable network address and norns PARAMS",
+    "local fallback requires an available backend",
+    "complete setup visible in main prose"
+  ]
+}

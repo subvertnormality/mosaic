@@ -1,0 +1,12 @@
+{
+  "source_sha256": "03aecad7b69c12b89ff2b6281d39f58900ce678702fa2b48308c19058457ec73",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_manual_authority.ManualAuthorityTests.test_course_source_is_pinned_and_edit_invalidates_identity",
+    "test_manual_authority.ManualAuthorityTests.test_course_source_escape_is_rejected"
+  ],
+  "returncode": 1,
+  "utc": "2026-10-03T14:56:05.053026+00:00"
+}

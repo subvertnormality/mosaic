@@ -20,7 +20,9 @@ local function helpers(delay_result)
 end
 
 -- Characterisation, not manual text: nil/1/3 roots play immediately, 2/4
--- roots play later, and unknown patterns currently omit the root.
+-- roots play later, and unknown patterns currently omit the root. X (0) is the
+-- README "Mute Root Note" / "Chord Shape Modifier" exception: only Mute Root
+-- Note silences a root, so an X pattern plays its root immediately like nil.
 function test_strum_descriptor_preserves_root_placement()
   local root_now, _, root_later, calls = helpers(0)
 
@@ -29,7 +31,7 @@ function test_strum_descriptor_preserves_root_placement()
   luaunit.assert_false(root_now(2, false))
   luaunit.assert_true(root_now(3, false))
   luaunit.assert_false(root_now(4, false))
-  luaunit.assert_false(root_now(0, false))
+  luaunit.assert_true(root_now(0, false))
   luaunit.assert_false(root_now(5, false))
   luaunit.assert_false(root_now(1, true))
 

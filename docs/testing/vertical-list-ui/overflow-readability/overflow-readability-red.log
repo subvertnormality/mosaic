@@ -1,0 +1,17 @@
+...FF...
+Failed tests:
+-------------
+1) test_ui_vertical_list_selected_overflow_exact_value_is_readable_over_marquee_cycle
+...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:64: expected: true, actual: false
+stack traceback:
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:64: in upvalue 'assert_readable_over_cycle'
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:90: in function 'test_ui_vertical_list_selected_overflow_exact_value_is_readable_over_marquee_cycle'
+
+2) test_ui_vertical_list_selected_overflow_label_is_readable_over_marquee_cycle
+...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:76: Marquee never reveals ve pa
+expected: true, actual: false
+stack traceback:
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:76: in upvalue 'assert_readable_over_cycle'
+	...ic-manual-1.4.0/lib/tests/lib/ui_vertical_list_tests.lua:83: in function 'test_ui_vertical_list_selected_overflow_label_is_readable_over_marquee_cycle'
+
+Ran 8 tests in 0.005 seconds, 6 successes, 2 failures

@@ -1,0 +1,7 @@
+{
+  "status": "prepared-not-launched",
+  "parent_manifest_sha256": "7a074c5e5de8eafd3d1191bfed1ded1911baca384f4378632761f3d79ed94f87",
+  "argv_sha256": "acdb6341ea642fdeaf9f1bb4936c72282a3a26237c7c16e4857b7e38de58cce9",
+  "requires_qualified_adapter_installation_and_candidate_review": true,
+  "artifacts": "/home/andy/mosaic-manual-build-runs/controlled-local-43-resume-077b-841eaad81b454426bdf53d8a15514a6b"
+}

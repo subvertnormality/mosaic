@@ -15,12 +15,16 @@ function include(name)
  if name=='mosaic/lib/clock/onset_projection' then return dofile('lib/clock/onset_projection.lua') end
  if name=='mosaic/lib/clock/transport_lifecycle' then return dofile('lib/clock/transport_lifecycle.lua') end
  if name=='mosaic/lib/clock/arp_lifetime' then return dofile('lib/clock/arp_lifetime.lua') end
+ -- This slide-only fixture has no playing Merge relation.
+ if name=='mosaic/lib/musical_merge/timeline' then return {running=function() return false end} end
  local slide_lifetime=include_slide_lifetime(name)
  if slide_lifetime then return slide_lifetime end
  return {clock_divisions={}}
 end
 local Lattice=dofile('lib/clock/m_lattice.lua')
 
+program.get_selected_song_pattern=function() return {} end
+pattern={followers_of=function() return {} end,rebuild_followers=function() end}
 local mc=dofile('lib/clock/m_clock.lua');slide_state:reset()
 local sample=function() return slide_state:process() end
 local lattice=Lattice:new{auto=false,ppqn=96,pattern_length=4};clock_lattice=lattice

@@ -1,0 +1,100 @@
+{
+  "package": "proposal-review-20261008-01",
+  "decision": "HOLD",
+  "historical_proposals_are_not_qualified": true,
+  "review_summary": {
+    "reviewed_units": 52,
+    "initial_below_threshold_units": 10,
+    "current_rubric_all_ten_criteria_at_least_8": false,
+    "pending": "Revised practical recipe and player-language candidate, followed by fresh scoped review. No overall publication qualification is conferred."
+  },
+  "locks_v04_supplement": {
+    "decision": "HOLD",
+    "unit": "feature:locks:recipes[4]",
+    "mapped_current_id": "recipe:locks:5-practice-longer-and-shorter-decay-envelopes",
+    "flow_score": 7,
+    "blockers": [
+      "After the copy instruction, explicitly tap/select Song slot 2 before editing its length or step locks; otherwise the text does not tell the reader to leave the source slot.",
+      "Before each A/B playback, explicitly select Song slot 1 as the start point; the current text leaves slot 2 selected after editing. Selecting slot 1 only after playback does not fix the start.",
+      "Make the Pattern 1 setup navigation explicit: open Channel with Grid (3,8), select channel 1 on row 1, then assign Pattern 1 on the second-from-top row before playback."
+    ]
+  },
+  "crosswalk_summary": {
+    "review_units": 52,
+    "direct_subunits": 41,
+    "standalone_units": 11,
+    "unique_direct_ids": 38,
+    "unique_dependency_ids": 63,
+    "below_threshold": 10
+  },
+  "ledger_pin_caveat": {
+    "review_pinned_ledger_sha256": "4ceb17deba072d7c5a4b4ee75da6c8a5ae87f362a09c8a4b612541645c650917",
+    "current_ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+    "matches": false,
+    "inventory_count": 425,
+    "score_transfer": "none"
+  },
+  "source_roots": [
+    {
+      "label": "actual",
+      "root": "/home/andy/mosaic-manual-1.4.0",
+      "head": "1867886ca2f39e3aff99cea19133e83b9c0cdd44",
+      "ledger_path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v07.json",
+      "ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+      "ledger_id_count": 425,
+      "destination": "/home/andy/mosaic-manual-1.4.0/manual/evidence/claude-review/proposal-review-20261008-01"
+    },
+    {
+      "label": "publication",
+      "root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+      "head": "9efbd8ad7fe3ae96e36db7386e3a3d0fa5be5ca0",
+      "ledger_path": "manual/evidence/claude-review/final-reader-rechecks-20261008-01/source19-course-crossref-score-refresh-20261008-01/ROOT-POSTSTYLE-PUBLIC-425-CANDIDATE-v07.json",
+      "ledger_sha256": "fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2",
+      "ledger_id_count": 425,
+      "destination": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout/manual/evidence/claude-review/proposal-review-20261008-01"
+    }
+  ],
+  "raw_source_files": [
+    {
+      "path": "review.json",
+      "bytes": 42713,
+      "sha256": "22e5ab006310a3dbd9ff883e3637490fb152dd3d6f15f161480e399e3b7e94dd"
+    },
+    {
+      "path": "review.md",
+      "bytes": 1824,
+      "sha256": "ba5bcdff13ffbdcbdc00a7208933694841dd592d17335396ba267a5c5d9aab58"
+    },
+    {
+      "path": "locks-v04-supplement.json",
+      "bytes": 1505,
+      "sha256": "c6eafe717894da385d894b676c1fed146933700027425fd5176437029456d874"
+    },
+    {
+      "path": "locks-v04-supplement.md",
+      "bytes": 796,
+      "sha256": "201a0ca4063cade975ce3826c4f1d4d1ce95df9a7c9169d019b5f97f06d09ab1"
+    },
+    {
+      "path": "ledger-crosswalk.json",
+      "bytes": 49269,
+      "sha256": "889e936fc334f1914311145c1bf7ef3bd7588ccbc3e0825f531c12eb5c090c29"
+    },
+    {
+      "path": "ledger-crosswalk.md",
+      "bytes": 13926,
+      "sha256": "795faba7dec9880c883e23efd158726d855c42299b15abd2a2f57b04f56a4147"
+    }
+  ],
+  "adopted_files": [
+    "review.json",
+    "review.md",
+    "locks-v04-supplement.json",
+    "locks-v04-supplement.md",
+    "ledger-crosswalk.json",
+    "ledger-crosswalk.md",
+    "adoption-receipt.json"
+  ],
+  "excluded": "Screenshots, source proposal candidates and generated reader assets are excluded; review report and mapping retain source/rubric pins.",
+  "scope": "Adds only developer-evidence files. No reader, YAML, generated output, or ledger changed."
+}

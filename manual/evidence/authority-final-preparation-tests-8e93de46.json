@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "scope": "Final pre-replacement authority preparation; no native captures or acceptance activation.",
+  "source_snapshot_sha256": "8e93de465723a2c4c6198c72c016d463bde258117dc7a2263927cbf15c3fe2a8",
+  "checks": [
+    {
+      "command": "python3 tests/behaviour/reconcile_manual.py --check",
+      "result": "manual inventory current"
+    },
+    {
+      "command": "git apply --check manual/AGENTS.proposed.patch",
+      "result": "pass"
+    }
+  ],
+  "focused_tests": {
+    "test_manual_authority_transition.py": 21,
+    "test_manual_authority.py": 16,
+    "test_inventory.py": 4,
+    "test_collection.py": 5,
+    "test_manual_quick_reference.py": 7
+  },
+  "total_tests": 53,
+  "failures": 0,
+  "authority_status": "inactive",
+  "complete_regression_run": false,
+  "root_replacements_performed": false
+}

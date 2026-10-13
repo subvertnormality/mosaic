@@ -1,0 +1,14 @@
+{"failures": [], "held_full_mix": {"count": 2, "unique_pcm": 2}, "manifest_sha256": "22145469a8f6103b6a65dd0583ee17cc22a495c805d0ec33825828325df20f15", "passed": true, "scope": "rendered fixture inventory; not transcription quality"}
+{"failures": ["audio_hash:phase"], "held_full_mix": {"count": 2, "unique_pcm": 2}, "manifest_sha256": "24f72d2d078af48685f773c08842d0497f7456872cafff58c119f0c6a5c475a4", "passed": false, "scope": "rendered fixture inventory; not transcription quality"}
+{"failures": ["gain_not_proportional:gain"], "held_full_mix": {"count": 2, "unique_pcm": 2}, "manifest_sha256": "ef7eadde8412b59de2caca6a6ab482c53a33cfce0bdb355092b759f4c6eedaa6", "passed": false, "scope": "rendered fixture inventory; not transcription quality"}
+{"failures": ["phase_not_exact"], "held_full_mix": {"count": 2, "unique_pcm": 2}, "manifest_sha256": "e2339b5415681fc47cd4b7ddf7084dd5c18f237e7f687e1fc89246f20afc6fce", "passed": false, "scope": "rendered fixture inventory; not transcription quality"}
+test_cli_fails_for_rejected_report (test_rendered_corpus_audit.RenderedAuditTests) ... ok
+test_correct_interleaved_stereo_fixture_passes (test_rendered_corpus_audit.RenderedAuditTests) ... ok
+test_hash_tampering_rejected (test_rendered_corpus_audit.RenderedAuditTests) ... ok
+test_nonproportional_gain_rejected (test_rendered_corpus_audit.RenderedAuditTests) ... ok
+test_one_bit_phase_residual_rejected (test_rendered_corpus_audit.RenderedAuditTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.170s
+
+OK

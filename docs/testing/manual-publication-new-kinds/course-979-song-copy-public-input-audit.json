@@ -1,0 +1,55 @@
+{
+  "scope": "Failed partial course; public Song1 hold/Song2 copy-release/select only",
+  "course_complete": false,
+  "passed": true,
+  "recipe_indices": [
+    1435,
+    1441
+  ],
+  "public_edges": [
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 1,
+      "state": 1
+    },
+    {
+      "type": "grid",
+      "x": 2,
+      "y": 1,
+      "state": 1
+    },
+    {
+      "type": "grid",
+      "x": 2,
+      "y": 1,
+      "state": 0
+    },
+    {
+      "type": "grid",
+      "x": 1,
+      "y": 1,
+      "state": 0
+    },
+    {
+      "type": "grid",
+      "x": 2,
+      "y": 1,
+      "state": 1
+    },
+    {
+      "type": "grid",
+      "x": 2,
+      "y": 1,
+      "state": 0
+    }
+  ],
+  "applied_native_sequences": [
+    3697,
+    3698,
+    3699,
+    3700,
+    3701,
+    3702
+  ]
+}

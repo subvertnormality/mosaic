@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mosaic:ui-contract:1",
+  "title": "Mosaic UI migration contract",
+  "type": "object",
+  "required": [
+    "format",
+    "version",
+    "authority",
+    "screen_model",
+    "contexts",
+    "tasks",
+    "screens",
+    "providers",
+    "flows",
+    "programs",
+    "guardrails",
+    "discrepancies",
+    "input_algebra",
+    "state_schema",
+    "effect_contracts",
+    "grid",
+    "migration",
+    "test_migration",
+    "field_contracts",
+    "layout_contract",
+    "subroutes",
+    "view_model",
+    "diagram_contracts",
+    "source_route_map",
+    "provider_protocol",
+    "coverage_policy",
+    "acceptance_matrix",
+    "acceptance_protocol",
+    "feature_action_edges",
+    "visual_variants",
+    "baseline_policy",
+    "confirmation_contracts"
+  ],
+  "properties": {
+    "format": {
+      "const": "mosaic-ui-contract"
+    },
+    "version": {
+      "const": 1
+    },
+    "screens": {
+      "type": "object",
+      "minProperties": 99,
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "context",
+          "profile",
+          "provider",
+          "existing_route",
+          "render",
+          "live_render",
+          "fields",
+          "entry_flow_ids"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z][0-9]{2}$"
+          },
+          "context": {
+            "enum": [
+              "Channel",
+              "Scale",
+              "Trig",
+              "Note",
+              "Velocity",
+              "Song"
+            ]
+          },
+          "provider": {
+            "enum": [
+              "masks",
+              "parameters",
+              "assignment",
+              "history",
+              "clock",
+              "device",
+              "scale",
+              "scale_clock",
+              "song",
+              "song_clock",
+              "trig_options",
+              "merge",
+              "harmony",
+              "doctor",
+              "native",
+              "read_only",
+              "tasks",
+              "confirmation"
+            ]
+          },
+          "profile": {
+            "enum": [
+              "assignment",
+              "clock",
+              "confirmation",
+              "device",
+              "doctor",
+              "feature",
+              "history",
+              "masks",
+              "native",
+              "parameters",
+              "read_only",
+              "scale",
+              "scale_clock",
+              "song",
+              "song_clock",
+              "tasks",
+              "trig_options"
+            ]
+          },
+          "fields": {
+            "type": "array"
+          },
+          "entry_flow_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "render": {
+            "type": "object",
+            "required": [
+              "program",
+              "function",
+              "model",
+              "specimens"
+            ]
+          },
+          "live_render": {
+            "type": "object",
+            "required": [
+              "program",
+              "function",
+              "model",
+              "layout"
+            ]
+          }
+        }
+      }
+    },
+    "flows": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "old",
+          "new"
+        ]
+      }
+    },
+    "input_algebra": {
+      "type": "object",
+      "required": [
+        "events",
+        "rules"
+      ],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "event",
+              "when",
+              "effects",
+              "priority"
+            ],
+            "properties": {
+              "priority": {
+                "type": "integer"
+              },
+              "effects": {
+                "type": "array",
+                "minItems": 1
+              },
+              "when": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "grid": {
+      "type": "object",
+      "required": [
+        "size",
+        "contexts",
+        "doctor_override"
+      ]
+    },
+    "migration": {
+      "type": "array",
+      "minItems": 7
+    },
+    "acceptance_matrix": {
+      "type": "array",
+      "minItems": 18
+    }
+  }
+}

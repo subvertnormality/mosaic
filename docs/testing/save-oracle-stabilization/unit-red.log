@@ -1,0 +1,24 @@
+F.F
+======================================================================
+FAIL: test_corrupt_content_is_rejected (test_persisted_digest.PersistedDigestTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/rd/v140/ui-save-stabilize/tests/behaviour/test_persisted_digest.py", line 45, in test_corrupt_content_is_rejected
+    self.digest('invalid Lua')
+AssertionError: CalledProcessError not raised
+
+======================================================================
+FAIL: test_order_is_not_content (test_persisted_digest.PersistedDigestTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/rd/v140/ui-save-stabilize/tests/behaviour/test_persisted_digest.py", line 31, in test_order_is_not_content
+    self.assertEqual(self.digest(first), self.digest(second))
+AssertionError: 'bbcfe03e3d8dcbb5e7c4b7461d8cd24b4da9848ed1578d3be547a9cb711215b2' != 'e96be7f7febf9abaabf91af05a3e3575ad67c42ae11b8358240f0b28be6e23af'
+- bbcfe03e3d8dcbb5e7c4b7461d8cd24b4da9848ed1578d3be547a9cb711215b2
++ e96be7f7febf9abaabf91af05a3e3575ad67c42ae11b8358240f0b28be6e23af
+
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.006s
+
+FAILED (failures=2)

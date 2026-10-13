@@ -1,0 +1,23 @@
+{
+  "scope": "engineering explicit immutable stage validation only with corrected exact literal atlas footprint auditor",
+  "passed_scoped_raw_acceptance": true,
+  "generic_publication_rejection": "Unsafe native application path",
+  "historical_rejection_receipt": "readability-engineering-v10-controlled-audit.json",
+  "manifest": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261003/controlled/2af9e6e4e34c4ec09bcdb42a08ce4980/manifest.json",
+  "manifest_sha256": "e231422458a5ecd0b5b1aaa3b66ed966c1447c899b7daf8461f28a322ac5b6d4",
+  "source_stage": "/home/andy/mosaic-mini-header-engineering-v10-20261003/mosaic",
+  "native_application_files": 17789,
+  "identity_sha256": "97e142c49d81d724988e5f717a4653c2d95b9044730b86d1fef679f2db265680",
+  "auditor_sha256": "0b6964b935ce59cb08318580f9202589f4774856c0256805586ee3074582cb74",
+  "checkpoints": 17,
+  "stopped_mini_rows": 10,
+  "playing_phase": {
+    "clock_ticks": 49,
+    "active_frames": 129,
+    "distinct_poses": 6,
+    "complete_pose_coverage": false
+  },
+  "cleanup": "all four services clean, no held inputs/outstanding notes",
+  "full_current_publication": false,
+  "hardware_timing_equivalent": false
+}

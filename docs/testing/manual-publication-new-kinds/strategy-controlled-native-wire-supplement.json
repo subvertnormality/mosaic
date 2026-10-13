@@ -1,0 +1,28 @@
+{
+  "scope": "Focused controlled exact native wire sequences and release cleanup supplement; realcounterparts pending",
+  "passed": true,
+  "roles": [
+    {
+      "role": "foundation-all-skip",
+      "report": "/home/andy/mosaic-manual-runs/9a7cd8a122f24c7491cfa8be2d7d562f/reference-scenes.json",
+      "passed": true,
+      "raw_positive_note_ons": 26,
+      "raw_releases": 26,
+      "complete_literal_wire_sequence_matches": true,
+      "cleanup_sha256": "1c4772a10f0ee7638def437c825465aaf0b0d0a950affe242c906f39576dc6ce",
+      "native_events_sha256": "95b6a9e8090e6c975734fd3acf4bc07c57af95bab7c7ccf90f33af324a683cb9"
+    },
+    {
+      "role": "overlap-union",
+      "report": "/home/andy/mosaic-manual-runs/ddf9bc720591468e86cfdcbc52c24d2d/reference-scenes.json",
+      "passed": true,
+      "raw_positive_note_ons": 32,
+      "raw_releases": 32,
+      "complete_literal_wire_sequence_matches": true,
+      "cleanup_sha256": "9afd2abc16e85187a80821d1ae943c0907fe2ceafbec5f606208780a52cfc844",
+      "native_events_sha256": "6c4f2962a5f1317d0c53a12e1c84be6e9fd52f083dbe9cb3960da476b6399213"
+    }
+  ],
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

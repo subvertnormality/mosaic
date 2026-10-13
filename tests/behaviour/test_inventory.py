@@ -22,4 +22,10 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(mapped,declared)
         self.assertTrue(all(case in CASES for _,case in mapped))
         self.assertTrue(all(issue['routes'] and all(route['cases'] and route['oracle'] for route in issue['routes']) for issue in ISSUES['issues']))
+    def test_manual_inventory_is_reconciled_with_the_manual(self):
+        # README/cheat-sheet digests, section ranges, statement lines and image
+        # references match the manual (reconcile_manual.py rebuilds them).
+        import subprocess,sys
+        result=subprocess.run([sys.executable,str(Path(__file__).parent/'reconcile_manual.py'),'--check'],capture_output=True,text=True)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
 if __name__=='__main__':unittest.main()

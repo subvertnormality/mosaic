@@ -1,0 +1,6 @@
+{
+  "driver_sha256": "8f20a5cbc721e5cee57e69c4f60ee15d5e16718952ff669d31ca6788c837e13c",
+  "classification": "harness retention regression; not a new Mosaic/emulator behavior baseline",
+  "expected_red": "two opt-in regressions fail; unchanged default pruning passes",
+  "log": "wait-frame-retention-red.log"
+}

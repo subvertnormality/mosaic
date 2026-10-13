@@ -1,0 +1,33 @@
+{
+  "name": "masks-controlled",
+  "command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+    "--visuals-only",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--controlled-local",
+    "--preserve-published-audio"
+  ],
+  "emulator": "/home/andy/projects/monome-emulator-ci-combined",
+  "exclusive_lock": true,
+  "action": null,
+  "passed": true,
+  "executed_command": [
+    "/usr/bin/python3",
+    "/home/andy/mosaic-manual-1.4.0/tools/manual_capture.py",
+    "--visuals-only",
+    "--clock-mode",
+    "controlled-experimental",
+    "--experimental-install",
+    "/home/andy/projects/monome-runtime-candidates/final-qualification-controlled-01/installation.json",
+    "--controlled-local",
+    "--preserve-published-audio"
+  ],
+  "returncode": 0,
+  "started_utc": "2026-10-04T11:20:11.588831+00:00",
+  "finished_utc": "2026-10-04T11:21:52.515892+00:00",
+  "log_sha256": "45234db60f44e3fe4d8fc54864ddf46e904dc7f5215e732f347c84a23863c0f2"
+}

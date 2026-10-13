@@ -1,0 +1,275 @@
+{
+  "identity": "3 October exact source review: approved shared effective strategy and restored selected overflow marquee",
+  "read_on": "2026-10-03",
+  "head": "69df623e06efd6721e1cc53e961a1dd845d2a48c",
+  "baseline_inventory": "history/source-inventory-56a9ba239526e7d01e757ea5e89f7ca5ad45e019.json",
+  "files": {
+    "lib/m_grid.lua": {
+      "sha256": "3abd77f7360344bb799525614e0b6f74d8b8a3c2ec696ee6776dfe2cf2691386",
+      "meaning": "Read-only post-owner grid outcome/hold/disconnect notifications added; original64callbacks retain their existing branches. Hold targeting includes Note/Velocity page offsets. Native UI ownership regressions and held-step tests are separate evidence."
+    },
+    "lib/pages/channel_edit_page/channel_edit_clock_controls.lua": {
+      "sha256": "4c76afe36435bf16b161e528414684beb5bfbe0b711c35f8cf5dae15ce9b8132",
+      "meaning": "Added stable read-only field metadata matching existing Rate/Feel/Swing/Shuffle control order; existing setters/navigation retained."
+    },
+    "lib/pages/channel_edit_page/channel_edit_history.lua": {
+      "sha256": "4c83ed3ea18e21bc11151a95315fb39a39c17aaedca19884edb70166a15dbdd3",
+      "meaning": "Added stable history descriptor IDs; existing undo/redo owner and event history retained."
+    },
+    "lib/pages/channel_edit_page/channel_edit_masks.lua": {
+      "sha256": "020dcc2693ec16e6f49b204bdd8d34d471eacaeb1388cacb42d3e4e8d13f8627",
+      "meaning": "Added stable descriptor IDs/short labels/sentinels for eight existing mask controls; no old handler/body changes."
+    },
+    "lib/pages/channel_edit_page/channel_edit_navigation.lua": {
+      "sha256": "158fc5a26c68e0ac6da4b86e5e2b848d803bcfb5f6828b6719ce0be9f92ea54e",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page.lua": {
+      "sha256": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+      "meaning": "Old grid three-state branch replaced by shared request; Fragments prevents legacy note/velocity/length cycle and direct pattern assignment; shared validated editor transaction keeps retained legacy settings."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui.lua": {
+      "sha256": "5ecd63e70de462af8e94db01143835dc5bebb3f9f0cf3b445c2c252bc4cc2228",
+      "meaning": "Added adapter_owners exposing existing objects/selectors/controller instances; no copied ownership or repeated input handlers."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui_handlers.lua": {
+      "sha256": "f5e2035cec55c7ab568802dd595e6b9ac779384305c70de4fb2551a64a96dde6",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua": {
+      "sha256": "4d29c5aafc271747c7f46abc25465e5d25a69954cdc3806ae481efb3c706b3ae",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/channel_edit_page/channel_edit_parameters.lua": {
+      "sha256": "435fe1841f32efc06cf8a09bfadddb9ca8c366f106d02d5b0105f69cf6a911f5",
+      "meaning": "Added ten-slot stable IDs, Device metadata and current control accessor. Existing trig locks, assignment and setters retain ownership."
+    },
+    "lib/pages/channel_edit_page/channel_feature_editor.lua": {
+      "sha256": "1cbcbb2821e69977d1d34362dfe5b5baf319d8ab8f45ef01cd0912d99ce0bcae",
+      "meaning": "Merge root Strategy read-only; selector action reload discards unapplied draft before route; parameter editing/apply owner remains transactional."
+    },
+    "lib/pages/note_edit_page/note_edit_page.lua": {
+      "sha256": "d4658759c6ee301ebf301f2219d22b4a00f4f0b12405f367800896199e5b03b0",
+      "meaning": "Added read-only step offset accessor for held fader targeting; unchanged registered inputs."
+    },
+    "lib/pages/note_edit_page/note_edit_page_ui.lua": {
+      "sha256": "d9718ed3b571d9338a81dc088d6113dd15066b93071ead60cdc619778d726e9f",
+      "meaning": "Added accessor exposing existing grid viewer; unchanged next/previous channel owner."
+    },
+    "lib/pages/pages.lua": {
+      "sha256": "6eb2f6d17847e28bd2b3aed2210820bb24b05c5696b1f368ed8555e5c1574e8f",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/scale_edit_page/scale_edit_page.lua": {
+      "sha256": "430062230a1ebb6b9bb96672d1175b76087b46dbc321c25f97ebf5f1069717cc",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/scale_edit_page/scale_edit_page_ui.lua": {
+      "sha256": "7c6c6a50a187cc42d8526c927478718ca1bbbd96906adf993f368cc7e2ab3e23",
+      "meaning": "Added accessor exposing existing page/viewer/selectors for live adapters. No old control body changes."
+    },
+    "lib/pages/song_edit_page/song_edit_page.lua": {
+      "sha256": "006fcbbaf05510e0050f9b20a0335b0b9b0303d0b21e6230f5d392fafce0c2c6",
+      "meaning": "File bytes unchanged from immutable historical source inventory; source symbols and registered callback anchors remain present."
+    },
+    "lib/pages/song_edit_page/song_edit_page_ui.lua": {
+      "sha256": "9228f92c828d709f6f26e63e323018bcacbb9b2bdab7d1b6c8105048edad6755",
+      "meaning": "Added accessor exposing existing song/feel selectors and grid viewer. No old control body changes."
+    },
+    "lib/pages/trigger_edit_page/trigger_edit_page.lua": {
+      "sha256": "45f3b115dafc5d4977d9d0a754620042c1bb7f52e30ab76bf8a28bea26d8dde9",
+      "meaning": "Extracted algorithm_selected helper retains exact Doctor enter/leave guards, refresh, tooltip and paint preview. Grid callback invokes it once; screen select_algorithm uses same path. Added read-only generator/paint/Doctor accessors; record/paint/window callbacks retain original ordered source."
+    },
+    "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua": {
+      "sha256": "a87469638ecbdfce617a5749bb4ff6091b2f9b38fa5431d467d288b3ad87e78d",
+      "meaning": "Added accessor exposing existing Trig selector/pages/viewer; existing grid-view navigation retained."
+    },
+    "lib/pages/velocity_edit_page/velocity_edit_page.lua": {
+      "sha256": "c295bd601c907350f57252eedf6f2a3d7567e0277e78f17676ea74a68e99d207",
+      "meaning": "Added read-only fader page step offset; original registered handlers retained."
+    },
+    "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua": {
+      "sha256": "d06d53fbb4f6e47e7882a75cd53608927ad5a2b012836f63a50959da958fc3dd",
+      "meaning": "Added accessor exposing existing viewer; existing next/previous navigation retained."
+    },
+    "lib/ui.lua": {
+      "sha256": "64870c05585fa02615d1ad6e6e95963153b47687ae4ef1155fd1f2864da5ab28",
+      "meaning": "Live ui_live installation/redraw/encoder/key dispatch replaces legacy page multiplexing; owner adapters and router preserve existing documented musical setters. This is intended live UI architecture, not unchanged draw-only extraction."
+    },
+    "lib/rhythm_doctor/ui_adapter.lua": {
+      "sha256": "ec03592c858ecefb448f9c649e3f711ecefee3539ffd68717a0eb0bcad9eb06e",
+      "meaning": "Record sends confirmed manual_bpm/input_source, never draft. Existing setup draft K2 cancellation/K3 commit remains owner."
+    },
+    "lib/application_parameters.lua": {
+      "sha256": "19de1bd408a242305b20975629facee550b571d157315e12575a74114d4f6290",
+      "meaning": "Native group count39->41 accounts for Screen separator and UI motion option Off/On defaultOn. Existing native parameter IDs retained."
+    },
+    "mosaic.lua": {
+      "sha256": "2a7434f627ec5f7e20ce6a974757683f8f52286d3b9857cbba83f044b1d5ddca",
+      "meaning": "Live redraw/native return detection plus input-preserving splash, idle-autosave resets for norns keys/encoders and bounded GC lifecycle replace historical drawing. Musical clock owners remain independent; historical snapshot is preserved rather than claiming this startup/UI was unchanged."
+    },
+    "README.md": {
+      "sha256": "23982e0a9d0f1a25a4bf9ac744128033e5a1656a8a252603ea0d672bfc08fcbd",
+      "meaning": "Current shared strategy and vertical controls; Doctor confirmed setup,40–240, Stereo/L/R duplication, Auto estimate/Manual origin and later Alignment replacement agree with consumed source."
+    },
+    "cheat_sheet.html": {
+      "sha256": "353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91",
+      "meaning": "Current shared selector/inactive modes and Doctor confirmed setup/input/timing agree with source; no new native acceptance implied."
+    },
+    "lib/ui_live.lua": {
+      "sha256": "66ffd22008369999b6d6b24fe58546b869ed5ee5c1551e81745a6b2398d5c31b",
+      "meaning": "Owner route reconciliation before redraw fixes asynchronous Doctor stale route; C09-to-M02 return re-enters accepted editor; vertical footers show actions and confirmation ownership."
+    },
+    "lib/ui_render.lua": {
+      "sha256": "0bffa33541043ab3a8a95926bf2c316f3b622f2d1c980bd4dac6b151ba6b2a3e",
+      "meaning": "Vertical list keeps neighboring fields and full selected value split; selected overflow retains marquee phase while other text stays static. Documentary never-scroll wording requires owner clarification."
+    },
+    "lib/ui_spec_data.lua": {
+      "sha256": "b2b56372d36ba6c9fbc0548f2420e55150aad24bef60bf1302ed944e6b5075fa",
+      "meaning": "Generated exact runtime export of shared effective Strategy/vertical lists. Two documentary layout_contract strings corrected to match user-authorized selected overflow marquee; routing and executable controls unchanged by this prose export."
+    },
+    "lib/rhythm_doctor/file_mailbox.lua": {
+      "sha256": "c580c40f9b562da4c471b19297a5968dcce0d5207a9f6ae2a3dd52720f256b89",
+      "meaning": "Earlier independent path-budget fix accepts absolute long native roots, validates actual direction/temp filenames against4095 bytes; not modified by current Doctor option task."
+    },
+    "lib/ui_adapters/read_only.lua": {
+      "sha256": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329",
+      "meaning": "C09 presents requested Strategy plus Active/Pending/Boundary/Request; owned attribute rows are readonly inactive with SAVED value; editable selector shares same owner."
+    },
+    "lib/musical_merge/strategy.lua": {
+      "sha256": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+      "meaning": "Five shared choices; accepted versus requested cursor, queued boundary, Foundation trig-only/Fragments all-attribute ownership; grid wrapping and screen clamping; refused anchor maps NEEDS ANCHOR without accepted state mutation."
+    },
+    "lib/rhythm_doctor/runtime.lua": {
+      "sha256": "c19a660b367c6f260837a10f619f3975acda1d3e9deb7a89689a9136669f51ca",
+      "meaning": "Validate mode, integer BPM40–240 and stereo/left/right before acquisition; lease snapshot restored on refusal; Manual alignment BPM/origin0 unless explicit correction, Auto detector estimates; project load clears capture settings."
+    },
+    "lib/rhythm_doctor/capture_controller.lua": {
+      "sha256": "8d9fba25659f80f021fcb1633205f252d6658c3858b110dbb612cc5b14496203",
+      "meaning": "Preflight validates input source and sends it to recorder; source does not stay UI-only."
+    },
+    "lib/rhythm_doctor/softcut_recorder.lua": {
+      "sha256": "46e36d8d4bdbef00e43323ff460c2940b9f351e99b75a9bcd807724bfdd1ba95",
+      "meaning": "Stereo ADC1/ADC2 separately; left/right duplicate selected ADC into both buffers; invalid source rejected before arm/acquisition."
+    }
+  },
+  "new_manual_sections": {
+    "Screen Options": {
+      "id": "MAN.CURRENT.001",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "X04"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "UI Motion": {
+      "id": "MAN.CURRENT.002",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "X04"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Fragments": {
+      "id": "MAN.CURRENT.003",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M15"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Interlock": {
+      "id": "MAN.CURRENT.004",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M16"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Structure": {
+      "id": "MAN.CURRENT.005",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M18"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    },
+    "Result and Reason": {
+      "id": "MAN.CURRENT.006",
+      "disposition": "current_feature_reference",
+      "screens": [
+        "M05",
+        "M14"
+      ],
+      "verification": "Reviewed current README and actual live native/feature owner. Existing component and native feature coverage retain separate evidence identities; this source slice is not itself acceptance."
+    }
+  },
+  "branch_transformations": {
+    "channel_edit_page.08.trig_merge_skip": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "2590888be2e04904203d1af1536a1c969bef9bc4d7428e648a6f07056a8f7d42",
+      "replacement": "        local next_strategy = merge_strategy.step(target_song, target_channel, 1, true)\n        channel_edit_page.set_merge_strategy(next_strategy)\n        channel_edit_page_ui.show_merge_gesture(\"STRATEGY \" .. string.upper(next_strategy))",
+      "meaning": "Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.08.trig_merge_only": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "ac2a2777519d4432cdad2bdb3f76add502e44b2b0e07038906eae1aee0734f7e",
+      "replacement": "        local next_strategy = merge_strategy.step(target_song, target_channel, 1, true)\n        channel_edit_page.set_merge_strategy(next_strategy)\n        channel_edit_page_ui.show_merge_gesture(\"STRATEGY \" .. string.upper(next_strategy))",
+      "meaning": "Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.08.trig_merge_all": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "450f2262f6d50e8bdb76ad6546d0ee93a04eef021f45905b19835153690eab1d",
+      "replacement": "        local next_strategy = merge_strategy.step(target_song, target_channel, 1, true)\n        channel_edit_page.set_merge_strategy(next_strategy)\n        channel_edit_page_ui.show_merge_gesture(\"STRATEGY \" .. string.upper(next_strategy))",
+      "meaning": "Historical saved-only three-state branch superseded by the approved shared five-choice request cursor and validated Shape commit. Original body retained in immutable ledger; both native lanes prove missing ALL-to-Foundation behavior, focused tests prove refusal, restore and queue.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.14.note_pattern_priority": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "344abef03205ec531f07a6a5341ae8d191fe4f4f0f8d3c40e41b286c1b3e69c1",
+      "replacement": "        if note_merge_mode_button:is_this(x, y) then\n          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, \"note\") then\n            tooltip:show(\"FRAGMENTS NOTE INACTIVE\"); return\n          end\n          target_channel.note_merge_mode = \"pattern_number_\" .. x2\n          note_merge_mode_button:set_state(4)\n          target_song.active = true\n          pattern.update_working_patterns(target_song, {[target_channel.number] = true})\n          tooltip:show(\n            \"Note merge mode pattern \" ..x2\n          )\n          shape_in_use(target_channel, \"note\")\n        end",
+      "meaning": "Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.14.velocity_pattern_priority": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "be104c1c67d190eaa1a9aca0bdb1aa1d2baac1ff3b0f30f32c877bbc0a88ba55",
+      "replacement": "        if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then\n          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, \"velocity\") then\n            tooltip:show(\"FRAGMENTS VELOCITY INACTIVE\"); return\n          end\n          target_channel.velocity_merge_mode = \"pattern_number_\" .. x2\n          velocity_merge_mode_button:set_state(4)\n          target_song.active = true\n          pattern.update_working_patterns(target_song, {[target_channel.number] = true})\n          tooltip:show(\n            \"Velocity merge mode pattern \" ..x2\n          )\n          shape_in_use(target_channel, \"velocity\")\n        end",
+      "meaning": "Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    },
+    "channel_edit_page.14.length_pattern_priority": {
+      "source": "lib/pages/channel_edit_page/channel_edit_page.lua",
+      "old_sha256": "57f0e92747d0c1b945bd506c7f252b9e9e7d9bf930e522985bec995229be90bb",
+      "replacement": "        if length_merge_mode_button:is_this(x, y) and is_key1_down then\n          if merge_strategy.owned(program.get_selected_song_pattern(), target_channel, \"length\") then\n            tooltip:show(\"FRAGMENTS LENGTH INACTIVE\"); return\n          end\n          target_channel.length_merge_mode = \"pattern_number_\" .. x2\n          length_merge_mode_button:set_state(4)\n          target_song.active = true\n          pattern.update_working_patterns(target_song, {[target_channel.number] = true})\n          tooltip:show(\n            \"Length merge mode pattern \" ..x2\n          )\n          shape_in_use(target_channel, \"length\")\n        end",
+      "meaning": "Original held priority assignment retained when active Fragments does not own it; approved active Fragments early refusal preserves saved setting and reports inactive. Foundation numeric controls remain active.",
+      "dependencies": {
+        "lib/pages/channel_edit_page/channel_edit_page.lua": "91256cb7ad942e65333e0469955360441b429717ad68527c6d79b9fe8386c818",
+        "lib/musical_merge/strategy.lua": "ab66578c510b0a8ced8a0328862a8e7591a2f022df25fef88cd7d30565e79e47",
+        "lib/ui_adapters/read_only.lua": "cb381789ca3a0bfaaa04ad3a610f4c883a97252b642a8ac31422e65b221a1329"
+      }
+    }
+  }
+}

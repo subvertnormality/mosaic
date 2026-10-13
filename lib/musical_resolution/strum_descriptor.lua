@@ -1,9 +1,11 @@
 local strum_descriptor = {}
 
 function strum_descriptor.new(order_index, delay_for)
+  -- X (off value 0) is no pattern, the same as an unassigned Chord Pattern.
   local function play_root_now(chord_strum_pattern, mute_root)
     return not mute_root and
-      (not chord_strum_pattern or chord_strum_pattern == 1 or chord_strum_pattern == 3)
+      (not chord_strum_pattern or chord_strum_pattern == 0 or
+       chord_strum_pattern == 1 or chord_strum_pattern == 3)
   end
 
   local function resolve_chord(i, chord_notes, chord_strum_pattern,

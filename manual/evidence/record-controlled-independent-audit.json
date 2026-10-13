@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "publication": "/home/andy/mosaic-manual-1.4.0/manual/generated/reference-record-scenes.json",
+  "clock_mode": "controlled-experimental",
+  "scenes": 1,
+  "frames": 3,
+  "report": "/home/andy/mosaic-manual-runs/78ec3004a5874b5eb8369940571c8d44/reference-scenes.json",
+  "report_sha256": "581c43e6827afbb892f1ef0de10d0fd87b59a81097a27a69ed2e1fa723b23e3e",
+  "start_source_identity_sha256": "93aff258bf3c7a6e340f63030c8c3c82c0b9441ff0e61a2fb18083518560626b",
+  "complete_regression_run": false,
+  "hardware_timing_verified": false
+}

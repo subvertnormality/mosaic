@@ -1,0 +1,7 @@
+{
+  "test_sha256": "C549D039660F55C956690693C2F8E5D2940BEE19AD6F76144ED1764579C70D70",
+  "output": "test_quality (unittest.loader._FailedTest) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_quality (unittest.loader._FailedTest)\r\n----------------------------------------------------------------------\r\nImportError: Failed to import test module: test_quality\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 436, in _find_test_path\r\n    module = self._get_module_from_name(name)\r\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 377, in _get_module_from_name\r\n    __import__(name)\r\n  File \"C:\\Users\\andy\\Documents\\ChatGPT\\mosaic\\.worktrees\\rhythm-doctor\\mosaic\\tests\\rhythm_doctor\\test_quality.py\", line 3, in <module>\r\n    from quality import onset_score, velocity_mae\r\nModuleNotFoundError: No module named 'quality'\r\n\r\n\r\n----------------------------------------------------------------------\r\nRan 1 test in 0.000s\r\n\r\nFAILED (errors=1)\r\n",
+  "source_revision": "8c08cb93d9f5a4cc36488e90517043531446a4f7",
+  "exit_code": 1,
+  "expected_failure": "ModuleNotFoundError: No module named quality"
+}

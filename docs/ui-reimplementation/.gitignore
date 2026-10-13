@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+generated/draw-commands.json
+generated/replay-input.lua
+reviews/logs/

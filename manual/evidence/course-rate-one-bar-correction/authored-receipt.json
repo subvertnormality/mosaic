@@ -1,0 +1,57 @@
+{
+  "scope": "Explicitly approved one-bar course Rate /4 to /1 documentation correction; musical phrases, timing and stage identities unchanged",
+  "files": [
+    {
+      "path": "manual/course.yaml",
+      "before_sha256": "ef5735efbdd2382cf270c3227697bc816a62a7fa924d037fa427c8f4e63bbe55",
+      "after_sha256": "7085ca8abc08f6b84f7ec9c1376982cc3e102ce9ed2488fe474dcbd9555ff5de",
+      "edits": [
+        [
+          "With Rate /4, each channel step lasts",
+          "With Rate /1, each channel step lasts"
+        ],
+        [
+          "Select Rate with E2; set /4 with E3.",
+          "Select Rate with E2; set /1 with E3."
+        ]
+      ]
+    },
+    {
+      "path": "manual/features/tutorials.yaml",
+      "before_sha256": "2f08e38428e3a9163417af2bec3400f4af8ba40b9742c137f725f40b916e19e3",
+      "after_sha256": "4a900da83f50145373889b69174ff352fc8652d703b77e5f7cf9bb7bb79ab343",
+      "edits": [
+        [
+          "Select Rate with E2; set /4 with E3.",
+          "Select Rate with E2; set /1 with E3."
+        ]
+      ]
+    },
+    {
+      "path": "manual/features/reference-workflow.yaml",
+      "before_sha256": "9430e3db0d5314fa7a8b992e4f1d891de1c86b55ab0a1e4ee514aae8435ffd26",
+      "after_sha256": "b409a67cb9d1f1b2cb3f16b0e54c66b45f3118e674bcbed9ad25d51db04e8255",
+      "edits": [
+        [
+          "C major at 90 BPM and Rate /4. Playback",
+          "C major at 90 BPM and Rate /1. Playback"
+        ],
+        [
+          "Use stopped channel 1, range 16, Rate /4, C major",
+          "Use stopped channel 1, range 16, Rate /1, C major"
+        ]
+      ]
+    },
+    {
+      "path": "manual/scene-plans-course.yaml",
+      "before_sha256": "a401daf93e4fd19a5b222b89f488394417e653f4ec999df1cb753bfa360c703c",
+      "after_sha256": "4be15bbd93e4e260d6107149a8e518ca92ed64c645865f73d20d9dd9fb70d36a",
+      "edits": [
+        [
+          "With ClockMod /4, each channel step lasts",
+          "With ClockMod /1, each channel step lasts"
+        ]
+      ]
+    }
+  ]
+}

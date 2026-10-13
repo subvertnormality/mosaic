@@ -1,0 +1,395 @@
+{
+  "report_id": "six-unit-fresh-rendered-review-v01",
+  "reviewed_at": "2026-10-08",
+  "candidate": "course-output-prerequisites projection-v02",
+  "basis": "Fresh visual and DOM review of six actual routes on the existing local reader, with candidate generated index/chunks intercepted from the sealed projection directory.",
+  "criteria": [
+    "canonical_home",
+    "coherence",
+    "flow",
+    "granularity",
+    "integration",
+    "naming",
+    "representation",
+    "understandability",
+    "usefulness",
+    "vocabulary"
+  ],
+  "threshold": 8,
+  "result": "not_all_units_at_threshold",
+  "candidate_reader_index_sha256": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701",
+  "browser_observations_sha256": "df801a0e7d7418cebbaab87481f925460a26cb59ebca2c93ad94d6b8f52bfe60",
+  "browser_observations_path": "evidence-v04/browser-observations.json",
+  "screenshots_path": "evidence-v04/",
+  "units": [
+    {
+      "id": "course:getting-started-objects",
+      "route": "#getting-started/lesson/getting-started-objects",
+      "scores": {
+        "flow": 8,
+        "vocabulary": 8,
+        "representation": 9,
+        "canonical_home": 9,
+        "coherence": 8,
+        "usefulness": 8,
+        "integration": 8,
+        "understandability": 7,
+        "naming": 9,
+        "granularity": 8
+      },
+      "observed_h1": "1. Meet Mosaic",
+      "step_title": "Empty project start",
+      "caption": "A new, empty project is open on NOTE MASKS for channel 1 before the first course action. No mask is set.",
+      "visible_raw_markdown": [
+        "Your starting point: Mosaic is running on norns with a 128 grid connected. Start a new project (PARAMS > MOSAIC > + New) so the course begins from an empty project. Have a MIDI instrument ready for chapter 2, or install and enable `nb_polyperc` before chapter 2 if you plan to use Polyperc 1 (see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b)).\n\nLearn the three objects\n\nKnow what a pattern, a channel and a song slot are for before you edit any of them.\n\nRead these three ideas first. Nothing changes until the last line.\n\nA pattern holds a rhythm of trigs (steps that play a note) and relative notes. You write patterns on the Pattern page.\nA channel plays patterns through one sound: a MIDI instrument or a norns voice. Its masks are values that override pitch, velocity and length, for the whole channel or for single steps.\nA song slot stores one section of the song. You arrange slots in chapter 9.\n\nThen do one thing: tap Channel (3,8) on the grid to open channel 1.\n\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nEmpty project start\n\nA new, empty project is open on NOTE MASKS for channel 1 before the first course action. No mask is set.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none."
+      ],
+      "visible_labeled_links": [
+        {
+          "text": "Manual",
+          "href": "#home"
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn"
+        },
+        {
+          "text": "Open Getting Started reference",
+          "href": "#getting-started"
+        },
+        {
+          "text": "1. Learn the three objects",
+          "href": "#getting-started/lesson/getting-started-objects"
+        },
+        {
+          "text": "2. Read the grid and norns controls",
+          "href": "#getting-started/lesson/getting-started-notation"
+        },
+        {
+          "text": "Continue: Read the grid and norns controls",
+          "href": "#getting-started/lesson/getting-started-notation"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\course-output-six-rechecks-20261008-01\\evidence-v04\\course-getting-started-objects.png"
+      ],
+      "assessment": "The route, title, captured state, and course sequence are clear. However, the starting-point workspace renders the Sound Sources reference as literal Markdown instead of a clickable label. This weakens understandability and practical usefulness of the optional n.b. setup advice."
+    },
+    {
+      "id": "course:getting-started-notation",
+      "route": "#getting-started/lesson/getting-started-notation",
+      "scores": {
+        "flow": 9,
+        "vocabulary": 8,
+        "representation": 9,
+        "canonical_home": 9,
+        "coherence": 9,
+        "usefulness": 9,
+        "integration": 8,
+        "understandability": 7,
+        "naming": 9,
+        "granularity": 8
+      },
+      "observed_h1": "1. Meet Mosaic",
+      "step_title": "Open channel 1",
+      "caption": "You start from a new, empty project: transport stopped, nothing set up, channel 1 selected. Tap Channel (3,8), the third button on the bottom row. The screen opens NOTE MASKS for CH01 with eight cells (Trig, Note, Vel, Len and Chd1 to Chd4) that all read X: no value is set, because a new channel has no pattern, pitch or sound yet. On the grid, (1,1) is lit because channel 1 is the channel you edit, and (3,8) is lit because it is the page you are on.",
+      "visible_raw_markdown": [
+        "Your starting point: Mosaic is running on norns with a 128 grid connected. Start a new project (PARAMS > MOSAIC > + New) so the course begins from an empty project. Have a MIDI instrument ready for chapter 2, or install and enable `nb_polyperc` before chapter 2 if you plan to use Polyperc 1 (see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b)).\n\nRead the grid and norns controls\n\nBe able to find any button from its coordinates for the rest of the course.\n\nA grid position is written (column,row). Columns count from 1 at the left to 16 at the right; rows count from 1 at the top to 8 at the bottom. (3,8) is column 3 on the bottom row.\nThe bottom-left buttons open the main pages: Play (1,8), Record (2,8), Channel (3,8), Scale (4,8), Pattern (5,8) and Song (6,8). Row 1 selects the channel on the channel page, the pattern on the Pattern page and the song slot on the Song page.\nOn the norns, K1-K3 are the three keys and E1-E3 the three encoders, numbered as printed on the norns. \"Tap\" means a short press. \"Hold K1\" means keep K1 down while you act: it is the shift key.\nTap Pattern (5,8) on the grid to try a button. Chapter 2 starts by tapping Channel (3,8), so you can leave the Pattern page that way.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n02\nBefore\nOpen channel 1\n\nYou start from a new, empty project: transport stopped, nothing set up, channel 1 selected. Tap Channel (3,8), the third button on the bottom row. The screen opens NOTE MASKS for CH01 with eight cells (Trig, Note, Vel, Len and Chd1 to Chd4) that all read X: no value is set, because a new channel has no pattern, pitch or sound yet. On the grid, (1,1) is lit because channel 1 is the channel you edit, and (3,8) is lit because it is the page you are on.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none."
+      ],
+      "visible_labeled_links": [
+        {
+          "text": "Manual",
+          "href": "#home"
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn"
+        },
+        {
+          "text": "Open Getting Started reference",
+          "href": "#getting-started"
+        },
+        {
+          "text": "1. Learn the three objects",
+          "href": "#getting-started/lesson/getting-started-objects"
+        },
+        {
+          "text": "2. Read the grid and norns controls",
+          "href": "#getting-started/lesson/getting-started-notation"
+        },
+        {
+          "text": "← Previous step",
+          "href": "#getting-started/lesson/getting-started-objects"
+        },
+        {
+          "text": "Continue to 2. Choose one sound",
+          "href": "#setup/course"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\course-output-six-rechecks-20261008-01\\evidence-v04\\course-getting-started-notation.png"
+      ],
+      "assessment": "The route, title, captured state, and course sequence are clear. However, the starting-point workspace renders the Sound Sources reference as literal Markdown instead of a clickable label. This weakens understandability and practical usefulness of the optional n.b. setup advice."
+    },
+    {
+      "id": "course:setup-route",
+      "route": "#setup/lesson/setup-route",
+      "scores": {
+        "flow": 9,
+        "vocabulary": 8,
+        "representation": 8,
+        "canonical_home": 9,
+        "coherence": 9,
+        "usefulness": 9,
+        "integration": 8,
+        "understandability": 7,
+        "naming": 9,
+        "granularity": 8
+      },
+      "observed_h1": "2. Choose one sound",
+      "step_title": "Starting point",
+      "caption": "A new, empty project with the transport stopped and nothing assigned to a channel. The pattern editor from chapter 1 is on screen. Channel 1 has no output chosen yet and no tempo has been set; the rest of the course uses MIDI port 1, MIDI channel 1 for channel 1.",
+      "visible_raw_markdown": [
+        "Your starting point: New project, transport stopped, Record off. A MIDI instrument is connected and set to receive on a MIDI channel you know, or install and enable `nb_polyperc` before starting if you plan to use Polyperc 1 (see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b)). Set the MIDI instrument volume before you start.\n\nOpen the Device page\n\nReach the page where a channel is given its sound.\n\nTap Channel (3,8). Channel 1 is selected (CH01 in the title row).\nTurn E1 right until Channel tasks opens. This list holds everything you can do with the channel: Masks, Trig params, Output, Clock, Merge modes, Merge Shape, Harmony, Device and History.\nTurn E2 until Device is highlighted.\nPress K3 to open it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nA new, empty project with the transport stopped and nothing assigned to a channel. The pattern editor from chapter 1 is on screen. Channel 1 has no output chosen yet and no tempo has been set; the rest of the course uses MIDI port 1, MIDI channel 1 for channel 1.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none."
+      ],
+      "visible_labeled_links": [
+        {
+          "text": "Manual",
+          "href": "#home"
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn"
+        },
+        {
+          "text": "Open Configuring an Output reference",
+          "href": "#setup"
+        },
+        {
+          "text": "1. Open the Device page",
+          "href": "#setup/lesson/setup-route"
+        },
+        {
+          "text": "2. Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply"
+        },
+        {
+          "text": "3. Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo"
+        },
+        {
+          "text": "Continue: Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\course-output-six-rechecks-20261008-01\\evidence-v04\\course-setup-route.png"
+      ],
+      "assessment": "The route, title, captured state, and course sequence are clear. However, the starting-point workspace renders the Sound Sources reference as literal Markdown instead of a clickable label. This weakens understandability and practical usefulness of the optional n.b. setup advice."
+    },
+    {
+      "id": "course:setup-apply",
+      "route": "#setup/lesson/setup-apply",
+      "scores": {
+        "flow": 9,
+        "vocabulary": 8,
+        "representation": 9,
+        "canonical_home": 9,
+        "coherence": 9,
+        "usefulness": 9,
+        "integration": 8,
+        "understandability": 7,
+        "naming": 9,
+        "granularity": 8
+      },
+      "observed_h1": "2. Choose one sound",
+      "step_title": "Open Device",
+      "caption": "Turn E2 down the list to Device, the eighth task (seven detents below Masks), and press K3. The title row reads DEVICE with CH01. Only the Device row is listed, set to None: the MIDI channel and MIDI port rows appear once you choose a device.",
+      "visible_raw_markdown": [
+        "Your starting point: New project, transport stopped, Record off. A MIDI instrument is connected and set to receive on a MIDI channel you know, or install and enable `nb_polyperc` before starting if you plan to use Polyperc 1 (see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b)). Set the MIDI instrument volume before you start.\n\nChoose the output and apply it\n\nMake channel 1 play your instrument.\n\nTurn E3 one detent to choose a Device. The first entry after None is CC Device, a generic MIDI device that suits any MIDI instrument. If your instrument has its own entry, choose that instead. With no external instrument, choose Polyperc 1 only if nb_polyperc is installed and enabled; see Norns Sound Sources with n.b. for setup.\nThe MIDI channel and MIDI port rows now appear. CC Device reads CC1 and OUT 1, so notes leave on port 1, MIDI channel 1. If your instrument listens elsewhere, turn E2 to a row and E3 to the value it needs. A device entry that fixes a value does not let you change it, and Polyperc 1 needs neither row.\nPress K3 to apply. Until K3 the page only shows a draft and the channel keeps its old routing; K2 cancels the draft.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n04\nBefore\nOpen Device\n\nTurn E2 down the list to Device, the eighth task (seven detents below Masks), and press K3. The title row reads DEVICE with CH01. Only the Device row is listed, set to None: the MIDI channel and MIDI port rows appear once you choose a device.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: none."
+      ],
+      "visible_labeled_links": [
+        {
+          "text": "Manual",
+          "href": "#home"
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn"
+        },
+        {
+          "text": "Open Configuring an Output reference",
+          "href": "#setup"
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "text": "1. Open the Device page",
+          "href": "#setup/lesson/setup-route"
+        },
+        {
+          "text": "2. Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply"
+        },
+        {
+          "text": "3. Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo"
+        },
+        {
+          "text": "← Previous step",
+          "href": "#setup/lesson/setup-route"
+        },
+        {
+          "text": "Continue: Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\course-output-six-rechecks-20261008-01\\evidence-v04\\course-setup-apply.png"
+      ],
+      "assessment": "The route, title, captured state, and course sequence are clear. However, the starting-point workspace renders the Sound Sources reference as literal Markdown instead of a clickable label. This weakens understandability and practical usefulness of the optional n.b. setup advice."
+    },
+    {
+      "id": "course:setup-tempo",
+      "route": "#setup/lesson/setup-tempo",
+      "scores": {
+        "flow": 9,
+        "vocabulary": 8,
+        "representation": 9,
+        "canonical_home": 9,
+        "coherence": 9,
+        "usefulness": 8,
+        "integration": 8,
+        "understandability": 7,
+        "naming": 9,
+        "granularity": 8
+      },
+      "observed_h1": "2. Choose one sound",
+      "step_title": "Choose a device and apply it",
+      "caption": "Press K3 to apply the draft. Notes from channel 1 now leave on MIDI port 1, MIDI channel 1. With your own gear, choose its device entry and set its port and channel; with no external gear, choose Polyperc 1 for the norns voice.",
+      "visible_raw_markdown": [
+        "Your starting point: New project, transport stopped, Record off. A MIDI instrument is connected and set to receive on a MIDI channel you know, or install and enable `nb_polyperc` before starting if you plan to use Polyperc 1 (see [Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b)). Set the MIDI instrument volume before you start.\n\nSet the tempo to 90 BPM\n\nSet a comfortable shared tempo of 90 BPM for the phrase and bass.\n\nTap Song (6,8).\nTurn E1 right one detent to open Song tasks, turn E2 to Tempo & feel and press K3. GLOBAL FEEL opens.\nTurn E2 up to Tempo, the top row. Turn E3 left until Tempo reads 90. Tempo follows the norns clock, so it shows whatever your norns is set to (often 120 on a fresh norns; this walkthrough's recording opens at 90). It moves one BPM per detent with no coarse step: keep turning E3 until the screen reads 90.\nPress K3 to apply.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n06\nBefore\nChoose a device and apply it\n\nPress K3 to apply the draft. Notes from channel 1 now leave on MIDI port 1, MIDI channel 1. With your own gear, choose its device entry and set its port and channel; with no external gear, choose Polyperc 1 for the norns voice.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: none."
+      ],
+      "visible_labeled_links": [
+        {
+          "text": "Manual",
+          "href": "#home"
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn"
+        },
+        {
+          "text": "Open Configuring an Output reference",
+          "href": "#setup"
+        },
+        {
+          "text": "1. Open the Device page",
+          "href": "#setup/lesson/setup-route"
+        },
+        {
+          "text": "2. Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply"
+        },
+        {
+          "text": "3. Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo"
+        },
+        {
+          "text": "← Previous step",
+          "href": "#setup/lesson/setup-apply"
+        },
+        {
+          "text": "Continue to 3. Make four equal notes",
+          "href": "#first-sound/course"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\course-output-six-rechecks-20261008-01\\evidence-v04\\course-setup-tempo.png"
+      ],
+      "assessment": "The route, title, captured state, and course sequence are clear. However, the starting-point workspace renders the Sound Sources reference as literal Markdown instead of a clickable label. This weakens understandability and practical usefulness of the optional n.b. setup advice."
+    },
+    {
+      "id": "lesson:mods-and-software-devices:play-polyperc-apply-confirm",
+      "route": "#mods-and-software-devices/lesson/play-polyperc-apply-confirm",
+      "scores": {
+        "flow": 8,
+        "vocabulary": 8,
+        "representation": 8,
+        "canonical_home": 9,
+        "coherence": 9,
+        "usefulness": 8,
+        "integration": 8,
+        "understandability": 8,
+        "naming": 8,
+        "granularity": 9
+      },
+      "observed_h1": "Selecting an n.b. Player",
+      "step_title": "Choose Polyperc 1",
+      "caption": "Turn E3 until the Device row reads Polyperc 1. The footer says “Press K3 to confirm”, so this is still a draft.",
+      "visible_raw_markdown": [],
+      "visible_labeled_links": [
+        {
+          "text": "Manual",
+          "href": "#home"
+        },
+        {
+          "text": "Getting started",
+          "href": "#learn"
+        },
+        {
+          "text": "Getting Started",
+          "href": "#getting-started"
+        },
+        {
+          "text": "Configuring an Output",
+          "href": "#setup"
+        },
+        {
+          "text": "MIDI Device Configuration",
+          "href": "#midi-device-configuration"
+        },
+        {
+          "text": "1. Apply Polyperc 1",
+          "href": "#mods-and-software-devices/lesson/play-polyperc-apply-confirm"
+        },
+        {
+          "text": "Apply the DoubleDecker sound",
+          "href": "#mods-and-software-devices/player-apply-doubledecker"
+        },
+        {
+          "text": "Apply the Oilcan sound",
+          "href": "#mods-and-software-devices/player-apply-oilcan"
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b"
+        },
+        {
+          "text": "Devices",
+          "href": "#devices"
+        },
+        {
+          "text": "Creating a First Loop",
+          "href": "#first-sound"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\course-output-six-rechecks-20261008-01\\evidence-v04\\lesson-mods-and-software-devices-play-polyperc-apply-confirm.png"
+      ],
+      "assessment": "The standalone Apply page has a clear purpose, concise instructions, and a specific captured pending selection with the K3 confirmation prompt. Its route, title, scene, and related-feature links align; no literal Markdown was observed on this page."
+    }
+  ],
+  "global_findings": [
+    "All six routes reached their expected canonical fragment and displayed the relevant chapter/lesson title; norns screen canvas measured 128x64 and grid contained 128 controls where applicable.",
+    "Five course units display `[Norns Sound Sources with n.b.](#norns-sound-sources-with-n-b)` as literal text inside the starting-point workspace. No visible labeled anchor for that phrase appears in those units, so the prose cross-reference is not clickable.",
+    "The separate setup page link appears in course navigation and the Polyperc apply-confirm page renders its instructions cleanly.",
+    "No JavaScript/page/console errors were recorded. Candidate index and four requested scene chunks were served with the hashes recorded in the observations.",
+    "Route-specific action frames/captions remain visible. The raw Markdown finding concerns course-authored workspace prose, not the frame captions."
+  ],
+  "limitations": [
+    "No behavior input was sent; this was a visual/editorial review of rendered state only.",
+    "Screenshots were captured at 1440x1000 viewport, full-page."
+  ]
+}

@@ -1,0 +1,8 @@
+Acceptance-first check before tools/manual_player_routes.py existed:
+python3 tests/behaviour/test_manual_player_routes.py
+Traceback (most recent call last):
+  File "tests/behaviour/test_manual_player_routes.py", line 5, in <module>
+    from manual_player_routes import choose_frame
+ModuleNotFoundError: No module named 'manual_player_routes'
+
+The original five acceptance cases pass after implementation: exact pre-apply selection, wrong-channel rejection, missing assertion rejection, post-apply substitution rejection and rejected K3 input rejection.

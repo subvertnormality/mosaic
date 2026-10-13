@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.behaviour.test_inventory",
+    "tests.behaviour.test_collection"
+  ],
+  "environment": {
+    "PYTHONPATH": "/home/andy/mosaic-manual-1.4.0/tests/behaviour"
+  },
+  "returncode": 0,
+  "log_sha256": "d4f7252748cb152dae1a1fbd3ce79b70a959cb54c561998e15636b2d0fc4a7ba"
+}

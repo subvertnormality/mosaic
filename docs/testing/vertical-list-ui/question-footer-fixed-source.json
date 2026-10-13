@@ -1,0 +1,22 @@
+{
+  "files": {
+    "lib/ui_live.lua": "656e208ef6e622434054ad0adcdc0b8c45d114a2e97150600fe98c151c879b4a",
+    "lib/ui_render.lua": "d9c51098826b51f8d1d5a4a86289d9cf1361e38aa105a133e556a4f53a0798ee",
+    "lib/ui_spec_data.lua": "edb25047ecb0c9e7797af854433d81a5c5d18662888ae6a76a12821c4763a35c",
+    "lib/rhythm_doctor/file_mailbox.lua": "c580c40f9b562da4c471b19297a5968dcce0d5207a9f6ae2a3dd52720f256b89",
+    "lib/tests/lib/ui_live_tests.lua": "eb435bb7f7d03916eac25c92a1a7e63d801f9e99abd8bfeb284d0aa06f1997bc",
+    "lib/tests/lib/ui_vertical_list_tests.lua": "b4b91266ebc8e003f24d959d8edb8cad87351c350f503141266cd061f6dc2feb",
+    "docs/ui-reimplementation/spec.json": "84cff573a5f283515a2b64277ca716411e111aa0e7895107bdcd5e9c11e9a9e1",
+    "docs/ui-reimplementation/source-inventory.json": "f6b9bf4a1ca29b2e712d7a23c3bf891ecff8433247ea54dd86809b66ded75d89",
+    "docs/ui-reimplementation/current-source-review.json": "bc3d8e68c2cc081c1b2c1d1924422564b20d137f154792e918158c797631aa9f",
+    "tests/behaviour/contract/live_ui_sweep.py": "9a834f5dd60799797fa258e3a5f89ce628746dbc43b998d64224142f4a3d1c28"
+  },
+  "unfixed_native_red": {
+    "real_time": "202b64e0e02a47f7ac5fecd73136ff63",
+    "controlled": "9e040cc112f640fbb36ce0ead54d9b38"
+  },
+  "native_baseline_helper_sha256": "ad74243b00e581a95a00c3bd6a43550bbcb2127e1f4a82e24b0e19acdeefd405",
+  "candidate_staging": "/home/andy/mosaic-ui-question-footer-fixed-20261003/mosaic",
+  "candidate_staging_identity_sha256": "1e796800131f08616d7acb075e0695305af00efc24d5cafb2a8d6644c7b7ed2b",
+  "complete_regression_run": false
+}

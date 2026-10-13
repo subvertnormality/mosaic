@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "viewport": 390,
+      "width": 140,
+      "height": 113,
+      "filter": "none",
+      "noOverlap": true,
+      "insideViewport": true
+    },
+    {
+      "viewport": 1440,
+      "width": 180,
+      "height": 145,
+      "filter": "none",
+      "noOverlap": true,
+      "insideViewport": true
+    }
+  ],
+  "complete_regression_run": false
+}

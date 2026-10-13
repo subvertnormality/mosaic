@@ -1,0 +1,35 @@
+..F..
+======================================================================
+FAIL: test_tempo_fixture_restores_levels_cursor_before_closing (test_merge_strategy_ui_routes.NativeClockExitGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_merge_strategy_ui_routes.py", line 99, in test_tempo_fixture_restores_levels_cursor_before_closing
+    self.assertEqual(calls[-5:],[("press_key",(2,)),("turn",(2,-60)),("expect_native_menu_label",("levels_root",)),("press_key",(2,)),("press_key",(1,))])
+AssertionError: Lists differ: [('turn', (2, 1)), ('expect_native_menu_labe[101 chars]1,))] != [('press_key', (2,)), ('turn', (2, -60)), ('[82 chars]1,))]
+
+First differing element 0:
+('turn', (2, 1))
+('press_key', (2,))
+
++ [('press_key', (2,)),
+- [('turn', (2, 1)),
+? ^             ^
+
++  ('turn', (2, -60)),
+? ^             ^^^
+
+-  ('expect_native_menu_label', ('clock_tempo',)),
+?                                 -  ^^^ ----
+
++  ('expect_native_menu_label', ('levels_root',)),
+?                                  +++++++ ^
+
++  ('press_key', (2,)),
+-  ('expect_menu_value', ('1',)),
+-  ('expect_menu_value', ('90',)),
+   ('press_key', (1,))]
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.039s
+
+FAILED (failures=1)

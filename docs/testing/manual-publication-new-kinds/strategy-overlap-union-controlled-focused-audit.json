@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "frames": 6,
+  "scope": "Focused controlled native case capture only; real counterpart pending",
+  "role": "overlap-union",
+  "report": "/home/andy/mosaic-manual-runs/ddf9bc720591468e86cfdcbc52c24d2d/reference-scenes.json",
+  "report_sha256": "3ae3ab078c1fbd0b82bd6a0a51b3aa372a8d892aaa0e21d5acfa8099f41679ee",
+  "clock_mode": "controlled-experimental",
+  "seconds": 0.4073959380039014,
+  "complete_regression_run": false,
+  "hardware_timing_equivalent": false
+}

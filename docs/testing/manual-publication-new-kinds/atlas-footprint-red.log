@@ -1,0 +1,25 @@
+....................................................EE..............
+======================================================================
+ERROR: test_literal_mini_animation_is_allowed_only_in_exact_authored_footprint (test_manual_publication_verify.ReadabilityExactMiniFootprintIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 595, in test_literal_mini_animation_is_allowed_only_in_exact_authored_footprint
+    audit.check_readability_samples(row,obs,events,path)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 290, in check_readability_samples
+    if any(band(state,excluded)!=band(states[0],excluded) or state['grid']!=states[0]['grid'] or state['midi_count']!=states[0]['midi_count'] for state in states):raise ValueError('Readability samples changed unaffected UI/grid/MIDI')
+ValueError: Readability samples changed unaffected UI/grid/MIDI
+
+======================================================================
+ERROR: test_preserved_v10_native_on_rows_close_obsolete_120_geometry_false_rejection (test_manual_publication_verify.ReadabilityExactMiniFootprintIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 609, in test_preserved_v10_native_on_rows_close_obsolete_120_geometry_false_rejection
+    for row in selected:audit.check_readability_samples(row,obs,events,source)
+  File "/home/andy/mosaic-manual-1.4.0/tools/manual_publication_verify.py", line 290, in check_readability_samples
+    if any(band(state,excluded)!=band(states[0],excluded) or state['grid']!=states[0]['grid'] or state['midi_count']!=states[0]['midi_count'] for state in states):raise ValueError('Readability samples changed unaffected UI/grid/MIDI')
+ValueError: Readability samples changed unaffected UI/grid/MIDI
+
+----------------------------------------------------------------------
+Ran 68 tests in 1.020s
+
+FAILED (errors=2)

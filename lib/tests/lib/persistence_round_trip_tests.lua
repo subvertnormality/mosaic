@@ -152,3 +152,27 @@ function test_hardening_all_ten_parameter_assignments_round_trip_on_highest_song
   luaunit.assert_not_equals(restored.trig_lock_params[2].ui_labels[1], "changed",
     "assignment labels alias across slots") -- characterisation
 end
+
+-- manual:trig-parameters and manual:save-and-load: each song pattern's
+-- sequencer-param defaults survive a real tabutil project round trip.
+function test_song_slot_stock_param_values_round_trip()
+  program.init()
+  memory.init()
+  program.get().selected_song_pattern = 1
+
+  local first = program.get_channel(1, 1)
+  first.stock_param_values = {chord_strum = 0, chord_spread = 0}
+  local second = program.get_channel(2, 1)
+  second.stock_param_values = {chord_strum = 8, chord_spread = 5}
+
+  local path = os.tmpname()
+  save_and_load(path)
+  os.remove(path)
+
+  local restored_first = program.get_channel(1, 1).stock_param_values
+  local restored_second = program.get_channel(2, 1).stock_param_values
+  luaunit.assert_equals(restored_first, {chord_strum = 0, chord_spread = 0},
+    "manual:trig-parameters selected slot values persist")
+  luaunit.assert_equals(restored_second, {chord_strum = 8, chord_spread = 5},
+    "manual:trig-parameters non-selected slot values persist")
+end

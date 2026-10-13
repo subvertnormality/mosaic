@@ -1,0 +1,16 @@
+.......F...................
+======================================================================
+FAIL: test_audio_route_and_doctor_cannot_fall_through_as_ordinary_reference (test_manual_publication_verify.ExplicitPublicationKind)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 205, in test_audio_route_and_doctor_cannot_fall_through_as_ordinary_reference
+    self.assertEqual(audit.scene_format(dict(publication_kind=kind,scenes=[],source={},clock_mode='real-time')),kind)
+AssertionError: 'reference' != 'audio-route-projection'
+- reference
++ audio-route-projection
+
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.016s
+
+FAILED (failures=1)

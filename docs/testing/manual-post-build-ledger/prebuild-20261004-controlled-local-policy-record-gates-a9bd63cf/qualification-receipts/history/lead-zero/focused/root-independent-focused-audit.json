@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "frames": 3,
+  "report": "/home/andy/mosaic-manual-runs/185323b0a5ae4d85a396a258e072d134/reference-scenes.json",
+  "report_sha256": "50915fda35d923cfe0c68221dd675d5fd934694a6db5216a8ee5e9d32f5b84be",
+  "exact_scene_ids": [
+    "lock-lead-menu-values"
+  ],
+  "native_processes_remaining": [],
+  "validation_scope": "controlled-manual-generation",
+  "complete_regression_run": false
+}

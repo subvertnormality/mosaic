@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Audited Doctor scene bindings",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "fixture_kind",
+    "dataset",
+    "source_paths",
+    "scenes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "fixture_kind": {
+      "const": "doctor-native-audio"
+    },
+    "dataset": {
+      "const": "generated/doctor-scenes.json"
+    },
+    "source_paths": {
+      "const": [
+        "doctor-scene.yaml",
+        "doctor-auto-probe.yaml"
+      ]
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "behaviour_case",
+          "steps",
+          "feature_id",
+          "profile"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "enum": [
+              "doctor-local-capture-and-paint",
+              "doctor-local-auto-capture-and-paint"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "behaviour_case": {
+            "const": "MA-DOCTOR-AUDIO-001"
+          },
+          "feature_id": {
+            "const": "rhythm-doctor"
+          },
+          "profile": {
+            "const": "audio-real-time"
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "caption",
+                "expect",
+                "citation",
+                "inputs",
+                "authoring_operations"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "enum": [
+                    "setup",
+                    "record",
+                    "analyse",
+                    "ready",
+                    "preview",
+                    "paint",
+                    "play"
+                  ]
+                },
+                "caption": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "expect": {
+                  "type": "object"
+                },
+                "citation": {
+                  "const": "manual/legacy/README-1.4.0.md#rhythm-doctor"
+                },
+                "inputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "authoring_operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

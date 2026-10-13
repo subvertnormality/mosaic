@@ -1,0 +1,145 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "native-grid-lifecycle-range",
+    "synthetic_release_order": [
+      [
+        8,
+        4
+      ],
+      [
+        1,
+        4
+      ]
+    ],
+    "range_leds": [
+      15,
+      15,
+      15,
+      15,
+      2,
+      2,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "midi_count_before": 10,
+    "midi_count_after": 10,
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        5,
+        8
+      ]
+    ],
+    "expected": [
+      5
+    ],
+    "actual": [
+      5
+    ]
+  },
+  {
+    "kind": "native-grid-lifecycle-clean-next-tap",
+    "menu_cell": [
+      5,
+      8
+    ],
+    "expected_level": 5,
+    "passed": true
+  },
+  {
+    "kind": "native-grid-lifecycle-midi-range",
+    "notes": [
+      [
+        144,
+        60,
+        127
+      ],
+      [
+        144,
+        62,
+        117
+      ],
+      [
+        144,
+        64,
+        107
+      ],
+      [
+        144,
+        65,
+        97
+      ],
+      [
+        144,
+        60,
+        127
+      ]
+    ],
+    "onset_seconds": [
+      0.0,
+      0.166976005,
+      0.333617842,
+      0.500277702,
+      1.333624074
+    ],
+    "expected_seconds": [
+      0,
+      0.16666666666666666,
+      0.3333333333333333,
+      0.5,
+      1.3333333333333333
+    ],
+    "tolerance_seconds": 0.01,
+    "passed": true
+  }
+]

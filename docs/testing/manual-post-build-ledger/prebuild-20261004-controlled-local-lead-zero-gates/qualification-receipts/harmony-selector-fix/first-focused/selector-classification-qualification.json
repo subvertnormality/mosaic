@@ -1,0 +1,12 @@
+{
+  "new_module_sha256": "815e90f2b9a5fdb32a3810c6e60748bc7a19e443772f0dbf462caf05f20e95fa",
+  "post_collection_log": "/home/andy/mosaic-manual-build-operators/mini-frame-focused-a467669549e2480eb5bc253066afbe83/selector-classification-green.log",
+  "post_collection_log_sha256": "7a053f49540bcc1e4eaa2c5a44e8ab12125062eaa17d4f22125267470f578608",
+  "preserved_suite_sha256": "4e56edf440fac75dd565b6172472c3fe98124a1d607b5c6b70caca510970f418",
+  "red_log": "/home/andy/mosaic-manual-build-operators/mini-frame-focused-a467669549e2480eb5bc253066afbe83/selector-classification-red-before.log",
+  "red_log_sha256": "9d41d13e43a1281227816da11c830115ca3c2bea4db66984a85a54078907f2a3",
+  "suite_guard_log": "/home/andy/mosaic-manual-build-operators/mini-frame-focused-a467669549e2480eb5bc253066afbe83/suite-classifier-guards-green.log",
+  "suite_guard_log_sha256": "3b8a34d278ec92f305c6792262eed5b8b28049638bd7570508949f7fb2e909bf",
+  "suite_guard_returncode": 0,
+  "suite_py_sha256": "1c3653ab614f4a6e1f0773c52396b1812516090f0ea9b814031b81f48202d091"
+}

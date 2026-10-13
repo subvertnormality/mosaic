@@ -1,0 +1,12 @@
+{
+  "full_module_green_log": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/mini-frame-fix-complete-module-green.log",
+  "full_module_green_sha256": "c8c2bc183af2bca3d675546db735b95e83776ed4d213f60cc4c34cc4902e52fa",
+  "full_module_test": "tests/behaviour/test_mini_header_animation_ui.py",
+  "helper_source_sha256": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296",
+  "native_fixture": "/home/andy/mosaic-manual-1.4.0/tests/behaviour/fixtures/harmony-no-voicing-native-obs44.json",
+  "native_fixture_sha256": "41cd1bc5dc68d5e7387e8e1cb67dd0772530da4564c93b0217606cf6dbdc1be7",
+  "red_native_obs44_log": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/mini-frame-fix-native-obs44-red-before.log",
+  "red_native_obs44_sha256": "c6dbe63a39741c4d22cb8537ffed2801110ec0de4b5af14cb02bc70adf137c40",
+  "result": "...........\n----------------------------------------------------------------------\nRan 11 tests in 1.846s\n\nOK",
+  "test_source_sha256": "3664f8b3043c6fc41db5917ab1e4152fdfb873869d0f6c584878ba056cbea755"
+}

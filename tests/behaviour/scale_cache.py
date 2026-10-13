@@ -12,14 +12,15 @@ MAJOR = [0, 2, 4, 5]; VELOCITY = [127, 117, 107, 97]
 
 def scale_cache_saves(c):
     c.configure()
-    c.tap(4, 8); c.tap(3, 3); c.tap(1, 3)                         # slot 1 applied and selected for editing
-    c.enc(2, -1)                                                  # root selector
-    before = c.snapshot()['midi_count']; c.tap(1, 8)
+    c.ui.scale_editor()
+    c.ui.tap_control('scale_slot', 3); c.ui.tap_control('scale_slot', 1)  # slot 1 applied and selected for editing
+    c.ui.turn(2, -1)                                               # root selector
+    before = c.snapshot()['midi_count']; c.ui.play()
     def onsets(s): return [m for m in s['midi'] if m['index'] > before and m['bytes'][0] == 144 and m['bytes'][2] > 0]
     checked = []
     for cycle in range(CYCLES):
         root = 1 if cycle % 2 == 0 else 0
-        c.enc(3, 1 if root else -1); c.key(3)                     # save slot 1 with the new root while playing
+        c.ui.set_value(1 if root else -1); c.ui.press_key(3)      # save slot 1 with the new root while playing
         seen = len(onsets(c.snapshot()))
         state = c.wait(lambda s: len(onsets(s)) > seen, timeout=2)
         note = onsets(state)[seen]
@@ -27,5 +28,5 @@ def scale_cache_saves(c):
         assert (note['port'], note['bytes']) == (1, [144, 60 + root + MAJOR[degree], VELOCITY[degree]]), \
             dict(cycle=cycle, root=root, degree=degree, actual=note['bytes'])
         checked.append((cycle, root, note['bytes'][1]))
-    c.tap(1, 8); c.wait(lambda s: not s['midi_capture']['outstanding'])
+    c.ui.stop(); c.wait(lambda s: not s['midi_capture']['outstanding'])
     c.results.append(dict(kind='scale-cache-saves', saves=CYCLES, first_onsets_after_save=checked, passed=True))

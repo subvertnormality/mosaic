@@ -1,0 +1,7 @@
+{
+  "path": "manual/book.js",
+  "before": "ff5958093a44b274ab4e142d9e5d29f54ed0f53f8d82aee4f85027bbfc2d9091",
+  "after": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+  "cause": "Reader startup rewrote the sidebar and reintroduced the removed tagline.",
+  "scope": "Remove the requested tagline from runtime sidebar rendering; no other strings or renderer behavior changed."
+}

@@ -1,0 +1,780 @@
+{
+  "candidate_projected_dir": "C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\course-output-prerequisites-20261008-01\\projection-v02",
+  "browser_base": "http://127.0.0.1:8785/manual/",
+  "route_asset_sha256": {
+    "http://127.0.0.1:8785/manual/generated/reader-index.json": null,
+    "/manual/generated/reader-index.json": "785d690e479df305ff4eb6a5082b592382570e388360ddf7e8a53a89ac72a701",
+    "http://127.0.0.1:8785/manual/generated/reader-chunks/scenes/course-getting-started-0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b.json": null,
+    "/manual/generated/reader-chunks/scenes/course-getting-started-0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b.json": "0d907abaf44257066a3816b6ebebd15fb1bcd87f3e7102708563791bd9f9760b",
+    "http://127.0.0.1:8785/manual/generated/reader-chunks/scenes/software-player-polyperc-76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53.json": null,
+    "/manual/generated/reader-chunks/scenes/software-player-polyperc-76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53.json": "76716fd7610f7329b5b56153bb1c18c106759f5b11cfa58b17a2c3d88569ab53",
+    "http://127.0.0.1:8785/manual/generated/reader-chunks/scenes/mute-live-resume-c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315.json": null,
+    "/manual/generated/reader-chunks/scenes/mute-live-resume-c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315.json": "c7dec63193e6168c4be56f9221225c6014e5c3f1ae428b6ff005c67645308315",
+    "http://127.0.0.1:8785/manual/generated/reader-chunks/scenes/range-reject-and-recover-6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636.json": null,
+    "/manual/generated/reader-chunks/scenes/range-reject-and-recover-6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636.json": "6cbce9f1701b469fca92932159fa51db725df143c31de2bf08d1eb3186253636",
+    "http://127.0.0.1:8785/manual/generated/reader-chunks/scenes/course-setup-9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60.json": null,
+    "/manual/generated/reader-chunks/scenes/course-setup-9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60.json": "9e2bfbb9d6d4e68aebe4d8990ba18a450954f808dc5728ce5529b23c7ca36a60",
+    "http://127.0.0.1:8785/manual/generated/reader-chunks/scenes/player-apply-polyperc-72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b.json": null,
+    "/manual/generated/reader-chunks/scenes/player-apply-polyperc-72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b.json": "72fc9f4a3797c8e69fc17242e394bf24ec60f11f614f998748461019504d256b"
+  },
+  "units": [
+    {
+      "id": "course:getting-started-objects",
+      "route": "#getting-started/lesson/getting-started-objects",
+      "h1": "1. Meet Mosaic",
+      "h2": [
+        "In this chapter",
+        "Before you explore Masks",
+        "A place to start",
+        "Learn the three objects",
+        "Small hours · four bars in C major",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Related features"
+      ],
+      "title": "1. Meet Mosaic",
+      "stepTitle": "Empty project start",
+      "caption": "A new, empty project is open on NOTE MASKS for channel 1 before the first course action. No mask is set.",
+      "outcome": "",
+      "workspace": "Your starting point: Mosaic is running on norns with a 128 grid connected. Start a new project (PARAMS > MOSAIC > + New) so the course begins from an empty project. Have a MIDI instrument ready for chapter 2, or install and enable nb_polyperc before chapter 2 if you plan to use Polyperc 1 (see Norns Sound Sources with n.b.).\n\nLearn the three objects\n\nKnow what a pattern, a channel and a song slot are for before you edit any of them.\n\nRead these three ideas first. Nothing changes until the last line.\n\nA pattern holds a rhythm of trigs (steps that play a note) and relative notes. You write patterns on the Pattern page.\nA channel plays patterns through one sound: a MIDI instrument or a norns voice. Its masks are values that override pitch, velocity and length, for the whole channel or for single steps.\nA song slot stores one section of the song. You arrange slots in chapter 9.\n\nThen do one thing: tap Channel (3,8) on the grid to open channel 1.\n\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nEmpty project start\n\nA new, empty project is open on NOTE MASKS for channel 1 before the first course action. No mask is set.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.",
+      "actions": "Follow the controls one at a time",
+      "result": "Notice the screen and grid result of the action above.",
+      "visibleLinks": [
+        {
+          "text": "Manual",
+          "href": "#home",
+          "aria": null
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#getting-started/lesson/getting-started-objects",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#getting-started/course/course-getting-started/getting-started-objects",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#getting-started/lesson/getting-started-notation",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#getting-started/course/course-getting-started/getting-started-notation",
+          "aria": null
+        },
+        {
+          "text": "Open Getting Started reference",
+          "href": "#getting-started",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "1. Learn the three objects",
+          "href": "#getting-started/lesson/getting-started-objects",
+          "aria": null
+        },
+        {
+          "text": "2. Read the grid and norns controls",
+          "href": "#getting-started/lesson/getting-started-notation",
+          "aria": null
+        },
+        {
+          "text": "Continue: Read the grid and norns controls",
+          "href": "#getting-started/lesson/getting-started-notation",
+          "aria": null
+        }
+      ],
+      "rawMarkdown": [],
+      "screenSize": [
+        128,
+        64
+      ],
+      "gridPads": 128,
+      "routeReady": "1",
+      "link_checks": "visible labeled authored links found",
+      "clickedLinks": [
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resultingHash": "#norns-sound-sources-with-n-b",
+          "destinationHeading": "Norns Sound Sources with n.b.",
+          "destinationText": "Manual\n/\nChannel\n/\nChannel Editor\n/\nDevices\n/\nNorns Sound Sources with n.b.\nMOSAIC / CHANNEL\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nExample\n← MIDI Sound Sources\nDevice Parameters →\nCaptured examples\nControls\n\nInstall a supported n.b. mod to sequence internal sound sources or devices connected through Crow. Supported mods include:\n\nnb_ansible for Ansible voices.\nemplaitress offers four MI Plaits voices in parallel. Emplaitress's params can be locked in Mosaic. Emplaitress is sensitive to rapid notes. Check playback when using arpeggios, chords or small clock divisions.\nnb_jf accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.\nnb_crow for Crow v/8 and envelope functions.\nnb_drum_crow turns a monome crow into a synthesizer.\nnb_polyperc poly perc. Poly perc's params can be locked in Mosaic.\nnb_rudiments percussion synth.\nnb_doubledecker 2-layer synth. Doubledecker's params can be locked in Mosaic.\nnb_oilcan percussion sync. Oilcan's params can be locked in Mosaic.\n\nFor nb_polyperc, install it through the Maiden Project Manager, or run ;install https://github.com/dstroud/nb_polyperc in the Maiden REPL. Restart norns with SYSTEM > RESTART so the installed mod is discovered. Then open SYSTEM > MODS, select nb_polyperc with E2 and enable it with E3. Restart norns again; Mosaic can then offer Polyperc 1 in the Device picker. One Polyperc voice is enabled by default. To add voices, open SYSTEM > MODS > NB_POLYPERC from the K1 menu, press K3 to open the mod menu and adjust E3. See the norns mod guide for the install, enable and restart sequence. Adding too many internal sound engines to channels can overload norns.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nSelect Polyperc 1\nMUSICAL USE\n\nAssign one internal voice and check playback. Add further voices before increasing chord density or arpeggio rate; multiple sound engines increase norns processing load.\n\nStarting point: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page is open and its player list is ready to browse. This channel carries the bass in the audio example Rhythm, bass and a changing chord.\n\nExample\n01 / 01\nNORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge gri"
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "resultingHash": "#no-sound",
+          "destinationHeading": "Troubleshooting No Sound",
+          "destinationText": "Manual\n/\nGetting started\n/\nGetting Started\n/\nTroubleshooting No Sound\nMOSAIC / LEARN\nTroubleshooting No Sound\n\nCheck transport, channel data and output settings in order.\n\nExample\n← Creating a First Loop\nCreating a Phrase and Arrangement →\nCaptured examples\nControls\n\nUse the loop in Creating a First Loop. Check the following in order.\n\nCheck that the grid playhead moves. If it does not, press Play. For an external clock source, check that the source is running and sending clock. Use the internal clock for a standalone check.\nSelect the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An unassigned source pattern does not play through the channel.\nCheck that active attacks are inside the channel range. If several patterns are assigned, check whether Skip removes their overlaps. Compare one assigned pattern or All trig merge.\nOpen Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.\nOpen Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match output port and receive channel. For n.b., check that the player is installed, enabled and supported. Check norns audio level and the listening path.\n\nFor hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic sends Note Off messages but does not stop playback. A running sequence can sound new notes after the sweep.\n\nThe examples on this page each show one of these checks. Keep each channel independent shows that Device belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before its start is refused, the previous valid range stays, and only the attacks inside that range sound. Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length masks shows that velocity 0 is silent and that X lets the pattern's own velocity through (check 4). Create a four-step loop from an empty project is the working loop to compare against.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nMute a channel and bring a running phrase back\nKeep a valid range when a gesture is reversed\nMUSICAL USE\n\nIndependent example. Its captured starting state is shown below; changes from another "
+        }
+      ]
+    },
+    {
+      "id": "course:getting-started-notation",
+      "route": "#getting-started/lesson/getting-started-notation",
+      "h1": "1. Meet Mosaic",
+      "h2": [
+        "In this chapter",
+        "Before you explore Masks",
+        "A place to start",
+        "Read the grid and norns controls",
+        "Small hours · four bars in C major",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Related features"
+      ],
+      "title": "1. Meet Mosaic",
+      "stepTitle": "Open channel 1",
+      "caption": "You start from a new, empty project: transport stopped, nothing set up, channel 1 selected. Tap Channel (3,8), the third button on the bottom row. The screen opens NOTE MASKS for CH01 with eight cells (Trig, Note, Vel, Len and Chd1 to Chd4) that all read X: no value is set, because a new channel has no pattern, pitch or sound yet. On the grid, (1,1) is lit because channel 1 is the channel you edit, and (3,8) is lit because it is the page you are on.",
+      "outcome": "Learn the three objects: The norns screen reads NOTE MASKS with CH01 in the title row. Its eight cells (Trig, Note, Vel, Len and Chd1 to Chd4) all show X, which means no value is set: the new channel has no pattern, pitch or sound yet. On the grid, (1,1) is lit because channel 1 is the channel you edit, and (3,8) is lit because you are on the Channel page. In chapter 3 you give channel 1 a pattern and a pitch.",
+      "workspace": "Your starting point: Mosaic is running on norns with a 128 grid connected. Start a new project (PARAMS > MOSAIC > + New) so the course begins from an empty project. Have a MIDI instrument ready for chapter 2, or install and enable nb_polyperc before chapter 2 if you plan to use Polyperc 1 (see Norns Sound Sources with n.b.).\n\nRead the grid and norns controls\n\nBe able to find any button from its coordinates for the rest of the course.\n\nA grid position is written (column,row). Columns count from 1 at the left to 16 at the right; rows count from 1 at the top to 8 at the bottom. (3,8) is column 3 on the bottom row.\nThe bottom-left buttons open the main pages: Play (1,8), Record (2,8), Channel (3,8), Scale (4,8), Pattern (5,8) and Song (6,8). Row 1 selects the channel on the channel page, the pattern on the Pattern page and the song slot on the Song page.\nOn the norns, K1-K3 are the three keys and E1-E3 the three encoders, numbered as printed on the norns. \"Tap\" means a short press. \"Hold K1\" means keep K1 down while you act: it is the shift key.\nTap Pattern (5,8) on the grid to try a button. Chapter 2 starts by tapping Channel (3,8), so you can leave the Pattern page that way.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n02\nBefore\nOpen channel 1\n\nYou start from a new, empty project: transport stopped, nothing set up, channel 1 selected. Tap Channel (3,8), the third button on the bottom row. The screen opens NOTE MASKS for CH01 with eight cells (Trig, Note, Vel, Len and Chd1 to Chd4) that all read X: no value is set, because a new channel has no pattern, pitch or sound yet. On the grid, (1,1) is lit because channel 1 is the channel you edit, and (3,8) is lit because it is the page you are on.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none.",
+      "actions": "Follow the controls one at a time",
+      "result": "Notice the screen and grid result of the action above.",
+      "visibleLinks": [
+        {
+          "text": "Manual",
+          "href": "#home",
+          "aria": null
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#getting-started/lesson/getting-started-objects",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#getting-started/course/course-getting-started/getting-started-objects",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#getting-started/lesson/getting-started-notation",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#getting-started/course/course-getting-started/getting-started-notation",
+          "aria": null
+        },
+        {
+          "text": "Open Getting Started reference",
+          "href": "#getting-started",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "1. Learn the three objects",
+          "href": "#getting-started/lesson/getting-started-objects",
+          "aria": null
+        },
+        {
+          "text": "2. Read the grid and norns controls",
+          "href": "#getting-started/lesson/getting-started-notation",
+          "aria": null
+        },
+        {
+          "text": "← Previous step",
+          "href": "#getting-started/lesson/getting-started-objects",
+          "aria": null
+        },
+        {
+          "text": "Continue to 2. Choose one sound",
+          "href": "#setup/course",
+          "aria": null
+        }
+      ],
+      "rawMarkdown": [],
+      "screenSize": [
+        128,
+        64
+      ],
+      "gridPads": 128,
+      "routeReady": "1",
+      "link_checks": "visible labeled authored links found",
+      "clickedLinks": [
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resultingHash": "#norns-sound-sources-with-n-b",
+          "destinationHeading": "Norns Sound Sources with n.b.",
+          "destinationText": "Manual\n/\nChannel\n/\nChannel Editor\n/\nDevices\n/\nNorns Sound Sources with n.b.\nMOSAIC / CHANNEL\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nExample\n← MIDI Sound Sources\nDevice Parameters →\nCaptured examples\nControls\n\nInstall a supported n.b. mod to sequence internal sound sources or devices connected through Crow. Supported mods include:\n\nnb_ansible for Ansible voices.\nemplaitress offers four MI Plaits voices in parallel. Emplaitress's params can be locked in Mosaic. Emplaitress is sensitive to rapid notes. Check playback when using arpeggios, chords or small clock divisions.\nnb_jf accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.\nnb_crow for Crow v/8 and envelope functions.\nnb_drum_crow turns a monome crow into a synthesizer.\nnb_polyperc poly perc. Poly perc's params can be locked in Mosaic.\nnb_rudiments percussion synth.\nnb_doubledecker 2-layer synth. Doubledecker's params can be locked in Mosaic.\nnb_oilcan percussion sync. Oilcan's params can be locked in Mosaic.\n\nFor nb_polyperc, install it through the Maiden Project Manager, or run ;install https://github.com/dstroud/nb_polyperc in the Maiden REPL. Restart norns with SYSTEM > RESTART so the installed mod is discovered. Then open SYSTEM > MODS, select nb_polyperc with E2 and enable it with E3. Restart norns again; Mosaic can then offer Polyperc 1 in the Device picker. One Polyperc voice is enabled by default. To add voices, open SYSTEM > MODS > NB_POLYPERC from the K1 menu, press K3 to open the mod menu and adjust E3. See the norns mod guide for the install, enable and restart sequence. Adding too many internal sound engines to channels can overload norns.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nSelect Polyperc 1\nMUSICAL USE\n\nAssign one internal voice and check playback. Add further voices before increasing chord density or arpeggio rate; multiple sound engines increase norns processing load.\n\nStarting point: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page is open and its player list is ready to browse. This channel carries the bass in the audio example Rhythm, bass and a changing chord.\n\nExample\n01 / 01\nNORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge gri"
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "resultingHash": "#no-sound",
+          "destinationHeading": "Troubleshooting No Sound",
+          "destinationText": "Manual\n/\nGetting started\n/\nGetting Started\n/\nTroubleshooting No Sound\nMOSAIC / LEARN\nTroubleshooting No Sound\n\nCheck transport, channel data and output settings in order.\n\nExample\n← Creating a First Loop\nCreating a Phrase and Arrangement →\nCaptured examples\nControls\n\nUse the loop in Creating a First Loop. Check the following in order.\n\nCheck that the grid playhead moves. If it does not, press Play. For an external clock source, check that the source is running and sending clock. Use the internal clock for a standalone check.\nSelect the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An unassigned source pattern does not play through the channel.\nCheck that active attacks are inside the channel range. If several patterns are assigned, check whether Skip removes their overlaps. Compare one assigned pattern or All trig merge.\nOpen Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.\nOpen Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match output port and receive channel. For n.b., check that the player is installed, enabled and supported. Check norns audio level and the listening path.\n\nFor hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic sends Note Off messages but does not stop playback. A running sequence can sound new notes after the sweep.\n\nThe examples on this page each show one of these checks. Keep each channel independent shows that Device belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before its start is refused, the previous valid range stays, and only the attacks inside that range sound. Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length masks shows that velocity 0 is silent and that X lets the pattern's own velocity through (check 4). Create a four-step loop from an empty project is the working loop to compare against.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nMute a channel and bring a running phrase back\nKeep a valid range when a gesture is reversed\nMUSICAL USE\n\nIndependent example. Its captured starting state is shown below; changes from another "
+        }
+      ]
+    },
+    {
+      "id": "course:setup-route",
+      "route": "#setup/lesson/setup-route",
+      "h1": "2. Choose one sound",
+      "h2": [
+        "In this chapter",
+        "Before you explore Masks",
+        "A place to start",
+        "Open the Device page",
+        "Small hours · four bars in C major",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Related features"
+      ],
+      "title": "2. Choose one sound",
+      "stepTitle": "Starting point",
+      "caption": "A new, empty project with the transport stopped and nothing assigned to a channel. The pattern editor from chapter 1 is on screen. Channel 1 has no output chosen yet and no tempo has been set; the rest of the course uses MIDI port 1, MIDI channel 1 for channel 1.",
+      "outcome": "",
+      "workspace": "Your starting point: New project, transport stopped, Record off. A MIDI instrument is connected and set to receive on a MIDI channel you know, or install and enable nb_polyperc before starting if you plan to use Polyperc 1 (see Norns Sound Sources with n.b.). Set the MIDI instrument volume before you start.\n\nOpen the Device page\n\nReach the page where a channel is given its sound.\n\nTap Channel (3,8). Channel 1 is selected (CH01 in the title row).\nTurn E1 right until Channel tasks opens. This list holds everything you can do with the channel: Masks, Trig params, Output, Clock, Merge modes, Merge Shape, Harmony, Device and History.\nTurn E2 until Device is highlighted.\nPress K3 to open it.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n01\nBefore\nStarting point\n\nA new, empty project with the transport stopped and nothing assigned to a channel. The pattern editor from chapter 1 is on screen. Channel 1 has no output chosen yet and no tempo has been set; the rest of the course uses MIDI port 1, MIDI channel 1 for channel 1.\n\nNotice the screen and grid result of the action above.\n\nCurrent action MIDI (starting view; earlier output not shown here): none.",
+      "actions": "Follow the controls one at a time",
+      "result": "Notice the screen and grid result of the action above.",
+      "visibleLinks": [
+        {
+          "text": "Manual",
+          "href": "#home",
+          "aria": null
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-route",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-route",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "Open Configuring an Output reference",
+          "href": "#setup",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "1. Open the Device page",
+          "href": "#setup/lesson/setup-route",
+          "aria": null
+        },
+        {
+          "text": "2. Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "3. Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "Continue: Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        }
+      ],
+      "rawMarkdown": [],
+      "screenSize": [
+        128,
+        64
+      ],
+      "gridPads": 128,
+      "routeReady": "1",
+      "link_checks": "visible labeled authored links found",
+      "clickedLinks": [
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resultingHash": "#norns-sound-sources-with-n-b",
+          "destinationHeading": "Norns Sound Sources with n.b.",
+          "destinationText": "Manual\n/\nChannel\n/\nChannel Editor\n/\nDevices\n/\nNorns Sound Sources with n.b.\nMOSAIC / CHANNEL\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nExample\n← MIDI Sound Sources\nDevice Parameters →\nCaptured examples\nControls\n\nInstall a supported n.b. mod to sequence internal sound sources or devices connected through Crow. Supported mods include:\n\nnb_ansible for Ansible voices.\nemplaitress offers four MI Plaits voices in parallel. Emplaitress's params can be locked in Mosaic. Emplaitress is sensitive to rapid notes. Check playback when using arpeggios, chords or small clock divisions.\nnb_jf accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.\nnb_crow for Crow v/8 and envelope functions.\nnb_drum_crow turns a monome crow into a synthesizer.\nnb_polyperc poly perc. Poly perc's params can be locked in Mosaic.\nnb_rudiments percussion synth.\nnb_doubledecker 2-layer synth. Doubledecker's params can be locked in Mosaic.\nnb_oilcan percussion sync. Oilcan's params can be locked in Mosaic.\n\nFor nb_polyperc, install it through the Maiden Project Manager, or run ;install https://github.com/dstroud/nb_polyperc in the Maiden REPL. Restart norns with SYSTEM > RESTART so the installed mod is discovered. Then open SYSTEM > MODS, select nb_polyperc with E2 and enable it with E3. Restart norns again; Mosaic can then offer Polyperc 1 in the Device picker. One Polyperc voice is enabled by default. To add voices, open SYSTEM > MODS > NB_POLYPERC from the K1 menu, press K3 to open the mod menu and adjust E3. See the norns mod guide for the install, enable and restart sequence. Adding too many internal sound engines to channels can overload norns.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nSelect Polyperc 1\nMUSICAL USE\n\nAssign one internal voice and check playback. Add further voices before increasing chord density or arpeggio rate; multiple sound engines increase norns processing load.\n\nStarting point: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page is open and its player list is ready to browse. This channel carries the bass in the audio example Rhythm, bass and a changing chord.\n\nExample\n01 / 01\nNORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge gri"
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "resultingHash": "#no-sound",
+          "destinationHeading": "Troubleshooting No Sound",
+          "destinationText": "Manual\n/\nGetting started\n/\nGetting Started\n/\nTroubleshooting No Sound\nMOSAIC / LEARN\nTroubleshooting No Sound\n\nCheck transport, channel data and output settings in order.\n\nExample\n← Creating a First Loop\nCreating a Phrase and Arrangement →\nCaptured examples\nControls\n\nUse the loop in Creating a First Loop. Check the following in order.\n\nCheck that the grid playhead moves. If it does not, press Play. For an external clock source, check that the source is running and sending clock. Use the internal clock for a standalone check.\nSelect the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An unassigned source pattern does not play through the channel.\nCheck that active attacks are inside the channel range. If several patterns are assigned, check whether Skip removes their overlaps. Compare one assigned pattern or All trig merge.\nOpen Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.\nOpen Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match output port and receive channel. For n.b., check that the player is installed, enabled and supported. Check norns audio level and the listening path.\n\nFor hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic sends Note Off messages but does not stop playback. A running sequence can sound new notes after the sweep.\n\nThe examples on this page each show one of these checks. Keep each channel independent shows that Device belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before its start is refused, the previous valid range stays, and only the attacks inside that range sound. Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length masks shows that velocity 0 is silent and that X lets the pattern's own velocity through (check 4). Create a four-step loop from an empty project is the working loop to compare against.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nMute a channel and bring a running phrase back\nKeep a valid range when a gesture is reversed\nMUSICAL USE\n\nIndependent example. Its captured starting state is shown below; changes from another "
+        }
+      ]
+    },
+    {
+      "id": "course:setup-apply",
+      "route": "#setup/lesson/setup-apply",
+      "h1": "2. Choose one sound",
+      "h2": [
+        "In this chapter",
+        "Before you explore Masks",
+        "A place to start",
+        "Choose the output and apply it",
+        "Small hours · four bars in C major",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Related features"
+      ],
+      "title": "2. Choose one sound",
+      "stepTitle": "Open Device",
+      "caption": "Turn E2 down the list to Device, the eighth task (seven detents below Masks), and press K3. The title row reads DEVICE with CH01. Only the Device row is listed, set to None: the MIDI channel and MIDI port rows appear once you choose a device.",
+      "outcome": "Open the Device page: The title row reads DEVICE with CH01. Only the Device row is listed, set to None: the MIDI channel and MIDI port rows appear once you choose a device. What you change here is only a draft until you press K3.",
+      "workspace": "Your starting point: New project, transport stopped, Record off. A MIDI instrument is connected and set to receive on a MIDI channel you know, or install and enable nb_polyperc before starting if you plan to use Polyperc 1 (see Norns Sound Sources with n.b.). Set the MIDI instrument volume before you start.\n\nChoose the output and apply it\n\nMake channel 1 play your instrument.\n\nTurn E3 one detent to choose a Device. The first entry after None is CC Device, a generic MIDI device that suits any MIDI instrument. If your instrument has its own entry, choose that instead. With no external instrument, choose Polyperc 1 only if nb_polyperc is installed and enabled; see Norns Sound Sources with n.b. for setup.\nThe MIDI channel and MIDI port rows now appear. CC Device reads CC1 and OUT 1, so notes leave on port 1, MIDI channel 1. If your instrument listens elsewhere, turn E2 to a row and E3 to the value it needs. A device entry that fixes a value does not let you change it, and Polyperc 1 needs neither row.\nPress K3 to apply. Until K3 the page only shows a draft and the channel keeps its old routing; K2 cancels the draft.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n04\nBefore\nOpen Device\n\nTurn E2 down the list to Device, the eighth task (seven detents below Masks), and press K3. The title row reads DEVICE with CH01. Only the Device row is listed, set to None: the MIDI channel and MIDI port rows appear once you choose a device.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: none.",
+      "actions": "Follow the controls one at a time",
+      "result": "Notice the screen and grid result of the action above.",
+      "visibleLinks": [
+        {
+          "text": "Manual",
+          "href": "#home",
+          "aria": null
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-route",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-route",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "Open Configuring an Output reference",
+          "href": "#setup",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "aria": null
+        },
+        {
+          "text": "1. Open the Device page",
+          "href": "#setup/lesson/setup-route",
+          "aria": null
+        },
+        {
+          "text": "2. Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "3. Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "← Previous step",
+          "href": "#setup/lesson/setup-route",
+          "aria": null
+        },
+        {
+          "text": "Continue: Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo",
+          "aria": null
+        }
+      ],
+      "rawMarkdown": [],
+      "screenSize": [
+        128,
+        64
+      ],
+      "gridPads": 128,
+      "routeReady": "1",
+      "link_checks": "visible labeled authored links found",
+      "clickedLinks": [
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resultingHash": "#norns-sound-sources-with-n-b",
+          "destinationHeading": "Norns Sound Sources with n.b.",
+          "destinationText": "Manual\n/\nChannel\n/\nChannel Editor\n/\nDevices\n/\nNorns Sound Sources with n.b.\nMOSAIC / CHANNEL\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nExample\n← MIDI Sound Sources\nDevice Parameters →\nCaptured examples\nControls\n\nInstall a supported n.b. mod to sequence internal sound sources or devices connected through Crow. Supported mods include:\n\nnb_ansible for Ansible voices.\nemplaitress offers four MI Plaits voices in parallel. Emplaitress's params can be locked in Mosaic. Emplaitress is sensitive to rapid notes. Check playback when using arpeggios, chords or small clock divisions.\nnb_jf accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.\nnb_crow for Crow v/8 and envelope functions.\nnb_drum_crow turns a monome crow into a synthesizer.\nnb_polyperc poly perc. Poly perc's params can be locked in Mosaic.\nnb_rudiments percussion synth.\nnb_doubledecker 2-layer synth. Doubledecker's params can be locked in Mosaic.\nnb_oilcan percussion sync. Oilcan's params can be locked in Mosaic.\n\nFor nb_polyperc, install it through the Maiden Project Manager, or run ;install https://github.com/dstroud/nb_polyperc in the Maiden REPL. Restart norns with SYSTEM > RESTART so the installed mod is discovered. Then open SYSTEM > MODS, select nb_polyperc with E2 and enable it with E3. Restart norns again; Mosaic can then offer Polyperc 1 in the Device picker. One Polyperc voice is enabled by default. To add voices, open SYSTEM > MODS > NB_POLYPERC from the K1 menu, press K3 to open the mod menu and adjust E3. See the norns mod guide for the install, enable and restart sequence. Adding too many internal sound engines to channels can overload norns.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nSelect Polyperc 1\nMUSICAL USE\n\nAssign one internal voice and check playback. Add further voices before increasing chord density or arpeggio rate; multiple sound engines increase norns processing load.\n\nStarting point: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page is open and its player list is ready to browse. This channel carries the bass in the audio example Rhythm, bass and a changing chord.\n\nExample\n01 / 01\nNORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge gri"
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "resultingHash": "#no-sound",
+          "destinationHeading": "Troubleshooting No Sound",
+          "destinationText": "Manual\n/\nGetting started\n/\nGetting Started\n/\nTroubleshooting No Sound\nMOSAIC / LEARN\nTroubleshooting No Sound\n\nCheck transport, channel data and output settings in order.\n\nExample\n← Creating a First Loop\nCreating a Phrase and Arrangement →\nCaptured examples\nControls\n\nUse the loop in Creating a First Loop. Check the following in order.\n\nCheck that the grid playhead moves. If it does not, press Play. For an external clock source, check that the source is running and sending clock. Use the internal clock for a standalone check.\nSelect the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An unassigned source pattern does not play through the channel.\nCheck that active attacks are inside the channel range. If several patterns are assigned, check whether Skip removes their overlaps. Compare one assigned pattern or All trig merge.\nOpen Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.\nOpen Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match output port and receive channel. For n.b., check that the player is installed, enabled and supported. Check norns audio level and the listening path.\n\nFor hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic sends Note Off messages but does not stop playback. A running sequence can sound new notes after the sweep.\n\nThe examples on this page each show one of these checks. Keep each channel independent shows that Device belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before its start is refused, the previous valid range stays, and only the attacks inside that range sound. Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length masks shows that velocity 0 is silent and that X lets the pattern's own velocity through (check 4). Create a four-step loop from an empty project is the working loop to compare against.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nMute a channel and bring a running phrase back\nKeep a valid range when a gesture is reversed\nMUSICAL USE\n\nIndependent example. Its captured starting state is shown below; changes from another "
+        }
+      ]
+    },
+    {
+      "id": "course:setup-tempo",
+      "route": "#setup/lesson/setup-tempo",
+      "h1": "2. Choose one sound",
+      "h2": [
+        "In this chapter",
+        "Before you explore Masks",
+        "A place to start",
+        "Set the tempo to 90 BPM",
+        "Small hours · four bars in C major",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Related features"
+      ],
+      "title": "2. Choose one sound",
+      "stepTitle": "Choose a device and apply it",
+      "caption": "Press K3 to apply the draft. Notes from channel 1 now leave on MIDI port 1, MIDI channel 1. With your own gear, choose its device entry and set its port and channel; with no external gear, choose Polyperc 1 for the norns voice.",
+      "outcome": "Choose the output and apply it: The DEVICE page lists Device CC Device, MIDI channel CC1 and MIDI port OUT 1 (or your own choices), and the routing is now active for channel 1. You hear it in chapter 3 when the first notes play. If it stays silent, open No Sound.",
+      "workspace": "Your starting point: New project, transport stopped, Record off. A MIDI instrument is connected and set to receive on a MIDI channel you know, or install and enable nb_polyperc before starting if you plan to use Polyperc 1 (see Norns Sound Sources with n.b.). Set the MIDI instrument volume before you start.\n\nSet the tempo to 90 BPM\n\nSet a comfortable shared tempo of 90 BPM for the phrase and bass.\n\nTap Song (6,8).\nTurn E1 right one detent to open Song tasks, turn E2 to Tempo & feel and press K3. GLOBAL FEEL opens.\nTurn E2 up to Tempo, the top row. Turn E3 left until Tempo reads 90. Tempo follows the norns clock, so it shows whatever your norns is set to (often 120 on a fresh norns; this walkthrough's recording opens at 90). It moves one BPM per detent with no coarse step: keep turning E3 until the screen reads 90.\nPress K3 to apply.\nBefore\nShow result\nWhat to look and listen for\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n06\nBefore\nChoose a device and apply it\n\nPress K3 to apply the draft. Notes from channel 1 now leave on MIDI port 1, MIDI channel 1. With your own gear, choose its device entry and set its port and channel; with no external gear, choose Polyperc 1 for the norns voice.\n\nNotice the screen and grid result of the action above.\n\nMIDI since the previous frame: none.",
+      "actions": "Follow the controls one at a time",
+      "result": "Notice the screen and grid result of the action above.",
+      "visibleLinks": [
+        {
+          "text": "Manual",
+          "href": "#home",
+          "aria": null
+        },
+        {
+          "text": "Make a piece",
+          "href": "#learn",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-route",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-route",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "Open this step",
+          "href": "#setup/lesson/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "Show result",
+          "href": "#setup/course/course-setup/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "Open Configuring an Output reference",
+          "href": "#setup",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "1. Open the Device page",
+          "href": "#setup/lesson/setup-route",
+          "aria": null
+        },
+        {
+          "text": "2. Choose the output and apply it",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "3. Set the tempo to 90 BPM",
+          "href": "#setup/lesson/setup-tempo",
+          "aria": null
+        },
+        {
+          "text": "← Previous step",
+          "href": "#setup/lesson/setup-apply",
+          "aria": null
+        },
+        {
+          "text": "Continue to 3. Make four equal notes",
+          "href": "#first-sound/course",
+          "aria": null
+        }
+      ],
+      "rawMarkdown": [],
+      "screenSize": [
+        128,
+        64
+      ],
+      "gridPads": 128,
+      "routeReady": "1",
+      "link_checks": "visible labeled authored links found",
+      "clickedLinks": [
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resultingHash": "#norns-sound-sources-with-n-b",
+          "destinationHeading": "Norns Sound Sources with n.b.",
+          "destinationText": "Manual\n/\nChannel\n/\nChannel Editor\n/\nDevices\n/\nNorns Sound Sources with n.b.\nMOSAIC / CHANNEL\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nExample\n← MIDI Sound Sources\nDevice Parameters →\nCaptured examples\nControls\n\nInstall a supported n.b. mod to sequence internal sound sources or devices connected through Crow. Supported mods include:\n\nnb_ansible for Ansible voices.\nemplaitress offers four MI Plaits voices in parallel. Emplaitress's params can be locked in Mosaic. Emplaitress is sensitive to rapid notes. Check playback when using arpeggios, chords or small clock divisions.\nnb_jf accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.\nnb_crow for Crow v/8 and envelope functions.\nnb_drum_crow turns a monome crow into a synthesizer.\nnb_polyperc poly perc. Poly perc's params can be locked in Mosaic.\nnb_rudiments percussion synth.\nnb_doubledecker 2-layer synth. Doubledecker's params can be locked in Mosaic.\nnb_oilcan percussion sync. Oilcan's params can be locked in Mosaic.\n\nFor nb_polyperc, install it through the Maiden Project Manager, or run ;install https://github.com/dstroud/nb_polyperc in the Maiden REPL. Restart norns with SYSTEM > RESTART so the installed mod is discovered. Then open SYSTEM > MODS, select nb_polyperc with E2 and enable it with E3. Restart norns again; Mosaic can then offer Polyperc 1 in the Device picker. One Polyperc voice is enabled by default. To add voices, open SYSTEM > MODS > NB_POLYPERC from the K1 menu, press K3 to open the mod menu and adjust E3. See the norns mod guide for the install, enable and restart sequence. Adding too many internal sound engines to channels can overload norns.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nSelect Polyperc 1\nMUSICAL USE\n\nAssign one internal voice and check playback. Add further voices before increasing chord density or arpeggio rate; multiple sound engines increase norns processing load.\n\nStarting point: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page is open and its player list is ready to browse. This channel carries the bass in the audio example Rhythm, bass and a changing chord.\n\nExample\n01 / 01\nNORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge gri"
+        },
+        {
+          "text": "No Sound",
+          "href": "#no-sound",
+          "resultingHash": "#no-sound",
+          "destinationHeading": "Troubleshooting No Sound",
+          "destinationText": "Manual\n/\nGetting started\n/\nGetting Started\n/\nTroubleshooting No Sound\nMOSAIC / LEARN\nTroubleshooting No Sound\n\nCheck transport, channel data and output settings in order.\n\nExample\n← Creating a First Loop\nCreating a Phrase and Arrangement →\nCaptured examples\nControls\n\nUse the loop in Creating a First Loop. Check the following in order.\n\nCheck that the grid playhead moves. If it does not, press Play. For an external clock source, check that the source is running and sending clock. Use the internal clock for a standalone check.\nSelect the intended channel and check that it is unmuted. Assign a pattern or enter trig masks. An unassigned source pattern does not play through the channel.\nCheck that active attacks are inside the channel range. If several patterns are assigned, check whether Skip removes their overlaps. Compare one assigned pattern or All trig merge.\nOpen Masks. Check Trig, Note, Vel and Len at channel and held-step scope. An explicit step value overrides its default. Velocity 0 is silent. Clear an exception to restore inheritance.\nOpen Device. Apply the selection with K3; a draft is not the active destination. For MIDI, match output port and receive channel. For n.b., check that the player is installed, enabled and supported. Check norns audio level and the listening path.\n\nFor hanging notes, stop playback, then hold a non-selected page navigation key to invoke panic. Panic sends Note Off messages but does not stop playback. A running sequence can sound new notes after the sweep.\n\nThe examples on this page each show one of these checks. Keep each channel independent shows that Device belongs to one channel, so a channel with Device None makes no sound (check 5). Keep a valid range when a gesture is reversed shows the channel range in check 3: a range gesture whose end would come before its start is refused, the previous valid range stays, and only the attacks inside that range sound. Merge two patterns shows how Skip removes the trigs two patterns share (check 3). Set velocity and length masks shows that velocity 0 is silent and that X lets the pattern's own velocity through (check 4). Create a four-step loop from an empty project is the working loop to compare against.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nMute a channel and bring a running phrase back\nKeep a valid range when a gesture is reversed\nMUSICAL USE\n\nIndependent example. Its captured starting state is shown below; changes from another "
+        }
+      ]
+    },
+    {
+      "id": "lesson:mods-and-software-devices:play-polyperc-apply-confirm",
+      "route": "#mods-and-software-devices/lesson/play-polyperc-apply-confirm",
+      "h1": "Selecting an n.b. Player",
+      "h2": [
+        "Before you explore Masks",
+        "A place to start",
+        "Apply Polyperc 1",
+        "Small hours · four bars in C major",
+        "Interactive examples",
+        "Controls",
+        "Musical examples",
+        "Related features"
+      ],
+      "title": "Selecting an n.b. Player",
+      "stepTitle": "Choose Polyperc 1",
+      "caption": "Turn E3 until the Device row reads Polyperc 1. The footer says “Press K3 to confirm”, so this is still a draft.",
+      "outcome": "",
+      "workspace": "Your starting point: Continue from the captured Select Polyperc 1 stage. Channel 2's Device page shows the pending Polyperc 1 selection and K3 confirmation prompt. The retained Apply capture begins from this same pending state, presses K3, then reopens the page to confirm the applied value persists.\n\nApply Polyperc 1\n\nApply the selected Polyperc player to channel 2 and verify the Device value.\n\nContinue from Select Polyperc 1 with channel 2's Device row showing Polyperc 1 and “Press K3 to confirm”. Press K3; the Device field still reads Polyperc 1 and the prompt is gone.\n\nBefore\nShow result\nFollow the controls one at a time\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge grid controls\n02\nBefore\nChoose Polyperc 1\n\nTurn E3 until the Device row reads Polyperc 1. The footer says “Press K3 to confirm”, so this is still a draft.\n\nNotice the screen and grid result of the action above.\n\nRecorded MIDI output: none.",
+      "actions": "Follow the controls one at a time",
+      "result": "Notice the screen and grid result of the action above.",
+      "visibleLinks": [
+        {
+          "text": "Manual",
+          "href": "#home",
+          "aria": null
+        },
+        {
+          "text": "Getting started",
+          "href": "#learn",
+          "aria": null
+        },
+        {
+          "text": "Getting Started",
+          "href": "#getting-started",
+          "aria": null
+        },
+        {
+          "text": "Configuring an Output",
+          "href": "#setup",
+          "aria": null
+        },
+        {
+          "text": "MIDI Device Configuration",
+          "href": "#midi-device-configuration",
+          "aria": null
+        },
+        {
+          "text": "1. Apply Polyperc 1",
+          "href": "#mods-and-software-devices/lesson/play-polyperc-apply-confirm",
+          "aria": null
+        },
+        {
+          "text": "Rhythm, bass and a changing chord",
+          "href": "#recording/three-voice-conversation",
+          "aria": null
+        },
+        {
+          "text": "Apply the DoubleDecker sound",
+          "href": "#mods-and-software-devices/player-apply-doubledecker",
+          "aria": null
+        },
+        {
+          "text": "Apply the Oilcan sound",
+          "href": "#mods-and-software-devices/player-apply-oilcan",
+          "aria": null
+        },
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "aria": null
+        },
+        {
+          "text": "Devices",
+          "href": "#devices",
+          "aria": null
+        },
+        {
+          "text": "Creating a First Loop",
+          "href": "#first-sound",
+          "aria": null
+        }
+      ],
+      "rawMarkdown": [],
+      "screenSize": [
+        128,
+        64
+      ],
+      "gridPads": 128,
+      "routeReady": "1",
+      "link_checks": "visible labeled authored links found",
+      "clickedLinks": [
+        {
+          "text": "Norns Sound Sources with n.b.",
+          "href": "#norns-sound-sources-with-n-b",
+          "resultingHash": "#norns-sound-sources-with-n-b",
+          "destinationHeading": "Norns Sound Sources with n.b.",
+          "destinationText": "Manual\n/\nChannel\n/\nChannel Editor\n/\nDevices\n/\nNorns Sound Sources with n.b.\nMOSAIC / CHANNEL\nNorns Sound Sources with n.b.\n\nSelect an installed supported n.b. voice for internal audio or Crow output.\n\nExample\n← MIDI Sound Sources\nDevice Parameters →\nCaptured examples\nControls\n\nInstall a supported n.b. mod to sequence internal sound sources or devices connected through Crow. Supported mods include:\n\nnb_ansible for Ansible voices.\nemplaitress offers four MI Plaits voices in parallel. Emplaitress's params can be locked in Mosaic. Emplaitress is sensitive to rapid notes. Check playback when using arpeggios, chords or small clock divisions.\nnb_jf accesses multiple voice modes from Just Friends, including individual mono voice (with slew), polysynth, kit, and unison modes.\nnb_crow for Crow v/8 and envelope functions.\nnb_drum_crow turns a monome crow into a synthesizer.\nnb_polyperc poly perc. Poly perc's params can be locked in Mosaic.\nnb_rudiments percussion synth.\nnb_doubledecker 2-layer synth. Doubledecker's params can be locked in Mosaic.\nnb_oilcan percussion sync. Oilcan's params can be locked in Mosaic.\n\nFor nb_polyperc, install it through the Maiden Project Manager, or run ;install https://github.com/dstroud/nb_polyperc in the Maiden REPL. Restart norns with SYSTEM > RESTART so the installed mod is discovered. Then open SYSTEM > MODS, select nb_polyperc with E2 and enable it with E3. Restart norns again; Mosaic can then offer Polyperc 1 in the Device picker. One Polyperc voice is enabled by default. To add voices, open SYSTEM > MODS > NB_POLYPERC from the K1 menu, press K3 to open the mod menu and adjust E3. See the norns mod guide for the install, enable and restart sequence. Adding too many internal sound engines to channels can overload norns.\n\nTry this step\nInteractive examples\nRecorded norns screen and grid\nChoose an interaction\nSelect Polyperc 1\nMUSICAL USE\n\nAssign one internal voice and check playback. Add further voices before increasing chord density or arpeggio rate; multiple sound engines increase norns processing load.\n\nStarting point: The Polyperc n.b. mod is installed and enabled in norns MODS. Channel 2's Device page is open and its player list is ready to browse. This channel carries the bass in the audio example Rhythm, bass and a changing chord.\n\nExample\n01 / 01\nNORNS\nnorns Shield layout\nE1\nE2\nE3\nK1\nK2\nK3\nnorns\nGrid\nCompact pads; all 16 columns fit\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n captured brightness\n controls used next\nEnlarge gri"
+        }
+      ]
+    }
+  ],
+  "page_errors": [],
+  "passed": true
+}

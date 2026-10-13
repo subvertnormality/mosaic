@@ -1,0 +1,15 @@
+{
+  "purpose": "RD-01 source grounding; not feature acceptance",
+  "files": {
+    "lib/memory.lua": "4d836be44fff92715bd59592f7722babc4d36f4b251195eb91038403a81edfd6",
+    "lib/project_lifecycle.lua": "7c9ffde0543766f2ff0548609d0c1b830ee9a09f1653451048e3713c7813001c",
+    "lib/clock/m_clock.lua": "69e6edbb740d5279f114bdc40a6c51fbeb03cc0294d27dc17c0e5448e03168c5",
+    "lib/pattern.lua": "aaeea3fa48350d66bd1bcdeb7d18f6a9a8edcb1e480ff514f311cda46e0b390d",
+    "lib/ui.lua": "0f1dff025beec559158a1776121dc6822b6f04fde477e866d8d415566f9836b5",
+    "docs/rhythm-doctor/PLAN.md": "22abd8b6f9406772c13ef715f695d7897efdec795d65e9da1a3e70190ac189d5",
+    "lib/m_grid.lua": "8f3e8b09254a7ed7647044bc53a8a7b36b4047dfc9b22ef2a8a0baf25ee46f79",
+    "lib/pages/trigger_edit_page/trigger_edit_page.lua": "88dc814178142567c99e0905af99a895514e78b079ad2ddc2543fecf524b18fd",
+    "lib/models/program.lua": "3c97513901b93500e8bceff8fc65ae2defd51db9321f2674043670dac4339b8b"
+  },
+  "source_revision": "8c08cb93d9f5a4cc36488e90517043531446a4f7"
+}

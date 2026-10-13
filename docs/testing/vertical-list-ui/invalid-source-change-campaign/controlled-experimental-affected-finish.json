@@ -1,0 +1,15 @@
+{
+  "clock_mode": "controlled-experimental",
+  "selected_cases": [
+    "M-UIACC-A01-001",
+    "M-UIACC-A02-001",
+    "M-UIACC-A03-001",
+    "M-UIACC-A18-001"
+  ],
+  "complete_regression_run": false,
+  "returncode": 1,
+  "source_unchanged": false,
+  "changed": [
+    "tests/behaviour/test_manual_publication_verify.py"
+  ]
+}

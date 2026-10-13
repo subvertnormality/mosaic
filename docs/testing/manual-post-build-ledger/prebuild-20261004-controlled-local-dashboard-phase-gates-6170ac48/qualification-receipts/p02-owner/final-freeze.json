@@ -1,0 +1,44 @@
+{
+  "status": "write-frozen bounded P02 truthful footer; final full Lua green; native fresh qualification pending",
+  "allowlist": [
+    "lib/ui_live.lua",
+    "lib/tests/lib/ui_live_tests.lua",
+    "tests/behaviour/contract/live_ui_feedback.py",
+    "tests/behaviour/contract/live_ui_sweep.py",
+    "tests/behaviour/test_ui.py",
+    "manual/features/reference-pattern.yaml",
+    "docs/ui-reimplementation/current-source-review.json",
+    "docs/ui-reimplementation/source-inventory.json",
+    "docs/ui-reimplementation/generated/source-review-receipt.json"
+  ],
+  "files": {
+    "lib/ui_live.lua": "bbdee8cf4cef9eedac03bf435095b0324fee31d6fcb81714bc6d7a06e54242ab",
+    "lib/tests/lib/ui_live_tests.lua": "58024da1288998c7b5311a70438afdbb1ec0108fbb39ddcb98c7c91c874ad0ee",
+    "tests/behaviour/contract/live_ui_feedback.py": "47682bb0536f3506386f558759cc898ed9c2a01606e2b6d25092bb8a7c78ffdd",
+    "tests/behaviour/contract/live_ui_sweep.py": "ff2bd9cb2304e2cf99d7c03bc3a5c6206679c400e02af6fb93d5c2d04c523a1a",
+    "tests/behaviour/test_ui.py": "2f3a899d3a7b14f08c44eb15c51f7f8c4547ee13cb30046398c6f311eea6fc75",
+    "manual/features/reference-pattern.yaml": "b8262eebc6c6981e5ee4bcb793c07c337353481dea7c625372cb6d4327a9b2fa",
+    "docs/ui-reimplementation/current-source-review.json": "6a1a07c9870a4357ac0fa932ac3885ef2fd45e4d17adf88f496268f012283e32",
+    "docs/ui-reimplementation/source-inventory.json": "fc6b9dc3e50bab206177d519941c7970e065b2fb5fecd55371fa237b5b50c5dd",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "1587bbb9c7d40672b7d6ebb4c8f77f23fe07cc0500e8523e4640193321cfcec8"
+  },
+  "production_delta": "Only trig_options FOOTER literal changes to E3 SET in lib/ui_live.lua; owner handlers/input/engine unchanged",
+  "lua_red": "lua-red.log",
+  "native_red": "retained-native-new-footer-red.json",
+  "lua_focused": "new1 + live51 + trig_options_adapter4 + vertical10 green",
+  "python_focused": "26 green",
+  "full_lua": {
+    "tests": 2445,
+    "passed": 2445,
+    "seconds": 77.808,
+    "log": "full-lua-final.log",
+    "stage": "/tmp/mosaic-p02-footer-green-2aphr178/mosaic",
+    "source_matches_current": true
+  },
+  "source_validation": "PASS without skips; runtime export unchanged",
+  "spacing_fix_evidence_unchanged": true,
+  "oracle_or_emulator_changed": false,
+  "native_launch_by_implementation": false,
+  "real_time_qualification": "CI only per user instructions",
+  "global_final_publication": false
+}

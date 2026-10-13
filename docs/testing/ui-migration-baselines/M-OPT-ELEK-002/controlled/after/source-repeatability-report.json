@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "b9f6a4267dfe0b3462e5d82605705d4aa43fcddf",
+  "selected_cases": [
+    "M-OPT-ELEK-001",
+    "M-OPT-ELEK-002",
+    "M-OPT-ELEK-003"
+  ],
+  "selected_modules": {
+    "tests/behaviour/elektron_program_changes.py": "M-OPT-ELEK-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/elektron_program_changes.py",
+      "case": "M-OPT-ELEK-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-2d9eba464bfe4ef1af56e50ba6fb6201/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-2d9eba464bfe4ef1af56e50ba6fb6201/manifest.json",
+      "manifest_sha256": "0346ec266b166a41ecc337cb4c80d147de45789e865696944642773e428120d2",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

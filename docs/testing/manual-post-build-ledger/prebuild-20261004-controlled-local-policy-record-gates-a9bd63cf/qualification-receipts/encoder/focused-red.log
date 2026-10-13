@@ -1,0 +1,17 @@
+E
+======================================================================
+ERROR: test_live_record_replay_tempo_reset_uses_schema_valid_public_encoder_and_selects_one (test_manual_case_capture.Checkpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_case_capture.py", line 104, in test_live_record_replay_tempo_reset_uses_schema_valid_public_encoder_and_selects_one
+    cases.select_live_record_replay_tempo_baseline(c,ui)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/cases.py", line 2024, in select_live_record_replay_tempo_baseline
+    ui.encoder_event(3,-600)
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_case_capture.py", line 97, in encoder_event
+    raise ValueError("public encoder delta outside schema bounds")
+ValueError: public encoder delta outside schema bounds
+
+----------------------------------------------------------------------
+Ran 1 test in 0.059s
+
+FAILED (errors=1)

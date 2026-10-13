@@ -1,0 +1,406 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "sparse-song-length",
+    "length": 1,
+    "expected_steps": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "onsets": 9,
+    "release_checks": [
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.16666666666666666,
+        "phase_error_seconds": 0.00015140033333332914,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.3333333333333333,
+        "phase_error_seconds": 0.0004645746666666617,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.5,
+        "phase_error_seconds": -0.0001461569999999801,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.6666666666666666,
+        "phase_error_seconds": 2.0611333333420134e-05,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.8333333333333334,
+        "phase_error_seconds": 0.00041244666666662155,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.0,
+        "phase_error_seconds": 0.0003923930000000464,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.1666666666666667,
+        "phase_error_seconds": -0.00042217166666680406,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.3333333333333333,
+        "phase_error_seconds": 0.0006119026666666638,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.5,
+        "phase_error_seconds": -0.14020158699999996,
+        "truncated": true
+      }
+    ],
+    "passed": true
+  },
+  {
+    "kind": "sparse-song-length",
+    "length": 2,
+    "expected_steps": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "onsets": 9,
+    "release_checks": [
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.16666666666666666,
+        "phase_error_seconds": 0.0002286933333333352,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 0.3333333333333333,
+        "phase_error_seconds": 0.0005514456666667056,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.5,
+        "phase_error_seconds": -0.00026669000000001386,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 0.6666666666666666,
+        "phase_error_seconds": 0.0004331203333334255,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.8333333333333334,
+        "phase_error_seconds": 0.0001534026666666355,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 1.0,
+        "phase_error_seconds": 0.00039586499999999525,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.1666666666666667,
+        "phase_error_seconds": 0.0005911753333331937,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 1.3333333333333333,
+        "phase_error_seconds": 6.868666666681733e-05,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.5,
+        "phase_error_seconds": -0.13249904700000004,
+        "truncated": true
+      }
+    ],
+    "passed": true
+  },
+  {
+    "kind": "sparse-song-length",
+    "length": 63,
+    "expected_steps": [
+      0,
+      1,
+      2,
+      3,
+      63,
+      64,
+      65,
+      66,
+      126
+    ],
+    "onsets": 9,
+    "release_checks": [
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.16666666666666666,
+        "phase_error_seconds": 0.00012053033333334073,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 0.3333333333333333,
+        "phase_error_seconds": 0.0002643216666666781,
+        "truncated": false
+      },
+      {
+        "pitch": 64,
+        "expected_release_seconds": 0.5,
+        "phase_error_seconds": 0.00026176799999999556,
+        "truncated": false
+      },
+      {
+        "pitch": 65,
+        "expected_release_seconds": 0.6666666666666666,
+        "phase_error_seconds": 0.0002159163333333991,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 10.666666666666666,
+        "phase_error_seconds": 0.0006550643333333994,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 10.833333333333334,
+        "phase_error_seconds": 0.0003971296666662738,
+        "truncated": false
+      },
+      {
+        "pitch": 64,
+        "expected_release_seconds": 11.0,
+        "phase_error_seconds": -0.00019443999999957384,
+        "truncated": false
+      },
+      {
+        "pitch": 65,
+        "expected_release_seconds": 11.166666666666666,
+        "phase_error_seconds": 0.0006934743333335547,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 21.166666666666668,
+        "phase_error_seconds": -0.13346093666666903,
+        "truncated": true
+      }
+    ],
+    "passed": true
+  },
+  {
+    "kind": "sparse-song-length",
+    "length": 64,
+    "expected_steps": [
+      0,
+      1,
+      2,
+      3,
+      64,
+      65,
+      66,
+      67,
+      128
+    ],
+    "onsets": 9,
+    "release_checks": [
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.16666666666666666,
+        "phase_error_seconds": -9.024666666662684e-06,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 0.3333333333333333,
+        "phase_error_seconds": 0.00026292566666669126,
+        "truncated": false
+      },
+      {
+        "pitch": 64,
+        "expected_release_seconds": 0.5,
+        "phase_error_seconds": 0.0005074040000000446,
+        "truncated": false
+      },
+      {
+        "pitch": 65,
+        "expected_release_seconds": 0.6666666666666666,
+        "phase_error_seconds": 3.6403333333323573e-06,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 10.833333333333334,
+        "phase_error_seconds": -2.5981333333646717e-05,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 11.0,
+        "phase_error_seconds": 0.0007450630000001013,
+        "truncated": false
+      },
+      {
+        "pitch": 64,
+        "expected_release_seconds": 11.166666666666666,
+        "phase_error_seconds": -2.76466666626618e-06,
+        "truncated": false
+      },
+      {
+        "pitch": 65,
+        "expected_release_seconds": 11.333333333333334,
+        "phase_error_seconds": 0.0001982616666662551,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 21.5,
+        "phase_error_seconds": -0.10837741899999997,
+        "truncated": true
+      }
+    ],
+    "passed": true
+  },
+  {
+    "kind": "sparse-song-length",
+    "length": 2,
+    "expected_steps": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "onsets": 9,
+    "release_checks": [
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.16666666666666666,
+        "phase_error_seconds": 0.0007982373333333403,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 0.3333333333333333,
+        "phase_error_seconds": 0.0002948936666666846,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.5,
+        "phase_error_seconds": -1.0500000000024379e-06,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 0.6666666666666666,
+        "phase_error_seconds": 0.0003330993333333643,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 0.8333333333333334,
+        "phase_error_seconds": 0.000421733666666646,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 1.0,
+        "phase_error_seconds": 0.0006191090000000621,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.1666666666666667,
+        "phase_error_seconds": 0.0007786643333331789,
+        "truncated": false
+      },
+      {
+        "pitch": 62,
+        "expected_release_seconds": 1.3333333333333333,
+        "phase_error_seconds": 0.0007257466666668044,
+        "truncated": false
+      },
+      {
+        "pitch": 60,
+        "expected_release_seconds": 1.5,
+        "phase_error_seconds": -0.1206061730000001,
+        "truncated": true
+      }
+    ],
+    "passed": true
+  }
+]

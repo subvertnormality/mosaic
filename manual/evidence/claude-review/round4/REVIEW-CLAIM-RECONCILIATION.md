@@ -1,0 +1,11 @@
+# Remediated review claim reconciliation
+
+The frozen417-unit reviews remain independent judgments. Structural validation proves complete criteria and source/reviewer attribution; it does not prove every factual diagnosis.
+
+Root reproduced the semantic browser-tool failure on the rendered getting-around-mosaic card play-song-global-length-length-two: the exact observed href click left the feature page, and waiting for Show result failed. A fresh native accessibility observation then identified link52. Activating that same link through native tab.click(52) immediately reached the correct lesson, with Before at Return to64steps04/07 and Show result present. This separates an automation discrepancy from a demonstrated reader routing defect. Reader-owner reports an independent normal Chromium136/136 rendered-card acceptance; retain its source-pinned audit before general adoption.
+
+Several reviewers corrected this before final report creation. Other original reports are preserved with dated backups and corrigenda. Song02 and Harmony02 explicitly withdraw or dispute tool-only route diagnoses; Parameters02 and Harmony03 cannot independently native-reinspect because their completed-agent browser surfaces are unavailable. No automatic score increases are justified. Those affected criteria must be freshly reviewed on the next remediated candidate; their old route-based ratings cannot establish either a reader defect or final passing quality.
+
+A closed Follow the controls one at a time disclosure is distinct from absent instructions. Expanded content was inspected by corrected reviewers. Reader-owner identifies100/136 feature primary prompts absent; many expanded instructions also omit practical setup or use generated outcome labels. These teaching problems remain independently supported and are being addressed in external candidates.
+
+No browser/service restart, source mutation, rebuilt manual or new audio was required to reconcile this tool discrepancy. The scored source remains fixed.

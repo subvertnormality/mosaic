@@ -1641,6 +1641,29 @@ function test_recording_global_wrap_preserves_midi_banks()
   if not ok then error(err) end
 end
 
+-- README.md Musical Merge: phrase cycles advance on the channel's actual loop
+-- wrap and the newly active projection is used by the following onset.
+function test_foundation_channel_wrap_rebuilds_the_working_pattern_without_shadowing_pattern_module()
+  setup()
+  local merge_config=include("mosaic/lib/musical_merge/config")
+  local merge_state=include("mosaic/lib/musical_merge/state")
+  merge_state.reset()
+  local song=program.get_selected_song_pattern()
+  song.global_pattern_length=1
+  local channel=song.channels[1]
+  channel.start_trig={1,4};channel.end_trig={1,4};channel.selected_patterns={[1]=true}
+  song.patterns[1].trig_values[1]=1
+  local config=merge_config.new();config.mode="foundation";config.anchor=1
+  config.cycles=2;config.percentages={25,100};config.shape="custom"
+  channel.musical_merge=config
+  pattern.update_working_pattern(1,song)
+  clock_setup()
+  local ok,reason=pcall(progress_clock_by_pulses,24)
+  luaunit.assert_true(ok,reason)
+  luaunit.assert_equals(merge_state.effective(song,1,config).cycle,2)
+  luaunit.assert_not_nil(channel.working_pattern.foundation)
+end
+
 -- Characterisation, not manual text: the screen redraw loop asks how long is
 -- left before the next master step so a native-heavy redraw does not start in
 -- front of it. Stopped or unknown state reports nil, and the loop redraws.

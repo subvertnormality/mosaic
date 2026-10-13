@@ -1,0 +1,65 @@
+{
+  "addendum": "source16 green course-browser receipt pin review",
+  "date": "2026-10-08",
+  "prior_audit": {
+    "review_md_sha256": "01adc8b7619452a850e1ef8d0e413394b6001670f8defeac1f7b2addee590092",
+    "review_json_sha256": "b3dd479a68297a1694b78956268af5b31506857cde65d34a99f596542d9d8129"
+  },
+  "manifest": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/source16-candidate-test-manifest.json",
+    "sha256": "9612753800c347563f2b2b32375ad304d9da9683a85b6bf4fd9454b0bee2d7ac"
+  },
+  "green_receipt": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/manual_course_browser-source16-passed.report.json",
+    "sha256": "d10669b7fa72b24db1568f1c199e1a2227607fcb385bc9c5df301ca99eda56e9",
+    "passed": true,
+    "check_count": 9,
+    "checks": [
+      "Current served course chapters render accepted native stages once; principal recordings require an exact typed stage relationship",
+      "Course chapters show only their own course audio (stage or chapter id), choose between several, hide unrelated reference audio; the reference page hides course clips",
+      "Single primary lesson; independent prose, recipes and audio separated",
+      "verified binding: link loads captured pixels; deep link, reload and public bound result selection retain course context",
+      "controlled-verified binding: link loads captured pixels; deep link, reload and public bound result selection retain course context",
+      "pending binding: no result link or captured scene",
+      "failed binding: no result link or captured scene",
+      "Public source metadata is absent while the separate developer inventory pins the historical README",
+      "Reference remains complete; checkpoint viewer does not claim to run gestures"
+    ],
+    "course_chapter_count": 10,
+    "chapter_stage_counts": {
+      "getting-started": 2,
+      "setup": 3,
+      "first-sound": 5,
+      "build-a-phrase": 5,
+      "masks": 10,
+      "sequence-composition": 8,
+      "harmony-design": 6,
+      "modulation-movement-and-interest": 3,
+      "song-composition": 7,
+      "keep-your-work": 6
+    },
+    "served_source_pins": {
+      "index.html": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482",
+      "book.js": "914abab5bb05c25d4272a4fbbbb9b79cfe98767f861056dc05f9657ff869b825",
+      "manual.js": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+      "manual.css": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309"
+    },
+    "manifest_source_pin_matches": {
+      "book.js": true,
+      "manual.js": true,
+      "manual.css": true,
+      "index.html": true
+    }
+  },
+  "candidate_test": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-reader-teaching-source08-20261008-01/ownsource08-existing-browser-regressions-20261008-01/candidate-test-contract-updates-20261008-01/scratch/tests/behaviour/manual_course_browser.cjs",
+    "sha256": "7f0e5ba8dd505d25b8623100cdcecfb3cd564bc58dd5c112a5858c8eae226350",
+    "manifest_candidate_sha256": "7f0e5ba8dd505d25b8623100cdcecfb3cd564bc58dd5c112a5858c8eae226350",
+    "matches_manifest": true
+  },
+  "historical_red": {
+    "path": "/home/andy/mosaic-manual-build-operators/round4-final-reader-source15-20261008-01/source15-browser8-20261008-01/source16-focused-reruns/manual_course_browser.cjs.log",
+    "status": "preserved separately; older 8-check failing run is not overwritten or relabeled"
+  },
+  "qualification": "The separate source16 green receipt is validly pinned to the candidate manual_course_browser.cjs and source16 production JS/CSS/HTML hashes. This resolves the prior caveat about the manifest claim; the old failure remains historical evidence. This is receipt inspection only, not a test rerun and not full-suite qualification."
+}

@@ -1,0 +1,16 @@
+{
+  "exit_code": 0,
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_lock_lead_owner"
+  ],
+  "log": "/home/andy/mosaic-manual-build-operators/lead-zero-correction-green-29c4a79494d64757ba196100a6078ebe/green.log",
+  "log_sha256": "43315031ecdf12b4240d23d04572e6d931008baa7c8942abb871de117aa29f05",
+  "sources": {
+    "/home/andy/mosaic-manual-1.4.0/tests/behaviour/contract/lock_lead_clock_matrix.py": "1f8f7f65f59e776f69aadc6c9becfa51a72f24a205407b0f83088539be3e3ba4",
+    "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_lock_lead_owner.py": "290b62792c695b64c2682794941559bf3ee2d2ce36fb32b115257394c7a7f84c"
+  },
+  "output": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.064s\n\nOK\n"
+}

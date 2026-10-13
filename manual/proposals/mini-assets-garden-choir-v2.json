@@ -1,0 +1,3433 @@
+{
+  "status": "design_assets_v2_not_application_capture",
+  "palette": {
+    ".": "transparent",
+    "a": 7,
+    "b": 11,
+    "c": 15
+  },
+  "screens": [
+    {
+      "id": "H01",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......cc......cc......cc....",
+          "......cb......cb......cb....",
+          "......c.......c.......c.....",
+          "...ccc.c...ccc.c...ccc.c....",
+          "..c.c.cc..c.c.cc..c.c.cc....",
+          "...ccc.....ccc.....ccc......",
+          "..a...a...a...a...a...a.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......bb......cc......cc....",
+          "......bb......cb......cb....",
+          "......c.......c.......c.....",
+          "...ccc.c...ccc.c...ccc.c....",
+          "..c.c.cc..c.c.cc..c.c.cc....",
+          "...ccc.....ccc.....ccc......",
+          "..a...a...a...a...a...a.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....b.......cc......cc.....",
+          ".....b.......cb......cb.....",
+          ".....c.......c.......c......",
+          "..ccc.c...ccc.c...ccc.c.....",
+          ".c.c.cc..c.c.cc..c.c.cc.....",
+          "..ccc.....ccc.....ccc.......",
+          ".a...a...a...a...a...a......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.......cc......cc.....",
+          ".....c.......cb......cb.....",
+          ".....c.......c.......c......",
+          "..ccc.c...ccc.c...ccc.c.....",
+          ".c.c.cc..c.c.cc..c.c.cc.....",
+          "..ccc.....ccc.....ccc.......",
+          ".a...a...a...a...a...a......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......aa......cc......cc....",
+          "......aa......cb......cb....",
+          "......c.......c.......c.....",
+          "...ccc.c...ccc.c...ccc.c....",
+          "..c.c.cc..c.c.cc..c.c.cc....",
+          "...ccc.....ccc.....ccc......",
+          "..a...a...a...a...a...a.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".......bb.....cc......cc....",
+          ".......bb.....cb......cb....",
+          "......c.......c.......c.....",
+          "...ccc.c...ccc.c...ccc.c....",
+          "..c.c.cc..c.c.cc..c.c.cc....",
+          "...ccc.....ccc.....ccc......",
+          "..a...a...a...a...a...a.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........c......cc......cc...",
+          "........c......cb......cb...",
+          ".......c.......c.......c....",
+          "....ccc.c...ccc.c...ccc.c...",
+          "...c.c.cc..c.c.cc..c.c.cc...",
+          "....ccc.....ccc.....ccc.....",
+          "...a...a...a...a...a...a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".......bc......cc......cc...",
+          ".......bb......cb......cb...",
+          ".......c.......c.......c....",
+          "....ccc.c...ccc.c...ccc.c...",
+          "...c.c.cc..c.c.cc..c.c.cc...",
+          "....ccc.....ccc.....ccc.....",
+          "...a...a...a...a...a...a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Leading choir",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Original note creatures take one small shared step",
+      "rest_pose": "Three creatures resting",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H02",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "....a.............a.....",
+          "....aaaaaaaaccaaaaa.....",
+          "....a.......cb....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.............a.....",
+          "....aaaaaaaabbaaaaa.....",
+          "....a.......bb....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.............a.....",
+          "....aaaaaaabb.aaaaa.....",
+          "....a......bb.....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.............a.....",
+          "....aaaaaaacc.aaaaa.....",
+          "....a......cc.....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.......cc....a.....",
+          "....aaaaaaaaaaaaaaa.....",
+          "....a.......a.....a.....",
+          "....a....ccc.c....a.....",
+          "....aaaacacaccaaaaa.....",
+          "....a....ccc......a.....",
+          "....a...a...a.....a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.......cc....a.....",
+          "....aaaaaaaa.bbaaaa.....",
+          "....a........b....a.....",
+          "....a....ccc.c....a.....",
+          "....aaaacacaccaaaaa.....",
+          "....a....ccc......a.....",
+          "....a...a...a.....a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.............a.....",
+          "....aaaaaaaa.ccaaaa.....",
+          "....a........cc...a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ],
+        [
+          "....a.............a.....",
+          "....aaaaaaaaabaaaaa.....",
+          "....a.......bb....a.....",
+          "....a.......c.....a.....",
+          "....aaaaacccacaaaaa.....",
+          "....a...c.c.cc....a.....",
+          "....a....ccc......a.....",
+          "....aaaaaaaaaaaaaaa....."
+        ]
+      ],
+      "concept": "Register ladder",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Original register creature climbs one rung and returns",
+      "rest_pose": "Creature on middle rung",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H03",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "....b...c.c.cc...b......",
+          ".....b...ccc....b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........bbb.c..........",
+          "....b...c.b.bc...b......",
+          ".....b...ccc....b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          ".........bbbc...........",
+          "..........b.bc..........",
+          "....b...c....c...b......",
+          ".....b...ccc....b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          ".........cccc...........",
+          "..........c.cc..........",
+          "....b...c....c...b......",
+          ".....b...ccc....b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "........c.a.ac..........",
+          "....b....aaa.....b......",
+          ".....b..a.c.a...b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "........c....c..........",
+          "....b.....b.b....b......",
+          ".....b..abbba...b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".............c..........",
+          "....b...cccc.c...b......",
+          ".....b...cccc...b.......",
+          "......bbbbbbbbbb........"
+        ],
+        [
+          "........................",
+          "............cc..........",
+          "............cb..........",
+          "............c...........",
+          ".........ccc.c..........",
+          "....b...c.c.cc...b......",
+          ".....b...cbc....b.......",
+          "......bbbbbbbbbb........"
+        ]
+      ],
+      "concept": "Bass anchor",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A bass note creature nods above a fixed anchor",
+      "rest_pose": "Anchor grounded creature upright",
+      "loop_quarter_beats": 2,
+      "status": "registered_candidate_route",
+      "motion_detail": "Creature takes a shallow breath and quiet blink above the existing grounded support.",
+      "pose_count": 8
+    },
+    {
+      "id": "H04",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c....cc.....cc...c...",
+          "....ccc.c...cba....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c....bb.....cc...c...",
+          "....ccc.c...bba....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c...bb......cc...c...",
+          "....ccc.c..bb.a....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c...cc......cc...c...",
+          "....ccc.c..cc.a....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cb...............cb..",
+          ".......c................c...",
+          "....ccc.c...aa.....ccccc.c..",
+          "...c.c.cc...aaa....cb.c.cc..",
+          "....ccc.....ca.....c.ccc....",
+          "...a...a.ccc.c..ccc.c...a...",
+          "........c.c.cc.c.c.cc.......",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cb...............cb..",
+          ".......c................c...",
+          "....ccc.c....bb....ccccc.c..",
+          "...c.c.cc....bb....cb.c.cc..",
+          "....ccc.....ca.....c.ccc....",
+          "...a...a.ccc.c..ccc.c...a...",
+          "........c.c.cc.c.c.cc.......",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c.....cc....cc...c...",
+          "....ccc.c....cc....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ],
+        [
+          ".......cc...............cc..",
+          ".......cb...............cb..",
+          ".......c....ab.....cc...c...",
+          "....ccc.c...bba....cbccc.c..",
+          "...c.c.cc...ca.....cc.c.cc..",
+          "....ccc..ccc.c..ccc.cccc....",
+          "...a...ac.c.cc.c.c.cc...a...",
+          ".........ccc....ccc........."
+        ]
+      ],
+      "concept": "Ensemble circle",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Four small note heads breathe together around a center",
+      "rest_pose": "Heads evenly spaced",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H05",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          ".......cc...................",
+          ".......cb.............cc....",
+          ".......c..............cb....",
+          "....ccc.c.............c.....",
+          "...c.c.cc..........ccc.c....",
+          "....ccc.......b...c.c.cc....",
+          "...a...a....b......ccc......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          ".......bb...................",
+          ".......bb.............cc....",
+          ".......c..............cb....",
+          "....ccc.c.............c.....",
+          "...c.c.cc..........ccc.c....",
+          "....ccc.......b...c.c.cc....",
+          "...a...a....b......ccc......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          "......b.....................",
+          "......b................cc...",
+          "......c................cb...",
+          "...ccc.c...............c....",
+          "..c.c.cc............ccc.c...",
+          "...ccc........b....c.c.cc...",
+          "..a...a.....b.......ccc.....",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          "......c.....................",
+          "......c................cc...",
+          "......c................cb...",
+          "...ccc.c...............c....",
+          "..c.c.cc............ccc.c...",
+          "...ccc........b....c.c.cc...",
+          "..a...a.....b.......ccc.....",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          ".......aa...................",
+          ".......aa.............cc....",
+          ".......c..............cb....",
+          "....ccc.c.............c.....",
+          "...c.c.cc..........ccc.c....",
+          "....ccc.......b...c.c.cc....",
+          "...a...a....b......ccc......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          "........bb..................",
+          "........bb............cc....",
+          ".......c..............cb....",
+          "....ccc.c.............c.....",
+          "...c.c.cc..........ccc.c....",
+          "....ccc.......b...c.c.cc....",
+          "...a...a....b......ccc......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          ".........c..................",
+          ".........c...........cc.....",
+          "........c............cb.....",
+          ".....ccc.c...........c......",
+          "....c.c.cc........ccc.c.....",
+          ".....ccc......b..c.c.cc.....",
+          "....a...a...b.....ccc.......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ],
+        [
+          "........bc..................",
+          "........bb...........cc.....",
+          "........c............cb.....",
+          ".....ccc.c...........c......",
+          "....c.c.cc........ccc.c.....",
+          ".....ccc......b..c.c.cc.....",
+          "....a...a...b.....ccc.......",
+          "..aaaaaaaa.......aaaaaaaa..."
+        ]
+      ],
+      "concept": "Voice-movement trail",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Two creatures exchange neighboring perches along a short trail",
+      "rest_pose": "Creatures on their own perches",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H06",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          "......cc...........cc...",
+          "......cb...........cb...",
+          "......c............c....",
+          "...ccc.c........ccc.c...",
+          "..c.c.cc.......c.c.cc...",
+          "...ccc..........ccc.....",
+          "..a...a....a...a...a...."
+        ],
+        [
+          "........................",
+          "......cc...........bb...",
+          "......cb...........bb...",
+          "......c............c....",
+          "...ccc.c........ccc.c...",
+          "..c.c.cc.......c.c.cc...",
+          "...ccc..........ccc.....",
+          "..a...a....a...a...a...."
+        ],
+        [
+          "........................",
+          "......cc..........bb....",
+          "......cb..........bb....",
+          "......c............c....",
+          "...ccc.c........ccc.c...",
+          "..c.c.cc.......c.c.cc...",
+          "...ccc..........ccc.....",
+          "..a...a....a...a...a...."
+        ],
+        [
+          "........................",
+          "......cc..........cc....",
+          "......cb..........cc....",
+          "......c............c....",
+          "...ccc.c........ccc.c...",
+          "..c.c.cc.......c.c.cc...",
+          "...ccc..........ccc.....",
+          "..a...a....a...a...a...."
+        ],
+        [
+          "......cc................",
+          "......cb...........aa...",
+          "......c............aa...",
+          "...ccc.c...........c....",
+          "..c.c.cc........ccc.c...",
+          "...ccc.........c.c.cc...",
+          "..a...a.........ccc.....",
+          "...........a...a...a...."
+        ],
+        [
+          "......cc................",
+          "......cb............bb..",
+          "......c.............bb..",
+          "...ccc.c...........c....",
+          "..c.c.cc........ccc.c...",
+          "...ccc.........c.c.cc...",
+          "..a...a.........ccc.....",
+          "...........a...a...a...."
+        ],
+        [
+          "...................cc...",
+          "......cc............cc..",
+          "......cb............c...",
+          "......c.........ccc.c...",
+          "...ccc.c.......c.c.cc...",
+          "..c.c.cc........ccc.....",
+          "...ccc.........a...a....",
+          "..a...a....a............"
+        ],
+        [
+          "...................cc...",
+          "......cc...........bb...",
+          "......cb...........b....",
+          "......c.........ccc.c...",
+          "...ccc.c.......c.c.cc...",
+          "..c.c.cc........ccc.....",
+          "...ccc.........a...a....",
+          "..a...a....a............"
+        ]
+      ],
+      "concept": "Waiting choir",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Two original note creatures wait with a soft alternating nod",
+      "rest_pose": "Creatures at rest gap between them",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H07",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "..aaa.cc......cc......acca..",
+          ".....acbaa....cbaaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ],
+        [
+          "............................",
+          "..aaa.cc......bb......acca..",
+          ".....acbaa....bbaaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ],
+        [
+          "............................",
+          "..aaa.cc.....bb.......acca..",
+          ".....acbaa...bb.aaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ],
+        [
+          "............................",
+          "..aaa.cc.....cc.......acca..",
+          ".....acbaa...cc.aaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ],
+        [
+          "..............cc............",
+          "..aaa.cc......aa......acca..",
+          ".....acbaa....a.aaaaaa.cb...",
+          "......c...acccac.......c....",
+          "...ccc.c..c.c.cc....ccc.c...",
+          "..c.c.cc...ccc.....c.c.cc...",
+          "...ccc....a...a.....ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "..............cc............",
+          "..aaa.cc.......bb.....acca..",
+          ".....acbaa.....baaaaaa.cb...",
+          "......c...acccac.......c....",
+          "...ccc.c..c.c.cc....ccc.c...",
+          "..c.c.cc...ccc.....c.c.cc...",
+          "...ccc....a...a.....ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "..aaa.cc.......cc.....acca..",
+          ".....acbaa.....ccaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ],
+        [
+          "............................",
+          "..aaa.cc......ab......acca..",
+          ".....acbaa....bbaaaaaa.cb...",
+          "......c...aaaaca.......c....",
+          "...ccc.c...ccc.c....ccc.c...",
+          "..c.c.cc..c.c.cc...c.c.cc...",
+          "...ccc.....ccc......ccc.....",
+          "..a...a...a...a....a...a...."
+        ]
+      ],
+      "concept": "Member garland",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Connected note creatures nod one after another",
+      "rest_pose": "Garland hanging level",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H08",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          ".....cc.................",
+          ".....cb...c..........cc.",
+          ".....c...aca.........cb.",
+          "..ccc.c.a.c.a........c..",
+          ".c.c.cc..a.a......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb...c..........cc.",
+          ".....c...aaa.........cb.",
+          "..ccc.c.a.a.a........c..",
+          ".c.c.cc..a.a......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb..ca..........cc.",
+          ".....c..bbb..........cb.",
+          "..ccc.c.ab..a........c..",
+          ".c.c.cc.b.b.......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb..ca..........cc.",
+          ".....c..ccc..........cb.",
+          "..ccc.c.ac..a........c..",
+          ".c.c.cc.c.c.......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb..bbb.........cc.",
+          ".....c....b..........cb.",
+          "..ccc.c.ab.ba........c..",
+          ".c.c.cc...........ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb...c..........cc.",
+          ".....c....ccc........cb.",
+          "..ccc.c.a..ca........c..",
+          ".c.c.cc...c.c.....ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb...ac.........cc.",
+          ".....c....aaa........cb.",
+          "..ccc.c.a..aa........c..",
+          ".c.c.cc...a.a.....ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ],
+        [
+          ".....cc.................",
+          ".....cb...ac.........cc.",
+          ".....c...bbb.........cb.",
+          "..ccc.c.a.b.a........c..",
+          ".c.c.cc..b.b......ccc.c.",
+          "..ccc.....a......c.c.cc.",
+          ".a...a............ccc...",
+          ".................a...a.."
+        ]
+      ],
+      "concept": "Voicing compass",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A small compass needle follows two choir perches",
+      "rest_pose": "Needle centered",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Relevant prop tilts or lifts a pixel, pauses briefly, and settles; stationary surrounding scene is retained.",
+      "pose_count": 8
+    },
+    {
+      "id": "H09",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "..........................",
+          ".......cc.......bbbbbbbb..",
+          ".......cb.......b......b..",
+          ".......c........b......b..",
+          "....ccc.c.......b....a.b..",
+          "...c.c.cc.......b......b..",
+          "....ccc.........b......b..",
+          "...a...a........b......b.."
+        ],
+        [
+          "..........................",
+          ".......bb.......bbbbbbbb..",
+          ".......bb.......b......b..",
+          ".......c........b......b..",
+          "....ccc.c.......b....a.b..",
+          "...c.c.cc.......b......b..",
+          "....ccc.........b......b..",
+          "...a...a........b......b.."
+        ],
+        [
+          "..........................",
+          "......b.........bbbbbbbb..",
+          "......b.........b......b..",
+          "......c.........b......b..",
+          "...ccc.c........b....a.b..",
+          "..c.c.cc........b......b..",
+          "...ccc..........b......b..",
+          "..a...a.........b......b.."
+        ],
+        [
+          "..........................",
+          "......c.........bbbbbbbb..",
+          "......c.........b......b..",
+          "......c.........b......b..",
+          "...ccc.c........b....a.b..",
+          "..c.c.cc........b......b..",
+          "...ccc..........b......b..",
+          "..a...a.........b......b.."
+        ],
+        [
+          "..........................",
+          ".......aa.......bbbbbbbb..",
+          ".......aa.......b......b..",
+          ".......c........b......b..",
+          "....ccc.c.......b....a.b..",
+          "...c.c.cc.......b......b..",
+          "....ccc.........b......b..",
+          "...a...a........b......b.."
+        ],
+        [
+          "..........................",
+          "........bb......bbbbbbbb..",
+          "........bb......b......b..",
+          ".......c........b......b..",
+          "....ccc.c.......b....a.b..",
+          "...c.c.cc.......b......b..",
+          "....ccc.........b......b..",
+          "...a...a........b......b.."
+        ],
+        [
+          "..........................",
+          ".........c......bbbbbbbb..",
+          ".........c......b......b..",
+          "........c.......b......b..",
+          ".....ccc.c......b....a.b..",
+          "....c.c.cc......b......b..",
+          ".....ccc........b......b..",
+          "....a...a.......b......b.."
+        ],
+        [
+          "..........................",
+          "........bc......bbbbbbbb..",
+          "........bb......b......b..",
+          "........c.......b......b..",
+          ".....ccc.c......b....a.b..",
+          "....c.c.cc......b......b..",
+          ".....ccc........b......b..",
+          "....a...a.......b......b.."
+        ]
+      ],
+      "concept": "Entry doorway",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A note creature leans toward a doorway then returns",
+      "rest_pose": "Creature beside doorway",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H10",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a..b..a....",
+          "......c..........a..b..a....",
+          "...ccc.c......bbbbbccbba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a..a..a....",
+          "......c..........a..a..a....",
+          "...ccc.c......bbbbbaabba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a.b...a....",
+          "......c..........a.b...a....",
+          "...ccc.c......bbbbbb.bba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a.c...a....",
+          "......c..........a.c...a....",
+          "...ccc.c......bbbbcc.bba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a..b..a....",
+          "......cb.........a.bb..a....",
+          "......c..........a.bb..a....",
+          "...ccc.c......bbbbb..bba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a..b..a....",
+          "......cb.........a...c.a....",
+          "......c..........a..cc.a....",
+          "...ccc.c......bbbbb.ccba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a...a.a....",
+          "......c..........a...a.a....",
+          "...ccc.c......bbbbb.aaba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ],
+        [
+          ".................aaaaaaa....",
+          "......cc.........a.....a....",
+          "......cb.........a..b..a....",
+          "......c..........a..b..a....",
+          "...ccc.c......bbbbbbbbba....",
+          "..c.c.cc......a........a....",
+          "...ccc.........aaaaaaaa.....",
+          "..a...a....................."
+        ]
+      ],
+      "concept": "Harmonic well",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A note creature lifts a small note from a well",
+      "rest_pose": "Creature and note at rim",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Relevant prop tilts or lifts a pixel, pauses briefly, and settles; stationary surrounding scene is retained.",
+      "pose_count": 8
+    },
+    {
+      "id": "H11",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......cc....................",
+          "......cb....................",
+          "......c.....................",
+          "...ccc.c....................",
+          "..c.c.cc.....c..............",
+          "...ccc......bbb..bbb..bbb...",
+          "..a...a.....bcb..bcb..bcb...",
+          "............................"
+        ],
+        [
+          "......cc....................",
+          "......cb....................",
+          "......c.....................",
+          "...ccc.c....................",
+          "..c.c.cc.....c..............",
+          "...ccc......aaa..bbb..bbb...",
+          "..a...a.....aaa..bcb..bcb...",
+          "............................"
+        ],
+        [
+          ".....cc.....................",
+          ".....cb.....................",
+          ".....c......................",
+          "..ccc.c.....................",
+          ".c.c.cc...........c.........",
+          "..ccc......bbb...bbb..bbb...",
+          ".a...a.....bbb...bcb..bcb...",
+          "............................"
+        ],
+        [
+          ".....cc.....................",
+          ".....cb.....................",
+          ".....c......................",
+          "..ccc.c.....................",
+          ".c.c.cc...........c.........",
+          "..ccc......ccc...bbb..bbb...",
+          ".a...a.....ccc...bcb..bcb...",
+          "............................"
+        ],
+        [
+          "......cc....................",
+          "......cb....................",
+          "......c.....................",
+          "...ccc.c....................",
+          "..c.c.cc....bbb........c....",
+          "...ccc......bbb..bbb..bbb...",
+          "..a...a..........bcb..bcb...",
+          "............................"
+        ],
+        [
+          "......cc....................",
+          "......cb....................",
+          "......c.....................",
+          "...ccc.c....................",
+          "..c.c.cc...............c....",
+          "...ccc.......ccc.bbb..bbb...",
+          "..a...a......ccc.bcb..bcb...",
+          "............................"
+        ],
+        [
+          ".......cc...................",
+          ".......cb...................",
+          ".......c....................",
+          "....ccc.c...................",
+          "...c.c.cc.........c.........",
+          "....ccc......aaa.bbb..bbb...",
+          "...a...a.....aaa.bcb..bcb...",
+          "............................"
+        ],
+        [
+          ".......cc...................",
+          ".......cb...................",
+          ".......c....................",
+          "....ccc.c...................",
+          "...c.c.cc.........c.........",
+          "....ccc.....bbb..bbb..bbb...",
+          "...a...a....bbb..bcb..bcb...",
+          "............................"
+        ]
+      ],
+      "concept": "Tone-map tiles",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Original choir creature taps three tiny tone tiles in order",
+      "rest_pose": "Creature beside center tile",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Relevant prop tilts or lifts a pixel, pauses briefly, and settles; stationary surrounding scene is retained.",
+      "pose_count": 8
+    },
+    {
+      "id": "H12",
+      "width": 7,
+      "height": 8,
+      "frames": [
+        [
+          "....cc.",
+          "...c...",
+          ".a.c...",
+          "b.ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          "a..c...",
+          "..ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "b..c...",
+          "...c...",
+          "..ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "cc.c...",
+          "c..c...",
+          "..ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          "..bc...",
+          ".bac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          "..ac...",
+          ".aac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          "...c...",
+          "bbac...",
+          "bcccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ],
+        [
+          "....cc.",
+          "...c...",
+          "cc.c...",
+          "c.ac...",
+          ".cccc..",
+          "cc.c.c.",
+          ".cccc..",
+          "..a.a.."
+        ]
+      ],
+      "concept": "Pattern-movement wing",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A note with a small wing breathes upward",
+      "rest_pose": "Wing resting",
+      "loop_quarter_beats": 2,
+      "status": "specimen_only",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "H13",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "..................c.......",
+          "......cc..........c.......",
+          "......cb.........ccc......",
+          "......c...........b.......",
+          "...ccc.c..........b.......",
+          "..c.c.cc..........b.......",
+          "...ccc...........aaa......",
+          "..a...a........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          "......cc..........c.......",
+          "......cb..................",
+          "......c..........bbb......",
+          "...ccc.c..........b.......",
+          "..c.c.cc..........b.......",
+          "...ccc...........aaa......",
+          "..a...a........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          ".....cc...........c.......",
+          ".....cb.........bbb.......",
+          ".....c............b.......",
+          "..ccc.c...........b.......",
+          ".c.c.cc...........b.......",
+          "..ccc............aaa......",
+          ".a...a.........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          ".....cc...........c.......",
+          ".....cb.........ccc.......",
+          ".....c............b.......",
+          "..ccc.c...........b.......",
+          ".c.c.cc...........b.......",
+          "..ccc............aaa......",
+          ".a...a.........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          "......cc..........c.......",
+          "......cb.........aaa......",
+          "......c...........b.......",
+          "...ccc.c..........b.......",
+          "..c.c.cc..........b.......",
+          "...ccc...........aaa......",
+          "..a...a........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          "......cc..........c.......",
+          "......cb..........ccc.....",
+          "......c...........b.......",
+          "...ccc.c..........b.......",
+          "..c.c.cc..........b.......",
+          "...ccc...........aaa......",
+          "..a...a........aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          ".......cc.........c.......",
+          ".......cb.................",
+          ".......c..........bbb.....",
+          "....ccc.c.........b.......",
+          "...c.c.cc.........b.......",
+          "....ccc..........aaa......",
+          "...a...a.......aa.a.aa...."
+        ],
+        [
+          "..................c.......",
+          ".......cc.........c.......",
+          ".......cb........bbb......",
+          ".......c..........b.......",
+          "....ccc.c.........b.......",
+          "...c.c.cc.........b.......",
+          "....ccc..........aaa......",
+          "...a...a.......aa.a.aa...."
+        ]
+      ],
+      "concept": "Pattern-bass root",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Register creature settles beside a rooted note",
+      "rest_pose": "Creature grounded beside root",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Flower petal dips softly before its sway, opens, and settles back above its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M01",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "....c.....................",
+          "...ccc..........bbbb......",
+          "..cc.cc........bb.b.b.....",
+          "...cbc.........b.b.bb.....",
+          "..aab.......b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          "....c.....................",
+          "...ccc..........aaaa......",
+          "..cc.cc........aa.a.a.....",
+          "...cbc.........a.a.aa.....",
+          "..aab.......b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          "...c......................",
+          "..ccc..........bbbb.......",
+          ".cc.cc........bb.b.b......",
+          "..cbc.........b.b.bb......",
+          "..aa........b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          "...c......................",
+          "..ccc..........cccc.......",
+          ".cc.cc........cc.c.c......",
+          "..cbc.........c.c.cc......",
+          "..aa........b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          "....c..........bbbbbb.....",
+          "...ccc.........b.b.bb.....",
+          "..cc.cc.........bbbb......",
+          "...cbc....................",
+          "..aab.......b..a....a..b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          "....c...........bbbb......",
+          "...ccc..........bb.b.b....",
+          "..cc.cc.........b.b.bb....",
+          "...cbc...........bbbb.....",
+          "..aab.......b..a....a..b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          ".....c....................",
+          "....ccc..........aaaa.....",
+          "...cc.cc........aa.a.a....",
+          "....cbc.........a.a.aa....",
+          "..aa.b......b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ],
+        [
+          ".....c....................",
+          "....ccc.........cccc......",
+          "...cc.cc.......cc.c.c.....",
+          "....cbc........c.c.cc.....",
+          "..aa.b......b...bbbb...b..",
+          "....a.a.....aaaaaaaaaaaa..",
+          "....aa......b..........b..",
+          ".aaaaaaaaaaabaaaaaaaaaaba."
+        ]
+      ],
+      "concept": "Garden gate",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Original garden visitor peeks above a little garden gate",
+      "rest_pose": "Visitor at gate",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Garden visitor peeks, closes its eyes gently, leans, and settles behind the existing gate.",
+      "pose_count": 8
+    },
+    {
+      "id": "M02",
+      "width": 30,
+      "height": 8,
+      "frames": [
+        [
+          ".....c.................c......",
+          "....ccc...............ccc.....",
+          "...cc.cc.............cc.cc....",
+          "....cbc...............cbc.....",
+          "...aab....aab..aab...aab......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          "......................ccc.....",
+          "...cbbbc.............cc.cc....",
+          "....bbb...............cbc.....",
+          "...aab....aab..aab...aab......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.................c.......",
+          "...bb................ccc......",
+          "..ccbb..............cc.cc.....",
+          "...cbc...............cbc......",
+          "...aa.....aab..aab...aa.......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.................c.......",
+          "...cc................ccc......",
+          "..cccc..............cc.cc.....",
+          "...cbc...............cbc......",
+          "...aa.....aab..aab...aa.......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          "....aaa...............ccc.....",
+          "...ca.ac.............cc.cc....",
+          "....cbc...............cbc.....",
+          "...aab....aab..aab...aab......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          ".....ccc..............ccc.....",
+          "...c.c.c.............cc.cc....",
+          "....cbc...............cbc.....",
+          "...aab....aab..aab...aab......",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......c.................c.....",
+          ".......c...............ccc....",
+          "......bbc.............cc.cc...",
+          ".....bbc...............cbc....",
+          "...aa.b...aab..aab...aa.b.....",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......c.................c.....",
+          ".....bbc...............ccc....",
+          "....bb.cc.............cc.cc...",
+          ".....cbc...............cbc....",
+          "...aa.b...aab..aab...aa.b.....",
+          ".....a.a....a.a..a.a...a.a....",
+          ".....aa.....aa...aa....aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Garden shape",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Original two-flower garden gently sways as a whole",
+      "rest_pose": "Flowers upright",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flower petal dips softly before its sway, opens, and settles back above its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M03",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "............................",
+          "............aab.............",
+          "....a.b.......a.a...a.b.....",
+          ".....aaaa.....aa.....aaaa...",
+          "......a.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "...........aaa..............",
+          "....a.b......a..a...a.b.....",
+          ".....aaaa.....aa.....aaaa...",
+          "......a.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "...........bbb..............",
+          ".............b..............",
+          "...a.b..........a...a.b.....",
+          "....aaaa......aa.....aaaa...",
+          ".....ab.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............ccc.............",
+          "..............c.............",
+          "...a.b..........a...a.b.....",
+          "....aaaa......aa.....aaaa...",
+          ".....ab.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          ".............bbb............",
+          "....a.b........ba...a.b.....",
+          ".....aaaa.....aa.....aaaa...",
+          "......a.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          ".............aaa............",
+          "....a.b........aa...a.b.....",
+          ".....aaaa.....aa.....aaaa...",
+          "......a.......b.......a.....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "............................",
+          "....a.b.....bbb.a....a.b....",
+          ".....aaaa.....ba......aaaa..",
+          "......a.......b.......ba....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "............ccc.............",
+          "....a.b.......c.a....a.b....",
+          ".....aaaa.....aa......aaaa..",
+          "......a.......b.......ba....",
+          "......b.......b.......b.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Rhythm sprouts",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Three sprouts nod successively over a fixed soil line",
+      "rest_pose": "Sprouts upright",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M04",
+      "width": 30,
+      "height": 8,
+      "frames": [
+        [
+          ".....c.................c......",
+          "....ccc.......b.b.....ccc.....",
+          "...cc.cc.....aab.....cc.cc....",
+          "....cbc........a.a....cbc.....",
+          "...aab.........aa....aab......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          "....ccc......a.a......ccc.....",
+          "...cc.cc.....aa......cc.cc....",
+          "....cbc........a.a....cbc.....",
+          "...aab.........aa....aab......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c........b.b........c.....",
+          "...ccc.......b.........ccc....",
+          "..cc.cc.....aa........cc.cc...",
+          "...cbc........a.a......cbc....",
+          "...aa.........aa.....aa.b.....",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c.c.......c.....",
+          "...ccc........c........ccc....",
+          "..cc.cc.....aa........cc.cc...",
+          "...cbc........a.a......cbc....",
+          "...aa.........aa.....aa.b.....",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          "....ccc........b.b....ccc.....",
+          "...cc.cc.....a.bb....cc.cc....",
+          "....cbc........a.a....cbc.....",
+          "...aab.........aa....aab......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".....c.................c......",
+          "....ccc........a.a....ccc.....",
+          "...cc.cc.....a.aa....cc.cc....",
+          "....cbc........a.a....cbc.....",
+          "...aab.........aa....aab......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......c...............c.......",
+          ".....ccc.............ccc......",
+          "....cc.cc.....b.b...cc.cc.....",
+          ".....cbc......bbb.a..cbc......",
+          "...aa.b.........aa...aa.......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......c...............c.......",
+          ".....ccc......c.c....ccc......",
+          "....cc.cc.....ccc...cc.cc.....",
+          ".....cbc........a.a..cbc......",
+          "...aa.b.........aa...aa.......",
+          ".....a.a.......b.......a.a....",
+          ".....aa........b.......aa.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Growing shape bed",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Two original flowers settle around a newly raised middle sprout",
+      "rest_pose": "Middle sprout standing",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M05",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........aaaaaaaaaa......",
+          "........a.........a.....",
+          ".......a...ab.....a.....",
+          ".....a....bcc..a........",
+          "......bbbbbbabb.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a.........a.....",
+          ".......a..aa......a.....",
+          ".....a...aaa...a........",
+          "......bbbaaaa.b.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a.bb......a.....",
+          ".......a.bbb......a.....",
+          ".....a...bbbb..a........",
+          "......bbbb....b.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a..cc.....a.....",
+          ".......a..ccc.....a.....",
+          ".....a....cccc.a........",
+          "......bbbb....b.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a..ab.....a.....",
+          ".......a...bbb....a.....",
+          ".....a......bb.a........",
+          "......bbbb.bbbb.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a..ab.....a.....",
+          ".......a...aaa....a.....",
+          ".....a......aa.a........",
+          "......bbbb.aaaa.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a.........a.....",
+          ".......a..........a.....",
+          ".....a.....bb..a........",
+          "......bbbbbbb.b.........",
+          "......bababbbbb.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ],
+        [
+          "........aaaaaaaaaa......",
+          "........a.........a.....",
+          ".......a...cc.....a.....",
+          ".....a....ccc..a........",
+          "......bbbbccccb.........",
+          "......babababab.........",
+          ".......bbbbbbb..........",
+          "........................"
+        ]
+      ],
+      "concept": "Merge-result basket",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A flower seed settles into a small woven basket",
+      "rest_pose": "Seed in basket",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M06",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "......ab..............ba....",
+          ".....bcc......ab......ccb...",
+          "......babb...bcc......abb...",
+          "......bb..bbbbba..bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab..............ba....",
+          ".....bcc.....aa.......ccb...",
+          "......babb..aaa.......abb...",
+          "......bb..bbaaa...bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab.....bb.......ba....",
+          ".....bcc....bbb.......ccb...",
+          "......babb..bbb.......abb...",
+          "......bb..bbb.....bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab......cc......ba....",
+          ".....bcc.....ccc......ccb...",
+          "......babb...ccc......abb...",
+          "......bb..bbb.....bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab......ab......ba....",
+          ".....bcc......bbb.....ccb...",
+          "......babb.....bb.....abb...",
+          "......bb..bbb.b...bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab......ab......ba....",
+          ".....bcc......aaa.....ccb...",
+          "......babb.....aa.....abb...",
+          "......bb..bbb.a...bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab..............ba....",
+          ".....bcc..............ccb...",
+          "......babb....bb......abb...",
+          "......bb..bbbbbb..bbbb......",
+          "....bb.......bbbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "......ab..............ba....",
+          ".....bcc......cc......ccb...",
+          "......babb...ccc......abb...",
+          "......bb..bbbccc..bbbb......",
+          "....bb........bbbb..........",
+          "...b........................",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Phrase vine",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A short vine unfurls one curved leaf then rests",
+      "rest_pose": "Leaf open",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M07",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "............c.............",
+          "......a....ccc....a.......",
+          "......aaaaccaccaaaa.......",
+          "......a....cbc....a.......",
+          "......aaaaaabaaaaaa.......",
+          "......a.....a.a...a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "......a...........a.......",
+          "......aaaacbbbcaaaa.......",
+          "......a....bbb....a.......",
+          "......aaaaaabaaaaaa.......",
+          "......a.....a.a...a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "...........c..............",
+          "......a...bb......a.......",
+          "......aaacbbb.aaaaa.......",
+          "......a...cbc.....a.......",
+          "......aaaaabaaaaaaa.......",
+          "......a....a.a....a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "...........c..............",
+          "......a...cc......a.......",
+          "......aaacccc.aaaaa.......",
+          "......a...cbc.....a.......",
+          "......aaaaabaaaaaaa.......",
+          "......a....a.a....a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "......a....aaa....a.......",
+          "......aaaacaaacaaaa.......",
+          "......a....cbc....a.......",
+          "......aaaaaabaaaaaa.......",
+          "......a.....a.a...a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "......a.....ccc...a.......",
+          "......aaaac.cccaaaa.......",
+          "......a....cbc....a.......",
+          "......aaaaaabaaaaaa.......",
+          "......a.....a.a...a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".............c............",
+          "......a.......c...a.......",
+          "......aaaaa..bbcaaa.......",
+          "......a.....bbb...a.......",
+          "......aaaaaaabaaaaa.......",
+          "......a......a.a..a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".............c............",
+          "......a.....bbc...a.......",
+          "......aaaaabbbccaaa.......",
+          "......a.....cbc...a.......",
+          "......aaaaaaabaaaaa.......",
+          "......a......a.a..a.......",
+          "......aaaaaaaaaaaaa.......",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Pitch vine ladder",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A flower head climbs three vine rungs gently",
+      "rest_pose": "Flower on middle rung",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flower petal dips softly before its sway, opens, and settles back above its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M08",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          ".......ab.................",
+          "......bcc.................",
+          "......aba.................",
+          "........a.a...............",
+          "........aa........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......aa..................",
+          "......aa..................",
+          "......aa..................",
+          "........a.a...............",
+          "........aa........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......b...................",
+          ".....bb...................",
+          ".....ab...................",
+          ".......a.a................",
+          ".......aa.........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "......ac..................",
+          ".....bcc..................",
+          ".....ab...................",
+          ".......a.a................",
+          ".......aa.........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........bb................",
+          "......b.bb................",
+          "......a.bb................",
+          "........a.a...............",
+          "........aa........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........aa................",
+          "......b.aa................",
+          "......a.aa................",
+          "........a.a...............",
+          "........aa........bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "..........................",
+          "........bb................",
+          ".......bbb................",
+          ".......bbb.a..............",
+          "........baa.......bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........cc................",
+          ".......ccc................",
+          ".......ccc................",
+          ".........a.a..............",
+          "........baa.......bbb.....",
+          "........b........bbbbb....",
+          "........b........bbbbb....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Rhythm marker leaf",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A leaf nods beside a stationary anchor stone",
+      "rest_pose": "Leaf upright anchor fixed",
+      "loop_quarter_beats": 2,
+      "status": "specimen_only",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M09",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "...........c............",
+          "..........ccc...........",
+          ".........cc.cc..........",
+          "..........cbc...........",
+          ".........aab............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "...........c............",
+          "........................",
+          ".........cbbbc..........",
+          "..........bbb...........",
+          ".........aab............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "..........c.............",
+          ".........bb.............",
+          "........ccbb............",
+          ".........cbc............",
+          ".........aa.............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "..........c.............",
+          ".........cc.............",
+          "........cccc............",
+          ".........cbc............",
+          ".........aa.............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "...........c............",
+          "..........aaa...........",
+          ".........ca.ac..........",
+          "..........cbc...........",
+          ".........aab............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "...........c............",
+          "...........ccc..........",
+          ".........c.c.c..........",
+          "..........cbc...........",
+          ".........aab............",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "............c...........",
+          ".............c..........",
+          "............bbc.........",
+          "...........bbc..........",
+          ".........aa.b...........",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ],
+        [
+          "............c...........",
+          "...........bbc..........",
+          "..........bb.cc.........",
+          "...........cbc..........",
+          ".........aa.b...........",
+          ".......bbbbbbbbb........",
+          "........b..aa.b.........",
+          ".........bbbbb.........."
+        ]
+      ],
+      "concept": "Saved garden pot",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A small potted flower breathes while its rim stays fixed",
+      "rest_pose": "Flower upright in pot",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Flower petal dips softly before its sway, opens, and settles back above its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M10",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "........ab........ba........",
+          ".......bccb.......ccb.......",
+          "........ba.bbb.bbbab........",
+          "..............b.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........ab.......aa.........",
+          ".......bccb......aaa........",
+          "........ba.bbb.baaa.........",
+          "..............b.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".......ab.......bbb.........",
+          "......bccbb.....bb..........",
+          ".......ba..bb..bb...........",
+          ".............bb.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".......ab........ccc........",
+          "......bccbb......cc.........",
+          ".......ba..bb..bb...........",
+          ".............bb.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........ab.........bb.......",
+          ".......bccb........bbb......",
+          "........ba.bbb.bb.bbb.......",
+          "..............b.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "........ab.........aa.......",
+          ".......bccb........aaa......",
+          "........ba.bbb.bb.aaa.......",
+          "..............b.............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".........ab.................",
+          "........bccb.......bbb......",
+          ".........ba.bb..b.bbb.......",
+          "..............bb.b.bb.......",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          ".........ab........cc.......",
+          "........bccb......cccb......",
+          ".........ba.bb..bc.cc.......",
+          "..............bb............",
+          "............ccccc...........",
+          "..............b.............",
+          "..............b.............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Harmony graft",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Two leaves on a retired garden graft sway together",
+      "rest_pose": "Leaves joined on stem",
+      "loop_quarter_beats": 4,
+      "status": "retired_specimen_only",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M11",
+      "width": 30,
+      "height": 8,
+      "frames": [
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab........b......",
+          "....a.a.......a.a....acacaca..",
+          "....aa........aa.....a.a.a.a..",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab........b......",
+          "....a.a.......a.a....aaaaaaa..",
+          "....aa........aa.....a.a.a.a..",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc.......b......",
+          "..aab.......aab.......b.......",
+          "....a.a.......a.a...bbbbbb....",
+          "....aa........aa....ab.b.b....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc.......b......",
+          "..aab.......aab.......b.......",
+          "....a.a.......a.a...cccccc....",
+          "....aa........aa....ac.c.c....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab......bbbbbbb..",
+          "....a.a.......a.a....b.b.b.b..",
+          "....aa........aa..............",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab........b......",
+          "....a.a.......a.a.....ccccccc.",
+          "....aa........aa......c.c.c.c.",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab.........b.....",
+          "....a.a.......a.a......aaaaaa.",
+          "....aa........aa.......a.a.aa.",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....c.........c...............",
+          "...ccc.......ccc........b.....",
+          "..cc.cc.....cc.cc.......b.....",
+          "...cbc.......cbc........b.....",
+          "..aab.......aab.........b.....",
+          "....a.a.......a.a.....bbbbbba.",
+          "....aa........aa......b.b.b.a.",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Garden tool rest",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A tiny rake rests beside two established flowers and tilts",
+      "rest_pose": "Rake grounded flowers upright",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Relevant prop tilts or lifts a pixel, pauses briefly, and settles; stationary surrounding scene is retained.",
+      "pose_count": 8
+    },
+    {
+      "id": "H14",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a...cc..........cca....",
+          "...aa....cb..........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ],
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a...bb..........cca....",
+          "...aa....bb..........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ],
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a..bb...........cca....",
+          "...aa...bb...........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ],
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a..cc...........cca....",
+          "...aa...cc...........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ],
+        [
+          "......aaaccaaaaaaaaaacc.....",
+          ".....a...aa..........cba....",
+          "...aa....a...........c..aa..",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......",
+          "............................"
+        ],
+        [
+          "......aaaccaaaaaaaaaacc.....",
+          ".....a....bb.........cba....",
+          "...aa.....b..........c..aa..",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......",
+          "............................"
+        ],
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a....cc.........cca....",
+          "...aa.....cc.........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ],
+        [
+          "......aaaaaaaaaaaaaaaaa.....",
+          ".....a...ab..........cca....",
+          "...aa....bb..........cb.aa..",
+          ".........c...........c......",
+          "......ccc.c.......ccc.c.....",
+          ".....c.c.cc......c.c.cc.....",
+          "......ccc.........ccc.......",
+          ".....a...a.......a...a......"
+        ]
+      ],
+      "concept": "Settled choir arch",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Two choir creatures nod beneath a joined arch",
+      "rest_pose": "Arch complete creatures upright",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H18",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.........c.....",
+          ".......c..........c.....",
+          "....ccc.c.........c.....",
+          "...c.c.cc.......ccc.....",
+          "....ccc........cc.c.....",
+          "...a...a........cc......"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.........b.....",
+          ".......c..........b.....",
+          "....ccc.c.........b.....",
+          "...c.c.cc.......ccc.....",
+          "....ccc........cc.c.....",
+          "...a...a........cc......"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb........c......",
+          ".......c.........c......",
+          "....ccc.c........c......",
+          "...c.c.cc......ccc......",
+          "....ccc.......cc.c......",
+          "...a...a.......cc......."
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb........c......",
+          ".......c.........c......",
+          "....ccc.c........c......",
+          "...c.c.cc......cbc......",
+          "....ccc.......cc.c......",
+          "...a...a.......cc......."
+        ],
+        [
+          "........................",
+          ".......cc.........c.....",
+          ".......cb.........a.....",
+          ".......c..........a.....",
+          "....ccc.c.......cca.....",
+          "...c.c.cc......cc.c.....",
+          "....ccc.........cc......",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc.........c.....",
+          ".......cb..........b....",
+          ".......c...........b....",
+          "....ccc.c.......cc.b....",
+          "...c.c.cc......cc.c.....",
+          "....ccc.........cc......",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb..........c....",
+          ".......c...........c....",
+          "....ccc.c..........c....",
+          "...c.c.cc........ccc....",
+          "....ccc.........cc.c....",
+          "...a...a.........cc....."
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb..........c....",
+          ".......c...........c....",
+          "....ccc.c..........c....",
+          "...c.c.cc........ccc....",
+          "....ccc.........ccac....",
+          "...a...a.........cc....."
+        ]
+      ],
+      "concept": "Event-result note",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A choir creature releases a small note that settles beside it",
+      "rest_pose": "Note resting beside creature",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "H15",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          ".......c..........c.....",
+          "....ccc.c........c......",
+          "...c.c.cc.......c.......",
+          "....ccc.........ccc.....",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          ".......c..........c.....",
+          "....bbb.c........c......",
+          "...c.b.bc.......c.......",
+          "....ccc.........ccc.....",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          "....bbbc..........c.....",
+          ".....b.bc........c......",
+          "...c....c.......c.......",
+          "....ccc.........ccc.....",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          "....cccc..........c.....",
+          ".....c.cc........c......",
+          "...c....c.......c.......",
+          "....ccc.........ccc.....",
+          "...a...a................"
+        ],
+        [
+          ".......cc...............",
+          ".......cb...............",
+          ".......c........ccc.....",
+          "....ccc.c.........c.....",
+          "...c.a.ac........c......",
+          "....aaa.........c.......",
+          "...a...a........ccc.....",
+          "........................"
+        ],
+        [
+          ".......cc...............",
+          ".......cb...............",
+          ".......c........ccc.....",
+          "....ccc.c.........c.....",
+          "...c....c........c......",
+          ".....b.b........c.......",
+          "...abbba........ccc.....",
+          "........................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          ".......c..........c.....",
+          "........c........c......",
+          "...cccc.c.......c.......",
+          "....cccc........ccc.....",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......cc...............",
+          ".......cb.......ccc.....",
+          ".......c..........c.....",
+          "....ccc.c........c......",
+          "...c.c.cc.......c.......",
+          "....cbc.........ccc.....",
+          "...a...a................"
+        ]
+      ],
+      "concept": "Quiet choir pause",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A choir creature breathes beside a small rest mark",
+      "rest_pose": "Creature upright rest mark fixed",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Creature takes a shallow breath and quiet blink above the existing grounded support.",
+      "pose_count": 8
+    },
+    {
+      "id": "H16",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "......cc.............ab.....",
+          "......cb............bccaa...",
+          "......c.............aba.....",
+          "...ccc.c..........aa........",
+          "..c.c.cc........aa..........",
+          "...ccc.........a..aa.ba.....",
+          "..a...a.......a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          "......cc............aa......",
+          "......cb............aaa.a...",
+          "......c.............aa......",
+          "...ccc.c..........aa........",
+          "..c.c.cc........aa..........",
+          "...ccc.........a..aa.ba.....",
+          "..a...a.......a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          ".....cc.............bbb.....",
+          ".....cb.............bb..a...",
+          ".....c..............a.......",
+          "..ccc.c...........aa........",
+          ".c.c.cc.........aa..........",
+          "..ccc..........a..aa.ba.....",
+          ".a...a........a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          ".....cc..............ccc....",
+          ".....cb.............bcc.a...",
+          ".....c..............a.......",
+          "..ccc.c...........aa........",
+          ".c.c.cc.........aa..........",
+          "..ccc..........a..aa.ba.....",
+          ".a...a........a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          "......cc..............bb....",
+          "......cb............b.bbb...",
+          "......c.............a.bb....",
+          "...ccc.c..........aa........",
+          "..c.c.cc........aa..........",
+          "...ccc.........a..aa.ba.....",
+          "..a...a.......a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          "......cc..............aa....",
+          "......cb............b.aaa...",
+          "......c.............a.aa....",
+          "...ccc.c..........aa........",
+          "..c.c.cc........aa..........",
+          "...ccc.........a..aa.ba.....",
+          "..a...a.......a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          ".......cc...................",
+          ".......cb...........bbb.a...",
+          ".......c............abbb....",
+          "....ccc.c.........aa.bb.....",
+          "...c.c.cc.......aa..........",
+          "....ccc........a..aa.ba.....",
+          "...a...a......a.....accb....",
+          ".............a.......abaa..."
+        ],
+        [
+          ".......cc............cc.....",
+          ".......cb...........bccca...",
+          ".......c............acc.....",
+          "....ccc.c.........aa........",
+          "...c.c.cc.......aa..........",
+          "....ccc........a..aa.ba.....",
+          "...a...a......a.....accb....",
+          ".............a.......abaa..."
+        ]
+      ],
+      "concept": "Local-scale path",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A choir creature steps beside a split leafy path",
+      "rest_pose": "Creature at junction",
+      "loop_quarter_beats": 4,
+      "status": "specimen_only",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "H17",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb....ccc........cb...",
+          "......c....c...c.......c....",
+          "...ccc.caaaa...aaaaaccc.c...",
+          "..c.c.cc....ccc....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb....aaa........cb...",
+          "......c....c...c.......c....",
+          "...ccc.caaaa...aaaaaccc.c...",
+          "..c.c.cc....ccc....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb...bb..........cb...",
+          "......c...c...c........c....",
+          "...ccc.caaa...aaaaaaccc.c...",
+          "..c.c.cc...ccc.....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb...cc..........cb...",
+          "......c...c...c........c....",
+          "...ccc.caaa...aaaaaaccc.c...",
+          "..c.c.cc...ccc.....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc....bbb........cc...",
+          "......cb...............cb...",
+          "......c....c...c.......c....",
+          "...ccc.caaaa...aaaaaccc.c...",
+          "..c.c.cc....ccc....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb.....ccc.......cb...",
+          "......c....c...c.......c....",
+          "...ccc.caaaa...aaaaaccc.c...",
+          "..c.c.cc....ccc....c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb......aa.......cb...",
+          "......c.....c...c......c....",
+          "...ccc.caaaaa...aaaaccc.c...",
+          "..c.c.cc.....ccc...c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ],
+        [
+          "............................",
+          "......cc...............cc...",
+          "......cb.....bbc.......cb...",
+          "......c.....c...c......c....",
+          "...ccc.caaaaa...aaaaccc.c...",
+          "..c.c.cc.....ccc...c.c.cc...",
+          "...ccc..............ccc.....",
+          "..a...a............a...a...."
+        ]
+      ],
+      "concept": "Group garland clasp",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A closed clasp tilts between two choir creatures",
+      "rest_pose": "Clasp closed",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Relevant prop tilts or lifts a pixel, pauses briefly, and settles; stationary surrounding scene is retained.",
+      "pose_count": 8
+    },
+    {
+      "id": "M12",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "............................",
+          "...bbbbbb...bcc.............",
+          "..bb....bb.b...c............",
+          "..bb.cc.bbb.....aab.aab.aab.",
+          "...bccccb.........a.a.a.a.a.",
+          "....bbbb..........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "...bbbbbb...baa.............",
+          "..bb....bb.b...a............",
+          "..bb.cc.bbb.....aab.aab.aab.",
+          "...bccccb.........a.a.a.a.a.",
+          "....bbbb..........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "..bbbbbb...bb...............",
+          ".bb....bb.b..b..............",
+          ".bb.cc.bbb......aab.aab.aab.",
+          "..bccccb..........a.a.a.a.a.",
+          "...bbbb...........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "..bbbbbb...bc...............",
+          ".bb....bb.b..c..............",
+          ".bb.cc.bbb......aab.aab.aab.",
+          "..bccccb..........a.a.a.a.a.",
+          "...bbbb...........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".............bb.............",
+          "...bbbbbb...b..b............",
+          "..bb....bb.b....a...........",
+          "..bb.cc.bbb.....aab.aab.aab.",
+          "...bccccb.........a.a.a.a.a.",
+          "....bbbb..........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "...bbbbbb...b.cc............",
+          "..bb....bb.b....c...........",
+          "..bb.cc.bbb.....aab.aab.aab.",
+          "...bccccb.........a.a.a.a.a.",
+          "....bbbb..........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "....bbbbbb....aaa...........",
+          "...bb....bb.b...c...........",
+          "...bb.cc.bbb....aab.aab.aab.",
+          "....bccccb........a.a.a.a.a.",
+          ".....bbbb.........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          "............................",
+          "....bbbbbb...bbb............",
+          "...bb....bb.b...c...........",
+          "...bb.cc.bbb....aab.aab.aab.",
+          "....bccccb........a.a.a.a.a.",
+          ".....bbbb.........aa..aa..aa",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Amount watering can",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A small watering can nods toward three sprouts",
+      "rest_pose": "Can upright sprouts stationary",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Relevant prop tilts or lifts a pixel, pauses briefly, and settles; stationary surrounding scene is retained.",
+      "pose_count": 8
+    },
+    {
+      "id": "M13",
+      "width": 26,
+      "height": 8,
+      "frames": [
+        [
+          "............c.............",
+          "...........ccc............",
+          "..........cc.cc...........",
+          "...........cbc............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "..........................",
+          "..........cbbbc...........",
+          "...........bbb............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          "...........c..............",
+          "..........bb..............",
+          ".........ccbb.............",
+          "..........cbc.............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          "...........c..............",
+          "..........cc..............",
+          ".........cccc.............",
+          "..........cbc.............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "...........aaa............",
+          "..........ca.ac...........",
+          "...........cbc............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          "............c.............",
+          "............ccc...........",
+          "..........c.c.c...........",
+          "...........cbc............",
+          "...ab.....aab.......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          ".............c............",
+          "..............c...........",
+          ".............bbc..........",
+          "............bbc...........",
+          "...ab.....aabb......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ],
+        [
+          ".............c............",
+          "............bbc...........",
+          "...........bb.cc..........",
+          "............cbc...........",
+          "...ab.....aabb......ba....",
+          "..bcc.....bcc.a.....ccb...",
+          "...ba......baa......ab....",
+          ".aaaaaaaaaaacaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Pitch-target flower",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A flower head leans toward one of three fixed leaves",
+      "rest_pose": "Flower centered",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flower petal dips softly before its sway, opens, and settles back above its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M14",
+      "width": 7,
+      "height": 8,
+      "frames": [
+        [
+          "...a...",
+          "..bbb..",
+          ".bbbbb.",
+          "bb...bb",
+          "bb...bb",
+          ".bbabb.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".bbb.b.",
+          "bb...bb",
+          "bb...bb",
+          ".bbb.b.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".ccc.b.",
+          "bb...bb",
+          "bb...bb",
+          ".ccc.b.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".b...b.",
+          "bb...bb",
+          "bbbbbbb",
+          ".b...b.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".baaab.",
+          "bb...bb",
+          "bb...bb",
+          ".baaab.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".b.ccc.",
+          "bb...bb",
+          "bb...bb",
+          ".b.ccc.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".b.bbb.",
+          "bb...bb",
+          "bb...bb",
+          ".b.bbb.",
+          "..bbb..",
+          "...a..."
+        ],
+        [
+          "...a...",
+          "..bbb..",
+          ".bcccb.",
+          "bb...bb",
+          "bb...bb",
+          ".bcccb.",
+          "..bbb..",
+          "...a..."
+        ]
+      ],
+      "concept": "Merge-reason seed",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A small split seed opens and closes gently",
+      "rest_pose": "Seed showing its seam",
+      "loop_quarter_beats": 2,
+      "status": "registered_candidate_route",
+      "motion_detail": "Existing split-seed seam softly opens and closes within its compact silhouette.",
+      "pose_count": 8
+    },
+    {
+      "id": "H19",
+      "width": 24,
+      "height": 8,
+      "frames": [
+        [
+          "........................",
+          ".......cc....bbbbbbbb...",
+          ".......cb....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......bb....bbbbbbbb...",
+          ".......bb....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          "......bb.....bbbbbbbb...",
+          "......bb.....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          "......cc.....bbbbbbbb...",
+          "......cc.....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ],
+        [
+          ".......cc...............",
+          ".......aa....bbbbbbbb...",
+          ".......a.....b......b...",
+          "....ccc.c....b......b...",
+          "...c.c.cc...aa......b...",
+          "....ccc...aa.bbbbbbbb...",
+          "...a...a................",
+          "........................"
+        ],
+        [
+          ".......cc...............",
+          "........bb...bbbbbbbb...",
+          "........b....b......b...",
+          "....ccc.c....b......b...",
+          "...c.c.cc...aa......b...",
+          "....ccc...aa.bbbbbbbb...",
+          "...a...a................",
+          "........................"
+        ],
+        [
+          "........................",
+          "........cc...bbbbbbbb...",
+          "........cc...b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ],
+        [
+          "........................",
+          ".......ab....bbbbbbbb...",
+          ".......bb....b......b...",
+          ".......c.....b......b...",
+          "....ccc.c...aa......b...",
+          "...c.c.cc.aa.bbbbbbbb...",
+          "....ccc.................",
+          "...a...a................"
+        ]
+      ],
+      "concept": "Tone-map slate",
+      "provenance": "lib/ui_characters.lua choir/register note creature miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A choir creature holds a blank small slate and nods",
+      "rest_pose": "Slate level",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Flag curls inward with anticipation, opens, then eases back; creature feet/perch retain primary scene.",
+      "pose_count": 8
+    },
+    {
+      "id": "M15",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          "............................",
+          ".............ab.............",
+          "....ab......bcc.......ba....",
+          "...bcc.......ba.......ccb...",
+          "....ba................ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          "............aa..............",
+          "....ab.....aaa........ba....",
+          "...bcc......aa........ccb...",
+          "....ba................ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          "............bb..............",
+          "....ab.....bbb........ba....",
+          "...bcc................ccb...",
+          "....ba.......ba.......ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          ".............cc.............",
+          "....ab......ccc.......ba....",
+          "...bcc................ccb...",
+          "....ba.......ba.......ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          "....ab........bb............",
+          "...bcc.......bbb......ba....",
+          "....ba........bb......ccb...",
+          "......................ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          "....ab........aa............",
+          "...bcc.......aaa......ba....",
+          "....ba........aa......ccb...",
+          "......................ab....",
+          "............................",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          "............................",
+          "....ab.......bb.............",
+          "...bcc......bbb.......ba....",
+          "....ba.......bb.......ccb...",
+          "......................ab....",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ],
+        [
+          "............................",
+          "............................",
+          ".............cc.............",
+          "....ab......ccc.............",
+          "...bcc.......cc.......ba....",
+          "....ba................ccb...",
+          "......................ab....",
+          "..aaaaaa...aaaaaa...aaaaaa.."
+        ]
+      ],
+      "concept": "Fragment leaves",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Three small detached leaves settle into a short vine pattern",
+      "rest_pose": "Leaves aligned",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M16",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "....ab...............ba.....",
+          "...bccc..............ccb....",
+          "....ba.ccc........ccbab.....",
+          ".......b..cbbbcccc..c.......",
+          "......b....cccbbb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab..............aa......",
+          "...bccc.............aaa.....",
+          "....ba.ccc........caaa......",
+          ".......b..cbbbcccc..c.......",
+          "......b....cccbbb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab.............bbbb.....",
+          "...bcccc...........bbb......",
+          "....ba.bcc........bc........",
+          "......b..bccb..cccc.c.......",
+          "......b.....cccb.....c......",
+          "......b...............c.....",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab..............cccc....",
+          "...bcccc............ccc.....",
+          "....ba.bcc........bc........",
+          "......b..bccb..cccc.c.......",
+          "......b.....cccb.....c......",
+          "......b...............c.....",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab................bb....",
+          "...bccc...............bbb...",
+          "....ba.ccc........cc.bbb....",
+          ".......b..cbbbcccc..c.......",
+          "......b....cccbbb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab................aa....",
+          "...bccc...............aaa...",
+          "....ba.ccc........cc.aaa....",
+          ".......b..cbbbcccc..c.......",
+          "......b....cccbbb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab......................",
+          "...bccc..............bb.....",
+          "....ba.ccbb......ccb.bbb....",
+          "........bccbbccccbbcbbb.....",
+          ".......b...cc..bb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "....ab...............cc.....",
+          "...bccc..............ccc....",
+          "....ba.ccbb......ccbccc.....",
+          "........bccbbccccbbc........",
+          ".......b...cc..bb...c.......",
+          "......b..............c......",
+          ".....b................c.....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Interlock stems",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "Two curved stems lean into a gentle alternating link",
+      "rest_pose": "Stems linked",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    },
+    {
+      "id": "M18",
+      "width": 28,
+      "height": 8,
+      "frames": [
+        [
+          "............................",
+          ".....a......aba........a....",
+          ".....aaaaaabccaaaaaaaaaa....",
+          ".....a......babbb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a.....aaa.........a....",
+          ".....aaaaaaaaa.aaaaaaaaa....",
+          ".....a.....aaa.bb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "..........bb.b..............",
+          ".....a....bbbb.........a....",
+          ".....aaaaabbbb.aaaaaaaaa....",
+          ".....a.........bb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "...........cc.c.............",
+          ".....a.....cccc........a....",
+          ".....aaaaabccccaaaaaaaaa....",
+          ".....a.........bb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a.......bbb.......a....",
+          ".....aaaaaa.bbbbaaaaaaaa....",
+          ".....a.......bbbb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a.......aaa.......a....",
+          ".....aaaaaa.aaaaaaaaaaaa....",
+          ".....a.......aaab......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a.................a....",
+          ".....aaaaaa..bbaaaaaaaaa....",
+          ".....a.....bbbbbb......a....",
+          ".....a....bbbbb..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ],
+        [
+          "............................",
+          ".....a.......cc........a....",
+          ".....aaaaaaccccaaaaaaaaa....",
+          ".....a......cccbb......a....",
+          ".....a....bb..a..bbbbb.a....",
+          ".....aaabbaaaaaaaaaaaaaa....",
+          ".....abb......a........a....",
+          ".aaaaaaaaaaaaaaaaaaaaaaaaaa."
+        ]
+      ],
+      "concept": "Structure trellis",
+      "provenance": "lib/ui_characters.lua garden two-flower/stem/visitor miniature; new concept-specific prop; v2 adds authored secondary movement of accepted scene fragment",
+      "motion": "A tiny vine climbs a fixed three-post trellis",
+      "rest_pose": "Vine at middle post",
+      "loop_quarter_beats": 4,
+      "status": "registered_candidate_route",
+      "motion_detail": "Small leaf gathers inward, lifts and unfurls, then settles onto its stem.",
+      "pose_count": 8
+    }
+  ],
+  "revision": "Eight-pose animation study; exact accepted v1 rest art and footprint preserved",
+  "base_asset_sha256": "3fc34df50b347d5857ddeacac4b7f8a0dc793f62ffeb9a273626a2497479cf41"
+}

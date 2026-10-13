@@ -1,0 +1,13 @@
+............F........................................
+======================================================================
+FAIL: test_contract_inventory_has_a_fixed_ceiling (test_ui_layer.UiLayerGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_ui_layer.py", line 813, in test_contract_inventory_has_a_fixed_ceiling
+    self.assertEqual(value["ceiling"], 476)
+AssertionError: 476 != 473
+
+----------------------------------------------------------------------
+Ran 53 tests in 36.363s
+
+FAILED (failures=1)

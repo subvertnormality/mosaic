@@ -1,0 +1,13 @@
+............................F....................................
+======================================================================
+FAIL: test_literal_mini_pose_and_stationary_controls_are_independently_checked (test_manual_publication_verify.MiniReadabilityPublicationIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_publication_verify.py", line 546, in test_literal_mini_pose_and_stationary_controls_are_independently_checked
+    with self.assertRaisesRegex(ValueError,'pose phase'):audit.check_mini_samples(wrongrow,wrongclock,events)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 65 tests in 0.125s
+
+FAILED (failures=1)

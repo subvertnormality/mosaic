@@ -1,0 +1,18 @@
+{
+  "changes": [
+    {
+      "file": "lib/ui_live.lua",
+      "before": "c97d278387c3c5f52e5af66ae6b2cb6f5a8be749743975fb49e1f5d2ef5ce56b",
+      "after": "bbdee8cf4cef9eedac03bf435095b0324fee31d6fcb81714bc6d7a06e54242ab",
+      "review": "Preserves reviewed owner routing/shared Strategy/miniature beat sampler. Bounded truthful P02 hint correction removes inactive K3 APPLY; E3 immediate option edit and K3 no-action handlers unchanged. Existing unrelated footer hints and rendering geometry unchanged."
+    },
+    {
+      "file": "manual/features/reference-pattern.yaml",
+      "before": "03d48e5fb111831c11818bfd52c77c8db1b5242871af3aad363e245b1c9a3c14",
+      "after": "b8262eebc6c6981e5ee4bcb793c07c337353481dea7c625372cb6d4327a9b2fa",
+      "review": "Current YAML intended manual explicitly states E3 saves Tresillo amount immediately, K3 has no apply action, grid re-prime updates preview and grid painting commits pattern; current historical bindings preserved separately. P02 fresh capture remains pending."
+    }
+  ],
+  "model_or_renderer_changed": false,
+  "runtime_export_changed": false
+}

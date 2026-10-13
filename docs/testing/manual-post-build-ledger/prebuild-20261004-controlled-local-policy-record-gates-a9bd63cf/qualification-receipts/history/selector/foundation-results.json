@@ -1,0 +1,413 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "MERGE MODES CH01",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "DEVICE CH01",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "merge_shape",
+    "channel": 1
+  },
+  {
+    "kind": "screen-header",
+    "expected": "MERGE SHAPE CH01",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "RHYTHM CH01",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "MERGE MODES CH01",
+    "matched": true
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Strategy",
+    "value": "FOUNDATION",
+    "matched": true,
+    "observation_index": 31,
+    "frame_sha256": "b6965d9582cb98be0d946ce3c58d6b07b7e18bb69ace3acbeb4d927fb4a13b20"
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Active",
+    "value": "FOUNDATION",
+    "matched": true,
+    "observation_index": 32,
+    "frame_sha256": "4ff6da6fb437da3fdcaa5639e879596b922852aab3fae0f67440bf264d726cb3"
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "merge_shape",
+    "channel": 1
+  },
+  {
+    "kind": "screen-header",
+    "expected": "MERGE SHAPE CH01",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "RHYTHM CH01",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        7,
+        4
+      ]
+    ],
+    "expected": [
+      15,
+      15,
+      15,
+      15,
+      15,
+      15
+    ],
+    "actual": [
+      15,
+      15,
+      15,
+      15,
+      15,
+      15
+    ]
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Add amount",
+    "value": "100",
+    "matched": true,
+    "observation_index": 38,
+    "frame_sha256": "d7b4a63f097d220c317839acbe0ab216a9102664666d0a16aa3d03a25a7d30ca"
+  },
+  {
+    "kind": "selected-field",
+    "layout": "detail",
+    "label": "Add accent",
+    "value": "70",
+    "matched": true,
+    "observation_index": 39,
+    "frame_sha256": "73aa69c004f16cf2869abab3583a4cf655e5283e57eba81cf63414270d7294b3"
+  },
+  {
+    "kind": "documentation-frame",
+    "name": "images/merge-shape-foundation.png",
+    "sha256": "bfef1e487a4d957d65587e682bdeeaf60f793603c5d7f56cbf2edb472e6baca4",
+    "passed": true,
+    "validation": "pinned-v2-mini-pose",
+    "page": "M03",
+    "baseline_sha256": "49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463",
+    "atlas_sha256": "4b1623dd87cabd4a98b3ed5d2e47b32455221c360054f1eb5dd8783eb5278c46",
+    "matching_poses": [
+      0
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          70
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "foundation-physical-workflow",
+    "passed": true
+  },
+  {
+    "kind": "documentation-frame",
+    "name": "manual/M-MERGE-FOUNDATION-001/foundation-protected-and-added/accented-phrase",
+    "sha256": "0d6241e1636dcf3fa7489354a8458699d15f8415a1330d06bc838ad2321e0bb7",
+    "stable_rows": 55,
+    "stable_sha256": "bfef1e487a4d957d65587e682bdeeaf60f793603c5d7f56cbf2edb472e6baca4",
+    "grid_sha256": "3a069757ddb1952c09693542a3446df2aa0824131e5c8cda214d411eaf1b8726",
+    "semantic_assertions": 22,
+    "passed": true,
+    "assertion_index": 21,
+    "assertion": {
+      "kind": "foundation-physical-workflow",
+      "passed": true
+    },
+    "assertion_sha256": "312e6996dc1ecef1c3219382e0a4c78c51e58fc7f809ac484408325e87e06c3c",
+    "trace_sha256": "dde51d28d8e47d578c2a6c04ef5b8f9d74b52f91c9ee279d8061eab49fa5fae9",
+    "session_ordinal": 0
+  }
+]

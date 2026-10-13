@@ -1,0 +1,21 @@
+Renderer source SHA256 07acc3a2fb864cbb2a0b7aa8a56a67aad9b819769fa51870ae6c9dee47107e40
+node:internal/assert/utils:281
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: Underscores inside source URLs must remain literal
+    at Object.<anonymous> (/home/andy/mosaic-manual-1.4.0/tests/behaviour/manual_inline.cjs:5:164)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v20.20.2

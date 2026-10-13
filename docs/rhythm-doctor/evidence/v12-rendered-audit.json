@@ -1,0 +1,10 @@
+{
+  "failures": [],
+  "held_full_mix": {
+    "count": 42,
+    "unique_pcm": 42
+  },
+  "manifest_sha256": "b7a804939e53f64858296c1073a8060bd14c9a36967f758438936474bb04dbdf",
+  "passed": true,
+  "scope": "rendered fixture inventory; not transcription quality"
+}

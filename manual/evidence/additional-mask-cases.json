@@ -1,0 +1,37 @@
+{
+  "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f",
+  "report": {
+    "complete_regression_run": false,
+    "lanes": {
+      "real-time": [
+        {
+          "case": "M-MASK-017",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/real-time/M-MASK-017",
+          "results_sha256": "c0930cf9fe6f23a4690db408a0c6cfff6d14686192dc2f07f816e386717c5267"
+        },
+        {
+          "case": "M-MASK-021",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/real-time/M-MASK-021",
+          "results_sha256": "b786b6688954c2345133a041cd3e211d784176274a582d2ef3685c554ddc24d4"
+        }
+      ],
+      "controlled-experimental": [
+        {
+          "case": "M-MASK-017",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/controlled-experimental/M-MASK-017",
+          "results_sha256": "70f8dc208a59cd46a5e302a410d1705a6a0ec2471317eb517066c25a4f116bc0"
+        },
+        {
+          "case": "M-MASK-021",
+          "passed": true,
+          "path": "/home/andy/mosaic-manual-runs/528eba94c5d5496eaa195d29aff3371f/controlled-experimental/M-MASK-021",
+          "results_sha256": "9112687ef38a5e1ebb9787681baa700c9d4313c684147cfb75141f7a78677f6c"
+        }
+      ]
+    },
+    "passed": true
+  }
+}

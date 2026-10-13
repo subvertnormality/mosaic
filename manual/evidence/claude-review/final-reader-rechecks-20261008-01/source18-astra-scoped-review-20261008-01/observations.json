@@ -1,0 +1,239 @@
+{
+  "assets": {
+    "generated/reader-index.json": "300ddfae16cf5ee485e1f90da797715dceba0bd74a208477a5f63f6011954c52",
+    "book.js": "11f6a0c42082d6f0f79da17d49f88ffee0813247f7e5d9fea878518127a830a4",
+    "manual.js": "474512b2f321cd47f8601714f8f9c8df5aadfac1830745427c31a58c7700f436",
+    "manual.css": "1afdc10e38a816dd58bd8b3a714ce38864271384b23a1897edc33ade6196e309",
+    "index.html": "2e97c18328141a080c7d24d7ce81c1d51a7c69523d3243a63e7aa0d59acaa482",
+    "../cheat_sheet.html": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+  },
+  "data": [
+    {
+      "label": "picker-options-1440",
+      "options": [
+        "A loaded map follows the selected or fixed channel",
+        "Start from the chosen scale degree",
+        "Rotate the keyboard voicing",
+        "Apply the scale transpose to live input"
+      ]
+    },
+    {
+      "label": "picker-degree-1440",
+      "hash": "#midi-controller-options/keyboard-honour-degree",
+      "steps": [
+        {
+          "counter": "Map white keys and compare C major with natural minor · 1/5",
+          "title": "Starting point"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 2/5",
+          "title": "Turn on Map scale to white keys"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 3/5",
+          "title": "Play the white keys in C major"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 4/5",
+          "title": "Choose natural minor in the Scale Editor"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 5/5",
+          "title": "Play the white keys in natural minor"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 1/6",
+          "title": "Set degree II"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 2/6",
+          "title": "Set rotation 2"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 3/6",
+          "title": "Set global transpose +2"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 4/6",
+          "title": "Nothing applies yet"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 5/6",
+          "title": "Turn on Honour scale degree"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 6/6",
+          "title": "Start from the chosen scale degree"
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "picker-rotation-1440",
+      "hash": "#midi-controller-options/keyboard-honour-degree-rotation",
+      "steps": [
+        {
+          "counter": "Start from degree II with rotation and transpose set · 1/2",
+          "title": "Starting point"
+        },
+        {
+          "counter": "Start from degree II with rotation and transpose set · 2/2",
+          "title": "Turn on Honour scale rotations"
+        },
+        {
+          "counter": "Enable rotation and compare the keyboard notes · 1/1",
+          "title": "Rotate the keyboard voicing"
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "first-loop-owner-1440",
+      "hash": "#first-sound/create-your-first-loop",
+      "steps": [
+        {
+          "counter": "Choose the output and enter four attacks · 1/2",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Choose the output and enter four attacks · 2/2",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Assign the range and set the sound · 1/3",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Assign the range and set the sound · 2/3",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Assign the range and set the sound · 3/3",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Play the loop and check its MIDI result · 1/1",
+          "title": "Create a four-step loop from an empty project"
+        }
+      ],
+      "width": 1440,
+      "docWidth": 1440
+    },
+    {
+      "label": "picker-options-390",
+      "options": [
+        "A loaded map follows the selected or fixed channel",
+        "Start from the chosen scale degree",
+        "Rotate the keyboard voicing",
+        "Apply the scale transpose to live input"
+      ]
+    },
+    {
+      "label": "picker-degree-390",
+      "hash": "#midi-controller-options/keyboard-honour-degree",
+      "steps": [
+        {
+          "counter": "Map white keys and compare C major with natural minor · 1/5",
+          "title": "Starting point"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 2/5",
+          "title": "Turn on Map scale to white keys"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 3/5",
+          "title": "Play the white keys in C major"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 4/5",
+          "title": "Choose natural minor in the Scale Editor"
+        },
+        {
+          "counter": "Map white keys and compare C major with natural minor · 5/5",
+          "title": "Play the white keys in natural minor"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 1/6",
+          "title": "Set degree II"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 2/6",
+          "title": "Set rotation 2"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 3/6",
+          "title": "Set global transpose +2"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 4/6",
+          "title": "Nothing applies yet"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 5/6",
+          "title": "Turn on Honour scale degree"
+        },
+        {
+          "counter": "Set degree II and verify only that option applies · 6/6",
+          "title": "Start from the chosen scale degree"
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "picker-rotation-390",
+      "hash": "#midi-controller-options/keyboard-honour-degree-rotation",
+      "steps": [
+        {
+          "counter": "Start from degree II with rotation and transpose set · 1/2",
+          "title": "Starting point"
+        },
+        {
+          "counter": "Start from degree II with rotation and transpose set · 2/2",
+          "title": "Turn on Honour scale rotations"
+        },
+        {
+          "counter": "Enable rotation and compare the keyboard notes · 1/1",
+          "title": "Rotate the keyboard voicing"
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    },
+    {
+      "label": "first-loop-owner-390",
+      "hash": "#first-sound/create-your-first-loop",
+      "steps": [
+        {
+          "counter": "Choose the output and enter four attacks · 1/2",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Choose the output and enter four attacks · 2/2",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Assign the range and set the sound · 1/3",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Assign the range and set the sound · 2/3",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Assign the range and set the sound · 3/3",
+          "title": "Create a four-step loop from an empty project"
+        },
+        {
+          "counter": "Play the loop and check its MIDI result · 1/1",
+          "title": "Create a four-step loop from an empty project"
+        }
+      ],
+      "width": 390,
+      "docWidth": 390
+    }
+  ],
+  "errors": []
+}

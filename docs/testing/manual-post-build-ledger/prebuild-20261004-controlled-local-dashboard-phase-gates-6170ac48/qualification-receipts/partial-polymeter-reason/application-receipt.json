@@ -1,0 +1,69 @@
+{
+  "before_ledgers": {
+    "docs/ui-reimplementation/current-source-review.json": "f89e402cfdb5bac9417045d07b75c5774fb56a55bf667ce77e4d783c6f9ed35e",
+    "docs/ui-reimplementation/source-inventory.json": "d7ce9161ccb379c1ac63081e009a7ceaec6fa38616937d7e78b1a2a92d7004d7",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "3395071c88fd9b6ed0c4f9f6c21019d66a793a0ee788d3d07214daf69dd2ca5a"
+  },
+  "after_ledgers": {
+    "docs/ui-reimplementation/current-source-review.json": "3e7efb84dec94adc1a7dfea8e698c01f41e70c1a97ef4b8da2c3e707f4042fe4",
+    "docs/ui-reimplementation/source-inventory.json": "8a3e157581e534fa6e1add8666ba3f3e67aad05c67afcaa5c3b36ef7843ec0a3",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "89cfbda95f736b4a6c913346b5d05f3c444e02e1719df16e3b929d48785ba364"
+  },
+  "bounded_receipt": {
+    "path": "/home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/bounded-review-receipt.json",
+    "sha256": "e8cd0afa8f186d8fdb74266afb16be717e5110f0fdf33edc5afa5bd48f423ad2"
+  },
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "docs/ui-reimplementation/tools/refresh_source_inventory.py",
+        "--review",
+        "docs/ui-reimplementation/current-source-review.json"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/strict-1.log",
+      "sha256": "83df7e932109b64aae88f776dee0bf6b6abe55ea3c710cfb85e2bf3cd27a2a7c"
+    },
+    {
+      "command": [
+        "python3",
+        "docs/ui-reimplementation/tools/refresh_source_inventory.py",
+        "--review",
+        "docs/ui-reimplementation/current-source-review.json",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/strict-2.log",
+      "sha256": "83df7e932109b64aae88f776dee0bf6b6abe55ea3c710cfb85e2bf3cd27a2a7c"
+    },
+    {
+      "command": [
+        "python3",
+        "docs/ui-reimplementation/tools/validate.py"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/strict-3.log",
+      "sha256": "e689a30017065f041e8fd6eb76a56415876e025c4083369297a5172df1ec7848"
+    },
+    {
+      "command": [
+        "python3",
+        "tests/behaviour/reconcile_manual.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "/home/andy/mosaic-manual-build-operators/partial-polymeter-reason-source-review-fa69462ab2cd4c41b4626ad53aead779/strict-4.log",
+      "sha256": "babe161140943cb9ce4a67dd09d31dc5be86e37ac4641f8872a786820880043d"
+    }
+  ],
+  "counts": {
+    "files": 78,
+    "manual_sections": 125,
+    "callbacks": 64,
+    "branches": 164
+  },
+  "whole_manual_complete": false,
+  "current_native_qualification": false,
+  "authority_activation": false
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35886060810",
+  "source_run_id": "35886060810",
+  "source_revision": "959c814f464a004f9eed92295b1bf01452db60cc",
+  "case": "M-HARMONY-PATTERN-CLOCKS-001",
+  "lane": "real-time",
+  "clock_mode": "real-time",
+  "side": "before",
+  "profile": "base-midi",
+  "targeted_report_sha256": "a70704350745417c9b923bdc1321ec01cce402c65300c5dbfdda0a5d2cbd22ed",
+  "repeatability_report_sha256": "d6a18e44dc14dfdc8aaf289e386b07c3a6206366ead19649802e829de04cd00c",
+  "manifest": "M-HARMONY-PATTERN-CLOCKS-001/real-time/before/b812bc59dafd4d40a51b0380afaaca88/manifest.json",
+  "manifest_sha256": "4f3e74bc187bbd815b07b6c17e922220786dd14f82479fef95d13cdaae22df26",
+  "evidence_sha256": {
+    "recipe.json": "1fd280702c1dafd198e077f35446afbd07c0d36c2545cd7e0fee906aa0c97ec9",
+    "results.json": "54e2e4ba58019ca92126fd3d86cfe223372e9cbac4d2f73b8d74526e0f41bf69"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI"
+}

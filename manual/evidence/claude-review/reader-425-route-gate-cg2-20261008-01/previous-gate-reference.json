@@ -1,0 +1,8 @@
+{
+  "status": "preserved",
+  "manifest_sha256": "8620ce3df63d35489e9473257313117a3d56c37f034d2f75cc2f986e488829f9",
+  "report_sha256": "caa9973c061f75f384466f23bd59ffe3e9775bb48a9ff317572184ca39a78653",
+  "receipt_sha256": "17b60c7f2b1c571ffd52002e17bef1111d6f5421c9bdb0b42f446cc259618ca2",
+  "adopted_in": "../reader-425-route-gate-20261008-01/",
+  "note": "Prior CSS v2 report and diagnostics remain unchanged."
+}

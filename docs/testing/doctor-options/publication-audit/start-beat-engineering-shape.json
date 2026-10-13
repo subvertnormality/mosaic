@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "scope": "read-only historical engineering native shape validation; not final current-source qualification",
+  "report": "/home/andy/mosaic-doctor-options-runs/4a991148aa4042b8a1b875631aa3ed23/report.json",
+  "report_sha256": "d04881bd155cba2f7e57e42ba10a53292460a286d78415a46ca5aff237183e65",
+  "auditor_sha256": "d4e41ac4f48322cfc70b45e9e1e2134a89f3b4a6f582829c1e3b0a4c89ec63e5",
+  "passed_scoped_checks": [
+    "exact four immutable completed analysis envelopes revisions0..3",
+    "Manual120 full capture regular beat grids origins0\u219224000\u21920",
+    "same actual WAV/project/generation/candidates/detector",
+    "exact twelve current checkpoint contracts",
+    "all twelve own-bound native framebuffer selectors independently decoded"
+  ],
+  "full_current_source_qualification": false,
+  "seven_role_qualification": false,
+  "hardware_timing_equivalent": false
+}

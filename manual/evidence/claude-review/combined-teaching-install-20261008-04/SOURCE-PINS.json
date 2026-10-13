@@ -1,0 +1,227 @@
+{
+  "root": "/home/andy/mosaic-manual-1.4.0",
+  "publication_root": "/home/andy/mosaic-manual-build-operators/final-publication-source-snapshot-20261008-01/checkout",
+  "preview_url": "http://localhost:8785/manual/",
+  "file_sha256": {
+    "manual/generated/book.json": "38beead5d88faa3a5aa1a5a0fc27c25796308c4d84bd831060035fe5085ef89f",
+    "manual/generated/reader-index.json": "73dc1ddb8952ca590cb9d670ee3a145ee460a68ec27f3259c1a08e28283323ca",
+    "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+    "manual/manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+    "manual/manual.css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+    "manual/index.html": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+    "tests/behaviour/manual_browser.cjs": "a9cc707477dff0d2d48c24e8ebdb44ee90b9ebc15f0b4e07b0c11db080c38e6d"
+  },
+  "authoring_identity": {
+    "sha256": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+    "files": {
+      "manual/audio-scenes.yaml": "ffc775971ce1fa3bfca8ba55c1059798519cd4a82241eb8827e9852afeebcd74",
+      "manual/book.schema.json": "f08c18a674c4342b4f6882845ac5195a984890cae884d87aac0528ebf48ec28c",
+      "manual/book.yaml": "8d45d9d748445d12488e8fc445ac05b6aaaa9c1213cc98677db183467b054508",
+      "manual/caption-overlays.schema.json": "b72f52b763811d137295e7fe31f4d5011dc5bac19d5eba802bd06f22d631d83d",
+      "manual/case-scenes.schema.json": "37ce8573ffef7ea4192b8bd2871d726eebca0edc04b24cfbae6fce2eb8f88c95",
+      "manual/course.schema.json": "73b6b821c6842dc0d7c762c074f16c3ba4e983469ee4d4493cf62f475a962885",
+      "manual/course.yaml": "ece0097f7768526557ea6abbbc150cfa423e6928fff4ad2c2a9083c60947636a",
+      "manual/doctor-auto-probe.yaml": "3019af18e689926b7a75ff189747149a52d28b20d6034ae5dfd596aa1ff831f2",
+      "manual/doctor-bindings.schema.json": "6b5003c89a1714060b951c1f95cf064ad61e13482e0771b18265c59135018202",
+      "manual/doctor-scene.schema.json": "18c3d08438a3dd907985216afc83e8873b815ce148c64617238d061623779504",
+      "manual/doctor-scene.yaml": "86c2c7621acc985137710fa49ed24beb6ea2a489d9b99f5ef02e557f93fb7bd1",
+      "manual/features/cookbook.yaml": "40e2bc5823c8f256c46ed66d039bbb496962e4285ff1832b30ac8c1a0d4cdc26",
+      "manual/features/first-sound-capture.yaml": "6e1baca237a328f2e14471e77c53aca6e72e6f71246ae22e11cfe9cfcfd628ea",
+      "manual/features/masks.yaml": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de",
+      "manual/features/reference-channel.yaml": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d",
+      "manual/features/reference-developer.yaml": "9c09ef25a0116b3aa31146e1245f96d73c57fd6b86edc4c056dd68d4f7681796",
+      "manual/features/reference-learn.yaml": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7",
+      "manual/features/reference-locks.yaml": "54dae03014a823c2c68965849b2a9c97d85927c86c2dc106e5a195f22fb22189",
+      "manual/features/reference-musical.yaml": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7",
+      "manual/features/reference-options.yaml": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff",
+      "manual/features/reference-pattern.yaml": "9db36b0d0150a94f45bd65964eeaa1550e065067cf2972548c22180e4fe80829",
+      "manual/features/reference-scale.yaml": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38",
+      "manual/features/reference-song.yaml": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9",
+      "manual/features/reference-workflow.yaml": "ffc2fb674ab034d4608f301296fd6bb7cbe3ad1d22d3799ebc35db2525788055",
+      "manual/features/scenes-doctor-scenes.yaml": "4e0635a7bcf6ccee4841bd7fe2462f23a9528760038cc77f7bd875b66b2002ee",
+      "manual/features/scenes-player-routes.yaml": "4d091759c5e5eec9d7fe2a258686619e6674b46e57aa80457a62de7f24c94fba",
+      "manual/features/scenes-reference-closure-scenes.yaml": "fb5e550fcf80da49c3d2ce61424ca42aa893bba46c3aad570d0128b3cb00f954",
+      "manual/features/scenes-reference-course-scenes.yaml": "9f900e55a85181196c528244dff0af2ea536ce41416e8acb0ca49438fa5d9eda",
+      "manual/features/scenes-reference-devices-scenes.yaml": "ade0fd48f565705b66922ca734196947da0519e2aed7e9349b24fe86bb80fd89",
+      "manual/features/scenes-reference-extra-scenes.yaml": "5b8c15b0db80f77e404c529576d22449ac146badfbb68277605f649985397b1f",
+      "manual/features/scenes-reference-lead-panic-scenes.yaml": "f6a7c9a84ee93a533329085e39321113c993eabefbd161f99bf426e456aa636e",
+      "manual/features/scenes-reference-locks-scenes.yaml": "de05e50cfab86766d31ffafb18656b0218b15ec50a03e5879b717a8aad0ed7ed",
+      "manual/features/scenes-reference-merge-strategy-scenes.yaml": "64230b9af519eebd3edee2585bd9f40f07ba77db408f6ef39dd60def43f8bff7",
+      "manual/features/scenes-reference-modulation-macro-midi-modulation-scenes.yaml": "bc146b496bbed7bee592945b72346465c4c2fc733e2e2b1c96b2771af700f08c",
+      "manual/features/scenes-reference-musical-scenes.yaml": "cb1e082dc2b9a1ce41e6630748cc15cd10b6848dda8737515b07ae5124472c32",
+      "manual/features/scenes-reference-native-public-gaps-scenes.yaml": "0188decfd8350430c8ef718ac75703aea0ae577d410cbe5b81bb8f18624329fb",
+      "manual/features/scenes-reference-nested-scenes.yaml": "b5273d1906cd887fdafae6b098d488429b6e9cd2ccd2920dfc2f9927d082bc36",
+      "manual/features/scenes-reference-options-midi-modulation-scenes.yaml": "70c6163739aee6d751003c012bfd8f69bd82cbe0d5e6aa72055b4e3c63e2068e",
+      "manual/features/scenes-reference-options-scenes.yaml": "f9032faa6dceed963792e15077b55075633bc87157a0e7f8c3de283adf43af90",
+      "manual/features/scenes-reference-parameters-scenes.yaml": "160458894f85050db1873f8bf9ccc3cc2bdfef8c2d9ed7cc4bb0fcd635f88fcc",
+      "manual/features/scenes-reference-player-apply-manual-player-ui-scenes.yaml": "9efda2febd7aa8492dd003d882ccc3857503c5709ac62d1e5fb9d52743cad603",
+      "manual/features/scenes-reference-polymeter-scenes.yaml": "3913fa61ca62a015ea8a733089086ff1543c784dcd571d1c86730080d99e1402",
+      "manual/features/scenes-reference-readability-scenes.yaml": "14e83f697dded87e470b4592a292421ddc00dd3e46838dbb830a8fdf2f9c0e99",
+      "manual/features/scenes-reference-reason-swing-scenes.yaml": "ff1a92d3c930ba774ce6e6a7b8b2f06be3bec9c34bfd3115b584aba67975923b",
+      "manual/features/scenes-reference-remaining-scenes.yaml": "a24023322d82e3622490387a60c2d68e8d729b4e5a42a634b8acb8eb1aea06bf",
+      "manual/features/scenes-reference-save-dialog-scenes.yaml": "224be97ba362a57afaabb2143357e75f4480631b2eddbf43c123f1b64c163883",
+      "manual/features/scenes-reference-scenes.yaml": "55e88fa730bc3a057f9d8a754563c4373aee48b096ee544fc73cbe5c38b69e6e",
+      "manual/features/scenes-reference-vertical-list-scenes.yaml": "aff640ea9fec854f7e43919531bd4767b19123ff2c163aa47ec877e686416dbc",
+      "manual/features/scenes-reference-workflow-scenes.yaml": "b2ad6c95acc0fd44ae5da4e0645e46df9acbe3e0424b9a42d3407c56437deb4d",
+      "manual/features/tutorials.yaml": "3ec9a8d4aaadbd33eef48d19d256202022d2aa801c157ea9719a9b8c960484c8",
+      "manual/player-routes.yaml": "7af32e3fb6c9c2e612a111ad899aad8c91c456f5d79f712e2d0db3b967b0cde1",
+      "manual/recordings.schema.json": "e4b6e44f4924a9f608874b70e601ad686aba6eed740bacbd46239b80a968d665",
+      "manual/recordings.yaml": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585",
+      "manual/scene-captions.yaml": "78400a80e122d38f85333bc1230ecc1320c2d6dfcaae25cc67bf8d0f9a475d8b",
+      "manual/scene-plans-closure.yaml": "7e809330e31c747b17475d9b5f5c3fa432f1fee1d912cc036b595d3e485ef396",
+      "manual/scene-plans-course.yaml": "5cf1f212b80690ca5a9bd5b338fc2872668109c33dd343d969fb54fb7a114d7a",
+      "manual/scene-plans-devices.yaml": "cc8cd91fadadd47434813dd1bc95acb229df14604d20940578620f6af7ff6fe4",
+      "manual/scene-plans-extra.yaml": "45b16f92fd210a8d050589e94b52b8fc7dd781b78d50ad1f604a1c1c3e8b23af",
+      "manual/scene-plans-lead-panic.yaml": "775946887ee24f80a984bb3cb86571c842fb0ac7a1a51cd1bcf63f727f93bd69",
+      "manual/scene-plans-locks.yaml": "8530b991590a307435f9644c7a982dbd355d5c425d425c507eea9b7897577f7e",
+      "manual/scene-plans-merge-strategy.yaml": "5e27d4bb47db5878b3e81fc0a05471316f9f1cebf6e0fac328926640c0733d7d",
+      "manual/scene-plans-modulation-macro.yaml": "38d65cb9c80c9e3ca497d62e0a73204d56bf86af45705174903a4a3a2d39d3da",
+      "manual/scene-plans-musical.yaml": "2c71837ab8fd3ac0f488695312ca3907b831895fcc98389b7bfd0d775e7e0c0c",
+      "manual/scene-plans-native-public-gaps.yaml": "a5533f37f9732633dae523b22717f53e34be3d9578dedee90f7ea42460dfd1c5",
+      "manual/scene-plans-nested.yaml": "a90e746d815291ba05c90878fe05e4c35ef852a2d0f7e565913ecf251fb7c999",
+      "manual/scene-plans-options.yaml": "3443477b6c8077671d97b94d0b9f1f2088de61fb0c246a51d18e9423a1a59f9e",
+      "manual/scene-plans-parameters.yaml": "d73887b591a3a27547d5082c0467e0ddcae6717262ff2b02f145100436e73613",
+      "manual/scene-plans-player-apply.yaml": "48f18e540e571f5e7e0bc381552eff71f724c2a306d8decc33b05b7c674bbf57",
+      "manual/scene-plans-polymeter.yaml": "c4fcf113c0b53335a71e39b12dbfc3ed511031e5605781b6b78bbf3c77cc1ef9",
+      "manual/scene-plans-readability.yaml": "da69a97e1b4f9fa83f6acca1555818b36c162524e2324ec5f4fb74fa985839a6",
+      "manual/scene-plans-reason-swing.yaml": "06049283494dd3c6772dc28881da6401603bd99879e3e244088d4b7d62eeb118",
+      "manual/scene-plans-remaining.yaml": "89b2be9b058479a238d9fc6f3942e50be2ac94c69260c3f92af690fda6f6927a",
+      "manual/scene-plans-save-dialog.yaml": "e1a7a6aafc5730805131177bf29e8b0d50b850fe7ca0926828e2512927af86ec",
+      "manual/scene-plans-vertical-list.yaml": "19bdc88cf4053a6709b2d50c4b71e9de3db8315590486362b3820addaed25d33",
+      "manual/scene-plans-workflow.yaml": "5e45b0b6426c8c4596e210320182eef02169590494374e4c98e2da7cedd2bdd7",
+      "manual/scene-plans.yaml": "b7737e5eb4d56ec27b695b9050fe34e85ebd0c08681ee9bf9e18a2f3336ebb9e",
+      "manual/scene-starting-states.yaml": "932f867400610f255ee7ffd0d18b61695dba2126bae94f798e6d66cb647bfbd2",
+      "manual/schema.json": "3862a55f728f42823fc869fd88eb3cc449aaa71d78ca9137c3059eadfee471c3",
+      "manual/screen-output.schema.json": "c9692b20a25f6d40ffeecb1ae50dc4d2a9b0b08f38c9200dc8dcb62c84367349",
+      "manual/teaching-binding.schema.json": "9479b0e42726853a62cfb62313b897fd898a1b411cc1d9a306a5ca5413332b4d"
+    }
+  },
+  "qualification_sha256": "9d79377817a028432c4534f27d77b5753454acdbe20a0d07aa0811bdbe5ff084",
+  "qualification": {
+    "manifest_sha256": "998b737acc84818948c390c00c727f7766c92f38303e9edb8074c34a5fb152d3",
+    "candidate_files": {
+      "manual/features/cookbook.yaml": {
+        "before_sha256": "5f5935095bd5ad13849bfede00671c213231ebc490ef3edacd6d2505e2091ba0",
+        "after_sha256": "40e2bc5823c8f256c46ed66d039bbb496962e4285ff1832b30ac8c1a0d4cdc26"
+      },
+      "manual/features/masks.yaml": {
+        "before_sha256": "b1b5e01e17479e813d51e6931fd510424fe7f6d6f1a34a6c072b0c10a52f8052",
+        "after_sha256": "e0c6477d95a8ae4a9c392e3254aed08c2ddac2a5348ccb2ae658e55d64ca09de"
+      },
+      "manual/features/reference-channel.yaml": {
+        "before_sha256": "f1959ad4521ab1df2703b6d73ee2d45ad33571ba60e2f3e24c68c7a7c1c098bd",
+        "after_sha256": "8e0a98e2130e0231f13f23ddb67a238db2c661e7c8af32497846f4911e5cf03d"
+      },
+      "manual/features/reference-learn.yaml": {
+        "before_sha256": "959078d310c11f317bde7bb784e7f2f1a40df75f7662da38f93ca9984c220ead",
+        "after_sha256": "3d931ff2485f63a2c59da467c487509444e20aa181384a90de5e22aa1eead7c7"
+      },
+      "manual/features/reference-locks.yaml": {
+        "before_sha256": "79e92135fb4a8ca5ce4ce8b5d33c9fe1bd03e68e660d8f0da1e6329f862d5404",
+        "after_sha256": "54dae03014a823c2c68965849b2a9c97d85927c86c2dc106e5a195f22fb22189"
+      },
+      "manual/features/reference-musical.yaml": {
+        "before_sha256": "b998d2666b7f7f207cc0da58bcaebbed8dfa31d96dff77bb1250751e0251b600",
+        "after_sha256": "f80117af5cba3ec3e8cf0ef1a9e2ce9ebc7e64357e268d38bc6d74ff610142a7"
+      },
+      "manual/features/reference-options.yaml": {
+        "before_sha256": "bad51a3d8b0637651973b296500d9cd10843599847af3ef1e6848d5af1795134",
+        "after_sha256": "b24772ffd99f0478b432500bc257483372b1336a26b8bffa642024dcfdb7ceff"
+      },
+      "manual/features/reference-scale.yaml": {
+        "before_sha256": "5b7a7a5dffd350a3326c03881688496d62be43e6d8f64925148ed23f1385747e",
+        "after_sha256": "d967833ad4a79be3fd25318fe72d45e5d47fb2f18918835f6b4c7c1b04132f38"
+      },
+      "manual/features/reference-song.yaml": {
+        "before_sha256": "612fcf0de656c7ee07fbd536510d1078adacfb0be06c843a4d627cd7b95eb2cc",
+        "after_sha256": "fad828912328c4349a2111ff2231a83e4cf402cece1bf229e897cd44a9594be9"
+      },
+      "manual/recordings.yaml": {
+        "before_sha256": "d60e5962d3c96b90c46d45c581193660f635e7a395e1f7eb7bdc5b49c2a8d3fe",
+        "after_sha256": "ad32558b242205330a206d1d568f172beefcf11a575dd2327045e90db4406585"
+      },
+      "manual/scene-captions.yaml": {
+        "before_sha256": "40c8d33cabc50a1f292083202c28ff1632790cdce24222d89b087f9c7e56f822",
+        "after_sha256": "78400a80e122d38f85333bc1230ecc1320c2d6dfcaae25cc67bf8d0f9a475d8b"
+      }
+    },
+    "authored_leaf_changes": 58,
+    "preimage_authoring_identity": "80cc81d39ab276c32da0561588cafad4ac3f4123b065043573a78b1483312d46",
+    "staged_authoring_identity": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+    "scene_count": 146,
+    "scene_native_semantic_parity": true,
+    "projection_chunks": 167,
+    "full_validate_projection": true,
+    "retained_midi_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a",
+    "raw_catalogues_and_scene_plans_unchanged": true,
+    "root_audio_scenes_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+    "current_base_rebase_report": "current-base-rebase.json",
+    "save_outcome_derivative_proof": {
+      "source_path": "manual/features/reference-locks.yaml",
+      "source_leaf": [
+        "features",
+        7,
+        "teaching_bindings",
+        0,
+        "teaching_binding",
+        "human_outcome"
+      ],
+      "feature_id": "save-and-load",
+      "lesson_id": "save-named-arrangement",
+      "presentation_metadata_sha256": "7dc2a67b775b6f20c0ac189704b1a009d44dc5b7106a98537f3120552cfa686d",
+      "derived_paths": [
+        [
+          "features",
+          85,
+          "teaching_bindings",
+          0,
+          "human_outcome"
+        ],
+        [
+          "features",
+          85,
+          "teaching_bindings",
+          0,
+          "presentation_metadata",
+          "human_outcome"
+        ],
+        [
+          "features",
+          85,
+          "teaching_bindings",
+          0,
+          "presentation_metadata_sha256"
+        ],
+        [
+          "teaching_contracts",
+          "feature:save-and-load:save-named-arrangement",
+          "human_outcome"
+        ],
+        [
+          "teaching_contracts",
+          "feature:save-and-load:save-named-arrangement",
+          "presentation_metadata",
+          "human_outcome"
+        ],
+        [
+          "teaching_contracts",
+          "feature:save-and-load:save-named-arrangement",
+          "presentation_metadata_sha256"
+        ]
+      ]
+    },
+    "save_outcome_derived_leaf_count": 6,
+    "publication_audio_scenes_used": false,
+    "audio_scenes_copied": false,
+    "install_requested": true,
+    "installation": {
+      "installed": true,
+      "rollback_files_per_root": 181,
+      "publication_audio_scenes_used": false
+    },
+    "postinstall_identity_root": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053",
+    "postinstall_identity_publication": "9d5e81b8776366aae0f9460d59bfe3d5f0d02e337d3188e965a143491d88e053"
+  },
+  "native_assets_rebuilt": false,
+  "audio_recorded": false
+}

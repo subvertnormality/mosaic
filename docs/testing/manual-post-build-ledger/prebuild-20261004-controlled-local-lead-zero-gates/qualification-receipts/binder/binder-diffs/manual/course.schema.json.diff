@@ -1,0 +1,59 @@
+--- before/manual/course.schema.json
++++ after/manual/course.schema.json
+@@ -50,8 +50,15 @@
+         "capture_status": {
+           "enum": [
+             "pending",
+-            "verified"
++            "verified",
++            "controlled-verified"
+           ]
++        },
++        "validation_scope": {
++          "const": "controlled-manual-generation"
++        },
++        "realtime_qualification": {
++          "const": "pending-ci"
+         }
+       }
+     },
+@@ -153,7 +160,8 @@
+                     "status": {
+                       "enum": [
+                         "pending",
+-                        "verified"
++                        "verified",
++                        "controlled-verified"
+                       ]
+                     },
+                     "scene": {
+@@ -212,6 +220,29 @@
+                       },
+                       "else": {
+                         "properties": {
++                          "step": {
++                            "type": "string",
++                            "minLength": 1,
++                            "pattern": "\\S"
++                          }
++                        }
++                      }
++                    },
++                    {
++                      "if": {
++                        "properties": {
++                          "status": {
++                            "const": "controlled-verified"
++                          }
++                        }
++                      },
++                      "then": {
++                        "properties": {
++                          "scene": {
++                            "type": "string",
++                            "minLength": 1,
++                            "pattern": "\\S"
++                          },
+                           "step": {
+                             "type": "string",
+                             "minLength": 1,

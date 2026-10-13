@@ -1,0 +1,538 @@
+schema_version: 1
+title: Make a piece
+summary: Keep one project from four notes to a saved two-section arrangement.
+project:
+  name: Four notes
+  output: One MIDI instrument or Polyperc1; an independent MIDI channel or Doubledecker for the second
+    part. Polyperc1 is used once.
+  incoming_state: Fresh project. Do not load independent reference-example fixtures during the course.
+  capture_status: pending-continuous-native-capture
+learning_path:
+- id: getting-started
+  title: 1. Meet Mosaic
+  goal: Understand how a pattern becomes a sounding channel.
+  prerequisite: Mosaic installed; grid connected.
+  outgoing_state: Control notation and three musical objects understood.
+  recovery: Open No Sound if playback moves without sound.
+  stages:
+  - id: objects
+    title: Follow the musical path
+    goal: Follow the musical path
+    action: "Read Pattern \u2192 Channel \u2192 Output. A pattern supplies rhythm and relative notes;\
+      \ a channel assigns it to a sound and adds exceptions; a Song slot stores a section."
+    result: We will keep one project through this course, changing one musical decision at a time.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: notation
+    title: Locate the controls
+    goal: Locate the controls
+    action: "Find Grid Channel (3,8), Scale (4,8), Pattern (5,8), Song (6,8), Play (1,8), and Record (2,8).\
+      \ Coordinates start at the top left. K1\u2013K3 are buttons; E1\u2013E3 are encoders."
+    result: You can identify each control before operating it.
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: setup
+  title: 2. Choose one sound
+  goal: Route channel 1 to one instrument.
+  prerequisite: New project, transport stopped, Record off.
+  outgoing_state: CH01 routes to a working MIDI instrument or Polyperc 1; no pattern assigned.
+  recovery: Check the destination port/channel or enabled player before changing notes.
+  stages:
+  - id: route
+    title: Open Device
+    goal: Open Device
+    action: '1. Tap Channel (3,8).
+
+      2. Check CH01.
+
+      3. Turn E1 to Channel tasks.
+
+      4. Select Device with E2 and press K3.'
+    result: Device opens for channel 1.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: apply
+    title: Apply one output
+    goal: Apply one output
+    action: '1. Select a working MIDI output or enabled Polyperc 1 with E3.
+
+      2. For MIDI, select port and channel with E2 and adjust each with E3 to match the receiver.
+
+      3. Press K3 to apply.'
+    result: The selected output becomes active. Selecting a draft alone does not apply it.
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: first-sound
+  title: 3. Make four equal notes
+  goal: Hear a repeating four-note loop.
+  prerequisite: Continue the routed empty project from chapter 2.
+  outgoing_state: "Pattern 1 attacks 1\u20134; CH01 assigned P1; range 1\u20134; Note60/Vel80/Len1/2;\
+    \ no step exceptions; stopped."
+  recovery: "If silent, follow No Sound in transport \u2192 assignment \u2192 range \u2192 masks \u2192\
+    \ output order."
+  stages:
+  - id: attacks
+    title: Enter four attacks
+    goal: Enter four attacks
+    action: '1. Tap Pattern (5,8) to Trig.
+
+      2. Select pattern 1 on the top row.
+
+      3. Tap (1,4), (2,4), (3,4), (4,4).'
+    result: Four active attacks light on row 4.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: assign
+    title: Assign and shorten
+    goal: Assign and shorten
+    action: '1. Tap Channel (3,8).
+
+      2. Tap pattern slot (1,2).
+
+      3. Hold step (1,4), tap (4,4), release (1,4).'
+    result: Pattern 1 feeds channel 1 across a four-step range.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: defaults
+    title: Give the attacks a pitch and level
+    goal: Give the attacks a pitch and level
+    action: "1. Open Channel tasks \u2192 Masks.\n2. With no step held, select Note with E2 and set MIDI60\
+      \ with E3 (C3).\n3. Select Vel and set80.\n4. Select Len and set1/2."
+    result: All four attacks share pitch, velocity and duration.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: hear
+    title: Play and stop
+    goal: Play and stop
+    action: '1. Tap Play (1,8).
+
+      2. Hear two cycles.
+
+      3. Tap Play again to stop; hold K1 too if Shift press stop is enabled.'
+    result: Four equal C notes repeat. Playback stops with notes released.
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: build-a-phrase
+  title: 4. Spread the rhythm across a bar
+  goal: Turn four fast attacks into four evenly spaced beats.
+  prerequisite: Keep chapter3 project stopped. Note60/Vel80/Len1/2 stay set for now.
+  outgoing_state: "P1 attacks1/5/9/13; CH01 range1\u201316; sixteenth-note rate; Note60/Vel80/Len1/2 unchanged."
+  recovery: Remove an accidental attack by tapping it again in Pattern Trig.
+  stages:
+  - id: range
+    title: Extend the range
+    goal: Extend the range
+    action: '1. Tap Channel.
+
+      2. Hold (1,4), tap (16,4), release.
+
+      3. Open Clock. Select the channel division and set a sixteenth-note rate.'
+    result: The channel traverses16 steps before repeating.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: rhythm
+    title: Move the attacks
+    goal: Move the attacks
+    action: '1. Open Pattern Trig, pattern1.
+
+      2. Remove steps2,3,4.
+
+      3. Add steps5,9,13; keep step1.'
+    result: Four attacks now sit on the four beats. The old attacks have been removed explicitly.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: compare
+    title: Hear the longer phrase
+    goal: Hear the longer phrase
+    action: '1. Play two bars.
+
+      2. Stop.'
+    result: "C\u2013C\u2013C\u2013C remains the pitch sequence; the space between attacks has increased."
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: masks
+  title: 5. Give the phrase an ending
+  goal: Change the last beat without rewriting the rhythm.
+  prerequisite: 'Continue chapter4: CH01,P1,steps1/5/9/13,range16,Note60/Vel80/Len1/2,stopped.'
+  outgoing_state: Same rhythm; step13 Note62/Vel50; channel Note60/Vel80/Len1/2; no other exceptions;
+    stopped.
+  recovery: Hold step13 and press K2 to clear every mask attribute of that step; re-enter the final D
+    and velocity50 before continuing.
+  stages:
+  - id: open
+    title: Find the channel default
+    goal: Find the channel default
+    action: '1. Open Channel tasks with E1.
+
+      2. Select Masks with E2; press K3.
+
+      3. Select Note with E2, without holding a step.'
+    result: C3 (MIDI60) is the common pitch.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: hold
+    title: Select the last beat
+    goal: Select the last beat
+    action: Hold (13,4). Keep it held for the next action.
+    result: The screen now describes step13.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: edit
+    title: Raise the last note
+    goal: Raise the last note
+    action: While holding step13, turn E3 two detents to D3 (MIDI62).
+    result: Only step13 receives the note exception.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: release
+    title: Return to the default view
+    goal: Return to the default view
+    action: Release (13,4).
+    result: The screen returns to C3; step13 retains D3.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: listen
+    title: Compare the ending
+    goal: Compare the ending
+    action: Play two bars, then stop.
+    result: "C\u2013C\u2013C\u2013D replaces C\u2013C\u2013C\u2013C at the same attack positions."
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: quiet
+    title: Reduce the final emphasis
+    goal: Reduce the final emphasis
+    action: '1. Select Vel with no step held; check80.
+
+      2. Hold step13.
+
+      3. Set50 with E3.
+
+      4. Release.
+
+      5. Play two bars and stop.'
+    result: The last D is quieter; pitch and timing stay the same.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: default
+    title: Compare a changed default
+    goal: Compare a changed default
+    action: '1. Select Note without holding a step.
+
+      2. Set MIDI67 (G3).
+
+      3. Play and stop.
+
+      4. Return the channel Note to MIDI60.'
+    result: "G\u2013G\u2013G\u2013D demonstrates that an exception survives a changed default. C\u2013\
+      C\u2013C\u2013D is restored."
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: clear
+    title: Remove both exceptions
+    goal: Remove both exceptions
+    action: '1. Hold step13.
+
+      2. Press K2.
+
+      3. Release.
+
+      4. Play and stop.'
+    result: "C\u2013C\u2013C\u2013C at velocity80 returns. K2 cleared both Note and Vel, not only the\
+      \ selected field."
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: keep
+    title: Keep the answering note
+    goal: Keep the answering note
+    action: '1. Hold step13 and set Note62, then release.
+
+      2. Select Vel; hold step13 and set50, then release.'
+    result: "The outgoing phrase is C\u2013C\u2013C\u2013D, final velocity50."
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: sequence-composition
+  title: 6. Add a second part
+  goal: Hear an independent bass pulse beneath the phrase.
+  prerequisite: Continue chapter5; transport stopped. Use a second MIDI destination/channel or Doubledecker.
+    Do not assign Polyperc1 twice.
+  outgoing_state: "CH01 remains C\u2013C\u2013C\u2013D. CH02/P2 attacks1/9, relative degrees0/4, range16,\
+    \ octave\u22121, inherited notes/velocity, no masks."
+  recovery: If the first part changes, return to CH01 and inspect its route; channel selection does not
+    erase the first part.
+  stages:
+  - id: bass-pattern
+    title: Enter two bass notes
+    goal: Enter two bass notes
+    action: '1. Open Pattern Trig and select pattern2.
+
+      2. Add steps1 and9.
+
+      3. Open Pattern Note.
+
+      4. Set step1 to relative degree0 and step9 to degree4.'
+    result: Pattern2 supplies a root and fifth.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: bass-route
+    title: Route channel2
+    goal: Route channel2
+    action: "1. Tap Channel and select channel2 on row1.\n2. Open Device and apply an independent output.\n\
+      3. Assign pattern2.\n4. Set range1\u201316.\n5. Select channel octave\u22121."
+    result: The bass uses MIDI48 and55 in the default C-major scale. Both channels repeat in16 steps.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: both
+    title: Hear the two parts
+    goal: Hear the two parts
+    action: Play two bars and stop.
+    result: "C\u2013C\u2013C\u2013D sounds above a C\u2013G bass pulse. Both parts retain independent\
+      \ settings."
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: harmony-design
+  title: 7. Change harmony without changing the rhythm
+  goal: Compare C major and D major using relative pattern notes.
+  prerequisite: Continue chapter6 stopped. Masks on CH01 still override pattern note values.
+  outgoing_state: CH01 P1 degrees0/0/0/1; Note defaultX; step13NoteX/Vel50; Vel80/Len1/2 defaults retained.
+    CH02 unchanged. Applied C major restored.
+  recovery: If pattern notes do not change the sounding pitch, inspect channel and step Note masks before
+    editing the pattern again.
+  stages:
+  - id: inherit
+    title: Restore note inheritance
+    goal: Restore note inheritance
+    action: '1. Select CH01 and open Masks.
+
+      2. With no step held, set Note to X.
+
+      3. Hold step13 and press K2, then release.
+
+      4. Select Vel, hold step13, set50 and release.'
+    result: All Note exceptions are cleared. K2 also cleared the velocity exception, which is deliberately
+      restored.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: relative
+    title: Retain the same melody in the pattern
+    goal: Retain the same melody in the pattern
+    action: '1. Open Pattern Note, pattern1.
+
+      2. Set attacks1,5,9 to degree0 and attack13 to degree1.
+
+      3. Play and stop.'
+    result: "C\u2013C\u2013C\u2013D returns through relative notes. The quieter ending stays in the channel\
+      \ mask."
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: draft
+    title: Prepare a second scale
+    goal: Prepare a second scale
+    action: '1. Open Scale (4,8).
+
+      2. Select scale slot2.
+
+      3. Select root with E2; set D with E3.
+
+      4. Select scale type and choose Major.'
+    result: The slot is edited; the previous applied harmony remains until Apply.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: apply
+    title: Compare the transposition
+    goal: Compare the transposition
+    action: '1. Press K3 to apply D major.
+
+      2. Play two bars and stop.
+
+      3. Select the unchanged C-major slot1 and press K3.'
+    result: "The phrase becomes D\u2013D\u2013D\u2013E and bass D\u2013A. Rhythm and velocity are preserved.\
+      \ C major is restored for the arrangement."
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: modulation-movement-and-interest
+  title: 8. Add a pickup
+  goal: Extend the phrase with a lighter attack before the loop restarts.
+  prerequisite: Continue chapter7 in C major, stopped.
+  outgoing_state: P1 attacks1/5/9/13/15; degree15=0; step13Vel50; step15Vel35; other velocities80; CH02
+    unchanged.
+  recovery: Remove step15 in Pattern Trig to return to the four-beat phrase.
+  stages:
+  - id: pickup
+    title: Add the late attack
+    goal: Add the late attack
+    action: '1. Open Pattern Trig, pattern1.
+
+      2. Add step15.
+
+      3. Open Pattern Note and set step15 degree0.'
+    result: A C pickup falls halfway between the last beat and the next bar.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: level
+    title: Reduce the pickup level
+    goal: Reduce the pickup level
+    action: '1. Select CH01, open Masks and select Vel.
+
+      2. Hold step15 and set35 with E3.
+
+      3. Release, play two bars and stop.'
+    result: The pickup is quieter than the main beats and the D ending. Probability and parameter slides
+      are optional follow-up guides; this version remains deterministic.
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: song-composition
+  title: 9. Arrange two sections
+  goal: Alternate a sparse section and the full two-part phrase.
+  prerequisite: Continue chapter8 in slot1; transport stopped. Slot2 and3 empty.
+  outgoing_state: Slot1 CH01 muted/CH02 audible; slot2 both channels audible. Global length16; repeats1;
+    Song modeOn; slot3empty; selectedslot1; stopped.
+  recovery: Stop before editing the wrong section; select its slot and check the header. Copying a slot
+    does not copy a new isolated project.
+  stages:
+  - id: copy
+    title: Copy the complete section
+    goal: Copy the complete section
+    action: '1. Open Song (6,8).
+
+      2. Hold slot1 (1,1), tap slot2 (2,1), release slot1.
+
+      3. Select slot2.'
+    result: Slot2 stores the same phrase, bass and channel settings.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: sparse
+    title: Make the first section sparse
+    goal: Make the first section sparse
+    action: '1. Select slot1 in Song.
+
+      2. Open Channel and mute CH01 using its channel mute control.
+
+      3. Return to Song and select slot2.
+
+      4. Check CH01 is unmuted in this copy.'
+    result: Slot1 contains bass only; slot2 adds the upper phrase and pickup.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: length
+    title: Set the section boundary
+    goal: Set the section boundary
+    action: "1. Open Song tasks \u2192 Slot setup.\n2. Set Global length16 and Repeats1 for each populated\
+      \ slot.\n3. Open Song settings and set Song modeOn.\n4. Leave slot3 empty and select slot1."
+    result: The contiguous group contains slots1 and2, one16-step pass each.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: transition
+    title: Hear the arrangement
+    goal: Hear the arrangement
+    action: Play four section passes and stop.
+    result: "Bass alone \u2192 bass and phrase \u2192 bass alone \u2192 bass and phrase. The highlighted\
+      \ Song slot changes at each boundary."
+    binding:
+      status: pending
+      scene: null
+      step: null
+- id: keep-your-work
+  title: 10. Save, reload and perform
+  goal: Restore the arrangement from a named project.
+  prerequisite: Continue chapter9 stopped on slot1.
+  outgoing_state: Named project Four notes contains both sections and restores their exact playback. Transport
+    stopped with no held notes.
+  recovery: K2 cancels Load without replacing the current project. Keep the saved name before trying optional
+    variations.
+  stages:
+  - id: save
+    title: Save the arrangement
+    goal: Save the arrangement
+    action: "1. Tap K1 briefly to enter the norns system menu.\n2. Open PARAMS \u2192 MOSAIC \u2192 Save\
+      \ project.\n3. Enter Four notes and confirm."
+    result: The named project stores the two-section arrangement.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: reload
+    title: Prove the saved version
+    goal: Prove the saved version
+    action: "1. Return to Mosaic and temporarily unmute CH01 in slot1.\n2. Stop, open PARAMS \u2192 MOSAIC\
+      \ \u2192 Load project.\n3. Select Four notes and confirm."
+    result: Slot1 returns to bass alone; the temporary change is removed.
+    binding:
+      status: pending
+      scene: null
+      step: null
+  - id: perform
+    title: Replay the restored sections
+    goal: Replay the restored sections
+    action: '1. Select slot1.
+
+      2. Play four section passes and stop.'
+    result: The saved bass-only/full-phrase alternation is restored. Continue with merge, recording or
+      modulation task guides without replacing this saved version.
+    binding:
+      status: pending
+      scene: null
+      step: null

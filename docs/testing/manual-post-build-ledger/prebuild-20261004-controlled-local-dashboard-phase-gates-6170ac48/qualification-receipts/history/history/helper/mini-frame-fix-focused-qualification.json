@@ -1,0 +1,11 @@
+{
+  "focused_green_log": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/mini-frame-fix-focused-green.log",
+  "focused_green_log_sha256": "f0b88a804f9ace00c03a63a29573d6e71b3198805a6b3f812b69fe938b3c622d",
+  "focused_test": "tests/behaviour/test_mini_header_animation_ui.py::PinnedDocumentationMiniFrameTests",
+  "preserved_old_helper": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/pre-mini-frame-fix/tests/behaviour/contract/harmony_merge_visual.py",
+  "preserved_old_helper_sha256": "0f9b3aa105dfb0ab3870bba938bbdc52e9d3c461bcc76c93f93fc068615f277f",
+  "red_before_log": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/mini-frame-fix-red-before.log",
+  "red_before_log_sha256": "9f434678a42fe60eea6e45786c09bbc883229b4ed0aa2760adbd6a716cc8ea73",
+  "source_sha256": "600a95ff080d8e3b03cdacbabb13b635e18c6861336c131e3d1b656663999296",
+  "test_source_sha256": "4ef52988279fff3f1d68a81eba59155b489395dce1e08d4d2b6b4bd15a90b432"
+}

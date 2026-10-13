@@ -1,0 +1,356 @@
+{
+  "complete_regression_run": false,
+  "controlled_time_admitted": false,
+  "stage": "/home/andy/mosaic-ui-question-footer-fixed-20261003/mosaic",
+  "stage_identity_sha256": "1e796800131f08616d7acb075e0695305af00efc24d5cafb2a8d6644c7b7ed2b",
+  "scope": "A01/A02/A03/A18 existing UI/music regressions plus immediate footer characterization; not exhaustive",
+  "lanes": {
+    "controlled-experimental": [
+      {
+        "case": "M-UIACC-A18-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/01fb3350e58a40c393aea5f5a6ffd633/manifest.json",
+        "manifest_sha256": "35da310f13a73150ea44ca2001fa5ab4ec7937dc0e7a45cce10c5aaff07d7daf",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 25985,
+            "returncode": 0,
+            "seconds": 0.16397782298736274
+          },
+          {
+            "service": "sclang",
+            "pid": 25880,
+            "returncode": -15,
+            "seconds": 0.11433092603692785
+          },
+          {
+            "service": "crone",
+            "pid": 25872,
+            "returncode": 0,
+            "seconds": 9.521201718598604e-05
+          },
+          {
+            "service": "jack",
+            "pid": 25865,
+            "returncode": 0,
+            "seconds": 0.015471693011932075
+          }
+        ],
+        "screen_frames": 249,
+        "distinct_screens": 50,
+        "immediate_check": [
+          {
+            "kind": "h17-cancel-immediate-footer",
+            "within_seconds": 0.25,
+            "passed": true,
+            "citation": "README.md#norns-menu-navigation",
+            "characterization": "250 ms public cancel feedback bound"
+          }
+        ]
+      },
+      {
+        "case": "M-UIACC-A02-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/8601f3f518f64894a2470392ea80fcd6/manifest.json",
+        "manifest_sha256": "e2d4a2804b1ca2c3144bccf0e54c7f6ebf06e09a0c7696e25365953c5639e48a",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 22254,
+            "returncode": 0,
+            "seconds": 0.164626715995837
+          },
+          {
+            "service": "sclang",
+            "pid": 22149,
+            "returncode": -15,
+            "seconds": 0.11444410803960636
+          },
+          {
+            "service": "crone",
+            "pid": 22141,
+            "returncode": 0,
+            "seconds": 6.975099677219987e-05
+          },
+          {
+            "service": "jack",
+            "pid": 22137,
+            "returncode": 0,
+            "seconds": 0.03168347000610083
+          }
+        ]
+      },
+      {
+        "case": "M-UIACC-A03-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/c6b0fed35c4e47b8ac60ff4a98d23c64/manifest.json",
+        "manifest_sha256": "7c8892ede47e928cfb4e69a89b4a97544e182eda9b90a7f3bfa6893ba8cc8689",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 24658,
+            "returncode": 0,
+            "seconds": 0.0637639289489016
+          },
+          {
+            "service": "sclang",
+            "pid": 24560,
+            "returncode": -15,
+            "seconds": 0.11442887794692069
+          },
+          {
+            "service": "crone",
+            "pid": 24552,
+            "returncode": 0,
+            "seconds": 6.147200474515557e-05
+          },
+          {
+            "service": "jack",
+            "pid": 24542,
+            "returncode": 0,
+            "seconds": 0.03153557697078213
+          }
+        ]
+      },
+      {
+        "case": "M-UIACC-A01-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-controlled-experimental/e59bdc24374a447fbc6288e2aff9e793/manifest.json",
+        "manifest_sha256": "2af64d5597291a2187b0f63b5d559c27ed62fdcdd3b3f3eb88f1acb31173b894",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 20802,
+            "returncode": 0,
+            "seconds": 0.06383060797816142
+          },
+          {
+            "service": "sclang",
+            "pid": 20690,
+            "returncode": -15,
+            "seconds": 0.11454762797802687
+          },
+          {
+            "service": "crone",
+            "pid": 20682,
+            "returncode": 0,
+            "seconds": 6.112095434218645e-05
+          },
+          {
+            "service": "jack",
+            "pid": 20672,
+            "returncode": 0,
+            "seconds": 0.06376506801461801
+          }
+        ]
+      }
+    ],
+    "real-time": [
+      {
+        "case": "M-UIACC-A03-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/23c048a510814106b71c66ed67aaaaa2/manifest.json",
+        "manifest_sha256": "72ac74bed797545aad1a86c8748dc7d52adb8508ea34bba6b88d72f6e71ab25c",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 6772,
+            "returncode": 0,
+            "seconds": 0.11397742503322661
+          },
+          {
+            "service": "sclang",
+            "pid": 6650,
+            "returncode": -15,
+            "seconds": 0.11458960600430146
+          },
+          {
+            "service": "crone",
+            "pid": 6642,
+            "returncode": 0,
+            "seconds": 6.472098175436258e-05
+          },
+          {
+            "service": "jack",
+            "pid": 6629,
+            "returncode": 0,
+            "seconds": 0.03158092999365181
+          }
+        ]
+      },
+      {
+        "case": "M-UIACC-A01-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/25b3c4ba3992410f942cdd58bdddc0c8/manifest.json",
+        "manifest_sha256": "83a628a30d190243bf6b3155a804f32d511e5e759650cfd7b5853e4c6a0d5e56",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 3199,
+            "returncode": 0,
+            "seconds": 0.11410575697664171
+          },
+          {
+            "service": "sclang",
+            "pid": 3091,
+            "returncode": -15,
+            "seconds": 0.11437380901770666
+          },
+          {
+            "service": "crone",
+            "pid": 3083,
+            "returncode": 0,
+            "seconds": 5.958101246505976e-05
+          },
+          {
+            "service": "jack",
+            "pid": 3054,
+            "returncode": 0,
+            "seconds": 0.031572478997986764
+          }
+        ]
+      },
+      {
+        "case": "M-UIACC-A18-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/38e4b70259734bf0bd4b831d64b52302/manifest.json",
+        "manifest_sha256": "254b32f2a784d0f44c691f7714d27a45cc85f36efa0ae79ac57cd1a5e0d5d420",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 8282,
+            "returncode": 0,
+            "seconds": 0.16405358398333192
+          },
+          {
+            "service": "sclang",
+            "pid": 8132,
+            "returncode": -15,
+            "seconds": 0.1146144739468582
+          },
+          {
+            "service": "crone",
+            "pid": 8124,
+            "returncode": 0,
+            "seconds": 6.849103374406695e-05
+          },
+          {
+            "service": "jack",
+            "pid": 8116,
+            "returncode": 0,
+            "seconds": 0.06369414203800261
+          }
+        ],
+        "screen_frames": 249,
+        "distinct_screens": 50,
+        "immediate_check": [
+          {
+            "kind": "h17-cancel-immediate-footer",
+            "within_seconds": 0.25,
+            "passed": true,
+            "citation": "README.md#norns-menu-navigation",
+            "characterization": "250 ms public cancel feedback bound"
+          }
+        ]
+      },
+      {
+        "case": "M-UIACC-A02-001",
+        "manifest": "/home/andy/mosaic-behaviour-runs/vertical-list-fixed-stage-real-time/c5a8a58c9d8441778a3264d8abb8dfb5/manifest.json",
+        "manifest_sha256": "722f8b780ed552036f617cf94b41cd07882e0c98c5f47eed3308f601c36fa4f3",
+        "passed": true,
+        "cleanup": [
+          {
+            "service": "matron",
+            "pid": 4548,
+            "returncode": 0,
+            "seconds": 0.06374865997349843
+          },
+          {
+            "service": "sclang",
+            "pid": 4446,
+            "returncode": -15,
+            "seconds": 0.11437045701313764
+          },
+          {
+            "service": "crone",
+            "pid": 4438,
+            "returncode": 0,
+            "seconds": 6.378104444593191e-05
+          },
+          {
+            "service": "jack",
+            "pid": 4434,
+            "returncode": 0,
+            "seconds": 0.015554206038359553
+          }
+        ]
+      }
+    ]
+  },
+  "same_frozen_immediate_helper_green": [
+    {
+      "lane": "controlled-experimental",
+      "manifest": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-controlled-experimental/2e0c711bc2054a02be855af7cddb79fe/manifest.json",
+      "helper_sha256": "cfb8d3818fd2153fe9661995c97e9872da13b0f7b303c8a144e782b036595fd6",
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 12475,
+          "returncode": 0,
+          "seconds": 0.11395536595955491
+        },
+        {
+          "service": "sclang",
+          "pid": 12295,
+          "returncode": -15,
+          "seconds": 0.11450414796127006
+        },
+        {
+          "service": "crone",
+          "pid": 12287,
+          "returncode": 0,
+          "seconds": 6.587104871869087e-05
+        },
+        {
+          "service": "jack",
+          "pid": 12277,
+          "returncode": 0,
+          "seconds": 0.03159703902201727
+        }
+      ]
+    },
+    {
+      "lane": "real-time",
+      "manifest": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-real-time/4a84c36720f046fdb708c59dd947afe1/manifest.json",
+      "helper_sha256": "cfb8d3818fd2153fe9661995c97e9872da13b0f7b303c8a144e782b036595fd6",
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 16857,
+          "returncode": 0,
+          "seconds": 0.16402658203151077
+        },
+        {
+          "service": "sclang",
+          "pid": 16760,
+          "returncode": -15,
+          "seconds": 0.11451216897694394
+        },
+        {
+          "service": "crone",
+          "pid": 16748,
+          "returncode": 0,
+          "seconds": 6.667099660262465e-05
+        },
+        {
+          "service": "jack",
+          "pid": 16741,
+          "returncode": 0,
+          "seconds": 0.031666809984017164
+        }
+      ]
+    }
+  ],
+  "log_sha256": "500fd6205d0a47621e026739a43e7eb517bb871ade41fc854c0a3103967b1fc3"
+}

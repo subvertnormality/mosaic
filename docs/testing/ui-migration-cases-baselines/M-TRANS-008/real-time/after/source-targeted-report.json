@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "d11f287e3f83e4ce5a3f6876cb805d49773dbe7c",
+  "after_sha": "f3f2557d47ea10a333458b578c759ae600cd60e8",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TRANS-008"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TRANS-008",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-008/real-time/before/83aa86c396924705a7f44e9d4e0dcbee/manifest.json",
+              "manifest_sha256": "4f01807fb68804f309b3b2c08935557d35624e859adc9d3003d6d56151f663e2"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-008/real-time/after/b18c25572051471ab656c14cfc17c650/manifest.json",
+              "manifest_sha256": "bd2831f2db777fd6f2c68c8803f6ef9c0d007e5d63887ff99da522aa4e0add66"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-008/controlled-experimental/before/44da7288d53e4e9b99c7db0fdacca50d/manifest.json",
+              "manifest_sha256": "736b0f0d7a1ffd48726a57a0e8736b2de5419d509594bf140337c5bf707f1bf0"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-008/controlled-experimental/after/84cdd7c5c6624c9fb4589c8e6eac8ecc/manifest.json",
+              "manifest_sha256": "f50fbbe316923a8c67abf70caa07b1d1be48a0a9c8f0f51214af63df6129f0da"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

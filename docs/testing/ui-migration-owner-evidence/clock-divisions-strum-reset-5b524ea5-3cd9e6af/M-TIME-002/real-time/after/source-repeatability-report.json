@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "5b524ea513f8c0cf2a5fe009050662a21895fa6a",
+  "after_sha": "3cd9e6af5e4c7349821a7a2985fc81a0264df903",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-TIME-001",
+    "M-TIME-002",
+    "M-TIME-012"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/clock_divisions.py": "M-TIME-001",
+    "tests/behaviour/contract/strum_reset_continuity.py": "M-TIME-012"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/clock_divisions.py",
+      "case": "M-TIME-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-9d725c114127489bbe7f6007264f7df6/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-9d725c114127489bbe7f6007264f7df6/manifest.json",
+      "manifest_sha256": "60efc9e9253921172c6f1f9922cb6fca128c17d19245e162943365dd2afb2b28",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/strum_reset_continuity.py",
+      "case": "M-TIME-012",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-5857cc6f1443475aba36576a52d878ef/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-5857cc6f1443475aba36576a52d878ef/manifest.json",
+      "manifest_sha256": "f168cd4b7bcb3707833ca2494a768ca6728ea77ccfd0fab6c8f007810a925d04",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

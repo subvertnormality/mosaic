@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Mosaic manual: make a first loop, develop a phrase and arrange a piece.">
+<title>Mosaic · interactive manual</title><link rel="stylesheet" href="manual.css">
+<script defer src="manual.js"></script><script defer src="book.js"></script>
+</head>
+<body class="book-loading">
+<a class="skip" href="#manual-content">Skip to the content</a>
+<header class="topbar"><a class="brand" href="#home" aria-label="Mosaic manual home"><img class="brandmark" src="../images/logo.svg" alt="Mosaic"><span class="brand-sub">manual</span></a>
+<div class="top-actions"><button id="theme" aria-label="Switch colour theme">Light mode</button></div></header>
+<div class="shell">
+<aside class="sidebar" aria-label="Manual navigation">
+<div class="sidebar-label">CONTENTS</div>
+<nav><a href="#start">01 <span>Start here</span></a><a href="#masks" class="selected">02 <span>Explore Masks</span></a><a href="#reference">03 <span>Quick reference</span></a><a href="#cookbook">04 <span>Musical cookbook</span></a><a href="#listen">05 <span>Listen &amp; try</span></a></nav>
+<label class="search-label" for="search">Find a control or feature</label><input id="search" type="search" aria-label="Find a control or feature" placeholder="Try “clear” or “chord”" autocomplete="off">
+<div id="search-results" aria-live="polite"></div>
+<div class="sidebar-bottom"><a href="../cheat_sheet.html">Cheat sheet ↗</a><a href="../config_creator.html">Device configuration ↗</a><a href="#about">About this guide</a></div>
+</aside>
+<main id="manual-content" tabindex="-1"><p id="guide-loading" role="status">Loading the manual…</p><section id="book-home" hidden></section>
+<div class="breadcrumbs" aria-label="Breadcrumb">REFERENCE <span>/</span> CHANNEL EDITOR <span>/</span> MASKS</div>
+<section id="masks" class="hero">
+<div class="eyebrow"><span class="status-dot"></span> A PATTERN IS ONLY THE BEGINNING</div>
+<h1 id="feature-title">Masks<span class="title-dot">.</span></h1><p class="lead" id="summary">Loading the captured field guide…</p>
+<div class="tags"><span>MELODY</span><span>DYNAMICS</span><span>CHORDS</span><span>~ 8 MINUTES</span></div>
+<div id="intro" class="prose"></div><aside id="mask-prerequisites" class="mask-prerequisites" hidden><h2>Before you explore Masks</h2><p>Open Channel (grid 3,8), turn E1 to Channel tasks, choose Masks with E2 and press K3. E2 selects Trig, Note, Vel, Len or Chd1–Chd4; E3 changes the selected value. With no step held, E3 changes the channel default. Hold a step while turning E3 to set an exception for that step.</p><p>X means unset and inherit, not MIDI note 0. Masks labels MIDI 60 as C3; Fixed Note labels MIDI 60 as C5. Releasing a step returns to the channel-default view. Hold a step and press K2 to clear that step's overrides; with no grid key held, K1+K2 clears step overrides while keeping channel defaults.</p></aside>
+</section>
+<section id="start" class="start-card"><div class="section-number">01</div><div><h2>A place to start</h2><p>The scenes begin with a four-note C-major pattern on channel 1. On your norns, open the Channel editor with grid <strong>(3,8)</strong>, use <strong>E1</strong> to reach Channel tasks, select <strong>Masks</strong> with <strong>E2</strong>, and press <strong>K3</strong>. <strong>E2</strong> chooses a mask; <strong>E3</strong> changes it.</p><p>New to Mosaic? <a href="../README.md#getting-started">Install and choose a sound source</a>, then <a href="../README.md#adding-trigs">make your first pattern</a>. This pilot teaches Masks; the rest of the manual remains in README.</p></div></section>
+<section id="explore" class="scene-section">
+<div class="section-heading"><div><div class="eyebrow">Try this step</div><h2>Interactive examples</h2></div><span class="small-muted">Recorded norns screen and grid</span></div>
+<label for="scene" class="sr-only">Choose an interaction</label><select id="scene"></select>
+<p class="example-state" id="example-state"></p><div class="player">
+<div class="player-top"><span class="player-label">Example</span><span id="counter"></span></div>
+<div class="instruments">
+<div class="norns-wrap"><div class="device-caption norns-device-caption"><span>NORNS</span><button id="norns-layout" class="norns-layout-toggle" type="button" aria-pressed="false" aria-label="Use norns Shield layout">Use norns Shield layout</button></div>
+<div class="norns" id="norns-device">
+<div class="encoders"><button class="encoder" data-n="1" aria-label="E1, pictured encoder"><span>E1</span></button><button class="encoder" data-n="2" aria-label="E2, pictured encoder"><span>E2</span></button><button class="encoder" data-n="3" aria-label="E3, pictured encoder"><span>E3</span></button></div>
+<canvas id="screen" width="128" height="64" role="img" aria-label="Captured norns screen"></canvas>
+<div class="norns-keys"><button data-key="1" aria-label="Norns K1">K1</button><button data-key="2" aria-label="Norns K2">K2</button><button data-key="3" aria-label="Norns K3">K3</button><span class="norns-word">norns</span></div>
+</div></div>
+<div class="grid-overview-wrap"><div class="device-caption">FULL GRID OVERVIEW <span>All 16 columns × 8 rows visible</span></div><div class="grid-overview-columns" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span></div><div id="grid-overview" role="img" aria-label="Complete captured 16 by 8 grid overview"></div></div><div class="grid-wrap"><div class="device-caption">Grid <span>44px pads; swipe horizontally; column numbers stay aligned</span></div><div class="grid-columns" aria-hidden="true"></div><div id="grid" role="group" aria-label="captured 16 by 8 grid; arrow keys move between pads"></div><div class="grid-legend"><span><i class="legend-led"></i> captured brightness</span><span><i class="legend-active"></i> controls used next</span></div></div>
+</div>
+<div class="caption"><div class="caption-index" id="caption-index"></div><div><span class="phase-label">CURRENT RESULT</span><h3 id="step-title"></h3><p id="caption" aria-live="polite"></p><p id="result-text" class="result-text"></p><div id="course-outcomes" aria-live="polite"></div><div id="teaching-actions" hidden><p>Recorded walkthrough. Follow each change with the controls below.</p></div><p id="midi-text" class="midi-strip" aria-label="MIDI output"></p></div></div>
+<div class="next-action"><span class="phase-label">NEXT ACTION</span><p id="next-action"></p></div><div class="transport"><button id="previous" aria-label="Previous scene step">← Back</button><button id="autoplay" aria-pressed="false">Auto-play</button><button id="next" class="primary" aria-label="Next captured step">Show next action →</button></div>
+<div id="step-strip" class="step-strip" aria-label="Scene steps"></div>
+<p class="player-help" id="control-help">Choose Show next action to watch the complete gesture.</p>
+</div>
+<div class="takeaway"><span>MUSICAL USE</span><p id="musical-use"></p></div>
+</section>
+<section id="reference">
+<div class="section-heading"><div><div class="eyebrow">03 / QUICK REFERENCE</div><h2>Controls</h2></div><button id="dense" aria-pressed="false">Dense view</button></div>
+<div class="table-scroll"><table><thead><tr><th scope="col">Your gesture</th><th scope="col">What happens</th></tr></thead><tbody id="controls"></tbody></table></div>
+<div id="details" class="details"></div>
+</section>
+<section id="cookbook"><div class="eyebrow">04 / MUSICAL EXAMPLES</div><h2>Musical examples</h2><div id="recipes" class="recipe-grid"></div></section>
+<section id="listen" class="listening"><div class="eyebrow">Listen</div><h2 id="audio-title">Small hours.</h2><p id="audio-description"></p><audio id="audio" controls preload="metadata"></audio><p class="small-muted">The devices above follow the playing position while audio plays. Seeking and pausing keep the display aligned.</p><div id="track-list"></div></section>
+<section id="related"><h2>Related features</h2><div id="related-links"></div><p class="small-muted">Follow these links for related controls and musical tasks.</p></section>
+
+<div id="notice" role="status"></div>
+</main>
+</div>
+</body></html>

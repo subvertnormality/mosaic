@@ -1,0 +1,32 @@
+--- before/tools/manual_course_bind.py
++++ after/tools/manual_course_bind.py
+@@ -35,9 +35,9 @@
+    if binding.get("passed") is not True or not binding.get("semantic_assertions") or not binding.get("sha256") or not binding.get("grid_sha256"):raise ValueError("Course checkpoint lacks native semantic proof")
+    assertion=binding.get("assertion",{})
+    if any(assertion.get(k)!=v for k,v in wanted[step["id"]]["assertion"].items()):raise ValueError("Course checkpoint semantic selector changed")
+- if total!=48:raise ValueError("Course checkpoint total must be 48")
++ if total!=50:raise ValueError("Course checkpoint total must be 50")
+  if len(contexts)!=1 or len(paths)!=1:raise ValueError("Course requires one continuous native session")
+- return dict(clock_mode=clock,session_id=next(iter(contexts)),participant=next(iter(paths)),scenes=10,checkpoints=48)
++ return dict(clock_mode=clock,session_id=next(iter(contexts)),participant=next(iter(paths)),scenes=10,checkpoints=50)
+ 
+ def check_course(course,plan,verify_only):
+  expected={s["feature_id"]:s for s in plan["scenes"]};routes=[c["id"] for c in course["learning_path"]]
+@@ -68,7 +68,7 @@
+  for (path,blob,document),clock in zip(reports,("real-time","controlled-experimental")):
+   lane=check_lane(document,clock,plan)
+   audited=audit_reference(document)
+-  if audited!=48:raise ValueError("Independent course audit did not verify all 48 checkpoints")
++  if audited!=50:raise ValueError("Independent course audit did not verify all 50 checkpoints")
+   lane.update(report=str(path),report_sha256=digest_bytes(blob),independent_audit_frames=audited)
+   lanes.append(lane)
+  if lanes[0]["session_id"]==lanes[1]["session_id"] or lanes[0]["participant"]==lanes[1]["participant"]:raise ValueError("Course lanes reused a native session")
+@@ -130,7 +130,7 @@
+    path,blob,document=read_document(receipt["report"])
+    if digest_bytes(blob)!=receipt["report_sha256"]:raise ValueError("Changed course native report")
+    lane=check_lane(document,clock,plan);audited=audit_reference(document)
+-   if audited!=48:raise ValueError("Course independent publication audit omitted checkpoints")
++   if audited!=50:raise ValueError("Course independent publication audit omitted checkpoints")
+    lane.update(report=str(path),report_sha256=digest_bytes(blob),independent_audit_frames=audited)
+    if lane!=receipt:raise ValueError("Course lane receipt changed")
+    lanes.append(lane)

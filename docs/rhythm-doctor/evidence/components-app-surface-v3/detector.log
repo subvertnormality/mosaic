@@ -1,0 +1,16 @@
+test_fixed_source_manifest_is_disjoint (test_detector.Detector) ... ok
+test_literal_metadata_missing_midi_marks_declared_lanes_unknown (test_detector.Detector) ... ok
+test_no_declared_bass_is_a_known_empty_negative (test_detector.Detector) ... ok
+test_onset_frame_targets_is_linear_sized_for_dense_reference_lists (test_detector.Detector) ... ok
+test_onset_frame_targets_marks_only_nearest_frames (test_detector.Detector) ... ok
+test_peak_picker_collapses_dense_frames (test_detector.Detector) ... ok
+test_phase_inversion_keeps_magnitude_features (test_detector.Detector) ... ok
+test_probability_selects_the_explicit_positive_class_column (test_detector.Detector) ... ok
+test_single_class_probability_uses_the_observed_positive_class (test_detector.Detector) ... ok
+test_single_negative_class_probability_is_zero (test_detector.Detector) ... ok
+test_subsample_keeps_all_positive_rows_when_positive_count_exceeds_cap (test_detector.Detector) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.023s
+
+OK

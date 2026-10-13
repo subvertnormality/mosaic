@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": [
+    "Original and Shield layouts preserve screen/canvas size, 128 pads and ordered controls; geometry is correct, preference survives navigation/reload, and invalid storage falls back",
+    "All scene captions, forward/back frames and 128 LED values",
+    "Without a recorded cue encoder click, key press and drag leave the captured frame and step unchanged",
+    "Uncued pictured controls preserve current frame; explicit Next, grid focus and autoplay",
+    "Recorded hold cue rejects wrong encoder and pad, accepts the matching pad and reveals the exact held result only on View next result",
+    "Recorded encoder cue rejects the wrong direction and accepts the recorded clockwise turn",
+    "Captured Masks hold cue remains clickable and visibly held in Shield layout, then shows its exact recorded frame",
+    "Search, dense reference and theme switching",
+    "Selected Opus and MP3 match authored four-bar tempo and independent three-second native capture tail",
+    "Historical pilot duration oracle preserved separately",
+    "Real web audio decoding, seek/pause and captured playhead sync"
+  ],
+  "audio_contract_source_sha256": "ff83d4dbbcd7c9981e05e96622d3618b8e052d5d776e2f1d13b3ccddbb2ac53d"
+}

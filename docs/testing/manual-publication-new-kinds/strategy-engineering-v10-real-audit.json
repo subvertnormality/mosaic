@@ -1,0 +1,22 @@
+{
+  "scope": "engineering explicit immutable stage validation only",
+  "passed_scoped_raw_acceptance": true,
+  "generic_publication_rejection": "Unsafe native application path",
+  "manifest": "/home/andy/mosaic-mini-header-engineering-v10-qualification-20261003/real/4d1e7077a99c4d65835b0e21cb15f933/manifest.json",
+  "manifest_sha256": "1ca514825b57b4d291519b9dd354e269968fff828a2e99770bdf09737a0cdb07",
+  "source_stage": "/home/andy/mosaic-mini-header-engineering-v10-20261003/mosaic",
+  "native_application_files": 17789,
+  "identity_sha256": "17f9cef0302cb3b7ce79e6a5be41672d4ea3aced43e7da9c281788613e821bb1",
+  "auditor_sha256": "0b6964b935ce59cb08318580f9202589f4774856c0256805586ee3074582cb74",
+  "ui_checkpoints": 8,
+  "music_oracles": [
+    "effective-foundation-musical-result",
+    "effective-fragments-musical-result",
+    "effective-only-silence",
+    "restored-legacy-musical-result",
+    "merge-strategy-next-cycle"
+  ],
+  "cleanup": "all four services clean, no held inputs/outstanding notes",
+  "full_current_publication": false,
+  "hardware_timing_equivalent": false
+}

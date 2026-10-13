@@ -1,0 +1,38 @@
+test_240_can_skip_displayed_phases_but_wrong_shift_is_not_free (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_correct_pose_uses_native_beat_bounds_not_wall_time (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_off_keeps_native_rest_identity_without_fabricated_fresh_redraw (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_real_lane_uses_same_native_beats_without_logical_time_substitution (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_stale_frame_whole_loop_epoch_and_missing_source_clock_cannot_pass (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_wrong_phase_real_revision_and_changed_clock_receipt_are_refused (test_mini_phase_oracle.NativeMiniPhaseIntegrity) ... ok
+test_missing_clock_start_bad_cadence_or_wrong_phase_refused (test_mini_phase_oracle.NativePlayingMiniPhaseIntegrity) ... ERROR
+test_pre_start_post_stop_frames_are_literal_only_and_do_not_fake_diversity (test_mini_phase_oracle.NativePlayingMiniPhaseIntegrity) ... ERROR
+test_real_and_controlled_playing_use_actual_f8_ticks_and_multiple_poses (test_mini_phase_oracle.NativePlayingMiniPhaseIntegrity) ... ERROR
+
+======================================================================
+ERROR: test_missing_clock_start_bad_cadence_or_wrong_phase_refused (test_mini_phase_oracle.NativePlayingMiniPhaseIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_mini_phase_oracle.py", line 68, in test_missing_clock_start_bad_cadence_or_wrong_phase_refused
+    with self.assertRaisesRegex(ValueError,'Start/Stop'):phase.check_playing_phases(*args)
+AttributeError: module 'mini_phase_oracle' has no attribute 'check_playing_phases'
+
+======================================================================
+ERROR: test_pre_start_post_stop_frames_are_literal_only_and_do_not_fake_diversity (test_mini_phase_oracle.NativePlayingMiniPhaseIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_mini_phase_oracle.py", line 75, in test_pre_start_post_stop_frames_are_literal_only_and_do_not_fake_diversity
+    with self.assertRaisesRegex(ValueError,'distinct playing'):phase.check_playing_phases(*args)
+AttributeError: module 'mini_phase_oracle' has no attribute 'check_playing_phases'
+
+======================================================================
+ERROR: test_real_and_controlled_playing_use_actual_f8_ticks_and_multiple_poses (test_mini_phase_oracle.NativePlayingMiniPhaseIntegrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_mini_phase_oracle.py", line 65, in test_real_and_controlled_playing_use_actual_f8_ticks_and_multiple_poses
+    proof=phase.check_playing_phases(*self.fixture(clock));self.assertEqual(proof['active_frames'],2);self.assertEqual(proof['clock_ticks'],13)
+AttributeError: module 'mini_phase_oracle' has no attribute 'check_playing_phases'
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.020s
+
+FAILED (errors=3)

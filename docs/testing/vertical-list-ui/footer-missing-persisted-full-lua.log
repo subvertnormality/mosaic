@@ -1,0 +1,37 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................E....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Saving project as absent.v2
+Loading project /tmp/lua_3tbJxj/absent.v2.ptn
+Loading project /tmp/lua_3tbJxj/absent.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Saving project as explicit_off.v2
+Loading project /tmp/lua_ttTRFh/explicit_off.v2.ptn
+Loading project /tmp/lua_ttTRFh/explicit_off.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Saving project as foundation.v2
+Loading project /tmp/lua_8R6oNh/foundation.v2.ptn
+Loading project /tmp/lua_8R6oNh/foundation.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Saving project as foundation_harmony_pattern.v2
+Loading project /tmp/lua_i6Tb1i/foundation_harmony_pattern.v2.ptn
+Loading project /tmp/lua_i6Tb1i/foundation_harmony_pattern.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Saving project as unknown_keys.v2
+Loading project /tmp/lua_2dozTg/unknown_keys.v2.ptn
+Loading project /tmp/lua_2dozTg/unknown_keys.v2.ptn
+.......................................................................................................................................................................................................................................................................................................................................................................................................................................ls: cannot access '/tmp/lua_u56Twg/config': No such file or directory
+.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Tests with errors:
+------------------
+1) test_hardening_released_and_current_project_fixtures_validate_and_migrate
+.///lib/project_load_integration_tests.lua:218: attempt to index a nil value (local 'saved')
+stack traceback:
+	.///lib/project_load_integration_tests.lua:218: in upvalue 'test_hardening_released_and_current_project_fixtures_validate_and_migrate'
+
+Ran 2414 tests in 77.882 seconds, 2413 successes, 1 error

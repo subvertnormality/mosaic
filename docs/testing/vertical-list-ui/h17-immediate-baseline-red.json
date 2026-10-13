@@ -1,0 +1,92 @@
+{
+  "case": "H17-CANCEL-IMMEDIATE-CHARACTERIZATION",
+  "new_helper_sha256": "ad74243b00e581a95a00c3bd6a43550bbcb2127e1f4a82e24b0e19acdeefd405",
+  "stage_identity_sha256": "dcbc6f06a6d6fb948211e8aa0e326974625358df3114ef37986ac93e2f23ef20",
+  "complete_regression_run": false,
+  "git_metadata_pointer": "/home/andy/mosaic/.git/worktrees/mosaic-manual-1.4.0",
+  "frozen_head": "69df623e06efd6721e1cc53e961a1dd845d2a48c",
+  "prelaunch_metadata_failure": {
+    "native_started": false,
+    "error": "staging has no .git; run.py git rev-parse HEAD failed",
+    "is_valid_red": false
+  },
+  "eventual_unfixed_real_A18_pass": "4e44c67f02f548d1b182acdeea9b396c",
+  "lanes": {
+    "controlled-experimental": {
+      "manifest": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-controlled-experimental/9e040cc112f640fbb36ce0ead54d9b38/manifest.json",
+      "manifest_sha256": "9af639decae67a178d8b01735d4f48286983ddeda25cba551ed848456fe86f05",
+      "failure": "H17 K2 cancel leaves confirmation footer on H04 beyond 250 ms",
+      "checks": {
+        "header": true,
+        "no_overflow": true,
+        "footer": false,
+        "field": true
+      },
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 32697,
+          "returncode": 0,
+          "seconds": 0.11385994497686625
+        },
+        {
+          "service": "sclang",
+          "pid": 32567,
+          "returncode": -15,
+          "seconds": 0.06434209301369265
+        },
+        {
+          "service": "crone",
+          "pid": 32559,
+          "returncode": 0,
+          "seconds": 0.015533772995695472
+        },
+        {
+          "service": "jack",
+          "pid": 32527,
+          "returncode": 0,
+          "seconds": 0.03159659804077819
+        }
+      ],
+      "frame": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-controlled-experimental/9e040cc112f640fbb36ce0ead54d9b38/screens/167-H04.png"
+    },
+    "real-time": {
+      "manifest": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-real-time/202b64e0e02a47f7ac5fecd73136ff63/manifest.json",
+      "manifest_sha256": "8768f07df14fb8b87c9b5ed8c5d459ae15e5b44279a70fa74c981fd065710bb2",
+      "failure": "H17 K2 cancel leaves confirmation footer on H04 beyond 250 ms",
+      "checks": {
+        "header": true,
+        "no_overflow": true,
+        "footer": false,
+        "field": true
+      },
+      "cleanup": [
+        {
+          "service": "matron",
+          "pid": 26832,
+          "returncode": 0,
+          "seconds": 0.1640967649873346
+        },
+        {
+          "service": "sclang",
+          "pid": 26740,
+          "returncode": -15,
+          "seconds": 0.11451936903176829
+        },
+        {
+          "service": "crone",
+          "pid": 26732,
+          "returncode": 0,
+          "seconds": 7.262203143909574e-05
+        },
+        {
+          "service": "jack",
+          "pid": 26728,
+          "returncode": 0,
+          "seconds": 0.015477602020837367
+        }
+      ],
+      "frame": "/home/andy/mosaic-behaviour-runs/h17-footer-immediate-real-time/202b64e0e02a47f7ac5fecd73136ff63/screens/167-H04.png"
+    }
+  }
+}

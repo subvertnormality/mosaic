@@ -1,0 +1,14 @@
+--- 
++++ 
+@@ -129,8 +129,9 @@
+ 
+       2. Add attacks at steps 1,5,9,13 in each bar, adding 16 to each step for each following bar.
+ 
+-      3. Open Masks. Set Note to MIDI 36, Vel to 90 and Len to 1/2 without holding a step. Set MIDI 37
+-      on each bar’s steps 5 and 13 by holding those steps and editing Note.
++      3. Open PARAMS > MOSAIC and set Snap note masks to scale to Off so MIDI 37 remains C#1. Return to Mosaic.
++      Open Masks. Set Note to MIDI 36, Vel to 90 and Len to 1/2 without holding a step. Set MIDI 37 on
++      each bar’s steps 5 and 13 by holding those steps and editing Note.
+ 
+       4. Add attacks at absolute steps 44 and 60: these are step 12 in bars 3 and 4. Hold each and set
+       Note to MIDI 38 and Vel to 35.

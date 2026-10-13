@@ -1,0 +1,40 @@
+{
+  "baseline_run": "/home/andy/mosaic-manual-runs/c04df836b6f54dc1873d94bf7708bbaf",
+  "baseline_helper_sha256": "9a7fcd3bd7b2d006cdf7be8fe9def7f21973451d290a5bb8fcc776a7eafdd524",
+  "candidate_helper_sha256": "846b62015e247cebe6986bbfbef7e2352b9b895928ff6fb9859baa1d1f5c3053",
+  "test_sha256": "f53b57745e9608fbda0decb4c7290051d58dd53b37c618d0340f1781d0a7d0c0",
+  "command": "python3 -m unittest discover -s tests/behaviour -p test_manual_course_bind.py",
+  "evidence": [
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-octave-route-red.log",
+      "sha256": "01351f0de3203be276ef6885e4f2e31c09ce07ca7dbdaac2f7a37fdd108cb876"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-octave-route-green.log",
+      "sha256": "016342533a2a6c5579224455b49390490891556b1d0634e03d79c8c915c5a104"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-octave-route-unfixed.py",
+      "sha256": "9a7fcd3bd7b2d006cdf7be8fe9def7f21973451d290a5bb8fcc776a7eafdd524"
+    },
+    {
+      "path": "/home/andy/mosaic-manual-1.4.0/docs/testing/mini-header-ui/course-octave-route-red-source.py",
+      "sha256": "f53b57745e9608fbda0decb4c7290051d58dd53b37c618d0340f1781d0a7d0c0"
+    }
+  ],
+  "actual_native_observations": [
+    110,
+    111
+  ],
+  "actual_page": "NOTE MASKS CH02 OCT-1",
+  "selected_octave_cell": [
+    9,
+    8,
+    15
+  ],
+  "cleanup_observation112_is_not_timed_acceptance": true,
+  "all19_musical_contracts_functions_periods_tolerances_ast_unchanged": true,
+  "production_changed": false,
+  "emulator_changed": false,
+  "native_qualification_pending": true
+}

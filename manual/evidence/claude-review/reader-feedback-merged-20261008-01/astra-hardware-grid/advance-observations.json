@@ -1,0 +1,18 @@
+[
+  {
+    "width": 1440,
+    "before": "Set the channel default and step-note exceptions · 1/6",
+    "after": "Set the channel default and step-note exceptions · 2/6",
+    "caption": "With no step held, turn E3 right until the screen reads G3 (MIDI 67). The screen shows the note name, so stop on the readout. This is the channel note mask: all four steps now play G, and their velocities stay as they were.",
+    "pressed": "true",
+    "enlarged": true
+  },
+  {
+    "width": 390,
+    "before": "Set the channel default and step-note exceptions · 1/6",
+    "after": "Set the channel default and step-note exceptions · 2/6",
+    "caption": "With no step held, turn E3 right until the screen reads G3 (MIDI 67). The screen shows the note name, so stop on the readout. This is the channel note mask: all four steps now play G, and their velocities stay as they were.",
+    "pressed": "false",
+    "enlarged": true
+  }
+]

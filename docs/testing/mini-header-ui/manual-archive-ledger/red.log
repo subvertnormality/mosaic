@@ -1,0 +1,17 @@
+E
+======================================================================
+ERROR: test_frozen_full_manual_keeps_MAN_ids_when_root_becomes_overview (test_refresh_source_inventory.SourceReviewTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 79, in test_frozen_full_manual_keeps_MAN_ids_when_root_becomes_overview
+    out,receipt=self.invoke()
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_refresh_source_inventory.py", line 22, in invoke
+    return tool.refresh(self.baseline,self.review)
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/refresh_source_inventory.py", line 92, in refresh
+    s=copy.deepcopy(review['new_manual_sections'][name]);s['heading']=name
+KeyError: 'Overview'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (errors=1)

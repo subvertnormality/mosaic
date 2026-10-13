@@ -1,0 +1,36 @@
+{
+  "kind": "ADTOF-PyTorch frozen-output-head transfer diagnostic",
+  "acceptance_claimed": false,
+  "artifact": "tests/rhythm_doctor/artifacts/adtof-transfer-v2/report.json",
+  "report_sha256": "b50f735aeabe09b9ee954672a485bdfdf1f32c5d6126fd2e1f020e8f707f8815",
+  "frozen_runner_sha256": "2573aabf4b785fcffaf52f7e690fcc9e3469ce7d2d7f9cdfb8ac70faab5cc83c",
+  "frozen_inputs_sha256": "46c6b8ad9245bf5894f3b3dd1a7029ca60b5748e574d40739d01401d24da488d",
+  "base_weight_sha256": "1bc986e596ec47ba0b44916f87cd4a39f0b2bec23596df3fb5d0e87749217320",
+  "output_head_sha256": "ef2dad3bdd5c26891784ba1b16a8beae3438fda502f6467cbb2f77f07389ba72",
+  "predictions_sha256": "77285efd87a4705ca8325d41f13b1dd725517cf7e261e8b2d761920a175d1e30",
+  "environment_sha256": "eecbb3e168febcd632bbee6bf8f2011ef83164dc58940c9eb23aef355813aa96",
+  "seed": 20260919,
+  "development_tracks": [3, 4, 5, 7, 10, 12, 13, 17, 18],
+  "held_tracks": [1, 2, 6, 8, 9, 11, 14, 15, 16, 19, 20],
+  "training": {
+    "backbone": "frozen",
+    "trainable_output_head_parameters": 605,
+    "loss": "class-balanced binary cross entropy",
+    "positive_weights": {"BD": 26.006311416625977, "SD": 34.49968719482422, "TOM": 100.0, "HH": 10.114640235900879},
+    "intervals": 222,
+    "interval_frames": 1000,
+    "time_cap_seconds": 600.0,
+    "wall_seconds": 386.36020929994993
+  },
+  "onset_metric": "independent source MIDI, one-to-one 50 ms matching; thresholds selected on development only",
+  "development_f1": {"BD": 0.9141329769462078, "SD": 0.714064914992272, "HH": 0.7227357863573198, "TOM": 0.09839317595715136},
+  "held_f1": {"BD": 0.8254681647940075, "SD": 0.5708989805375347, "HH": 0.6390041493775933, "TOM": 0.028985507246376812},
+  "held_tom_counts": {"tp": 9, "fp": 567, "fn": 36},
+  "limitations": [
+    "The held data is the old preliminary BabySlakh diagnostic and has been used by earlier feasibility work; it is not an untouched acceptance set.",
+    "Only the output head was tuned. The frozen training run used no held labels, thresholds, or intervals.",
+    "No BASS, cymbal, grid F1, ARM latency, incremental RSS, or redistribution claim is made.",
+    "The base ADTOF port/weight licensing remains unresolved for shipment."
+  ],
+  "interpretation": "This bounded transfer experiment did not resolve TOM: development F1 remains 0.0984 and old-held diagnostic F1 is 0.0290. It is evidence about this frozen head-only transfer configuration, not a conclusion about all model architectures."
+}

@@ -1,0 +1,12 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+F
+Failed tests:
+-------------
+1) test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition
+.///lib/rhythm_doctor_setup_backend_tests.lua:93: expected: "FAILED"
+actual: "READY"
+stack traceback:
+	.///lib/rhythm_doctor_setup_backend_tests.lua:93: in upvalue 'test_rhythm_doctor_setup_backend_recorder_invalid_source_refuses_acquisition'
+
+Ran 1 tests in 0.001 seconds, 0 successes, 1 failure, 2435 non-selected

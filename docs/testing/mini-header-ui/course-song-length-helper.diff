@@ -1,0 +1,41 @@
+--- frozen-d313
++++ candidate
+@@ -78,7 +78,7 @@
+         expected=expected,midi_start_index=start,midi_end_index=end,next_cycle_index=boundary['index'],
+         timing_tolerance_seconds=tolerance,citation=CITATION,passed=True))
+ 
+-def checkpoint(c,stage,page,params=None,mask_fields=(),selected=None,leds=()):
++def checkpoint(c,stage,page,params=None,mask_fields=(),selected=None,leds=(),dashboard_rows=()):
+     params=params or {}
+     from ui_map import header_parts
+     from frame_oracle import live_header_matches
+@@ -92,9 +92,14 @@
+     for name,value in mask_fields:c.ui.expect_field_value(name,str(value))
+     if selected:c.ui.expect_selected_field(**selected)
+     if leds:c.led_values([(x,y) for x,y,v in leds],[v for x,y,v in leds])
+-    c.results.append(dict(kind='manual-course-ui',stage=stage,page=page,params=params,header=header,
++    for row in dashboard_rows:
++        assert c.ui.expect_dashboard_row(row["label"],row["value"])==row["row"]
++    result=dict(kind='manual-course-ui',stage=stage,page=page,params=params,header=header,
+         mask_fields=[dict(field=n,value=str(v),layout='overview_masks') for n,v in mask_fields],
+-        selected_field=selected,leds=[dict(x=x,y=y,level=v) for x,y,v in leds],citation=CITATION,passed=True))
++        selected_field=selected,leds=[dict(x=x,y=y,level=v) for x,y,v in leds],citation=CITATION,passed=True)
++    if dashboard_rows:
++        result.update(dashboard_rows=list(dashboard_rows),native_observation_index=len(c.observations)-1)
++    c.results.append(result)
+ 
+ def mask(c,field,delta,step=None):
+     index={'trig':0,'note':1,'velocity':2,'length':3}[field]
+@@ -220,7 +225,11 @@
+     checkpoint(c,'song-composition-sparse-copy','masks',{'channel':1,'song_slot':2})
+     ui.song_editor()
+     for slot in (1,2):
+-        ui.tap_control('song_pattern_slot',slot);ui.tap_control('global_pattern_length',2)
++        ui.tap_control('song_pattern_slot',slot);ui.tap_control('global_pattern_length',3)
++        for _ in range(3):ui.tap_control('global_pattern_length',8)
++        checkpoint(c,'song-composition-global-length-slot%d'%slot,'song',{'song_slot':slot},
++            dashboard_rows=[dict(row=4,label='Global length',value='16')],
++            leds=[(x,7,v) for x,v in enumerate((7,2,9,2,2,2,2,7),1)])
+         ui.open_task('Song','slot_setup');ui.select_row('repeats',0)
+         c.enc(3,-64);ui.press_key(3)
+         checkpoint(c,'song-composition-length-slot%d'%slot,'song_setup',{'song_slot':slot},selected=dict(layout='vertical_list',label='Repeats',value='1'))

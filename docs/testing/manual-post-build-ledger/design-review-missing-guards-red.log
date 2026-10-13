@@ -1,0 +1,32 @@
+test_reserialized_immutable_yaml_requires_receipt (test_reconcile_manual_build.ReviewedDesignGapTests) ... FAIL
+test_missing_full_build_phase_rejected (test_reconcile_manual_build.ReviewedDesignGapTests) ... FAIL
+test_historical_doctor_publication_substitution_rejected (test_reconcile_manual_build.ReviewedDesignGapTests) ... FAIL
+
+======================================================================
+FAIL: test_reserialized_immutable_yaml_requires_receipt (test_reconcile_manual_build.ReviewedDesignGapTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 134, in test_reserialized_immutable_yaml_requires_receipt
+    with self.assertRaisesRegex(ValueError,'Unapproved'):tool.check_metadata('manual/player-routes.yaml',b'value: original\n',b'value: original\n\n',Path(temp))
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_missing_full_build_phase_rejected (test_reconcile_manual_build.ReviewedDesignGapTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 142, in test_missing_full_build_phase_rejected
+    with self.assertRaisesRegex(ValueError,'canonical plan'):tool.verify_manifest(fixture.root,fixture.build,fixture.pin)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_historical_doctor_publication_substitution_rejected (test_reconcile_manual_build.ReviewedDesignGapTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/docs/ui-reimplementation/tools/test_reconcile_manual_build.py", line 149, in test_historical_doctor_publication_substitution_rejected
+    with self.assertRaisesRegex(ValueError,'same-build capture reports'):tool.reproduced_scenes(root,root,m)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.053s
+
+FAILED (failures=3)

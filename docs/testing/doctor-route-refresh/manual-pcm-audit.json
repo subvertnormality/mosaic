@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "captures": [
+    {
+      "path": "/home/andy/mosaic-manual-runs/ea67eb71b9f94235b71220fe63ed0be2/rhythm-doctor-captures/rhythm-doctor-1.wav",
+      "sha256": "7c22e4e78326f4b061f1e567be0bc6d6821f514a7050af081b9ee5ae122fcbe1",
+      "frames": 1212828,
+      "rms": 0.04444037072916872
+    }
+  ],
+  "analyses": [
+    {
+      "path": "/home/andy/mosaic-manual-runs/ea67eb71b9f94235b71220fe63ed0be2/rhythm-doctor-analysis-runtime/results/rhythm-doctor-analysis-1.json",
+      "detector": {
+        "backend_id": "nmf-pfnmf-drums-v1",
+        "backend_sha256": "9153f5cd6bd1fe0458bdab0f0d8749c339914c4881b31fb27315a07c2c47d375",
+        "template_sha256": "6ed20fe064c9ee7a8f3a39c4c483660cb39f842bd82225c227429b69395f318e"
+      },
+      "bd_candidates": 48
+    }
+  ],
+  "stimulus_sha256": "331f763faa265cc295808b264a69c5348d4fe30229602dad0f9f605e94b895cf",
+  "worker_cleanup": [
+    {
+      "pid": 21317,
+      "active": false,
+      "observed_monotonic_ns": 425436891009608
+    }
+  ],
+  "frames": 7,
+  "controlled_time_applicable": false
+}

@@ -1,0 +1,26 @@
+F
+======================================================================
+FAIL: test_clock_matrix_selects_each_public_menu_checkpoint_before_play (test_lock_lead_owner.LockLeadOwnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_lock_lead_owner.py", line 83, in test_clock_matrix_selects_each_public_menu_checkpoint_before_play
+    self.assertEqual(
+AssertionError: Lists differ: [25, 50] != [0, 25, 50]
+
+First differing element 0:
+25
+0
+
+Second list contains 1 additional elements.
+First extra element 2:
+50
+
+- [25, 50]
++ [0, 25, 50]
+?  +++
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.017s
+
+FAILED (failures=1)

@@ -1,0 +1,29 @@
+F......F.........E....
+======================================================================
+ERROR: test_shared_strategy_requires_all_twelve_new_checkpoints (test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 144, in test_shared_strategy_requires_all_twelve_new_checkpoints
+    with self.assertRaisesRegex(ValueError,'checkpoint'):binder.verify_reviewed_scene(scene)
+AttributeError: module 'manual_feature_bind' has no attribute 'verify_reviewed_scene'
+
+======================================================================
+FAIL: test_all_five_updated_features_require_shared_selector_acceptance (test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 147, in test_all_five_updated_features_require_shared_selector_acceptance
+    self.assertIn('shared-merge-strategy-workflow',binder.MAPPINGS.get(fid,[]))
+AssertionError: 'shared-merge-strategy-workflow' not found in []
+
+======================================================================
+FAIL: test_exact_twenty_five_pending_feature_scope (test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 139, in test_exact_twenty_five_pending_feature_scope
+    self.assertEqual(len(binder.MAPPINGS),25)
+AssertionError: 20 != 25
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.179s
+
+FAILED (failures=2, errors=1)

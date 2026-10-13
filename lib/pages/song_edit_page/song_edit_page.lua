@@ -69,7 +69,7 @@ function song_edit_page.register_press()
        then
         local do_func = function()
           channel_pattern_buttons["step" .. s .. "_song_pattern_button"]:set_state(3)
-          program.get().selected_song_pattern = s
+          program.set_selected_song_pattern(s)
           -- Selecting a sequence by hand is a global pattern change like any
           -- other: nothing resolved from the outgoing pattern may still leave.
           if m_clock and m_clock.discard_lookahead then m_clock.discard_lookahead() end
@@ -108,7 +108,9 @@ function song_edit_page.register_press()
           channel_edit_page_ui.refresh_shuffle_feel()
           channel_edit_page_ui.refresh_shuffle_basis()
           channel_edit_page_ui.refresh_shuffle_amount()
-          
+          -- The Trig params dials show this pattern's assignments and values.
+          channel_edit_page_ui.refresh_trig_locks()
+
         end
 
         local blink_cancel_func = function()
@@ -170,6 +172,7 @@ function song_edit_page.register_press()
           channel_pattern_buttons["step" .. target_pattern .. "_song_pattern_button"]:is_this(x2, y2)
        then
         program.set_song_pattern(pattern, target_pattern)
+        channel_edit_page_ui.refresh_trig_locks()
         refresh_button[pattern] = true
         refresh_button[target_pattern] = true
       end

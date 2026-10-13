@@ -1,0 +1,34 @@
+{
+  "scope": "Development-split-only prototype sweep of alternative BASS decoders. Held-out data was never opened. No production change was made on this evidence.",
+  "date": "2026-09-19",
+  "motivation": "The held-out BASS lane fails at recall 0.314 against a zero-floor ceiling of 0.8142, so the failure looked like a decoding and ranking problem rather than a detection problem. BASS is a higher product priority than OHH.",
+  "observation_that_prompted_it": "The pinned decoder asks the Basic Pitch session for two outputs, StatefulPartitionedCall:1 and :2, and uses only the second. The first, the frame/note activation on the same 88-pitch grid, is computed and discarded. Pitch persistence was therefore available at zero additional inference cost.",
+  "hypothesis": "A real bass note sustains a stable pitch while percussive bleed does not, so gating onsets by frame-head persistence at the onset's pitch should suppress false positives.",
+  "method": {
+    "clips": "40 development clips, 863 BASS reference onsets",
+    "cached": "both model heads per clip, so the sweep was offline and free",
+    "matching": "chronological one-to-one, 50 ms tolerance, gap_frames 8, identical to the evaluator"
+  },
+  "results_persistence_gating": {
+    "baseline_best_dev_f1": 0.3771,
+    "baseline_threshold": 0.15,
+    "gated_best_dev_f1": 0.3789,
+    "gated_settings": {"onset_threshold": 0.15, "persistence_window_frames": 8, "persistence_threshold": 0.1},
+    "delta": 0.0018,
+    "verdict": "REFUTED. The gain is negligible."
+  },
+  "results_alternative_curves": [
+    {"variant": "onset head only (current production)", "dev_f1": 0.3771, "threshold": 0.15, "tp": 392, "fp": 824, "fn": 471},
+    {"variant": "frame/note head only", "dev_f1": 0.1165, "threshold": 0.1, "tp": 136, "fp": 1336, "fn": 727},
+    {"variant": "onset x frame product", "dev_f1": 0.2012, "threshold": 0.02, "tp": 214, "fp": 1050, "fn": 649},
+    {"variant": "positive flux of frame head", "dev_f1": 0.0976, "threshold": 0.02, "tp": 62, "fp": 345, "fn": 801}
+  ],
+  "development_ceiling_at_zero_threshold": {"recall": 0.6698, "matched": 578, "references": 863, "precision": 0.2288},
+  "conclusion": "The production decoder is already the best of every variant tried. Because the frame head agrees with the onset head on the spurious detections, those events carry genuinely sustained pitch content, which is consistent with tom and low-mid bleed surviving UMXHQ separation. The BASS failure is therefore in the separated stem, not in the decoding, and no decoder change will recover the lane.",
+  "actions_not_taken": [
+    "No production code was changed.",
+    "Held-out data was not opened and no held-out score was computed.",
+    "No threshold from this sweep was promoted into production."
+  ],
+  "consequence": "Improving BASS requires a cleaner bass stem. Demucs is the strongest licence-clean option but is refuted on device footprint (demucs-segment-memory-2026-09-19.json), and on-device throughput is separately the binding constraint (norns-drum-inference-2026-09-19.json)."
+}

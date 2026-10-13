@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "authorization": "Root /root explicit message APPROVES liveapply exact655; source-reviewed changes only, no acceptanceactivation/native/fullbuild/publishing release",
+  "before": {
+    "docs/ui-reimplementation/current-source-review.json": {
+      "sha256": "d924a17d8e88f13e09c10178b25ab08a5b7e67d5e2b87303cfa32c71fd23ee2a",
+      "archive": "manual/evidence/authored-source-review-20261004-course50-qualified/live-application-before/d924a17d8e88f13e09c10178b25ab08a5b7e67d5e2b87303cfa32c71fd23ee2a-current-source-review.json"
+    },
+    "docs/ui-reimplementation/source-inventory.json": {
+      "sha256": "82e05ac517fed12071e1474ecfb427c78d782582336f18eb274f55c1c41b2205",
+      "archive": "manual/evidence/authored-source-review-20261004-course50-qualified/live-application-before/82e05ac517fed12071e1474ecfb427c78d782582336f18eb274f55c1c41b2205-source-inventory.json"
+    },
+    "docs/ui-reimplementation/generated/source-review-receipt.json": {
+      "sha256": "245e0d55a802272d12b1247f72ccd87afe3c690a3480b9d4a49474efe81d02b2",
+      "archive": "manual/evidence/authored-source-review-20261004-course50-qualified/live-application-before/245e0d55a802272d12b1247f72ccd87afe3c690a3480b9d4a49474efe81d02b2-source-review-receipt.json"
+    }
+  },
+  "approved_and_applied_proposal_sha256": "655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741",
+  "after": {
+    "docs/ui-reimplementation/current-source-review.json": "655a08b20e8f2f3fe218a795800766f6f04176b7f15c5e7c51756d20d53c1741",
+    "docs/ui-reimplementation/source-inventory.json": "33650042daa49e1f7d8adad05d185b1b9a16f3e962adde5660bfaf0fb965017a",
+    "docs/ui-reimplementation/generated/source-review-receipt.json": "7624dcc6b512aa349e39f3f0ac85ba33d1d631fb980c5d6d5a1977107c7d26c7"
+  },
+  "strict_refresh_check": true,
+  "strict_source_validation": true,
+  "source_fingerprint_skip": false,
+  "source_files": 78,
+  "historical_manual_sections": 125,
+  "callbacks": 64,
+  "branches": 164,
+  "snapshot": "docs/testing/manual-post-build-ledger/prebuild-20261004-course50-gates",
+  "snapshot_sha256": "e9d1bbadbba2e732c8cd97e67045c61b97a4569f02a803d6bdc78a3f1dbfab27",
+  "snapshot_files": 81,
+  "all81_source_and_snapshot_bytes_equal": true,
+  "additional_nonmember_pins": [
+    {
+      "path": "tools/manual_course_cases.py",
+      "sha256": "04fe6e40242e0741247789b447efd70c8520ea54ac864125f1cf55c5d3a0d3c5"
+    },
+    {
+      "path": "tools/manual_publication_verify.py",
+      "sha256": "10b339ed62fd08b12926abffb67e72f2dce466a84f3b714e0d6b7a05703974a9"
+    },
+    {
+      "path": "tools/manual_audio.py",
+      "sha256": "4583b55b74e3a4fb63dcec6d073bb90b4928ed81f613919af1417f58aa935774"
+    },
+    {
+      "path": "tools/manual_closure_cases.py",
+      "sha256": "8cd241f2a9072492c37183dbe4a6312c5c0531dc15fac8a8dcfe5150765792be"
+    },
+    {
+      "path": "tools/manual_build.py",
+      "sha256": "a59e8f2f1e3913033f4c7f3981d364e625f4d30dabf733367d3aa70450d364c8"
+    },
+    {
+      "path": "tests/behaviour/test_manual_build.py",
+      "sha256": "2dc2d988de7f28fd366808fc8ce05adb600277cef7b632ff1562740cecb16ddf"
+    },
+    {
+      "path": "manual/scene-plans-course.yaml",
+      "sha256": "dc36d0cac4fb5609ef3a19fcbb56d134bd125da0b96b6770ffcebaa3bd1cd9ad"
+    },
+    {
+      "path": "manual/VOICES.md",
+      "sha256": "d431e303daf5f5bb697d7f2002233df8402b2929634bd7bd9f1d6af666631574"
+    },
+    {
+      "path": "manual/BUILD.md",
+      "sha256": "81767345371e2cad45e038d04d320b3867baf12fc5392fb7336ab84118814089"
+    }
+  ],
+  "authority_activation": false,
+  "complete_regression_run": false,
+  "native_launched": false,
+  "fullbuild_launched": false,
+  "published": false
+}

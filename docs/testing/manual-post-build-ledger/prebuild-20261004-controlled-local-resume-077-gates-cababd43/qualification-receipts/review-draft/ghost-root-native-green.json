@@ -1,0 +1,63 @@
+{
+  "checked_utc": "2026-10-04T14:34:05.739527+00:00",
+  "scope": "one-example controlled native musical MIDI green; no real-time qualification or audio rendering",
+  "passed": true,
+  "run": "/home/andy/mosaic-manual-runs/ghost-note-snap-off-green-077b-01",
+  "visible_snap_off": [
+    {
+      "kind": "selected-menu-option-row",
+      "label": "Snap note masks to scale",
+      "value": "Off",
+      "matched": true
+    }
+  ],
+  "literal_onsets": 18,
+  "ghost_steps": [
+    43,
+    59
+  ],
+  "main_note37_positions": [
+    4,
+    12,
+    20,
+    28,
+    36,
+    44,
+    52,
+    60
+  ],
+  "timing_tolerance_seconds": 2e-09,
+  "native_processes_after": [],
+  "cleanup": [
+    {
+      "service": "matron",
+      "pid": 17356,
+      "returncode": 0,
+      "seconds": 0.11408854502951726
+    },
+    {
+      "service": "sclang",
+      "pid": 17193,
+      "returncode": -15,
+      "seconds": 0.11468470498220995
+    },
+    {
+      "service": "crone",
+      "pid": 17185,
+      "returncode": 0,
+      "seconds": 6.992102134972811e-05
+    },
+    {
+      "service": "jack",
+      "pid": 17178,
+      "returncode": 0,
+      "seconds": 0.031680559972301126
+    }
+  ],
+  "hashes": {
+    "lesson-result.json": "4debfe878b2185a8cfcd5b6299314dc36665bdd738dc27a6f9393afa0a6caac5",
+    "results.json": "f7d6dcd1253d4c5e116fb2517308d50aeb0ba88df5653eb51f0251332c0f535d",
+    "native/identity.json": "ad2c789881967a2f36101f4d2269873b596decf4630d2ff2f562063e8b6f95f2",
+    "native/cleanup.json": "634513f0455f2b4703c9bca23c7e8bfe1f0b34de8d5787b4b9212d9e7a68fb25"
+  }
+}

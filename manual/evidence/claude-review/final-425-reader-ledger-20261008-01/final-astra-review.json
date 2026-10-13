@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "candidate": "installed C07-1 three-scalar follow-up",
+  "verdict": "reader review pass",
+  "all_seven_at_least_8": true,
+  "scores": {
+    "readability": 8,
+    "comprehensibility": 8,
+    "flow": 8,
+    "understandability": 8,
+    "user_friendliness": 8,
+    "usefulness_of_interactive_examples": 8,
+    "cohesion": 8
+  },
+  "open_findings": [],
+  "closed_findings": [
+    "C07-1",
+    "C07-N1",
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5"
+  ],
+  "original_finding_status": {
+    "F01": "closed at reader level",
+    "F02": "closed at reader level",
+    "F03": "closed within recorded-walkthrough scope",
+    "F04": "closed at reader level",
+    "F05": "closed at reader level",
+    "F06": "closed at reader level",
+    "F07": "closed at reader level",
+    "F08": "closed at reader level",
+    "F09": "closed at reader level",
+    "F10": "closed at reader level",
+    "F11": "closed at reader level"
+  },
+  "source": {
+    "url": "http://localhost:8785/manual/",
+    "served_assets": {
+      "manual/generated/reader-index.json": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24",
+      "manual/book.js": "a80f66aee6f4b5cc3c98fb38b0ff39e027be8d178dba8c29e10f5c92661bbeb1",
+      "manual/manual.js": "49a88a9be93f58571b43fdb30e445bffb0bac4340941726a5488577ea21b21e4",
+      "manual/manual.css": "123afe7d35beb8e827089b16518f03ccdfdcc000c33916e64b8f0002eb2caa4a",
+      "manual/index.html": "c4386498a8f224507ff0316958078932e58865640ed91931afb9945599839b87",
+      "cheat_sheet.html": "6c169304bd791673876479649ceb720e161b7a6bee2a570d074e0f082d251695"
+    },
+    "served_index_canonical_inputs": {
+      "audio_scenes_json_sha256": "3396e9e75f11dd66482fb85c3dc58997efdcb591801c37622dcd49a1ff1fe0bd",
+      "book_json_sha256": "e0d23614c74ca9fdf47caaaa6c4ab758b530639530e20b8eadd140fcf5ef49fe",
+      "retained_midi_admission_sha256": "8a5aca9c52ed89de06df6361b236a0b937c91045788c2c18c97c0b5ecca8446a"
+    },
+    "served_index_authoring_identity": "e34e4faed23c5f5ae6593aba425596eba7ba25594c806a216737d266a37e6800",
+    "root_reported_postinstall_receipt_sha256": "221496a38940a5b0374923005afa393fb2410c5d9abfe5318741eb6a06547fe8",
+    "root_reported_final_manifest_sha256": "5c88a4c57867ae78e4b4addbe1bed4fd8922f86778535c3697c52a3a506faf41"
+  },
+  "coverage": {
+    "fresh_widths": [
+      1440,
+      390
+    ],
+    "fresh_route_viewport_checks": 6,
+    "actual_routes": [
+      "#locks/recipe/5",
+      "#small-hours/recipe/2",
+      "#small-hours/recipe/3"
+    ],
+    "screenshots_visually_inspected": 6,
+    "browser_errors": [],
+    "unintended_overflows": 0,
+    "prior_whole_reader": {
+      "public_features": 133,
+      "course_openings": 10,
+      "route_viewport_observations": 116,
+      "report": "../combined-candidate07-astra-recheck-20261008-01/review.md",
+      "report_sha256": "066f06fb28362b9fe2c93787fddb4f77b5fdd92c31bca73d068c6327df641d5d",
+      "json_sha256": "70f8d342d727343f272c25e73a439b490e6e1fb4d3015a61134c5272f3ea7768",
+      "retention_basis": "independent complete reader-index comparison; only three recipe text scalars and identities changed; other served assets byte-identical"
+    }
+  },
+  "parity": {
+    "diff_paths": [
+      "/authoring_identity/files/manual/features/cookbook.yaml",
+      "/authoring_identity/files/manual/features/reference-locks.yaml",
+      "/authoring_identity/sha256",
+      "/canonical_inputs/book_json_sha256",
+      "/features/78/recipes/4/text",
+      "/features/129/recipes/1/text",
+      "/features/129/recipes/2/text",
+      "/source_sha256"
+    ],
+    "all_146_scene_refs_exact": true,
+    "all_21_audio_refs_exact": true,
+    "course_exact": true,
+    "other_served_assets_exact": true,
+    "root_reported_all_167_chunks_byte_identical": true,
+    "end_index_sha256": "254d19c38871b71973a6252fe859a02c4a9d6c8c464840d367de58baa8c4ff24"
+  },
+  "evidence": [
+    "observations.json",
+    "decay-1440.png",
+    "decay-390.png",
+    "bass-1440.png",
+    "bass-390.png",
+    "chord-1440.png",
+    "chord-390.png"
+  ],
+  "limitations": [
+    "No listening claims.",
+    "No native/audio generation, emulator campaign, CI or hardware certification.",
+    "425-unit ratings and native parity remain separate root evidence.",
+    "Reader approval does not perform publication or replace remaining release gates.",
+    "Prior failed reports preserved; owned browser closed; production source and services unchanged."
+  ]
+}

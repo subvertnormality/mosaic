@@ -1,0 +1,202 @@
+{
+  "scope": "Root-approved bounded review of exactly two regenerated members from successful native stages within FAILED whole build",
+  "whole_build": {
+    "path": "/home/andy/mosaic-manual-build-runs/controlled-local-next-plan-ac0708cafdf14685ac2b4bee280be7c9/b2efd3ce33aa4d19a50d5fd2e0cd59e8/manifest.json",
+    "sha256": "435711ea84279a583826073b9bdc168d8efc1fe33f97e5c7fedf1bf471b4cc77",
+    "passed": false,
+    "build_complete": false,
+    "manual_generation_complete": null
+  },
+  "members": [
+    {
+      "member": "manual/features/scenes-reference-musical-scenes.yaml",
+      "before_sha256": "329924c793b75426499bb3b9e7314205b99060639deab346c206eb5c3a22b830",
+      "after_sha256": "04bbf4782e05d26f1cb89a5d414471a57cd091aaaacd83102dffbbe910d4ef00",
+      "stage": {
+        "path": "/home/andy/mosaic-manual-build-runs/controlled-local-next-plan-ac0708cafdf14685ac2b4bee280be7c9/b2efd3ce33aa4d19a50d5fd2e0cd59e8/reference-controlled-scene-plans-musical-base-midi.json",
+        "sha256": "8eefc9b225c13d95035ee0562cc1d2cea7c9d8c1930cd833124283fced51b5b7",
+        "name": "reference-controlled-scene-plans-musical-base-midi",
+        "passed": true
+      },
+      "native_report": {
+        "path": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/reference-scenes.json",
+        "sha256": "037ff6cb48af37b06d725b57c1d0f98ac811d93ed4acb94402a5d85bfe1d645a"
+      },
+      "published_json": {
+        "path": "/home/andy/mosaic-manual-1.4.0/manual/generated/reference-musical-scenes.json",
+        "sha256": "037ff6cb48af37b06d725b57c1d0f98ac811d93ed4acb94402a5d85bfe1d645a"
+      },
+      "frozen_adapter": {
+        "path": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/capture-source/tools/manual_case_capture.py",
+        "sha256": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c"
+      },
+      "generation": "Exact frozen publish AST statements executed against source-reconstructed immutable scene objects into scratch; no native execution",
+      "object_identity_restoration": [
+        {
+          "scene": "foundation-protected-and-added",
+          "trace": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/M-MERGE-FOUNDATION-001-base-midi/capture-trace.json",
+          "trace_sha256": "0777dda29b60fdc6686fe6df44fed3f7a17077704f22d6942eac1a6aa7130f62",
+          "consumed_events": 1002,
+          "requirements_owner": [
+            "M-MERGE-FOUNDATION-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "foundation-two-cycle-build",
+          "trace": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/M-MERGE-PHRASE-001-base-midi/capture-trace.json",
+          "trace_sha256": "03b2e970f45c79bca0486559d8057b9c28dc363c78cf4f3fefb35637dd1fb763",
+          "consumed_events": 1333,
+          "requirements_owner": [
+            "M-MERGE-PHRASE-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "fragments-seed-source-choice",
+          "trace": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/M-MERGE-FRAGMENTS-001-base-midi/capture-trace.json",
+          "trace_sha256": "7b21789bf90b949b34bba79fa4fa2292bcbe378dad9ddd5a6b964120db6c813b",
+          "consumed_events": 1222,
+          "requirements_owner": [
+            "M-MERGE-FRAGMENTS-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "interlock-leader-window",
+          "trace": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/M-MERGE-INTERLOCK-001-base-midi/capture-trace.json",
+          "trace_sha256": "7d149bf8a79930f1a5652b5f21e56fafae9925424df5f667c631087d5b8369be",
+          "consumed_events": 2437,
+          "requirements_owner": [
+            "M-MERGE-INTERLOCK-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "structure-anchor-chord-and-delete",
+          "trace": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/M-MERGE-STRUCTURE-001-base-midi/capture-trace.json",
+          "trace_sha256": "eac2ae47f3408c3cd1a229dcbbcbfc3b45d26b1e0de6f6dbbb0adcdf851b6944",
+          "consumed_events": 2271,
+          "requirements_owner": [
+            "M-MERGE-STRUCTURE-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "harmony-revoice-two-voices",
+          "trace": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/M-HARMONY-REVOICE-001-base-midi/capture-trace.json",
+          "trace_sha256": "a42a27414d15ef2bb009d29959f3878e04c7ffec0ce24e393b0e32b4555652ff",
+          "consumed_events": 376,
+          "requirements_owner": [
+            "M-HARMONY-REVOICE-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "harmony-ensemble-and-local-bypass",
+          "trace": "/home/andy/mosaic-manual-runs/e107a56bdccd468fa9d0aec4f506d7de/M-HARMONY-ENSEMBLE-001-base-midi/capture-trace.json",
+          "trace_sha256": "53a2ace5aebd08357c09af171c841cc7cb6372023fe853531394adff8ac40c83",
+          "consumed_events": 1836,
+          "requirements_owner": [
+            "M-HARMONY-ENSEMBLE-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        }
+      ],
+      "reproduced_yaml": "/home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/musical/manual/features/scenes-reference-musical-scenes.yaml",
+      "source_manifest_checks": {
+        "plan_files": 1,
+        "case_sources": 235,
+        "capture_sources": 3,
+        "fixture_sources": 1
+      },
+      "historical_strict_audit_frames": 18,
+      "current_source_audit_frames": null,
+      "current_source_audit_error": "ValueError('Stale behaviour case source: tests/behaviour/cases.py')",
+      "scope": "historical successful partial stage; failed whole manual remains incomplete",
+      "complete_regression_run": false
+    },
+    {
+      "member": "manual/features/scenes-reference-nested-scenes.yaml",
+      "before_sha256": "cba4e49eca7296e7e5971deeb657c26d5f2e42e964b4e5741b8a7a3e43630a23",
+      "after_sha256": "2fe0f2b128916c24effc28890c21a50e3b30b560b9504e707a7dad3e2d9c895d",
+      "stage": {
+        "path": "/home/andy/mosaic-manual-build-runs/controlled-local-next-plan-ac0708cafdf14685ac2b4bee280be7c9/b2efd3ce33aa4d19a50d5fd2e0cd59e8/reference-controlled-scene-plans-nested-base-midi.json",
+        "sha256": "ffe57f96b7cd698585cbd23db836d8dfc9a3af85b085d4bbe27d7612f30b5e5a",
+        "name": "reference-controlled-scene-plans-nested-base-midi",
+        "passed": true
+      },
+      "native_report": {
+        "path": "/home/andy/mosaic-manual-runs/90a5df27f9bd479caf4bec904b54b741/reference-scenes.json",
+        "sha256": "945dbb96257f057634dfb581dfda500dff6a4c47de902653e2a7daaafafb411b"
+      },
+      "published_json": {
+        "path": "/home/andy/mosaic-manual-1.4.0/manual/generated/reference-nested-scenes.json",
+        "sha256": "945dbb96257f057634dfb581dfda500dff6a4c47de902653e2a7daaafafb411b"
+      },
+      "frozen_adapter": {
+        "path": "/home/andy/mosaic-manual-runs/90a5df27f9bd479caf4bec904b54b741/capture-source/tools/manual_case_capture.py",
+        "sha256": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c"
+      },
+      "generation": "Exact frozen publish AST statements executed against source-reconstructed immutable scene objects into scratch; no native execution",
+      "object_identity_restoration": [
+        {
+          "scene": "mapping-child-selected-and-fixed",
+          "trace": "/home/andy/mosaic-manual-runs/90a5df27f9bd479caf4bec904b54b741/M-MAP-001-base-midi/mapping/capture-trace.json",
+          "trace_sha256": "198bffc6f2bea9140f90faee383d0bb18eb332742c868b5dd3065fb98f424079",
+          "consumed_events": 581,
+          "requirements_owner": [
+            "M-MAP-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "elektron-child-enable-and-announce",
+          "trace": "/home/andy/mosaic-manual-runs/90a5df27f9bd479caf4bec904b54b741/M-OPT-ELEK-001-base-midi/elektron/capture-trace.json",
+          "trace_sha256": "7faa1bd496097ac4f77d073ba63c5e212999f977f1debbc35ba4853f9cd7e3e9",
+          "consumed_events": 547,
+          "requirements_owner": [
+            "M-OPT-ELEK-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        },
+        {
+          "scene": "elektron-child-program-channel",
+          "trace": "/home/andy/mosaic-manual-runs/90a5df27f9bd479caf4bec904b54b741/M-OPT-ELEK-001-base-midi/elektron/capture-trace.json",
+          "trace_sha256": "7faa1bd496097ac4f77d073ba63c5e212999f977f1debbc35ba4853f9cd7e3e9",
+          "consumed_events": 888,
+          "requirements_owner": [
+            "M-OPT-ELEK-001",
+            "base-midi"
+          ],
+          "assertion_types": "Exact frozen YAML selector matched by canonical JSON equality; no value changes"
+        }
+      ],
+      "reproduced_yaml": "/home/andy/mosaic-manual-build-operators/partial-musical-nested-source-review-0f67df1bb03246dab0baeee96f4f2ae4/nested/manual/features/scenes-reference-nested-scenes.yaml",
+      "source_manifest_checks": {
+        "plan_files": 1,
+        "case_sources": 235,
+        "capture_sources": 3,
+        "fixture_sources": 1
+      },
+      "historical_strict_audit_frames": 11,
+      "current_source_audit_frames": null,
+      "current_source_audit_error": "ValueError('Stale behaviour case source: tests/behaviour/cases.py')",
+      "scope": "historical successful partial stage; failed whole manual remains incomplete",
+      "complete_regression_run": false
+    }
+  ],
+  "reviewed_members": 78,
+  "whole_manual_complete": false,
+  "current_native_qualification": false,
+  "authority_activation": false
+}

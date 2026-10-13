@@ -1,0 +1,27 @@
+..................F.........
+======================================================================
+FAIL: test_readability_requires_all_seventeen_native_checkpoints (test_manual_feature_bind.FeatureBindingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_feature_bind.py", line 173, in test_readability_requires_all_seventeen_native_checkpoints
+    with self.assertRaisesRegex(ValueError,'seventeen'):binder.verify_reviewed_scene(scene)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.261s
+
+FAILED (failures=1)
+
+.......................F........
+======================================================================
+FAIL: test_readability_plan_replays_the_same_canonical_case_in_both_lanes (test_manual_build.BuildPlan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_build.py", line 288, in test_readability_plan_replays_the_same_canonical_case_in_both_lanes
+    self.assertEqual(len(plan["scenes"][0]["steps"]),17)
+AssertionError: 7 != 17
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.641s
+
+FAILED (failures=1)

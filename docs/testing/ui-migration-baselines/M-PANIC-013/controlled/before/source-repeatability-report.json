@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "89ab06f3876e2e83b3805f1a4e5e5268f1059dc3",
+  "selected_cases": [
+    "M-PANIC-011",
+    "M-PANIC-012",
+    "M-PANIC-013",
+    "M-PANIC-014",
+    "M-PAT-BOUNDARY-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/panic_hotplug.py": "M-PANIC-011",
+    "tests/behaviour/pattern_boundary_edit.py": "M-PAT-BOUNDARY-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/panic_hotplug.py",
+      "case": "M-PANIC-011",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-68b7543fcf8f40998cfb0447fd7f9550/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-68b7543fcf8f40998cfb0447fd7f9550/manifest.json",
+      "manifest_sha256": "f84f072170fc9c5ea8c1a704175dbf5e06a9022a34aedd5dd8960649b6bd2fe2",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/pattern_boundary_edit.py",
+      "case": "M-PAT-BOUNDARY-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-f10a4c46ff6a4f80829cf7886ac48d33/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-f10a4c46ff6a4f80829cf7886ac48d33/manifest.json",
+      "manifest_sha256": "1fa7431a5164b509ad1a715a4098466bc78061095a7e802f24861360a37c6b90",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

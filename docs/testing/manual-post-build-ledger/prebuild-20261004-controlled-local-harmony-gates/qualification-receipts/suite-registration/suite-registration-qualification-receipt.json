@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "suite_registration": "green-after",
+  "suite_red_before": {
+    "path": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/suite-registration-red-before.json",
+    "sha256": "11de82423c0d99f98058b1f7f844654ba91c3468f1d3f6fe3be668f035445e47",
+    "returncode": 1,
+    "missing_modules": [
+      "test_manual_capture",
+      "test_manual_controlled_generation_integrity"
+    ]
+  },
+  "suite_source_archive": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/suite-registration-before/suite.py",
+  "suite_source_archive_sha256": "602b8c5dd3a8b18a9f7c6f9748bf004203540d1153ef99bb402ff603840813e2",
+  "tests": [
+    {
+      "label": "manual_build",
+      "pattern": "test_manual_build.py",
+      "returncode": 0,
+      "expected_count": 62,
+      "output": "Stage: capture-0\nStage: capture-1\nStage: capture-2\nStage: capture-3\nStage: capture-4\nStage: capture-5\nStage: capture-6\nStage: capture-7\nStage: capture-8\nStage: capture-9\nStage: capture-10\nStage: capture-11\nStage: capture-12\nStage: capture-13\nStage: capture-14\nStage: capture-15\nStage: capture-16\nStage: capture-17\nStage: capture-18\nStage: capture-19\nStage: capture-20\nStage: capture-21\nStage: capture-22\nStage: capture-23\nStage: capture-24\nStage: capture-25\nStage: capture-26\nStage: capture-27\nStage: capture-28\nStage: capture-29\nStage: capture-30\nStage: capture-31\nStage: capture-32\nStage: capture-33\nStage: capture-34\nStage: capture-35\nStage: capture-36\nStage: capture-37\nStage: capture-38\nStage: capture-39\nStage: capture-40\nStage: capture-41\nStage: capture-42\nStage: capture-43\nStage: capture-44\nStage: capture-45\nStage: capture-46\nStage: capture-47\nStage: capture-48\nStage: capture-49\nStage: capture-50\nStage: capture-51\nStage: capture-52\nStage: capture-53\nStage: capture-54\nStage: capture-55\nStage: capture-56\nStage: capture-57\nStage: capture-58\nStage: capture-59\nStage: capture-60\nStage: capture-61\nStage: capture-62\nStage: capture-63\nStage: capture-64\nStage: capture-65\nStage: capture-66\nStage: capture-67\nStage: capture-68\nStage: capture-69\nStage: capture-70\nStage: capture-71\nImmutable build evidence: /tmp/tmpivwodt14/runs/286f031e16f34572b6a670bfda5d8c79\nStage gate ready: /tmp/tmpjqeoyrsx/gates/001-b205cb93cc4b391df33f277070781b3bcdbd129b768782e0db224514509d795f.request.json\nStage gate ready: /tmp/tmp6d50tgv_/gates/001-558a6c8f0cce4c93b2d1b45664deb8ed9b231becfee313ed421c4dd34d32564f.request.json\nStage gate ready: /tmp/tmphi9wfku0/gates/001-26f2d868ba68c035abdf6a2bf6c8bdf8553fe33e015b149467109b337ce83e6c.request.json\nStage: capture-real\nImmutable build evidence: /tmp/tmpu50kvdvz/runs/5ddec72ee9a04385a199eeb681f168e4\nStage gate ready: /tmp/tmps99b1frz/gates/001-88ad41994f430c6fb743fe10e5edef3a3599fc64c09d4d14d8105bb8f24fd9b6.request.json\nStage gate ready: /tmp/tmpffk5w_9h/gates/002-d06f76b9074596e51d90e9406f78139a8003349b0dac048357ed4be48bdd3d07.request.json\nStage gate ready: /tmp/tmpvd0eema6/gates/002-86bc3e2e111ac64be017d98883e045e505635429a26fe0490f243ca30ad4eda2.request.json\nStage gate ready: /tmp/tmpyrr8a3zk/gates/001-b5e4984392741bd6819df1cd931b0b9c1bb7e15e5f8336b1b60195bedbae0f53.request.json\nStage gate ready: /tmp/tmpvdnv2ms4/gates/001-182e41e9af13cc68ac42322c222d152e22c954b3cdb3641eaec482bcb312bf0a.request.json\nStage gate ready: /tmp/tmpbgq5th08/gates/001-efbbd8bf0585d5e08ef06e280ee1dc604f3fa79b41c6db73f9528b0ee23fe329.request.json\nStage gate ready: /tmp/tmpq735n_u4/gates/001-f085951f47def22629331e01750c9363be1955c7ada8cd039f40705f4a363f80.request.json\nStage gate ready: /tmp/tmpmxln3h1b/gates/001-ac3c4af4ae106f08ade11ac113158dfcd78e78fabf4a29709b0823b951a0e095.request.json\nStage gate ready: /tmp/tmpgnpn6r09/gates/001-885dc57a70030c65ebd9d109ed0d2bd74d6f7b1adada8058f846f851c8faf8ea.request.json\nStage gate ready: /tmp/tmpnbgue_4f/gates/001-aedcd0cf6126bfbe5bac3805c40f4d5d26e32b1fcfd228a0a7c157bc4ebfb2cf.request.json\nStage gate ready: /tmp/tmp2kah1vwq/gates/001-e5dd8a0ba207158a350a5020e9e9d185cd607a8082e80baacdd33e138c4e793d.request.json\nStage gate ready: /tmp/tmp4vca99v6/gates/001-961dad73d831906ee00bc82e21fca4ce7c366d67c1a4c1c4981f4afa23c369bb.request.json\n..............................................................\n----------------------------------------------------------------------\nRan 62 tests in 2.751s\n\nOK\n"
+    },
+    {
+      "label": "manual_case_capture",
+      "pattern": "test_manual_case_capture.py",
+      "returncode": 0,
+      "expected_count": 25,
+      "output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.132s\n\nOK\n"
+    },
+    {
+      "label": "manual_capture",
+      "pattern": "test_manual_capture.py",
+      "returncode": 0,
+      "expected_count": 1,
+      "output": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n"
+    },
+    {
+      "label": "suite_guard",
+      "pattern": "test_suite.py",
+      "returncode": 0,
+      "expected_count": 27,
+      "output": "{\"suite\": \"/tmp/tmp0t8eisif/suite-output/suite.json\", \"passed\": false, \"complete\": false, \"failed_case_runs\": 0, \"failed_layer_items\": []}\n...........................\n----------------------------------------------------------------------\nRan 27 tests in 5.552s\n\nOK\n"
+    },
+    {
+      "label": "controlled_integrity",
+      "pattern": "test_manual_controlled_generation_integrity.py",
+      "returncode": 0,
+      "expected_count": 2,
+      "output": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.013s\n\nOK\n"
+    }
+  ],
+  "controlled_local_focus_total": 88,
+  "all_green": true,
+  "source_hashes": {
+    "tools/manual_build.py": "cdf8b1cb1fdca9d6d2384e7e954acc7f992ddf6e4ca0d9e5a3b48d3cc8afd0cc",
+    "tools/manual_capture.py": "96cc9b6b3eccb88457f878654eab3201ba9319c1869ae6fc7cfe12394b229d80",
+    "tools/manual_case_capture.py": "452c594c02788f32d5f28d6cfb74b49f61c26336b2cee5290f8f5940c3775f7c",
+    "tests/behaviour/suite.py": "4e56edf440fac75dd565b6172472c3fe98124a1d607b5c6b70caca510970f418",
+    "tests/behaviour/test_manual_build.py": "460b17fd6b4885d65b1a7e7515a7319a3b9c98bc7806433cc8446189ec26ae77",
+    "tests/behaviour/test_manual_case_capture.py": "8ced93458e570c039a8ae0864b0f15fa86a72f061992ec2a5f1faf33385425cc",
+    "tests/behaviour/test_manual_capture.py": "eea02adb476a6afc940244e4e3d699c524e85e82360eb0cf9a9c4ca4d605444f"
+  },
+  "owned_allowlist": [
+    "tools/manual_build.py",
+    "tools/manual_capture.py",
+    "tools/manual_case_capture.py",
+    "tests/behaviour/suite.py",
+    "tests/behaviour/test_manual_build.py",
+    "tests/behaviour/test_manual_case_capture.py",
+    "tests/behaviour/test_manual_capture.py"
+  ],
+  "old_receipt": "/home/andy/mosaic-manual-build-operators/controlled-local-3962d1d646e64124aabf3182d748a390/source-qualification-receipt.json",
+  "default_plan_sha256": "ada92f688ed2918829151232458f7b343387f656d558be6887a4b68e5b2a0dfd"
+}

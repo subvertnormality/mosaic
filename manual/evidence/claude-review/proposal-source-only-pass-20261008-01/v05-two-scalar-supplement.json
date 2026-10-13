@@ -1,0 +1,35 @@
+{
+  "review_id":"proposal-v05-two-scalar-review-2026-10-08",
+  "revision":2,
+  "decision":"HOLD",
+  "candidate_manifest_path":"C:\\Users\\andy\\.codex\\visualizations\\2026\\10\\03\\01a100e0-e188-7c11-b2f0-748214517bb6\\doc-language-cleanup-20261008-01\\candidate-v05\\manifest.json",
+  "candidate_manifest_sha256":"928d0ce471fce9ac259978a4956c48f08816fb7ebb54e0a004808da44cf160b0",
+  "candidate_files":{
+    "manual/features/reference-locks.yaml":"6e55bc5426ebdab56607baf3e60e034a271269262fa53b74f5b0c322b0c6f9c2",
+    "manual/features/reference-musical.yaml":"a0e236ebaa20c95d1032a60431fcc3b8ba427b52694a496cb50b040a16cd2d8e"
+  },
+  "rubric_source":{"path":"final-reader-rechecks/source19-course-crossref-score-refresh","sha256":"fe378689a917dd0eedc2f77e13588bd9b6faba11b66dfc3d6e948dc78c1255f2","criteria":["coherence","usefulness","understandability","representation","granularity","flow","integration","vocabulary","naming","canonical_home"],"note":"Scores below are fresh judgments of these two v05 scalars against the current rubric; no scores were transferred from the stale Windows ledger."},
+  "unit_ratings":[
+    {
+      "unit_id":"feature:locks:recipes[4]",
+      "field":"manual/features/reference-locks.yaml#feature.locks.recipes[4].text",
+      "scores":{"coherence":9,"usefulness":7,"understandability":8,"representation":9,"granularity":8,"flow":7,"integration":8,"vocabulary":8,"naming":9,"canonical_home":9},
+      "blockers":["The relative-turn exercise says slot 1 is two bars/32 steps but never instructs the reader to set that length. A new Song Pattern defaults to global_pattern_length 64 (lib/models/model_defaults.lua:98); the endpoint exercise correctly has an explicit slot-1 length instruction, but the relative exercise does not."],
+      "resolved_in_v05":["PolyPerc install/enable route","Channel (3,8), channel 1 selection and Pattern 1 assignment","select slot 2 after each copy","select slot 1 before each A/B playback","player-facing relative-turn wording and device-value caveat"],
+      "correction_to_prior_assessment":"Masks Note is an absolute MIDI note mask (range -1..127 in lib/pages/channel_edit_page/channel_edit_page_ui.lua); the stated note values belong in Masks. The prior suggestion to move this recipe's note entry to Pattern Note Editor is withdrawn.",
+      "score_basis":"Navigation is now clear and the note values are correctly Mask note values. The relative exercise still fails to establish its stated 32-step starting state on an empty project, so usefulness and flow remain below threshold."
+    },
+    {
+      "unit_id":"feature:performance-management:details[0]",
+      "field":"manual/features/reference-musical.yaml#feature.performance-management.details[0].text",
+      "scores":{"coherence":6,"usefulness":7,"understandability":9,"representation":8,"granularity":8,"flow":6,"integration":6,"vocabulary":7,"naming":5,"canonical_home":8},
+      "blockers":["The title remains 'Earlier timing test' while the replacement text is generic workload advice.","The parent Performance Management prose still contains the version 1.1.1 test-history paragraph, so changing only this details text does not remove the stale production-history framing from the page.","The replacement advice is clear but could point readers to the workload controls already discussed in the feature."],
+      "score_basis":"The field is clear as a standalone sentence, but its unchanged heading conflicts with it and the containing feature still displays the version-specific history. The proposed scalar therefore does not achieve its cleanup purpose."
+    }
+  ],
+  "preserved_reviews":[
+    {"path":"proposal-review-20261008-01/review.json","sha256":"22e5ab006310a3dbd9ff883e3637490fb152dd3d6f15f161480e399e3b7e94dd","note":"Initial 52-unit v03 review remains unchanged."},
+    {"path":"proposal-review-20261008-01/locks-v04-supplement.json","sha256":"c6eafe717894da385d894b676c1fed146933700027425fd5176437029456d874","note":"v04 navigation supplement remains unchanged."}
+  ]
+}
+

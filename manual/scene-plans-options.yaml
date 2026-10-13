@@ -1,0 +1,1902 @@
+schema_version: 1
+status: semantic-checkpoint-plan-not-captured
+base_revision: 54d7b871358fcc68b7166847603cc9fb1461d0b6
+scope: Replay each existing native case in full; select only post-assertion player-observable result rows.
+  Checkpoints containing MIDI or persistence evidence need not visibly print the audited events. No nested-session
+  or post-finish result is used as a live framebuffer checkpoint.
+scenes:
+- id: channel-task-navigation
+  feature_id: norns-menu-navigation
+  title: Find a channel task
+  behaviour_case: M-LIVEUI-TASKS-001
+  citation: README.md#norns-menu-navigation
+  source: tests/behaviour/contract/live_ui.py
+  steps:
+  - id: open
+    title: Open tasks
+    caption: 'Tap Channel (3,8): the Masks page opens for CH01. Turn E1 one detent. From any page, E1
+      opens Channel tasks, with the page you came from highlighted, here Masks. The nine tasks, top to
+      bottom, are 1 Masks, 2 Trig params, 3 Output, 4 Clock, 5 Merge modes, 6 Merge Shape, 7 Harmony,
+      8 Device and 9 History.'
+    assertion:
+      kind: e1-opens-tasks
+      source: masks
+      passed: true
+  - id: harmony
+    title: Scroll down to Harmony
+    caption: 'With the list open, E1 and E2 both scroll it, one row per detent. Turn E1 two detents to
+      row 3, Output, then turn E2 four detents: Clock, Merge modes, Merge Shape, and Harmony, row 7, is
+      highlighted.'
+    assertion:
+      kind: task-scroll
+      encoder: 2
+      delta: 1
+      row: Harmony
+      passed: true
+  - id: scroll-ends
+    title: Scroll back up to Masks
+    caption: Turn E2 four detents back up the list to Output (row 3), then turn E1 four detents the same
+      way. The highlight stops on Masks, row 1, and the list does not wrap.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Masks
+      value: OPEN >
+      matched: true
+    occurrence: 2
+  - id: open-trig-params
+    title: Open Trig params
+    caption: Turn E2 one detent down to Trig params (row 2) and press K3. The Trig params screen opens
+      for CH01.
+    assertion:
+      kind: screen-header
+      expected: TRIG PARAMS CH01
+    occurrence: 1
+  - id: family
+    title: Return to the list with E1
+    caption: Turn E1 one detent. Channel tasks reopens with Trig params highlighted, the page you came
+      from, so E1 always brings you back to the task list at your current page.
+    assertion:
+      kind: e1-opens-tasks
+      source: trig_locks
+      passed: true
+  - id: reopen-trig-params
+    title: Open Trig params again
+    caption: Press K3 to open Trig params again. The header reads TRIG PARAMS CH01.
+    assertion:
+      kind: screen-header
+      expected: TRIG PARAMS CH01
+    occurrence: 2
+  - id: history-row
+    title: Scroll to History (row 9)
+    caption: Turn E1 to reopen Channel tasks, then turn E2 down to row 9. History, the last row, is
+      highlighted and its value reads OPEN >.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: History
+      value: OPEN >
+      matched: true
+    occurrence: 1
+  - id: history
+    title: Open History
+    caption: Press K3. The History screen opens. Every task in the list opens its own screen this way.
+    assertion:
+      kind: channel-task
+      page: memory
+      passed: true
+  - id: clock
+    title: Open Clock (row 4)
+    caption: Turn E1 to open Channel tasks from History, scroll up to row 4, Clock, and press K3. The
+      Clock screen opens for channel 1.
+    assertion:
+      kind: channel-task
+      page: clock_mods
+      passed: true
+  - id: device-row
+    title: Scroll to Device (row 8)
+    caption: Turn E1 to open Channel tasks again, then turn E2 to row 8. Device is highlighted and its
+      value reads OPEN >.
+    assertion:
+      kind: selected-field
+      layout: detail
+      label: Device
+      value: OPEN >
+      matched: true
+    occurrence: 1
+  - id: device
+    title: Open Device
+    caption: Press K3. The Device screen opens for channel 1, where its output is chosen.
+    assertion:
+      kind: channel-task
+      page: midi_config
+      passed: true
+- id: hold-step-return
+  feature_id: grid-menu-navigation
+  title: Inspect a step and return
+  behaviour_case: M-LIVEUI-FOLLOW-001
+  citation: README.md#grid-menu-navigation
+  source: tests/behaviour/contract/live_ui.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'A new empty project that has just started: stopped, Record off, channel 1 selected and no
+      step held. The Channel editor is showing: its header reads NOTE MASKS CH01. The first step visits
+      the page keys before you hold a step.'
+    assertion:
+      kind: screen-header
+      expected: NOTE MASKS CH01
+    occurrence: 1
+  - id: pages
+    title: Visit the page keys
+    caption: 'Tap each page key in turn and watch the header follow. Scale (4,8) opens the Scale Editor,
+      SCALE SLOT 01. Pattern (5,8) cycles Trig, Note, then Velocity: three taps reach PATTERN VELOCITY
+      PAT01 CH01. Song (6,8) opens SONG PLAYBACK SONG 01. Channel (3,8) brings you back to NOTE MASKS
+      CH01.'
+    assertion:
+      kind: screen-header
+      expected: NOTE MASKS CH01
+    occurrence: 2
+  - id: select-channel
+    title: Select channel 3
+    caption: Tap channel 3 at (3,1). The header now reads NOTE MASKS CH03.
+    assertion:
+      kind: screen-header
+      expected: NOTE MASKS CH03
+    occurrence: 1
+  - id: hold
+    title: Hold a step
+    caption: 'Press and hold step 5 at (5,4). The header reads CH03 ST05: ST05 means step 5 of the selected
+      channel. While the step is held, edits on this Masks page apply to step 5 only.'
+    assertion:
+      kind: held-scope
+      step: 5
+      passed: true
+  - id: edit-held
+    title: Edit while the step is held
+    caption: With step 5 still held, turn E2 to the Note cell and turn E3 one detent up. The Note cell
+      changes from X to C-2 and the header still reads CH03 ST05, so the edit belongs to step 5 only.
+    assertion:
+      kind: selected-mask
+      field: note
+      value: C-2
+      passed: true
+  - id: release
+    title: Release the step
+    caption: Let go of step 5. The header drops back to NOTE MASKS CH03 and edits apply to the whole channel
+      again.
+    assertion:
+      kind: screen-header
+      expected: NOTE MASKS CH03
+    occurrence: 2
+  - id: channel-unchanged
+    title: The channel value is unchanged
+    caption: Look at the Note cell now. It still reads X, the channel's own value, so the C-2 you set
+      lives on step 5 alone.
+    assertion:
+      kind: selected-mask
+      field: note
+      value: X
+      passed: true
+    occurrence: 2
+  - id: open-clock
+    title: Open the Clock page
+    caption: Turn E1 to open Channel tasks, scroll to Clock and press K3. The Clock page for CH03 is showing.
+    assertion:
+      kind: ui-confirm
+      page: clock_mods
+      channel: 3
+  - id: hold-on-clock
+    title: Hold a step from the Clock page
+    caption: Press and hold step 9 at (9,4). While it is held the screen switches to that step's Masks,
+      header NOTE MASKS CH03 ST09, whichever page you were on.
+    assertion:
+      kind: screen-header
+      expected: NOTE MASKS CH03 ST09
+    occurrence: 1
+  - id: return
+    title: Return to the parent screen
+    caption: Release step 9. The screen returns to the Clock page, the page you were on before you held
+      the step.
+    assertion:
+      kind: hold-returns-to-parent
+      screen: clock_mods
+      passed: true
+- id: protect-stop-gesture
+  feature_id: shift-press-stop
+  title: Protect playback from a stray tap
+  behaviour_case: M-OPT-STOP-001
+  citation: README.md#shift-press-stop
+  source: tests/behaviour/contract/stop_safety.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step phrase through the test MIDI device: trigs on steps 1 to 4 with
+      C D E F (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. The channel range is steps 1-4,
+      the tempo is the default 90 BPM, Rate is /1 and the sequencer is stopped. Every Mosaic option is
+      at its default, so Shift press to stop is Off. The Device page for CH01 is showing.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: started
+    title: Start playback
+    caption: Press Play/Stop (1,8). The phrase starts and the MIDI stream carries the four notes.
+    assertion:
+      kind: stop-safety
+      stage: default-started
+      transport: playing
+      passed: true
+  - id: default
+    title: A tap stops by default
+    caption: With Shift press to stop Off, press Play/Stop (1,8) again after under a second. The sequencer
+      stops, the MIDI stream goes silent and every sounding note is released.
+    assertion:
+      kind: stop-safety
+      stage: default-tap
+      transport: stopped
+      passed: true
+  - id: option-on
+    title: Turn Shift press to stop on
+    caption: Tap K1 and open PARAMS > MOSAIC, select Shift press to stop and turn E3 right to On. The
+      row reads On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Shift press to stop
+      value: 'On'
+      matched: true
+  - id: playing-on
+    title: Start with the option on
+    caption: 'Close the menu and press Play/Stop to start. Starting is never blocked: the phrase plays.'
+    assertion:
+      kind: stop-safety
+      stage: on-tap-starts
+      transport: playing
+      passed: true
+  - id: short
+    title: Ignore a short stop tap
+    caption: Tap Play/Stop again after under a second. The tap is ignored and the phrase keeps playing.
+    assertion:
+      kind: stop-safety
+      stage: on-short-tap-ignored
+      transport: playing
+      passed: true
+  - id: below
+    title: Hold briefly without stopping
+    caption: Press and hold Play/Stop for 0.9 seconds, then release. This is still shorter than the one-second
+      threshold, so playback continues.
+    assertion:
+      kind: stop-safety
+      stage: on-hold-below-threshold-ignored
+      transport: playing
+      passed: true
+  - id: shift
+    title: Stop with Shift
+    caption: Hold K1 and tap Play/Stop. With Shift held, a short tap stops playback and releases its notes.
+    assertion:
+      kind: stop-safety
+      stage: on-shift-K1-tap-stops
+      transport: stopped
+      passed: true
+  - id: k3
+    title: K3 is not a shift key
+    caption: 'Tap Play/Stop to start again. Hold K3 and tap Play/Stop: K3 is not a shift key, so playback
+      continues.'
+    assertion:
+      kind: stop-safety
+      stage: on-K3-tap-ignored
+      transport: playing
+      passed: true
+  - id: long
+    title: Stop with a long press
+    caption: Hold Play/Stop alone for 1.1 seconds. Playback stops, because a hold of one second or more
+      counts as a long press.
+    assertion:
+      kind: stop-safety
+      stage: on-long-press-stops
+      transport: stopped
+      passed: true
+  - id: option-off
+    title: Turn Shift press to stop off
+    caption: Tap K1 and open PARAMS > MOSAIC, select Shift press to stop and turn E3 left to Off. The
+      row reads Off.
+    assertion:
+      kind: selected-menu-option-row
+      label: Shift press to stop
+      value: 'Off'
+      matched: true
+  - id: restore
+    title: Ordinary tap stop is back
+    caption: 'Close the menu, start playback and tap Play/Stop: a short tap stops it again.'
+    assertion:
+      kind: stop-safety
+      stage: off-again-tap-stops
+      transport: stopped
+      passed: true
+- id: named-project-roundtrip
+  feature_id: save-and-load
+  title: Keep a named project and recover it
+  behaviour_case: M-SAVE-NAMED-001
+  citation: README.md#save-and-load
+  source: tests/behaviour/named_save.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step melody through a MIDI device: trigs on steps 1 to 4 on pattern
+      degrees 1 to 4 of scale slot 1 (C major), so MIDI notes 60, 62, 64 and 65. The sequencer is stopped
+      and the Device page for CH01 is showing. The project has never been saved under a name, so no new
+      or newB file exists.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: original
+    title: Hear the original melody
+    caption: 'Press Play (1,8), listen, and press it again to stop. The melody is C, D, E, F: MIDI 60,
+      62, 64, 65.'
+    assertion:
+      kind: named-save
+      stage: initial-A
+      passed: true
+      phrase:
+      - 60
+      - 62
+      - 64
+      - 65
+  - id: save-menu
+    title: Find Save project
+    caption: Tap K1 to open the norns menu, choose PARAMS, then MOSAIC, and scroll to Save project.
+    assertion:
+      kind: selected-menu-label
+      text: < Save project
+    occurrence: 1
+  - id: default
+    title: Save the default name
+    caption: Press K3 to open the name entry. It starts on the suggested name, new, with OK selected,
+      so press K3 again to accept it. Mosaic writes the project file and its parameter file under that
+      name. Tap K1 to close the menu.
+    assertion:
+      kind: named-save
+      stage: save-default-name
+      files_state: created
+      passed: true
+  - id: save-again
+    title: Open Save project again
+    caption: Tap K1 and scroll to MOSAIC > Save project once more.
+    assertion:
+      kind: selected-menu-label
+      text: < Save project
+    occurrence: 2
+  - id: typed
+    title: Save another name
+    caption: Press K3 to open the name entry. Turn E3 left to the letter row, turn E2 one detent to B
+      and press K3 to add it, so the name reads newB. Turn E3 right to the bottom row, turn E2 right to
+      OK and press K3. A second, separate save is created, and both saves, new and newB, now hold the
+      melody C, D, E, F. Tap K1 to close the menu.
+    assertion:
+      kind: named-save
+      stage: save-typed-name
+      name: newB
+      files_state: created
+      passed: true
+  - id: edit
+    title: Edit the melody
+    caption: 'Press Pattern (5,8) twice: the first press shows the trig page and the second the note page.
+      Press (4,3) to raise step 4 from F to G. Tap Channel (3,8) to return to the Channel editor and press
+      Play (1,8): the melody is now C, D, E, G, MIDI 60, 62, 64, 67.'
+    assertion:
+      kind: named-save
+      stage: edited-B
+      passed: true
+      phrase:
+      - 60
+      - 62
+      - 64
+      - 67
+  - id: autosave
+    title: Let autosave preserve both names
+    caption: Leave Mosaic stopped and untouched for about a minute until the idle autosave runs. A third
+      file, autosave, is written. The saves new and newB are not touched.
+    assertion:
+      kind: named-save
+      stage: autosave-preserves-named
+      autosave_state: created
+      named_saves: unchanged
+      passed: true
+  - id: cancel
+    title: Cancel a save
+    caption: Tap K1 and scroll to MOSAIC > Save project. Press K3 to open the name entry, then press K2
+      to cancel. No project file changes. Tap K1 to close the menu.
+    assertion:
+      kind: named-save
+      stage: cancel-save
+      passed: true
+  - id: overwrite
+    title: Overwrite only the chosen name
+    caption: Open Save project again, press K3, then K3 again to accept the name new and confirm replacing
+      it. The save new now holds the edited melody C, D, E, G. The save newB is unchanged and still holds
+      C, D, E, F.
+    assertion:
+      kind: named-save
+      stage: overwrite-default-name
+      files_state: changed
+      typed_save: unchanged
+      passed: true
+  - id: load-menu
+    title: Find Load project
+    caption: Tap K1, then scroll to MOSAIC > Load project.
+    assertion:
+      kind: selected-menu-label
+      text: '> Load project'
+    occurrence: 1
+  - id: load-a
+    title: Load the preserved phrase
+    caption: Press K3 to open the file picker, choose newB.ptn and press K3. The original melody returns.
+      Close the menu and press Play to hear MIDI 60, 62, 64 and 65.
+    assertion:
+      kind: named-save
+      stage: load-typed-A
+      phrase:
+      - 60
+      - 62
+      - 64
+      - 65
+      passed: true
+  - id: load-b
+    title: Load the overwritten phrase
+    caption: Load new.ptn the same way. The edited melody plays MIDI 60, 62, 64 and 67. The save newB
+      is still in the file list.
+    assertion:
+      kind: named-save
+      stage: load-overwritten-B
+      phrase:
+      - 60
+      - 62
+      - 64
+      - 67
+      passed: true
+  estimated_native_seconds: 90
+- id: pentatonic-snap-all
+  feature_id: lock-all-to-pentatonic
+  title: Restrict every note to five degrees
+  behaviour_case: M-OPT-PENT-ALL-001
+  citation: README.md#lock-all-to-pentatonic
+  source: tests/behaviour/pentatonic_options.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, in C major through the test MIDI device. The channel range is steps 1-4, the tempo
+      is the default 90 BPM, Rate is /1 (sixteenth-note steps, one sixth of a second each) and the sequencer
+      is stopped. Every Mosaic option is at its default, so Lock all to pentatonic is Off. Lock all to
+      pentatonic forces every note you play onto a five-note subset of the chosen scale, so each scale
+      step below changes which five notes survive.
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: seven-steps
+    title: Extend the pattern to seven steps
+    caption: 'Open the Pattern editor (5,8), which starts on the trig page. Tap steps 5, 6 and 7 on the
+      trig row, (5,4), (6,4) and (7,4). Press (5,8) again for the note page and press the rising diagonal
+      (1,7), (2,6), (3,5), (4,4), (5,3), (6,2), (7,1): one note per step, scale degrees I-VII, C D E F
+      G A B. The note page now shows a rising diagonal.'
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 7
+      - - 2
+        - 6
+      - - 3
+        - 5
+      - - 4
+        - 4
+      - - 5
+        - 3
+      - - 6
+        - 2
+  - id: finish-pattern
+    title: Set the velocities of steps 5 to 7
+    caption: 'Press (5,8) for the velocity page and tap (5,1), (6,2) and (7,3): the velocity bars for
+      steps 5, 6 and 7 light up.'
+    assertion:
+      kind: grid
+      cells:
+      - - 5
+        - 1
+      - - 6
+        - 2
+      - - 7
+        - 3
+  - id: seven-step-range
+    title: Set the range to seven steps
+    caption: Return to the Channel editor (3,8), hold step 1 (1,4) and tap step 7 (7,4). Steps 1 to 7
+      light up and step 8 stays dark, so the channel range is steps 1-7.
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 4
+      - - 7
+        - 4
+      - - 8
+        - 4
+  - id: 'off'
+    title: Hear the plain major scale
+    caption: 'Press Play and listen to two loops with Lock all to pentatonic at its default Off: all seven
+      plain C major degrees sound, 60, 62, 64, 65, 67, 69, 71.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: default-off-major
+      pitches:
+      - 60
+      - 62
+      - 64
+      - 65
+      - 67
+      - 69
+      - 71
+      passed: true
+  - id: option-on
+    title: Turn Lock all to pentatonic on
+    caption: Tap K1 and open PARAMS > MOSAIC, scroll to Lock all to pentatonic and turn E3 right to On.
+      The row reads On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock all to pentatonic
+      value: 'On'
+      matched: true
+  - id: other-locks-off
+    title: Switch off the other two locks
+    caption: Scroll down to Lock random to pent. and turn E3 left to Off, then do the same for Lock merged
+      to pent. Both rows read Off, so Lock all to pentatonic is the only option that can change a pitch.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock merged to pent.
+      value: 'Off'
+      matched: true
+  - id: major
+    title: Snap major to pentatonic
+    caption: 'Press K2 to step back, then K1 to close the menu, and play the seven steps again: 60, 62,
+      64, 64, 67, 69, 72. Major keeps degrees 1/2/3/5/6 (C D E G A). F falls to E and B rises to C because
+      only those five are allowed.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-major
+      pitches:
+      - 60
+      - 62
+      - 64
+      - 64
+      - 67
+      - 69
+      - 72
+      passed: true
+  - id: pick-harmonic-major
+    title: Pick Harmonic Major
+    caption: Open the Scale Editor (grid (4,8)), turn E3 one detent and press K3. The Scale row reads
+      Harmonic Major.
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Scale
+      value: Harmonic Major
+      matched: true
+  - id: harmonic-major
+    title: Step to Harmonic Major
+    caption: 'Return to the Channel editor (3,8) and play two loops. Harmonic Major keeps the same degrees
+      as Major, 1/2/3/5/6, but its sixth is A-flat: 60, 62, 64, 64, 67, 68, 72. F falls to E, A-flat stays
+      and B rises to C.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-harmonic-major
+      pitches:
+      - 60
+      - 62
+      - 64
+      - 64
+      - 67
+      - 68
+      - 72
+      passed: true
+  - id: minor
+    title: Minor uses its own five notes
+    caption: 'Open the Scale Editor (grid (4,8)), turn E3 one detent to Minor and press K3. Return
+      to the Channel editor (3,8) and play two loops. The minor family keeps degrees 1/3/4/5/7 (C E-flat
+      F G B-flat): 60, 63, 63, 65, 67, 67, 70. D snaps up to E-flat and A-flat snaps down to G.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-minor
+      pitches:
+      - 60
+      - 63
+      - 63
+      - 65
+      - 67
+      - 67
+      - 70
+      passed: true
+  - id: pick-melodic-minor
+    title: Pick Harmonic Minor, then Melodic Minor
+    caption: 'Open the Scale Editor (grid (4,8)), turn E3 one detent to Harmonic Minor and press K3, return
+      to the Channel editor (3,8) and play. Then open the Scale Editor again, turn E3 one more detent
+      and press K3: the Scale row reads Melodic Minor.'
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Scale
+      value: Melodic Minor
+      matched: true
+  - id: melodic-minor
+    title: Hear Harmonic and Melodic Minor
+    caption: 'Return to the Channel editor (3,8) and play two loops. Harmonic Minor and Melodic Minor give
+      the same pitches: 60, 63, 63, 65, 67, 67, 71. Only the top note differs from Minor, B-flat becoming
+      B. In Harmonic Minor A-flat snaps down to G; in Melodic Minor A sits exactly between G and B, and
+      an equal-distance note snaps to the lower pitch, so it also lands on G.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-melodic-minor
+      pitches:
+      - 60
+      - 63
+      - 63
+      - 65
+      - 67
+      - 67
+      - 71
+      passed: true
+  - id: dorian
+    title: Step to Dorian
+    caption: 'Open the Scale Editor (grid (4,8)), turn E3 one detent to Dorian and press K3. Return to
+      the Channel editor (3,8) and play two loops. Dorian keeps degrees 1/2/4/5/7 (C D F G B-flat): 60,
+      62, 62, 65, 67, 70, 70. E-flat falls to D and A rises to B-flat.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-dorian
+      pitches:
+      - 60
+      - 62
+      - 62
+      - 65
+      - 67
+      - 70
+      - 70
+      passed: true
+  - id: phrygian
+    title: Step to Phrygian
+    caption: 'Open the Scale Editor (grid (4,8)), turn E3 one detent to Phrygian and press K3. Return
+      to the Channel editor (3,8) and play two loops. Phrygian keeps degrees 1/3/4/6/7 (C E-flat F A-flat
+      B-flat): 60, 60, 63, 65, 68, 68, 70. D-flat falls to C and G rises to A-flat.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-phrygian
+      pitches:
+      - 60
+      - 60
+      - 63
+      - 65
+      - 68
+      - 68
+      - 70
+      passed: true
+  - id: lydian
+    title: See the lower boundary snap
+    caption: 'Open the Scale Editor (grid (4,8)), turn E3 one detent to Lydian and press K3. Return to
+      the Channel editor (3,8) and play two loops. Lydian keeps degrees 2/3/5/6/7 (D E G A B), so the
+      tonic C snaps down to the B below it: 59, 62, 64, 67, 67, 69, 71.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-lydian
+      pitches:
+      - 59
+      - 62
+      - 64
+      - 67
+      - 67
+      - 69
+      - 71
+      passed: true
+  - id: mixolydian
+    title: Step to Mixolydian
+    caption: 'Open the Scale Editor (grid (4,8)), turn E3 one detent to Mixolydian and press K3. Return
+      to the Channel editor (3,8) and play two loops. Mixolydian keeps degrees 1/2/4/5/6 (C D F G A):
+      60, 62, 65, 65, 67, 69, 69. E rises to F and B-flat falls to A.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-mixolydian
+      pitches:
+      - 60
+      - 62
+      - 65
+      - 65
+      - 67
+      - 69
+      - 69
+      passed: true
+  - id: locrian
+    title: Step to Locrian
+    caption: 'Open the Scale Editor (grid (4,8)), turn E3 one detent to Locrian and press K3. Return to
+      the Channel editor (3,8) and play two loops. Locrian keeps degrees 2/3/4/6/7 (D-flat E-flat F A-flat
+      B-flat), so the tonic C snaps up to D-flat and G-flat snaps down to F: 61, 61, 63, 65, 65, 68, 70.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: on-locrian
+      pitches:
+      - 61
+      - 61
+      - 63
+      - 65
+      - 65
+      - 68
+      - 70
+      passed: true
+  - id: option-off
+    title: Turn Lock all to pentatonic off
+    caption: Tap K1 and open PARAMS > MOSAIC, scroll to Lock all to pentatonic and turn E3 left to Off.
+      The row reads Off.
+    assertion:
+      kind: selected-menu-option-row
+      label: Lock all to pentatonic
+      value: 'Off'
+      matched: true
+  - id: restore
+    title: All seven Locrian pitches return
+    caption: 'Close the menu and play. All seven plain Locrian pitches return: 60, 61, 63, 65, 66, 68,
+      70. Musical tip: leave Lock all to pentatonic On when a pattern is random or generative, so every
+      note lands in a five-note set that stays consonant in any scale, and Off when you want the full
+      seven-note colour.'
+    assertion:
+      kind: lock-all-to-pentatonic
+      stage: off-locrian
+      pitches:
+      - 60
+      - 61
+      - 63
+      - 65
+      - 66
+      - 68
+      - 70
+      passed: true
+- id: keyboard-honour-degree
+  feature_id: honor-scale-degree
+  title: Start from the chosen scale degree
+  behaviour_case: M-OPT-KEYS-001
+  citation: README.md#honor-scale-degree
+  source: tests/behaviour/keyboard_options.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4.
+      The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Every Mosaic option
+      is at its default, so Map scale to white keys and the three Honour switches are Off, and the Scale
+      Editor is on C major.
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: map-on
+    title: Turn on Map scale to white keys
+    caption: 'Play some keys on the keyboard: each sounds the note you pressed, because nothing is mapped
+      yet. Tap K1 and open PARAMS > MOSAIC > Midi control. Select Map scale to white keys and turn E3
+      right to On. The row reads On.'
+    assertion:
+      kind: selected-menu-option-row
+      label: Map scale to white keys
+      value: 'On'
+      matched: true
+  - id: white-major
+    title: Play the white keys in C major
+    caption: 'Close the menu and play the white keys from C3 up to C4 on the keyboard. In C major they
+      sound as written: 60, 62, 64, 65, 67, 69, 71, 72. The MIDI strip lists the notes Mosaic sent.'
+    assertion:
+      kind: keyboard-mapping
+      stage: white-major
+      passed: true
+  - id: pick-natural-minor
+    title: Choose natural minor in the Scale Editor
+    caption: Open the Scale Editor (grid (4,8)), turn E3 two detents and press K3. The Scale row reads
+      Minor, natural minor.
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Scale
+      value: Minor
+  - id: natural-minor
+    title: Play the white keys in natural minor
+    caption: 'Return to the Channel editor (3,8) and play the white keys again: they now follow C natural
+      minor, 60, 62, 63, 65, 67, 68, 70, 72 (C D E-flat F G A-flat B-flat C).'
+    assertion:
+      kind: keyboard-mapping
+      stage: white-minor
+      passed: true
+  - id: set-degree
+    title: Set degree II
+    caption: Open the Scale Editor (4,8) again, turn E2 one click to Degree, turn E3 one detent and
+      press K3. Degree reads ii°. Degree picks which scale note the keyboard's C starts on.
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Degree
+      value: "ii\u00b0"
+  - id: set-rotation
+    title: Set rotation 2
+    caption: Turn E2 to the Rotation row, turn E3 two detents and press K3. Rotation reads r2. Rotation
+      moves the top keys down an octave.
+    assertion:
+      kind: selected-field
+      layout: vertical_list
+      label: Rotation
+      value: r2
+  - id: set-transpose
+    title: Set global transpose +2
+    caption: Tap the global transpose fader on the grid at its lowest value, then tap its increment
+      button fourteen times, and return to the Channel editor (3,8). The Scale overview lists Transpose
+      +2, which shifts everything.
+    assertion:
+      kind: dashboard-row
+      label: Transpose
+      value: '+2'
+  - id: default-off
+    title: Nothing applies yet
+    caption: 'The three Honour switches are still Off, so none of this is applied yet: the white keys
+      still play 60, 62, 63, 65, 67, 68, 70, 72.'
+    assertion:
+      kind: keyboard-mapping
+      stage: honour-defaults-off
+      passed: true
+  - id: degree-on
+    title: Turn on Honour scale degree
+    caption: Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale degree and turn E3 right
+      to On. The row reads On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Honour scale degree
+      value: 'On'
+      matched: true
+  - id: enabled
+    title: Start from the chosen scale degree
+    caption: 'Close the menu and play C3 to C4 again. Key C now plays the scale''s second note: 62, 63,
+      65, 67, 68, 70, 72, 74 (D E-flat F G A-flat B-flat C D). Rotation and transpose stay unapplied,
+      so you can start a phrase from degree II without changing the scale.'
+    assertion:
+      kind: keyboard-mapping
+      stage: honour-degree
+      passed: true
+  shared_run: M-OPT-KEYS-001
+- id: keyboard-honour-degree-rotation
+  feature_id: honor-scale-rotations
+  title: Rotate the keyboard voicing
+  behaviour_case: M-OPT-KEYS-001
+  citation: README.md#honor-scale-rotations
+  source: tests/behaviour/keyboard_options.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4.
+      The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. Map scale to white
+      keys is On and the scale is C natural minor. The Scale Editor holds degree II, rotation 2 and global
+      transpose +2, and Honour scale degree is On, so the white keys C3 to C4 play 62, 63, 65, 67, 68,
+      70, 72, 74. Honour scale rotations and Honour scale transpose are Off.
+    assertion:
+      kind: keyboard-mapping
+      stage: honour-degree
+      passed: true
+  - id: rotations-on
+    title: Turn on Honour scale rotations
+    caption: Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale rotations and turn E3
+      right to On. The row reads On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Honour scale rotations
+      value: 'On'
+      matched: true
+  - id: enabled
+    title: Rotate the keyboard voicing
+    caption: 'Close the menu and play C3 to C4 again. Rotation 2 turns the top of the scale upside down:
+      the last two white keys before the octave, the A and B keys, sound an octave lower, 58 and 60 instead
+      of 70 and 72, giving 62, 63, 65, 67, 68, 58, 60, 74. The first five keys do not change. Use it to
+      play a bass note or an inverted voicing of the same scale shape from the keys you already know.'
+    assertion:
+      kind: keyboard-mapping
+      stage: honour-degree-rotation
+      passed: true
+  shared_run: M-OPT-KEYS-001
+- id: keyboard-honour-all
+  feature_id: honour-scale-transpose
+  title: Apply the scale transpose to live input
+  behaviour_case: M-OPT-KEYS-001
+  citation: README.md#honour-scale-transpose
+  source: tests/behaviour/keyboard_options.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4.
+      The sequencer is stopped and a MIDI keyboard is connected as Mosaic's input. This lesson continues
+      from the degree and rotation lessons. Map scale to white keys is On and the scale is C natural minor,
+      with degree II, rotation 2 and global transpose +2 set in the Scale Editor. Honour scale degree
+      and Honour scale rotations are On and Honour scale transpose is Off, so the white keys C3 to C4
+      play 62, 63, 65, 67, 68, 58, 60, 74.
+    assertion:
+      kind: keyboard-mapping
+      stage: honour-degree-rotation
+      passed: true
+  - id: transpose-on
+    title: Turn on Honour scale transpose
+    caption: Tap K1 and open PARAMS > MOSAIC > Midi control. Select Honour scale transpose and turn E3
+      right to On. The row reads On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Honour scale transpose
+      value: 'On'
+      matched: true
+  - id: enabled
+    title: Apply the scale transpose to live input
+    caption: 'Close the menu and play C3 to C4 again. The scale''s global transpose of +2 now applies
+      to everything you play, so every key sounds two semitones higher than in the start: 64, 65, 67,
+      69, 70, 60, 62, 76. The MIDI strip lists the notes Mosaic sent.'
+    assertion:
+      kind: keyboard-mapping
+      stage: honour-all
+      passed: true
+  shared_run: M-OPT-KEYS-001
+- id: native-relative-midi-map
+  feature_id: midi-controller-mapping
+  title: Teach a relative MIDI controller
+  behaviour_case: M-MAP-002
+  citation: README.md#midi-controller-mapping
+  source: tests/behaviour/midi_mapping.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with C D E F
+      (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97. The sequencer is stopped. A MIDI controller
+      on input port 1, channel 1 is connected and sends relative CC 20: a value of 63 means one step down
+      and 65 one step up. Nothing is mapped yet and the velocity mask is Off (X).'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: select-parameter
+    title: Find the velocity mask parameter
+    caption: Tap K1, choose PARAMS, open Mosaic Midi Mapping and turn E2 to the selected-channel velocity
+      parameter. The selected row reads Selected Ch. Velocity.
+    assertion:
+      kind: selected-menu-label
+      text: Selected Ch. Velocity
+  - id: map-mode
+    title: Switch to MAP mode
+    caption: Hold K1 and press K3 to switch from EDIT to MAP mode. The list now names each parameter by
+      its id, sel_ch_vel for this one, and nothing is mapped yet.
+    assertion:
+      kind: selected-menu-label
+      text: sel_ch_vel
+  - id: editor
+    title: Open the map editor
+    caption: Press K3 to open the map editor. Learn is selected, and the editor lists cc 100, ch 1, dev
+      1 EMIDI, in 0 to 127, out -1.0 to 1.0, accum no and echo no.
+    assertion:
+      kind: map-editor
+      selected: learn
+      learning: false
+    occurrence: 1
+  - id: arm-learn
+    title: Arm Learn
+    caption: Press K3 on Learn. The row reads LEARNING while the editor waits for the controller.
+    assertion:
+      kind: map-editor
+      selected: learn
+      learning: true
+  - id: learn
+    title: Move the controller
+    caption: Move the controller so it sends CC 20. The editor learns it and the cc row reads 20, with
+      input port 1 and channel 1.
+    assertion:
+      kind: map-editor
+      selected: learn
+      learning: false
+    occurrence: 2
+  - id: in-lo
+    title: Set Input low to 1
+    caption: Turn E2 five clicks to the first number of the in row, Input low, and turn E3 one click
+      right. It reads 1.
+    assertion:
+      kind: map-editor
+      selected: in_lo
+  - id: in-hi
+    title: Set Input high to 2
+    caption: Turn E2 one click to the second number of the in row, Input high, and turn E3 left until it
+      reads 2. Inputs 1 and 2 are the two steps a relative controller sends.
+    assertion:
+      kind: map-editor
+      selected: in_hi
+  - id: accum
+    title: Turn Accum on
+    caption: Turn E2 three clicks to accum, past the out row, and turn E3 one click right. Accum reads yes
+      and out still reads -1.0 to 1.0, so each message adds to the value instead of setting it.
+    assertion:
+      kind: map-editor
+      selected: accum
+  - id: assign
+    title: Assign the map
+    caption: Press K2 to assign. Back in the list, sel_ch_vel now shows 20:1:1, the controller's CC 20 on
+      channel 1 of input port 1.
+    assertion:
+      kind: selected-menu-value
+      text: '20:1:1'
+  - id: saved-map
+    title: Return to EDIT mode and leave PARAMS
+    caption: Hold K1 and press K3 to return to EDIT mode, press K2 twice to leave the group, then tap K1 to
+      return to Mosaic. The controller is now mapped to the velocity mask.
+    assertion:
+      kind: pmap-entry
+      source: mosaic.pmap
+      passed: true
+  - id: open-masks
+    title: Open the Masks page
+    caption: Turn E1 to Channel tasks, choose Masks with E2 and press K3, then turn E2 to the Vel cell. It
+      reads X, Off, because nothing has moved it yet.
+    assertion:
+      kind: selected-mask
+      field: velocity
+      value: X
+  - id: rise-mask
+    title: Turn the controller up
+    caption: 'Send CC 20 with value 63 once, which leaves Off where it is, then value 65 five times: each
+      message steps the velocity mask up one. The Vel cell rises from X to 4.'
+    assertion:
+      kind: selected-mask
+      field: velocity
+      value: '4'
+  - id: rise
+    title: Hear velocity 4
+    caption: Press Play and stop. The MIDI strip shows all four notes at velocity 4.
+    assertion:
+      kind: midi
+    occurrence: 1
+  - id: control-mask
+    title: Turn the controller down
+    caption: Send CC 20 with value 63 once more. The Vel cell drops to 3.
+    assertion:
+      kind: selected-mask
+      field: velocity
+      value: '3'
+  - id: control
+    title: Hear velocity 3
+    caption: Press Play and stop. The MIDI strip shows all four notes at velocity 3.
+    assertion:
+      kind: midi
+    occurrence: 2
+- id: last-lock-slide-wrap
+  feature_id: parameter-slides-wrap
+  title: Carry a slide across the loop boundary
+  behaviour_case: M-SLIDE-STEP-001
+  citation: README.md#parameter-slides-wrap
+  source: tests/behaviour/step_slides.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4.
+      The sequencer is stopped. Every Mosaic option is at its default, so Wrap param slides is Off, and
+      nothing is locked yet.
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: assign
+    title: Assign CC 1 to a trig slot
+    caption: Open Channel tasks > Trig params and assign the device's CC 1 to a trig slot. The channel
+      default for CC 1 is 63.
+    assertion:
+      kind: parameter-list-label
+      label: CC 1
+      passed: true
+  - id: lock-step-1
+    title: Lock step 1 to 24
+    caption: Press K3 to confirm the CC 1 assignment and K2 to go back. Hold step 1 and turn E3 to 24. Slot
+      1 shows 24 with an L in its corner while the step is held. Release the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: L
+    occurrence: 1
+  - id: lock-step-3
+    title: Lock step 3 to 96
+    caption: Hold step 3 and turn E3 to 96. Slot 1 shows 96 with the L. Release the step.
+    assertion:
+      kind: selected-param
+      value: '96'
+      marker: L
+  - id: lock-step-4
+    title: Lock step 4 to 48
+    caption: Hold step 4 and turn E3 to 48. Slot 1 shows 48 with the L. Step 2 gets no lock and keeps the
+      channel default, 63.
+    assertion:
+      kind: selected-param
+      value: '48'
+      marker: L
+  - id: slide-on
+    title: Turn a step slide on
+    caption: Hold step 1 and press K3. Slot 1 shows 24 with an S in its corner, so the lock on step 1 now
+      slides toward the next lock. Release the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: S
+  - id: slide-off
+    title: Turn the step slide off again
+    caption: Hold step 1 and press K3 again. The S goes and the L returns, so step 1 jumps again. Release
+      the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: L
+    occurrence: 2
+  - id: toggle-off
+    title: Play without a slide
+    caption: 'Play two loops. With no slide, CC 1 does not glide from 24 to 96. Each loop the MIDI strip
+      shows only 24 on step 1, 63 on step 2 (the channel default, because step 2 has no lock), 96 on step 3
+      and 48 on step 4.'
+    assertion:
+      kind: step-slide
+      stage: toggled-off-jumps
+      passed: true
+  - id: last-slide
+    title: Slide the last lock
+    caption: Hold step 4 and press K3 to give the last lock (48) a slide. Slot 1 shows 48 with the S.
+    assertion:
+      kind: selected-param
+      value: '48'
+      marker: S
+  - id: no-wrap
+    title: Give the last lock no destination
+    caption: 'Wrap param slides is still Off, so there is no later lock to slide toward: CC 1 stays at 48
+      through step 4, and the first lock, 24, is recalled when the loop restarts. Play and listen for the
+      value changing abruptly at the loop point.'
+    assertion:
+      kind: step-slide
+      stage: last-lock-no-wrap
+      passed: true
+  - id: wrap-option
+    title: Turn Wrap param slides on
+    caption: Tap K1, open PARAMS > MOSAIC, select Wrap param slides and turn E3 right to On. The row reads
+      On.
+    assertion:
+      kind: selected-menu-option-row
+      label: Wrap param slides
+      value: 'On'
+      matched: true
+  - id: wrap
+    title: Slide to the first lock
+    caption: 'Tap K1 to return to Mosaic and play. The step-4 slide now runs from 48 down to 24 across
+      one sixteenth-note step (one sixth of a second): CC 1 passes 40 and 32 and reaches 24 exactly with
+      the first note of the next loop. Look for those CC values in the MIDI strip. Use this for a cyclic
+      sweep, such as a filter that falls back to its start with no jump at the loop point.'
+    assertion:
+      kind: step-slide
+      stage: last-lock-wraps
+      passed: true
+- id: trigless-locks-on
+  feature_id: trigless-locks
+  title: Keep automation on rests
+  behaviour_case: M-PARAM-022
+  citation: README.md#trigless-locks
+  source: tests/behaviour/trig_parameter_interactions.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, in C major through the test MIDI device at 90 BPM with Rate /1 and channel range
+      steps 1-4. The sequencer is stopped and the Device page for CH01 is showing. Channel 2 is not set
+      up yet: you will make it a steady timing reference. Trigless locks is at its default On.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: assign-cc
+    title: Check Trigless locks, then set up the channels
+    caption: 'Tap K1 and open PARAMS > MOSAIC. Trigless locks reads On, its default, so locks on steps
+      without a trig will still be sent. Press K2, then K1 to leave the menu. Set up channel 2 as the
+      timing reference: tap (2,1), open Channel tasks > Device, point it at the second MIDI port, give
+      it pattern 1 at (1,2) and range steps 1-4 (hold (1,4), tap (4,4)). It will play C D E F on MIDI
+      channel 2 on every loop whatever you do to channel 1. Then tap channel 1 (1,1), open Channel tasks
+      > Trig params and assign CC 1 to the first slot.'
+    assertion:
+      kind: parameter-list-label
+      label: CC 1
+      passed: true
+  - id: lock-step-1
+    title: Lock step 1 to 24
+    caption: Press K3 to confirm CC 1 and K2 to go back. Hold step 1 and turn E3 to 24. Slot 1 shows 24
+      with an L in its corner while the step is held. Release the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: L
+  - id: lock-steps-2-4
+    title: Lock steps 2 to 4 to 48, 72 and 96
+    caption: Do the same on the other steps. Hold step 2 and turn E3 to 48, hold step 3 for 72 and hold
+      step 4 for 96. Slot 1 reads 96 with the L while step 4 is held, so every step now carries its own CC
+      1 value.
+    assertion:
+      kind: selected-param
+      value: '96'
+      marker: L
+  - id: assign-probability
+    title: Add Trig probability
+    caption: Assign Trig probability to the second slot, so you can silence channel 1's notes and see only
+      its CC 1 stream beside channel 2's steady notes.
+    assertion:
+      kind: parameter-list-label
+      label: Trig Probability
+      passed: true
+  - id: probability
+    title: Probability 0 silences the notes, not the locks
+    caption: 'Set Trig probability to 0 so channel 1''s notes never sound, and play two loops. All four
+      steps have trigs, so CC 1 goes out at every step (24, 48, 72, 96) even though no note plays: look
+      for those four CC values each loop in the MIDI strip, beside channel 2''s steady notes.'
+    assertion:
+      kind: probability-trigless-midi-locks
+      nrpn: false
+      trigless: true
+      phase: probability0-active-trigs-retain-locks
+      active_steps:
+      - 1
+      - 2
+      - 3
+      - 4
+      accepted_steps: []
+      passed: true
+  - id: rest
+    title: Remove the third trig
+    caption: 'Open the Pattern editor (5,8), tap step 3 to remove its trig, and return to the Channel
+      editor (3,8). Play. With Trigless locks On, a lock on a step with no trig is still sent: the MIDI
+      strip shows CC 1 still sending 72 at step 3, so automation keeps moving through rests, for example
+      a filter sweep under a sparse rhythm.'
+    assertion:
+      kind: probability-trigless-midi-locks
+      nrpn: false
+      trigless: true
+      phase: removed-trig-respects-trigless
+      active_steps:
+      - 1
+      - 2
+      - 4
+      accepted_steps: []
+      passed: true
+  - id: accepted
+    title: Keep a lock ahead of its accepted note
+    caption: Hold step 4 and turn E3 to set its Trig probability lock to 100, then play. Step 4's note
+      (F3, 65) now sounds, with its CC 1 lock (96) sent just before it. Steps 1 and 2 stay silent, and
+      step 3 still sends its 72. The scene Skip automation on rests plays the same steps with Trigless
+      locks Off, for comparison.
+    assertion:
+      kind: probability-trigless-midi-locks
+      nrpn: false
+      trigless: true
+      phase: step-probability100-keeps-lock-before-note
+      active_steps:
+      - 1
+      - 2
+      - 4
+      accepted_steps:
+      - 4
+      passed: true
+- id: trigless-locks-off
+  feature_id: trigless-locks
+  title: Skip automation on rests
+  behaviour_case: M-PARAM-023
+  citation: README.md#trigless-locks
+  source: tests/behaviour/trig_parameter_interactions.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, in C major through the test MIDI device at 90 BPM with Rate /1 and channel range
+      steps 1-4. The sequencer is stopped and the Device page for CH01 is showing. Channel 2 is not set
+      up yet: you will make it a steady timing reference. Trigless locks is at its default On.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: option
+    title: Turn Trigless locks off
+    caption: Tap K1 and open PARAMS > MOSAIC, select Trigless locks and turn E3 left to Off. The row reads
+      Off.
+    assertion:
+      kind: selected-menu-option-row
+      label: Trigless locks
+      value: 'Off'
+      matched: true
+  - id: assign-cc
+    title: Assign CC 1
+    caption: 'Press K2, then K1 to leave the menu. Set up channel 2 as the timing reference: tap (2,1),
+      open Channel tasks > Device, point it at the second MIDI port, give it pattern 1 at (1,2) and range
+      steps 1-4 (hold (1,4), tap (4,4)). It will play C D E F on MIDI channel 2 on every loop whatever
+      you do to channel 1. Then tap channel 1 (1,1), open Channel tasks > Trig params and assign CC 1
+      to the first slot.'
+    assertion:
+      kind: parameter-list-label
+      label: CC 1
+      passed: true
+  - id: lock-step-1
+    title: Lock step 1 to 24
+    caption: Press K3 to confirm CC 1 and K2 to go back. Hold step 1 and turn E3 to 24. Slot 1 shows 24
+      with an L in its corner while the step is held. Release the step.
+    assertion:
+      kind: selected-param
+      value: '24'
+      marker: L
+  - id: lock-steps-2-4
+    title: Lock steps 2 to 4 to 48, 72 and 96
+    caption: Do the same on the other steps. Hold step 2 and turn E3 to 48, hold step 3 for 72 and hold
+      step 4 for 96. Slot 1 reads 96 with the L while step 4 is held, so every step now carries its own CC
+      1 value.
+    assertion:
+      kind: selected-param
+      value: '96'
+      marker: L
+  - id: assign-probability
+    title: Add Trig probability
+    caption: Assign Trig probability to the second slot, so you can silence channel 1's notes and see only
+      its CC 1 stream beside channel 2's steady notes.
+    assertion:
+      kind: parameter-list-label
+      label: Trig Probability
+      passed: true
+  - id: probability
+    title: Probability 0 silences the notes, not the locks
+    caption: 'Set Trig probability to 0 so channel 1''s notes never sound, and play two loops. All four
+      steps still have trigs, so CC 1 still goes out at every step (24, 48, 72, 96) even with Trigless
+      locks Off: look for those four CC values each loop in the MIDI strip, beside channel 2''s steady
+      notes. A probability of 0 is not a rest: only a removed trig is.'
+    assertion:
+      kind: probability-trigless-midi-locks
+      nrpn: false
+      trigless: false
+      phase: probability0-active-trigs-retain-locks
+      active_steps:
+      - 1
+      - 2
+      - 3
+      - 4
+      accepted_steps: []
+      passed: true
+  - id: rest
+    title: Remove the third trig
+    caption: 'Open the Pattern editor (5,8), tap step 3 to remove its trig, and return to the Channel
+      editor (3,8). Play. With Trigless locks Off, a lock on a step with no trig is skipped: the MIDI
+      strip shows CC 1 sending 24, 48 and 96 but not 72, the value on step 3.'
+    assertion:
+      kind: probability-trigless-midi-locks
+      nrpn: false
+      trigless: false
+      phase: removed-trig-respects-trigless
+      active_steps:
+      - 1
+      - 2
+      - 4
+      accepted_steps: []
+      passed: true
+  - id: accepted
+    title: Keep a lock ahead of its accepted note
+    caption: Hold step 4 and turn E3 to set its Trig probability lock to 100, then play. Step 4's note
+      (F3, 65) now sounds, with its CC 1 lock (96) sent just before it. Steps 1 and 2 stay silent, and
+      step 3 still sends no value. The scene Keep automation on rests plays the same steps with Trigless
+      locks On, for comparison.
+    assertion:
+      kind: probability-trigless-midi-locks
+      nrpn: false
+      trigless: false
+      phase: step-probability100-keeps-lock-before-note
+      active_steps:
+      - 1
+      - 2
+      - 4
+      accepted_steps:
+      - 4
+      passed: true
+- id: repeat-reset-policies
+  feature_id: reset-at-pattern-repeat
+  title: Decide whether a slow channel restarts
+  behaviour_case: M-TIME-003
+  citation: README.md#reset-at-pattern-repeat
+  source: tests/behaviour/cases.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4.
+      The sequencer is stopped. Song mode is On, and the song has one slot with a 64-step global length.
+      Every other option is at its default: Reset on song seq change is On and Reset on pattern repeat
+      is Off.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: slow-channel
+    title: Make a slow channel
+    caption: Hold step 1 and tap step 3 to set the range to steps 1-3. On Channel tasks > Clock set Clock
+      Mod to /9. One step now lasts nine sixteenths (1.5 seconds), so the three notes 60, 62, 64 cycle
+      every 4.5 seconds, while the song pattern repeats every 64 steps (10.7 seconds). The two never line
+      up, which is what makes the reset visible.
+    assertion:
+      kind: ui-confirm
+      page: clock_mods
+      channel: 1
+  - id: continuous
+    title: 'Both resets off: the phase carries on'
+    caption: 'Tap K1 and open PARAMS > MOSAIC. Make sure Song mode is On, then turn Reset on song seq
+      change Off and Reset on pattern repeat Off. Close the menu, press Play and let it run for 24 seconds,
+      then stop. The phrase carries on across each repeat: 60 62 64 60 62 64 60 62, then 64 at 12 seconds.
+      Read the note times in the MIDI strip.'
+    assertion:
+      kind: native-repeat-reset-policy
+      song_mode: true
+      transition_reset: false
+      repeat_reset: false
+      passed: true
+  - id: seq-only
+    title: Reset on song seq change alone
+    caption: Turn Reset on song seq change On and play 24 seconds. A pattern that is only repeating is
+      not restarted by a song change, so the phrase still carries on, with the same note times as before.
+    assertion:
+      kind: native-repeat-reset-policy
+      song_mode: true
+      transition_reset: true
+      repeat_reset: false
+      passed: true
+  - id: reset
+    title: Reset at each repeat
+    caption: 'Turn Reset on song seq change Off and Reset on pattern repeat On, close the menu and play
+      24 seconds. At each 64-step boundary, 10.7 and 21.3 seconds, the slow channel restarts: note 60
+      sounds exactly at the boundary instead of waiting for the old cycle. Compare the note times in the
+      MIDI strip with the first run.'
+    assertion:
+      kind: native-repeat-reset-policy
+      song_mode: true
+      transition_reset: false
+      repeat_reset: true
+      passed: true
+  - id: both-on
+    title: Turn both reset options on
+    caption: Turn Reset on song seq change On as well, so both options are On, and play 24 seconds. The
+      channel restarts at each repeat, as in the last step.
+    assertion:
+      kind: native-repeat-reset-policy
+      song_mode: true
+      transition_reset: true
+      repeat_reset: true
+      passed: true
+  - id: manual
+    title: 'Song mode off: no reset'
+    caption: 'Select Song mode and turn E3 left to Off; both reset options stay On. Close the menu and
+      play 24 seconds. With Song mode Off the slot is not stepped by the song, so neither reset applies:
+      the phrase runs continuously again, with 64 at 12 seconds.'
+    assertion:
+      kind: native-repeat-reset-policy
+      song_mode: false
+      transition_reset: true
+      repeat_reset: true
+      passed: true
+  estimated_native_seconds: 140
+- id: song-change-reset-policies
+  feature_id: reset-at-song-editor-pattern-change
+  title: Reset when the arrangement changes
+  behaviour_case: M-TIME-005
+  citation: README.md#reset-at-song-editor-pattern-change
+  source: tests/behaviour/cases.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays a four-step pattern, C3 D3 E3 F3 (MIDI 60, 62, 64, 65) at velocities 127,
+      117, 107 and 97, through the test MIDI device at 90 BPM with Rate /1 and channel range steps 1-4.
+      The sequencer is stopped. Channel 1 has been made slow: its range is steps 1-3 and Clock Mod is
+      /9, so one step lasts 1.5 seconds and the phrase 60, 62, 64 cycles every 4.5 seconds. Song mode
+      is On and the song has two 64-step slots, 10.7 seconds each. Slot 2 is a copy of slot 1 with the
+      channel octave raised by one, so it sounds an octave higher: C4 D4 E4 are 72, 74, 76. Slot 1 is
+      selected, so on the Song editor (grid (6,8)) its LED (1,1) is bright and (2,1) dim. Both reset options
+      are Off.'
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 1
+      - - 2
+        - 1
+      expected:
+      - 15
+      - 7
+    occurrence: 2
+  - id: slot-change
+    title: Watch the slot change
+    caption: 'Press Play. After 10.7 seconds, at the 64-step slot change, the slot LEDs swap brightness:
+      (2,1) is now the bright one.'
+    assertion:
+      kind: grid
+      cells:
+      - - 1
+        - 1
+      - - 2
+        - 1
+      expected:
+      - 7
+      - 15
+    occurrence: 1
+  - id: continuous
+    title: 'Both resets off: the phase carries across two slots'
+    caption: 'Let it play to 23 seconds, then stop. The phrase keeps its place across the slot change:
+      slot 2 starts on E4 (76) at 12 seconds, not C4. Read the note times in the MIDI strip.'
+    assertion:
+      kind: native-song-transition-reset
+      transition_reset: false
+      repeat_reset: false
+      passed: true
+  - id: reset
+    title: Restart at a changed song slot
+    caption: 'Tap K1 and open PARAMS > MOSAIC, select Reset on song seq change and turn E3 right to On;
+      Reset on pattern repeat stays Off. Close the menu and play 23 seconds. At each slot change, 10.7
+      and 21.3 seconds, the channel restarts on its first step: C4 (72) sounds exactly at the change,
+      an octave above slot 1''s C3, and the slot LEDs swap as before.'
+    assertion:
+      kind: native-song-transition-reset
+      transition_reset: true
+      repeat_reset: false
+      passed: true
+  estimated_native_seconds: 110
+- id: external-midi-source-menu
+  feature_id: external-midi-transport
+  title: Choose the clock source
+  behaviour_case: M-TIM-003
+  citation: README.md#external-midi-transport
+  source: tests/behaviour/cases.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 plays pattern 1 through a MIDI device: four trigs on steps 1 to 4 with C D E F
+      (MIDI 60, 62, 64, 65) at velocities 127, 117, 107 and 97, in C major. The sequencer is stopped,
+      Rate is /1 and every Mosaic option is at its default. The norns clock is internal at 90 BPM. A separate
+      MIDI device is connected on port 1 and will send clock at 100 BPM when Mosaic follows it. The PARAMS
+      menu is closed.'
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: internal
+    title: Begin with internal clock
+    caption: 'Tap K1 to open the norns PARAMS menu and open the CLOCK group. Source reads internal: Mosaic
+      keeps its own tempo of 90 BPM.'
+    assertion:
+      kind: selected-menu-value
+      text: internal
+    occurrence: 1
+  - id: midi
+    title: Select MIDI clock
+    caption: Turn E3 one detent. Source reads midi. Mosaic now follows incoming MIDI clock, Start and
+      Stop from the connected device and waits for them, so its own tempo no longer sets the speed.
+    assertion:
+      kind: selected-menu-value
+      text: midi
+  - id: clock-running
+    title: The other device sends clock
+    caption: 'You do nothing in this step: the connected device sends clock, a Start, more clock, then
+      a Stop. Mosaic stays silent through the first clock pulses, begins when Start arrives, plays the
+      phrase at the sender''s 100 BPM and halts when Stop arrives. The MIDI strip below lists the notes,
+      0.15 seconds apart, one sixteenth at 100 BPM.'
+    assertion:
+      kind: midi-clock-onsets
+  - id: return
+    title: Return to internal
+    caption: Turn E3 one detent back down to put Source on internal. Mosaic is on its own clock again.
+    assertion:
+      kind: selected-menu-value
+      text: internal
+    occurrence: 2
+  - id: tempo
+    title: Bring the tempo back to 90 BPM
+    caption: 'Turn E2 to the tempo row. It reads 100 BPM: while Source was midi the incoming clock set
+      the tempo, and switching Source back does not restore your own. Turn E3 ten detents down to bring
+      it back to 90 BPM, the tempo the project used before.'
+    assertion:
+      kind: selected-menu-value
+      text: '90'
+  - id: restored
+    title: Play on the internal clock
+    caption: Close the menu and press Play. The notes are again one sixth of a second apart, the pace
+      of 90 BPM, as the MIDI strip shows.
+    assertion:
+      kind: restored-internal-onsets
+- id: record-keyboard-steps
+  feature_id: arm-live-record
+  title: Capture a live keyboard phrase
+  behaviour_case: M-REC-001
+  citation: README.md#arm-live-record
+  source: tests/behaviour/cases.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: 'Channel 1 has pattern 1 assigned over steps 1 to 4, but pattern 1''s trigs have been cleared,
+      so no step is lit. A MIDI keyboard is connected on port 1 and Record is off. The norns clock source
+      is internal; an external MIDI clock at 100 BPM is available. Mosaic records each note onto the step
+      that is playing when the note arrives, so recording needs a running clock: this lesson borrows the
+      external one. If you have no external clock, start Mosaic''s own clock with Play (1,8) and arm Record
+      the same way.'
+    assertion:
+      kind: grid
+    occurrence: 2
+  - id: clock-source
+    title: Follow the external clock
+    caption: Tap K1 to open the norns PARAMS menu, open the CLOCK group and turn E3 so Source reads midi.
+      Mosaic now follows the external 100 BPM clock.
+    assertion:
+      kind: selected-menu-value
+      text: midi
+  - id: placement
+    title: Record two notes
+    caption: Close the menu and tap Record (2,8) to arm recording. While the external clock runs, play
+      MIDI note 72 at velocity 90 and then note 79 at velocity 80 on the keyboard. Each note lands on
+      the step playing when it arrives. Tap Record again to disarm. The grid shows steps 2 and 4 lit,
+      and steps 1 and 3 empty. Which steps light depends on when you press, so your own take may land
+      elsewhere.
+    assertion:
+      kind: recorded-step-placement
+      expected_steps:
+      - 2
+      - 4
+      channel_range:
+      - 1
+      - 4
+      clock_step_ns: 150000000
+  - id: tempo
+    title: Back to the internal clock at 90 BPM
+    caption: Tap K1, open the CLOCK group and turn E3 back so Source reads internal. Following the external
+      clock left the tempo at 100 BPM, so turn E2 to the tempo row and turn E3 until it reads 90 BPM;
+      any tempo works, the notes' spacing simply follows it.
+    assertion:
+      kind: selected-menu-value
+      text: '90'
+  - id: replay
+    title: Replay and hear the rhythm
+    caption: 'Close the menu and tap Play (1,8). The channel plays note 72 at velocity 90, then note 79
+      at velocity 80, repeating, as the MIDI strip lists. The two notes sit on steps 2 and 4, so they
+      alternate every two steps: at 90 BPM with the default Rate /1 that is one third of a second apart.'
+    assertion:
+      kind: midi
+      complete_cycles: 3
+- id: matrix-macro-route-clear
+  feature_id: lfos-and-modulation
+  title: Route a macro and remove its depth
+  behaviour_case: M-MOD-001
+  citation: README.md#lfos-and-modulation
+  source: tests/behaviour/cases.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: The norns matrix and toolkit mods are installed and enabled. Channel 1 plays the four-step
+      phrase (MIDI 60, 62, 64, 65, velocities 127, 117, 107, 97) through a CC device with Rate /1, the
+      sequencer is stopped, and the Matrix has no routes yet. The Device page for CH01 is showing.
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: target
+    title: Open the Matrix and choose Fixed Note
+    caption: 'Tap K1 and open MODS > MATRIX. Choose MOSAIC CH 1: CC DEVICE and select Fixed Note, which
+      forces the channel to one MIDI note number (not quantised). Its row shows dashes: no source and
+      no depth yet.'
+    assertion:
+      kind: selected-menu-label
+      text: Fixed Note
+  - id: source
+    title: Choose macro 1
+    caption: Press K3 to open Fixed Note's sources and turn E2 down to macro 1. A macro is a knob in the
+      toolkit mod that you set by hand. The macro 1 row still shows dashes.
+    assertion:
+      kind: selected-menu-label
+      text: macro 1
+    occurrence: 1
+  - id: depth
+    title: Set full modulation depth
+    caption: 'Hold E3 turning right until the depth reads 1.00. Depth is how strongly the macro drives
+      Fixed Note: 1.00 is the full effect.'
+    assertion:
+      kind: selected-menu-value
+      text: '1.00'
+  - id: value
+    title: Find the macro Value
+    caption: 'Open toolkit macro 1''s parameters (E1 to the parameter list, then macro 1) and select Value.
+      It reads 0.0: the macro is at rest, so nothing sounds different yet.'
+    assertion:
+      kind: selected-menu-label
+      text: value
+  - id: raise
+    title: Raise the macro to its full value
+    caption: Turn E3 right until Value reads 1.0, the macro at full strength. The macro now drives Fixed
+      Note at the depth you set.
+    assertion:
+      kind: selected-menu-value
+      text: '1.0'
+  - id: affected
+    title: Hear the phrase follow the macro
+    caption: Press K1 to leave the menu, and press Play, then Play again to stop. Every note is now MIDI
+      127, the Fixed Note the macro forces, while the velocities stay 127, 117, 107, 97, as the MIDI strip
+      lists.
+    assertion:
+      kind: midi
+      complete_cycles: 3
+    occurrence: 1
+  - id: reopen-route
+    title: Return to the macro's route
+    caption: Press K1 to return to the menu and open the Matrix again. The Fixed Note route for macro 1
+      is selected.
+    assertion:
+      kind: selected-menu-label
+      text: macro 1
+    occurrence: 2
+  - id: clear
+    title: Clear the depth
+    caption: 'Select the depth and clear it: the depth field shows a dash again and the route is removed.'
+    assertion:
+      kind: selected-menu-value
+      text: '-'
+  - id: restored
+    title: Recover the authored pitches
+    caption: Press K1 and Play, then Play again to stop. The phrase is back to its authored notes, MIDI
+      60, 62, 64, 65, with velocities 127, 117, 107, 97.
+    assertion:
+      kind: midi
+      complete_cycles: 3
+    occurrence: 2
+  profile: midi-modulation
+  required_mods:
+    matrix:
+      url: https://github.com/sixolet/matrix.git
+      commit: 41e11286bee8dbe48e8746e7a456400f93dc739a
+    toolkit:
+      url: https://github.com/sixolet/toolkit.git
+      commit: 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
+  capabilities:
+  - native Matrix menus
+  - native toolkit menus
+  - MIDI input and output
+  availability: Requires capture adapter profile support and pinned external mods; base-midi cannot establish
+    this scene.
+- id: toolkit-clocked-lfo-menu
+  feature_id: lfos-and-modulation
+  title: Set up a clocked LFO
+  behaviour_case: M-MOD-002
+  citation: README.md#lfos-and-modulation
+  source: tests/behaviour/cases.py
+  steps:
+  - id: start
+    title: Starting point
+    caption: The norns matrix and toolkit mods are installed and enabled, and the norns tempo is 90 BPM.
+      Channel 1 plays the four-step phrase (MIDI 60, 62, 64, 65) through a CC device with Rate /1, the
+      sequencer is stopped, and the Matrix has no routes yet. The Device page for CH01 is showing.
+    assertion:
+      kind: screen-header
+      expected: DEVICE CH01
+    occurrence: 1
+  - id: depth
+    title: Route lfo 1 to Fixed Note at full depth
+    caption: 'Tap K1 and open MODS > MATRIX. Choose MOSAIC CH 1: CC DEVICE and select Fixed Note, the
+      parameter the LFO will drive. Press K3 to open Fixed Note''s sources and turn E2 to lfo 1; its row
+      shows dashes, no depth yet. Hold E3 turning right until lfo 1''s depth reads 1.00, so the LFO controls
+      Fixed Note at full strength.'
+    assertion:
+      kind: selected-menu-value
+      text: '1.00'
+  - id: clock
+    title: Clock the LFO to the tempo
+    caption: 'Open the parameters list, choose toolkit lfo 1 (PARAMETERS / lfo 1) and select clocked,
+      which makes the LFO follow the tempo instead of running in seconds. Press K3 to switch it on: clocked
+      shows a filled marker.'
+    assertion:
+      kind: selected-menu-label
+      text: clocked
+  - id: shape
+    title: Set the period and the shape
+    caption: Turn E2 down one row to Beats, the LFO period in beats. It reads 1/4. Turn E3 right until
+      Beats reads 4, a period of four beats. Turn E2 down two rows to Shape, which still reads sine.
+    assertion:
+      kind: selected-menu-label
+      text: shape
+  - id: choose-pulse
+    title: Choose Pulse
+    caption: Turn E3 two detents to choose Pulse. Shape now reads pulse.
+    assertion:
+      kind: selected-menu-value
+      text: pulse
+  - id: play
+    title: Play the phrase
+    caption: 'Tap K1 and press Play. The LFO now alternates every two beats, half of its four-beat period:
+      eight steps at MIDI 127, the Fixed Note pitch, then eight steps of the authored phrase, 60, 62, 64,
+      65, repeating. The MIDI strip lists the notes in that order.'
+    assertion:
+      kind: midi
+      complete_cycles: 2
+  profile: midi-modulation
+  required_mods:
+    matrix:
+      url: https://github.com/sixolet/matrix.git
+      commit: 41e11286bee8dbe48e8746e7a456400f93dc739a
+    toolkit:
+      url: https://github.com/sixolet/toolkit.git
+      commit: 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
+  capabilities:
+  - native Matrix menus
+  - native toolkit menus
+  - MIDI input and output
+  availability: Requires capture adapter profile support and pinned external mods; base-midi cannot establish
+    this scene.
+- id: record-parameter-lock
+  feature_id: arm-live-record
+  title: Record a trig parameter
+  behaviour_case: M-REC-PARAM-001
+  citation: README.md#arm-live-record
+  source: tests/behaviour/cases.py
+  steps:
+  - id: armed
+    title: Arm parameter recording
+    caption: >-
+      With CC 1 assigned and its channel value at 63, tap Record (2,8). Its grid cell blinks while
+      recording is armed. The Trig Params screen still shows the channel value 63. Start playback
+      and turn E3 to 64; Mosaic records that value on the next eligible steps.
+    assertion:
+      kind: parameter-recording-arm-led
+      cell: [2, 8]
+      expected: 12
+      passed: true
+      citation: manual:arm-live-record
+      characterisation: The captured armed blink phase is grid level 12; the renderer test marks its blink output as -4.
+    occurrence: 1
+  - id: recorded-lock
+    title: See the recorded value on step 2
+    caption: >-
+      After disarming and stopping playback, hold step 2 at (2,4). Trig Params shows CC 1 at 64
+      with an L marker: the edited value was stored as a lock on that step.
+    assertion:
+      kind: parameter-recording-selected-value
+      slot: 1
+      value: '64'
+      marker: L
+      citation: manual:arm-live-record
+      characterisation: Current Trig Params screen marks the recorded step value with L.
+    native_readout:
+      layout: overview_params
+      slot: 1
+      label: Cc1
+      value: '64'
+      marker: L
+    native_replay:
+      window:
+        # These are raw recipe action indexes, cross-checked against the captured scene input and native acknowledgement stream.
+        start_recipe_index: 2058
+        start_action: {type: grid, x: 1, y: 8, state: 1}
+        stop_recipe_index: 2759
+        stop_action: {type: grid, x: 15, y: 8, state: 1}
+        prefix_messages: [[176, 1, 65], [250]]
+        suffix_messages: [[252]]
+      port: 1
+      channel: 1
+      controller: 1
+      cc_values: [24, 64, 64, 64, 24, 64, 64, 64, 24]
+      notes:
+      - [60, 127]
+      - [62, 117]
+      - [64, 107]
+      - [65, 97]
+      - [60, 127]
+      - [62, 117]
+      - [64, 107]
+      - [65, 97]
+      - [60, 127]
+      timing:
+        step_ns: 4000000000
+        natural_gate_ns: 4000000000
+        tolerance_ns: 2
+    occurrence: 1

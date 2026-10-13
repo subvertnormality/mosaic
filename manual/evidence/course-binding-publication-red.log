@@ -1,0 +1,43 @@
+...EEEF...........
+======================================================================
+ERROR: test_durable_publication_rejects_changed_course_or_receipt (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 104, in test_durable_publication_rejects_changed_course_or_receipt
+    with self.assertRaisesRegex(ValueError,"course"):binder.verify_publication(root=self.root)
+AttributeError: module 'manual_course_bind' has no attribute 'verify_publication'
+
+======================================================================
+ERROR: test_durable_publication_rejects_changed_report (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 100, in test_durable_publication_rejects_changed_report
+    with self.assertRaisesRegex(ValueError,"report"):binder.verify_publication(root=self.root)
+AttributeError: module 'manual_course_bind' has no attribute 'verify_publication'
+
+======================================================================
+ERROR: test_durable_publication_rejects_forged_mapping (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 106, in test_durable_publication_rejects_forged_mapping
+    self.bind();p=self.root/"manual/generated/course-binding.json";d=json.loads(p.read_text());d["mappings"][0]["scene"]="unrelated";p.write_text(json.dumps(d))
+  File "/usr/lib/python3.8/pathlib.py", line 1232, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1218, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1074, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmppybocq47/manual/generated/course-binding.json'
+
+======================================================================
+FAIL: test_durable_publication_verifies_without_artifact_writes (test_manual_course_bind.CourseBinding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/andy/mosaic-manual-1.4.0/tests/behaviour/test_manual_course_bind.py", line 91, in test_durable_publication_verifies_without_artifact_writes
+    self.assertTrue(publication.exists())
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 18 tests in 2.535s
+
+FAILED (failures=1, errors=3)

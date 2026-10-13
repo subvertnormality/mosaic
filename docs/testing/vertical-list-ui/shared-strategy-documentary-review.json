@@ -1,0 +1,60 @@
+{
+  "format": "mosaic-shared-strategy-documentation-review-v1",
+  "status": "candidate-control-prose-only; new native acceptance pending",
+  "files": {
+    "README.md": "11fff062bcb9a5f03480abc2e223702c779152c969b0f5ce4e9157d0d18103cb",
+    "cheat_sheet.html": "353c78ba85cbdbef8d3a749a942389ef1a3508f1ec682ba6b76c210b6a3b0a91",
+    "manual/features/reference-channel.yaml": "a71c928413f807376ee6b06e60a2c8942463e7401053b355267ebc850b7e86e4",
+    "manual/features/reference-musical.yaml": "721510468370160a264122c7b8357f60d5d4d0eb6a84ffda4f3f707ddf3c115f"
+  },
+  "frozen_legacy_readme_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c",
+  "legacy_heading_lines_preserved": true,
+  "changed_claims": [
+    {
+      "section": "merge-modes",
+      "before": "Separate legacy trig cycling and Merge Shape Mode choices",
+      "after": "One shared Strategy: Skip, Only, All, Foundation, Fragments; grid14,8 wraps and C09 E3 clamps; successful request needs no K3"
+    },
+    {
+      "section": "merge-modes",
+      "before": "Ownership indicated through SHAPE/FRAGMENTS wrapper values",
+      "after": "Requested Strategy separately from accepted Active/Pending; boundary visible; refused Foundation keeps cursor and NEEDS ANCHOR without applying"
+    },
+    {
+      "section": "trig-merge-modes",
+      "before": "Grid14,8 cycles only Skip/Only/All",
+      "after": "First three legacy strategies within shared five-choice selector"
+    },
+    {
+      "section": "merge-shape",
+      "before": "Editable Mode Off/Foundation/Fragments in M02",
+      "after": "M02 Strategy read-only plus action opening C09; action discards unapplied parameter draft; return reloads accepted configuration"
+    },
+    {
+      "section": "merge-shape",
+      "before": "Saved trig mode returns when Mode Off",
+      "after": "Foundation controls trigs only; legacy strategies restore retained settings; note/velocity/length remain independently active during Foundation"
+    },
+    {
+      "section": "fragments",
+      "before": "FRAGMENTS (AVERAGE) and saved modes return when Mode Off",
+      "after": "Fragments owns four attributes; retained rows labelled inactive and values SAVED; rows/grid buttons do not edit saved values; legacy choice restores them"
+    },
+    {
+      "section": "musical-merge-and-voice-leading",
+      "before": "All Merge Shape value rows K3 Apply",
+      "after": "Strategy successful requests immediate; remaining feature parameter drafts keep K3 Apply/K2 cancel and their existing boundary semantics"
+    },
+    {
+      "section": "clocks-swing-and-shuffle",
+      "before": "E2 selects Feel source",
+      "after": "Feel source is read-only resolvedsource feedback and E2 skips it; E2 selects editable Rate/Swing type/feel rows only"
+    },
+    {
+      "section": "merge-shape/fragments practical recipes",
+      "before": "Editable Mode instruction mixed strategy choice and staged parameter Apply",
+      "after": "Prepare valid anchor and Apply parameterdraft before Foundation strategy request; Fragments chooses sharedStrategy before opening parameters; remainingK3 applies parameterdraft only"
+    }
+  ],
+  "historical_native_bindings": "Unchanged; affected feature reviews pending, no raw capture or source identity relabelled"
+}

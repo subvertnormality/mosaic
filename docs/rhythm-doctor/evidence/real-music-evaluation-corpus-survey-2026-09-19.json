@@ -1,0 +1,58 @@
+{
+  "scope": "Survey and independent verification of real-music evaluation corpora for BD/SD/CHH and BASS. Planning evidence only; nothing has been downloaded, evaluated or scored yet.",
+  "date": "2026-09-19",
+  "motivation": "Rhythm Doctor targets real music, but every quality number so far comes from the rendered two-kit v12 corpus. Until a real-music set exists, no candidate decision is trustworthy in either direction. See the domain-mismatch section in CORPUS.md.",
+  "licence_principle": "Evaluation distributes nothing, so non-commercial corpora are usable for measuring. Training weights that would then be shipped is a separate and stricter question, flagged per corpus below.",
+  "drums_recommendation": {
+    "corpus": "MDB-Drums",
+    "url": "https://github.com/CarlSouthall/MDBDrums",
+    "verified_independently_by_primary_agent": {
+      "method": "GitHub trees API over the repository, plus fetching one annotation file and all 23 metadata files directly",
+      "wav_files": 268,
+      "total_audio_bytes_gb": 2.01,
+      "full_mix_wavs": 23,
+      "drum_only_wavs": 23,
+      "multitrack_wavs": 222,
+      "subclass_annotation_files": 23,
+      "class_annotation_files": 23,
+      "chh_ohh_separated": true,
+      "label_sample_MusicDelta_Rock": {"KD": 12, "SD": 12, "CHH": 47, "OHH": 1},
+      "tracks_with_a_bass_instrument": "23 of 23 (18 electric bass, 5 double bass, per the _METADATA.yaml files)"
+    },
+    "why": "Real bands with vocals, guitars, keys and real rooms; full mixes AND isolated stems; audio ships in the git repository with no request form or login; and the subclass taxonomy separates closed from open hi-hat, which almost nothing else does.",
+    "scale": "23 excerpts, about 21.8 minutes, roughly 1539 BD / 2644 SD / 1847 CHH events",
+    "licence": "CC BY-NC-SA 4.0 covering audio and annotations. Fine for private evaluation. NOT usable for training weights that would be redistributed.",
+    "trap_to_avoid": "The 6-class 'class' annotation files collapse CHH, OHH and pedal hat into one HH label. Use the 'subclass' files and exclude OHH (269) and PHH (523) from the CHH lane, or closed-hat precision is measured wrongly.",
+    "no_velocity": "Annotations are time and label only, so velocity MAE cannot be measured against this corpus."
+  },
+  "drums_secondary": [
+    {"corpus": "ENST-Drums", "url": "https://zenodo.org/records/7432188", "value": "3 professional drummers on their own kits with sticks, rods, brushes and mallets, about 3.75 h, and a minus-one accompaniment set so the drums-to-backing ratio can be controlled. Separates chh from ohh. Best test of whether two sampled kits generalise to arbitrary real kits.", "licence": "CC BY-NC-ND 4.0, research only. ND makes training and redistributing derived weights clearly unsafe.", "note": "Isolated drum recordings, not full mixes."},
+    {"corpus": "RBMA-13", "url": "http://ifs.tuwien.ac.at/~vogl/datasets/rbma13-drums.zip", "value": "30 fully produced commercial-quality tracks, about 113 minutes. The only mastered, produced audio in the set.", "limitation": "The PUBLIC release has only three labels, KD/SD/HH, with hi-hat MERGED, contrary to the 23-instrument taxonomy described in the literature. Audio must be obtained separately from Bandcamp.", "licence": "Audio all-rights-reserved; annotation zip carries no licence file at all."}
+  ],
+  "drums_rejected": [
+    {"corpus": "IDMT-SMT-Drums", "reason": "Two of its three subsets are sample libraries and drum synthesizers, i.e. the same rendered domain we are trying to escape, and it has no musical context at all. Hi-hat merged."},
+    {"corpus": "STAR Drums", "reason": "18 classes with CHH/OHH separate and velocity, but the drum audio is RE-SYNTHESIZED from MIDI. The drum timbre is exactly what is under suspicion, so it cannot measure the gap. Worth revisiting as TRAINING data, since its licensing permits redistribution."},
+    {"corpus": "ADTOF", "reason": "Annotations derive from crowd-sourced rhythm-game charts with a stated ~50 ms inaccuracy, identical to our matching tolerance, so ground-truth error and decision threshold are the same magnitude. Also CC BY-NC-SA."}
+  ],
+  "bass_finding": {
+    "headline": "No corpus exists with human-verified bass note onsets on real full-mix music. This is the finding, not a gap in the search.",
+    "checked_and_rejected": [
+      {"corpus": "MUSDB18 / MUSDB18-HQ", "reason": "Isolated bass stems but NO note-level or onset annotations of any kind."},
+      {"corpus": "MedleyDB", "reason": "Melody f0, instrument activations and genre only. No bass note or onset annotations."},
+      {"corpus": "Slakh2100", "reason": "Aligned MIDI for bass, but the audio is SYNTHESIZED from Lakh MIDI. Categorically the same domain as the current rendered corpus."},
+      {"corpus": "FiloBass", "reason": "Manually verified bass notes, but upright double bass, jazz, bass stems only with no band. Softer attacks make it pessimistic for an electric-bass line-input product. Licence conflict between Zenodo CC-BY-4.0 and a restrictive project EULA."},
+      {"corpus": "Jazz Trio Database", "reason": "34 human-annotated excerpts, about 42 minutes, but annotated on SOURCE-SEPARATED audio, so the ground truth systematically omits onsets the separator dropped. Drum annotations are undifferentiated. Audio restricted."},
+      {"corpus": "RWC Popular", "reason": "SMF synchronisation is stated at BEAT level, which does not guarantee 50 ms note accuracy. Heavy access friction."}
+    ],
+    "circularity_warning": "Deriving bass onsets from an isolated stem with an onset detector and scoring against them measures agreement between two onset detectors, not accuracy. It inherits the reference detector's systematic errors on soft attacks, legato and ghost notes, which are precisely the BASS failure modes that need measuring. A stem is a good annotation aid and a worthless substitute for a human."
+  },
+  "bass_recommendation": {
+    "plan": "Hand-annotate the 23 MDB-Drums bass stems.",
+    "why_it_is_cheap": "The stems are isolated, bleed-free and sample-aligned to the same mixes the drum ground truth refers to, so no alignment work is needed and 18 of 23 are electric bass, matching the product.",
+    "cost": "About 21.8 minutes of audio; roughly a day for one careful annotator. Bootstrap with a detector on the STEM, then correct every onset by hand; the correction pass is what breaks the circularity.",
+    "payoff": "The only artefact that would give BD, SD, CHH and BASS on identical real full-mix audio.",
+    "method_note": "Annotate from the isolated stem but score against the full mix. That measures whether the detector finds notes that are genuinely present, and is the opposite of the Jazz Trio Database's separation bias.",
+    "supplementary": {"corpus": "IDMT-SMT-Bass-Single-Track", "url": "https://zenodo.org/record/7544099", "value": "20.5 MB, instant download, real electric bass, 17 lines with human onset/offset/pitch annotations. An isolated-bass floor check: any gap between it and the MDB-Drums mix results is attributable to musical context rather than to the bass front-end."}
+  },
+  "next_step": "Run the existing pinned drum chain against MDB-Drums full mixes. It needs no annotation work and would establish within an afternoon whether the accepted full-mix figures of BD 0.702, SD 0.687 and CHH 0.887 survive contact with real music."
+}
