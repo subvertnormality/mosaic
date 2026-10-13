@@ -154,7 +154,7 @@ def public_reader_index(data):
         raise ValueError("Reader index is missing a runtime field")
     public = {key: data[key] for key in READER_INDEX_KEYS if key in data}
     public["features"] = [
-        {key: value for key, value in feature.items() if key != "sources"}
+        {key: value for key, value in feature.items() if key not in ("sources", "review")}
         for feature in public["features"]
     ]
     return scrub_public_json(public)

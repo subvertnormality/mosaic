@@ -144,6 +144,32 @@ class StaticSitePackageTests(unittest.TestCase):
         self.assertNotIn("source_sha256", public)
         self.assertNotIn("authoring_identity", public)
 
+    def test_package_omits_feature_review_and_preserves_private_source(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            repo, _ = self.site_fixture(root)
+            source = repo / "manual/generated/reader-index.json"
+            index = json.loads(source.read_text())
+            pointer = "/runner/_work/_temp/manual-build/feature-bind/manifest.json"
+            index["features"] = [{"id": "masks", "title": "Masks", "scene_refs": ["masks"],
+                "review": {"binding_receipt": pointer, "historical_native_evidence": [
+                    {"review": {"controlled_baselines": [{"log": "/home/andy/build/stage.log"}]}}]}}]
+            source.write_text(json.dumps(index))
+            original = source.read_bytes()
+            site = root / "site"
+            artifact.collect_public_site(repo, site)
+            public = json.loads((site / "manual/generated/reader-index.json").read_text())
+            self.assertEqual(public["features"], [{"id": "masks", "title": "Masks",
+                             "scene_refs": ["masks"]}])
+            self.assertNotIn(pointer, json.dumps(public))
+            self.assertEqual(source.read_bytes(), original)
+            self.assertEqual(json.loads(source.read_text())["features"][0]["review"]
+                             ["binding_receipt"], pointer)
+
+    def test_unknown_nested_host_path_still_blocks_public_export(self):
+        with self.assertRaisesRegex(ValueError, "Absolute host path"):
+            artifact.scrub_public_json({"features": [{"description": "/runner/private/data"}]})
+
     def test_reader_chrome_has_no_visible_capture_receipts_or_build_links(self):
         index = (ROOT / "manual/index.html").read_text()
         book = (ROOT / "manual/book.js").read_text()
@@ -415,6 +441,52 @@ class EvidenceSymlinkBoundaryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "Invalid static site root"):
                     artifact.verify_browser_site(link, node="unused-test-node")
                 smoke.assert_not_called()
+
+
+class PublicManualSmokeTests(unittest.TestCase):
+    def test_smoke_uses_public_hash_bound_reader_chunks(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            repo, _ = StaticSitePackageTests().site_fixture(root)
+            generated = repo / "manual/generated"
+            chunk_specs = {
+                "reader-chunks/scenes/demo.json": {"id": "demo", "title": "Demo scene", "steps": []},
+                "reader-chunks/audio/demo.json": {"id": "demo-audio", "files": ["audio/demo.ogg"]},
+                "reader-chunks/prelude/demo.json": {"id": "demo-prelude", "text": "Start here"},
+            }
+            for relative, payload in chunk_specs.items():
+                chunk = generated / relative
+                chunk.parent.mkdir(parents=True, exist_ok=True)
+                content = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
+                chunk.write_bytes(content)
+            # Initialize each reader chunk group explicitly while preserving the fixture's other fields.
+            refs = {
+                "scene_chunks": {"demo": {"path": "reader-chunks/scenes/demo.json",
+                    "sha256": hashlib.sha256((generated / "reader-chunks/scenes/demo.json").read_bytes()).hexdigest()}},
+                "audio_chunks": {"demo-audio": {"path": "reader-chunks/audio/demo.json",
+                    "sha256": hashlib.sha256((generated / "reader-chunks/audio/demo.json").read_bytes()).hexdigest()}},
+                "prelude_receipts": {"demo-prelude": {"path": "reader-chunks/prelude/demo.json",
+                    "sha256": hashlib.sha256((generated / "reader-chunks/prelude/demo.json").read_bytes()).hexdigest()}},
+            }
+            index_path = generated / "reader-index.json"
+            index = json.loads(index_path.read_text(encoding="utf-8"))
+            index.update(features=[{"id": "demo"}], navigation=[{"id": "demo"}], **refs)
+            index_path.write_text(json.dumps(index), encoding="utf-8")
+
+            site = root / "site"
+            artifact.collect_public_site(repo, site)
+            self.assertTrue((site / "manual/generated/reader-index.json").is_file())
+            for relative in chunk_specs:
+                self.assertTrue((site / "manual/generated" / relative).is_file())
+            self.assertFalse((site / "manual/generated/book.json").exists())
+            self.assertFalse((site / "manual/generated/audio-scenes.json").exists())
+            self.assertFalse((site / "manual/inventory.json").exists())
+
+            smoke = (ROOT / ".github/scripts/manual-site-smoke.cjs").read_text(encoding="utf-8")
+            for private_route in ("/manual/generated/book.json", "/manual/generated/audio-scenes.json", "/manual/inventory.json"):
+                self.assertNotIn(private_route, smoke)
+            for public_field in ("reader-index.json", "scene_chunks", "audio_chunks", "prelude_receipts", "crypto.subtle"):
+                self.assertIn(public_field, smoke)
 
 
 if __name__ == "__main__":

@@ -35,7 +35,7 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     PRODUCER_TOOLING_POLICY_VERSION: {
         ".github/workflows/manual-build.yml": "dac8e7273ec776ef2d6a345ad6e610246da886c968f6a6f1d1e14865d9691c16",
         ".github/scripts/manual-build.sh": "417305e7738f4243e62921242440725a95087a58b0e609e6e1287e8eb86e98de",
-        ".github/scripts/manual_artifact.py": "8012a9e1e0f51f240954646e82c5dcfa49f92dfaff61eebf2b0ff12a4f826f23",
+        ".github/scripts/manual_artifact.py": "46bb7accfbe5fcf4a73523cc5d2d68473aa4bbba9c8c38db041ffdbf74828469",
         ".github/scripts/audio_bundle_reuse.py": "7ee1ba75f080312fec61f4f5fa83a1947997d7662f9790e6f38520a5683ce6c0",
         "manual/evidence/ci-recovery-20261012/audio-bundle-pin.json": "72a03bee85b5671600f72382342d2bfc778b07a8cb334bd14b908985756cbeb3",
     },
